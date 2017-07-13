@@ -1,5 +1,4 @@
 # ui-requests
-Stripes UI module for making requests on items
 
 Copyright (C) 2017 The Open Library Foundation
 
