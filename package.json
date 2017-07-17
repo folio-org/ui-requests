@@ -18,7 +18,12 @@
     "home": "/requests?filters=active.Active&sort=Name",
     "hasSettings": false,
     "okapiInterfaces": { },
-    "permissionSets": []
+    "permissionSets": [
+      {
+        "permissionName": "module.requests.enabled",
+        "displayName": "UI: Requests module is enabled"
+      }
+    ]
   },
   "scripts": {
     "lint": "eslint *.js lib settings || true"
