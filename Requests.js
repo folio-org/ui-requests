@@ -3,9 +3,20 @@ import PropTypes from 'prop-types';
 import Route from 'react-router-dom/Route';
 import queryString from 'query-string';
 
+import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
+
+
+const filterConfig = [
+  {
+    label: 'Request Type',
+    name: 'request',
+    cql: '',
+    values: ['Hold', { name: 'Paging request', cql: 'paging' }, 'Recall'],
+  },
+];
 
 class Requests extends React.Component {
 
@@ -28,17 +39,32 @@ class Requests extends React.Component {
         log: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
-  }
+  };
 
   constructor(props) {
     super(props);
 
+    const query = props.location.search ? queryString.parse(props.location.search) : {};
+    this.state = {
+      filters: initialFilterState(filterConfig, query.filters),
+      selectedItem: {},
+      searchTerm: query.query || '',
+      sortOrder: query.sort || '',
+    };
+
+    this.onChangeFilter = commonChangeFilter.bind(this);
+
+  }
+
+  onChangeFilter = (e) => {
+    this.commonChangeFilter(e);
   }
 
   render() {
     return (
       <Paneset>
-        <Pane defaultWidth="16%" header={searchHeader}>
+        <Pane defaultWidth="16%" header="{searchHeader}">
+          <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
         </Pane>
         <Pane defaultWidth="fill" paneTitle="Requests">
           content goes here
