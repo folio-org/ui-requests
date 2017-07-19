@@ -53,11 +53,17 @@ class Requests extends React.Component {
     };
 
     this.onChangeFilter = commonChangeFilter.bind(this);
+    this.updateFilters = updateFilters.bind(this);
 
   }
 
   onChangeFilter = (e) => {
     this.commonChangeFilter(e);
+  }
+
+  // provided for onChangeFilter
+  updateFilters(filters) {
+    this.transitionToParams({ filters: Object.keys(filters).filter(key => filters[key]).join(',') });
   }
 
   render() {
