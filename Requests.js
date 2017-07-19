@@ -5,6 +5,7 @@ import queryString from 'query-string';
 
 import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
+import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
@@ -42,6 +43,15 @@ class Requests extends React.Component {
       }),
     }).isRequired,
     okapi: PropTypes.object,
+    resources: PropTypes.shape({
+      requests: PropTypes.shape({
+        hasLoaded: PropTypes.bool.isRequired,
+        isPending: PropTypes.bool.isPending,
+        other: PropTypes.shape({
+          totalRecords: PropTypes.number,
+        }),
+      }),
+    }).isRequired,
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
       logger: PropTypes.shape({
@@ -52,6 +62,15 @@ class Requests extends React.Component {
 
   static manifest = {
     requestCount: { initialValue: INITIAL_RESULT_COUNT },
+    // TODO: 'requests' that follows is a stub -- has to be replaced with proper
+    // back-end connection once it's ready.
+    requests: {
+      initialValue: [
+        { id: 1, title: 'Item 1', author: 'A1', barcode: '14234125123', requestType: 'Recall', requestor: 'Arby Bodwin', reqBarcode: '1806808068', date: '05/06/17' },
+        { id: 2, title: 'Item 2', author: 'A2', barcode: '108058093403', requestType: 'Recall', requestor: 'Arby Bodwin', reqBarcode: '1806808068', date: '05/06/17' },
+        { id: 3, title: 'Item 3', author: 'A1', barcode: '198015808312', requestType: 'Recall', requestor: 'Arby Bodwin', reqBarcode: '1806808068', date: '05/06/17' },
+      ],
+    },
   };
 
   constructor(props) {
@@ -101,6 +120,8 @@ class Requests extends React.Component {
   }
 
   render() {
+    const requests = this.props.data.requests || [];
+    const { requests: requestsInfo } = this.props.resources;
 
     const searchHeader = <FilterPaneSearch
       id="SearchField"
@@ -110,13 +131,39 @@ class Requests extends React.Component {
       searchAriaLabel="Requests search"
     />;
 
+    const paneTitle = (
+      <div style={{ textAlign: 'center' }}>
+        <strong>Results</strong>
+        <div>
+          <em>{requestsInfo && requestsInfo.hasLoaded ? requestsInfo.other.totalRecords : '0'} Result{requests.length === 1 ? '' : 's'} Found
+          </em>
+        </div>
+      </div>
+    );
+
+    const resultsFormatter = {
+      Author: rq => rq.author,
+      'Item Barcode': rq => rq.barcode,
+      'Request Date': rq => rq.date,
+      Requestor: rq => rq.requestor,
+      'Requestor Barcode': rq => rq.reqBarcode,
+      'Request Type': rq => rq.requestType,
+      Title: rq => rq.title,
+    };
+
     return (
       <Paneset>
         <Pane defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
         </Pane>
-        <Pane defaultWidth="fill" paneTitle="Requests">
-          content goes here
+        <Pane defaultWidth="fill" paneTitle={paneTitle}>
+          <MultiColumnList
+            contentData={requests}
+            virtualize
+            autosize={true}
+            visibleColumns={['Title', 'Author', 'Item Barcode', 'Request Type', 'Requestor', 'Requestor Barcode', 'Request Date']}
+            formatter={resultsFormatter}
+          />
         </Pane>
       </Paneset>
     )
