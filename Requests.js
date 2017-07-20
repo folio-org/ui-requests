@@ -87,8 +87,25 @@ class Requests extends React.Component {
     this.onChangeFilter = commonChangeFilter.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
+    this.onSort = this.onSort.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
     this.updateFilters = this.updateFilters.bind(this);
+  }
+
+  onSort(e, meta) {
+    const newOrder = meta.alias;
+    const oldOrder = this.state.sortOrder;
+
+    const orders = oldOrder ? oldOrder.split(',') : [];
+    if (orders.length > 0 && newOrder === orders[0].replace(/^-/, '')) {
+      orders[0] = `-${orders[0]}`.replace(/^--/, '');
+    } else {
+      orders.unshift(newOrder);
+    }
+
+    const sortOrder = orders.slice(0, 2).join(',');
+    this.setState({ sortOrder });
+    this.transitionToParams({ sort: sortOrder });
   }
 
   /* ************** Search handlers ************** */
@@ -120,8 +137,8 @@ class Requests extends React.Component {
   }
 
   render() {
-    const requests = this.props.data.requests || [];
-    const { requests: requestsInfo } = this.props.resources;
+    const requests = this.props.resources.requests || [];
+    //const { requests: requestsInfo } = this.props.resources;
 
     const searchHeader = <FilterPaneSearch
       id="SearchField"
@@ -135,20 +152,22 @@ class Requests extends React.Component {
       <div style={{ textAlign: 'center' }}>
         <strong>Results</strong>
         <div>
-          <em>{requestsInfo && requestsInfo.hasLoaded ? requestsInfo.other.totalRecords : '0'} Result{requests.length === 1 ? '' : 's'} Found
+          <em>{requests && requests.hasLoaded ? requests.other.totalRecords : '0'} Result{requests.length === 1 ? '' : 's'} Found
           </em>
         </div>
       </div>
     );
 
     const resultsFormatter = {
-      Author: rq => rq.author,
       'Item Barcode': rq => rq.barcode,
       'Request Date': rq => rq.date,
-      Requestor: rq => rq.requestor,
       'Requestor Barcode': rq => rq.reqBarcode,
       'Request Type': rq => rq.requestType,
-      Title: rq => rq.title,
+    };
+
+    const columnMapping = {
+      Title: 'title',
+      Author: 'author'
     };
 
     return (
@@ -160,9 +179,13 @@ class Requests extends React.Component {
           <MultiColumnList
             contentData={requests}
             virtualize
-            autosize={true}
-            visibleColumns={['Title', 'Author', 'Item Barcode', 'Request Type', 'Requestor', 'Requestor Barcode', 'Request Date']}
+            autosize
+            visibleColumns={['title', 'author', 'Item Barcode', 'Request Type', 'requestor', 'Requestor Barcode', 'Request Date']} columnMapping={columnMapping}
             formatter={resultsFormatter}
+            onHeaderClick={this.onSort}
+            rowMetadata={['id', 'title']}
+            sortOrder={this.state.sortOrder.replace(/^-/, '').replace(/,.*/, '')}
+            sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
           />
         </Pane>
       </Paneset>
