@@ -65,11 +65,9 @@ class Requests extends React.Component {
     // TODO: 'requests' that follows is a stub -- has to be replaced with proper
     // back-end connection once it's ready.
     requests: {
-      initialValue: [
-        { id: 1, title: 'Item 1', author: 'A1', barcode: '14234125123', requestType: 'Recall', requestor: 'Arby Bodwin', reqBarcode: '1806808068', date: '05/06/17' },
-        { id: 2, title: 'Item 2', author: 'A2', barcode: '108058093403', requestType: 'Recall', requestor: 'Arby Bodwin', reqBarcode: '1806808068', date: '05/06/17' },
-        { id: 3, title: 'Item 3', author: 'A1', barcode: '198015808312', requestType: 'Recall', requestor: 'Arby Bodwin', reqBarcode: '1806808068', date: '05/06/17' },
-      ],
+      type: 'okapi',
+      path: 'request-storage/requests',
+      records: 'requests'
     },
   };
 
@@ -137,7 +135,7 @@ class Requests extends React.Component {
   }
 
   render() {
-    const requests = this.props.resources.requests || [];
+    const requests = this.props.data.requests || [];
     //const { requests: requestsInfo } = this.props.resources;
 
     const searchHeader = <FilterPaneSearch
@@ -152,7 +150,7 @@ class Requests extends React.Component {
       <div style={{ textAlign: 'center' }}>
         <strong>Results</strong>
         <div>
-          <em>{requests && requests.hasLoaded ? requests.other.totalRecords : '0'} Result{requests.length === 1 ? '' : 's'} Found
+          <em>{requests && requests.length > 0 ? requests.length : '0'} Result{requests.length === 1 ? '' : 's'} Found
           </em>
         </div>
       </div>
@@ -160,9 +158,10 @@ class Requests extends React.Component {
 
     const resultsFormatter = {
       'Item Barcode': rq => rq.barcode,
-      'Request Date': rq => rq.date,
-      'Requestor Barcode': rq => rq.reqBarcode,
+      'Request Date': rq => rq.requestDate,
+      'Requester ID': rq => rq.requesterId,
       'Request Type': rq => rq.requestType,
+      'Item ID': rq => rq.itemId,
     };
 
     const columnMapping = {
@@ -180,7 +179,7 @@ class Requests extends React.Component {
             contentData={requests}
             virtualize
             autosize
-            visibleColumns={['title', 'author', 'Item Barcode', 'Request Type', 'requestor', 'Requestor Barcode', 'Request Date']} columnMapping={columnMapping}
+            visibleColumns={['id', 'Item ID', 'Request Type', 'Requester ID', 'Request Date']} columnMapping={columnMapping}
             formatter={resultsFormatter}
             onHeaderClick={this.onSort}
             rowMetadata={['id', 'title']}
