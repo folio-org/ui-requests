@@ -258,7 +258,7 @@ class Requests extends React.Component {
         {/* Details Pane */}
         <Route
           path={`${this.props.match.path}/view/:requestId`}
-          render={props => <this.connectedViewRequest stripes={stripes} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
+          render={props => <this.connectedViewRequest stripes={stripes} requests={requests} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
         />
       </Paneset>
     )
