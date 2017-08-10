@@ -11,6 +11,8 @@ import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 
+import ViewRequest from './ViewRequest';
+
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
 
@@ -94,11 +96,14 @@ class Requests extends React.Component {
     };
 
     this.addRequestFields = this.addRequestFields.bind(this);
+    this.collapseDetails = this.collapseDetails.bind(this);
+    this.connectedViewRequest = props.stripes.connect(ViewRequest);
     this.findItem = this.findItem.bind(this);
     this.findUser = this.findUser.bind(this);
     this.onChangeFilter = commonChangeFilter.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
+    this.onSelectRow = this.onSelectRow.bind(this);
     this.onSort = this.onSort.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
     this.updateFilters = this.updateFilters.bind(this);
@@ -148,6 +153,19 @@ class Requests extends React.Component {
     this.transitionToParams({ filters: Object.keys(filters).filter(key => filters[key]).join(',') });
   }
 
+  onSelectRow(e, meta) {
+    const requestId = meta.id;
+    this.setState({ selectedItem: meta });
+    this.props.history.push(`/requests/view/${requestId}${this.props.location.search}`);
+  }
+
+  collapseDetails() {
+    this.setState({
+      selectedItem: {},
+    });
+    this.props.history.push(`${this.props.match.path}${this.props.location.search}`);
+  }
+
   findUser(id) {
     console.log("finduser", id, this.props.data.users)
     return _.find(this.props.data.users, { id });
@@ -177,12 +195,12 @@ class Requests extends React.Component {
   }
 
   render() {
+    const { stripes } = this.props;
     const requests = this.props.data.requests || [];
     //const { requests: requestsInfo } = this.props.resources;
 
-    let restructuredRequests;
     if (requests.length > 0) {
-      restructuredRequests = requests.map(this.addRequestFields);
+      requests.map(this.addRequestFields);
     }
 
     const searchHeader = <FilterPaneSearch
@@ -230,11 +248,18 @@ class Requests extends React.Component {
             columnMapping={columnMapping}
             formatter={resultsFormatter}
             onHeaderClick={this.onSort}
+            onRowClick={this.onSelectRow}
             rowMetadata={['id', 'title']}
             sortOrder={this.state.sortOrder.replace(/^-/, '').replace(/,.*/, '')}
             sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
           />
         </Pane>
+
+        {/* Details Pane */}
+        <Route
+          path={`${this.props.match.path}/view/:requestId`}
+          render={props => <this.connectedViewRequest stripes={stripes} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
+        />
       </Paneset>
     )
   }
