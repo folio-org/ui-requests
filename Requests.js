@@ -62,12 +62,23 @@ class Requests extends React.Component {
 
   static manifest = {
     requestCount: { initialValue: INITIAL_RESULT_COUNT },
-    // TODO: 'requests' that follows is a stub -- has to be replaced with proper
-    // back-end connection once it's ready.
     requests: {
       type: 'okapi',
       path: 'request-storage/requests',
       records: 'requests'
+    },
+    // Metadata from associated ITEM and USER records will, hopefully,
+    // be aggregated in a business logic module somewhere. For now, though,
+    // these next entries are necessary
+    users: {
+      type: 'okapi',
+      path: 'users',
+      records: 'users',
+    },
+    items: {
+      type: 'okapi',
+      records: 'items',
+      path: 'inventory/items',
     },
   };
 
@@ -82,6 +93,9 @@ class Requests extends React.Component {
       sortOrder: query.sort || '',
     };
 
+    this.addRequestFields = this.addRequestFields.bind(this);
+    this.findItem = this.findItem.bind(this);
+    this.findUser = this.findUser.bind(this);
     this.onChangeFilter = commonChangeFilter.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
@@ -134,9 +148,42 @@ class Requests extends React.Component {
     this.transitionToParams({ filters: Object.keys(filters).filter(key => filters[key]).join(',') });
   }
 
+  findUser(id) {
+    console.log("finduser", id, this.props.data.users)
+    return _.find(this.props.data.users, { id });
+  }
+
+  findItem(id) {
+    console.log("finditem", id, this.props.data.items)
+
+    return this.props.data.items.length > 0 ? _.find(this.props.data.items, { id }) : null;
+  }
+
+  // Called as a map function
+  addRequestFields(r) {
+    // Approach: process each entry in the requests list. For each one, do two lookups (ugh),
+    // one to find the referenced item and one to fetch the referenced user. Then modify the array structure
+    // to include the fields we need
+
+    const item = this.findItem(r.itemId);
+    const user = this.findUser(r.requesterId);
+
+    r.title = item ? item.title : '';
+    r.itemBarcode = item ? item.barcode : '';
+    r.requesterName = user ? `${user.personal.firstName} ${user.personal.lastName}` : '';
+    r.requesterBarcode = user ? user.barcode : '';
+
+    return r;
+  }
+
   render() {
     const requests = this.props.data.requests || [];
     //const { requests: requestsInfo } = this.props.resources;
+
+    let restructuredRequests;
+    if (requests.length > 0) {
+      restructuredRequests = requests.map(this.addRequestFields);
+    }
 
     const searchHeader = <FilterPaneSearch
       id="SearchField"
@@ -157,15 +204,15 @@ class Requests extends React.Component {
     );
 
     const resultsFormatter = {
-      'Item Barcode': rq => rq.barcode,
-      'Request Date': rq => rq.requestDate,
-      'Requester ID': rq => rq.requesterId,
+      'Item Barcode': rq => rq.itemBarcode,
+      'Request Date': rq => new Date(Date.parse(rq.requestDate)).toLocaleDateString(this.props.stripes.locale),
+      'Requester': rq => rq.requesterName,
+      'Requester Barcode': rq => rq.requesterBarcode,
       'Request Type': rq => rq.requestType,
-      'Item ID': rq => rq.itemId,
+      'Title': rq => rq.title,
     };
 
     const columnMapping = {
-      Title: 'title',
       Author: 'author'
     };
 
@@ -179,7 +226,8 @@ class Requests extends React.Component {
             contentData={requests}
             virtualize
             autosize
-            visibleColumns={['id', 'Item ID', 'Request Type', 'Requester ID', 'Request Date']} columnMapping={columnMapping}
+            visibleColumns={['Title', 'Item Barcode', 'Request Type', 'Requester', 'Requester Barcode', 'Request Date']}
+            columnMapping={columnMapping}
             formatter={resultsFormatter}
             onHeaderClick={this.onSort}
             rowMetadata={['id', 'title']}
