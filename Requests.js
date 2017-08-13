@@ -15,6 +15,7 @@ import transitionToParams from '@folio/stripes-components/util/transitionToParam
 
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
+import { requestTypes } from './constants';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -294,6 +295,7 @@ class Requests extends React.Component {
           <RequestForm
             handleSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewRequest}
+            optionLists={{ requestTypes: requestTypes }}
           />
         </Layer>
       </Paneset>
