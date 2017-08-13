@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import Route from 'react-router-dom/Route';
 import queryString from 'query-string';
 
+import Button from '@folio/stripes-components/lib/Button';
 import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
+import Layer from '@folio/stripes-components/lib/Layer';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
@@ -12,6 +14,7 @@ import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 
 import ViewRequest from './ViewRequest';
+import RequestForm from './RequestForm';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -40,6 +43,9 @@ class Requests extends React.Component {
       path: PropTypes.string.isRequired,
     }).isRequired,
     mutator: PropTypes.shape({
+      addRequestMode: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
       requestCount: PropTypes.shape({
         replace: PropTypes.func,
       }),
@@ -63,6 +69,7 @@ class Requests extends React.Component {
   };
 
   static manifest = {
+    addRequestMode: { initialValue: { mode: false } },
     requestCount: { initialValue: INITIAL_RESULT_COUNT },
     requests: {
       type: 'okapi',
@@ -103,6 +110,8 @@ class Requests extends React.Component {
     this.onChangeFilter = commonChangeFilter.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
+    this.onClickAddNewRequest = this.onClickAddNewRequest.bind(this);
+    this.onClickCloseNewRequest = this.onClickCloseNewRequest.bind(this);
     this.onSelectRow = this.onSelectRow.bind(this);
     this.onSort = this.onSort.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
@@ -159,6 +168,16 @@ class Requests extends React.Component {
     this.props.history.push(`/requests/view/${requestId}${this.props.location.search}`);
   }
 
+  onClickAddNewRequest(e) {
+    e.preventDefault();
+    this.props.mutator.addRequestMode.replace({ mode: true });
+  }
+
+  onClickCloseNewRequest(e) {
+    e.preventDefault();
+    this.props.mutator.addRequestMode.replace({ mode: false });
+  }
+
   collapseDetails() {
     this.setState({
       selectedItem: {},
@@ -192,6 +211,10 @@ class Requests extends React.Component {
     r.requesterBarcode = user ? user.barcode : '';
 
     return r;
+  }
+
+  create(record) {
+
   }
 
   render() {
@@ -239,7 +262,13 @@ class Requests extends React.Component {
         <Pane defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
         </Pane>
-        <Pane defaultWidth="fill" paneTitle={paneTitle}>
+        <Pane defaultWidth="fill" paneTitle={paneTitle} lastMenu={
+          <PaneMenu>
+            <Button
+              title="Add New Request"
+              onClick={this.onClickAddNewRequest} buttonStyle="primary paneHeaderNewButton">+ New</Button>
+          </PaneMenu>
+        }>
           <MultiColumnList
             contentData={requests}
             virtualize
@@ -260,6 +289,13 @@ class Requests extends React.Component {
           path={`${this.props.match.path}/view/:requestId`}
           render={props => <this.connectedViewRequest stripes={stripes} requests={requests} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
         />
+        {/* Add new request form */}
+        <Layer isOpen={this.props.data.addRequestMode ? this.props.data.addRequestMode.mode : false} label="Add New Request Dialog">
+          <RequestForm
+            handleSubmit={(record) => { this.create(record); }}
+            onCancel={this.onClickCloseNewRequest}
+          />
+        </Layer>
       </Paneset>
     )
   }
