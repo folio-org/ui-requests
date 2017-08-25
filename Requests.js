@@ -3,13 +3,19 @@ import PropTypes from 'prop-types';
 import Route from 'react-router-dom/Route';
 import queryString from 'query-string';
 
+import Button from '@folio/stripes-components/lib/Button';
 import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
 import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
+import Layer from '@folio/stripes-components/lib/Layer';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
+
+import ViewRequest from './ViewRequest';
+import RequestForm from './RequestForm';
+import { requestTypes } from './constants';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -38,6 +44,9 @@ class Requests extends React.Component {
       path: PropTypes.string.isRequired,
     }).isRequired,
     mutator: PropTypes.shape({
+      addRequestMode: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
       requestCount: PropTypes.shape({
         replace: PropTypes.func,
       }),
@@ -61,15 +70,25 @@ class Requests extends React.Component {
   };
 
   static manifest = {
+    addRequestMode: { initialValue: { mode: false } },
     requestCount: { initialValue: INITIAL_RESULT_COUNT },
-    // TODO: 'requests' that follows is a stub -- has to be replaced with proper
-    // back-end connection once it's ready.
     requests: {
-      initialValue: [
-        { id: 1, title: 'Item 1', author: 'A1', barcode: '14234125123', requestType: 'Recall', requestor: 'Arby Bodwin', reqBarcode: '1806808068', date: '05/06/17' },
-        { id: 2, title: 'Item 2', author: 'A2', barcode: '108058093403', requestType: 'Recall', requestor: 'Arby Bodwin', reqBarcode: '1806808068', date: '05/06/17' },
-        { id: 3, title: 'Item 3', author: 'A1', barcode: '198015808312', requestType: 'Recall', requestor: 'Arby Bodwin', reqBarcode: '1806808068', date: '05/06/17' },
-      ],
+      type: 'okapi',
+      path: 'request-storage/requests',
+      records: 'requests'
+    },
+    // Metadata from associated ITEM and USER records will, hopefully,
+    // be aggregated in a business logic module somewhere. For now, though,
+    // these next entries are necessary
+    users: {
+      type: 'okapi',
+      path: 'users',
+      records: 'users',
+    },
+    items: {
+      type: 'okapi',
+      records: 'items',
+      path: 'inventory/items',
     },
   };
 
@@ -84,9 +103,17 @@ class Requests extends React.Component {
       sortOrder: query.sort || '',
     };
 
+    this.addRequestFields = this.addRequestFields.bind(this);
+    this.collapseDetails = this.collapseDetails.bind(this);
+    this.connectedViewRequest = props.stripes.connect(ViewRequest);
+    this.findItem = this.findItem.bind(this);
+    this.findUser = this.findUser.bind(this);
     this.onChangeFilter = commonChangeFilter.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
+    this.onClickAddNewRequest = this.onClickAddNewRequest.bind(this);
+    this.onClickCloseNewRequest = this.onClickCloseNewRequest.bind(this);
+    this.onSelectRow = this.onSelectRow.bind(this);
     this.onSort = this.onSort.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
     this.updateFilters = this.updateFilters.bind(this);
@@ -136,9 +163,69 @@ class Requests extends React.Component {
     this.transitionToParams({ filters: Object.keys(filters).filter(key => filters[key]).join(',') });
   }
 
+  onSelectRow(e, meta) {
+    const requestId = meta.id;
+    this.setState({ selectedItem: meta });
+    this.props.history.push(`/requests/view/${requestId}${this.props.location.search}`);
+  }
+
+  onClickAddNewRequest(e) {
+    e.preventDefault();
+    this.props.mutator.addRequestMode.replace({ mode: true });
+  }
+
+  onClickCloseNewRequest(e) {
+    e.preventDefault();
+    this.props.mutator.addRequestMode.replace({ mode: false });
+  }
+
+  collapseDetails() {
+    this.setState({
+      selectedItem: {},
+    });
+    this.props.history.push(`${this.props.match.path}${this.props.location.search}`);
+  }
+
+  findUser(id) {
+    console.log("finduser", id, this.props.data.users)
+    return _.find(this.props.data.users, { id });
+  }
+
+  findItem(id) {
+    console.log("finditem", id, this.props.data.items)
+
+    return this.props.data.items.length > 0 ? _.find(this.props.data.items, { id }) : null;
+  }
+
+  // Called as a map function
+  addRequestFields(r) {
+    // Approach: process each entry in the requests list. For each one, do two lookups (ugh),
+    // one to find the referenced item and one to fetch the referenced user. Then modify the array structure
+    // to include the fields we need
+
+    const item = this.findItem(r.itemId);
+    const user = this.findUser(r.requesterId);
+
+    r.title = item ? item.title : '';
+    r.itemBarcode = item ? item.barcode : '';
+    r.requesterName = user ? `${user.personal.firstName} ${user.personal.lastName}` : '';
+    r.requesterBarcode = user ? user.barcode : '';
+
+    return r;
+  }
+
+  create(record) {
+
+  }
+
   render() {
-    const requests = this.props.resources.requests || [];
+    const { stripes } = this.props;
+    const requests = this.props.data.requests || [];
     //const { requests: requestsInfo } = this.props.resources;
+
+    if (requests.length > 0) {
+      requests.map(this.addRequestFields);
+    }
 
     const searchHeader = <FilterPaneSearch
       id="SearchField"
@@ -152,21 +239,22 @@ class Requests extends React.Component {
       <div style={{ textAlign: 'center' }}>
         <strong>Results</strong>
         <div>
-          <em>{requests && requests.hasLoaded ? requests.other.totalRecords : '0'} Result{requests.length === 1 ? '' : 's'} Found
+          <em>{requests && requests.length > 0 ? requests.length : '0'} Result{requests.length === 1 ? '' : 's'} Found
           </em>
         </div>
       </div>
     );
 
     const resultsFormatter = {
-      'Item Barcode': rq => rq.barcode,
-      'Request Date': rq => rq.date,
-      'Requestor Barcode': rq => rq.reqBarcode,
+      'Item Barcode': rq => rq.itemBarcode,
+      'Request Date': rq => new Date(Date.parse(rq.requestDate)).toLocaleDateString(this.props.stripes.locale),
+      'Requester': rq => rq.requesterName,
+      'Requester Barcode': rq => rq.requesterBarcode,
       'Request Type': rq => rq.requestType,
+      'Title': rq => rq.title,
     };
 
     const columnMapping = {
-      Title: 'title',
       Author: 'author'
     };
 
@@ -175,19 +263,41 @@ class Requests extends React.Component {
         <Pane defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
         </Pane>
-        <Pane defaultWidth="fill" paneTitle={paneTitle}>
+        <Pane defaultWidth="fill" paneTitle={paneTitle} lastMenu={
+          <PaneMenu>
+            <Button
+              title="Add New Request"
+              onClick={this.onClickAddNewRequest} buttonStyle="primary paneHeaderNewButton">+ New</Button>
+          </PaneMenu>
+        }>
           <MultiColumnList
             contentData={requests}
             virtualize
             autosize
-            visibleColumns={['title', 'author', 'Item Barcode', 'Request Type', 'requestor', 'Requestor Barcode', 'Request Date']} columnMapping={columnMapping}
+            visibleColumns={['Title', 'Item Barcode', 'Request Type', 'Requester', 'Requester Barcode', 'Request Date']}
+            columnMapping={columnMapping}
             formatter={resultsFormatter}
             onHeaderClick={this.onSort}
+            onRowClick={this.onSelectRow}
             rowMetadata={['id', 'title']}
             sortOrder={this.state.sortOrder.replace(/^-/, '').replace(/,.*/, '')}
             sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
           />
         </Pane>
+
+        {/* Details Pane */}
+        <Route
+          path={`${this.props.match.path}/view/:requestId`}
+          render={props => <this.connectedViewRequest stripes={stripes} requests={requests} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
+        />
+        {/* Add new request form */}
+        <Layer isOpen={this.props.data.addRequestMode ? this.props.data.addRequestMode.mode : false} label="Add New Request Dialog">
+          <RequestForm
+            handleSubmit={(record) => { this.create(record); }}
+            onCancel={this.onClickCloseNewRequest}
+            optionLists={{ requestTypes: requestTypes }}
+          />
+        </Layer>
       </Paneset>
     )
   }
