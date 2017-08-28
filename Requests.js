@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Route from 'react-router-dom/Route';
 import queryString from 'query-string';
+import fetch from 'isomorphic-fetch';
 
 import Button from '@folio/stripes-components/lib/Button';
 import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
@@ -30,6 +31,10 @@ const filterConfig = [
 ];
 
 class Requests extends React.Component {
+
+  static contextTypes = {
+    stripes: PropTypes.object,
+  }
 
   static propTypes = {
     data: PropTypes.object.isRequired,
@@ -77,23 +82,17 @@ class Requests extends React.Component {
       path: 'request-storage/requests',
       records: 'requests'
     },
-    // Metadata from associated ITEM and USER records will, hopefully,
-    // be aggregated in a business logic module somewhere. For now, though,
-    // these next entries are necessary
-    users: {
-      type: 'okapi',
-      path: 'users',
-      records: 'users',
-    },
-    items: {
-      type: 'okapi',
-      records: 'items',
-      path: 'inventory/items',
-    },
   };
 
-  constructor(props) {
+  constructor(props, context) {
     super(props);
+
+    this.okapiUrl = context.stripes.okapi.url;
+    this.httpHeaders = Object.assign({}, {
+      'X-Okapi-Tenant': context.stripes.okapi.tenant,
+      'X-Okapi-Token': context.stripes.store.getState().okapi.token,
+      'Content-Type': 'application/json',
+    });
 
     const query = props.location.search ? queryString.parse(props.location.search) : {};
     this.state = {
@@ -186,15 +185,43 @@ class Requests extends React.Component {
     this.props.history.push(`${this.props.match.path}${this.props.location.search}`);
   }
 
-  findUser(id) {
-    console.log("finduser", id, this.props.data.users)
-    return _.find(this.props.data.users, { id });
+  // idType can be 'id', 'barcode', etc.
+  findUser(value, idType = 'id') {
+    console.log("calling finduser", idType, value)
+
+    return fetch(`${this.okapiUrl}/users?query=(${idType}="${value}")`, { headers: this.httpHeaders })
+      .then((response) => {
+        if (response.ok) {
+          console.log("Got good response for user " + value)
+          return response.json();
+        }
+        else {
+          console.log("Fetch error for user!", idType, value);
+        }
+      })
+      .then((json) => {
+      //  console.log("json", json.users)
+        return json.users[0];
+      })
   }
 
-  findItem(id) {
-    console.log("finditem", id, this.props.data.items)
+  findItem(value, idType = 'id') {
+    console.log("calling finditem", idType, value)
 
-    return this.props.data.items.length > 0 ? _.find(this.props.data.items, { id }) : null;
+    return fetch(`${this.okapiUrl}/inventory/items?query=(${idType}="${value}")`, { headers: this.httpHeaders })
+      .then((response) => {
+        if (response.ok) {
+          console.log("Got good response for item " + value)
+          return response.json();
+        }
+        else {
+          console.log("Fetch error for item!", idType, value);
+        }
+      })
+      .then((json) => {
+        console.log("json", json.items)
+        return json.items[0];
+      })
   }
 
   // Called as a map function
@@ -202,14 +229,15 @@ class Requests extends React.Component {
     // Approach: process each entry in the requests list. For each one, do two lookups (ugh),
     // one to find the referenced item and one to fetch the referenced user. Then modify the array structure
     // to include the fields we need
+    this.findUser(r.requesterId).then((user) => {
+      r.requesterName = (user && user.personal) ? `${user.personal.firstName} ${user.personal.lastName}` : '';
+      r.requesterBarcode = (user && user.personal) ? user.barcode : '';
+    });
 
-    const item = this.findItem(r.itemId);
-    const user = this.findUser(r.requesterId);
-
-    r.title = item ? item.title : '';
-    r.itemBarcode = item ? item.barcode : '';
-    r.requesterName = user ? `${user.personal.firstName} ${user.personal.lastName}` : '';
-    r.requesterBarcode = user ? user.barcode : '';
+    this.findItem(r.itemId).then((item) => {
+      r.title = item ? item.title : '';
+      r.itemBarcode = item ? item.barcode : '';
+    });
 
     return r;
   }
@@ -220,11 +248,11 @@ class Requests extends React.Component {
 
   render() {
     const { stripes } = this.props;
-    const requests = this.props.data.requests || [];
+    let requests = this.props.data.requests || [];
     //const { requests: requestsInfo } = this.props.resources;
 
     if (requests.length > 0) {
-      requests.map(this.addRequestFields);
+      requests = requests.map(this.addRequestFields);
     }
 
     const searchHeader = <FilterPaneSearch
@@ -295,6 +323,7 @@ class Requests extends React.Component {
           <RequestForm
             handleSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewRequest}
+            onFindUser={this.findUser}
             optionLists={{ requestTypes: requestTypes }}
           />
         </Layer>
