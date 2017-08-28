@@ -1,27 +1,22 @@
 module.exports.test = function(uiTestCtx) {
 
   describe('Module test: checkout:stub', function() {
-    const { config, utils: { auth, names } } = uiTestCtx;
+    const { config, helpers: { login, openApp, logout }, meta: { testVersion } } = uiTestCtx;
     const nightmare = new Nightmare(config.nightmare);
 
     this.timeout(Number(config.test_timeout));
 
     describe('Login > Open module "Requests" > Logout', () => {
       before( done => {
-        auth.login(nightmare,config,done);
+        login(nightmare, config, done);  // logs in with the default admin credentials
       })
       after( done => {
-        auth.logout(nightmare,config,done);
+        logout(nightmare, config, done);
       })
-      it('should open module "Requests"', done => {
+      it('should open module "Requests" and find version tag ', done => {
         nightmare
-        .wait('#clickable-requests-module')
-        .click('#clickable-requests-module')
-        .wait(2000)
-        .then(function(result) {
-          done()
-        })
-        .catch(done)
+        .use(openApp(nightmare, config, done, 'requests', testVersion))
+        .then(result => result )
       })
     })
   })
