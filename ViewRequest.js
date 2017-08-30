@@ -27,7 +27,12 @@ class ViewRequest extends React.Component {
 
     if (!requests || !requestId) return <div />;
 
-    const request = requests.find(r => r.id == requestId);
+    let request = requests.find(r => r.id == requestId);
+    
+    if (request) {
+      request = this.props.joinRequest(request);
+      console.log("new request is", request)
+    }
 
     return request ? (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" dismissible onClose={this.props.onClose}>
@@ -51,6 +56,11 @@ class ViewRequest extends React.Component {
           <Row>
             <Col xs={12}>
               <KeyValue label="Author" value={_.get(request, ['author'], '')} />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12}>
+              <KeyValue label="Shelving location" value={_.get(request, ['location'], '')} />
             </Col>
           </Row>
         </fieldset>

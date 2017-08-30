@@ -205,6 +205,7 @@ class Requests extends React.Component {
       })
   }
 
+  // idType can be 'id', 'barcode', etc.
   findItem(value, idType = 'id') {
     console.log("calling finditem", idType, value)
 
@@ -230,13 +231,17 @@ class Requests extends React.Component {
     // one to find the referenced item and one to fetch the referenced user. Then modify the array structure
     // to include the fields we need
     this.findUser(r.requesterId).then((user) => {
+      console.log('user is', user)
       r.requesterName = (user && user.personal) ? `${user.personal.firstName} ${user.personal.lastName}` : '';
       r.requesterBarcode = (user && user.personal) ? user.barcode : '';
+      r.patronGroup = (user && user.personal) ? user.patronGroup : '';
     });
 
     this.findItem(r.itemId).then((item) => {
+      console.log('item is', item)
       r.title = item ? item.title : '';
       r.itemBarcode = item ? item.barcode : '';
+      r.location = (item && item.location) ? item.location.name : '';
     });
 
     return r;
@@ -321,7 +326,16 @@ class Requests extends React.Component {
         {/* Details Pane */}
         <Route
           path={`${this.props.match.path}/view/:requestId`}
-          render={props => <this.connectedViewRequest stripes={stripes} requests={requests} paneWidth="44%" onClose={this.collapseDetails} {...props} />}
+          render={props => 
+            <this.connectedViewRequest
+              stripes={stripes}
+              requests={requests}
+              paneWidth="44%"
+              onClose={this.collapseDetails}
+              joinRequest={this.addRequestFields}
+              {...props}
+            />
+          }
         />
         {/* Add new request form */}
         <Layer isOpen={this.props.data.addRequestMode ? this.props.data.addRequestMode.mode : false} label="Add New Request Dialog">
