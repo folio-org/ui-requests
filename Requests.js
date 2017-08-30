@@ -250,9 +250,14 @@ class Requests extends React.Component {
     const { stripes } = this.props;
     let requests = this.props.data.requests || [];
     //const { requests: requestsInfo } = this.props.resources;
-
+    
+    // NOTE: Uncommenting this clause will activate front-end joins of
+    // user and item records for every request in the results list. This is
+    // probably NOT something we want to do. It's here in case we need something
+    // like this later for some reason, but it shouldn't be used under
+    // normal circumstances -- and should be removed entirely at some point.
     if (requests.length > 0) {
-      requests = requests.map(this.addRequestFields);
+      // requests = requests.map(this.addRequestFields);
     }
 
     const searchHeader = <FilterPaneSearch
