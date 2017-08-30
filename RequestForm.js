@@ -12,6 +12,9 @@ import Select from '@folio/stripes-components/lib/Select';
 import TextField from '@folio/stripes-components/lib/TextField';
 import stripesForm from '@folio/stripes-form';
 
+import UserDetail from './UserDetail';
+import ItemDetail from './ItemDetail';
+
 class RequestForm extends React.Component {
 
   static propTypes = {
@@ -29,6 +32,49 @@ class RequestForm extends React.Component {
 
   constructor(props) {
     super(props);
+    
+    this.state = {
+      selectedItem: null,
+      selectedUser: null,
+      selectedItemBarcode: null,
+      selectedUserBarcode: null,
+    }
+    
+    this.onChangeItem = this.onChangeItem.bind(this);
+    this.onChangeUser = this.onChangeUser.bind(this);
+    this.onItemClick = this.onItemClick.bind(this);
+    this.onUserClick = this.onUserClick.bind(this);
+  }
+  
+  onChangeUser(e) {
+    this.setState({
+      selectedUserBarcode: e.target.value,
+    });
+  }
+  
+  onChangeItem(e) {
+    this.setState({
+      selectedItemBarcode: e.target.value,
+    });
+  }
+  
+  onUserClick() {
+    console.log("clicked with user val", this.state.selectedUserBarcode);
+    this.props.findUser(this.state.selectedUserBarcode, 'barcode').then((result) => {
+      this.setState({
+        selectedUser: result,
+      });
+    });
+  }
+  
+  onItemClick() {
+    console.log("clicked with item val", this.state.selectedItemBarcode)
+    this.props.findItem(this.state.selectedItemBarcode, 'barcode').then((result) => {
+      console.log("ITEM RESULT", result)
+      this.setState({
+        selectedItem: result,
+      });
+    });
   }
 
   render() {
@@ -69,21 +115,24 @@ class RequestForm extends React.Component {
                       <Col xs={9}>
                         <Field
                           name="item.identifier"
+                          ref="itemBarcode"
                           placeholder={'Enter item barcode'}
                           aria-label="Item barcode"
                           fullWidth
                           component={TextField}
+                          onChange={this.onChangeItem}
                         />
                       </Col>
                       <Col xs={3}>
                         <Button
                           buttonStyle="primary noRadius"
                           fullWidth
-                          onClick={console.log('noop')}
+                          onClick={this.onItemClick}
                           disabled={submitting}
                         >Select item</Button>
                       </Col>
                     </Row>
+                    { this.state.selectedItem && <ItemDetail itemRecord={this.state.selectedItem} /> }
                   </fieldset>
                   <fieldset>
                     <legend>Requester info *</legend>
@@ -91,21 +140,24 @@ class RequestForm extends React.Component {
                       <Col xs={9}>
                         <Field
                           name="requester.identifier"
+                          ref="userBarcode"
                           placeholder={'Enter requester barcode'}
                           aria-label="Requester barcode"
                           fullWidth
                           component={TextField}
+                          onChange={this.onChangeUser}
                         />
                       </Col>
                       <Col xs={3}>
                         <Button
                           buttonStyle="primary noRadius"
                           fullWidth
-                          onClick={console.log('noop')}
+                          onClick={this.onUserClick}
                           disabled={submitting}
                         >Select requester</Button>
                       </Col>
                     </Row>
+                    { this.state.selectedUser && <UserDetail userRecord={this.state.selectedUser} /> }
                   </fieldset>
                   <fieldset>
                     <legend>Request details</legend>

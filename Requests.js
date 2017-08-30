@@ -342,7 +342,8 @@ class Requests extends React.Component {
           <RequestForm
             handleSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewRequest}
-            onFindUser={this.findUser}
+            findUser={this.findUser}
+            findItem={this.findItem}
             optionLists={{ requestTypes: requestTypes }}
           />
         </Layer>
