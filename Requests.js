@@ -255,8 +255,13 @@ class Requests extends React.Component {
   create(data) {
     data.requestDate = new Date();
     console.log("CREATE called with record", data)
-    debugger;
-    this.props.mutator.requests.POST(data);
+    this.props.mutator.requests.POST(data).then((response) => {
+      return response;
+    }).then((newRecord) => {
+      console.log("New record is", newRecord);
+      this.props.mutator.addRequestMode.replace({ mode: false });
+      this.props.history.push(`/requests/view/${newRecord.id}${this.props.location.search}`);
+    });
   }
 
   render() {
