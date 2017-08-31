@@ -16,7 +16,7 @@ import transitionToParams from '@folio/stripes-components/util/transitionToParam
 
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
-import { requestTypes } from './constants';
+import { requestTypes, fulfilmentTypes } from './constants';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -49,6 +49,10 @@ class Requests extends React.Component {
       path: PropTypes.string.isRequired,
     }).isRequired,
     mutator: PropTypes.shape({
+      requests: PropTypes.shape({
+        GET: PropTypes.func,
+        POST: PropTypes.func,
+      }),
       addRequestMode: PropTypes.shape({
         replace: PropTypes.func,
       }),
@@ -105,6 +109,7 @@ class Requests extends React.Component {
     this.addRequestFields = this.addRequestFields.bind(this);
     this.collapseDetails = this.collapseDetails.bind(this);
     this.connectedViewRequest = props.stripes.connect(ViewRequest);
+    this.create = this.create.bind(this);
     this.findItem = this.findItem.bind(this);
     this.findUser = this.findUser.bind(this);
     this.onChangeFilter = commonChangeFilter.bind(this);
@@ -247,8 +252,11 @@ class Requests extends React.Component {
     return r;
   }
 
-  create(record) {
-
+  create(data) {
+    data.requestDate = new Date();
+    console.log("CREATE called with record", data)
+    debugger;
+    this.props.mutator.requests.POST(data);
   }
 
   render() {
@@ -340,11 +348,12 @@ class Requests extends React.Component {
         {/* Add new request form */}
         <Layer isOpen={this.props.data.addRequestMode ? this.props.data.addRequestMode.mode : false} label="Add New Request Dialog">
           <RequestForm
-            handleSubmit={(record) => { this.create(record); }}
+            onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewRequest}
             findUser={this.findUser}
             findItem={this.findItem}
-            optionLists={{ requestTypes: requestTypes }}
+            optionLists={{ requestTypes: requestTypes, fulfilmentTypes: fulfilmentTypes }}
+            initialValues={{ itemId: null, requesterId: null }}
           />
         </Layer>
       </Paneset>

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'react-flexbox-grid';
-import { Field } from 'redux-form';
+import { Field, changeFieldValue } from 'redux-form';
 
 import Button from '@folio/stripes-components/lib/Button';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
@@ -18,6 +18,7 @@ import ItemDetail from './ItemDetail';
 class RequestForm extends React.Component {
 
   static propTypes = {
+    change: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     reset: PropTypes.func,
     pristine: PropTypes.bool,
@@ -27,6 +28,7 @@ class RequestForm extends React.Component {
   //  okapi: PropTypes.object,
     optionLists: PropTypes.shape({
       requestTypes: PropTypes.arrayOf(PropTypes.object),
+      fulfilmentTypes: PropTypes.arrayOf(PropTypes.object),
     }),
   };
 
@@ -64,6 +66,7 @@ class RequestForm extends React.Component {
       this.setState({
         selectedUser: result,
       });
+      this.props.change('requesterId', result.id);
     });
   }
   
@@ -74,6 +77,7 @@ class RequestForm extends React.Component {
       this.setState({
         selectedItem: result,
       });
+      this.props.change('itemId', result.id);
     });
   }
 
@@ -94,6 +98,7 @@ class RequestForm extends React.Component {
     const editRequestLastMenu = <PaneMenu><Button type="submit" title="Update Request" disabled={pristine || submitting} onClick={handleSubmit}>Update Request</Button></PaneMenu>;
     const requestTypeOptions = (optionLists.requestTypes || []).map(t => ({
       label: t.label, value: t.id }));
+    const fulfilmentTypeOptions = (optionLists.fulfilmentTypes || []).map(t => ({ label: t.label, value: t.id }));
 
     return (
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
@@ -113,15 +118,19 @@ class RequestForm extends React.Component {
                     <legend>Item info *</legend>
                     <Row>
                       <Col xs={9}>
-                        <Field
-                          name="item.identifier"
-                          ref="itemBarcode"
+                        <TextField
+                          placeholder={'Enter item barcode'}
+                          aria-label="Item barcode"
+                          fullWidth
+                          onChange={this.onChangeItem}
+                        />
+                        {/* <Field
                           placeholder={'Enter item barcode'}
                           aria-label="Item barcode"
                           fullWidth
                           component={TextField}
                           onChange={this.onChangeItem}
-                        />
+                        /> */}
                       </Col>
                       <Col xs={3}>
                         <Button
@@ -138,15 +147,19 @@ class RequestForm extends React.Component {
                     <legend>Requester info *</legend>
                     <Row>
                       <Col xs={9}>
-                        <Field
-                          name="requester.identifier"
-                          ref="userBarcode"
+                        <TextField
+                          placeholder={'Enter requester barcode'}
+                          aria-label="Requester barcode"
+                          fullWidth
+                          onChange={this.onChangeUser}
+                        />                          
+                        {/* <Field
                           placeholder={'Enter requester barcode'}
                           aria-label="Requester barcode"
                           fullWidth
                           component={TextField}
                           onChange={this.onChangeUser}
-                        />
+                        /> */}
                       </Col>
                       <Col xs={3}>
                         <Button
@@ -158,6 +171,28 @@ class RequestForm extends React.Component {
                       </Col>
                     </Row>
                     { this.state.selectedUser && <UserDetail userRecord={this.state.selectedUser} /> }
+                    { this.state.selectedUser &&
+                      <Row>
+                        <Col xs={6}>
+                          <Field
+                            name="fulfilmentPreference"
+                            label="Fulfilment preference"
+                            component={Select}
+                            fullWidth
+                            dataOptions={[{ label: 'Select fulfilment option', value: '' }, ...fulfilmentTypeOptions]}                            
+                          />                          
+                        </Col>
+                        <Col xs={6}>
+                          <Field
+                            name="pickupLocation"
+                            label="Pickup location"
+                            component={Select}
+                            fullWidth
+                            dataOptions={[{ label: 'Select pickup location', value: '' }, ...requestTypeOptions]}                            
+                          />                             
+                        </Col>
+                      </Row> 
+                    }
                   </fieldset>
                   <fieldset>
                     <legend>Request details</legend>
@@ -165,12 +200,14 @@ class RequestForm extends React.Component {
                       name="requestExpirationDate"
                       label='Request expiration date'
                       aria-label="Request expiration date"
+                      backendDateStandard="YYYY-MM-DD"
                       component={Datepicker}
                     />
                     <Field
                       name="holdShelfExpirationDate"
                       label='Hold shelf expiration date'
                       aria-label="Hold shelf expiration date"
+                      backendDateStandard="YYYY-MM-DD"
                       component={Datepicker}
                     />
                   </fieldset>
