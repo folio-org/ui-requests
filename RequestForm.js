@@ -61,23 +61,20 @@ class RequestForm extends React.Component {
   }
   
   onUserClick() {
-    console.log("clicked with user val", this.state.selectedUserBarcode);
     this.props.findUser(this.state.selectedUserBarcode, 'barcode').then((result) => {
       this.setState({
-        selectedUser: result,
+        selectedUser: result.users[0],
       });
-      this.props.change('requesterId', result.id);
+      this.props.change('requesterId', result.users[0].id);
     });
   }
   
   onItemClick() {
-    console.log("clicked with item val", this.state.selectedItemBarcode)
     this.props.findItem(this.state.selectedItemBarcode, 'barcode').then((result) => {
-      console.log("ITEM RESULT", result)
       this.setState({
-        selectedItem: result,
+        selectedItem: result.items[0],
       });
-      this.props.change('itemId', result.id);
+      this.props.change('itemId', result.items[0].id);
     });
   }
 
@@ -124,13 +121,6 @@ class RequestForm extends React.Component {
                           fullWidth
                           onChange={this.onChangeItem}
                         />
-                        {/* <Field
-                          placeholder={'Enter item barcode'}
-                          aria-label="Item barcode"
-                          fullWidth
-                          component={TextField}
-                          onChange={this.onChangeItem}
-                        /> */}
                       </Col>
                       <Col xs={3}>
                         <Button
@@ -153,13 +143,6 @@ class RequestForm extends React.Component {
                           fullWidth
                           onChange={this.onChangeUser}
                         />                          
-                        {/* <Field
-                          placeholder={'Enter requester barcode'}
-                          aria-label="Requester barcode"
-                          fullWidth
-                          component={TextField}
-                          onChange={this.onChangeUser}
-                        /> */}
                       </Col>
                       <Col xs={3}>
                         <Button
