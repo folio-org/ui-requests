@@ -24,6 +24,8 @@ class RequestForm extends React.Component {
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
     onCancel: PropTypes.func,
+    findUser: PropTypes.func.isRequired,
+    findItem: PropTypes.func.isRequired,
     initialValues: PropTypes.object,
   //  okapi: PropTypes.object,
     optionLists: PropTypes.shape({
@@ -32,34 +34,38 @@ class RequestForm extends React.Component {
     }),
   };
 
+  static defaultProps = {
+    optionLists: {},
+  };
+
   constructor(props) {
     super(props);
-    
+
     this.state = {
       selectedItem: null,
       selectedUser: null,
       selectedItemBarcode: null,
       selectedUserBarcode: null,
-    }
-    
+    };
+
     this.onChangeItem = this.onChangeItem.bind(this);
     this.onChangeUser = this.onChangeUser.bind(this);
     this.onItemClick = this.onItemClick.bind(this);
     this.onUserClick = this.onUserClick.bind(this);
   }
-  
+
   onChangeUser(e) {
     this.setState({
       selectedUserBarcode: e.target.value,
     });
   }
-  
+
   onChangeItem(e) {
     this.setState({
       selectedItemBarcode: e.target.value,
     });
   }
-  
+
   onUserClick() {
     this.props.findUser(this.state.selectedUserBarcode, 'barcode').then((result) => {
       this.setState({
@@ -68,7 +74,7 @@ class RequestForm extends React.Component {
       this.props.change('requesterId', result.users[0].id);
     });
   }
-  
+
   onItemClick() {
     this.props.findItem(this.state.selectedItemBarcode, 'barcode').then((result) => {
       this.setState({
@@ -79,14 +85,12 @@ class RequestForm extends React.Component {
   }
 
   render() {
-
     const {
       handleSubmit,
       reset,  // eslint-disable-line no-unused-vars
       pristine,
       submitting,
       onCancel,
-      initialValues,
       optionLists,
     } = this.props;
 
@@ -104,96 +108,96 @@ class RequestForm extends React.Component {
             <Row>
               <Col sm={5} smOffset={1}>
                 <h2>Request record</h2>
-                  <Field
-                    label="Request Type *"
-                    name="requestType"
-                    component={Select}
-                    fullWidth
-                    dataOptions={[{ label: 'Select request type', value: '' }, ...requestTypeOptions]}
-                  />
-                  <fieldset>
-                    <legend>Item info *</legend>
+                <Field
+                  label="Request Type *"
+                  name="requestType"
+                  component={Select}
+                  fullWidth
+                  dataOptions={[{ label: 'Select request type', value: '' }, ...requestTypeOptions]}
+                />
+                <fieldset>
+                  <legend>Item info *</legend>
+                  <Row>
+                    <Col xs={9}>
+                      <TextField
+                        placeholder={'Enter item barcode'}
+                        aria-label="Item barcode"
+                        fullWidth
+                        onChange={this.onChangeItem}
+                      />
+                    </Col>
+                    <Col xs={3}>
+                      <Button
+                        buttonStyle="primary noRadius"
+                        fullWidth
+                        onClick={this.onItemClick}
+                        disabled={submitting}
+                      >Select item</Button>
+                    </Col>
+                  </Row>
+                  { this.state.selectedItem && <ItemDetail itemRecord={this.state.selectedItem} /> }
+                </fieldset>
+                <fieldset>
+                  <legend>Requester info *</legend>
+                  <Row>
+                    <Col xs={9}>
+                      <TextField
+                        placeholder={'Enter requester barcode'}
+                        aria-label="Requester barcode"
+                        fullWidth
+                        onChange={this.onChangeUser}
+                      />
+                    </Col>
+                    <Col xs={3}>
+                      <Button
+                        buttonStyle="primary noRadius"
+                        fullWidth
+                        onClick={this.onUserClick}
+                        disabled={submitting}
+                      >Select requester</Button>
+                    </Col>
+                  </Row>
+                  { this.state.selectedUser && <UserDetail userRecord={this.state.selectedUser} /> }
+                  { this.state.selectedUser &&
                     <Row>
-                      <Col xs={9}>
-                        <TextField
-                          placeholder={'Enter item barcode'}
-                          aria-label="Item barcode"
+                      <Col xs={6}>
+                        <Field
+                          name="fulfilmentPreference"
+                          label="Fulfilment preference"
+                          component={Select}
                           fullWidth
-                          onChange={this.onChangeItem}
+                          dataOptions={[{ label: 'Select fulfilment option', value: '' }, ...fulfilmentTypeOptions]}
                         />
                       </Col>
-                      <Col xs={3}>
-                        <Button
-                          buttonStyle="primary noRadius"
+                      <Col xs={6}>
+                        <Field
+                          name="pickupLocation"
+                          label="Pickup location"
+                          component={Select}
                           fullWidth
-                          onClick={this.onItemClick}
-                          disabled={submitting}
-                        >Select item</Button>
+                          dataOptions={[{ label: 'Select pickup location', value: '' }, ...requestTypeOptions]}
+                        />
                       </Col>
                     </Row>
-                    { this.state.selectedItem && <ItemDetail itemRecord={this.state.selectedItem} /> }
-                  </fieldset>
-                  <fieldset>
-                    <legend>Requester info *</legend>
-                    <Row>
-                      <Col xs={9}>
-                        <TextField
-                          placeholder={'Enter requester barcode'}
-                          aria-label="Requester barcode"
-                          fullWidth
-                          onChange={this.onChangeUser}
-                        />                          
-                      </Col>
-                      <Col xs={3}>
-                        <Button
-                          buttonStyle="primary noRadius"
-                          fullWidth
-                          onClick={this.onUserClick}
-                          disabled={submitting}
-                        >Select requester</Button>
-                      </Col>
-                    </Row>
-                    { this.state.selectedUser && <UserDetail userRecord={this.state.selectedUser} /> }
-                    { this.state.selectedUser &&
-                      <Row>
-                        <Col xs={6}>
-                          <Field
-                            name="fulfilmentPreference"
-                            label="Fulfilment preference"
-                            component={Select}
-                            fullWidth
-                            dataOptions={[{ label: 'Select fulfilment option', value: '' }, ...fulfilmentTypeOptions]}                            
-                          />                          
-                        </Col>
-                        <Col xs={6}>
-                          <Field
-                            name="pickupLocation"
-                            label="Pickup location"
-                            component={Select}
-                            fullWidth
-                            dataOptions={[{ label: 'Select pickup location', value: '' }, ...requestTypeOptions]}                            
-                          />                             
-                        </Col>
-                      </Row> 
-                    }
-                  </fieldset>
-                  <fieldset>
-                    <legend>Request details</legend>
-                    <Field
-                      name="requestExpirationDate"
-                      label='Request expiration date'
-                      aria-label="Request expiration date"
-                      backendDateStandard="YYYY-MM-DD"
-                      component={Datepicker}
-                    />
-                    <Field
-                      name="holdShelfExpirationDate"
-                      label='Hold shelf expiration date'
-                      aria-label="Hold shelf expiration date"
-                      backendDateStandard="YYYY-MM-DD"
-                      component={Datepicker}
-                    />
-                  </fieldset>
+                  }
+                </fieldset>
+                <fieldset>
+                  <legend>Request details</legend>
+                  <Field
+                    name="requestExpirationDate"
+                    label="Request expiration date"
+                    aria-label="Request expiration date"
+                    backendDateStandard="YYYY-MM-DD"
+                    component={Datepicker}
+                  />
+                  <Field
+                    name="holdShelfExpirationDate"
+                    label="Hold shelf expiration date"
+                    aria-label="Hold shelf expiration date"
+                    backendDateStandard="YYYY-MM-DD"
+                    component={Datepicker}
+                  />
+                </fieldset>
               </Col>
             </Row>
           </Pane>
