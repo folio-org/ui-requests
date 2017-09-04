@@ -72,6 +72,7 @@ class Requests extends React.Component {
     }).isRequired,
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
+      locale: PropTypes.func.isRequired,
       logger: PropTypes.shape({
         log: PropTypes.func.isRequired,
       }).isRequired,
@@ -84,7 +85,7 @@ class Requests extends React.Component {
     requests: {
       type: 'okapi',
       path: 'request-storage/requests',
-      records: 'requests'
+      records: 'requests',
     },
   };
 
@@ -152,27 +153,18 @@ class Requests extends React.Component {
     this.props.history.push(this.props.location.pathname);
   }
 
-  performSearch = _.debounce((query) => {
-    this.transitionToParams({ query });
-  }, 250);
-
   /* ************** Filter handlers ************** */
   onChangeFilter = (e) => {
     this.props.mutator.requestCount.replace(INITIAL_RESULT_COUNT);
     this.commonChangeFilter(e);
   }
 
-  // provided for onChangeFilter
-  updateFilters(filters) {
-    this.transitionToParams({ filters: Object.keys(filters).filter(key => filters[key]).join(',') });
-  }
-
   onSelectRow(e, meta) {
     const requestId = meta.id;
-    this.addRequestFields(meta).then(request => {
+    this.addRequestFields(meta).then((request) => {
       this.setState({ selectedItem: request });
       this.props.history.push(`/requests/view/${requestId}${this.props.location.search}`);
-   });
+    });
   }
 
   onClickAddNewRequest(e) {
@@ -183,6 +175,15 @@ class Requests extends React.Component {
   onClickCloseNewRequest(e) {
     e.preventDefault();
     this.props.mutator.addRequestMode.replace({ mode: false });
+  }
+
+  performSearch = _.debounce((query) => {
+    this.transitionToParams({ query });
+  }, 250);
+
+  // provided for onChangeFilter
+  updateFilters(filters) {
+    this.transitionToParams({ filters: Object.keys(filters).filter(key => filters[key]).join(',') });
   }
 
   collapseDetails() {
@@ -204,34 +205,30 @@ class Requests extends React.Component {
 
   // Called as a map function
   addRequestFields(r) {
-
     return Promise.all([this.findUser(r.requesterId), this.findItem(r.itemId)]).then((resultArray) => {
-
       // Each element of the promises array returns an array of results, but in
       // this case, there should only ever be one result for each.
       const user = resultArray[0].users[0];
       const item = resultArray[1].items[0];
-            
-      let enhancedRequest = Object.assign({}, r);
+
+      const enhancedRequest = Object.assign({}, r);
       enhancedRequest.requesterName = (user && user.personal) ? `${user.personal.firstName} ${user.personal.lastName}` : '';
       enhancedRequest.requesterBarcode = (user && user.personal) ? user.barcode : '';
-      enhancedRequest.patronGroup = (user && user.personal) ? user.patronGroup : '';   
-    
+      enhancedRequest.patronGroup = (user && user.personal) ? user.patronGroup : '';
+
       enhancedRequest.title = item ? item.title : '';
       enhancedRequest.itemBarcode = item ? item.barcode : '';
-      enhancedRequest.location = (item && item.location) ? item.location.name : '';   
-      
+      enhancedRequest.location = (item && item.location) ? item.location.name : '';
+
       return enhancedRequest;
     });
   }
 
   create(data) {
     data.requestDate = new Date();
-    console.log("CREATE called with record", data)
-    this.props.mutator.requests.POST(data).then((response) => {
-      return response;
-    }).then((newRecord) => {
-      console.log("New record is", newRecord);
+    console.log('CREATE request called with record', data);
+    this.props.mutator.requests.POST(data).then(response => response).then((newRecord) => {
+      console.log('New request record is', newRecord);
       this.props.mutator.addRequestMode.replace({ mode: false });
       this.props.history.push(`/requests/view/${newRecord.id}${this.props.location.search}`);
     });
@@ -239,9 +236,8 @@ class Requests extends React.Component {
 
   render() {
     const { stripes } = this.props;
-    let requests = this.props.data.requests || [];
-    //const { requests: requestsInfo } = this.props.resources;
-    
+    const requests = this.props.data.requests || [];
+
     // NOTE: Uncommenting this clause will activate front-end joins of
     // user and item records for every request in the results list. This is
     // probably NOT something we want to do. It's here in case we need something
@@ -251,13 +247,13 @@ class Requests extends React.Component {
       // requests = requests.map(this.addRequestFields);
     }
 
-    const searchHeader = <FilterPaneSearch
+    const searchHeader = (<FilterPaneSearch
       id="SearchField"
       onChange={this.onChangeSearch}
       onClear={this.onClearSearch}
       value={this.state.searchTerm}
       searchAriaLabel="Requests search"
-    />;
+    />);
 
     const paneTitle = (
       <div style={{ textAlign: 'center' }}>
@@ -272,14 +268,14 @@ class Requests extends React.Component {
     const resultsFormatter = {
       'Item Barcode': rq => rq.itemBarcode,
       'Request Date': rq => new Date(Date.parse(rq.requestDate)).toLocaleDateString(this.props.stripes.locale),
-      'Requester': rq => rq.requesterName,
+      Requester: rq => rq.requesterName,
       'Requester Barcode': rq => rq.requesterBarcode,
       'Request Type': rq => rq.requestType,
-      'Title': rq => rq.title,
+      Title: rq => rq.title,
     };
 
     const columnMapping = {
-      Author: 'author'
+      Author: 'author',
     };
 
     return (
@@ -287,13 +283,21 @@ class Requests extends React.Component {
         <Pane defaultWidth="16%" header={searchHeader}>
           <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
         </Pane>
-        <Pane defaultWidth="fill" paneTitle={paneTitle} lastMenu={
-          <PaneMenu>
-            <Button
-              title="Add New Request"
-              onClick={this.onClickAddNewRequest} buttonStyle="primary paneHeaderNewButton">+ New</Button>
-          </PaneMenu>
-        }>
+        <Pane
+          defaultWidth="fill"
+          paneTitle={paneTitle}
+          lastMenu={
+            <PaneMenu>
+              <Button
+                title="Add New Request"
+                onClick={this.onClickAddNewRequest}
+                buttonStyle="primary paneHeaderNewButton"
+              >
+                + New
+              </Button>
+            </PaneMenu>
+          }
+        >
           <MultiColumnList
             contentData={requests}
             virtualize
@@ -312,7 +316,7 @@ class Requests extends React.Component {
         {/* Details Pane */}
         <Route
           path={`${this.props.match.path}/view/:requestId`}
-          render={props => 
+          render={props =>
             <this.connectedViewRequest
               stripes={stripes}
               request={this.state.selectedItem}
@@ -330,12 +334,12 @@ class Requests extends React.Component {
             onCancel={this.onClickCloseNewRequest}
             findUser={this.findUser}
             findItem={this.findItem}
-            optionLists={{ requestTypes: requestTypes, fulfilmentTypes: fulfilmentTypes }}
+            optionLists={{ requestTypes, fulfilmentTypes }}
             initialValues={{ itemId: null, requesterId: null }}
           />
         </Layer>
       </Paneset>
-    )
+    );
   }
 
 }
