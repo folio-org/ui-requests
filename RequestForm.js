@@ -135,7 +135,7 @@ class RequestForm extends React.Component {
                       >Select item</Button>
                     </Col>
                   </Row>
-                  { this.state.selectedItem && <ItemDetail itemRecord={this.state.selectedItem} /> }
+                  { this.state.selectedItem && <ItemDetail item={this.state.selectedItem} /> }
                 </fieldset>
                 <fieldset>
                   <legend>Requester info *</legend>
@@ -157,7 +157,7 @@ class RequestForm extends React.Component {
                       >Select requester</Button>
                     </Col>
                   </Row>
-                  { this.state.selectedUser && <UserDetail userRecord={this.state.selectedUser} /> }
+                  { this.state.selectedUser && <UserDetail user={this.state.selectedUser} /> }
                   { this.state.selectedUser &&
                     <Row>
                       <Col xs={6}>
