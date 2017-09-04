@@ -25,10 +25,31 @@ class ViewRequest extends React.Component {
     },
   });
 
-  render() {
-    const { resources } = this.props;
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      enhancedRequest: {},
+    };
+  }
+
+  componentWillReceiveProps() {
+    const { resources, joinRequest } = this.props;
     const request = (resources.request && resources.request.hasLoaded) ? resources.request.records[0] : null;
-    console.log("got request?", request)
+
+    if (request) {
+      joinRequest(request).then(newRequest => {
+        console.log("got enhanced request", newRequest)
+        this.setState({
+          enhancedRequest: newRequest,
+        });
+      });
+    }
+  }
+
+  render() {
+
+    const request = this.state.enhancedRequest || this.props.resources.request;
 
     return request ? (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" dismissible onClose={this.props.onClose}>

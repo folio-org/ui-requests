@@ -317,6 +317,7 @@ class Requests extends React.Component {
           path={`${this.props.match.path}/view/:requestId`}
           render={props =>
             <this.connectedViewRequest
+              joinRequest={this.addRequestFields}
               paneWidth="44%"
               onClose={this.collapseDetails}
               {...props}
