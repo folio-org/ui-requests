@@ -18,8 +18,17 @@ class ViewRequest extends React.Component {
     paneWidth: '50%',
   };
 
+  static manifest = Object.freeze({
+    request: {
+      type: 'okapi',
+      path: 'request-storage/requests/:{requestId}',
+    },
+  });
+
   render() {
-    const request = this.props.request;
+    const { resources } = this.props;
+    const request = (resources.request && resources.request.hasLoaded) ? resources.request.records[0] : null;
+    console.log("got request?", request)
 
     return request ? (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" dismissible onClose={this.props.onClose}>

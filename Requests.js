@@ -161,10 +161,8 @@ class Requests extends React.Component {
 
   onSelectRow(e, meta) {
     const requestId = meta.id;
-    this.addRequestFields(meta).then((request) => {
-      this.setState({ selectedItem: request });
-      this.props.history.push(`/requests/view/${requestId}${this.props.location.search}`);
-    });
+    this.setState({ selectedItem: meta });
+    this.props.history.push(`/requests/view/${requestId}${this.props.location.search}`);
   }
 
   onClickAddNewRequest(e) {
@@ -308,6 +306,7 @@ class Requests extends React.Component {
             onHeaderClick={this.onSort}
             onRowClick={this.onSelectRow}
             rowMetadata={['id', 'title']}
+            selectedRow={this.state.selectedItem}
             sortOrder={this.state.sortOrder.replace(/^-/, '').replace(/,.*/, '')}
             sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
           />
@@ -318,7 +317,6 @@ class Requests extends React.Component {
           path={`${this.props.match.path}/view/:requestId`}
           render={props =>
             <this.connectedViewRequest
-              request={this.state.selectedItem}
               paneWidth="44%"
               onClose={this.collapseDetails}
               {...props}
