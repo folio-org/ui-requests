@@ -7,4 +7,4 @@ export const requestTypes = [
 export const fulfilmentTypes = [
   { id: 'Hold Shelf', label: 'Hold Shelf' },
   { id: 'Delivery', label: 'Delivery' },
-]
+];
