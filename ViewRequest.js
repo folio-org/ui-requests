@@ -9,30 +9,8 @@ import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 
 class ViewRequest extends React.Component {
 
-  static manifest = Object.freeze({
-    // requests: {
-    //   type: 'okapi',
-    //   path: 'request-storage/requests/:{requestId}',
-    //   clear: false,
-    // },
-  });
-
-  constructor(props) {
-    super(props);
-
-  }
-
   render() {
-    const { requests, match: { params: { requestId }}} = this.props;
-
-    if (!requests || !requestId) return <div />;
-
-    let request = requests.find(r => r.id == requestId);
-    
-    if (request) {
-      request = this.props.joinRequest(request);
-      console.log("new request is", request)
-    }
+    const request = this.props.request;
 
     return request ? (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" dismissible onClose={this.props.onClose}>

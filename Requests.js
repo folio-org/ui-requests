@@ -169,8 +169,10 @@ class Requests extends React.Component {
 
   onSelectRow(e, meta) {
     const requestId = meta.id;
-    this.setState({ selectedItem: meta });
-    this.props.history.push(`/requests/view/${requestId}${this.props.location.search}`);
+    this.addRequestFields(meta).then(request => {
+      this.setState({ selectedItem: request });
+      this.props.history.push(`/requests/view/${requestId}${this.props.location.search}`);
+   });
   }
 
   onClickAddNewRequest(e) {
@@ -192,64 +194,35 @@ class Requests extends React.Component {
 
   // idType can be 'id', 'barcode', etc.
   findUser(value, idType = 'id') {
-    console.log("calling finduser", idType, value)
-
-    return fetch(`${this.okapiUrl}/users?query=(${idType}="${value}")`, { headers: this.httpHeaders })
-      .then((response) => {
-        if (response.ok) {
-          console.log("Got good response for user " + value)
-          return response.json();
-        }
-        else {
-          console.log("Fetch error for user!", idType, value);
-        }
-      })
-      .then((json) => {
-      //  console.log("json", json.users)
-        return json.users[0];
-      })
+    return fetch(`${this.okapiUrl}/users?query=(${idType}="${value}")`, { headers: this.httpHeaders }).then(response => response.json());
   }
 
   // idType can be 'id', 'barcode', etc.
   findItem(value, idType = 'id') {
-    console.log("calling finditem", idType, value)
-
-    return fetch(`${this.okapiUrl}/inventory/items?query=(${idType}="${value}")`, { headers: this.httpHeaders })
-      .then((response) => {
-        if (response.ok) {
-          console.log("Got good response for item " + value)
-          return response.json();
-        }
-        else {
-          console.log("Fetch error for item!", idType, value);
-        }
-      })
-      .then((json) => {
-        console.log("json", json.items)
-        return json.items[0];
-      })
+    return fetch(`${this.okapiUrl}/inventory/items?query=(${idType}="${value}")`, { headers: this.httpHeaders }).then(response => response.json());
   }
 
   // Called as a map function
   addRequestFields(r) {
-    // Approach: process each entry in the requests list. For each one, do two lookups (ugh),
-    // one to find the referenced item and one to fetch the referenced user. Then modify the array structure
-    // to include the fields we need
-    this.findUser(r.requesterId).then((user) => {
-      console.log('user is', user)
-      r.requesterName = (user && user.personal) ? `${user.personal.firstName} ${user.personal.lastName}` : '';
-      r.requesterBarcode = (user && user.personal) ? user.barcode : '';
-      r.patronGroup = (user && user.personal) ? user.patronGroup : '';
-    });
 
-    this.findItem(r.itemId).then((item) => {
-      console.log('item is', item)
-      r.title = item ? item.title : '';
-      r.itemBarcode = item ? item.barcode : '';
-      r.location = (item && item.location) ? item.location.name : '';
-    });
+    return Promise.all([this.findUser(r.requesterId), this.findItem(r.itemId)]).then((resultArray) => {
 
-    return r;
+      // Each element of the promises array returns an array of results, but in
+      // this case, there should only ever be one result for each.
+      const user = resultArray[0].users[0];
+      const item = resultArray[1].items[0];
+            
+      let enhancedRequest = Object.assign({}, r);
+      enhancedRequest.requesterName = (user && user.personal) ? `${user.personal.firstName} ${user.personal.lastName}` : '';
+      enhancedRequest.requesterBarcode = (user && user.personal) ? user.barcode : '';
+      enhancedRequest.patronGroup = (user && user.personal) ? user.patronGroup : '';   
+    
+      enhancedRequest.title = item ? item.title : '';
+      enhancedRequest.itemBarcode = item ? item.barcode : '';
+      enhancedRequest.location = (item && item.location) ? item.location.name : '';   
+      
+      return enhancedRequest;
+    });
   }
 
   create(data) {
@@ -342,7 +315,7 @@ class Requests extends React.Component {
           render={props => 
             <this.connectedViewRequest
               stripes={stripes}
-              requests={requests}
+              request={this.state.selectedItem}
               paneWidth="44%"
               onClose={this.collapseDetails}
               joinRequest={this.addRequestFields}
