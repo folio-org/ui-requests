@@ -162,17 +162,9 @@ class Requests extends React.Component {
   }
 
   onSelectRow(e, meta) {
-    console.log("ON SELECT ROW with meta", meta)
     const requestId = meta.id;
     this.setState({ selectedItem: meta });
-  //  this.addRequestFields(meta).then(newRequest => {
-      // this.setState({
-      //   selectedItem: meta,
-      // }, () => {
-         console.log("SET STATE called with selectedItem", meta)
-         this.props.history.push(`/requests/view/${requestId}${this.props.location.search}`);
-      // });
-  //  });
+    this.props.history.push(`/requests/view/${requestId}${this.props.location.search}`);
   }
 
   onClickAddNewRequest(e) {
@@ -243,8 +235,8 @@ class Requests extends React.Component {
   }
 
   render() {
-    const { stripes } = this.props;
-    const requests = this.props.data.requests || [];
+    const { stripes, resources } = this.props;
+    const requests = (resources.requests || {}).records || [];
 
     console.log("NEW SELECTED ITEM", this.props)
 
@@ -331,7 +323,6 @@ class Requests extends React.Component {
           render={props =>
             <this.connectedViewRequest
               joinRequest={this.addRequestFields}
-              request={this.state.selectedItem}
               paneWidth="44%"
               onClose={this.collapseDetails}
               {...props}

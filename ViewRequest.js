@@ -23,6 +23,11 @@ class ViewRequest extends React.Component {
       type: 'okapi',
       path: 'request-storage/requests/:{requestId}',
     },
+    patronGroups: {
+      type: 'okapi',
+      path: 'groups',
+      records: 'usergroups',
+    },
   };
 
   constructor(props) {
@@ -77,15 +82,18 @@ class ViewRequest extends React.Component {
   }
 
   render() {
+    const { resources } = this.props;
+    let request = (resources.selectedRequest && resources.selectedRequest.hasLoaded) ? resources.selectedRequest.records[0] : null;
+    let patronGroup;
 
-    console.log("PROPS", this.props);
-    console.log("STATE", this.state);
-    //const request = this.props.request;
-    //const request = this.state.enhancedRequest || this.props.resources.selectedRequest.records[0];
-    let request = (this.props.resources.selectedRequest && this.props.resources.selectedRequest.hasLoaded) ? this.props.resources.selectedRequest.records[0] : null;
     if (this.state.enhancedRequest.id) {
       console.log("db USING ENHANCED")
       request = this.state.enhancedRequest;
+      patronGroup = request.patronGroup;
+      if (resources.patronGroups && resources.patronGroups.hasLoaded) {
+        console.log(`Looking for ${patronGroup} in`, resources.patronGroups.records )
+        patronGroup = resources.patronGroups.records.find(g => g.id === request.patronGroup).group || patronGroup;
+      }
     }
 
     return request ? (
@@ -127,7 +135,7 @@ class ViewRequest extends React.Component {
           </Row>
           <Row>
             <Col xs={12}>
-              <KeyValue label="Patron group" value={_.get(request, ['patronGroup'], '')} />
+              <KeyValue label="Patron group" value={patronGroup} />
             </Col>
           </Row>
           <Row>
