@@ -136,7 +136,7 @@ class RequestForm extends React.Component {
     return (
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
-          <Pane defaultWidth="100%" firstMenu={addRequestFirstMenu} lastMenu={false ? editRequestLastMenu : addRequestLastMenu} paneTitle={false ? 'Edit request' : 'New request'}>
+          <Pane defaultWidth="100%" height="100%" firstMenu={addRequestFirstMenu} lastMenu={false ? editRequestLastMenu : addRequestLastMenu} paneTitle={false ? 'Edit request' : 'New request'}>
             <Row>
               <Col sm={5} smOffset={1}>
                 <h2>Request record</h2>
@@ -236,6 +236,18 @@ class RequestForm extends React.Component {
                 </fieldset>
               </Col>
             </Row>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
           </Pane>
         </Paneset>
       </form>
