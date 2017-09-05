@@ -38,32 +38,12 @@ class ViewRequest extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    // console.log("WILL RECEIVE", nextProps)
-    // if (nextProps.resources && nextProps.resources.selectedRequest && nextProps.resources.selectedRequest.hasLoaded) {
-    //   if (this.props.resources.selectedRequest.hasLoaded && nextProps.resources.selectedRequest.records[0].id !== this.props.resources.selectedRequest.records[0].id) {
-    //     console.log("DIFFERENT!")
-    //   }
-    //   else {
-    //     console.log("SAME!")
-    //   }
-    //   const basicRequest = nextProps.resources.selectedRequest.records[0];
-    //   this.props.joinRequest(basicRequest).then(newRequest => {
-    //     this.setState({
-    //       enhancedRequest: newRequest,
-    //     });
-    //   });
-    // }
-  }
-
   componentDidUpdate(prevProps, prevState) {
-    console.log("db DID RECEIVE", prevProps, prevState)
     const prevRQ = prevProps.resources.selectedRequest;
     const currentRQ = this.props.resources.selectedRequest;
 
     if (prevRQ && prevRQ.hasLoaded && currentRQ && currentRQ.hasLoaded) {
       if (prevRQ.records[0].id !== currentRQ.records[0].id || !this.state.enhancedRequest.id) {
-        console.log("db PROPS DON'T MATCH, should update the enhanced record", prevRQ.records[0].id, currentRQ.records[0].id)
         const basicRequest = currentRQ.records[0];
         this.props.joinRequest(basicRequest).then(newRequest => {
           this.setState({
@@ -71,14 +51,7 @@ class ViewRequest extends React.Component {
           });
         });
       }
-      else {
-        console.log("db PROPS MATCH for ", currentRQ.records[0].id)
-      }
     }
-    else {
-      console.log("db RESOURCES NOT AVAILABLE YET")
-    }
-
   }
 
   render() {
@@ -87,11 +60,9 @@ class ViewRequest extends React.Component {
     let patronGroup;
 
     if (this.state.enhancedRequest.id) {
-      console.log("db USING ENHANCED")
       request = this.state.enhancedRequest;
       patronGroup = request.patronGroup;
       if (resources.patronGroups && resources.patronGroups.hasLoaded) {
-        console.log(`Looking for ${patronGroup} in`, resources.patronGroups.records )
         patronGroup = resources.patronGroups.records.find(g => g.id === request.patronGroup).group || patronGroup;
       }
     }

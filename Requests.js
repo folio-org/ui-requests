@@ -227,6 +227,15 @@ class Requests extends React.Component {
   create(data) {
     data.requestDate = new Date();
     console.log('CREATE request called with record', data);
+
+    // HACK: In order to use redux-form stuff like validation, fields must have a name property.
+    // Unfortunately, naming fields means that redux-form will incorporate them as keys into
+    // the data object passed through to here. Specifically, the two barcode fields for item
+    // and requester are necessary for the form, but incompatible with the request schema.
+    // They have to be removed before the record can be posted.
+    delete data.itemBarcode;
+    delete data.requesterBarcode;
+
     this.props.mutator.requests.POST(data).then(response => response).then((newRecord) => {
       console.log('New request record is', newRecord);
       this.props.mutator.addRequestMode.replace({ mode: false });

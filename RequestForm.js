@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'react-flexbox-grid';
-import { Field, changeFieldValue } from 'redux-form';
+import { Field, SubmissionError } from 'redux-form';
 
 import Button from '@folio/stripes-components/lib/Button';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
@@ -14,6 +14,20 @@ import stripesForm from '@folio/stripes-form';
 
 import UserDetail from './UserDetail';
 import ItemDetail from './ItemDetail';
+
+
+function validate(values) {
+  const errors = {};
+
+  if (!values.itemBarcode) {
+    errors.itemBarcode = 'Please select an item';
+  }
+  if (!values.requesterBarcode) {
+    errors.requesterBarcode = 'Please select a requester';
+  }
+
+  return errors;
+}
 
 class RequestForm extends React.Component {
 
@@ -77,10 +91,15 @@ class RequestForm extends React.Component {
 
   onItemClick() {
     this.props.findItem(this.state.selectedItemBarcode, 'barcode').then((result) => {
-      this.setState({
-        selectedItem: result.items[0],
-      });
-      this.props.change('itemId', result.items[0].id);
+      if (result.totalRecords > 0) {
+        this.setState({
+          selectedItem: result.items[0],
+        });
+        this.props.change('itemId', result.items[0].id);
+      }
+      else {
+        console.log("Record does not exist")
+      }
     });
   }
 
@@ -98,8 +117,8 @@ class RequestForm extends React.Component {
     const addRequestLastMenu = <PaneMenu><Button type="submit" title="Create New Request" disabled={pristine || submitting} onClick={handleSubmit}>Create Request</Button></PaneMenu>;
     const editRequestLastMenu = <PaneMenu><Button type="submit" title="Update Request" disabled={pristine || submitting} onClick={handleSubmit}>Update Request</Button></PaneMenu>;
     const requestTypeOptions = (optionLists.requestTypes || []).map(t => ({
-      label: t.label, value: t.id }));
-    const fulfilmentTypeOptions = (optionLists.fulfilmentTypes || []).map(t => ({ label: t.label, value: t.id }));
+      label: t.label, value: t.id, selected: t.id === 'Hold' }));
+    const fulfilmentTypeOptions = (optionLists.fulfilmentTypes || []).map(t => ({ label: t.label, value: t.id, selected: t.id === 'Hold' }));
 
     return (
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
@@ -113,16 +132,18 @@ class RequestForm extends React.Component {
                   name="requestType"
                   component={Select}
                   fullWidth
-                  dataOptions={[{ label: 'Select request type', value: '' }, ...requestTypeOptions]}
+                  dataOptions={requestTypeOptions}
                 />
                 <fieldset>
                   <legend>Item info *</legend>
                   <Row>
                     <Col xs={9}>
-                      <TextField
+                      <Field
+                        name="itemBarcode"
                         placeholder={'Enter item barcode'}
                         aria-label="Item barcode"
                         fullWidth
+                        component={TextField}
                         onChange={this.onChangeItem}
                       />
                     </Col>
@@ -141,10 +162,12 @@ class RequestForm extends React.Component {
                   <legend>Requester info *</legend>
                   <Row>
                     <Col xs={9}>
-                      <TextField
+                      <Field
+                        name="requesterBarcode"
                         placeholder={'Enter requester barcode'}
                         aria-label="Requester barcode"
                         fullWidth
+                        component={TextField}
                         onChange={this.onChangeUser}
                       />
                     </Col>
@@ -169,7 +192,7 @@ class RequestForm extends React.Component {
                           dataOptions={[{ label: 'Select fulfilment option', value: '' }, ...fulfilmentTypeOptions]}
                         />
                       </Col>
-                      <Col xs={6}>
+              {/*       <Col xs={6}>
                         <Field
                           name="pickupLocation"
                           label="Pickup location"
@@ -177,7 +200,7 @@ class RequestForm extends React.Component {
                           fullWidth
                           dataOptions={[{ label: 'Select pickup location', value: '' }, ...requestTypeOptions]}
                         />
-                      </Col>
+                      </Col> */}
                     </Row>
                   }
                 </fieldset>
@@ -209,6 +232,6 @@ class RequestForm extends React.Component {
 
 export default stripesForm({
   form: 'requestForm',
-
+  validate,
   navigationCheck: true,
 })(RequestForm);
