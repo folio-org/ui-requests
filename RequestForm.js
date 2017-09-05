@@ -15,7 +15,6 @@ import stripesForm from '@folio/stripes-form';
 import UserDetail from './UserDetail';
 import ItemDetail from './ItemDetail';
 
-
 function validate(values) {
   const errors = {};
 
@@ -60,6 +59,8 @@ class RequestForm extends React.Component {
       selectedUser: null,
       selectedItemBarcode: null,
       selectedUserBarcode: null,
+      itemSelectionError: null,
+      userSelectionError: null,
     };
 
     this.onChangeItem = this.onChangeItem.bind(this);
@@ -82,10 +83,19 @@ class RequestForm extends React.Component {
 
   onUserClick() {
     this.props.findUser(this.state.selectedUserBarcode, 'barcode').then((result) => {
-      this.setState({
-        selectedUser: result.users[0],
-      });
-      this.props.change('requesterId', result.users[0].id);
+      if (result.totalRecords > 0) {
+        this.setState({
+          selectedUser: result.users[0],
+          userSelectionError: false,
+        });
+        this.props.change('requesterId', result.users[0].id);
+      }
+      else {
+        console.log("Record does not exist");
+        this.setState({
+          userSelectionError: 'User with this barcode does not exist',
+        });
+      }
     });
   }
 
@@ -98,7 +108,10 @@ class RequestForm extends React.Component {
         this.props.change('itemId', result.items[0].id);
       }
       else {
-        console.log("Record does not exist")
+        console.log("Record does not exist");
+        this.setState({
+          itemSelectionError: 'Item with this barcode does not exist',
+        });
       }
     });
   }
@@ -156,7 +169,7 @@ class RequestForm extends React.Component {
                       >Select item</Button>
                     </Col>
                   </Row>
-                  { this.state.selectedItem && <ItemDetail item={this.state.selectedItem} /> }
+                  { (this.state.selectedItem || this.state.itemSelectionError) && <ItemDetail item={this.state.selectedItem} error={this.state.itemSelectionError} /> }
                 </fieldset>
                 <fieldset>
                   <legend>Requester info *</legend>
@@ -180,7 +193,7 @@ class RequestForm extends React.Component {
                       >Select requester</Button>
                     </Col>
                   </Row>
-                  { this.state.selectedUser && <UserDetail user={this.state.selectedUser} /> }
+                  { (this.state.selectedUser || this.state.userSelectionError) && <UserDetail user={this.state.selectedUser} error={this.state.userSelectionError}/> }
                   { this.state.selectedUser &&
                     <Row>
                       <Col xs={6}>

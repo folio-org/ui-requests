@@ -6,24 +6,32 @@ import { Link } from 'react-router-dom';
 
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 
-const UserDetail = ({ user }) => {
+const UserDetail = ({ user, error }) => {
   const userName = (user && user.personal) ? `${user.personal.firstName} ${user.personal.lastName}` : '';
-  const recordLink = <Link to={`/users/view/${user.id}`}>{userName}</Link>;
+  let recordLink;
+  if (user) {
+    recordLink = <Link to={`/users/view/${user.id}`}>{userName}</Link>;
+  }
 
-  return (
-    <div>
-      <Row>
-        <Col xs={12}>
-          <KeyValue label="Requester name" value={recordLink} />
-        </Col>
-      </Row>
-      <Row>
-        <Col xs={12}>
-          <KeyValue label="Patron group" value={_.get(user, ['patronGroup'], '')} />
-        </Col>
-      </Row>
-    </div>
-  );
+  if (error) {
+    return <div style={{color: 'red'}}>{error}</div>;
+  }
+  else {
+    return (
+      <div>
+        <Row>
+          <Col xs={12}>
+            <KeyValue label="Requester name" value={recordLink} />
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12}>
+            <KeyValue label="Patron group" value={_.get(user, ['patronGroup'], '')} />
+          </Col>
+        </Row>
+      </div>
+    );
+  }
 };
 
 UserDetail.propTypes = {
