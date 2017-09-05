@@ -124,6 +124,8 @@ class Requests extends React.Component {
     this.updateFilters = this.updateFilters.bind(this);
   }
 
+
+
   onSort(e, meta) {
     const newOrder = meta.alias;
     const oldOrder = this.state.sortOrder;
@@ -160,9 +162,17 @@ class Requests extends React.Component {
   }
 
   onSelectRow(e, meta) {
+    console.log("ON SELECT ROW with meta", meta)
     const requestId = meta.id;
     this.setState({ selectedItem: meta });
-    this.props.history.push(`/requests/view/${requestId}${this.props.location.search}`);
+  //  this.addRequestFields(meta).then(newRequest => {
+      // this.setState({
+      //   selectedItem: meta,
+      // }, () => {
+         console.log("SET STATE called with selectedItem", meta)
+         this.props.history.push(`/requests/view/${requestId}${this.props.location.search}`);
+      // });
+  //  });
   }
 
   onClickAddNewRequest(e) {
@@ -236,6 +246,8 @@ class Requests extends React.Component {
     const { stripes } = this.props;
     const requests = this.props.data.requests || [];
 
+    console.log("NEW SELECTED ITEM", this.props)
+
     // NOTE: Uncommenting this clause will activate front-end joins of
     // user and item records for every request in the results list. This is
     // probably NOT something we want to do. It's here in case we need something
@@ -270,6 +282,7 @@ class Requests extends React.Component {
       'Requester Barcode': rq => rq.requesterBarcode,
       'Request Type': rq => rq.requestType,
       Title: rq => rq.title,
+      ID: rq => rq.id,
     };
 
     const columnMapping = {
@@ -300,7 +313,7 @@ class Requests extends React.Component {
             contentData={requests}
             virtualize
             autosize
-            visibleColumns={['Title', 'Item Barcode', 'Request Type', 'Requester', 'Requester Barcode', 'Request Date']}
+            visibleColumns={['ID', 'Title', 'Item Barcode', 'Request Type', 'Requester', 'Requester Barcode', 'Request Date']}
             columnMapping={columnMapping}
             formatter={resultsFormatter}
             onHeaderClick={this.onSort}
@@ -318,6 +331,7 @@ class Requests extends React.Component {
           render={props =>
             <this.connectedViewRequest
               joinRequest={this.addRequestFields}
+              request={this.state.selectedItem}
               paneWidth="44%"
               onClose={this.collapseDetails}
               {...props}

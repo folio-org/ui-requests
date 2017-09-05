@@ -18,12 +18,12 @@ class ViewRequest extends React.Component {
     paneWidth: '50%',
   };
 
-  static manifest = Object.freeze({
-    request: {
+  static manifest = {
+    selectedRequest: {
       type: 'okapi',
       path: 'request-storage/requests/:{requestId}',
     },
-  });
+  };
 
   constructor(props) {
     super(props);
@@ -33,23 +33,60 @@ class ViewRequest extends React.Component {
     };
   }
 
-  componentWillReceiveProps() {
-    const { resources, joinRequest } = this.props;
-    const request = (resources.request && resources.request.hasLoaded) ? resources.request.records[0] : null;
+  componentWillReceiveProps(nextProps) {
+    // console.log("WILL RECEIVE", nextProps)
+    // if (nextProps.resources && nextProps.resources.selectedRequest && nextProps.resources.selectedRequest.hasLoaded) {
+    //   if (this.props.resources.selectedRequest.hasLoaded && nextProps.resources.selectedRequest.records[0].id !== this.props.resources.selectedRequest.records[0].id) {
+    //     console.log("DIFFERENT!")
+    //   }
+    //   else {
+    //     console.log("SAME!")
+    //   }
+    //   const basicRequest = nextProps.resources.selectedRequest.records[0];
+    //   this.props.joinRequest(basicRequest).then(newRequest => {
+    //     this.setState({
+    //       enhancedRequest: newRequest,
+    //     });
+    //   });
+    // }
+  }
 
-    if (request) {
-      joinRequest(request).then(newRequest => {
-        console.log("got enhanced request", newRequest)
-        this.setState({
-          enhancedRequest: newRequest,
+  componentDidUpdate(prevProps, prevState) {
+    console.log("db DID RECEIVE", prevProps, prevState)
+    const prevRQ = prevProps.resources.selectedRequest;
+    const currentRQ = this.props.resources.selectedRequest;
+
+    if (prevRQ && prevRQ.hasLoaded && currentRQ && currentRQ.hasLoaded) {
+      if (prevRQ.records[0].id !== currentRQ.records[0].id || !this.state.enhancedRequest.id) {
+        console.log("db PROPS DON'T MATCH, should update the enhanced record", prevRQ.records[0].id, currentRQ.records[0].id)
+        const basicRequest = currentRQ.records[0];
+        this.props.joinRequest(basicRequest).then(newRequest => {
+          this.setState({
+            enhancedRequest: newRequest,
+          });
         });
-      });
+      }
+      else {
+        console.log("db PROPS MATCH for ", currentRQ.records[0].id)
+      }
     }
+    else {
+      console.log("db RESOURCES NOT AVAILABLE YET")
+    }
+
   }
 
   render() {
 
-    const request = this.state.enhancedRequest || this.props.resources.request;
+    console.log("PROPS", this.props);
+    console.log("STATE", this.state);
+    //const request = this.props.request;
+    //const request = this.state.enhancedRequest || this.props.resources.selectedRequest.records[0];
+    let request = (this.props.resources.selectedRequest && this.props.resources.selectedRequest.hasLoaded) ? this.props.resources.selectedRequest.records[0] : null;
+    if (this.state.enhancedRequest.id) {
+      console.log("db USING ENHANCED")
+      request = this.state.enhancedRequest;
+    }
 
     return request ? (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" dismissible onClose={this.props.onClose}>
@@ -109,6 +146,11 @@ class ViewRequest extends React.Component {
           <Row>
             <Col xs={12}>
               <KeyValue label="Hold shelf expiration date" value={_.get(request, ['holdShelfExpirationDate'], '')} />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12}>
+              <KeyValue label="id" value={_.get(request, ['id'], '')} />
             </Col>
           </Row>
         </fieldset>
