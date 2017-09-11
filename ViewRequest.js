@@ -56,9 +56,11 @@ class ViewRequest extends React.Component {
       if (prevRQ.records[0].id !== currentRQ.records[0].id || !this.state.enhancedRequest.id) {
         const basicRequest = currentRQ.records[0];
         this.props.joinRequest(basicRequest).then(newRequest => {
+          console.log("new request", newRequest)
           this.setState({
             enhancedRequest: newRequest,
           });
+          console.log("ER is", newRequest)
         });
       }
     }

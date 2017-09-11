@@ -236,7 +236,11 @@ class Requests extends React.Component {
       
       enhancedRequest.loan = loan;
 
-      return enhancedRequest;
+      // Look up the associated borrower (if any) for the loan
+      return this.findUser(loan.userId).then(loanUser => {
+        enhancedRequest.loan.userDetail = loanUser.users[0];
+        return enhancedRequest;
+      });
     });
   }
 
