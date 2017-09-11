@@ -56,11 +56,9 @@ class ViewRequest extends React.Component {
       if (prevRQ.records[0].id !== currentRQ.records[0].id || !this.state.enhancedRequest.id) {
         const basicRequest = currentRQ.records[0];
         this.props.joinRequest(basicRequest).then(newRequest => {
-          console.log("new request", newRequest)
           this.setState({
             enhancedRequest: newRequest,
           });
-          console.log("ER is", newRequest)
         });
       }
     }
@@ -69,13 +67,17 @@ class ViewRequest extends React.Component {
   render() {
     const { resources } = this.props;
     let request = (resources.selectedRequest && resources.selectedRequest.hasLoaded) ? resources.selectedRequest.records[0] : null;
-    let patronGroup;
-
+    
+    let patronGroup, borrower, borrowerName, borrowerGroup;
     if (this.state.enhancedRequest.id) {
       request = this.state.enhancedRequest;
       patronGroup = request.patronGroup;
+      borrower = request && request.loan && request.loan.userDetail;
+      borrowerName = (borrower && borrower.personal) ? `${borrower.personal.firstName} ${borrower.personal.lastName}` : '';
+      borrowerGroup = borrower.patronGroup;
       if (resources.patronGroups && resources.patronGroups.hasLoaded) {
         patronGroup = resources.patronGroups.records.find(g => g.id === request.patronGroup).group || patronGroup;
+        borrowerGroup = resources.patronGroups.records.find(g => g.id === borrowerGroup).group || borrowerGroup;
       }
     }
 
@@ -113,10 +115,10 @@ class ViewRequest extends React.Component {
           <legend>Current Loan</legend>
           <Row>
             <Col xs={4}>
-              <KeyValue label="Loaned to" value={_.get(request, ['loan', 'userId'], '')} />
+              <KeyValue label="Loaned to" value={borrowerName} />
             </Col>
             <Col xs={4}>
-              <KeyValue label="Patron group" value={_.get(request, [], '')} />
+              <KeyValue label="Patron group" value={borrowerGroup} />
             </Col>
             <Col xs={4}>
               <KeyValue label="Status" value={_.get(request, ['loan', 'status', 'name'], '')} />
@@ -159,11 +161,6 @@ class ViewRequest extends React.Component {
           <Row>
             <Col xs={12}>
               <KeyValue label="Hold shelf expiration date" value={_.get(request, ['holdShelfExpirationDate'], '')} />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <KeyValue label="id" value={_.get(request, ['id'], '')} />
             </Col>
           </Row>
         </fieldset>
