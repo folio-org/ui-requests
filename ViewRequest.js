@@ -45,6 +45,8 @@ class ViewRequest extends React.Component {
     this.state = {
       enhancedRequest: {},
     };
+    
+    this.makeLocaleDateString = this.makeLocaleDateString.bind(this);
   }
 
   // Use componentDidUpdate to pull in metadata from the related user and item records
@@ -62,6 +64,16 @@ class ViewRequest extends React.Component {
           });
         });
       }
+    }
+  }
+  
+  // Helper function to form a locale-aware date for display
+  makeLocaleDateString(dateString) {
+    if (dateString === '') {
+      return '';
+    }
+    else {
+      return new Date(Date.parse(dateString)).toLocaleDateString(this.props.stripes.locale);
     }
   }
 
@@ -140,7 +152,7 @@ class ViewRequest extends React.Component {
           </Row>
           <Row>
             <Col xs={6}>
-              <KeyValue label="Current due date" value={(_.get(request, ['loan', 'dueDate'], '')) ? new Date(Date.parse(_.get(request, ['loan', 'dueDate'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
+              <KeyValue label="Current due date" value={this.makeLocaleDateString(_.get(request, ['loan', 'dueDate'], ''))} />
             </Col>
             <Col xs={6}>
               <KeyValue label="Requests" value={_.get(request, [], '')} />
@@ -169,12 +181,12 @@ class ViewRequest extends React.Component {
           <legend>Request details</legend>
           <Row>
             <Col xs={12}>
-              <KeyValue label="Request expiration date" value={_.get(request, ['requestExpirationDate'], '')} />
+              <KeyValue label="Request expiration date" value={this.makeLocaleDateString(_.get(request, ['requestExpirationDate'], ''))} />
             </Col>
           </Row>
           <Row>
             <Col xs={12}>
-              <KeyValue label="Hold shelf expiration date" value={_.get(request, ['holdShelfExpirationDate'], '')} />
+              <KeyValue label="Hold shelf expiration date" value={this.makeLocaleDateString(_.get(request, ['holdShelfExpirationDate'], ''))} />
             </Col>
           </Row>
         </fieldset>
