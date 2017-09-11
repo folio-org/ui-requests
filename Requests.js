@@ -112,6 +112,7 @@ class Requests extends React.Component {
     this.connectedViewRequest = props.stripes.connect(ViewRequest);
     this.create = this.create.bind(this);
     this.findItem = this.findItem.bind(this);
+    this.findLoan = this.findLoan.bind(this);
     this.findUser = this.findUser.bind(this);
     this.onChangeFilter = commonChangeFilter.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
@@ -202,14 +203,27 @@ class Requests extends React.Component {
   findItem(value, idType = 'id') {
     return fetch(`${this.okapiUrl}/inventory/items?query=(${idType}="${value}")`, { headers: this.httpHeaders }).then(response => response.json());
   }
+  
+  findLoan(itemId) {
+    return fetch(`${this.okapiUrl}/loan-storage/loans?query=(itemId="${itemId}")`, { headers: this.httpHeaders }).then(response => response.json());
+  }
 
   // Called as a map function
   addRequestFields(r) {
-    return Promise.all([this.findUser(r.requesterId), this.findItem(r.itemId)]).then((resultArray) => {
+    return Promise.all(
+      [
+        this.findUser(r.requesterId),
+        this.findItem(r.itemId),
+        this.findLoan(r.itemId)
+      ]
+    ).then((resultArray) => {
       // Each element of the promises array returns an array of results, but in
       // this case, there should only ever be one result for each.
       const user = resultArray[0].users[0];
       const item = resultArray[1].items[0];
+      const loan = resultArray[2].loans[0];
+      
+      console.log("Found a loan!", loan)
 
       const enhancedRequest = Object.assign({}, r);
       enhancedRequest.requesterName = (user && user.personal) ? `${user.personal.firstName} ${user.personal.lastName}` : '';
@@ -219,6 +233,8 @@ class Requests extends React.Component {
       enhancedRequest.title = item ? item.title : '';
       enhancedRequest.itemBarcode = item ? item.barcode : '';
       enhancedRequest.location = (item && item.location) ? item.location.name : '';
+      
+      enhancedRequest.loan = loan;
 
       return enhancedRequest;
     });
@@ -331,6 +347,7 @@ class Requests extends React.Component {
           path={`${this.props.match.path}/view/:requestId`}
           render={props =>
             <this.connectedViewRequest
+              stripes={stripes}
               joinRequest={this.addRequestFields}
               paneWidth="44%"
               onClose={this.collapseDetails}

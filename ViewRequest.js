@@ -12,6 +12,14 @@ class ViewRequest extends React.Component {
     onClose: PropTypes.func.isRequired,
     paneWidth: PropTypes.string,
     request: PropTypes.object.isRequired,
+    stripes: PropTypes.shape({
+      hasPerm: PropTypes.func.isRequired,
+      connect: PropTypes.func.isRequired,
+      locale: PropTypes.string.isRequired,
+      logger: PropTypes.shape({
+        log: PropTypes.func.isRequired,
+      }).isRequired,
+    }).isRequired,
   };
 
   static defaultProps = {
@@ -38,10 +46,12 @@ class ViewRequest extends React.Component {
     };
   }
 
+  // Use componentDidUpdate to pull in metadata from the related user and item records
   componentDidUpdate(prevProps, prevState) {
     const prevRQ = prevProps.resources.selectedRequest;
     const currentRQ = this.props.resources.selectedRequest;
 
+    // Only update if actually needed (otherwise, this gets called way too often)
     if (prevRQ && prevRQ.hasLoaded && currentRQ && currentRQ.hasLoaded) {
       if (prevRQ.records[0].id !== currentRQ.records[0].id || !this.state.enhancedRequest.id) {
         const basicRequest = currentRQ.records[0];
@@ -94,6 +104,28 @@ class ViewRequest extends React.Component {
           <Row>
             <Col xs={12}>
               <KeyValue label="Shelving location" value={_.get(request, ['location'], '')} />
+            </Col>
+          </Row>
+        </fieldset>
+        <fieldset>
+          <legend>Current Loan</legend>
+          <Row>
+            <Col xs={4}>
+              <KeyValue label="Loaned to" value={_.get(request, ['loan', 'userId'], '')} />
+            </Col>
+            <Col xs={4}>
+              <KeyValue label="Patron group" value={_.get(request, [], '')} />
+            </Col>
+            <Col xs={4}>
+              <KeyValue label="Status" value={_.get(request, ['loan', 'status', 'name'], '')} />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={6}>
+              <KeyValue label="Current due date" value={(_.get(request, ['loan', 'dueDate'], '')) ? new Date(Date.parse(_.get(request, ['loan', 'dueDate'], ''))).toLocaleDateString(this.props.stripes.locale) : ''} />
+            </Col>
+            <Col xs={6}>
+              <KeyValue label="Requests" value={_.get(request, [], '')} />
             </Col>
           </Row>
         </fieldset>
