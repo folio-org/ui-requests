@@ -39,12 +39,15 @@ class RequestForm extends React.Component {
     onCancel: PropTypes.func,
     findUser: PropTypes.func.isRequired,
     findItem: PropTypes.func.isRequired,
+    findLoan: PropTypes.func.isRequired,
     initialValues: PropTypes.object,
   //  okapi: PropTypes.object,
     optionLists: PropTypes.shape({
       requestTypes: PropTypes.arrayOf(PropTypes.object),
       fulfilmentTypes: PropTypes.arrayOf(PropTypes.object),
     }),
+    patronGroups: PropTypes.arrayOf(PropTypes.object).isRequired,
+    dateFormatter: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -100,12 +103,36 @@ class RequestForm extends React.Component {
   }
 
   onItemClick() {
-    this.props.findItem(this.state.selectedItemBarcode, 'barcode').then((result) => {
+    const { findItem, findLoan, findUser } = this.props;
+    findItem(this.state.selectedItemBarcode, 'barcode').then((result) => {
       if (result.totalRecords > 0) {
-        this.setState({
-          selectedItem: result.items[0],
+        const item = result.items[0];
+        console.log("got item", item)
+        // Look for an associated loan
+        return findLoan(item.id).then((result) => {
+          console.log("in findLoan with", result)
+          if (result.totalRecords > 0) {
+            const loan = result.loans[0];
+            // Look for the loan's associated borrower record
+            return findUser(loan.userId).then((result) => {
+              const borrower = result.users[0];
+              console.log("in findUser with ", result, item, loan, borrower)
+              this.setState({
+                selectedItem: {
+                  itemRecord: item,
+                  loanRecord: loan,
+                  borrowerRecord: borrower,
+                }
+              });
+              this.props.change('itemId', item.id);
+            });
+          }
+          else {
+            this.setState({
+              selectedItem: { itemRecord: item, }
+            });            
+          }
         });
-        this.props.change('itemId', result.items[0].id);
       }
       else {
         console.log("Record does not exist");
@@ -169,7 +196,14 @@ class RequestForm extends React.Component {
                       >Select item</Button>
                     </Col>
                   </Row>
-                  { (this.state.selectedItem || this.state.itemSelectionError) && <ItemDetail item={this.state.selectedItem} error={this.state.itemSelectionError} /> }
+                  { (this.state.selectedItem || this.state.itemSelectionError) &&
+                    <ItemDetail
+                      item={this.state.selectedItem}
+                      error={this.state.itemSelectionError}
+                      patronGroups={this.props.patronGroups}
+                      dateFormatter={this.props.dateFormatter}
+                    />
+                  }
                 </fieldset>
                 <fieldset>
                   <legend>Requester info *</legend>

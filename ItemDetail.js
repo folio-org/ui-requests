@@ -6,12 +6,21 @@ import { Link } from 'react-router-dom';
 
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 
-const ItemDetail = ({ item, error }) => {
-  let recordLink;
+const ItemDetail = ({ item, error, patronGroups, dateFormatter }) => {
+  let recordLink, borrowerLink, borrowerName, borrowerGroup;
+  const { itemRecord, loanRecord, borrowerRecord } = item;
   if (item) {
-    recordLink = <Link to={`/items/view/${item.id}`}>{_.get(item, ['barcode'], '')}</Link>;
-  }
+    borrowerName = `${_.get(borrowerRecord, ['personal', 'firstName'], '')} ${_.get(borrowerRecord, ['personal', 'lastName'], '')}`;
+    borrowerGroup = (borrowerRecord && patronGroups.length > 0) ? patronGroups.find(g => g.id === borrowerRecord.patronGroup).group : '';
 
+    if (itemRecord) {
+      recordLink = <Link to={`/items/view/${itemRecord.id}`}>{_.get(itemRecord, ['barcode'], '')}</Link>;
+    }
+    if (borrowerRecord) {
+      borrowerLink = <Link to={`/users/view/${borrowerRecord.id}`}>{borrowerName}</Link>;
+    }
+  }
+  
   if (error) {
     return (
       <div style={{color: 'red'}}>
@@ -29,20 +38,34 @@ const ItemDetail = ({ item, error }) => {
         </Row>
         <Row>
           <Col xs={12}>
-            <KeyValue label="Title" value={_.get(item, ['title'], '')} />
+            <KeyValue label="Title" value={_.get(itemRecord, ['title'], '')} />
           </Col>
         </Row>
         <Row>
           <Col xs={12}>
-            <KeyValue label="Shelving location" value={_.get(item, ['location', 'name'], '')} />
+            <KeyValue label="Shelving location" value={_.get(itemRecord, ['location', 'name'], '')} />
           </Col>
         </Row>
         <h4>Current Loan</h4>
-        <Row>
-          <Col xs={12}>
-            <KeyValue label="Status" value={_.get(item, ['status', 'name'], '')} />
-          </Col>
-        </Row>
+        {item && loanRecord &&
+          <Row>
+            <Col xs={4}>
+              <KeyValue label="Loaned to" value={borrowerLink} />
+            </Col>
+            <Col xs={2}>
+              <KeyValue label="Patron group" value={borrowerGroup} />
+            </Col>
+            <Col xs={2}>
+              <KeyValue label="Status" value={_.get(itemRecord, ['status', 'name'], '')} />
+            </Col>
+            <Col xs={2}>
+              <KeyValue label="Current due date" value={dateFormatter(_.get(loanRecord, ['dueDate'], ''))} />
+            </Col>
+            <Col xs={2}>
+              <KeyValue label="Requests" value={''} />
+            </Col>
+          </Row>
+        }
       </div>
     );
   }
@@ -51,6 +74,8 @@ const ItemDetail = ({ item, error }) => {
 ItemDetail.propTypes = {
   item: PropTypes.object,
   error: PropTypes.string,
+  patronGroups: PropTypes.arrayOf(PropTypes.object),
+  dateFormatter: PropTypes.func.isRequired,
 };
 
 export default ItemDetail;

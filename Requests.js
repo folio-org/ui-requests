@@ -87,6 +87,11 @@ class Requests extends React.Component {
       path: 'request-storage/requests',
       records: 'requests',
     },
+    patronGroups: {
+      type: 'okapi',
+      path: 'groups',
+      records: 'usergroups',
+    },
   };
 
   constructor(props, context) {
@@ -114,6 +119,7 @@ class Requests extends React.Component {
     this.findItem = this.findItem.bind(this);
     this.findLoan = this.findLoan.bind(this);
     this.findUser = this.findUser.bind(this);
+    this.makeLocaleDateString = this.makeLocaleDateString.bind(this);
     this.onChangeFilter = commonChangeFilter.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
@@ -263,9 +269,20 @@ class Requests extends React.Component {
     });
   }
 
+  // Helper function to form a locale-aware date for display
+  makeLocaleDateString(dateString) {
+    if (dateString === '') {
+      return '';
+    }
+    else {
+      return new Date(Date.parse(dateString)).toLocaleDateString(this.props.stripes.locale);
+    }
+  }
+
   render() {
     const { stripes, resources } = this.props;
     const requests = (resources.requests || {}).records || [];
+    const patronGroups = (resources.patronGroups || {}).records || [];
 
     console.log("NEW SELECTED ITEM", this.props)
 
@@ -366,8 +383,11 @@ class Requests extends React.Component {
             onCancel={this.onClickCloseNewRequest}
             findUser={this.findUser}
             findItem={this.findItem}
+            findLoan={this.findLoan}
             optionLists={{ requestTypes, fulfilmentTypes }}
+            patronGroups={patronGroups}
             initialValues={{ itemId: null, requesterId: null }}
+            dateFormatter={this.makeLocaleDateString}
           />
         </Layer>
       </Paneset>
