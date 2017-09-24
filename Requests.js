@@ -84,7 +84,7 @@ class Requests extends React.Component {
     requestCount: { initialValue: INITIAL_RESULT_COUNT },
     requests: {
       type: 'okapi',
-      path: 'request-storage/requests',
+      path: 'circulation/requests',
       records: 'requests',
     },
     patronGroups: {
@@ -209,7 +209,7 @@ class Requests extends React.Component {
   findItem(value, idType = 'id') {
     return fetch(`${this.okapiUrl}/inventory/items?query=(${idType}="${value}")`, { headers: this.httpHeaders }).then(response => response.json());
   }
-  
+
   findLoan(itemId) {
     return fetch(`${this.okapiUrl}/loan-storage/loans?query=(itemId="${itemId}")`, { headers: this.httpHeaders }).then(response => response.json());
   }
@@ -228,7 +228,7 @@ class Requests extends React.Component {
       const user = resultArray[0].users[0];
       const item = resultArray[1].items[0];
       const loan = resultArray[2].loans[0];
-      
+
       console.log("Found a loan!", loan)
 
       const enhancedRequest = Object.assign({}, r);
@@ -239,7 +239,7 @@ class Requests extends React.Component {
       enhancedRequest.title = item ? item.title : '';
       enhancedRequest.itemBarcode = item ? item.barcode : '';
       enhancedRequest.location = (item && item.location) ? item.location.name : '';
-      
+
       enhancedRequest.loan = loan;
 
       // Look up the associated borrower (if any) for the loan

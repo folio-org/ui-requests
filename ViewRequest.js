@@ -30,7 +30,7 @@ class ViewRequest extends React.Component {
   static manifest = {
     selectedRequest: {
       type: 'okapi',
-      path: 'request-storage/requests/:{requestId}',
+      path: 'circulation/requests/:{requestId}',
     },
     patronGroups: {
       type: 'okapi',
@@ -45,7 +45,7 @@ class ViewRequest extends React.Component {
     this.state = {
       enhancedRequest: {},
     };
-    
+
     this.makeLocaleDateString = this.makeLocaleDateString.bind(this);
   }
 
@@ -66,7 +66,7 @@ class ViewRequest extends React.Component {
       }
     }
   }
-  
+
   // Helper function to form a locale-aware date for display
   makeLocaleDateString(dateString) {
     if (dateString === '') {
@@ -80,9 +80,9 @@ class ViewRequest extends React.Component {
   render() {
     const { resources } = this.props;
     let request = (resources.selectedRequest && resources.selectedRequest.hasLoaded) ? resources.selectedRequest.records[0] : null;
-    
+
     let patronGroup, borrower, borrowerName, borrowerGroup;
-    
+
     // Most of the values needed to populate the view come from the "enhanced" request
     // object, which includes parts of the requester's user record, the item record,
     // and the related loan record (if any) and its borrower.
@@ -97,14 +97,14 @@ class ViewRequest extends React.Component {
         borrowerGroup = resources.patronGroups.records.find(g => g.id === borrowerGroup).group || borrowerGroup;
       }
     }
-    
+
     let itemRecordLink, requesterRecordLink;
     const itemBarcode = _.get(request, ['itemBarcode'], '');
     itemRecordLink = itemBarcode ? <Link to={`/items/view/${request.itemId}`}>{itemBarcode}</Link> : '';
-    
+
     const requesterName = _.get(request, ['requesterName'], '');
     requesterRecordLink = requesterName ? <Link to={`/users/view/${request.requesterId}`}>{requesterName}</Link> : '';
-    
+
     const borrowerRecordLink = borrowerName ? <Link to={`/users/view/${borrower.id}`}>{borrowerName}</Link> : '';
 
     return request ? (
