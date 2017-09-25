@@ -145,6 +145,7 @@ class Requests extends React.Component {
     }
 
     const sortOrder = orders.slice(0, 2).join(',');
+    console.log(`sorted by ${sortOrder}`)
     this.setState({ sortOrder });
     this.transitionToParams({ sort: sortOrder });
   }
@@ -314,13 +315,12 @@ class Requests extends React.Component {
     );
 
     const resultsFormatter = {
-      'Item Barcode': rq => rq.itemBarcode,
+      'Item Barcode': rq => rq.item ? rq.item.barcode : '',
       'Request Date': rq => new Date(Date.parse(rq.requestDate)).toLocaleDateString(this.props.stripes.locale),
-      Requester: rq => rq.requesterName,
-      'Requester Barcode': rq => rq.requesterBarcode,
+      Requester: rq => rq.requester ? `${rq.requester.firstName} ${rq.requester.lastName}` : '',
+      'Requester Barcode': rq => rq.requester ? rq.requester.barcode : '',
       'Request Type': rq => rq.requestType,
-      Title: rq => rq.title,
-      ID: rq => rq.id,
+      Title: rq => rq.item ? rq.item.title : '',
     };
 
     const columnMapping = {
@@ -351,7 +351,7 @@ class Requests extends React.Component {
             contentData={requests}
             virtualize
             autosize
-            visibleColumns={['ID', 'Title', 'Item Barcode', 'Request Type', 'Requester', 'Requester Barcode', 'Request Date']}
+            visibleColumns={['Title', 'Item Barcode', 'Request Type', 'Requester', 'Requester Barcode', 'Request Date']}
             columnMapping={columnMapping}
             formatter={resultsFormatter}
             onHeaderClick={this.onSort}
