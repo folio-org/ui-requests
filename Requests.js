@@ -12,6 +12,7 @@ import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
+import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 
 import ViewRequest from './ViewRequest';
@@ -86,6 +87,24 @@ class Requests extends React.Component {
       type: 'okapi',
       path: 'circulation/requests',
       records: 'requests',
+      GET: {
+        params: {
+          query: makeQueryFunction(
+            'requesterId=*',
+            'requesterId="$QUERY*" or requester.firstName="$QUERY*" or requester.lastName="$QUERY*" or requester.middleName="$QUERY*" or requester.barcode="$QUERY*" or id="$QUERY*" or item.title="$QUERY*" or item.barcode="$QUERY*"',
+            {
+              'Title': 'item.title',
+              'Item Barcode': 'item.barcode',
+              'Request Type': 'requestType',
+              'Requester': 'requester.lastName requester.firstName',
+              'Requester Barcode': 'requester.barcode',
+              'Request Date': 'requestDate',
+            },
+            filterConfig,
+          ),
+        },
+        staticFallback: { params: {} },
+      },
     },
     patronGroups: {
       type: 'okapi',
