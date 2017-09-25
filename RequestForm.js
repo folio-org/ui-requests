@@ -130,7 +130,7 @@ class RequestForm extends React.Component {
           else {
             this.setState({
               selectedItem: { itemRecord: item, }
-            });            
+            });
           }
         });
       }
@@ -227,7 +227,13 @@ class RequestForm extends React.Component {
                       >Select requester</Button>
                     </Col>
                   </Row>
-                  { (this.state.selectedUser || this.state.userSelectionError) && <UserDetail user={this.state.selectedUser} error={this.state.userSelectionError}/> }
+                  { (this.state.selectedUser || this.state.userSelectionError) &&
+                    <UserDetail
+                      user={this.state.selectedUser}
+                      error={this.state.userSelectionError}
+                      patronGroups={this.props.patronGroups}
+                    />
+                  }
                   { this.state.selectedUser &&
                     <Row>
                       <Col xs={6}>
