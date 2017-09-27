@@ -396,7 +396,7 @@ class Requests extends React.Component {
           }
         />
         {/* Add new request form */}
-        <Layer isOpen={this.props.data.addRequestMode ? this.props.data.addRequestMode.mode : false} label="Add New Request Dialog">
+        <Layer isOpen={resources.addRequestMode ? resources.addRequestMode.mode : false} label="Add New Request Dialog">
           <RequestForm
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewRequest}
