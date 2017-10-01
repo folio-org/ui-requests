@@ -27,7 +27,10 @@ const filterConfig = [
     label: 'Request Type',
     name: 'request',
     cql: 'requestType',
-    values: ['Hold', { name: 'Paging request', cql: 'paging' }, 'Recall'],
+    values: [
+      { name: 'Holds', cql: 'Hold' },
+      { name: 'Recalls', cql: 'Recall' },
+    ],
   },
 ];
 
