@@ -26,7 +26,7 @@ const filterConfig = [
   {
     label: 'Request Type',
     name: 'request',
-    cql: '',
+    cql: 'requestType',
     values: ['Hold', { name: 'Paging request', cql: 'paging' }, 'Recall'],
   },
 ];
@@ -91,7 +91,7 @@ class Requests extends React.Component {
         params: {
           query: makeQueryFunction(
             'requesterId=*',
-            'requesterId="$QUERY*" or requester.firstName="$QUERY*" or requester.lastName="$QUERY*" or requester.middleName="$QUERY*" or requester.barcode="$QUERY*" or id="$QUERY*" or item.title="$QUERY*" or item.barcode="$QUERY*"',
+            'requester.barcode="$QUERY*" or item.title="$QUERY*" or item.barcode="$QUERY*"',
             {
               'Title': 'item.title',
               'Item Barcode': 'item.barcode',
@@ -379,6 +379,7 @@ class Requests extends React.Component {
             selectedRow={this.state.selectedItem}
             sortOrder={this.state.sortOrder.replace(/^-/, '').replace(/,.*/, '')}
             sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
+            isEmptyMessage="No results found. Please check your spelling and filters."
           />
         </Pane>
 
