@@ -3,6 +3,8 @@
 ## In progress
 
 * All resources in manifest now reference props.resources instead of props.data. Completes UIU-10.
+* Searching and filtering now behave as specified. Completes UIU-11.
+
 
 ## [1.0.0](https://github.com/folio-org/ui-requests/tree/v1.0.0) (2017-09-26)
 
