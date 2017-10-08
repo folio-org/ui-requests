@@ -409,7 +409,7 @@ class Requests extends React.Component {
             findLoan={this.findLoan}
             optionLists={{ requestTypes, fulfilmentTypes }}
             patronGroups={patronGroups}
-            initialValues={{ itemId: null, requesterId: null }}
+            initialValues={{ itemId: null, requesterId: null, requestType: 'Hold' }}
             dateFormatter={this.makeLocaleDateString}
           />
         </Layer>
