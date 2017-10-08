@@ -73,6 +73,7 @@ class RequestForm extends React.Component {
   }
 
   onChangeUser(e) {
+    console.log("setting user barcode", e)
     this.setState({
       selectedUserBarcode: e.target.value,
     });
@@ -184,7 +185,7 @@ class RequestForm extends React.Component {
                         aria-label="Item barcode"
                         fullWidth
                         component={TextField}
-                        onChange={this.onChangeItem}
+                        onInput={this.onChangeItem}
                       />
                     </Col>
                     <Col xs={3}>
@@ -215,7 +216,7 @@ class RequestForm extends React.Component {
                         aria-label="Requester barcode"
                         fullWidth
                         component={TextField}
-                        onChange={this.onChangeUser}
+                        onInput={this.onChangeUser}
                       />
                     </Col>
                     <Col xs={3}>
