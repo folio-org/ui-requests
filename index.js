@@ -15,7 +15,7 @@ class RequestsRouting extends React.Component {
 
   constructor(props) {
     super(props);
-    this.connectedApp = props.stripes.connect(Requests)
+    this.connectedApp = props.stripes.connect(Requests);
   }
 
   NoMatch() {
