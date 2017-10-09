@@ -109,6 +109,7 @@ class RequestForm extends React.Component {
       if (result.totalRecords > 0) {
         const item = result.items[0];
         console.log("got item", item)
+        this.props.change('itemId', item.id);
         // Look for an associated loan
         return findLoan(item.id).then((result) => {
           console.log("in findLoan with", result)
@@ -125,7 +126,6 @@ class RequestForm extends React.Component {
                   borrowerRecord: borrower,
                 }
               });
-              this.props.change('itemId', item.id);
             });
           }
           else {
