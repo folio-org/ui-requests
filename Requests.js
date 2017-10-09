@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import Route from 'react-router-dom/Route';
@@ -20,7 +21,7 @@ import RequestForm from './RequestForm';
 import { requestTypes, fulfilmentTypes } from './constants';
 
 const INITIAL_RESULT_COUNT = 30;
-const RESULT_COUNT_INCREMENT = 30;
+// const RESULT_COUNT_INCREMENT = 30;
 
 const filterConfig = [
   {
@@ -35,7 +36,6 @@ const filterConfig = [
 ];
 
 class Requests extends React.Component {
-
   static contextTypes = {
     stripes: PropTypes.object,
   }
@@ -64,7 +64,7 @@ class Requests extends React.Component {
         replace: PropTypes.func,
       }),
     }).isRequired,
-    okapi: PropTypes.object,
+    okapi: PropTypes.object.isRequired,
     resources: PropTypes.shape({
       requests: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
@@ -96,10 +96,10 @@ class Requests extends React.Component {
             'requesterId=*',
             'requester.barcode="$QUERY*" or item.title="$QUERY*" or item.barcode="$QUERY*"',
             {
-              'Title': 'item.title',
+              Title: 'item.title',
               'Item Barcode': 'item.barcode',
               'Request Type': 'requestType',
-              'Requester': 'requester.lastName requester.firstName',
+              Requester: 'requester.lastName requester.firstName',
               'Requester Barcode': 'requester.barcode',
               'Request Date': 'requestDate',
             },
@@ -153,8 +153,6 @@ class Requests extends React.Component {
     this.updateFilters = this.updateFilters.bind(this);
   }
 
-
-
   onSort(e, meta) {
     const newOrder = meta.alias;
     const oldOrder = this.state.sortOrder;
@@ -167,7 +165,6 @@ class Requests extends React.Component {
     }
 
     const sortOrder = orders.slice(0, 2).join(',');
-    console.log(`sorted by ${sortOrder}`)
     this.setState({ sortOrder });
     this.transitionToParams({ sort: sortOrder });
   }
@@ -243,16 +240,14 @@ class Requests extends React.Component {
       [
         this.findUser(r.requesterId),
         this.findItem(r.itemId),
-        this.findLoan(r.itemId)
-      ]
+        this.findLoan(r.itemId),
+      ],
     ).then((resultArray) => {
       // Each element of the promises array returns an array of results, but in
       // this case, there should only ever be one result for each.
       const user = resultArray[0].users[0];
       const item = resultArray[1].items[0];
       const loan = resultArray[2].loans[0];
-
-      console.log("Found a loan!", loan)
 
       const enhancedRequest = Object.assign({}, r);
       enhancedRequest.requesterName = (user && user.personal) ? `${user.personal.firstName} ${user.personal.lastName}` : '';
@@ -266,7 +261,7 @@ class Requests extends React.Component {
       enhancedRequest.loan = loan;
 
       // Look up the associated borrower (if any) for the loan
-      return this.findUser(loan.userId).then(loanUser => {
+      return this.findUser(loan.userId).then((loanUser) => {
         enhancedRequest.loan.userDetail = loanUser.users[0];
         return enhancedRequest;
       });
@@ -274,19 +269,18 @@ class Requests extends React.Component {
   }
 
   create(data) {
-    data.requestDate = new Date();
-    console.log('CREATE request called with record', data);
+    const recordData = Object.assign({}, data);
+    recordData.requestDate = new Date();
 
     // HACK: In order to use redux-form stuff like validation, fields must have a name property.
     // Unfortunately, naming fields means that redux-form will incorporate them as keys into
     // the data object passed through to here. Specifically, the two barcode fields for item
     // and requester are necessary for the form, but incompatible with the request schema.
     // They have to be removed before the record can be posted.
-    delete data.itemBarcode;
-    delete data.requesterBarcode;
+    delete recordData.itemBarcode;
+    delete recordData.requesterBarcode;
 
-    this.props.mutator.requests.POST(data).then(response => response).then((newRecord) => {
-      console.log('New request record is', newRecord);
+    this.props.mutator.requests.POST(recordData).then(response => response).then((newRecord) => {
       this.props.mutator.addRequestMode.replace({ mode: false });
       this.props.history.push(`/requests/view/${newRecord.id}${this.props.location.search}`);
     });
@@ -297,17 +291,14 @@ class Requests extends React.Component {
     if (dateString === '') {
       return '';
     }
-    else {
-      return new Date(Date.parse(dateString)).toLocaleDateString(this.props.stripes.locale);
-    }
+
+    return new Date(Date.parse(dateString)).toLocaleDateString(this.props.stripes.locale);
   }
 
   render() {
     const { stripes, resources } = this.props;
     const requests = (resources.requests || {}).records || [];
     const patronGroups = (resources.patronGroups || {}).records || [];
-
-    console.log("NEW SELECTED ITEM", this.props)
 
     // NOTE: Uncommenting this clause will activate front-end joins of
     // user and item records for every request in the results list. This is
@@ -337,12 +328,12 @@ class Requests extends React.Component {
     );
 
     const resultsFormatter = {
-      'Item Barcode': rq => rq.item ? rq.item.barcode : '',
+      'Item Barcode': rq => (rq.item ? rq.item.barcode : ''),
       'Request Date': rq => new Date(Date.parse(rq.requestDate)).toLocaleDateString(this.props.stripes.locale),
-      Requester: rq => rq.requester ? `${rq.requester.firstName} ${rq.requester.lastName}` : '',
-      'Requester Barcode': rq => rq.requester ? rq.requester.barcode : '',
+      Requester: rq => (rq.requester ? `${rq.requester.firstName} ${rq.requester.lastName}` : ''),
+      'Requester Barcode': rq => (rq.requester ? rq.requester.barcode : ''),
       'Request Type': rq => rq.requestType,
-      Title: rq => rq.item ? rq.item.title : '',
+      Title: rq => (rq.item ? rq.item.title : ''),
     };
 
     const columnMapping = {
@@ -389,7 +380,7 @@ class Requests extends React.Component {
         {/* Details Pane */}
         <Route
           path={`${this.props.match.path}/view/:requestId`}
-          render={props =>
+          render={props => (
             <this.connectedViewRequest
               stripes={stripes}
               joinRequest={this.addRequestFields}
@@ -397,6 +388,7 @@ class Requests extends React.Component {
               onClose={this.collapseDetails}
               {...props}
             />
+          )
           }
         />
         {/* Add new request form */}
@@ -416,7 +408,6 @@ class Requests extends React.Component {
       </Paneset>
     );
   }
-
 }
 
 export default Requests;
