@@ -8,11 +8,26 @@ import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import Pane from '@folio/stripes-components/lib/Pane';
 
 class ViewRequest extends React.Component {
-
   static propTypes = {
+    joinRequest: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     paneWidth: PropTypes.string,
-    request: PropTypes.object.isRequired,
+    resources: PropTypes.shape({
+      patronGroups: PropTypes.shape({
+        hasLoaded: PropTypes.bool.isRequired,
+        isPending: PropTypes.bool.isPending,
+        other: PropTypes.shape({
+          totalRecords: PropTypes.number,
+        }),
+      }),
+      selectedRequest: PropTypes.shape({
+        hasLoaded: PropTypes.bool.isRequired,
+        isPending: PropTypes.bool.isPending,
+        other: PropTypes.shape({
+          totalRecords: PropTypes.number,
+        }),
+      }),
+    }).isRequired,
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
       connect: PropTypes.func.isRequired,
@@ -50,7 +65,7 @@ class ViewRequest extends React.Component {
   }
 
   // Use componentDidUpdate to pull in metadata from the related user and item records
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const prevRQ = prevProps.resources.selectedRequest;
     const currentRQ = this.props.resources.selectedRequest;
 
@@ -58,7 +73,7 @@ class ViewRequest extends React.Component {
     if (prevRQ && prevRQ.hasLoaded && currentRQ && currentRQ.hasLoaded) {
       if (prevRQ.records[0].id !== currentRQ.records[0].id || !this.state.enhancedRequest.id) {
         const basicRequest = currentRQ.records[0];
-        this.props.joinRequest(basicRequest).then(newRequest => {
+        this.props.joinRequest(basicRequest).then((newRequest) => {
           this.setState({
             enhancedRequest: newRequest,
           });
@@ -72,16 +87,18 @@ class ViewRequest extends React.Component {
     if (dateString === '') {
       return '';
     }
-    else {
-      return new Date(Date.parse(dateString)).toLocaleDateString(this.props.stripes.locale);
-    }
+
+    return new Date(Date.parse(dateString)).toLocaleDateString(this.props.stripes.locale);
   }
 
   render() {
     const { resources } = this.props;
     let request = (resources.selectedRequest && resources.selectedRequest.hasLoaded) ? resources.selectedRequest.records[0] : null;
 
-    let patronGroup, borrower, borrowerName, borrowerGroup;
+    let patronGroup;
+    let borrower;
+    let borrowerName;
+    let borrowerGroup;
 
     // Most of the values needed to populate the view come from the "enhanced" request
     // object, which includes parts of the requester's user record, the item record,
@@ -98,13 +115,10 @@ class ViewRequest extends React.Component {
       }
     }
 
-    let itemRecordLink, requesterRecordLink;
     const itemBarcode = _.get(request, ['itemBarcode'], '');
-    itemRecordLink = itemBarcode ? <Link to={`/items/view/${request.itemId}`}>{itemBarcode}</Link> : '';
-
+    const itemRecordLink = itemBarcode ? <Link to={`/items/view/${request.itemId}`}>{itemBarcode}</Link> : '';
     const requesterName = _.get(request, ['requesterName'], '');
-    requesterRecordLink = requesterName ? <Link to={`/users/view/${request.requesterId}`}>{requesterName}</Link> : '';
-
+    const requesterRecordLink = requesterName ? <Link to={`/users/view/${request.requesterId}`}>{requesterName}</Link> : '';
     const borrowerRecordLink = borrowerName ? <Link to={`/users/view/${borrower.id}`}>{borrowerName}</Link> : '';
 
     return request ? (

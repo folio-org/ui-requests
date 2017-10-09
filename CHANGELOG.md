@@ -5,6 +5,7 @@
 * All resources in manifest now reference props.resources instead of props.data. Completes UIREQ-10.
 * Searching and filtering now behave as specified. Completes UIREQ-11 & UIREQ-13.
 * Bugs in request type selection and new request creation have been squashed. Completes UIREQ-20.
+* Code cleanup and fixing of linting errors. Towards UIREQ-19.
 
 
 ## [1.0.0](https://github.com/folio-org/ui-requests/tree/v1.0.0) (2017-09-26)
