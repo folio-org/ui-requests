@@ -73,7 +73,6 @@ class RequestForm extends React.Component {
   }
 
   onChangeUser(e) {
-    console.log("setting user barcode", e)
     this.setState({
       selectedUserBarcode: e.target.value,
     });
