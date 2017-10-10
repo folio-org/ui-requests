@@ -1,14 +1,24 @@
 import _ from 'lodash';
+import queryString from 'query-string';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'react-flexbox-grid';
 import { Link } from 'react-router-dom';
 
+import Icon from '@folio/stripes-components/lib/Icon';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
+import Layer from '@folio/stripes-components/lib/Layer';
 import Pane from '@folio/stripes-components/lib/Pane';
+import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
+import transitionToParams from '@folio/stripes-components/util/transitionToParams';
+
+import RequestForm from './RequestForm';
+import { requestTypes } from './constants';
 
 class ViewRequest extends React.Component {
   static propTypes = {
+    location: PropTypes.object,
+    history: PropTypes.object,
     joinRequest: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     paneWidth: PropTypes.string,
