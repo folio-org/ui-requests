@@ -72,6 +72,10 @@ class ViewRequest extends React.Component {
     };
 
     this.makeLocaleDateString = this.makeLocaleDateString.bind(this);
+    this.onClickCloseEditRequest = this.onClickCloseEditRequest.bind(this);
+    this.onClickEditRequest = this.onClickEditRequest.bind(this);
+    this.transitionToParams = transitionToParams.bind(this);
+    this.update = this.update.bind(this);
   }
 
   // Use componentDidUpdate to pull in metadata from the related user and item records
@@ -90,6 +94,23 @@ class ViewRequest extends React.Component {
         });
       }
     }
+  }
+
+  onClickEditRequest(e) {
+    if (e) e.preventDefault();
+    this.transitionToParams({ layer: 'edit' });
+  }
+
+  onClickCloseEditRequest(e) {
+    if (e) e.preventDefault();
+    //removeQueryParam('layer', this.props.location, this.props.history);
+    const urlParams = queryString.parse(this.props.location.search);
+    _.unset(urlParams, 'layer');
+    this.props.history.push(`${this.props.location.pathname}?${queryString.stringify(urlParams)}`)
+  }
+
+  update() {
+
   }
 
   // Helper function to form a locale-aware date for display
@@ -214,6 +235,14 @@ class ViewRequest extends React.Component {
             </Col>
           </Row>
         </fieldset>
+        <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit Request Dialog">
+          <RequestForm
+            initialValues={request}
+            onSubmit={(record) => { this.update(record); }}
+            onCancel={this.onClickCloseEditRequest}
+            optionLists={{ requestTypes }}
+          />
+        </Layer>
       </Pane>
     ) : null;
   }
