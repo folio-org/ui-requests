@@ -123,7 +123,8 @@ class ViewRequest extends React.Component {
   }
 
   render() {
-    const { resources } = this.props;
+    const { resources, location } = this.props;
+    const query = location.search ? queryString.parse(location.search) : {};
     let request = (resources.selectedRequest && resources.selectedRequest.hasLoaded) ? resources.selectedRequest.records[0] : null;
 
     let patronGroup;
@@ -146,6 +147,13 @@ class ViewRequest extends React.Component {
       }
     }
 
+    const detailMenu = (
+      <PaneMenu>
+        <button id="clickable-editrequest" style={{ visibility: !request ? 'hidden' : 'visible' }} onClick={this.onClickEditRequest} title="Edit Request"><Icon icon="edit" />Edit</button>
+        <button id="clickable-show-notes" style={{ visibility: !request ? 'hidden' : 'visible' }} onClick={this.props.notesToggle} title="Show Notes"><Icon icon="comment" />Notes</button>
+      </PaneMenu>
+    );
+
     const itemBarcode = _.get(request, ['itemBarcode'], '');
     const itemRecordLink = itemBarcode ? <Link to={`/items/view/${request.itemId}`}>{itemBarcode}</Link> : '';
     const requesterName = _.get(request, ['requesterName'], '');
@@ -153,7 +161,7 @@ class ViewRequest extends React.Component {
     const borrowerRecordLink = borrowerName ? <Link to={`/users/view/${borrower.id}`}>{borrowerName}</Link> : '';
 
     return request ? (
-      <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" dismissible onClose={this.props.onClose}>
+      <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail"  lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
         <Row>
           <Col xs={12}>
             <KeyValue label="Request type" value={_.get(request, ['requestType'], '')} />
