@@ -191,7 +191,7 @@ class RequestForm extends React.Component {
                         placeholder={'Enter item barcode'}
                         aria-label="Item barcode"
                         fullWidth
-                        component={TextArea}
+                        component={TextField}
                         onInput={this.onChangeItem}
                       />
                     </Col>
