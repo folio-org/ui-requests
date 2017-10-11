@@ -10,6 +10,8 @@ import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Select from '@folio/stripes-components/lib/Select';
 import TextField from '@folio/stripes-components/lib/TextField';
+import TextArea from '@folio/stripes-components/lib/TextArea';
+
 import stripesForm from '@folio/stripes-form';
 
 import UserDetail from './UserDetail';
@@ -17,6 +19,7 @@ import ItemDetail from './ItemDetail';
 
 function validate(values) {
   const errors = {};
+  console.log("validating", values)
 
   if (!values.itemBarcode) {
     errors.itemBarcode = 'Please select an item';
@@ -71,6 +74,14 @@ class RequestForm extends React.Component {
     this.onChangeUser = this.onChangeUser.bind(this);
     this.onItemClick = this.onItemClick.bind(this);
     this.onUserClick = this.onUserClick.bind(this);
+  }
+
+  componentDidMount() {
+    console.log("Mounted")
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log("did update", prevProps, prevState)
   }
 
   onChangeUser(e) {
@@ -146,6 +157,8 @@ class RequestForm extends React.Component {
       submitting,
     } = this.props;
 
+    console.log("initialvalues", initialValues)
+
     const isEditForm = initialValues && initialValues.itemId !== null;
 
     const addRequestFirstMenu = <PaneMenu><Button onClick={onCancel} title="close" aria-label="Close New Request Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></Button></PaneMenu>;
@@ -174,11 +187,11 @@ class RequestForm extends React.Component {
                   <Row>
                     <Col xs={9}>
                       <Field
-                        name="itemBarcode"
+                        name="item.barcode"
                         placeholder={'Enter item barcode'}
                         aria-label="Item barcode"
                         fullWidth
-                        component={TextField}
+                        component={TextArea}
                         onInput={this.onChangeItem}
                       />
                     </Col>
@@ -205,7 +218,7 @@ class RequestForm extends React.Component {
                   <Row>
                     <Col xs={9}>
                       <Field
-                        name="requesterBarcode"
+                        name="requester.barcode"
                         placeholder={'Enter requester barcode'}
                         aria-label="Requester barcode"
                         fullWidth
@@ -294,4 +307,6 @@ export default stripesForm({
   form: 'requestForm',
   validate,
   navigationCheck: true,
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: true,
 })(RequestForm);

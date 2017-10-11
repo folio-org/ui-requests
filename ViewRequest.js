@@ -245,7 +245,7 @@ class ViewRequest extends React.Component {
         </fieldset>
         <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit Request Dialog">
           <RequestForm
-            initialValues={request}
+            initialValues={ this.state.enhancedRequest }
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditRequest}
             optionLists={{ requestTypes }}
