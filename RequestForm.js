@@ -76,12 +76,7 @@ class RequestForm extends React.Component {
     this.onUserClick = this.onUserClick.bind(this);
   }
 
-  componentDidMount() {
-    console.log("Mounted")
-  }
-
   componentDidUpdate(prevProps, prevState) {
-    console.log("did update", prevProps, prevState)
     if (this.props.initialValues &&
         this.props.initialValues.requester &&
         prevProps.initialValues &&
