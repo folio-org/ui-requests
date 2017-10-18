@@ -82,6 +82,14 @@ class RequestForm extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     console.log("did update", prevProps, prevState)
+    if (this.props.initialValues &&
+        this.props.initialValues.requester &&
+        prevProps.initialValues &&
+        !prevProps.initialValues.requester) {
+      this.setState({
+        selectedUser: this.props.initialValues.requester,
+      });
+    }
   }
 
   onChangeUser(e) {
