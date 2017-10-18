@@ -82,7 +82,10 @@ class RequestForm extends React.Component {
         prevProps.initialValues &&
         !prevProps.initialValues.requester) {
       this.setState({
-        selectedUser: this.props.initialValues.requester,
+        selectedUser: {
+          patronGroup: this.props.initialValues.requester.patronGroup,
+          personal: this.props.initialValues.requester
+        },
       });
     }
   }

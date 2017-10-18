@@ -143,6 +143,7 @@ class ViewRequest extends React.Component {
       borrowerGroup = borrower.patronGroup;
       if (resources.patronGroups && resources.patronGroups.hasLoaded) {
         patronGroup = resources.patronGroups.records.find(g => g.id === request.patronGroup).group || patronGroup;
+        this.state.enhancedRequest.requester.patronGroup = patronGroup;
         borrowerGroup = resources.patronGroups.records.find(g => g.id === borrowerGroup).group || borrowerGroup;
       }
     }
@@ -249,6 +250,7 @@ class ViewRequest extends React.Component {
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditRequest}
             optionLists={{ requestTypes }}
+            patronGroups={this.props.resources.patronGroups}
           />
         </Layer>
       </Pane>
