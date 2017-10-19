@@ -92,6 +92,7 @@ class RequestForm extends React.Component {
     if (initials && initials.requester &&
         oldInitials && !oldInitials.requester) {
           console.log("intiial values", this.props.initialValues)
+      initials.item.location = { name: initials.location };
       this.setState({
         selectedItem: {
           itemRecord: initials.item,
@@ -205,29 +206,32 @@ class RequestForm extends React.Component {
                   component={Select}
                   fullWidth
                   dataOptions={requestTypeOptions}
+                  disabled={isEditForm}
                 />
                 <fieldset>
                   <legend>Item info *</legend>
-                  <Row>
-                    <Col xs={9}>
-                      <Field
-                        name="item.barcode"
-                        placeholder={'Enter item barcode'}
-                        aria-label="Item barcode"
-                        fullWidth
-                        component={TextField}
-                        onInput={this.onChangeItem}
-                      />
-                    </Col>
-                    <Col xs={3}>
-                      <Button
-                        buttonStyle="primary noRadius"
-                        fullWidth
-                        onClick={this.onItemClick}
-                        disabled={submitting}
-                      >Select item</Button>
-                    </Col>
-                  </Row>
+                  {!isEditForm &&
+                    <Row>
+                      <Col xs={9}>
+                        <Field
+                          name="item.barcode"
+                          placeholder={'Enter item barcode'}
+                          aria-label="Item barcode"
+                          fullWidth
+                          component={TextField}
+                          onInput={this.onChangeItem}
+                        />
+                      </Col>
+                      <Col xs={3}>
+                        <Button
+                          buttonStyle="primary noRadius"
+                          fullWidth
+                          onClick={this.onItemClick}
+                          disabled={submitting}
+                        >Select item</Button>
+                      </Col>
+                    </Row>
+                  }
                   { (this.state.selectedItem || this.state.itemSelectionError) &&
                     <ItemDetail
                       item={this.state.selectedItem}
