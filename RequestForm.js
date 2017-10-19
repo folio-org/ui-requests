@@ -192,6 +192,7 @@ class RequestForm extends React.Component {
     const requestTypeOptions = (optionLists.requestTypes || []).map(t => ({
       label: t.label, value: t.id, selected: initialValues.requestType === t.id }));
     const fulfilmentTypeOptions = (optionLists.fulfilmentTypes || []).map(t => ({ label: t.label, value: t.id, selected: t.id === 'Hold' }));
+    const labelAsterisk = isEditForm ? '' : '*';
 
     return (
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
@@ -201,7 +202,7 @@ class RequestForm extends React.Component {
               <Col sm={5} smOffset={1}>
                 <h2>Request record</h2>
                 <Field
-                  label="Request Type *"
+                  label={`Request Type ${labelAsterisk}`}
                   name="requestType"
                   component={Select}
                   fullWidth
@@ -209,7 +210,7 @@ class RequestForm extends React.Component {
                   disabled={isEditForm}
                 />
                 <fieldset>
-                  <legend>Item info *</legend>
+                  <legend>{`Item info ${labelAsterisk}`}</legend>
                   {!isEditForm &&
                     <Row>
                       <Col xs={9}>
@@ -242,27 +243,29 @@ class RequestForm extends React.Component {
                   }
                 </fieldset>
                 <fieldset>
-                  <legend>Requester info *</legend>
-                  <Row>
-                    <Col xs={9}>
-                      <Field
-                        name="requester.barcode"
-                        placeholder={'Enter requester barcode'}
-                        aria-label="Requester barcode"
-                        fullWidth
-                        component={TextField}
-                        onInput={this.onChangeUser}
-                      />
-                    </Col>
-                    <Col xs={3}>
-                      <Button
-                        buttonStyle="primary noRadius"
-                        fullWidth
-                        onClick={this.onUserClick}
-                        disabled={submitting}
-                      >Select requester</Button>
-                    </Col>
-                  </Row>
+                  <legend>{`Requester info ${labelAsterisk}`}</legend>
+                  {!isEditForm &&
+                    <Row>
+                      <Col xs={9}>
+                        <Field
+                          name="requester.barcode"
+                          placeholder={'Enter requester barcode'}
+                          aria-label="Requester barcode"
+                          fullWidth
+                          component={TextField}
+                          onInput={this.onChangeUser}
+                        />
+                      </Col>
+                      <Col xs={3}>
+                        <Button
+                          buttonStyle="primary noRadius"
+                          fullWidth
+                          onClick={this.onUserClick}
+                          disabled={submitting}
+                        >Select requester</Button>
+                      </Col>
+                    </Row>
+                  }
                   { (this.state.selectedUser || this.state.userSelectionError) &&
                     <UserDetail
                       user={this.state.selectedUser}
