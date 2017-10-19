@@ -61,9 +61,18 @@ class RequestForm extends React.Component {
   constructor(props) {
     super(props);
 
+    const { requester, item, loan } = props.initialValues;
+
     this.state = {
-      selectedItem: null,
-      selectedUser: null,
+      selectedItem: item ? {
+        itemRecord: item,
+        borrowerRecord: loan.userDetail,
+        loanRecord: loan,
+      } : null,
+      selectedUser: requester ? {
+        patronGroup: requester.patronGroup,
+        personal: requester
+      } : null,
       selectedItemBarcode: null,
       selectedUserBarcode: null,
       itemSelectionError: null,
@@ -76,15 +85,22 @@ class RequestForm extends React.Component {
     this.onUserClick = this.onUserClick.bind(this);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.initialValues &&
-        this.props.initialValues.requester &&
-        prevProps.initialValues &&
-        !prevProps.initialValues.requester) {
+  componentDidUpdate(prevProps) {
+    const initials = this.props.initialValues;
+    const oldInitials = prevProps.initialValues;
+
+    if (initials && initials.requester &&
+        oldInitials && !oldInitials.requester) {
+          console.log("intiial values", this.props.initialValues)
       this.setState({
+        selectedItem: {
+          itemRecord: initials.item,
+          borrowerRecord: initials.loan.userDetail,
+          loanRecord: initials.loan,
+        },
         selectedUser: {
-          patronGroup: this.props.initialValues.requester.patronGroup,
-          personal: this.props.initialValues.requester
+          patronGroup: initials.requester.patronGroup,
+          personal: initials.requester
         },
       });
     }
@@ -159,11 +175,13 @@ class RequestForm extends React.Component {
       initialValues,
       onCancel,
       optionLists,
+      patronGroups,
       pristine,
       submitting,
     } = this.props;
 
     console.log("initialvalues", initialValues)
+    console.log("patronGroups", patronGroups)
 
     const isEditForm = initialValues && initialValues.itemId !== null;
 
@@ -214,7 +232,7 @@ class RequestForm extends React.Component {
                     <ItemDetail
                       item={this.state.selectedItem}
                       error={this.state.itemSelectionError}
-                      patronGroups={this.props.patronGroups}
+                      patronGroups={patronGroups}
                       dateFormatter={this.props.dateFormatter}
                     />
                   }
@@ -245,7 +263,7 @@ class RequestForm extends React.Component {
                     <UserDetail
                       user={this.state.selectedUser}
                       error={this.state.userSelectionError}
-                      patronGroups={this.props.patronGroups}
+                      patronGroups={patronGroups}
                     />
                   }
                   { this.state.selectedUser &&

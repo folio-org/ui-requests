@@ -12,11 +12,15 @@ const ItemDetail = ({ item, error, patronGroups, dateFormatter }) => {
   let borrowerName;
   let borrowerGroup;
 
+  console.log("item", item)
+  console.log("pgroups - item", patronGroups)
+  //patronGroups = patronGroups.records;
+
   const { itemRecord, loanRecord, borrowerRecord } = item;
 
   if (item) {
     borrowerName = `${_.get(borrowerRecord, ['personal', 'firstName'], '')} ${_.get(borrowerRecord, ['personal', 'lastName'], '')}`;
-    borrowerGroup = (borrowerRecord && patronGroups.length > 0) ? patronGroups.find(g => g.id === borrowerRecord.patronGroup).group : '';
+    borrowerGroup = (borrowerRecord && patronGroups.records && patronGroups.records.length > 0) ? patronGroups.records.find(g => g.id === borrowerRecord.patronGroup).group : '';
 
     if (itemRecord) {
       recordLink = <Link to={`/items/view/${itemRecord.id}`}>{_.get(itemRecord, ['barcode'], '')}</Link>;

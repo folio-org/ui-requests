@@ -17,6 +17,7 @@ import { requestTypes } from './constants';
 
 class ViewRequest extends React.Component {
   static propTypes = {
+    dateFormatter: PropTypes.func.isRequired,
     location: PropTypes.object,
     history: PropTypes.object,
     joinRequest: PropTypes.func.isRequired,
@@ -142,8 +143,9 @@ class ViewRequest extends React.Component {
       borrowerName = (borrower && borrower.personal) ? `${borrower.personal.firstName} ${borrower.personal.lastName}` : '';
       borrowerGroup = borrower.patronGroup;
       if (resources.patronGroups && resources.patronGroups.hasLoaded) {
-        patronGroup = resources.patronGroups.records.find(g => g.id === request.patronGroup).group || patronGroup;
-        this.state.enhancedRequest.requester.patronGroup = patronGroup;
+        const groupRecord = resources.patronGroups.records.find(g => g.id === request.patronGroup);
+        patronGroup = groupRecord.group || patronGroup;
+        this.state.enhancedRequest.requester.patronGroup = groupRecord ? groupRecord.id : null;
         borrowerGroup = resources.patronGroups.records.find(g => g.id === borrowerGroup).group || borrowerGroup;
       }
     }
@@ -251,6 +253,7 @@ class ViewRequest extends React.Component {
             onCancel={this.onClickCloseEditRequest}
             optionLists={{ requestTypes }}
             patronGroups={this.props.resources.patronGroups}
+            dateFormatter={this.props.dateFormatter}
           />
         </Layer>
       </Pane>

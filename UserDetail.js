@@ -10,9 +10,12 @@ const UserDetail = ({ user, error, patronGroups }) => {
   let recordLink;
   let requesterGroup;
 
+  console.log("pgroups - user", patronGroups)
+  console.log("user", user)
+
   if (user) {
     recordLink = <Link to={`/users/view/${user.id}`}>{userName}</Link>;
-    requesterGroup = user.patronGroup || ((user && patronGroups.length > 0) ? patronGroups.find(g => g.id === user.patronGroup).group : '');
+    requesterGroup = (user && patronGroups.records && patronGroups.records.length > 0) ? patronGroups.records.find(g => g.id === user.patronGroup).group : '';
   }
 
   if (error) {
