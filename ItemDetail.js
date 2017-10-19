@@ -12,12 +12,7 @@ const ItemDetail = ({ item, error, patronGroups, dateFormatter }) => {
   let borrowerName;
   let borrowerGroup;
 
-  console.log("item", item)
-  console.log("pgroups - item", patronGroups)
-  //patronGroups = patronGroups.records;
-
   const { itemRecord, loanRecord, borrowerRecord } = item;
-  console.log("itemrecord", itemRecord)
 
   if (item) {
     borrowerName = `${_.get(borrowerRecord, ['personal', 'firstName'], '')} ${_.get(borrowerRecord, ['personal', 'lastName'], '')}`;

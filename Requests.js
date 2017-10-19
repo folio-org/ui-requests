@@ -298,7 +298,7 @@ class Requests extends React.Component {
   render() {
     const { stripes, resources } = this.props;
     const requests = (resources.requests || {}).records || [];
-    const patronGroups = resources.patronGroups //(resources.patronGroups || {}).records || [];
+    const patronGroups = resources.patronGroups;// (resources.patronGroups || {}).records || [];
 
     // NOTE: Uncommenting this clause will activate front-end joins of
     // user and item records for every request in the results list. This is

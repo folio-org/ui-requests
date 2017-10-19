@@ -21,6 +21,11 @@ class ViewRequest extends React.Component {
     location: PropTypes.object,
     history: PropTypes.object,
     joinRequest: PropTypes.func.isRequired,
+    mutator: PropTypes.shape({
+      selectedRequest: PropTypes.shape({
+        PUT: PropTypes.func,
+      }),
+    }).isRequired,
     onClose: PropTypes.func.isRequired,
     paneWidth: PropTypes.string,
     resources: PropTypes.shape({
@@ -51,6 +56,8 @@ class ViewRequest extends React.Component {
 
   static defaultProps = {
     paneWidth: '50%',
+    location: {},
+    history: {},
   };
 
   static manifest = {
@@ -104,26 +111,26 @@ class ViewRequest extends React.Component {
 
   onClickCloseEditRequest(e) {
     if (e) e.preventDefault();
-    //removeQueryParam('layer', this.props.location, this.props.history);
+    // removeQueryParam('layer', this.props.location, this.props.history);
     const urlParams = queryString.parse(this.props.location.search);
     _.unset(urlParams, 'layer');
-    this.props.history.push(`${this.props.location.pathname}?${queryString.stringify(urlParams)}`)
+    this.props.history.push(`${this.props.location.pathname}?${queryString.stringify(urlParams)}`);
   }
 
   update(record) {
-    console.log("updating record!", record)
+    const updatedRecord = record;
 
     // Remove the "enhanced record" fields that aren't part of the request schema (and thus can't)
     // be included in the record PUT, or the save will fail
-    delete record.requesterName;
-    delete record.requesterBarcode;
-    delete record.patronGroup;
-    delete record.itemBarcode;
-    delete record.title;
-    delete record.location;
-    delete record.loan;
-    
-    this.props.mutator.selectedRequest.PUT(record).then(() => {
+    delete updatedRecord.requesterName;
+    delete updatedRecord.requesterBarcode;
+    delete updatedRecord.patronGroup;
+    delete updatedRecord.itemBarcode;
+    delete updatedRecord.title;
+    delete updatedRecord.location;
+    delete updatedRecord.loan;
+
+    this.props.mutator.selectedRequest.PUT(updatedRecord).then(() => {
       this.onClickCloseEditRequest();
     });
   }
@@ -178,7 +185,7 @@ class ViewRequest extends React.Component {
     const borrowerRecordLink = borrowerName ? <Link to={`/users/view/${borrower.id}`}>{borrowerName}</Link> : '';
 
     return request ? (
-      <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail"  lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
+      <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
         <Row>
           <Col xs={12}>
             <KeyValue label="Request type" value={_.get(request, ['requestType'], '')} />
@@ -262,7 +269,7 @@ class ViewRequest extends React.Component {
         </fieldset>
         <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit Request Dialog">
           <RequestForm
-            initialValues={ this.state.enhancedRequest }
+            initialValues={this.state.enhancedRequest}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditRequest}
             optionLists={{ requestTypes, fulfilmentTypes }}

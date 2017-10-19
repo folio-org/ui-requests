@@ -10,7 +10,6 @@ import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Select from '@folio/stripes-components/lib/Select';
 import TextField from '@folio/stripes-components/lib/TextField';
-import TextArea from '@folio/stripes-components/lib/TextArea';
 
 import stripesForm from '@folio/stripes-form';
 
@@ -19,7 +18,6 @@ import ItemDetail from './ItemDetail';
 
 function validate(values) {
   const errors = {};
-  console.log("validating", values)
 
   if (!values.itemBarcode) {
     errors.itemBarcode = 'Please select an item';
@@ -71,7 +69,7 @@ class RequestForm extends React.Component {
       } : null,
       selectedUser: requester ? {
         patronGroup: requester.patronGroup,
-        personal: requester
+        personal: requester,
       } : null,
       selectedItemBarcode: null,
       selectedUserBarcode: null,
@@ -91,7 +89,6 @@ class RequestForm extends React.Component {
 
     if (initials && initials.requester &&
         oldInitials && !oldInitials.requester) {
-          console.log("intiial values", this.props.initialValues)
       initials.item.location = { name: initials.location };
       this.setState({
         selectedItem: {
@@ -101,7 +98,7 @@ class RequestForm extends React.Component {
         },
         selectedUser: {
           patronGroup: initials.requester.patronGroup,
-          personal: initials.requester
+          personal: initials.requester,
         },
       });
     }
@@ -180,9 +177,6 @@ class RequestForm extends React.Component {
       pristine,
       submitting,
     } = this.props;
-
-    console.log("initialvalues", initialValues)
-    console.log("patronGroups", patronGroups)
 
     const isEditForm = initialValues && initialValues.itemId !== null;
 
