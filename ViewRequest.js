@@ -110,8 +110,22 @@ class ViewRequest extends React.Component {
     this.props.history.push(`${this.props.location.pathname}?${queryString.stringify(urlParams)}`)
   }
 
-  update() {
+  update(record) {
+    console.log("updating record!", record)
 
+    // Remove the "enhanced record" fields that aren't part of the request schema (and thus can't)
+    // be included in the record PUT, or the save will fail
+    delete record.requesterName;
+    delete record.requesterBarcode;
+    delete record.patronGroup;
+    delete record.itemBarcode;
+    delete record.title;
+    delete record.location;
+    delete record.loan;
+    
+    this.props.mutator.selectedRequest.PUT(record).then(() => {
+      this.onClickCloseEditRequest();
+    });
   }
 
   // Helper function to form a locale-aware date for display
