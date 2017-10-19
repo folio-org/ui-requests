@@ -1,15 +1,31 @@
 import _ from 'lodash';
+import queryString from 'query-string';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'react-flexbox-grid';
 import { Link } from 'react-router-dom';
 
+import Icon from '@folio/stripes-components/lib/Icon';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
+import Layer from '@folio/stripes-components/lib/Layer';
 import Pane from '@folio/stripes-components/lib/Pane';
+import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
+import transitionToParams from '@folio/stripes-components/util/transitionToParams';
+
+import RequestForm from './RequestForm';
+import { fulfilmentTypes, requestTypes } from './constants';
 
 class ViewRequest extends React.Component {
   static propTypes = {
+    dateFormatter: PropTypes.func.isRequired,
+    location: PropTypes.object,
+    history: PropTypes.object,
     joinRequest: PropTypes.func.isRequired,
+    mutator: PropTypes.shape({
+      selectedRequest: PropTypes.shape({
+        PUT: PropTypes.func,
+      }),
+    }).isRequired,
     onClose: PropTypes.func.isRequired,
     paneWidth: PropTypes.string,
     resources: PropTypes.shape({
@@ -40,6 +56,8 @@ class ViewRequest extends React.Component {
 
   static defaultProps = {
     paneWidth: '50%',
+    location: {},
+    history: {},
   };
 
   static manifest = {
@@ -62,6 +80,10 @@ class ViewRequest extends React.Component {
     };
 
     this.makeLocaleDateString = this.makeLocaleDateString.bind(this);
+    this.onClickCloseEditRequest = this.onClickCloseEditRequest.bind(this);
+    this.onClickEditRequest = this.onClickEditRequest.bind(this);
+    this.transitionToParams = transitionToParams.bind(this);
+    this.update = this.update.bind(this);
   }
 
   // Use componentDidUpdate to pull in metadata from the related user and item records
@@ -82,6 +104,37 @@ class ViewRequest extends React.Component {
     }
   }
 
+  onClickEditRequest(e) {
+    if (e) e.preventDefault();
+    this.transitionToParams({ layer: 'edit' });
+  }
+
+  onClickCloseEditRequest(e) {
+    if (e) e.preventDefault();
+    // removeQueryParam('layer', this.props.location, this.props.history);
+    const urlParams = queryString.parse(this.props.location.search);
+    _.unset(urlParams, 'layer');
+    this.props.history.push(`${this.props.location.pathname}?${queryString.stringify(urlParams)}`);
+  }
+
+  update(record) {
+    const updatedRecord = record;
+
+    // Remove the "enhanced record" fields that aren't part of the request schema (and thus can't)
+    // be included in the record PUT, or the save will fail
+    delete updatedRecord.requesterName;
+    delete updatedRecord.requesterBarcode;
+    delete updatedRecord.patronGroup;
+    delete updatedRecord.itemBarcode;
+    delete updatedRecord.title;
+    delete updatedRecord.location;
+    delete updatedRecord.loan;
+
+    this.props.mutator.selectedRequest.PUT(updatedRecord).then(() => {
+      this.onClickCloseEditRequest();
+    });
+  }
+
   // Helper function to form a locale-aware date for display
   makeLocaleDateString(dateString) {
     if (dateString === '') {
@@ -92,7 +145,8 @@ class ViewRequest extends React.Component {
   }
 
   render() {
-    const { resources } = this.props;
+    const { resources, location } = this.props;
+    const query = location.search ? queryString.parse(location.search) : {};
     let request = (resources.selectedRequest && resources.selectedRequest.hasLoaded) ? resources.selectedRequest.records[0] : null;
 
     let patronGroup;
@@ -110,10 +164,19 @@ class ViewRequest extends React.Component {
       borrowerName = (borrower && borrower.personal) ? `${borrower.personal.firstName} ${borrower.personal.lastName}` : '';
       borrowerGroup = borrower.patronGroup;
       if (resources.patronGroups && resources.patronGroups.hasLoaded) {
-        patronGroup = resources.patronGroups.records.find(g => g.id === request.patronGroup).group || patronGroup;
+        const groupRecord = resources.patronGroups.records.find(g => g.id === request.patronGroup);
+        patronGroup = groupRecord.group || patronGroup;
+        this.state.enhancedRequest.requester.patronGroup = groupRecord ? groupRecord.id : null;
         borrowerGroup = resources.patronGroups.records.find(g => g.id === borrowerGroup).group || borrowerGroup;
       }
     }
+
+    const detailMenu = (
+      <PaneMenu>
+        <button id="clickable-editrequest" style={{ visibility: !request ? 'hidden' : 'visible' }} onClick={this.onClickEditRequest} title="Edit Request"><Icon icon="edit" />Edit</button>
+        <button id="clickable-show-notes" style={{ visibility: !request ? 'hidden' : 'visible' }} onClick={this.props.notesToggle} title="Show Notes"><Icon icon="comment" />Notes</button>
+      </PaneMenu>
+    );
 
     const itemBarcode = _.get(request, ['itemBarcode'], '');
     const itemRecordLink = itemBarcode ? <Link to={`/items/view/${request.itemId}`}>{itemBarcode}</Link> : '';
@@ -122,7 +185,7 @@ class ViewRequest extends React.Component {
     const borrowerRecordLink = borrowerName ? <Link to={`/users/view/${borrower.id}`}>{borrowerName}</Link> : '';
 
     return request ? (
-      <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" dismissible onClose={this.props.onClose}>
+      <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
         <Row>
           <Col xs={12}>
             <KeyValue label="Request type" value={_.get(request, ['requestType'], '')} />
@@ -204,6 +267,16 @@ class ViewRequest extends React.Component {
             </Col>
           </Row>
         </fieldset>
+        <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit Request Dialog">
+          <RequestForm
+            initialValues={this.state.enhancedRequest}
+            onSubmit={(record) => { this.update(record); }}
+            onCancel={this.onClickCloseEditRequest}
+            optionLists={{ requestTypes, fulfilmentTypes }}
+            patronGroups={this.props.resources.patronGroups}
+            dateFormatter={this.props.dateFormatter}
+          />
+        </Layer>
       </Pane>
     ) : null;
   }

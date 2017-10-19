@@ -16,7 +16,7 @@ const ItemDetail = ({ item, error, patronGroups, dateFormatter }) => {
 
   if (item) {
     borrowerName = `${_.get(borrowerRecord, ['personal', 'firstName'], '')} ${_.get(borrowerRecord, ['personal', 'lastName'], '')}`;
-    borrowerGroup = (borrowerRecord && patronGroups.length > 0) ? patronGroups.find(g => g.id === borrowerRecord.patronGroup).group : '';
+    borrowerGroup = (borrowerRecord && patronGroups.records && patronGroups.records.length > 0) ? patronGroups.records.find(g => g.id === borrowerRecord.patronGroup).group : '';
 
     if (itemRecord) {
       recordLink = <Link to={`/items/view/${itemRecord.id}`}>{_.get(itemRecord, ['barcode'], '')}</Link>;
@@ -61,7 +61,7 @@ const ItemDetail = ({ item, error, patronGroups, dateFormatter }) => {
             <KeyValue label="Patron group" value={borrowerGroup} />
           </Col>
           <Col xs={2}>
-            <KeyValue label="Status" value={_.get(itemRecord, ['status', 'name'], '')} />
+            <KeyValue label="Status" value={_.get(itemRecord, ['status', 'name'], '') || _.get(loanRecord, ['status', 'name'])} />
           </Col>
           <Col xs={2}>
             <KeyValue label="Current due date" value={dateFormatter(_.get(loanRecord, ['dueDate'], ''))} />

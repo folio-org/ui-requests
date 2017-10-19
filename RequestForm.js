@@ -10,6 +10,7 @@ import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Select from '@folio/stripes-components/lib/Select';
 import TextField from '@folio/stripes-components/lib/TextField';
+
 import stripesForm from '@folio/stripes-form';
 
 import UserDetail from './UserDetail';
@@ -58,9 +59,18 @@ class RequestForm extends React.Component {
   constructor(props) {
     super(props);
 
+    const { requester, item, loan } = props.initialValues;
+
     this.state = {
-      selectedItem: null,
-      selectedUser: null,
+      selectedItem: item ? {
+        itemRecord: item,
+        borrowerRecord: loan.userDetail,
+        loanRecord: loan,
+      } : null,
+      selectedUser: requester ? {
+        patronGroup: requester.patronGroup,
+        personal: requester,
+      } : null,
       selectedItemBarcode: null,
       selectedUserBarcode: null,
       itemSelectionError: null,
@@ -71,6 +81,27 @@ class RequestForm extends React.Component {
     this.onChangeUser = this.onChangeUser.bind(this);
     this.onItemClick = this.onItemClick.bind(this);
     this.onUserClick = this.onUserClick.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    const initials = this.props.initialValues;
+    const oldInitials = prevProps.initialValues;
+
+    if (initials && initials.requester &&
+        oldInitials && !oldInitials.requester) {
+      initials.item.location = { name: initials.location };
+      this.setState({
+        selectedItem: {
+          itemRecord: initials.item,
+          borrowerRecord: initials.loan.userDetail,
+          loanRecord: initials.loan,
+        },
+        selectedUser: {
+          patronGroup: initials.requester.patronGroup,
+          personal: initials.requester,
+        },
+      });
+    }
   }
 
   onChangeUser(e) {
@@ -139,91 +170,101 @@ class RequestForm extends React.Component {
   render() {
     const {
       handleSubmit,
+      initialValues,
       onCancel,
       optionLists,
+      patronGroups,
       pristine,
       submitting,
     } = this.props;
+
+    const isEditForm = initialValues && initialValues.itemId !== null;
 
     const addRequestFirstMenu = <PaneMenu><Button onClick={onCancel} title="close" aria-label="Close New Request Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></Button></PaneMenu>;
     const addRequestLastMenu = <PaneMenu><Button type="submit" title="Create New Request" disabled={pristine || submitting} onClick={handleSubmit}>Create Request</Button></PaneMenu>;
     const editRequestLastMenu = <PaneMenu><Button type="submit" title="Update Request" disabled={pristine || submitting} onClick={handleSubmit}>Update Request</Button></PaneMenu>;
     const requestTypeOptions = (optionLists.requestTypes || []).map(t => ({
-      label: t.label, value: t.id, selected: t.id === 'Hold' }));
+      label: t.label, value: t.id, selected: initialValues.requestType === t.id }));
     const fulfilmentTypeOptions = (optionLists.fulfilmentTypes || []).map(t => ({ label: t.label, value: t.id, selected: t.id === 'Hold' }));
+    const labelAsterisk = isEditForm ? '' : '*';
 
     return (
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
-          <Pane defaultWidth="100%" height="100%" firstMenu={addRequestFirstMenu} lastMenu={false ? editRequestLastMenu : addRequestLastMenu} paneTitle={false ? 'Edit request' : 'New request'}>
+          <Pane defaultWidth="100%" height="100%" firstMenu={addRequestFirstMenu} lastMenu={isEditForm ? editRequestLastMenu : addRequestLastMenu} paneTitle={isEditForm ? 'Edit request' : 'New request'}>
             <Row>
               <Col sm={5} smOffset={1}>
                 <h2>Request record</h2>
                 <Field
-                  label="Request Type *"
+                  label={`Request Type ${labelAsterisk}`}
                   name="requestType"
                   component={Select}
                   fullWidth
                   dataOptions={requestTypeOptions}
+                  disabled={isEditForm}
                 />
                 <fieldset>
-                  <legend>Item info *</legend>
-                  <Row>
-                    <Col xs={9}>
-                      <Field
-                        name="itemBarcode"
-                        placeholder={'Enter item barcode'}
-                        aria-label="Item barcode"
-                        fullWidth
-                        component={TextField}
-                        onInput={this.onChangeItem}
-                      />
-                    </Col>
-                    <Col xs={3}>
-                      <Button
-                        buttonStyle="primary noRadius"
-                        fullWidth
-                        onClick={this.onItemClick}
-                        disabled={submitting}
-                      >Select item</Button>
-                    </Col>
-                  </Row>
+                  <legend>{`Item info ${labelAsterisk}`}</legend>
+                  {!isEditForm &&
+                    <Row>
+                      <Col xs={9}>
+                        <Field
+                          name="item.barcode"
+                          placeholder={'Enter item barcode'}
+                          aria-label="Item barcode"
+                          fullWidth
+                          component={TextField}
+                          onInput={this.onChangeItem}
+                        />
+                      </Col>
+                      <Col xs={3}>
+                        <Button
+                          buttonStyle="primary noRadius"
+                          fullWidth
+                          onClick={this.onItemClick}
+                          disabled={submitting}
+                        >Select item</Button>
+                      </Col>
+                    </Row>
+                  }
                   { (this.state.selectedItem || this.state.itemSelectionError) &&
                     <ItemDetail
                       item={this.state.selectedItem}
                       error={this.state.itemSelectionError}
-                      patronGroups={this.props.patronGroups}
+                      patronGroups={patronGroups}
                       dateFormatter={this.props.dateFormatter}
                     />
                   }
                 </fieldset>
                 <fieldset>
-                  <legend>Requester info *</legend>
-                  <Row>
-                    <Col xs={9}>
-                      <Field
-                        name="requesterBarcode"
-                        placeholder={'Enter requester barcode'}
-                        aria-label="Requester barcode"
-                        fullWidth
-                        component={TextField}
-                        onInput={this.onChangeUser}
-                      />
-                    </Col>
-                    <Col xs={3}>
-                      <Button
-                        buttonStyle="primary noRadius"
-                        fullWidth
-                        onClick={this.onUserClick}
-                        disabled={submitting}
-                      >Select requester</Button>
-                    </Col>
-                  </Row>
+                  <legend>{`Requester info ${labelAsterisk}`}</legend>
+                  {!isEditForm &&
+                    <Row>
+                      <Col xs={9}>
+                        <Field
+                          name="requester.barcode"
+                          placeholder={'Enter requester barcode'}
+                          aria-label="Requester barcode"
+                          fullWidth
+                          component={TextField}
+                          onInput={this.onChangeUser}
+                        />
+                      </Col>
+                      <Col xs={3}>
+                        <Button
+                          buttonStyle="primary noRadius"
+                          fullWidth
+                          onClick={this.onUserClick}
+                          disabled={submitting}
+                        >Select requester</Button>
+                      </Col>
+                    </Row>
+                  }
                   { (this.state.selectedUser || this.state.userSelectionError) &&
                     <UserDetail
                       user={this.state.selectedUser}
                       error={this.state.userSelectionError}
-                      patronGroups={this.props.patronGroups}
+                      patronGroups={patronGroups}
                     />
                   }
                   { this.state.selectedUser &&
@@ -291,4 +332,6 @@ export default stripesForm({
   form: 'requestForm',
   validate,
   navigationCheck: true,
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: true,
 })(RequestForm);
