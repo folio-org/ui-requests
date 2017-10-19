@@ -13,7 +13,7 @@ import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 
 import RequestForm from './RequestForm';
-import { requestTypes } from './constants';
+import { fulfilmentTypes, requestTypes } from './constants';
 
 class ViewRequest extends React.Component {
   static propTypes = {
@@ -251,7 +251,7 @@ class ViewRequest extends React.Component {
             initialValues={ this.state.enhancedRequest }
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditRequest}
-            optionLists={{ requestTypes }}
+            optionLists={{ requestTypes, fulfilmentTypes }}
             patronGroups={this.props.resources.patronGroups}
             dateFormatter={this.props.dateFormatter}
           />
