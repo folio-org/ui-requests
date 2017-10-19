@@ -17,6 +17,7 @@ const ItemDetail = ({ item, error, patronGroups, dateFormatter }) => {
   //patronGroups = patronGroups.records;
 
   const { itemRecord, loanRecord, borrowerRecord } = item;
+  console.log("itemrecord", itemRecord)
 
   if (item) {
     borrowerName = `${_.get(borrowerRecord, ['personal', 'firstName'], '')} ${_.get(borrowerRecord, ['personal', 'lastName'], '')}`;
@@ -65,7 +66,7 @@ const ItemDetail = ({ item, error, patronGroups, dateFormatter }) => {
             <KeyValue label="Patron group" value={borrowerGroup} />
           </Col>
           <Col xs={2}>
-            <KeyValue label="Status" value={_.get(itemRecord, ['status', 'name'], '')} />
+            <KeyValue label="Status" value={_.get(itemRecord, ['status', 'name'], '') || _.get(loanRecord, ['status', 'name'])} />
           </Col>
           <Col xs={2}>
             <KeyValue label="Current due date" value={dateFormatter(_.get(loanRecord, ['dueDate'], ''))} />
