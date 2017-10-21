@@ -62,6 +62,7 @@ class RequestForm extends React.Component {
     const { requester, item, loan } = props.initialValues;
 
     this.state = {
+      selectedDelivery: false,
       selectedItem: item ? {
         itemRecord: item,
         borrowerRecord: loan.userDetail,
@@ -77,6 +78,7 @@ class RequestForm extends React.Component {
       userSelectionError: null,
     };
 
+    this.onChangeFulfilment = this.onChangeFulfilment.bind(this);
     this.onChangeItem = this.onChangeItem.bind(this);
     this.onChangeUser = this.onChangeUser.bind(this);
     this.onItemClick = this.onItemClick.bind(this);
@@ -102,6 +104,12 @@ class RequestForm extends React.Component {
         },
       });
     }
+  }
+
+  onChangeFulfilment(e) {
+    this.setState({
+      selectedDelivery: e.target.value == 'Delivery',
+    });
   }
 
   onChangeUser(e) {
@@ -187,6 +195,11 @@ class RequestForm extends React.Component {
       label: t.label, value: t.id, selected: initialValues.requestType === t.id }));
     const fulfilmentTypeOptions = (optionLists.fulfilmentTypes || []).map(t => ({ label: t.label, value: t.id, selected: t.id === 'Hold' }));
     const labelAsterisk = isEditForm ? '' : '*';
+
+    let deliveryLocations;
+    if (this.state.selectedUser && this.state.selectedUser.personal && this.state.selectedUser.personal.addresses) {
+      deliveryLocations = this.state.selectedUser.personal.addresses.map(a => ({ label: a.addressTypeId, value: a.addressTypeId }));
+    }
 
     return (
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
@@ -276,17 +289,20 @@ class RequestForm extends React.Component {
                           component={Select}
                           fullWidth
                           dataOptions={[{ label: 'Select fulfilment option', value: '' }, ...fulfilmentTypeOptions]}
+                          onChange={this.onChangeFulfilment}
                         />
                       </Col>
-                      {/*   <Col xs={6}>
-                        <Field
-                          name="pickupLocation"
-                          label="Pickup location"
-                          component={Select}
-                          fullWidth
-                          dataOptions={[{ label: 'Select pickup location', value: '' }, ...requestTypeOptions]}
-                        />
-                      </Col> */}
+                      { this.state.selectedDelivery && deliveryLocations &&
+                        <Col>
+                          <Field
+                            name="deliveryAddress"
+                            label="Delivery Address"
+                            component={Select}
+                            fullWidth
+                            dataOptions={[{ label: 'Select address type', value: ''}, ...deliveryLocations]}
+                          />
+                        </Col>
+                      }
                     </Row>
                   }
                 </fieldset>
