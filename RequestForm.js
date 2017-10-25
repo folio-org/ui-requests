@@ -96,6 +96,7 @@ class RequestForm extends React.Component {
         oldInitials && !oldInitials.requester) {
       initials.item.location = { name: initials.location };
       this.setState({
+        selectedDelivery: initials.fulfilmentPreference === 'Delivery',
         selectedItem: {
           itemRecord: initials.item,
           borrowerRecord: initials.loan.userDetail,
@@ -230,7 +231,9 @@ class RequestForm extends React.Component {
 
     let deliveryLocations;
     let deliveryLocationsDetail = [];
+    console.log("seluesr", selectedUser)
     if (selectedUser && selectedUser.personal && selectedUser.personal.addresses) {
+      console.log("in user")
       deliveryLocations = selectedUser.personal.addresses.map(a => ({ label: a.addressTypeId, value: a.addressTypeId }));
       deliveryLocationsDetail = _.keyBy(selectedUser.personal.addresses, a => a.addressTypeId);
     }

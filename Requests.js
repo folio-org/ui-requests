@@ -249,10 +249,13 @@ class Requests extends React.Component {
       const item = resultArray[1].items[0];
       const loan = resultArray[2].loans[0];
 
+      console.log("starting with", user, r)
+
       const enhancedRequest = Object.assign({}, r);
       enhancedRequest.requesterName = (user && user.personal) ? `${user.personal.firstName} ${user.personal.lastName}` : '';
       enhancedRequest.requesterBarcode = (user && user.personal) ? user.barcode : '';
       enhancedRequest.patronGroup = (user && user.personal) ? user.patronGroup : '';
+      enhancedRequest.requester.addresses = (user && user.personal && user.personal.addresses) ? user.personal.addresses : [];
 
       enhancedRequest.title = item ? item.title : '';
       enhancedRequest.itemBarcode = item ? item.barcode : '';
@@ -260,9 +263,12 @@ class Requests extends React.Component {
 
       enhancedRequest.loan = loan;
 
+      console.log("intermediate", enhancedRequest)
+
       // Look up the associated borrower (if any) for the loan
       return this.findUser(loan.userId).then((loanUser) => {
         enhancedRequest.loan.userDetail = loanUser.users[0];
+        console.log("final er", enhancedRequest)
         return enhancedRequest;
       });
     });
