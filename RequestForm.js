@@ -232,11 +232,11 @@ class RequestForm extends React.Component {
 
     let deliveryLocations;
     let deliveryLocationsDetail = [];
-    console.log("seluesr", selectedUser)
-    console.log("address types", optionLists.addressTypes)
     if (selectedUser && selectedUser.personal && selectedUser.personal.addresses) {
-      console.log("in user")
-      deliveryLocations = selectedUser.personal.addresses.map(a => ({ label: a.addressTypeId, value: a.addressTypeId }));
+      deliveryLocations = selectedUser.personal.addresses.map((a) => {
+        const typeName = _.find(optionLists.addressTypes, { 'id': a.addressTypeId }).addressType;
+        return { label: typeName, value: a.addressTypeId };
+      });
       deliveryLocationsDetail = _.keyBy(selectedUser.personal.addresses, a => a.addressTypeId);
     }
 
