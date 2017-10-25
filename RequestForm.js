@@ -43,6 +43,7 @@ class RequestForm extends React.Component {
     submitting: PropTypes.bool,
     //  okapi: PropTypes.object,
     optionLists: PropTypes.shape({
+      addressTypes: PropTypes.arrayOf(PropTypes.object),
       requestTypes: PropTypes.arrayOf(PropTypes.object),
       fulfilmentTypes: PropTypes.arrayOf(PropTypes.object),
     }),
@@ -232,6 +233,7 @@ class RequestForm extends React.Component {
     let deliveryLocations;
     let deliveryLocationsDetail = [];
     console.log("seluesr", selectedUser)
+    console.log("address types", optionLists.addressTypes)
     if (selectedUser && selectedUser.personal && selectedUser.personal.addresses) {
       console.log("in user")
       deliveryLocations = selectedUser.personal.addresses.map(a => ({ label: a.addressTypeId, value: a.addressTypeId }));

@@ -65,6 +65,11 @@ class ViewRequest extends React.Component {
       type: 'okapi',
       path: 'circulation/requests/:{requestId}',
     },
+    addressTypes: {
+      type: 'okapi',
+      path: 'addresstypes',
+      records: 'addressTypes',
+    },
     patronGroups: {
       type: 'okapi',
       path: 'groups',
@@ -186,6 +191,8 @@ class ViewRequest extends React.Component {
     const requesterRecordLink = requesterName ? <Link to={`/users/view/${request.requesterId}`}>{requesterName}</Link> : '';
     const borrowerRecordLink = borrowerName ? <Link to={`/users/view/${borrower.id}`}>{borrowerName}</Link> : '';
 
+    const addressTypes = (this.props.resources.addressTypes && this.props.resources.addressTypes.hasLoaded) ? this.props.resources.addressTypes.records : [];
+
     return request ? (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
         <Row>
@@ -274,7 +281,7 @@ class ViewRequest extends React.Component {
             initialValues={this.state.enhancedRequest}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditRequest}
-            optionLists={{ requestTypes, fulfilmentTypes }}
+            optionLists={{ requestTypes, fulfilmentTypes, addressTypes }}
             patronGroups={this.props.resources.patronGroups}
             dateFormatter={this.props.dateFormatter}
           />
