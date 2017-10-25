@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'react-flexbox-grid';
@@ -63,6 +64,7 @@ class RequestForm extends React.Component {
 
     this.state = {
       selectedDelivery: false,
+      selectedAddressTypeId: null,
       selectedItem: item ? {
         itemRecord: item,
         borrowerRecord: loan.userDetail,
@@ -78,6 +80,7 @@ class RequestForm extends React.Component {
       userSelectionError: null,
     };
 
+    this.onChangeAddress = this.onChangeAddress.bind(this);
     this.onChangeFulfilment = this.onChangeFulfilment.bind(this);
     this.onChangeItem = this.onChangeItem.bind(this);
     this.onChangeUser = this.onChangeUser.bind(this);
@@ -108,7 +111,13 @@ class RequestForm extends React.Component {
 
   onChangeFulfilment(e) {
     this.setState({
-      selectedDelivery: e.target.value == 'Delivery',
+      selectedDelivery: e.target.value === 'Delivery',
+    });
+  }
+
+  onChangeAddress(e) {
+    this.setState({
+      selectedAddressTypeId: e.target.value,
     });
   }
 
@@ -175,6 +184,27 @@ class RequestForm extends React.Component {
     });
   }
 
+  toUserAddress(addr) {
+    console.log("Got address ", addr)
+    //const countryId = (addr.country) ? countriesByName[addr.country].alpha2 : '';
+    console.log("result",       `${addr.addressLine1}
+          ${addr.addressLine2}
+          ${addr.city}
+          ${addr.primaryAddress}
+          ${addr.stateRegion}
+          ${addr.zipCode}
+          `)
+    return
+      `${addr.addressLine1}
+      ${addr.addressLine2}
+      ${addr.city}
+      ${addr.primaryAddress}
+      ${addr.stateRegion}
+      ${addr.zipCode}
+      `
+    ;
+  }
+
   render() {
     const {
       handleSubmit,
@@ -185,6 +215,8 @@ class RequestForm extends React.Component {
       pristine,
       submitting,
     } = this.props;
+
+    const { selectedUser } = this.state;
 
     const isEditForm = initialValues && initialValues.itemId !== null;
 
@@ -197,10 +229,13 @@ class RequestForm extends React.Component {
     const labelAsterisk = isEditForm ? '' : '*';
 
     let deliveryLocations;
-    if (this.state.selectedUser && this.state.selectedUser.personal && this.state.selectedUser.personal.addresses) {
-      deliveryLocations = this.state.selectedUser.personal.addresses.map(a => ({ label: a.addressTypeId, value: a.addressTypeId }));
+    let deliveryLocationsDetail = [];
+    if (selectedUser && selectedUser.personal && selectedUser.personal.addresses) {
+      deliveryLocations = selectedUser.personal.addresses.map(a => ({ label: a.addressTypeId, value: a.addressTypeId }));
+      deliveryLocationsDetail = _.keyBy(selectedUser.personal.addresses, a => a.addressTypeId);
     }
 
+console.log("details", deliveryLocationsDetail)
     return (
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
@@ -295,13 +330,21 @@ class RequestForm extends React.Component {
                       { this.state.selectedDelivery && deliveryLocations &&
                         <Col>
                           <Field
-                            name="deliveryAddress"
+                            name="deliveryAddressTypeId"
                             label="Delivery Address"
                             component={Select}
                             fullWidth
                             dataOptions={[{ label: 'Select address type', value: ''}, ...deliveryLocations]}
+                            onChange={this.onChangeAddress}
                           />
                         </Col>
+                      }
+                      { this.state.selectedAddressTypeId &&
+                        <div>
+                          <pre>
+                          {this.toUserAddress(deliveryLocationsDetail[this.state.selectedAddressTypeId])}
+                          </pre>
+                        </div>
                       }
                     </Row>
                   }

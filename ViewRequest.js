@@ -166,7 +166,9 @@ class ViewRequest extends React.Component {
       if (resources.patronGroups && resources.patronGroups.hasLoaded) {
         const groupRecord = resources.patronGroups.records.find(g => g.id === request.patronGroup);
         patronGroup = groupRecord.group || patronGroup;
-        this.state.enhancedRequest.requester.patronGroup = groupRecord ? groupRecord.id : null;
+        if (this.state.enhancedRequest.requester) {
+          this.state.enhancedRequest.requester.patronGroup = groupRecord ? groupRecord.id : null;
+        }
         borrowerGroup = resources.patronGroups.records.find(g => g.id === borrowerGroup).group || borrowerGroup;
       }
     }
