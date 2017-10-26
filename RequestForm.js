@@ -61,11 +61,11 @@ class RequestForm extends React.Component {
   constructor(props) {
     super(props);
 
-    const { requester, item, loan, fulfilmentPreference } = props.initialValues;
+    const { requester, item, loan, fulfilmentPreference, deliveryAddressTypeId } = props.initialValues;
 
     this.state = {
       selectedDelivery: fulfilmentPreference === 'Delivery',
-      selectedAddressTypeId: null,
+      selectedAddressTypeId: deliveryAddressTypeId,
       selectedItem: item ? {
         itemRecord: item,
         borrowerRecord: loan.userDetail,
@@ -97,6 +97,7 @@ class RequestForm extends React.Component {
         oldInitials && !oldInitials.requester) {
       initials.item.location = { name: initials.location };
       this.setState({
+        selectedAddressTypeId: initials.deliveryAddressTypeId,
         selectedDelivery: initials.fulfilmentPreference === 'Delivery',
         selectedItem: {
           itemRecord: initials.item,
@@ -187,24 +188,16 @@ class RequestForm extends React.Component {
   }
 
   toUserAddress(addr) {
-    console.log("Got address ", addr)
     //const countryId = (addr.country) ? countriesByName[addr.country].alpha2 : '';
-    console.log("result",       `${addr.addressLine1}
-          ${addr.addressLine2}
-          ${addr.city}
-          ${addr.primaryAddress}
-          ${addr.stateRegion}
-          ${addr.zipCode}
-          `)
-    return
-      `${addr.addressLine1}
-      ${addr.addressLine2}
-      ${addr.city}
-      ${addr.primaryAddress}
-      ${addr.stateRegion}
-      ${addr.zipCode}
-      `
-    ;
+    return (
+      <div>
+        <div>{addr.addressLine1 || ''}</div>
+        <div>{addr.addressLine2 || ''}</div>
+        <div>{addr.city || ''}</div>
+        <div>{addr.region || ''}</div>
+        <div>{addr.postalCode || ''}</div>
+      </div>
+    );
   }
 
   render() {
@@ -232,6 +225,7 @@ class RequestForm extends React.Component {
 
     let deliveryLocations;
     let deliveryLocationsDetail = [];
+    let addressDetail;
     if (selectedUser && selectedUser.personal && selectedUser.personal.addresses) {
       deliveryLocations = selectedUser.personal.addresses.map((a) => {
         const typeName = _.find(optionLists.addressTypes, { 'id': a.addressTypeId }).addressType;
@@ -240,8 +234,11 @@ class RequestForm extends React.Component {
       deliveryLocations = _.sortBy(deliveryLocations, ['label']);
       deliveryLocationsDetail = _.keyBy(selectedUser.personal.addresses, a => a.addressTypeId);
     }
+    if (this.state.selectedAddressTypeId) {
+      addressDetail = this.toUserAddress(deliveryLocationsDetail[this.state.selectedAddressTypeId]);
+    }
 
-console.log("details", deliveryLocationsDetail)
+console.log("details", addressDetail)
     return (
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
@@ -345,13 +342,13 @@ console.log("details", deliveryLocationsDetail)
                           />
                         </Col>
                       }
-                      { this.state.selectedAddressTypeId &&
-                        <div>
-                          <pre>
-                          {this.toUserAddress(deliveryLocationsDetail[this.state.selectedAddressTypeId])}
-                          </pre>
-                        </div>
-                      }
+                    </Row>
+                  }
+                  { this.state.selectedDelivery && this.state.selectedAddressTypeId &&
+                    <Row>
+                      <Col xsOffset={6} xs={6}>
+                        <p>{addressDetail}</p>
+                      </Col>
                     </Row>
                   }
                 </fieldset>
