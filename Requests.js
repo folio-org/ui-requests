@@ -66,6 +66,10 @@ class Requests extends React.Component {
     }).isRequired,
     okapi: PropTypes.object.isRequired,
     resources: PropTypes.shape({
+      addressTypes: PropTypes.shape({
+        hasLoaded: PropTypes.bool.isRequired,
+        records: PropTypes.arrayOf(PropTypes.object),
+      }).isRequired,
       requests: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         isPending: PropTypes.bool.isPending,
@@ -254,8 +258,6 @@ class Requests extends React.Component {
       const item = resultArray[1].items[0];
       const loan = resultArray[2].loans[0];
 
-      console.log("starting with", user, r)
-
       const enhancedRequest = Object.assign({}, r);
       enhancedRequest.requesterName = (user && user.personal) ? `${user.personal.firstName} ${user.personal.lastName}` : '';
       enhancedRequest.requesterBarcode = (user && user.personal) ? user.barcode : '';
@@ -268,12 +270,9 @@ class Requests extends React.Component {
 
       enhancedRequest.loan = loan;
 
-      console.log("intermediate", enhancedRequest)
-
       // Look up the associated borrower (if any) for the loan
       return this.findUser(loan.userId).then((loanUser) => {
         enhancedRequest.loan.userDetail = loanUser.users[0];
-        console.log("final er", enhancedRequest)
         return enhancedRequest;
       });
     });

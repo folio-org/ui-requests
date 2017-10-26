@@ -78,7 +78,13 @@ const ItemDetail = ({ item, error, patronGroups, dateFormatter }) => {
 ItemDetail.propTypes = {
   item: PropTypes.object.isRequired,
   error: PropTypes.string,
-  patronGroups: PropTypes.arrayOf(PropTypes.object).isRequired,
+  patronGroups: PropTypes.shape({
+    hasLoaded: PropTypes.bool.isRequired,
+    isPending: PropTypes.bool.isPending,
+    other: PropTypes.shape({
+      totalRecords: PropTypes.number,
+    }),
+  }).isRequired,
   dateFormatter: PropTypes.func.isRequired,
 };
 

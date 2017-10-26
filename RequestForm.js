@@ -34,9 +34,9 @@ class RequestForm extends React.Component {
   static propTypes = {
     change: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    findUser: PropTypes.func.isRequired,
-    findItem: PropTypes.func.isRequired,
-    findLoan: PropTypes.func.isRequired,
+    findUser: PropTypes.func,
+    findItem: PropTypes.func,
+    findLoan: PropTypes.func,
     initialValues: PropTypes.object,
     onCancel: PropTypes.func.isRequired,
     pristine: PropTypes.bool,
@@ -47,11 +47,20 @@ class RequestForm extends React.Component {
       requestTypes: PropTypes.arrayOf(PropTypes.object),
       fulfilmentTypes: PropTypes.arrayOf(PropTypes.object),
     }),
-    patronGroups: PropTypes.arrayOf(PropTypes.object).isRequired,
+    patronGroups: PropTypes.shape({
+      hasLoaded: PropTypes.bool.isRequired,
+      isPending: PropTypes.bool.isPending,
+      other: PropTypes.shape({
+        totalRecords: PropTypes.number,
+      }),
+    }).isRequired,
     dateFormatter: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
+    findUser: () => {},
+    findItem: () => {},
+    findLoan: () => {},
     initialValues: {},
     optionLists: {},
     pristine: true,
@@ -96,6 +105,7 @@ class RequestForm extends React.Component {
     if (initials && initials.requester &&
         oldInitials && !oldInitials.requester) {
       initials.item.location = { name: initials.location };
+      /* eslint react/no-did-update-set-state: 0 */
       this.setState({
         selectedAddressTypeId: initials.deliveryAddressTypeId,
         selectedDelivery: initials.fulfilmentPreference === 'Delivery',
@@ -178,17 +188,22 @@ class RequestForm extends React.Component {
           this.setState({
             selectedItem: { itemRecord: item },
           });
+
+          return result2;
         });
       }
 
       this.setState({
         itemSelectionError: 'Item with this barcode does not exist',
       });
+
+      return result;
     });
   }
 
+  /* eslint class-methods-use-this: 0 */
   toUserAddress(addr) {
-    //const countryId = (addr.country) ? countriesByName[addr.country].alpha2 : '';
+    // const countryId = (addr.country) ? countriesByName[addr.country].alpha2 : '';
     return (
       <div>
         <div>{addr.addressLine1 || ''}</div>
@@ -228,7 +243,7 @@ class RequestForm extends React.Component {
     let addressDetail;
     if (selectedUser && selectedUser.personal && selectedUser.personal.addresses) {
       deliveryLocations = selectedUser.personal.addresses.map((a) => {
-        const typeName = _.find(optionLists.addressTypes, { 'id': a.addressTypeId }).addressType;
+        const typeName = _.find(optionLists.addressTypes, { id: a.addressTypeId }).addressType;
         return { label: typeName, value: a.addressTypeId };
       });
       deliveryLocations = _.sortBy(deliveryLocations, ['label']);
@@ -238,7 +253,6 @@ class RequestForm extends React.Component {
       addressDetail = this.toUserAddress(deliveryLocationsDetail[this.state.selectedAddressTypeId]);
     }
 
-console.log("details", addressDetail)
     return (
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
@@ -337,7 +351,7 @@ console.log("details", addressDetail)
                             label="Delivery Address"
                             component={Select}
                             fullWidth
-                            dataOptions={[{ label: 'Select address type', value: ''}, ...deliveryLocations]}
+                            dataOptions={[{ label: 'Select address type', value: '' }, ...deliveryLocations]}
                             onChange={this.onChangeAddress}
                           />
                         </Col>
@@ -347,7 +361,7 @@ console.log("details", addressDetail)
                   { this.state.selectedDelivery && this.state.selectedAddressTypeId &&
                     <Row>
                       <Col xsOffset={6} xs={6}>
-                        <p>{addressDetail}</p>
+                        {addressDetail}
                       </Col>
                     </Row>
                   }

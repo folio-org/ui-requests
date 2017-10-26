@@ -26,9 +26,14 @@ class ViewRequest extends React.Component {
         PUT: PropTypes.func,
       }),
     }).isRequired,
+    notesToggle: PropTypes.func,
     onClose: PropTypes.func.isRequired,
     paneWidth: PropTypes.string,
     resources: PropTypes.shape({
+      addressTypes: PropTypes.shape({
+        hasLoaded: PropTypes.bool.isRequired,
+        records: PropTypes.arrayOf(PropTypes.object),
+      }).isRequired,
       patronGroups: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         isPending: PropTypes.bool.isPending,
@@ -58,6 +63,7 @@ class ViewRequest extends React.Component {
     paneWidth: '50%',
     location: {},
     history: {},
+    notesToggle: {},
   };
 
   static manifest = {
