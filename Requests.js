@@ -85,6 +85,11 @@ class Requests extends React.Component {
 
   static manifest = {
     addRequestMode: { initialValue: { mode: false } },
+    addressTypes: {
+      type: 'okapi',
+      path: 'addresstypes',
+      records: 'addressTypes',
+    },
     requestCount: { initialValue: INITIAL_RESULT_COUNT },
     requests: {
       type: 'okapi',
@@ -305,6 +310,8 @@ class Requests extends React.Component {
     const { stripes, resources } = this.props;
     const requests = (resources.requests || {}).records || [];
     const patronGroups = resources.patronGroups;// (resources.patronGroups || {}).records || [];
+    const addressTypes = (this.props.resources.addressTypes && this.props.resources.addressTypes.hasLoaded) ? this.props.resources.addressTypes.records : [];
+
 
     // NOTE: Uncommenting this clause will activate front-end joins of
     // user and item records for every request in the results list. This is
@@ -406,7 +413,7 @@ class Requests extends React.Component {
             findUser={this.findUser}
             findItem={this.findItem}
             findLoan={this.findLoan}
-            optionLists={{ requestTypes, fulfilmentTypes }}
+            optionLists={{ requestTypes, fulfilmentTypes, addressTypes }}
             patronGroups={patronGroups}
             initialValues={{ itemId: null, requesterId: null, requestType: 'Hold' }}
             dateFormatter={this.makeLocaleDateString}
