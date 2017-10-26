@@ -237,6 +237,7 @@ class RequestForm extends React.Component {
         const typeName = _.find(optionLists.addressTypes, { 'id': a.addressTypeId }).addressType;
         return { label: typeName, value: a.addressTypeId };
       });
+      deliveryLocations = _.sortBy(deliveryLocations, ['label']);
       deliveryLocationsDetail = _.keyBy(selectedUser.personal.addresses, a => a.addressTypeId);
     }
 
