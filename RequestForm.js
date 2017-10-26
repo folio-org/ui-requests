@@ -61,10 +61,10 @@ class RequestForm extends React.Component {
   constructor(props) {
     super(props);
 
-    const { requester, item, loan } = props.initialValues;
+    const { requester, item, loan, fulfilmentPreference } = props.initialValues;
 
     this.state = {
-      selectedDelivery: false,
+      selectedDelivery: fulfilmentPreference === 'Delivery',
       selectedAddressTypeId: null,
       selectedItem: item ? {
         itemRecord: item,
