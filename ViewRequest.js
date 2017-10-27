@@ -63,7 +63,7 @@ class ViewRequest extends React.Component {
     paneWidth: '50%',
     location: {},
     history: {},
-    notesToggle: {},
+    notesToggle: () => {},
   };
 
   static manifest = {
