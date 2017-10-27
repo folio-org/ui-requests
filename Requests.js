@@ -70,6 +70,10 @@ class Requests extends React.Component {
     }),
     okapi: PropTypes.object.isRequired,
     resources: PropTypes.shape({
+      addressTypes: PropTypes.shape({
+        hasLoaded: PropTypes.bool.isRequired,
+        records: PropTypes.arrayOf(PropTypes.object),
+      }).isRequired,
       requests: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         isPending: PropTypes.bool.isPending,
@@ -89,6 +93,11 @@ class Requests extends React.Component {
 
   static manifest = {
     addRequestMode: { initialValue: { mode: false } },
+    addressTypes: {
+      type: 'okapi',
+      path: 'addresstypes',
+      records: 'addressTypes',
+    },
     requestCount: { initialValue: INITIAL_RESULT_COUNT },
     requests: {
       type: 'okapi',
@@ -280,6 +289,7 @@ class Requests extends React.Component {
       enhancedRequest.requesterName = (user && user.personal) ? `${user.personal.firstName} ${user.personal.lastName}` : '';
       enhancedRequest.requesterBarcode = (user && user.personal) ? user.barcode : '';
       enhancedRequest.patronGroup = (user && user.personal) ? user.patronGroup : '';
+      enhancedRequest.requester.addresses = (user && user.personal && user.personal.addresses) ? user.personal.addresses : [];
 
       enhancedRequest.title = item ? item.title : '';
       enhancedRequest.itemBarcode = item ? item.barcode : '';
@@ -326,6 +336,8 @@ class Requests extends React.Component {
     const { stripes, resources } = this.props;
     const requests = (resources.requests || {}).records || [];
     const patronGroups = resources.patronGroups;// (resources.patronGroups || {}).records || [];
+    const addressTypes = (this.props.resources.addressTypes && this.props.resources.addressTypes.hasLoaded) ? this.props.resources.addressTypes.records : [];
+
 
     // NOTE: Uncommenting this clause will activate front-end joins of
     // user and item records for every request in the results list. This is
@@ -428,7 +440,7 @@ class Requests extends React.Component {
             findUser={this.findUser}
             findItem={this.findItem}
             findLoan={this.findLoan}
-            optionLists={{ requestTypes, fulfilmentTypes }}
+            optionLists={{ requestTypes, fulfilmentTypes, addressTypes }}
             patronGroups={patronGroups}
             initialValues={{ itemId: null, requesterId: null, requestType: 'Hold' }}
             dateFormatter={this.makeLocaleDateString}

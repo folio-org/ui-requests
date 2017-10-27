@@ -37,7 +37,13 @@ const UserDetail = ({ user, error, patronGroups }) => {
 
 UserDetail.propTypes = {
   error: PropTypes.string,
-  patronGroups: PropTypes.arrayOf(PropTypes.object).isRequired,
+  patronGroups: PropTypes.shape({
+    hasLoaded: PropTypes.bool.isRequired,
+    isPending: PropTypes.bool.isPending,
+    other: PropTypes.shape({
+      totalRecords: PropTypes.number,
+    }),
+  }).isRequired,
   user: PropTypes.object.isRequired,
 };
 

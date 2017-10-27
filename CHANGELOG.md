@@ -2,6 +2,8 @@
 
 ## In progress
 
+* Adds an edit view for requests. Completes UIREQ-8.
+* Adds delivery location address display and selection. Completes UIREQ-24.
 * All resources in manifest now reference props.resources instead of props.data. Completes UIREQ-10.
 * Searching and filtering now behave as specified. Completes UIREQ-11 & UIREQ-13.
 * Bugs in request type selection and new request creation have been squashed. Completes UIREQ-20.

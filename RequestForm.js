@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'react-flexbox-grid';
@@ -33,23 +34,33 @@ class RequestForm extends React.Component {
   static propTypes = {
     change: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    findUser: PropTypes.func.isRequired,
-    findItem: PropTypes.func.isRequired,
-    findLoan: PropTypes.func.isRequired,
+    findUser: PropTypes.func,
+    findItem: PropTypes.func,
+    findLoan: PropTypes.func,
     initialValues: PropTypes.object,
     onCancel: PropTypes.func.isRequired,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
     //  okapi: PropTypes.object,
     optionLists: PropTypes.shape({
+      addressTypes: PropTypes.arrayOf(PropTypes.object),
       requestTypes: PropTypes.arrayOf(PropTypes.object),
       fulfilmentTypes: PropTypes.arrayOf(PropTypes.object),
     }),
-    patronGroups: PropTypes.arrayOf(PropTypes.object).isRequired,
+    patronGroups: PropTypes.shape({
+      hasLoaded: PropTypes.bool.isRequired,
+      isPending: PropTypes.bool.isPending,
+      other: PropTypes.shape({
+        totalRecords: PropTypes.number,
+      }),
+    }).isRequired,
     dateFormatter: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
+    findUser: () => {},
+    findItem: () => {},
+    findLoan: () => {},
     initialValues: {},
     optionLists: {},
     pristine: true,
@@ -59,9 +70,11 @@ class RequestForm extends React.Component {
   constructor(props) {
     super(props);
 
-    const { requester, item, loan } = props.initialValues;
+    const { requester, item, loan, fulfilmentPreference, deliveryAddressTypeId } = props.initialValues;
 
     this.state = {
+      selectedDelivery: fulfilmentPreference === 'Delivery',
+      selectedAddressTypeId: deliveryAddressTypeId,
       selectedItem: item ? {
         itemRecord: item,
         borrowerRecord: loan.userDetail,
@@ -77,6 +90,8 @@ class RequestForm extends React.Component {
       userSelectionError: null,
     };
 
+    this.onChangeAddress = this.onChangeAddress.bind(this);
+    this.onChangeFulfilment = this.onChangeFulfilment.bind(this);
     this.onChangeItem = this.onChangeItem.bind(this);
     this.onChangeUser = this.onChangeUser.bind(this);
     this.onItemClick = this.onItemClick.bind(this);
@@ -90,7 +105,10 @@ class RequestForm extends React.Component {
     if (initials && initials.requester &&
         oldInitials && !oldInitials.requester) {
       initials.item.location = { name: initials.location };
+      /* eslint react/no-did-update-set-state: 0 */
       this.setState({
+        selectedAddressTypeId: initials.deliveryAddressTypeId,
+        selectedDelivery: initials.fulfilmentPreference === 'Delivery',
         selectedItem: {
           itemRecord: initials.item,
           borrowerRecord: initials.loan.userDetail,
@@ -102,6 +120,18 @@ class RequestForm extends React.Component {
         },
       });
     }
+  }
+
+  onChangeFulfilment(e) {
+    this.setState({
+      selectedDelivery: e.target.value === 'Delivery',
+    });
+  }
+
+  onChangeAddress(e) {
+    this.setState({
+      selectedAddressTypeId: e.target.value,
+    });
   }
 
   onChangeUser(e) {
@@ -158,13 +188,31 @@ class RequestForm extends React.Component {
           this.setState({
             selectedItem: { itemRecord: item },
           });
+
+          return result2;
         });
       }
 
       this.setState({
         itemSelectionError: 'Item with this barcode does not exist',
       });
+
+      return result;
     });
+  }
+
+  /* eslint class-methods-use-this: 0 */
+  toUserAddress(addr) {
+    // const countryId = (addr.country) ? countriesByName[addr.country].alpha2 : '';
+    return (
+      <div>
+        <div>{addr.addressLine1 || ''}</div>
+        <div>{addr.addressLine2 || ''}</div>
+        <div>{addr.city || ''}</div>
+        <div>{addr.region || ''}</div>
+        <div>{addr.postalCode || ''}</div>
+      </div>
+    );
   }
 
   render() {
@@ -178,6 +226,8 @@ class RequestForm extends React.Component {
       submitting,
     } = this.props;
 
+    const { selectedUser } = this.state;
+
     const isEditForm = initialValues && initialValues.itemId !== null;
 
     const addRequestFirstMenu = <PaneMenu><Button onClick={onCancel} title="close" aria-label="Close New Request Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></Button></PaneMenu>;
@@ -187,6 +237,21 @@ class RequestForm extends React.Component {
       label: t.label, value: t.id, selected: initialValues.requestType === t.id }));
     const fulfilmentTypeOptions = (optionLists.fulfilmentTypes || []).map(t => ({ label: t.label, value: t.id, selected: t.id === 'Hold' }));
     const labelAsterisk = isEditForm ? '' : '*';
+
+    let deliveryLocations;
+    let deliveryLocationsDetail = [];
+    let addressDetail;
+    if (selectedUser && selectedUser.personal && selectedUser.personal.addresses) {
+      deliveryLocations = selectedUser.personal.addresses.map((a) => {
+        const typeName = _.find(optionLists.addressTypes, { id: a.addressTypeId }).addressType;
+        return { label: typeName, value: a.addressTypeId };
+      });
+      deliveryLocations = _.sortBy(deliveryLocations, ['label']);
+      deliveryLocationsDetail = _.keyBy(selectedUser.personal.addresses, a => a.addressTypeId);
+    }
+    if (this.state.selectedAddressTypeId) {
+      addressDetail = this.toUserAddress(deliveryLocationsDetail[this.state.selectedAddressTypeId]);
+    }
 
     return (
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
@@ -276,17 +341,28 @@ class RequestForm extends React.Component {
                           component={Select}
                           fullWidth
                           dataOptions={[{ label: 'Select fulfilment option', value: '' }, ...fulfilmentTypeOptions]}
+                          onChange={this.onChangeFulfilment}
                         />
                       </Col>
-                      {/*   <Col xs={6}>
-                        <Field
-                          name="pickupLocation"
-                          label="Pickup location"
-                          component={Select}
-                          fullWidth
-                          dataOptions={[{ label: 'Select pickup location', value: '' }, ...requestTypeOptions]}
-                        />
-                      </Col> */}
+                      { this.state.selectedDelivery && deliveryLocations &&
+                        <Col>
+                          <Field
+                            name="deliveryAddressTypeId"
+                            label="Delivery Address"
+                            component={Select}
+                            fullWidth
+                            dataOptions={[{ label: 'Select address type', value: '' }, ...deliveryLocations]}
+                            onChange={this.onChangeAddress}
+                          />
+                        </Col>
+                      }
+                    </Row>
+                  }
+                  { this.state.selectedDelivery && this.state.selectedAddressTypeId &&
+                    <Row>
+                      <Col xsOffset={6} xs={6}>
+                        {addressDetail}
+                      </Col>
                     </Row>
                   }
                 </fieldset>

@@ -30,6 +30,10 @@ class ViewRequest extends React.Component {
     onClose: PropTypes.func.isRequired,
     paneWidth: PropTypes.string,
     resources: PropTypes.shape({
+      addressTypes: PropTypes.shape({
+        hasLoaded: PropTypes.bool.isRequired,
+        records: PropTypes.arrayOf(PropTypes.object),
+      }).isRequired,
       patronGroups: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         isPending: PropTypes.bool.isPending,
@@ -59,12 +63,18 @@ class ViewRequest extends React.Component {
     paneWidth: '50%',
     location: {},
     history: {},
+    notesToggle: () => {},
   };
 
   static manifest = {
     selectedRequest: {
       type: 'okapi',
       path: 'circulation/requests/:{requestId}',
+    },
+    addressTypes: {
+      type: 'okapi',
+      path: 'addresstypes',
+      records: 'addressTypes',
     },
     patronGroups: {
       type: 'okapi',
@@ -167,7 +177,9 @@ class ViewRequest extends React.Component {
       if (resources.patronGroups && resources.patronGroups.hasLoaded) {
         const groupRecord = resources.patronGroups.records.find(g => g.id === request.patronGroup);
         patronGroup = groupRecord.group || patronGroup;
-        this.state.enhancedRequest.requester.patronGroup = groupRecord ? groupRecord.id : null;
+        if (this.state.enhancedRequest.requester) {
+          this.state.enhancedRequest.requester.patronGroup = groupRecord ? groupRecord.id : null;
+        }
         borrowerGroup = resources.patronGroups.records.find(g => g.id === borrowerGroup).group || borrowerGroup;
       }
     }
@@ -184,6 +196,8 @@ class ViewRequest extends React.Component {
     const requesterName = _.get(request, ['requesterName'], '');
     const requesterRecordLink = requesterName ? <Link to={`/users/view/${request.requesterId}`}>{requesterName}</Link> : '';
     const borrowerRecordLink = borrowerName ? <Link to={`/users/view/${borrower.id}`}>{borrowerName}</Link> : '';
+
+    const addressTypes = (this.props.resources.addressTypes && this.props.resources.addressTypes.hasLoaded) ? this.props.resources.addressTypes.records : [];
 
     return request ? (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -273,7 +287,7 @@ class ViewRequest extends React.Component {
             initialValues={this.state.enhancedRequest}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.onClickCloseEditRequest}
-            optionLists={{ requestTypes, fulfilmentTypes }}
+            optionLists={{ requestTypes, fulfilmentTypes, addressTypes }}
             patronGroups={this.props.resources.patronGroups}
             dateFormatter={this.props.dateFormatter}
           />
