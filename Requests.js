@@ -73,7 +73,7 @@ class Requests extends React.Component {
       addressTypes: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         records: PropTypes.arrayOf(PropTypes.object),
-      }).isRequired,
+      }),
       requests: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         isPending: PropTypes.bool.isPending,
@@ -84,7 +84,7 @@ class Requests extends React.Component {
     }).isRequired,
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
-      locale: PropTypes.func.isRequired,
+      locale: PropTypes.string,
       logger: PropTypes.shape({
         log: PropTypes.func.isRequired,
       }).isRequired,
@@ -338,7 +338,6 @@ class Requests extends React.Component {
     const patronGroups = resources.patronGroups;// (resources.patronGroups || {}).records || [];
     const addressTypes = (this.props.resources.addressTypes && this.props.resources.addressTypes.hasLoaded) ? this.props.resources.addressTypes.records : [];
 
-
     // NOTE: Uncommenting this clause will activate front-end joins of
     // user and item records for every request in the results list. This is
     // probably NOT something we want to do. It's here in case we need something
@@ -452,7 +451,6 @@ class Requests extends React.Component {
             path={`${this.props.match.path}/view/:id`}
             render={props => <this.connectedNotes
               stripes={stripes}
-              okapi={this.okapi}
               onToggle={this.toggleNotes}
               link={`requests/${props.match.params.id}`}
               notesResource={this.props.resources.notes}

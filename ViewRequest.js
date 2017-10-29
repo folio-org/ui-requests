@@ -33,7 +33,7 @@ class ViewRequest extends React.Component {
       addressTypes: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         records: PropTypes.arrayOf(PropTypes.object),
-      }).isRequired,
+      }),
       patronGroups: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         isPending: PropTypes.bool.isPending,
