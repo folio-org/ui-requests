@@ -33,7 +33,7 @@ class ViewRequest extends React.Component {
       addressTypes: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         records: PropTypes.arrayOf(PropTypes.object),
-      }).isRequired,
+      }),
       patronGroups: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         isPending: PropTypes.bool.isPending,
@@ -186,8 +186,8 @@ class ViewRequest extends React.Component {
 
     const detailMenu = (
       <PaneMenu>
-        <button id="clickable-editrequest" style={{ visibility: !request ? 'hidden' : 'visible' }} onClick={this.onClickEditRequest} title="Edit Request"><Icon icon="edit" />Edit</button>
         <button id="clickable-show-notes" style={{ visibility: !request ? 'hidden' : 'visible' }} onClick={this.props.notesToggle} title="Show Notes"><Icon icon="comment" />Notes</button>
+        <button id="clickable-editrequest" style={{ visibility: !request ? 'hidden' : 'visible' }} onClick={this.onClickEditRequest} title="Edit Request"><Icon icon="edit" />Edit</button>
       </PaneMenu>
     );
 
