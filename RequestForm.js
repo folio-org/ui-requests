@@ -6,7 +6,6 @@ import { Field } from 'redux-form';
 
 import Button from '@folio/stripes-components/lib/Button';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
-import Icon from '@folio/stripes-components/lib/Icon';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
@@ -269,7 +268,7 @@ class RequestForm extends React.Component {
       addressDetail = this.toUserAddress(deliveryLocationsDetail[this.state.selectedAddressTypeId]);
     }
 
-    const selectUserControl = <Pluggable
+    const selectUserControl = (<Pluggable
       aria-haspopup="true"
       type="find-user"
       {...this.props}
@@ -277,8 +276,7 @@ class RequestForm extends React.Component {
       searchButtonStyle="primary"
       selectUser={this.onSelectUser}
       visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
-      disableUserCreation={true}
-    />;
+    />);
 
     return (
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
