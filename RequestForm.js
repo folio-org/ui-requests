@@ -9,6 +9,7 @@ import Datepicker from '@folio/stripes-components/lib/Datepicker';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
+import Pluggable from '@folio/stripes-components/lib/Pluggable';
 import Select from '@folio/stripes-components/lib/Select';
 import TextField from '@folio/stripes-components/lib/TextField';
 
@@ -95,6 +96,7 @@ class RequestForm extends React.Component {
     this.onChangeItem = this.onChangeItem.bind(this);
     this.onChangeUser = this.onChangeUser.bind(this);
     this.onItemClick = this.onItemClick.bind(this);
+    this.onSelectUser = this.onSelectUser.bind(this);
     this.onUserClick = this.onUserClick.bind(this);
   }
 
@@ -138,6 +140,19 @@ class RequestForm extends React.Component {
     this.setState({
       selectedUserBarcode: e.target.value,
     });
+  }
+
+  // This function is called from the "search and select user" widget when
+  // a user has been selected from the list
+  onSelectUser(user) {
+    if (user) {
+      this.setState({
+        selectedUserBarcode: user.barcode,
+      });
+      // Set the new value in the redux-form barcode field
+      this.props.change('requester.barcode', user.barcode);
+      this.onUserClick();
+    }
   }
 
   onChangeItem(e) {
@@ -253,6 +268,16 @@ class RequestForm extends React.Component {
       addressDetail = this.toUserAddress(deliveryLocationsDetail[this.state.selectedAddressTypeId]);
     }
 
+    const selectUserControl = (<Pluggable
+      aria-haspopup="true"
+      type="find-user"
+      {...this.props}
+      dataKey="users"
+      searchButtonStyle="primary"
+      selectUser={this.onSelectUser}
+      visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
+    />);
+
     return (
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
@@ -313,6 +338,7 @@ class RequestForm extends React.Component {
                           fullWidth
                           component={TextField}
                           onInput={this.onChangeUser}
+                          startControl={selectUserControl}
                         />
                       </Col>
                       <Col xs={3}>
