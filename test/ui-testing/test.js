@@ -1,7 +1,7 @@
-// const stub = require('./stub.js');
+const new_request = require('./new_request.js');
 
 module.exports.test = function(uiTestCtx) {
 
-  // stub.test(uiTestCtx);
+     new_request.test(uiTestCtx);
 
 }
