@@ -309,6 +309,7 @@ class RequestForm extends React.Component {
                       </Col>
                       <Col xs={3}>
                         <Button
+			  id="clickable-select-item"
                           buttonStyle="primary noRadius"
                           fullWidth
                           onClick={this.onItemClick}
@@ -343,6 +344,7 @@ class RequestForm extends React.Component {
                       </Col>
                       <Col xs={3}>
                         <Button
+			  id="clickable-select-requester"
                           buttonStyle="primary noRadius"
                           fullWidth
                           onClick={this.onUserClick}
