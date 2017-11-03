@@ -187,7 +187,7 @@ class ViewRequest extends React.Component {
     const detailMenu = (
       <PaneMenu>
         <button id="clickable-show-notes" style={{ visibility: !request ? 'hidden' : 'visible' }} onClick={this.props.notesToggle} title="Show Notes"><Icon icon="comment" />Notes</button>
-        <button id="clickable-editrequest" style={{ visibility: !request ? 'hidden' : 'visible' }} onClick={this.onClickEditRequest} title="Edit Request"><Icon icon="edit" />Edit</button>
+        <button id="clickable-edit-request" style={{ visibility: !request ? 'hidden' : 'visible' }} onClick={this.onClickEditRequest} title="Edit Request"><Icon icon="edit" />Edit</button>
       </PaneMenu>
     );
 

@@ -7,8 +7,10 @@ module.exports.test = function(uiTestCtx) {
     this.timeout(Number(config.test_timeout));
 
     describe('Login > Open module "Requests" > Create new request > Logout', () => {
-      let itembc = null;
-      let userbc = null;
+      let itembc = null
+      let userbc = null
+      var nextMonthValue = new Date().valueOf() + 2419200000
+      let nextMonth = new Date(nextMonthValue).toLocaleDateString('en-US')
       before( done => {
         login(nightmare, config, done);  // logs in with the default admin credentials
       })
@@ -21,7 +23,7 @@ module.exports.test = function(uiTestCtx) {
         .then(result => result )
       })
       it('should find a user barcode', done => {
-	const listitem = '#list-users div[class^="rowContainer"] > a:nth-child(5)'
+	const listitem = '#list-users div[class^="rowContainer"] > a:not([aria-label*="Barcode: und"]):nth-child(5)'
 	const bcode = listitem + ' > div:nth-child(3)'
         nightmare
 	.click('#clickable-users-module')
@@ -35,6 +37,7 @@ module.exports.test = function(uiTestCtx) {
 	  done()
 	  console.log('        Found ' + userbc)
 	})
+	.catch(done)
       })
       it('should find an item barcode', done => {
 	const listitem = '#list-instances > div.scrollable---3O0eW div[role="listitem"]:first-of-type'
@@ -53,6 +56,7 @@ module.exports.test = function(uiTestCtx) {
 	  done()
 	  console.log('        Found ' + itembc)
 	})
+	.catch(done)
       })
       it('should add a new "Hold" request', done => {
         nightmare
@@ -67,6 +71,10 @@ module.exports.test = function(uiTestCtx) {
 	.insert('input[name="requester.barcode"]',userbc)
 	.click('#clickable-select-requester')
 	.wait('#section-requester-info a[href^="/users/view/"]')
+	.select('select[name="fulfilmentPreference"]', 'Hold Shelf')
+	.insert('input[name="requestExpirationDate"]', nextMonth)
+	.insert('input[name="holdShelfExpirationDate"]', nextMonth)
+	.click('#clickable-create-request')
 	.wait(4444)
         .then(result => {
 	  done()
