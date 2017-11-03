@@ -293,7 +293,7 @@ class RequestForm extends React.Component {
                   dataOptions={requestTypeOptions}
                   disabled={isEditForm}
                 />
-                <fieldset id="#section-item-info">
+                <fieldset id="section-item-info">
                   <legend>{`Item info ${labelAsterisk}`}</legend>
                   {!isEditForm &&
                     <Row>
