@@ -246,8 +246,8 @@ class RequestForm extends React.Component {
     const isEditForm = initialValues && initialValues.itemId !== null;
 
     const addRequestFirstMenu = <PaneMenu><Button onClick={onCancel} title="close" aria-label="Close New Request Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></Button></PaneMenu>;
-    const addRequestLastMenu = <PaneMenu><Button type="submit" title="Create New Request" disabled={pristine || submitting} onClick={handleSubmit}>Create Request</Button></PaneMenu>;
-    const editRequestLastMenu = <PaneMenu><Button type="submit" title="Update Request" disabled={pristine || submitting} onClick={handleSubmit}>Update Request</Button></PaneMenu>;
+    const addRequestLastMenu = <PaneMenu><Button id="clickable-create-request" type="submit" title="Create New Request" disabled={pristine || submitting} onClick={handleSubmit}>Create Request</Button></PaneMenu>;
+    const editRequestLastMenu = <PaneMenu><Button id="clickable-update-request" type="submit" title="Update Request" disabled={pristine || submitting} onClick={handleSubmit}>Update Request</Button></PaneMenu>;
     const requestTypeOptions = (optionLists.requestTypes || []).map(t => ({
       label: t.label, value: t.id, selected: initialValues.requestType === t.id }));
     const fulfilmentTypeOptions = (optionLists.fulfilmentTypes || []).map(t => ({ label: t.label, value: t.id, selected: t.id === 'Hold' }));
@@ -293,7 +293,7 @@ class RequestForm extends React.Component {
                   dataOptions={requestTypeOptions}
                   disabled={isEditForm}
                 />
-                <fieldset>
+                <fieldset id="section-item-info">
                   <legend>{`Item info ${labelAsterisk}`}</legend>
                   {!isEditForm &&
                     <Row>
@@ -309,6 +309,7 @@ class RequestForm extends React.Component {
                       </Col>
                       <Col xs={3}>
                         <Button
+			  id="clickable-select-item"
                           buttonStyle="primary noRadius"
                           fullWidth
                           onClick={this.onItemClick}
@@ -326,7 +327,7 @@ class RequestForm extends React.Component {
                     />
                   }
                 </fieldset>
-                <fieldset>
+                <fieldset id="section-requester-info">
                   <legend>{`Requester info ${labelAsterisk}`}</legend>
                   {!isEditForm &&
                     <Row>
@@ -343,6 +344,7 @@ class RequestForm extends React.Component {
                       </Col>
                       <Col xs={3}>
                         <Button
+			  id="clickable-select-requester"
                           buttonStyle="primary noRadius"
                           fullWidth
                           onClick={this.onUserClick}
