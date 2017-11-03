@@ -57,12 +57,14 @@ module.exports.test = function(uiTestCtx) {
       it('should add a new "Hold" request', done => {
         nightmare
 	.click('#clickable-requests-module')
-	.wait('button[title="Add New Request"]')
-	.click('button[title="Add New Request"]')
+	.wait('#clickable-new-request')
+	.click('#clickable-new-request')
 	.wait('select[name="requestType"]')
 	.select('select[name="requestType"]','Hold')
 	.insert('input[name="item.barcode"]',itembc)
+	.click('#clickable-select-item')
 	.insert('input[name="requester.barcode"]',userbc)
+	.click('#clickable-select-requester')
 	.wait(4444)
         .then(result => {
 	  done()
