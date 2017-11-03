@@ -63,8 +63,10 @@ module.exports.test = function(uiTestCtx) {
 	.select('select[name="requestType"]','Hold')
 	.insert('input[name="item.barcode"]',itembc)
 	.click('#clickable-select-item')
+	.wait('a[href^="/items/view/"]')
 	.insert('input[name="requester.barcode"]',userbc)
 	.click('#clickable-select-requester')
+	.wait('a[href^="/users/view/"]')
 	.wait(4444)
         .then(result => {
 	  done()
