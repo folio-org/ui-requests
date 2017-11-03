@@ -91,6 +91,10 @@ class Requests extends React.Component {
     }).isRequired,
   };
 
+  static defaultProps = {
+    notes: [],
+  };
+
   static manifest = {
     addRequestMode: { initialValue: { mode: false } },
     addressTypes: {
@@ -434,6 +438,7 @@ class Requests extends React.Component {
         {/* Add new request form */}
         <Layer isOpen={resources.addRequestMode ? resources.addRequestMode.mode : false} label="Add New Request Dialog">
           <RequestForm
+            stripes={stripes}
             onSubmit={(record) => { this.create(record); }}
             onCancel={this.onClickCloseNewRequest}
             findUser={this.findUser}
@@ -449,13 +454,13 @@ class Requests extends React.Component {
           this.state.showNotesPane &&
           <Route
             path={`${this.props.match.path}/view/:id`}
-            render={props => <this.connectedNotes
+            render={props => (<this.connectedNotes
               stripes={stripes}
               onToggle={this.toggleNotes}
               link={`requests/${props.match.params.id}`}
-              notesResource={this.props.resources.notes}
+              notesResource={this.props.notes}
               {...props}
-            />}
+            />)}
           />
         }
       </Paneset>
