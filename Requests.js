@@ -65,9 +65,7 @@ class Requests extends React.Component {
         replace: PropTypes.func,
       }),
     }).isRequired,
-    notes: PropTypes.shape({
-      records: PropTypes.arrayOf(PropTypes.object),
-    }),
+    notes: PropTypes.arrayOf(PropTypes.object),
     okapi: PropTypes.object.isRequired,
     resources: PropTypes.shape({
       addressTypes: PropTypes.shape({
