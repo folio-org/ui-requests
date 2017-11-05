@@ -11,10 +11,13 @@ const ItemDetail = ({ item, error, patronGroups, dateFormatter }) => {
   let borrowerLink;
   let borrowerName;
   let borrowerGroup;
-
-  const { itemRecord, loanRecord, borrowerRecord } = item;
+  let itemRecord;
+  let loanRecord;
+  let borrowerRecord;
 
   if (item) {
+    ({ itemRecord, loanRecord, borrowerRecord } = item);
+
     borrowerName = `${_.get(borrowerRecord, ['personal', 'firstName'], '')} ${_.get(borrowerRecord, ['personal', 'lastName'], '')}`;
     borrowerGroup = (borrowerRecord && patronGroups.records && patronGroups.records.length > 0) ? patronGroups.records.find(g => g.id === borrowerRecord.patronGroup).group : '';
 

@@ -18,18 +18,6 @@ import stripesForm from '@folio/stripes-form';
 import UserDetail from './UserDetail';
 import ItemDetail from './ItemDetail';
 
-function validate(values) {
-  const errors = {};
-
-  if (!values.itemBarcode) {
-    errors.itemBarcode = 'Please select an item';
-  }
-  if (!values.requesterBarcode) {
-    errors.requesterBarcode = 'Please select a requester';
-  }
-
-  return errors;
-}
 
 class RequestForm extends React.Component {
   static propTypes = {
@@ -183,7 +171,20 @@ class RequestForm extends React.Component {
       if (result.totalRecords > 0) {
         const item = result.items[0];
         this.props.change('itemId', item.id);
-        // Look for an associated loan
+
+        // // If status is not checked out, then this item is not valid for a request
+        // console.log("rqtype", this.state.requestType)
+        // const validStatuses = ['Checked out', 'Checked out - Held', 'Checked out - Recalled'];
+        // if (item && item.status && !validStatuses.includes(item.status.name)) {
+        //   console.log('set state')
+        //   this.setState({
+        //     itemSelectionError: 'Only checked out items can be recalled',
+        //     selectedItem: { itemRecord: item },
+        //   });
+        //   return item;
+        // }
+
+        // Otherwise, continue and look for an associated loan
         return findLoan(item.id).then((result2) => {
           if (result2.totalRecords > 0) {
             const loan = result2.loans[0];
@@ -229,6 +230,9 @@ class RequestForm extends React.Component {
       </div>
     );
   }
+
+  requireItem = value => (value ? undefined : 'Please select an item');
+  requireUser = value => (value ? undefined : 'Please select a requester');
 
   render() {
     const {
@@ -305,6 +309,7 @@ class RequestForm extends React.Component {
                           fullWidth
                           component={TextField}
                           onInput={this.onChangeItem}
+                          validate={[this.requireItem]}
                         />
                       </Col>
                       <Col xs={3}>
@@ -340,6 +345,7 @@ class RequestForm extends React.Component {
                           component={TextField}
                           onInput={this.onChangeUser}
                           startControl={selectUserControl}
+                          validate={this.requireUser}
                         />
                       </Col>
                       <Col xs={3}>
@@ -434,7 +440,6 @@ class RequestForm extends React.Component {
 
 export default stripesForm({
   form: 'requestForm',
-  validate,
   navigationCheck: true,
   enableReinitialize: true,
   keepDirtyOnReinitialize: true,
