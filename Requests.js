@@ -391,7 +391,7 @@ class Requests extends React.Component {
           lastMenu={
             <PaneMenu>
               <Button
-	        id="clickable-new-request"
+                id="clickable-new-request"
                 title="Add New Request"
                 onClick={this.onClickAddNewRequest}
                 buttonStyle="primary paneHeaderNewButton"

@@ -19,7 +19,11 @@ const ItemDetail = ({ item, error, patronGroups, dateFormatter }) => {
     ({ itemRecord, loanRecord, borrowerRecord } = item);
 
     borrowerName = `${_.get(borrowerRecord, ['personal', 'firstName'], '')} ${_.get(borrowerRecord, ['personal', 'lastName'], '')}`;
-    borrowerGroup = (borrowerRecord && patronGroups.records && patronGroups.records.length > 0) ? patronGroups.records.find(g => g.id === borrowerRecord.patronGroup).group : '';
+    borrowerGroup = (borrowerRecord &&
+                     borrowerRecord.patronGroup &&
+                     patronGroups.records &&
+                     patronGroups.records.length > 0) ?
+      patronGroups.records.find(g => g.id === borrowerRecord.patronGroup).group : '';
 
     if (itemRecord) {
       recordLink = <Link to={`/items/view/${itemRecord.id}`}>{_.get(itemRecord, ['barcode'], '')}</Link>;
