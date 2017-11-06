@@ -84,6 +84,7 @@ class RequestForm extends React.Component {
     this.onChangeItem = this.onChangeItem.bind(this);
     this.onChangeUser = this.onChangeUser.bind(this);
     this.onItemClick = this.onItemClick.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
     this.onSelectUser = this.onSelectUser.bind(this);
     this.onUserClick = this.onUserClick.bind(this);
   }
@@ -217,6 +218,19 @@ class RequestForm extends React.Component {
     });
   }
 
+  // This function only exists to enable 'do lookup on enter' for item and
+  // user search
+  onKeyDown(e, element) {
+     if (e.key === 'Enter' && e.shiftKey === false) {
+       e.preventDefault();
+       if (element === 'item') {
+         this.onItemClick();
+       } else {
+         this.onUserClick();
+       }
+     }
+   };
+
   /* eslint class-methods-use-this: 0 */
   toUserAddress(addr) {
     // const countryId = (addr.country) ? countriesByName[addr.country].alpha2 : '';
@@ -250,8 +264,8 @@ class RequestForm extends React.Component {
     const isEditForm = initialValues && initialValues.itemId !== null;
 
     const addRequestFirstMenu = <PaneMenu><Button onClick={onCancel} title="close" aria-label="Close New Request Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></Button></PaneMenu>;
-    const addRequestLastMenu = <PaneMenu><Button id="clickable-create-request" type="submit" title="Create New Request" disabled={pristine || submitting} onClick={handleSubmit}>Create Request</Button></PaneMenu>;
-    const editRequestLastMenu = <PaneMenu><Button id="clickable-update-request" type="submit" title="Update Request" disabled={pristine || submitting} onClick={handleSubmit}>Update Request</Button></PaneMenu>;
+    const addRequestLastMenu = <PaneMenu><Button id="clickable-create-request" type="button" title="Create New Request" disabled={pristine || submitting} onClick={handleSubmit}>Create Request</Button></PaneMenu>;
+    const editRequestLastMenu = <PaneMenu><Button id="clickable-update-request" type="button" title="Update Request" disabled={pristine || submitting} onClick={handleSubmit}>Update Request</Button></PaneMenu>;
     const requestTypeOptions = (optionLists.requestTypes || []).map(t => ({
       label: t.label, value: t.id, selected: initialValues.requestType === t.id }));
     const fulfilmentTypeOptions = (optionLists.fulfilmentTypes || []).map(t => ({ label: t.label, value: t.id, selected: t.id === 'Hold' }));
@@ -309,6 +323,7 @@ class RequestForm extends React.Component {
                           fullWidth
                           component={TextField}
                           onInput={this.onChangeItem}
+                          onKeyDown={e => this.onKeyDown(e, 'item')}
                           validate={[this.requireItem]}
                         />
                       </Col>
@@ -344,6 +359,7 @@ class RequestForm extends React.Component {
                           fullWidth
                           component={TextField}
                           onInput={this.onChangeUser}
+                          onKeyDown={e => this.onKeyDown(e, 'requester')}
                           startControl={selectUserControl}
                           validate={this.requireUser}
                         />
