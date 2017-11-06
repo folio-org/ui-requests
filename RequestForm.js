@@ -293,6 +293,7 @@ class RequestForm extends React.Component {
       dataKey="users"
       searchButtonStyle="primary"
       selectUser={this.onSelectUser}
+      disableRecordCreation={true}
       visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
     />);
 
