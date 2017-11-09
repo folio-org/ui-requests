@@ -6,6 +6,7 @@ import { Field } from 'redux-form';
 
 import Button from '@folio/stripes-components/lib/Button';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
+import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
@@ -304,14 +305,19 @@ class RequestForm extends React.Component {
             <Row>
               <Col sm={5} smOffset={1}>
                 <h2>Request record</h2>
-                <Field
-                  label={`Request Type ${labelAsterisk}`}
-                  name="requestType"
-                  component={Select}
-                  fullWidth
-                  dataOptions={requestTypeOptions}
-                  disabled={isEditForm}
-                />
+                { !isEditForm &&
+                  <Field
+                    label={`Request Type ${labelAsterisk}`}
+                    name="requestType"
+                    component={Select}
+                    fullWidth
+                    dataOptions={requestTypeOptions}
+                    disabled={isEditForm}
+                  />
+                }
+                { isEditForm &&
+                  <KeyValue label="Request Type" value={initialValues.requestType} />
+                }
                 <fieldset id="section-item-info">
                   <legend>{`Item info ${labelAsterisk}`}</legend>
                   {!isEditForm &&
