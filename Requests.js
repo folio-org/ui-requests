@@ -295,6 +295,7 @@ class Requests extends React.Component {
 
       enhancedRequest.title = item ? item.title : '';
       enhancedRequest.itemBarcode = item ? item.barcode : '';
+      enhancedRequest.itemStatus = item ? item.status : '';
       enhancedRequest.location = (item && item.location) ? item.location.name : '';
 
       enhancedRequest.loan = loan;

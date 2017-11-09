@@ -239,7 +239,7 @@ class ViewRequest extends React.Component {
               <KeyValue label="Patron group" value={borrowerGroup} />
             </Col>
             <Col xs={4}>
-              <KeyValue label="Status" value={_.get(request, ['loan', 'status', 'name'], '')} />
+              <KeyValue label="Status" value={_.get(request, ['itemStatus', 'name'], '')} />
             </Col>
           </Row>
           <Row>
