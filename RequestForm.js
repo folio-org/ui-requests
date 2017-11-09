@@ -222,15 +222,15 @@ class RequestForm extends React.Component {
   // This function only exists to enable 'do lookup on enter' for item and
   // user search
   onKeyDown(e, element) {
-     if (e.key === 'Enter' && e.shiftKey === false) {
-       e.preventDefault();
-       if (element === 'item') {
-         this.onItemClick();
-       } else {
-         this.onUserClick();
-       }
-     }
-   };
+    if (e.key === 'Enter' && e.shiftKey === false) {
+      e.preventDefault();
+      if (element === 'item') {
+        this.onItemClick();
+      } else {
+        this.onUserClick();
+      }
+    }
+  }
 
   /* eslint class-methods-use-this: 0 */
   toUserAddress(addr) {
@@ -294,7 +294,7 @@ class RequestForm extends React.Component {
       dataKey="users"
       searchButtonStyle="primary"
       selectUser={this.onSelectUser}
-      disableRecordCreation={true}
+      disableRecordCreation
       visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
     />);
 

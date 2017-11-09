@@ -42,7 +42,6 @@ class Requests extends React.Component {
   }
 
   static propTypes = {
-    data: PropTypes.object.isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
     }).isRequired,
@@ -66,7 +65,6 @@ class Requests extends React.Component {
       }),
     }).isRequired,
     notes: PropTypes.arrayOf(PropTypes.object),
-    okapi: PropTypes.object.isRequired,
     resources: PropTypes.shape({
       addressTypes: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
