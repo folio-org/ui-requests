@@ -10,6 +10,7 @@
 * Bugs in request type selection and new request creation have been squashed. Completes UIREQ-20.
 * Code cleanup and fixing of linting errors. Completes UIREQ-19.
 * Enables 'search on enter' for item and requester barcode fields in create/edit form. Part of UIREQ-2, UIREQ-8.
+* Adds request count to request detail view. Completes UIREQ-34.
 
 
 ## [1.0.0](https://github.com/folio-org/ui-requests/tree/v1.0.0) (2017-09-26)
