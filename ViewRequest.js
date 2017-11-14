@@ -247,7 +247,7 @@ class ViewRequest extends React.Component {
               <KeyValue label="Current due date" value={this.makeLocaleDateString(_.get(request, ['loan', 'dueDate'], ''))} />
             </Col>
             <Col xs={6}>
-              <KeyValue label="Requests" value={_.get(request, [], '')} />
+              <KeyValue label="Requests" value={_.get(request, ['itemRequestCount'], '')} />
             </Col>
           </Row>
         </fieldset>
