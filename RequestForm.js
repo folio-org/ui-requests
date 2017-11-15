@@ -267,9 +267,9 @@ class RequestForm extends React.Component {
     const addRequestFirstMenu = <PaneMenu><Button onClick={onCancel} title="close" aria-label="Close New Request Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></Button></PaneMenu>;
     const addRequestLastMenu = <PaneMenu><Button id="clickable-create-request" type="button" title="Create New Request" disabled={pristine || submitting} onClick={handleSubmit}>Create Request</Button></PaneMenu>;
     const editRequestLastMenu = <PaneMenu><Button id="clickable-update-request" type="button" title="Update Request" disabled={pristine || submitting} onClick={handleSubmit}>Update Request</Button></PaneMenu>;
-    const requestTypeOptions = (optionLists.requestTypes || []).map(t => ({
+    const requestTypeOptions = _.sortBy(optionLists.requestTypes || [], ['label']).map(t => ({
       label: t.label, value: t.id, selected: initialValues.requestType === t.id }));
-    const fulfilmentTypeOptions = (optionLists.fulfilmentTypes || []).map(t => ({ label: t.label, value: t.id, selected: t.id === 'Hold' }));
+    const fulfilmentTypeOptions = _.sortBy(optionLists.fulfilmentTypes || [], ['label']).map(t => ({ label: t.label, value: t.id, selected: t.id === initialValues.fulfilmentPreference }));
     const labelAsterisk = isEditForm ? '' : '*';
 
     let deliveryLocations;
@@ -397,7 +397,7 @@ class RequestForm extends React.Component {
                           label="Fulfilment preference"
                           component={Select}
                           fullWidth
-                          dataOptions={[{ label: 'Select fulfilment option', value: '' }, ...fulfilmentTypeOptions]}
+                          dataOptions={fulfilmentTypeOptions}
                           onChange={this.onChangeFulfilment}
                         />
                       </Col>
