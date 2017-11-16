@@ -76,7 +76,7 @@ const ItemDetail = ({ item, error, patronGroups, dateFormatter }) => {
             <KeyValue label="Current due date" value={dateFormatter(_.get(loanRecord, ['dueDate'], ''))} />
           </Col>
           <Col xs={2}>
-            <KeyValue label="Requests" value={''} />
+            <KeyValue label="Requests" value={_.get(item, ['requestCount'], '')} />
           </Col>
         </Row>
       }

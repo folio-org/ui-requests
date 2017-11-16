@@ -168,6 +168,7 @@ class Requests extends React.Component {
     this.create = this.create.bind(this);
     this.findItem = this.findItem.bind(this);
     this.findLoan = this.findLoan.bind(this);
+    this.findRequestsForItem = this.findRequestsForItem.bind(this);
     this.findUser = this.findUser.bind(this);
     this.makeLocaleDateString = this.makeLocaleDateString.bind(this);
     this.onChangeFilter = commonChangeFilter.bind(this);
@@ -269,7 +270,7 @@ class Requests extends React.Component {
   }
 
   findLoan(itemId) {
-    return fetch(`${this.okapiUrl}/loan-storage/loans?query=(itemId="${itemId}")`, { headers: this.httpHeaders }).then(response => response.json());
+    return fetch(`${this.okapiUrl}/loan-storage/loans?query=(itemId="${itemId}" and status.name<>"Closed")`, { headers: this.httpHeaders }).then(response => response.json());
   }
 
   findRequestsForItem(itemId) {
@@ -451,6 +452,7 @@ class Requests extends React.Component {
             findUser={this.findUser}
             findItem={this.findItem}
             findLoan={this.findLoan}
+            findRequestsForItem={this.findRequestsForItem}
             optionLists={{ requestTypes, fulfilmentTypes, addressTypes }}
             patronGroups={patronGroups}
             initialValues={{ itemId: null, requesterId: null, requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' }}

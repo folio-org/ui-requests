@@ -12,6 +12,7 @@
 * Enables 'search on enter' for item and requester barcode fields in create/edit form. Part of UIREQ-2, UIREQ-8.
 * Adds request count to request detail view. Completes UIREQ-34.
 * Fixes presentation of shelving location in create/edit view.
+* Excludes closed loans from loan lookup. Completes UIREQ-27.
 
 
 ## [1.0.0](https://github.com/folio-org/ui-requests/tree/v1.0.0) (2017-09-26)

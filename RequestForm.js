@@ -168,7 +168,7 @@ class RequestForm extends React.Component {
   }
 
   onItemClick() {
-    const { findItem, findLoan, findUser } = this.props;
+    const { findItem, findLoan, findUser, findRequestsForItem } = this.props;
     findItem(this.state.selectedItemBarcode, 'barcode').then((result) => {
       if (result.totalRecords > 0) {
         const item = result.items[0];
@@ -185,32 +185,72 @@ class RequestForm extends React.Component {
         //   });
         //   return item;
         // }
+        //
 
-        // Otherwise, continue and look for an associated loan
-        return findLoan(item.id).then((result2) => {
-          if (result2.totalRecords > 0) {
-            const loan = result2.loans[0];
-            // Look for the loan's associated borrower record
-            return findUser(loan.userId).then((result3) => {
-              const borrower = result3.users[0];
+        return Promise.all(
+          [
+            findLoan(item.id),
+            findRequestsForItem(item.id),
+          ],
+        ).then((resultArray) => {
+          const loan = resultArray[0].loans[0];
+          const requestCount = resultArray[1].requests.length;
+
+          if (loan) {
+            return findUser(loan.userId).then((result2) => {
+              const borrower = result2.users[0];
               this.setState({
                 selectedItem: {
                   itemRecord: item,
                   loanRecord: loan,
                   borrowerRecord: borrower,
+                  requestCount: requestCount,
                 },
               });
             });
           }
+          else {
+            // If no loan is found, just set the item record and rq count
+            this.setState({
+              selectedItem: {
+                itemRecord: item,
+                requestCount: requestCount,
+              },
+            });
+          }
 
-          this.setState({
-            selectedItem: { itemRecord: item },
-          });
+          return result;
 
-          return result2;
         });
       }
 
+        // Otherwise, continue and look for an associated loan
+      //   return findLoan(item.id).then((result2) => {
+      //     if (result2.totalRecords > 0) {
+      //       const loan = result2.loans[0];
+      //       // Look for the loan's associated borrower record
+      //       return findUser(loan.userId).then((result3) => {
+      //         const borrower = result3.users[0];
+      //         this.setState({
+      //           selectedItem: {
+      //             itemRecord: item,
+      //             loanRecord: loan,
+      //             borrowerRecord: borrower,
+      //           },
+      //         });
+      //       });
+      //     }
+      //
+      //     // If no loan is found, just set the item record
+      //     this.setState({
+      //       selectedItem: { itemRecord: item },
+      //     });
+      //
+      //     return result2;
+      //   });
+      // }
+
+      // If no item is found
       this.setState({
         itemSelectionError: 'Item with this barcode does not exist',
       });
