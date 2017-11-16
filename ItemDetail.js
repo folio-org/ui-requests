@@ -41,6 +41,8 @@ const ItemDetail = ({ item, error, patronGroups, dateFormatter }) => {
     );
   }
 
+  const location = _.get(itemRecord, ['temporaryLocation', 'name'], null) || _.get(itemRecord, ['permanentLocation', 'name'], '');
+
   return (
     <div>
       <Row>
@@ -55,7 +57,7 @@ const ItemDetail = ({ item, error, patronGroups, dateFormatter }) => {
       </Row>
       <Row>
         <Col xs={12}>
-          <KeyValue label="Shelving location" value={_.get(itemRecord, ['location', 'name'], '')} />
+          <KeyValue label="Shelving location" value={location} />
         </Col>
       </Row>
       <h4>Current Loan</h4>
@@ -74,7 +76,7 @@ const ItemDetail = ({ item, error, patronGroups, dateFormatter }) => {
             <KeyValue label="Current due date" value={dateFormatter(_.get(loanRecord, ['dueDate'], ''))} />
           </Col>
           <Col xs={2}>
-            <KeyValue label="Requests" value={''} />
+            <KeyValue label="Requests" value={_.get(item, ['requestCount'], '')} />
           </Col>
         </Row>
       }

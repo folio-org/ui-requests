@@ -27,6 +27,7 @@ class RequestForm extends React.Component {
     findUser: PropTypes.func,
     findItem: PropTypes.func,
     findLoan: PropTypes.func,
+    findRequestsForItem: PropTypes.func,
     initialValues: PropTypes.object,
     onCancel: PropTypes.func.isRequired,
     pristine: PropTypes.bool,
@@ -51,6 +52,7 @@ class RequestForm extends React.Component {
     findUser: () => {},
     findItem: () => {},
     findLoan: () => {},
+    findRequestsForItem: () => {},
     initialValues: {},
     optionLists: {},
     pristine: true,
@@ -168,7 +170,7 @@ class RequestForm extends React.Component {
   }
 
   onItemClick() {
-    const { findItem, findLoan, findUser } = this.props;
+    const { findItem, findLoan, findUser, findRequestsForItem } = this.props;
     findItem(this.state.selectedItemBarcode, 'barcode').then((result) => {
       if (result.totalRecords > 0) {
         const item = result.items[0];
@@ -185,32 +187,69 @@ class RequestForm extends React.Component {
         //   });
         //   return item;
         // }
+        //
 
-        // Otherwise, continue and look for an associated loan
-        return findLoan(item.id).then((result2) => {
-          if (result2.totalRecords > 0) {
-            const loan = result2.loans[0];
-            // Look for the loan's associated borrower record
-            return findUser(loan.userId).then((result3) => {
-              const borrower = result3.users[0];
+        return Promise.all(
+          [
+            findLoan(item.id),
+            findRequestsForItem(item.id),
+          ],
+        ).then((resultArray) => {
+          const loan = resultArray[0].loans[0];
+          const requestCount = resultArray[1].requests.length;
+
+          if (loan) {
+            return findUser(loan.userId).then((result2) => {
+              const borrower = result2.users[0];
               this.setState({
                 selectedItem: {
                   itemRecord: item,
                   loanRecord: loan,
                   borrowerRecord: borrower,
+                  requestCount,
                 },
               });
             });
           }
-
+          // If no loan is found, just set the item record and rq count
           this.setState({
-            selectedItem: { itemRecord: item },
+            selectedItem: {
+              itemRecord: item,
+              requestCount,
+            },
           });
 
-          return result2;
+          return result;
         });
       }
 
+      // Otherwise, continue and look for an associated loan
+      //   return findLoan(item.id).then((result2) => {
+      //     if (result2.totalRecords > 0) {
+      //       const loan = result2.loans[0];
+      //       // Look for the loan's associated borrower record
+      //       return findUser(loan.userId).then((result3) => {
+      //         const borrower = result3.users[0];
+      //         this.setState({
+      //           selectedItem: {
+      //             itemRecord: item,
+      //             loanRecord: loan,
+      //             borrowerRecord: borrower,
+      //           },
+      //         });
+      //       });
+      //     }
+      //
+      //     // If no loan is found, just set the item record
+      //     this.setState({
+      //       selectedItem: { itemRecord: item },
+      //     });
+      //
+      //     return result2;
+      //   });
+      // }
+
+      // If no item is found
       this.setState({
         itemSelectionError: 'Item with this barcode does not exist',
       });
@@ -222,15 +261,15 @@ class RequestForm extends React.Component {
   // This function only exists to enable 'do lookup on enter' for item and
   // user search
   onKeyDown(e, element) {
-     if (e.key === 'Enter' && e.shiftKey === false) {
-       e.preventDefault();
-       if (element === 'item') {
-         this.onItemClick();
-       } else {
-         this.onUserClick();
-       }
-     }
-   };
+    if (e.key === 'Enter' && e.shiftKey === false) {
+      e.preventDefault();
+      if (element === 'item') {
+        this.onItemClick();
+      } else {
+        this.onUserClick();
+      }
+    }
+  }
 
   /* eslint class-methods-use-this: 0 */
   toUserAddress(addr) {
@@ -267,9 +306,9 @@ class RequestForm extends React.Component {
     const addRequestFirstMenu = <PaneMenu><Button onClick={onCancel} title="close" aria-label="Close New Request Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></Button></PaneMenu>;
     const addRequestLastMenu = <PaneMenu><Button id="clickable-create-request" type="button" title="Create New Request" disabled={pristine || submitting} onClick={handleSubmit}>Create Request</Button></PaneMenu>;
     const editRequestLastMenu = <PaneMenu><Button id="clickable-update-request" type="button" title="Update Request" disabled={pristine || submitting} onClick={handleSubmit}>Update Request</Button></PaneMenu>;
-    const requestTypeOptions = (optionLists.requestTypes || []).map(t => ({
+    const requestTypeOptions = _.sortBy(optionLists.requestTypes || [], ['label']).map(t => ({
       label: t.label, value: t.id, selected: initialValues.requestType === t.id }));
-    const fulfilmentTypeOptions = (optionLists.fulfilmentTypes || []).map(t => ({ label: t.label, value: t.id, selected: t.id === 'Hold' }));
+    const fulfilmentTypeOptions = _.sortBy(optionLists.fulfilmentTypes || [], ['label']).map(t => ({ label: t.label, value: t.id, selected: t.id === initialValues.fulfilmentPreference }));
     const labelAsterisk = isEditForm ? '' : '*';
 
     let deliveryLocations;
@@ -294,7 +333,7 @@ class RequestForm extends React.Component {
       dataKey="users"
       searchButtonStyle="primary"
       selectUser={this.onSelectUser}
-      disableRecordCreation={true}
+      disableRecordCreation
       visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
     />);
 
@@ -397,7 +436,7 @@ class RequestForm extends React.Component {
                           label="Fulfilment preference"
                           component={Select}
                           fullWidth
-                          dataOptions={[{ label: 'Select fulfilment option', value: '' }, ...fulfilmentTypeOptions]}
+                          dataOptions={fulfilmentTypeOptions}
                           onChange={this.onChangeFulfilment}
                         />
                       </Col>
