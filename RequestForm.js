@@ -27,6 +27,7 @@ class RequestForm extends React.Component {
     findUser: PropTypes.func,
     findItem: PropTypes.func,
     findLoan: PropTypes.func,
+    findRequestsForItem: PropTypes.func,
     initialValues: PropTypes.object,
     onCancel: PropTypes.func.isRequired,
     pristine: PropTypes.bool,
@@ -51,6 +52,7 @@ class RequestForm extends React.Component {
     findUser: () => {},
     findItem: () => {},
     findLoan: () => {},
+    findRequestsForItem: () => {},
     initialValues: {},
     optionLists: {},
     pristine: true,
@@ -204,27 +206,24 @@ class RequestForm extends React.Component {
                   itemRecord: item,
                   loanRecord: loan,
                   borrowerRecord: borrower,
-                  requestCount: requestCount,
+                  requestCount,
                 },
               });
             });
           }
-          else {
-            // If no loan is found, just set the item record and rq count
-            this.setState({
-              selectedItem: {
-                itemRecord: item,
-                requestCount: requestCount,
-              },
-            });
-          }
+          // If no loan is found, just set the item record and rq count
+          this.setState({
+            selectedItem: {
+              itemRecord: item,
+              requestCount,
+            },
+          });
 
           return result;
-
         });
       }
 
-        // Otherwise, continue and look for an associated loan
+      // Otherwise, continue and look for an associated loan
       //   return findLoan(item.id).then((result2) => {
       //     if (result2.totalRecords > 0) {
       //       const loan = result2.loans[0];
