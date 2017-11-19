@@ -140,6 +140,8 @@ class ViewRequest extends React.Component {
     delete updatedRecord.title;
     delete updatedRecord.location;
     delete updatedRecord.loan;
+    delete updatedRecord.itemStatus;
+    delete updatedRecord.itemRequestCount;
 
     this.props.mutator.selectedRequest.PUT(updatedRecord).then(() => {
       this.onClickCloseEditRequest();
