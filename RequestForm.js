@@ -18,6 +18,7 @@ import stripesForm from '@folio/stripes-form';
 
 import UserDetail from './UserDetail';
 import ItemDetail from './ItemDetail';
+import { toUserAddress } from './constants';
 
 
 class RequestForm extends React.Component {
@@ -271,20 +272,6 @@ class RequestForm extends React.Component {
     }
   }
 
-  /* eslint class-methods-use-this: 0 */
-  toUserAddress(addr) {
-    // const countryId = (addr.country) ? countriesByName[addr.country].alpha2 : '';
-    return (
-      <div>
-        <div>{addr.addressLine1 || ''}</div>
-        <div>{addr.addressLine2 || ''}</div>
-        <div>{addr.city || ''}</div>
-        <div>{addr.region || ''}</div>
-        <div>{addr.postalCode || ''}</div>
-      </div>
-    );
-  }
-
   requireItem = value => (value ? undefined : 'Please select an item');
   requireUser = value => (value ? undefined : 'Please select a requester');
 
@@ -323,7 +310,7 @@ class RequestForm extends React.Component {
       deliveryLocationsDetail = _.keyBy(selectedUser.personal.addresses, a => a.addressTypeId);
     }
     if (this.state.selectedAddressTypeId) {
-      addressDetail = this.toUserAddress(deliveryLocationsDetail[this.state.selectedAddressTypeId]);
+      addressDetail = toUserAddress(deliveryLocationsDetail[this.state.selectedAddressTypeId]);
     }
 
     const selectUserControl = (<Pluggable
