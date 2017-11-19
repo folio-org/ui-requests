@@ -13,7 +13,7 @@ import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 
 import RequestForm from './RequestForm';
-import { fulfilmentTypes, requestTypes } from './constants';
+import { fulfilmentTypes, requestTypes, toUserAddress } from './constants';
 
 class ViewRequest extends React.Component {
   static propTypes = {
@@ -198,6 +198,14 @@ class ViewRequest extends React.Component {
     const borrowerRecordLink = borrowerName ? <Link to={`/users/view/${borrower.id}`}>{borrowerName}</Link> : '';
 
     const addressTypes = (this.props.resources.addressTypes && this.props.resources.addressTypes.hasLoaded) ? this.props.resources.addressTypes.records : [];
+    let deliveryAddressDetail;
+    if (_.get(request, ['fulfilmentPreference'], '') === 'Delivery') {
+      const deliveryAddressType = _.get(request, ['deliveryAddressTypeId'], null);
+      if (deliveryAddressType) {
+        const deliveryLocationsDetail = _.keyBy(request.requester.addresses, a => a.addressTypeId);
+        deliveryAddressDetail = toUserAddress(deliveryLocationsDetail[deliveryAddressType]);
+      }
+    }
 
     return request ? (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -265,9 +273,16 @@ class ViewRequest extends React.Component {
           </Row>
           <Row>
             <Col xs={12}>
-              <KeyValue label="Request type" value={_.get(request, ['requestType'], '')} />
+              <KeyValue label="Fulfilment preference" value={_.get(request, ['fulfilmentPreference'], '')} />
             </Col>
           </Row>
+          {(_.get(request, ['fulfilmentPreference'], '') === 'Delivery') &&
+            <Row>
+              <Col xs={12}>
+                <KeyValue label="Delivery address" value={deliveryAddressDetail} />
+              </Col>
+            </Row>
+          }
         </fieldset>
         <fieldset>
           <legend>Request details</legend>
