@@ -25,7 +25,7 @@
     ]
   },
   "scripts": {
-    "lint": "eslint *.js lib settings || true"
+    "lint": "eslint *.js lib settings"
   },
   "devDependencies": {
     "babel-core": "^6.17.0",
