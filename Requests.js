@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Route from 'react-router-dom/Route';
 import queryString from 'query-string';
 import fetch from 'isomorphic-fetch';
+import { FormattedDate } from 'react-intl';
 
 import Button from '@folio/stripes-components/lib/Button';
 import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
@@ -168,7 +169,6 @@ class Requests extends React.Component {
     this.findLoan = this.findLoan.bind(this);
     this.findRequestsForItem = this.findRequestsForItem.bind(this);
     this.findUser = this.findUser.bind(this);
-    this.makeLocaleDateString = this.makeLocaleDateString.bind(this);
     this.onChangeFilter = commonChangeFilter.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
@@ -333,13 +333,13 @@ class Requests extends React.Component {
   }
 
   // Helper function to form a locale-aware date for display
-  makeLocaleDateString(dateString) {
+  makeLocaleDateString = (dateString) => {
     if (dateString === '') {
       return '';
     }
 
-    return new Date(Date.parse(dateString)).toLocaleDateString(this.props.stripes.locale);
-  }
+    return <FormattedDate value={dateString} />;
+  };
 
   render() {
     const { stripes, resources } = this.props;

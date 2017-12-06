@@ -14,7 +14,7 @@
 * Fixes presentation of shelving location in create/edit view.
 * Excludes closed loans from loan lookup. Completes UIREQ-27.
 * Adds fulfilment preference and delivery address to detail view. Completes UIREQ-39.
-
+* Favor react-intl date/time formatters. Refs STCOR-109.
 
 ## [1.0.0](https://github.com/folio-org/ui-requests/tree/v1.0.0) (2017-09-26)
 
