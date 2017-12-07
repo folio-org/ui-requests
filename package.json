@@ -21,6 +21,20 @@
       {
         "permissionName": "module.requests.enabled",
         "displayName": "UI: Requests module is enabled"
+      },
+      {
+        "permissionName": "ui-requests.all",
+        "displayName": "Requests: All permissions",
+        "description": "All permissions for the Requests app",
+        "subPermissions": [
+          "circulation-storage.requests.collection.get",
+          "circulation-storage.requests.collection.delete",
+          "circulation-storage.requests.item.get",
+          "circulation-storage.requests.item.post",
+          "circulation-storage.requests.item.put",
+          "circulation-storage.requests.item.delete"
+        ],
+        "visible": true
       }
     ]
   },

@@ -13,7 +13,8 @@
 * Adds request count to request detail view. Completes UIREQ-34.
 * Fixes presentation of shelving location in create/edit view.
 * Excludes closed loans from loan lookup. Completes UIREQ-27.
-* Adds fulfilment preference and delivery address to detail view. Completes UIREQ-39.
+* Adds fulfillment preference and delivery address to detail view. Completes UIREQ-39.
+* Adds an 'all permissions' permission. Completes UIREQ-36.
 
 
 ## [1.0.0](https://github.com/folio-org/ui-requests/tree/v1.0.0) (2017-09-26)
