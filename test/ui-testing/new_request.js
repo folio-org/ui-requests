@@ -23,7 +23,7 @@ module.exports.test = function(uiTestCtx) {
         .then(result => result )
       })
       it('should find a user barcode', done => {
-	const listitem = '#list-users div[class^="rowContainer"] > a:not([aria-label*="Barcode: und"]):nth-child(5)'
+	const listitem = '#list-users div[role="listitem"] > a:not([aria-label*="Barcode: undef"])'
 	const bcode = listitem + ' > div:nth-child(3)'
         nightmare
 	.click('#clickable-users-module')
@@ -39,14 +39,16 @@ module.exports.test = function(uiTestCtx) {
 	})
 	.catch(done)
       })
-      it('should find an item barcode', done => {
-	const listitem = '#list-instances > div.scrollable---3O0eW div[role="listitem"]:first-of-type'
-	const bcode = '#list-instance-items > div[class^="scrollable"] > div > div:nth-child(5)'
+      it('should find a checked out item barcode', done => {
+	const listitem = 'a[role="listitem"][aria-label$="Checked out"]'
+	const bcode = listitem + ' > div:nth-child(2)'
         nightmare
-	.click('#clickable-instances-module')
+	.click('#clickable-items-module')
+	.wait(1555)
+	.xclick('//div[.="status"][@role="presentation"]')
+	.wait(1555)
+	.xclick('//div[.="status"][@role="presentation"]')
 	.wait(listitem)
-	.click(listitem)
-	.wait(bcode)
 	.evaluate(function(bcode) {
 	  var bc = document.querySelector(bcode)
 	  return bc.textContent
