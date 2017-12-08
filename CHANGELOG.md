@@ -13,6 +13,7 @@
 * Adds request count to request detail view. Completes UIREQ-34.
 * Fixes presentation of shelving location in create/edit view.
 * Excludes closed loans from loan lookup. Completes UIREQ-27.
+* Adds an 'all permissions' permission. Completes UIREQ-36.
 * Adds fulfilment preference and delivery address to detail view. Completes UIREQ-39.
 * Favor react-intl date/time formatters. Refs STCOR-109.
 
