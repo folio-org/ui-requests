@@ -40,13 +40,15 @@ module.exports.test = function(uiTestCtx) {
 	.catch(done)
       })
       it('should find a checked out item barcode', done => {
-	const listitem = 'a[role="listitem"][aria-label*="Checked out"]'
+	const listitem = 'a[role="listitem"][aria-label$="Checked out"]'
 	const bcode = listitem + ' > div:nth-child(2)'
         nightmare
 	.click('#clickable-items-module')
+	.wait(1555)
+	.xclick('//div[.="status"][@role="presentation"]')
+	.wait(1555)
+	.xclick('//div[.="status"][@role="presentation"]')
 	.wait(listitem)
-	.click(listitem)
-	.wait(bcode)
 	.evaluate(function(bcode) {
 	  var bc = document.querySelector(bcode)
 	  return bc.textContent
