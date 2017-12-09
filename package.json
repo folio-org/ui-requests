@@ -39,6 +39,7 @@
           "circulation-storage.requests.item.put",
           "circulation-storage.requests.item.delete",
           "users.collection.get",
+          "users.item.get",
           "circulation-storage.loans.collection.get",
           "circulation-storage.loans.item.get",
           "inventory.items.collection.get",
@@ -46,6 +47,7 @@
           "addresstypes.collection.get",
           "usergroups.collection.get",
           "notes.domain.requests",
+          "notes.domain.all",
           "notes.allops"
         ],
         "visible": true
