@@ -23,12 +23,25 @@ import { toUserAddress } from './constants';
 function asyncValidate(values, dispatch, props, blurredField) {
   if (blurredField === 'item.barcode') {
     return new Promise((resolve, reject) => {
-      const uv = props.uniquenessValidator.uniquenessValidator;
+      const uv = props.uniquenessValidator.itemUniquenessValidator;
       const query = `(barcode="${values.item.barcode}")`;
       uv.reset();
       uv.GET({ params: { query } }).then((items) => {
         if (items.length < 1) {
-          reject({ item: { barcode: 'Item with this barcode does not exist' }});
+          reject({ item: { barcode: 'Item with this barcode does not exist' } });
+        } else {
+          resolve();
+        }
+      });
+    });
+  } else if (blurredField === 'requester.barcode') {
+    return new Promise((resolve, reject) => {
+      const uv = props.uniquenessValidator.userUniquenessValidator;
+      const query = `(barcode="${values.requester.barcode}")`;
+      uv.reset();
+      uv.GET({ params: { query } }).then((users) => {
+        if (users.length < 1) {
+          reject({ requester: { barcode: 'User with this barcode does not exist' } });
         } else {
           resolve();
         }
@@ -181,11 +194,11 @@ class RequestForm extends React.Component {
         });
         this.props.change('requesterId', result.users[0].id);
       }
-      else {
-        this.setState({
-          userSelectionError: 'User with this barcode does not exist',
-        });
-      }
+      // else {
+      //   this.setState({
+      //     userSelectionError: 'User with this barcode does not exist',
+      //   });
+      // }
     });
   }
 
@@ -294,8 +307,6 @@ class RequestForm extends React.Component {
   requireItem = value => (value ? undefined : 'Please select an item');
   requireUser = value => (value ? undefined : 'Please select a requester');
 
-
-
   render() {
     const {
       handleSubmit,
@@ -378,7 +389,7 @@ class RequestForm extends React.Component {
                           component={TextField}
                           onInput={this.onChangeItem}
                           onKeyDown={e => this.onKeyDown(e, 'item')}
-                      //    validate={[this.requireItem]}
+                          validate={[this.requireItem]}
                         />
                       </Col>
                       <Col xs={3}>
@@ -511,7 +522,7 @@ class RequestForm extends React.Component {
 export default stripesForm({
   form: 'requestForm',
   asyncValidate,
-  asyncBlurFields: ['item.barcode'],
+  asyncBlurFields: ['item.barcode', 'requester.barcode'],
   navigationCheck: true,
   enableReinitialize: true,
   keepDirtyOnReinitialize: true,

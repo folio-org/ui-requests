@@ -139,11 +139,18 @@ class Requests extends React.Component {
       path: 'groups',
       records: 'usergroups',
     },
-    uniquenessValidator: {
+    itemUniquenessValidator: {
       type: 'okapi',
       records: 'items',
       accumulate: 'true',
       path: 'inventory/items',
+      fetch: false,
+    },
+    userUniquenessValidator: {
+      type: 'okapi',
+      records: 'users',
+      accumulate: 'true',
+      path: 'users',
       fetch: false,
     },
   };
