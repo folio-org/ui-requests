@@ -20,6 +20,24 @@ import UserDetail from './UserDetail';
 import ItemDetail from './ItemDetail';
 import { toUserAddress } from './constants';
 
+function asyncValidate(values, dispatch, props, blurredField) {
+  if (blurredField === 'item.barcode') {
+    return new Promise((resolve, reject) => {
+      const uv = props.uniquenessValidator.uniquenessValidator;
+      const query = `(barcode="${values.item.barcode}")`;
+      uv.reset();
+      uv.GET({ params: { query } }).then((items) => {
+        if (items.length < 1) {
+          reject({ item: { barcode: 'Item with this barcode does not exist' }});
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
+  return new Promise(resolve => resolve());
+}
 
 class RequestForm extends React.Component {
   static propTypes = {
@@ -162,7 +180,8 @@ class RequestForm extends React.Component {
           userSelectionError: false,
         });
         this.props.change('requesterId', result.users[0].id);
-      } else {
+      }
+      else {
         this.setState({
           userSelectionError: 'User with this barcode does not exist',
         });
@@ -251,9 +270,9 @@ class RequestForm extends React.Component {
       // }
 
       // If no item is found
-      this.setState({
-        itemSelectionError: 'Item with this barcode does not exist',
-      });
+      // this.setState({
+      //   itemSelectionError: 'Item with this barcode does not exist',
+      // });
 
       return result;
     });
@@ -274,6 +293,8 @@ class RequestForm extends React.Component {
 
   requireItem = value => (value ? undefined : 'Please select an item');
   requireUser = value => (value ? undefined : 'Please select a requester');
+
+
 
   render() {
     const {
@@ -357,7 +378,7 @@ class RequestForm extends React.Component {
                           component={TextField}
                           onInput={this.onChangeItem}
                           onKeyDown={e => this.onKeyDown(e, 'item')}
-                          validate={[this.requireItem]}
+                      //    validate={[this.requireItem]}
                         />
                       </Col>
                       <Col xs={3}>
@@ -489,6 +510,8 @@ class RequestForm extends React.Component {
 
 export default stripesForm({
   form: 'requestForm',
+  asyncValidate,
+  asyncBlurFields: ['item.barcode'],
   navigationCheck: true,
   enableReinitialize: true,
   keepDirtyOnReinitialize: true,

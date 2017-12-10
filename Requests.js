@@ -139,6 +139,13 @@ class Requests extends React.Component {
       path: 'groups',
       records: 'usergroups',
     },
+    uniquenessValidator: {
+      type: 'okapi',
+      records: 'items',
+      accumulate: 'true',
+      path: 'inventory/items',
+      fetch: false,
+    },
   };
 
   constructor(props, context) {
@@ -455,6 +462,7 @@ class Requests extends React.Component {
             patronGroups={patronGroups}
             initialValues={{ itemId: null, requesterId: null, requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' }}
             dateFormatter={this.makeLocaleDateString}
+            uniquenessValidator={this.props.mutator}
           />
         </Layer>
         {
