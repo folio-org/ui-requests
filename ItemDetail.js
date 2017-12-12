@@ -80,6 +80,13 @@ const ItemDetail = ({ item, error, patronGroups, dateFormatter }) => {
           </Col>
         </Row>
       }
+      {item && !loanRecord &&
+        <Row>
+          <Col xs={12}>
+            <p>Item not checked out</p>
+          </Col>
+        </Row>
+      }
     </div>
   );
 };

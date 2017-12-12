@@ -29,6 +29,10 @@ function asyncValidate(values, dispatch, props, blurredField) {
       uv.GET({ params: { query } }).then((items) => {
         if (items.length < 1) {
           reject({ item: { barcode: 'Item with this barcode does not exist' } });
+        } else if (items[0].status.name !== 'Checked out' &&
+                   items[0].status.name !== 'Checked out - Held' &&
+                   items[0].status.name !== 'Checked out - Recalled') {
+          reject({ item: { barcode: 'Only checked out items can be recalled' } });
         } else {
           resolve();
         }
@@ -412,6 +416,7 @@ class RequestForm extends React.Component {
                     />
                   }
                 </fieldset>
+                <br/>
                 <fieldset id="section-requester-info">
                   <legend>{`Requester info ${labelAsterisk}`}</legend>
                   {!isEditForm &&
