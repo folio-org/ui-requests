@@ -416,7 +416,7 @@ class RequestForm extends React.Component {
                     />
                   }
                 </fieldset>
-                <br/>
+                <br />
                 <fieldset id="section-requester-info">
                   <legend>{`Requester info ${labelAsterisk}`}</legend>
                   {!isEditForm &&
