@@ -20,6 +20,41 @@ import UserDetail from './UserDetail';
 import ItemDetail from './ItemDetail';
 import { toUserAddress } from './constants';
 
+function asyncValidate(values, dispatch, props, blurredField) {
+  if (blurredField === 'item.barcode') {
+    return new Promise((resolve, reject) => {
+      const uv = props.uniquenessValidator.itemUniquenessValidator;
+      const query = `(barcode="${values.item.barcode}")`;
+      uv.reset();
+      uv.GET({ params: { query } }).then((items) => {
+        if (items.length < 1) {
+          reject({ item: { barcode: 'Item with this barcode does not exist' } });
+        } else if (items[0].status.name !== 'Checked out' &&
+                   items[0].status.name !== 'Checked out - Held' &&
+                   items[0].status.name !== 'Checked out - Recalled') {
+          reject({ item: { barcode: 'Only checked out items can be recalled' } });
+        } else {
+          resolve();
+        }
+      });
+    });
+  } else if (blurredField === 'requester.barcode') {
+    return new Promise((resolve, reject) => {
+      const uv = props.uniquenessValidator.userUniquenessValidator;
+      const query = `(barcode="${values.requester.barcode}")`;
+      uv.reset();
+      uv.GET({ params: { query } }).then((users) => {
+        if (users.length < 1) {
+          reject({ requester: { barcode: 'User with this barcode does not exist' } });
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
+  return new Promise(resolve => resolve());
+}
 
 class RequestForm extends React.Component {
   static propTypes = {
@@ -162,11 +197,12 @@ class RequestForm extends React.Component {
           userSelectionError: false,
         });
         this.props.change('requesterId', result.users[0].id);
-      } else {
-        this.setState({
-          userSelectionError: 'User with this barcode does not exist',
-        });
       }
+      // else {
+      //   this.setState({
+      //     userSelectionError: 'User with this barcode does not exist',
+      //   });
+      // }
     });
   }
 
@@ -251,9 +287,9 @@ class RequestForm extends React.Component {
       // }
 
       // If no item is found
-      this.setState({
-        itemSelectionError: 'Item with this barcode does not exist',
-      });
+      // this.setState({
+      //   itemSelectionError: 'Item with this barcode does not exist',
+      // });
 
       return result;
     });
@@ -380,6 +416,7 @@ class RequestForm extends React.Component {
                     />
                   }
                 </fieldset>
+                <br/>
                 <fieldset id="section-requester-info">
                   <legend>{`Requester info ${labelAsterisk}`}</legend>
                   {!isEditForm &&
@@ -489,6 +526,8 @@ class RequestForm extends React.Component {
 
 export default stripesForm({
   form: 'requestForm',
+  asyncValidate,
+  asyncBlurFields: ['item.barcode', 'requester.barcode'],
   navigationCheck: true,
   enableReinitialize: true,
   keepDirtyOnReinitialize: true,
