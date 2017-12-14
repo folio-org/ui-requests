@@ -27,7 +27,6 @@ function asyncValidate(values, dispatch, props, blurredField) {
       const query = `(barcode="${values.item.barcode}")`;
       uv.reset();
       uv.GET({ params: { query } }).then((items) => {
-        console.log("values", values)
         if (items.length < 1) {
           reject({ item: { barcode: 'Item with this barcode does not exist' } });
         } else if (values.requestType === 'Recall' &&
