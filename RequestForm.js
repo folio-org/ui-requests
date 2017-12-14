@@ -27,9 +27,11 @@ function asyncValidate(values, dispatch, props, blurredField) {
       const query = `(barcode="${values.item.barcode}")`;
       uv.reset();
       uv.GET({ params: { query } }).then((items) => {
+        console.log("values", values)
         if (items.length < 1) {
           reject({ item: { barcode: 'Item with this barcode does not exist' } });
-        } else if (items[0].status.name !== 'Checked out' &&
+        } else if (values.requestType === 'Recall' &&
+                   items[0].status.name !== 'Checked out' &&
                    items[0].status.name !== 'Checked out - Held' &&
                    items[0].status.name !== 'Checked out - Recalled') {
           reject({ item: { barcode: 'Only checked out items can be recalled' } });
