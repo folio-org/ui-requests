@@ -350,17 +350,6 @@ class RequestForm extends React.Component {
       addressDetail = toUserAddress(deliveryLocationsDetail[this.state.selectedAddressTypeId]);
     }
 
-    const selectUserControl = (<Pluggable
-      aria-haspopup="true"
-      type="find-user"
-      {...this.props}
-      dataKey="users"
-      searchButtonStyle="primary"
-      selectUser={this.onSelectUser}
-      disableRecordCreation
-      visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
-    />);
-
     return (
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
@@ -431,8 +420,19 @@ class RequestForm extends React.Component {
                           component={TextField}
                           onInput={this.onChangeUser}
                           onKeyDown={e => this.onKeyDown(e, 'requester')}
-                          startControl={selectUserControl}
                           validate={this.requireUser}
+                        />
+                        <Pluggable
+                          aria-haspopup="true"
+                          type="find-user"
+                          searchLabel="Requester look-up"
+                          marginTop0
+                          searchButtonStyle="link"
+                          {...this.props}
+                          dataKey="users"
+                          selectUser={this.onSelectUser}
+                          disableRecordCreation
+                          visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
                         />
                       </Col>
                       <Col xs={3}>
