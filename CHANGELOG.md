@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## In progress
+## [1.1.0](https://github.com/folio-org/ui-requests/tree/v1.1.0) (2018-01-04)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.0.0...v1.1.0)
 
 * Adds an edit view for requests. Completes UIREQ-8.
 * Adds delivery location address display and selection. Completes UIREQ-24.
