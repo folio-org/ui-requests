@@ -180,7 +180,7 @@ class RequestForm extends React.Component {
       });
       // Set the new value in the redux-form barcode field
       this.props.change('requester.barcode', user.barcode);
-      this.onUserClick();
+      setTimeout(() => this.onUserClick());
     }
   }
 
@@ -195,7 +195,7 @@ class RequestForm extends React.Component {
       if (result.totalRecords > 0) {
         this.setState({
           selectedUser: result.users[0],
-          userSelectionError: false,
+          userSelectionError: null,
         });
         this.props.change('requesterId', result.users[0].id);
       }
@@ -377,7 +377,7 @@ class RequestForm extends React.Component {
                       <Col xs={9}>
                         <Field
                           name="item.barcode"
-                          placeholder={'Enter item barcode'}
+                          placeholder={'Scan or enter item barcode'}
                           aria-label="Item barcode"
                           fullWidth
                           component={TextField}
@@ -393,7 +393,7 @@ class RequestForm extends React.Component {
                           fullWidth
                           onClick={this.onItemClick}
                           disabled={submitting}
-                        >Select item</Button>
+                        >Enter</Button>
                       </Col>
                     </Row>
                   }
@@ -414,7 +414,7 @@ class RequestForm extends React.Component {
                       <Col xs={9}>
                         <Field
                           name="requester.barcode"
-                          placeholder={'Enter requester barcode'}
+                          placeholder={'Scan or enter requester barcode'}
                           aria-label="Requester barcode"
                           fullWidth
                           component={TextField}
@@ -442,7 +442,7 @@ class RequestForm extends React.Component {
                           fullWidth
                           onClick={this.onUserClick}
                           disabled={submitting}
-                        >Select requester</Button>
+                        >Enter</Button>
                       </Col>
                     </Row>
                   }

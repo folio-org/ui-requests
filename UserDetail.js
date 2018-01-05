@@ -1,33 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col } from 'react-flexbox-grid';
 import { Link } from 'react-router-dom';
-
+import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 
-const UserDetail = ({ user, error, patronGroups }) => {
-  const userName = (user && user.personal) ? `${user.personal.firstName} ${user.personal.lastName}` : '';
-  let recordLink;
-  let requesterGroup;
+import { getFullName } from './utils';
 
-  if (user) {
-    recordLink = <Link to={`/users/view/${user.id}`}>{userName}</Link>;
-    requesterGroup = (user &&
-                      user.patronGroup &&
-                      patronGroups.records &&
-                      patronGroups.records.length > 0) ?
-      patronGroups.records.find(g => g.id === user.patronGroup).group : '';
+const UserDetail = (props) => {
+  if (props.error) {
+    return <div style={{ color: 'red' }}>{props.error}</div>;
   }
 
-  if (error) {
-    return <div style={{ color: 'red' }}>{error}</div>;
-  }
+  const patronGroups = (props.patronGroups || {}).records || [];
+  const user = props.user || {};
+  const patronGroupId = user.patronGroup || {};
+  const requesterGroup = (patronGroups.find(g => g.id === patronGroupId) || {}).group || '';
+  const path = `/users/view/${user.id}`;
 
   return (
     <div>
+      <br />
       <Row>
         <Col xs={12}>
-          <KeyValue label="Requester name" value={recordLink} />
+          <KeyValue label="Requester name" value={<Link to={path}>{getFullName(user)}</Link>} />
+        </Col>
+      </Row>
+      <Row>
+        <Col xs={12}>
+          <KeyValue label="Barcode" value={user.barcode ? <Link to={path}>{user.barcode}</Link> : ''} />
         </Col>
       </Row>
       <Row>
