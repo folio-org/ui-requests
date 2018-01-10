@@ -7,7 +7,7 @@ import fetch from 'isomorphic-fetch';
 import { FormattedDate } from 'react-intl';
 
 import Button from '@folio/stripes-components/lib/Button';
-import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter } from '@folio/stripes-components/lib/FilterGroups';
+import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter, handleFilterClear, handleClearAllFilters } from '@folio/stripes-components/lib/FilterGroups';
 import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import Layer from '@folio/stripes-components/lib/Layer';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
@@ -184,6 +184,8 @@ class Requests extends React.Component {
     this.findRequestsForItem = this.findRequestsForItem.bind(this);
     this.findUser = this.findUser.bind(this);
     this.onChangeFilter = commonChangeFilter.bind(this);
+    this.handleFilterClear = handleFilterClear.bind(this);
+    this.handleClearAllFilters = handleClearAllFilters.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onClearSearch = this.onClearSearch.bind(this);
     this.onClickAddNewRequest = this.onClickAddNewRequest.bind(this);
@@ -229,6 +231,15 @@ class Requests extends React.Component {
     this.props.mutator.requestCount.replace(INITIAL_RESULT_COUNT);
     this.commonChangeFilter(e);
   }
+
+  onClearFilter = (e) => {
+    this.handleFilterClear(e);
+  }
+
+  onClearAllFilters = () => {
+    this.handleClearAllFilters();
+  }
+
 
   onSelectRow(e, meta) {
     const requestId = meta.id;
@@ -404,7 +415,13 @@ class Requests extends React.Component {
     return (
       <Paneset>
         <Pane defaultWidth="16%" header={searchHeader}>
-          <FilterGroups config={filterConfig} filters={this.state.filters} onChangeFilter={this.onChangeFilter} />
+          <FilterGroups
+            config={filterConfig}
+            filters={this.state.filters}
+            onChangeFilter={this.onChangeFilter}
+            onClearFilter={this.onClearFilter}
+            onClearAllFilters={this.onClearAllFilters}
+          />
         </Pane>
         <Pane
           defaultWidth="fill"
