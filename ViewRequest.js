@@ -5,7 +5,6 @@ import queryString from 'query-string';
 import { Row, Col } from 'react-flexbox-grid';
 import { Link } from 'react-router-dom';
 
-import Icon from '@folio/stripes-components/lib/Icon';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import Layer from '@folio/stripes-components/lib/Layer';
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -25,7 +24,6 @@ class ViewRequest extends React.Component {
       pathname: PropTypes.string.isRequired,
       search: PropTypes.string,
     }).isRequired,
-    history: PropTypes.object,
     joinRequest: PropTypes.func.isRequired,
     mutator: PropTypes.shape({
       selectedRequest: PropTypes.shape({
