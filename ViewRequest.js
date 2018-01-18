@@ -1,7 +1,7 @@
 import _ from 'lodash';
-import queryString from 'query-string';
 import React from 'react';
 import PropTypes from 'prop-types';
+import queryString from 'query-string';
 import { Row, Col } from 'react-flexbox-grid';
 import { Link } from 'react-router-dom';
 
@@ -10,7 +10,10 @@ import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import Layer from '@folio/stripes-components/lib/Layer';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
+import IconButton from '@folio/stripes-components/lib/IconButton';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
+import removeQueryParam from '@folio/stripes-components/util/removeQueryParam';
+import craftLayerUrl from '@folio/stripes-components/util/craftLayerUrl';
 
 import RequestForm from './RequestForm';
 import { fulfilmentTypes, requestTypes, toUserAddress } from './constants';
@@ -18,7 +21,10 @@ import { fulfilmentTypes, requestTypes, toUserAddress } from './constants';
 class ViewRequest extends React.Component {
   static propTypes = {
     dateFormatter: PropTypes.func.isRequired,
-    location: PropTypes.object,
+    location: PropTypes.shape({
+      pathname: PropTypes.string.isRequired,
+      search: PropTypes.string,
+    }).isRequired,
     history: PropTypes.object,
     joinRequest: PropTypes.func.isRequired,
     mutator: PropTypes.shape({
@@ -94,6 +100,8 @@ class ViewRequest extends React.Component {
     this.onClickCloseEditRequest = this.onClickCloseEditRequest.bind(this);
     this.onClickEditRequest = this.onClickEditRequest.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
+    this.removeQueryParam = removeQueryParam.bind(this);
+    this.craftLayerUrl = craftLayerUrl.bind(this);
     this.update = this.update.bind(this);
   }
 
@@ -122,10 +130,7 @@ class ViewRequest extends React.Component {
 
   onClickCloseEditRequest(e) {
     if (e) e.preventDefault();
-    // removeQueryParam('layer', this.props.location, this.props.history);
-    const urlParams = queryString.parse(this.props.location.search);
-    _.unset(urlParams, 'layer');
-    this.props.history.push(`${this.props.location.pathname}?${queryString.stringify(urlParams)}`);
+    this.removeQueryParam('layer');
   }
 
   update(record) {
@@ -188,8 +193,21 @@ class ViewRequest extends React.Component {
 
     const detailMenu = (
       <PaneMenu>
-        <button id="clickable-show-notes" style={{ visibility: !request ? 'hidden' : 'visible' }} onClick={this.props.notesToggle} title="Show Notes"><Icon icon="comment" />Notes</button>
-        <button id="clickable-edit-request" style={{ visibility: !request ? 'hidden' : 'visible' }} onClick={this.onClickEditRequest} title="Edit Request"><Icon icon="edit" />Edit</button>
+        <IconButton
+          icon="comment"
+          id="clickable-show-notes"
+          style={{ visibility: !request ? 'hidden' : 'visible' }}
+          onClick={this.props.notesToggle}
+          title="Show Notes"
+        />
+        <IconButton
+          icon="edit"
+          id="clickable-edit-request"
+          style={{ visibility: !request ? 'hidden' : 'visible' }}
+          href={this.craftLayerUrl('edit')}
+          onClick={this.onClickEditRequest}
+          title="Edit Request"
+        />
       </PaneMenu>
     );
 
