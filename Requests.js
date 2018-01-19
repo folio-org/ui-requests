@@ -17,6 +17,8 @@ import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
+import removeQueryParam from '@folio/stripes-components/util/removeQueryParam';
+import craftLayerUrl from '@folio/stripes-components/util/craftLayerUrl';
 
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
@@ -58,9 +60,6 @@ class Requests extends React.Component {
         GET: PropTypes.func,
         POST: PropTypes.func,
       }),
-      addRequestMode: PropTypes.shape({
-        replace: PropTypes.func,
-      }),
       requestCount: PropTypes.shape({
         replace: PropTypes.func,
       }),
@@ -93,7 +92,6 @@ class Requests extends React.Component {
   };
 
   static manifest = {
-    addRequestMode: { initialValue: { mode: false } },
     addressTypes: {
       type: 'okapi',
       path: 'addresstypes',
@@ -194,6 +192,8 @@ class Requests extends React.Component {
     this.onSort = this.onSort.bind(this);
     this.toggleNotes = this.toggleNotes.bind(this);
     this.transitionToParams = transitionToParams.bind(this);
+    this.removeQueryParam = removeQueryParam.bind(this);
+    this.craftLayerUrl = craftLayerUrl.bind(this);
     this.updateFilters = this.updateFilters.bind(this);
   }
 
@@ -248,13 +248,13 @@ class Requests extends React.Component {
   }
 
   onClickAddNewRequest(e) {
-    e.preventDefault();
-    this.props.mutator.addRequestMode.replace({ mode: true });
+    if (e) e.preventDefault();
+    this.transitionToParams({ layer: 'create' });
   }
 
   onClickCloseNewRequest(e) {
-    e.preventDefault();
-    this.props.mutator.addRequestMode.replace({ mode: false });
+    if (e) e.preventDefault();
+    this.removeQueryParam('layer');
   }
 
   performSearch = _.debounce((query) => {
@@ -352,7 +352,7 @@ class Requests extends React.Component {
     delete recordData.requesterBarcode;
 
     this.props.mutator.requests.POST(recordData).then(response => response).then((newRecord) => {
-      this.props.mutator.addRequestMode.replace({ mode: false });
+      this.onClickCloseNewRequest();
       this.props.history.push(`/requests/view/${newRecord.id}${this.props.location.search}`);
     });
   }
@@ -367,7 +367,8 @@ class Requests extends React.Component {
   };
 
   render() {
-    const { stripes, resources } = this.props;
+    const { stripes, resources, location } = this.props;
+    const query = location.search ? queryString.parse(location.search) : {};
     const requests = (resources.requests || {}).records || [];
     const patronGroups = resources.patronGroups;// (resources.patronGroups || {}).records || [];
     const addressTypes = (this.props.resources.addressTypes && this.props.resources.addressTypes.hasLoaded) ? this.props.resources.addressTypes.records : [];
@@ -431,11 +432,10 @@ class Requests extends React.Component {
               <Button
                 id="clickable-new-request"
                 title="Add New Request"
+                href={this.craftLayerUrl('create')}
                 onClick={this.onClickAddNewRequest}
                 buttonStyle="primary paneHeaderNewButton"
-              >
-                + New
-              </Button>
+              >+ New</Button>
             </PaneMenu>
           }
         >
@@ -473,7 +473,7 @@ class Requests extends React.Component {
           }
         />
         {/* Add new request form */}
-        <Layer isOpen={resources.addRequestMode ? resources.addRequestMode.mode : false} label="Add New Request Dialog">
+        <Layer isOpen={query.layer ? query.layer === 'create' : false} label="Add New Request Dialog">
           <RequestForm
             stripes={stripes}
             onSubmit={(record) => { this.create(record); }}
