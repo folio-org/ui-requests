@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col } from 'react-flexbox-grid';
 import { Link } from 'react-router-dom';
 
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
+import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
 const ItemDetail = ({ item, error, patronGroups, dateFormatter }) => {
   let recordLink;
