@@ -86,14 +86,14 @@
     "lodash": "^4.17.4",
     "prop-types": "^15.5.10",
     "query-string": "^4.3.2",
-    "react": "^15.4.2",
     "react-intl": "^2.4.0",
     "react-router-dom": "^4.0.0",
     "redux-form": "^7.0.3"
   },
   "peerDependencies": {
     "@folio/stripes-connect": "^3.0.0",
-    "@folio/stripes-core": "^2.8.0"
+    "@folio/stripes-core": "^2.8.0",
+    "react": "*"
   },
   "optionalDependencies": {
     "@folio/plugin-find-user": "^1.1.0"
