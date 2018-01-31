@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col } from 'react-flexbox-grid';
 import { Field } from 'redux-form';
 
 import Button from '@folio/stripes-components/lib/Button';
@@ -13,6 +12,7 @@ import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import Pluggable from '@folio/stripes-components/lib/Pluggable';
 import Select from '@folio/stripes-components/lib/Select';
 import TextField from '@folio/stripes-components/lib/TextField';
+import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
 import stripesForm from '@folio/stripes-form';
 

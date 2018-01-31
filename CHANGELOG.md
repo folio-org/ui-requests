@@ -23,6 +23,7 @@
 * Favor react-intl date/time formatters. Refs STCOR-109.
 * Updates validation to use redux-form's asyncValidate approach.
 * Switch out magnifying glass for "Requester look-up" link. Fixes UIREQ-47.
+* Pull Row and Col from stripes-components. Refs STRIPES-490.
 
 ## [1.0.0](https://github.com/folio-org/ui-requests/tree/v1.0.0) (2017-09-26)
 

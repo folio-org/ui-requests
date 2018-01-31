@@ -2,7 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
-import { Row, Col } from 'react-flexbox-grid';
 import { Link } from 'react-router-dom';
 
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
@@ -13,6 +12,7 @@ import IconButton from '@folio/stripes-components/lib/IconButton';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import removeQueryParam from '@folio/stripes-components/util/removeQueryParam';
 import craftLayerUrl from '@folio/stripes-components/util/craftLayerUrl';
+import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
 import RequestForm from './RequestForm';
 import { fulfilmentTypes, requestTypes, toUserAddress } from './constants';
