@@ -16,6 +16,7 @@
     "displayName": "Requests",
     "route": "/requests",
     "hasSettings": false,
+    "queryResource": "query",
     "okapiInterfaces": {
       "notes": "1.0",
       "request-storage": "1.2",
