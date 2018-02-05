@@ -15,6 +15,7 @@ import Notes from '@folio/stripes-smart-components/lib/Notes';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
+import SearchAndSort from '@folio/stripes-smart-components/lib/SearchAndSort';
 import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
 import transitionToParams from '@folio/stripes-components/util/transitionToParams';
 import removeQueryParam from '@folio/stripes-components/util/removeQueryParam';
@@ -23,9 +24,10 @@ import craftLayerUrl from '@folio/stripes-components/util/craftLayerUrl';
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
 import { requestTypes, fulfilmentTypes } from './constants';
+import packageInfo from './package';
 
 const INITIAL_RESULT_COUNT = 30;
-// const RESULT_COUNT_INCREMENT = 30;
+const RESULT_COUNT_INCREMENT = 30;
 
 const filterConfig = [
   {
@@ -97,8 +99,15 @@ class Requests extends React.Component {
       path: 'addresstypes',
       records: 'addressTypes',
     },
-    requestCount: { initialValue: INITIAL_RESULT_COUNT },
-    requests: {
+    query: {
+      initialValue: {
+        query: '',
+        filters: 'active.Active',
+        sort: 'Name',
+      },
+    },
+    resultCount: { initialValue: INITIAL_RESULT_COUNT },
+    records: {
       type: 'okapi',
       path: 'circulation/requests',
       records: 'requests',
@@ -413,97 +422,35 @@ class Requests extends React.Component {
       Author: 'author',
     };
 
-    return (
-      <Paneset>
-        <Pane defaultWidth="16%" header={searchHeader}>
-          <FilterGroups
-            config={filterConfig}
-            filters={this.state.filters}
-            onChangeFilter={this.onChangeFilter}
-            onClearFilter={this.onClearFilter}
-            onClearAllFilters={this.onClearAllFilters}
-          />
-        </Pane>
-        <Pane
-          defaultWidth="fill"
-          paneTitle={paneTitle}
-          lastMenu={
-            <PaneMenu>
-              <Button
-                id="clickable-new-request"
-                title="Add New Request"
-                href={this.craftLayerUrl('create')}
-                onClick={this.onClickAddNewRequest}
-                buttonStyle="primary paneHeaderNewButton"
-              >+ New</Button>
-            </PaneMenu>
-          }
-        >
-          <MultiColumnList
-            contentData={requests}
-            virtualize
-            autosize
-            visibleColumns={['Title', 'Item Barcode', 'Request Type', 'Requester', 'Requester Barcode', 'Request Date']}
-            columnMapping={columnMapping}
-            formatter={resultsFormatter}
-            onHeaderClick={this.onSort}
-            onRowClick={this.onSelectRow}
-            rowMetadata={['id', 'title']}
-            selectedRow={this.state.selectedItem}
-            sortOrder={this.state.sortOrder.replace(/^-/, '').replace(/,.*/, '')}
-            sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
-            isEmptyMessage="No results found. Please check your spelling and filters."
-          />
-        </Pane>
-
-        {/* Details Pane */}
-        <Route
-          path={`${this.props.match.path}/view/:requestId`}
-          render={props => (
-            <this.connectedViewRequest
-              stripes={stripes}
-              joinRequest={this.addRequestFields}
-              paneWidth="44%"
-              onClose={this.collapseDetails}
-              dateFormatter={this.makeLocaleDateString}
-              notesToggle={this.toggleNotes}
-              {...props}
-            />
-          )
-          }
-        />
-        {/* Add new request form */}
-        <Layer isOpen={query.layer ? query.layer === 'create' : false} label="Add New Request Dialog">
-          <RequestForm
-            stripes={stripes}
-            onSubmit={(record) => { this.create(record); }}
-            onCancel={this.onClickCloseNewRequest}
-            findUser={this.findUser}
-            findItem={this.findItem}
-            findLoan={this.findLoan}
-            findRequestsForItem={this.findRequestsForItem}
-            optionLists={{ requestTypes, fulfilmentTypes, addressTypes }}
-            patronGroups={patronGroups}
-            initialValues={{ itemId: null, requesterId: null, requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' }}
-            dateFormatter={this.makeLocaleDateString}
-            uniquenessValidator={this.props.mutator}
-          />
-        </Layer>
-        {
-          this.state.showNotesPane &&
-          <Route
-            path={`${this.props.match.path}/view/:id`}
-            render={props => (<this.connectedNotes
-              stripes={stripes}
-              onToggle={this.toggleNotes}
-              link={`requests/${props.match.params.id}`}
-              notesResource={this.props.notes}
-              {...props}
-            />)}
-          />
-        }
-      </Paneset>
-    );
+    return (<SearchAndSort
+      moduleName={packageInfo.name.replace(/.*\//, '')}
+      moduleTitle={packageInfo.stripes.displayName}
+      objectName="request"
+      baseRoute={packageInfo.stripes.route}
+      filterConfig={filterConfig}
+      initialResultCount={INITIAL_RESULT_COUNT}
+      resultCountIncrement={RESULT_COUNT_INCREMENT}
+      viewRecordComponent={ViewRequest}
+      editRecordComponent={RequestForm}
+      newRecordInitialValues={{ test: 'howdy' }}
+      visibleColumns={['Title', 'Item Barcode', 'Request Type', 'Requester', 'Requester Barcode', 'Request Date']}
+      resultsFormatter={resultsFormatter}
+      // onCreate={this.create}
+    // onSelectRow={this.onSelectRow}
+      parentResources={this.props.resources}
+      parentMutator={this.props.mutator}
+      detailProps={{
+        findItem: this.findItem,
+        findLoan: this.findLoan,
+        findUser: this.findUser,
+        joinRequest: this.addRequestFields,
+        patronGroups,
+        addressTypes,
+        dateFormatter: this.makeLocaleDateString,
+      }}
+      viewRecordPerms="module.requests.enabled"
+      newRecordPerms="module.requests.enabled"
+    />);
   }
 }
 
