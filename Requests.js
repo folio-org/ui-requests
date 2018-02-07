@@ -7,7 +7,7 @@ import fetch from 'isomorphic-fetch';
 import { FormattedDate } from 'react-intl';
 
 import Button from '@folio/stripes-components/lib/Button';
-import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter, handleFilterClear, handleClearAllFilters } from '@folio/stripes-components/lib/FilterGroups';
+import { filters2cql, initialFilterState, onChangeFilter as commonChangeFilter, handleFilterClear, handleClearAllFilters } from '@folio/stripes-components/lib/FilterGroups';
 import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
 import Layer from '@folio/stripes-components/lib/Layer';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
@@ -30,6 +30,19 @@ const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
 
 const filterConfig = [
+  /* There should not actually be a 'Status' filter here. But filter2cql was complaining
+   * until I added it ... and then suddenly it stopped complaining. (Why?) Keeping it
+   * here, commented out, in case it's needed again.
+   */
+  // {
+  //   label: 'Status',
+  //   name: 'active',
+  //   cql: 'active',
+  //   values: [
+  //     { name: 'Active', cql: 'true' },
+  //     { name: 'Inactive', cql: 'false' },
+  //   ],
+  // },
   {
     label: 'Request Type',
     name: 'request',
@@ -113,19 +126,55 @@ class Requests extends React.Component {
       records: 'requests',
       GET: {
         params: {
-          query: makeQueryFunction(
-            'requesterId=*',
-            'requester.barcode="$QUERY*" or item.title="$QUERY*" or item.barcode="$QUERY*"',
-            {
+          query: (...args) => {
+            /*
+              As per other SearchAndSort modules (users, instances) ...
+              This code is not DRY as it is copied from makeQueryFunction in stripes-components.
+              This is necessary, as makeQueryFunction only referneces query paramaters as a data source.
+              STRIPES-480 is intended to correct this and allow this query function to be replace with a call
+              to makeQueryFunction.
+              https://issues.folio.org/browse/STRIPES-480
+            */
+            const resourceData = args[2];
+            const sortMap = {
               Title: 'item.title',
               'Item Barcode': 'item.barcode',
               'Request Type': 'requestType',
               Requester: 'requester.lastName requester.firstName',
               'Requester Barcode': 'requester.barcode',
               'Request Date': 'requestDate',
-            },
-            filterConfig,
-          ),
+            };
+            let cql = `(requester.barcode="${resourceData.query.query}*" or item.title="${resourceData.query.query}*" or item.barcode="${resourceData.query.query}*")`;
+            const filterCql = filters2cql(filterConfig, resourceData.query.filters);
+
+            if (filterCql) {
+              if (cql) {
+                cql = `(${cql}) and ${filterCql}`;
+              } else {
+                cql = filterCql;
+              }
+            }
+
+            const { sort } = resourceData.query;
+            if (sort) {
+              const sortIndexes = sort.split(',').map((sort1) => {
+                let reverse = false;
+                if (sort1.startsWith('-')) {
+                  // eslint-disable-next-line no-param-reassign
+                  sort1 = sort1.substr(1);
+                  reverse = true;
+                }
+                let sortIndex = sortMap[sort1] || sort1;
+                if (reverse) {
+                  sortIndex = `${sortIndex.replace(' ', '/sort.descending ')}/sort.descending`;
+                }
+                return sortIndex;
+              });
+
+              cql += ` sortby ${sortIndexes.join(' ')}`;
+            }
+            return cql;
+          },
         },
         staticFallback: { params: {} },
       },
