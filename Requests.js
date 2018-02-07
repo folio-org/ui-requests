@@ -313,10 +313,16 @@ class Requests extends React.Component {
         findItem: this.findItem,
         findLoan: this.findLoan,
         findUser: this.findUser,
+        findRequestsForItem: this.findRequestsForItem,
         joinRequest: this.addRequestFields,
+        optionLists: {
+          addressTypes,
+          requestTypes,
+          fulfilmentTypes,
+        },
         patronGroups,
-        addressTypes,
         dateFormatter: this.makeLocaleDateString,
+        uniquenessValidator: this.props.mutator,
       }}
       viewRecordPerms="module.requests.enabled"
       newRecordPerms="module.requests.enabled"
