@@ -73,7 +73,7 @@ class ViewRequest extends React.Component {
   static manifest = {
     selectedRequest: {
       type: 'okapi',
-      path: 'circulation/requests/:{requestId}',
+      path: 'circulation/requests/:{id}',
     },
     addressTypes: {
       type: 'okapi',
