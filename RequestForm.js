@@ -199,11 +199,6 @@ class RequestForm extends React.Component {
         });
         this.props.change('requesterId', result.users[0].id);
       }
-      // else {
-      //   this.setState({
-      //     userSelectionError: 'User with this barcode does not exist',
-      //   });
-      // }
     });
   }
 
@@ -213,19 +208,6 @@ class RequestForm extends React.Component {
       if (result.totalRecords > 0) {
         const item = result.items[0];
         this.props.change('itemId', item.id);
-
-        // // If status is not checked out, then this item is not valid for a request
-        // console.log("rqtype", this.state.requestType)
-        // const validStatuses = ['Checked out', 'Checked out - Held', 'Checked out - Recalled'];
-        // if (item && item.status && !validStatuses.includes(item.status.name)) {
-        //   console.log('set state')
-        //   this.setState({
-        //     itemSelectionError: 'Only checked out items can be recalled',
-        //     selectedItem: { itemRecord: item },
-        //   });
-        //   return item;
-        // }
-        //
 
         return Promise.all(
           [
@@ -261,37 +243,6 @@ class RequestForm extends React.Component {
         });
       }
 
-      // Otherwise, continue and look for an associated loan
-      //   return findLoan(item.id).then((result2) => {
-      //     if (result2.totalRecords > 0) {
-      //       const loan = result2.loans[0];
-      //       // Look for the loan's associated borrower record
-      //       return findUser(loan.userId).then((result3) => {
-      //         const borrower = result3.users[0];
-      //         this.setState({
-      //           selectedItem: {
-      //             itemRecord: item,
-      //             loanRecord: loan,
-      //             borrowerRecord: borrower,
-      //           },
-      //         });
-      //       });
-      //     }
-      //
-      //     // If no loan is found, just set the item record
-      //     this.setState({
-      //       selectedItem: { itemRecord: item },
-      //     });
-      //
-      //     return result2;
-      //   });
-      // }
-
-      // If no item is found
-      // this.setState({
-      //   itemSelectionError: 'Item with this barcode does not exist',
-      // });
-
       return result;
     });
   }
@@ -325,7 +276,7 @@ class RequestForm extends React.Component {
 
     const { selectedUser } = this.state;
 
-    const isEditForm = initialValues && initialValues.itemId !== null;
+    const isEditForm = (initialValues && initialValues.itemId);
 
     const addRequestFirstMenu = <PaneMenu><Button onClick={onCancel} title="close" aria-label="Close New Request Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></Button></PaneMenu>;
     const addRequestLastMenu = <PaneMenu><Button id="clickable-create-request" type="button" title="Create New Request" disabled={pristine || submitting} onClick={handleSubmit}>Create Request</Button></PaneMenu>;
@@ -422,18 +373,7 @@ class RequestForm extends React.Component {
                           onKeyDown={e => this.onKeyDown(e, 'requester')}
                           validate={this.requireUser}
                         />
-                        <Pluggable
-                          aria-haspopup="true"
-                          type="find-user"
-                          searchLabel="Requester look-up"
-                          marginTop0
-                          searchButtonStyle="link"
-                          {...this.props}
-                          dataKey="users"
-                          selectUser={this.onSelectUser}
-                          disableRecordCreation
-                          visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
-                        />
+
                       </Col>
                       <Col xs={3}>
                         <Button

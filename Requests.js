@@ -45,14 +45,8 @@ class Requests extends React.Component {
   }
 
   static propTypes = {
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-    }).isRequired,
-    location: PropTypes.shape({
-      search: PropTypes.string,
-    }).isRequired,
     mutator: PropTypes.shape({
-      requests: PropTypes.shape({
+      records: PropTypes.shape({
         GET: PropTypes.func,
         POST: PropTypes.func,
       }),
@@ -65,7 +59,7 @@ class Requests extends React.Component {
         hasLoaded: PropTypes.bool.isRequired,
         records: PropTypes.arrayOf(PropTypes.object),
       }),
-      requests: PropTypes.shape({
+      records: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         isPending: PropTypes.bool.isPending,
         other: PropTypes.shape({
@@ -91,8 +85,8 @@ class Requests extends React.Component {
     query: {
       initialValue: {
         query: '',
-        filters: 'active.Active',
-        sort: 'Name',
+        filters: '',
+        sort: 'Title',
       },
     },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
@@ -251,23 +245,13 @@ class Requests extends React.Component {
     });
   }
 
-  create(data) {
-    const recordData = Object.assign({}, data);
-    recordData.requestDate = new Date();
-
-    // HACK: In order to use redux-form stuff like validation, fields must have a name property.
-    // Unfortunately, naming fields means that redux-form will incorporate them as keys into
-    // the data object passed through to here. Specifically, the two barcode fields for item
-    // and requester are necessary for the form, but incompatible with the request schema.
-    // They have to be removed before the record can be posted.
-    delete recordData.itemBarcode;
-    delete recordData.requesterBarcode;
-
-    this.props.mutator.requests.POST(recordData).then(response => response).then((newRecord) => {
-      this.onClickCloseNewRequest();
-      this.props.history.push(`/requests/view/${newRecord.id}${this.props.location.search}`);
-    });
+  massageNewRecord = (requestData) => {
+    const date = new Date();
+    const isoDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
+    Object.assign(requestData, { requestDate: isoDate });
   }
+
+  create = data => this.props.mutator.records.POST(data);
 
   // Helper function to form a locale-aware date for display
   makeLocaleDateString = (dateString) => {
@@ -302,11 +286,11 @@ class Requests extends React.Component {
       resultCountIncrement={RESULT_COUNT_INCREMENT}
       viewRecordComponent={ViewRequest}
       editRecordComponent={RequestForm}
-      newRecordInitialValues={{ test: 'howdy' }}
       visibleColumns={['Title', 'Item Barcode', 'Request Type', 'Requester', 'Requester Barcode', 'Request Date']}
       resultsFormatter={resultsFormatter}
-      // onCreate={this.create}
-    // onSelectRow={this.onSelectRow}
+      newRecordInitialValues={{ requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' }}
+      massageNewRecord={this.massageNewRecord}
+      onCreate={this.create}
       parentResources={this.props.resources}
       parentMutator={this.props.mutator}
       detailProps={{
