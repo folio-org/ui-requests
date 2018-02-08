@@ -50,6 +50,7 @@ class Requests extends React.Component {
         GET: PropTypes.func,
         POST: PropTypes.func,
       }),
+      query: PropTypes.func,
       requestCount: PropTypes.shape({
         replace: PropTypes.func,
       }),
@@ -251,7 +252,7 @@ class Requests extends React.Component {
     Object.assign(requestData, { requestDate: isoDate });
   }
 
-  create = data => this.props.mutator.records.POST(data);
+  create = data => this.props.mutator.records.POST(data).then(() => this.props.mutator.query.update({ layer: null }));
 
   // Helper function to form a locale-aware date for display
   makeLocaleDateString = (dateString) => {
