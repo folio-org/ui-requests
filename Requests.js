@@ -294,6 +294,7 @@ class Requests extends React.Component {
       parentResources={this.props.resources}
       parentMutator={this.props.mutator}
       detailProps={{
+        stripes: this.props.stripes,
         findItem: this.findItem,
         findLoan: this.findLoan,
         findUser: this.findUser,

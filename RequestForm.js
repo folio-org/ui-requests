@@ -285,6 +285,7 @@ class RequestForm extends React.Component {
       label: t.label, value: t.id, selected: initialValues.requestType === t.id }));
     const fulfilmentTypeOptions = _.sortBy(optionLists.fulfilmentTypes || [], ['label']).map(t => ({ label: t.label, value: t.id, selected: t.id === initialValues.fulfilmentPreference }));
     const labelAsterisk = isEditForm ? '' : '*';
+    const disableRecordCreation = true;
 
     let deliveryLocations;
     let deliveryLocationsDetail = [];
@@ -372,6 +373,18 @@ class RequestForm extends React.Component {
                           onInput={this.onChangeUser}
                           onKeyDown={e => this.onKeyDown(e, 'requester')}
                           validate={this.requireUser}
+                        />
+                        <Pluggable
+                          aria-haspopup="true"
+                          type="find-user"
+                          searchLabel="Requester look-up"
+                          marginTop0
+                          searchButtonStyle="link"
+                          {...this.props}
+                          dataKey="users"
+                          selectUser={this.onSelectUser}
+                          disableRecordCreation={disableRecordCreation}
+                          visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
                         />
 
                       </Col>
