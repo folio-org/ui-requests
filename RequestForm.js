@@ -330,8 +330,7 @@ class RequestForm extends React.Component {
     const addRequestFirstMenu = <PaneMenu><Button onClick={onCancel} title="close" aria-label="Close New Request Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></Button></PaneMenu>;
     const addRequestLastMenu = <PaneMenu><Button id="clickable-create-request" type="button" title="Create New Request" disabled={pristine || submitting} onClick={handleSubmit}>Create Request</Button></PaneMenu>;
     const editRequestLastMenu = <PaneMenu><Button id="clickable-update-request" type="button" title="Update Request" disabled={pristine || submitting} onClick={handleSubmit}>Update Request</Button></PaneMenu>;
-    const requestTypeOptions = _.sortBy(optionLists.requestTypes || [], ['label']).map(t => ({
-      label: t.label, value: t.id, selected: initialValues.requestType === t.id }));
+    const requestTypeOptions = _.sortBy(optionLists.requestTypes || [], ['label']).map(t => ({ label: t.label, value: t.id, selected: initialValues.requestType === t.id }));
     const fulfilmentTypeOptions = _.sortBy(optionLists.fulfilmentTypes || [], ['label']).map(t => ({ label: t.label, value: t.id, selected: t.id === initialValues.fulfilmentPreference }));
     const labelAsterisk = isEditForm ? '' : '*';
 
@@ -377,7 +376,7 @@ class RequestForm extends React.Component {
                       <Col xs={9}>
                         <Field
                           name="item.barcode"
-                          placeholder={'Scan or enter item barcode'}
+                          placeholder="Scan or enter item barcode"
                           aria-label="Item barcode"
                           fullWidth
                           component={TextField}
@@ -393,7 +392,8 @@ class RequestForm extends React.Component {
                           fullWidth
                           onClick={this.onItemClick}
                           disabled={submitting}
-                        >Enter</Button>
+                        >Enter
+                        </Button>
                       </Col>
                     </Row>
                   }
@@ -414,7 +414,7 @@ class RequestForm extends React.Component {
                       <Col xs={9}>
                         <Field
                           name="requester.barcode"
-                          placeholder={'Scan or enter requester barcode'}
+                          placeholder="Scan or enter requester barcode"
                           aria-label="Requester barcode"
                           fullWidth
                           component={TextField}
@@ -442,7 +442,8 @@ class RequestForm extends React.Component {
                           fullWidth
                           onClick={this.onUserClick}
                           disabled={submitting}
-                        >Enter</Button>
+                        >Enter
+                        </Button>
                       </Col>
                     </Row>
                   }
