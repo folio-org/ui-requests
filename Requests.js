@@ -435,7 +435,8 @@ class Requests extends React.Component {
                 href={this.craftLayerUrl('create')}
                 onClick={this.onClickAddNewRequest}
                 buttonStyle="primary paneHeaderNewButton"
-              >+ New</Button>
+              >+ New
+              </Button>
             </PaneMenu>
           }
         >
