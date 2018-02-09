@@ -15,19 +15,6 @@ const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
 
 const filterConfig = [
-  /* There should not actually be a 'Status' filter here. But filter2cql was complaining
-   * until I added it ... and then suddenly it stopped complaining. (Why?) Keeping it
-   * here, commented out, in case it's needed again.
-   */
-  // {
-  //   label: 'Status',
-  //   name: 'active',
-  //   cql: 'active',
-  //   values: [
-  //     { name: 'Active', cql: 'true' },
-  //     { name: 'Inactive', cql: 'false' },
-  //   ],
-  // },
   {
     label: 'Request Type',
     name: 'request',
@@ -50,7 +37,7 @@ class Requests extends React.Component {
         GET: PropTypes.func,
         POST: PropTypes.func,
       }),
-      query: PropTypes.func,
+      query: PropTypes.object,
       requestCount: PropTypes.shape({
         replace: PropTypes.func,
       }),
@@ -264,7 +251,7 @@ class Requests extends React.Component {
   };
 
   render() {
-    const { resources } = this.props;
+    const { resources, stripes } = this.props;
     const patronGroups = resources.patronGroups;// (resources.patronGroups || {}).records || [];
     const addressTypes = (resources.addressTypes && resources.addressTypes.hasLoaded) ? resources.addressTypes.records : [];
 
@@ -295,7 +282,7 @@ class Requests extends React.Component {
       parentResources={this.props.resources}
       parentMutator={this.props.mutator}
       detailProps={{
-        stripes: this.props.stripes,
+        stripes,
         findItem: this.findItem,
         findLoan: this.findLoan,
         findUser: this.findUser,
