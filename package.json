@@ -15,7 +15,9 @@
     "type": "app",
     "displayName": "Requests",
     "route": "/requests",
+    "home": "/requests?filters=&sort=Title",
     "hasSettings": false,
+    "queryResource": "query",
     "okapiInterfaces": {
       "notes": "1.0",
       "request-storage": "1.2",
@@ -57,7 +59,17 @@
         ],
         "visible": true
       }
-    ]
+    ],
+    "translations": {
+      "en": {
+        "search": "Search",
+        "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}"
+      },
+      "de": {
+        "search": "Suche",
+        "resultCount": "Gefunden {count, number} {count, plural, one {Aufzeichnung} other {Aufzeichnungen}}"
+      }
+    }
   },
   "scripts": {
     "lint": "eslint *.js lib settings"
