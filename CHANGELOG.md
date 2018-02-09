@@ -2,7 +2,7 @@
 
 ## 1.2.0 (IN PROGRESS)
 
-* Refactor code to use <SearchAndSort> component. Completes. UIREQ-49.
+* Refactor code to use <SearchAndSort> component. Completes UIREQ-49.
 * Include clear-filter handlers. Refs STRIPES-495.
 
 ## [1.1.0](https://github.com/folio-org/ui-requests/tree/v1.1.0) (2018-01-04)
