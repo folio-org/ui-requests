@@ -187,7 +187,7 @@ class Requests extends React.Component {
   }
 
   findLoan(itemId) {
-    return fetch(`${this.okapiUrl}/loan-storage/loans?query=(itemId="${itemId}" and status.name<>"Closed")`, { headers: this.httpHeaders }).then(response => response.json());
+    return fetch(`${this.okapiUrl}/circulation/loans?query=(itemId="${itemId}" and status.name<>"Closed")`, { headers: this.httpHeaders }).then(response => response.json());
   }
 
   findRequestsForItem(itemId) {
