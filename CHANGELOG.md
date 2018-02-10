@@ -4,7 +4,7 @@
 
 * Refactor code to use <SearchAndSort> component. Completes UIREQ-49.
 * Include clear-filter handlers. Refs STRIPES-495.
-* rewire loan links from items to inventory. Fixes UIREQ-57.
+* rewire loan links from items to inventory so we can deprecate items! Fixes UIREQ-57.
 
 ## [1.1.0](https://github.com/folio-org/ui-requests/tree/v1.1.0) (2018-01-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.0.0...v1.1.0)
