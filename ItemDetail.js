@@ -25,7 +25,7 @@ const ItemDetail = ({ item, error, patronGroups, dateFormatter }) => {
                      patronGroups.records.length > 0) ?
       patronGroups.records.find(g => g.id === borrowerRecord.patronGroup).group : '';
 
-    if (itemRecord) {
+    if (itemRecord && loanRecord) {
       recordLink = <Link to={`/inventory/view/${loanRecord.item.instanceId}/${loanRecord.item.holdingsRecordId}/${loanRecord.itemId}`}>{_.get(itemRecord, ['barcode'], '')}</Link>;
     }
     if (borrowerRecord) {
