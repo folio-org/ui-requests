@@ -50,7 +50,7 @@ module.exports.test = function(uiTestCtx) {
 	.xclick('//div[.="status"][@role="presentation"]')
 	.wait(listitem)
 	.evaluate(function(bcode) {
-	  var bc = document.querySelector(bcode)
+	  var bc = document.querySelectorAll(bcode)[2]
 	  return bc.textContent
 	},bcode)
         .then(result => {
@@ -63,13 +63,13 @@ module.exports.test = function(uiTestCtx) {
       it('should add a new "Hold" request', done => {
         nightmare
 	.click('#clickable-requests-module')
-	.wait('#clickable-new-request')
-	.click('#clickable-new-request')
+	.wait('#clickable-newrequest')
+	.click('#clickable-newrequest')
 	.wait('select[name="requestType"]')
 	.select('select[name="requestType"]','Hold')
 	.insert('input[name="item.barcode"]',itembc)
 	.click('#clickable-select-item')
-	.wait('#section-item-info a[href^="/items/view/"]')
+	.wait('#section-item-info a[href^="/inventory/view/"]')
 	.insert('input[name="requester.barcode"]',userbc)
 	.click('#clickable-select-requester')
 	.wait('#section-requester-info a[href^="/users/view/"]')
