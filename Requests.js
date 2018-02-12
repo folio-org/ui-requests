@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import fetch from 'isomorphic-fetch';
-import { FormattedDate } from 'react-intl';
+import { FormattedDate, FormattedTime } from 'react-intl';
 
 import { filters2cql } from '@folio/stripes-components/lib/FilterGroups';
 import SearchAndSort from '@folio/stripes-smart-components/lib/SearchAndSort';
@@ -74,7 +74,7 @@ class Requests extends React.Component {
       initialValue: {
         query: '',
         filters: '',
-        sort: 'Title',
+        sort: 'Request Date',
       },
     },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
@@ -250,6 +250,14 @@ class Requests extends React.Component {
     return <FormattedDate value={dateString} />;
   };
 
+  makeLocaleDateTimeString = (dateString) => {
+    if (dateString === '') {
+      return '';
+    }
+
+    return <span><FormattedDate value={dateString} />, <FormattedTime value={dateString} /></span>;
+  }
+
   render() {
     const { resources, stripes } = this.props;
     const patronGroups = resources.patronGroups;// (resources.patronGroups || {}).records || [];
@@ -257,7 +265,7 @@ class Requests extends React.Component {
 
     const resultsFormatter = {
       'Item Barcode': rq => (rq.item ? rq.item.barcode : ''),
-      'Request Date': rq => new Date(Date.parse(rq.requestDate)).toLocaleDateString(this.props.stripes.locale),
+      'Request Date': rq => this.makeLocaleDateTimeString(rq.requestDate),
       Requester: rq => (rq.requester ? `${rq.requester.firstName} ${rq.requester.lastName}` : ''),
       'Requester Barcode': rq => (rq.requester ? rq.requester.barcode : ''),
       'Request Type': rq => rq.requestType,
