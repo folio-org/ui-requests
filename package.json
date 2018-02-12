@@ -15,7 +15,7 @@
     "type": "app",
     "displayName": "Requests",
     "route": "/requests",
-    "home": "/requests?filters=&sort=Title",
+    "home": "/requests?filters=&sort=Request Date",
     "hasSettings": false,
     "queryResource": "query",
     "okapiInterfaces": {
