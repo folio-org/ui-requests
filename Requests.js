@@ -1,31 +1,18 @@
-import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import Route from 'react-router-dom/Route';
-import queryString from 'query-string';
 import fetch from 'isomorphic-fetch';
-import { FormattedDate } from 'react-intl';
+import { FormattedDate, FormattedTime } from 'react-intl';
 
-import Button from '@folio/stripes-components/lib/Button';
-import FilterGroups, { initialFilterState, onChangeFilter as commonChangeFilter, handleFilterClear, handleClearAllFilters } from '@folio/stripes-components/lib/FilterGroups';
-import FilterPaneSearch from '@folio/stripes-components/lib/FilterPaneSearch';
-import Layer from '@folio/stripes-components/lib/Layer';
-import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
-import Notes from '@folio/stripes-smart-components/lib/Notes';
-import Pane from '@folio/stripes-components/lib/Pane';
-import Paneset from '@folio/stripes-components/lib/Paneset';
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import makeQueryFunction from '@folio/stripes-components/util/makeQueryFunction';
-import transitionToParams from '@folio/stripes-components/util/transitionToParams';
-import removeQueryParam from '@folio/stripes-components/util/removeQueryParam';
-import craftLayerUrl from '@folio/stripes-components/util/craftLayerUrl';
+import { filters2cql } from '@folio/stripes-components/lib/FilterGroups';
+import SearchAndSort from '@folio/stripes-smart-components/lib/SearchAndSort';
 
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
 import { requestTypes, fulfilmentTypes } from './constants';
+import packageInfo from './package';
 
 const INITIAL_RESULT_COUNT = 30;
-// const RESULT_COUNT_INCREMENT = 30;
+const RESULT_COUNT_INCREMENT = 30;
 
 const filterConfig = [
   {
@@ -45,32 +32,22 @@ class Requests extends React.Component {
   }
 
   static propTypes = {
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-    }).isRequired,
-    location: PropTypes.shape({
-      pathname: PropTypes.string.isRequired,
-      search: PropTypes.string,
-    }).isRequired,
-    match: PropTypes.shape({
-      path: PropTypes.string.isRequired,
-    }).isRequired,
     mutator: PropTypes.shape({
-      requests: PropTypes.shape({
+      records: PropTypes.shape({
         GET: PropTypes.func,
         POST: PropTypes.func,
       }),
+      query: PropTypes.object,
       requestCount: PropTypes.shape({
         replace: PropTypes.func,
       }),
     }).isRequired,
-    notes: PropTypes.arrayOf(PropTypes.object),
     resources: PropTypes.shape({
       addressTypes: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         records: PropTypes.arrayOf(PropTypes.object),
       }),
-      requests: PropTypes.shape({
+      records: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         isPending: PropTypes.bool.isPending,
         other: PropTypes.shape({
@@ -87,49 +64,77 @@ class Requests extends React.Component {
     }).isRequired,
   };
 
-  static defaultProps = {
-    notes: [],
-  };
-
   static manifest = {
     addressTypes: {
       type: 'okapi',
       path: 'addresstypes',
       records: 'addressTypes',
     },
-    requestCount: { initialValue: INITIAL_RESULT_COUNT },
-    requests: {
+    query: {
+      initialValue: {
+        query: '',
+        filters: '',
+        sort: 'Request Date',
+      },
+    },
+    resultCount: { initialValue: INITIAL_RESULT_COUNT },
+    records: {
       type: 'okapi',
       path: 'circulation/requests',
       records: 'requests',
       GET: {
         params: {
-          query: makeQueryFunction(
-            'requesterId=*',
-            'requester.barcode="$QUERY*" or item.title="$QUERY*" or item.barcode="$QUERY*"',
-            {
+          query: (...args) => {
+            /*
+              As per other SearchAndSort modules (users, instances) ...
+              This code is not DRY as it is copied from makeQueryFunction in stripes-components.
+              This is necessary, as makeQueryFunction only referneces query paramaters as a data source.
+              STRIPES-480 is intended to correct this and allow this query function to be replace with a call
+              to makeQueryFunction.
+              https://issues.folio.org/browse/STRIPES-480
+            */
+            const resourceData = args[2];
+            const sortMap = {
               Title: 'item.title',
               'Item Barcode': 'item.barcode',
               'Request Type': 'requestType',
               Requester: 'requester.lastName requester.firstName',
               'Requester Barcode': 'requester.barcode',
               'Request Date': 'requestDate',
-            },
-            filterConfig,
-          ),
+            };
+            let cql = `(requester.barcode="${resourceData.query.query}*" or item.title="${resourceData.query.query}*" or item.barcode="${resourceData.query.query}*")`;
+            const filterCql = filters2cql(filterConfig, resourceData.query.filters);
+
+            if (filterCql) {
+              if (cql) {
+                cql = `(${cql}) and ${filterCql}`;
+              } else {
+                cql = filterCql;
+              }
+            }
+
+            const { sort } = resourceData.query;
+            if (sort) {
+              const sortIndexes = sort.split(',').map((sort1) => {
+                let reverse = false;
+                if (sort1.startsWith('-')) {
+                  // eslint-disable-next-line no-param-reassign
+                  sort1 = sort1.substr(1);
+                  reverse = true;
+                }
+                let sortIndex = sortMap[sort1] || sort1;
+                if (reverse) {
+                  sortIndex = `${sortIndex.replace(' ', '/sort.descending ')}/sort.descending`;
+                }
+                return sortIndex;
+              });
+
+              cql += ` sortby ${sortIndexes.join(' ')}`;
+            }
+            return cql;
+          },
         },
         staticFallback: { params: {} },
-      },
-    },
-    notes: {
-      type: 'okapi',
-      path: 'notes',
-      records: 'notes',
-      clear: false,
-      GET: {
-        params: {
-          query: 'link=:{id}',
-        },
       },
     },
     patronGroups: {
@@ -163,123 +168,12 @@ class Requests extends React.Component {
       'Content-Type': 'application/json',
     });
 
-    const query = props.location.search ? queryString.parse(props.location.search) : {};
-    this.state = {
-      filters: initialFilterState(filterConfig, query.filters),
-      selectedItem: {},
-      searchTerm: query.query || '',
-      showNotesPane: false,
-      sortOrder: query.sort || '',
-    };
-
     this.addRequestFields = this.addRequestFields.bind(this);
-    this.collapseDetails = this.collapseDetails.bind(this);
-    this.connectedNotes = props.stripes.connect(Notes);
-    this.connectedViewRequest = props.stripes.connect(ViewRequest);
     this.create = this.create.bind(this);
     this.findItem = this.findItem.bind(this);
     this.findLoan = this.findLoan.bind(this);
     this.findRequestsForItem = this.findRequestsForItem.bind(this);
     this.findUser = this.findUser.bind(this);
-    this.onChangeFilter = commonChangeFilter.bind(this);
-    this.handleFilterClear = handleFilterClear.bind(this);
-    this.handleClearAllFilters = handleClearAllFilters.bind(this);
-    this.onChangeSearch = this.onChangeSearch.bind(this);
-    this.onClearSearch = this.onClearSearch.bind(this);
-    this.onClickAddNewRequest = this.onClickAddNewRequest.bind(this);
-    this.onClickCloseNewRequest = this.onClickCloseNewRequest.bind(this);
-    this.onSelectRow = this.onSelectRow.bind(this);
-    this.onSort = this.onSort.bind(this);
-    this.toggleNotes = this.toggleNotes.bind(this);
-    this.transitionToParams = transitionToParams.bind(this);
-    this.removeQueryParam = removeQueryParam.bind(this);
-    this.craftLayerUrl = craftLayerUrl.bind(this);
-    this.updateFilters = this.updateFilters.bind(this);
-  }
-
-  onSort(e, meta) {
-    const newOrder = meta.alias;
-    const oldOrder = this.state.sortOrder;
-
-    const orders = oldOrder ? oldOrder.split(',') : [];
-    if (orders.length > 0 && newOrder === orders[0].replace(/^-/, '')) {
-      orders[0] = `-${orders[0]}`.replace(/^--/, '');
-    } else {
-      orders.unshift(newOrder);
-    }
-
-    const sortOrder = orders.slice(0, 2).join(',');
-    this.setState({ sortOrder });
-    this.transitionToParams({ sort: sortOrder });
-  }
-
-  /* ************** Search handlers ************** */
-  onChangeSearch = (e) => {
-    this.props.mutator.requestCount.replace(INITIAL_RESULT_COUNT);
-    const query = e.target.value;
-    this.setState({ searchTerm: query });
-    this.performSearch(query);
-  }
-
-  onClearSearch = () => {
-    this.setState({ searchTerm: '' });
-    this.props.history.push(this.props.location.pathname);
-  }
-
-  /* ************** Filter handlers ************** */
-  onChangeFilter = (e) => {
-    this.props.mutator.requestCount.replace(INITIAL_RESULT_COUNT);
-    this.commonChangeFilter(e);
-  }
-
-  onClearFilter = (e) => {
-    this.handleFilterClear(e);
-  }
-
-  onClearAllFilters = () => {
-    this.handleClearAllFilters();
-  }
-
-
-  onSelectRow(e, meta) {
-    const requestId = meta.id;
-    this.setState({ selectedItem: meta });
-    this.props.history.push(`/requests/view/${requestId}${this.props.location.search}`);
-  }
-
-  onClickAddNewRequest(e) {
-    if (e) e.preventDefault();
-    this.transitionToParams({ layer: 'create' });
-  }
-
-  onClickCloseNewRequest(e) {
-    if (e) e.preventDefault();
-    this.removeQueryParam('layer');
-  }
-
-  performSearch = _.debounce((query) => {
-    this.transitionToParams({ query });
-  }, 250);
-
-  // provided for onChangeFilter
-  updateFilters(filters) {
-    this.transitionToParams({ filters: Object.keys(filters).filter(key => filters[key]).join(',') });
-  }
-
-  collapseDetails() {
-    this.setState({
-      selectedItem: {},
-    });
-    this.props.history.push(`${this.props.match.path}${this.props.location.search}`);
-  }
-
-  toggleNotes() {
-    this.setState((curState) => {
-      const show = !curState.showNotesPane;
-      return {
-        showNotesPane: show,
-      };
-    });
   }
 
   // idType can be 'id', 'barcode', etc.
@@ -293,7 +187,7 @@ class Requests extends React.Component {
   }
 
   findLoan(itemId) {
-    return fetch(`${this.okapiUrl}/loan-storage/loans?query=(itemId="${itemId}" and status.name<>"Closed")`, { headers: this.httpHeaders }).then(response => response.json());
+    return fetch(`${this.okapiUrl}/circulation/loans?query=(itemId="${itemId}" and status.name<>"Closed")`, { headers: this.httpHeaders }).then(response => response.json());
   }
 
   findRequestsForItem(itemId) {
@@ -339,23 +233,13 @@ class Requests extends React.Component {
     });
   }
 
-  create(data) {
-    const recordData = Object.assign({}, data);
-    recordData.requestDate = new Date();
-
-    // HACK: In order to use redux-form stuff like validation, fields must have a name property.
-    // Unfortunately, naming fields means that redux-form will incorporate them as keys into
-    // the data object passed through to here. Specifically, the two barcode fields for item
-    // and requester are necessary for the form, but incompatible with the request schema.
-    // They have to be removed before the record can be posted.
-    delete recordData.itemBarcode;
-    delete recordData.requesterBarcode;
-
-    this.props.mutator.requests.POST(recordData).then(response => response).then((newRecord) => {
-      this.onClickCloseNewRequest();
-      this.props.history.push(`/requests/view/${newRecord.id}${this.props.location.search}`);
-    });
+  massageNewRecord = (requestData) => {
+    const date = new Date();
+    const isoDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
+    Object.assign(requestData, { requestDate: isoDate });
   }
+
+  create = data => this.props.mutator.records.POST(data).then(() => this.props.mutator.query.update({ layer: null }));
 
   // Helper function to form a locale-aware date for display
   makeLocaleDateString = (dateString) => {
@@ -366,144 +250,64 @@ class Requests extends React.Component {
     return <FormattedDate value={dateString} />;
   };
 
-  render() {
-    const { stripes, resources, location } = this.props;
-    const query = location.search ? queryString.parse(location.search) : {};
-    const requests = (resources.requests || {}).records || [];
-    const patronGroups = resources.patronGroups;// (resources.patronGroups || {}).records || [];
-    const addressTypes = (this.props.resources.addressTypes && this.props.resources.addressTypes.hasLoaded) ? this.props.resources.addressTypes.records : [];
-
-    // NOTE: Uncommenting this clause will activate front-end joins of
-    // user and item records for every request in the results list. This is
-    // probably NOT something we want to do. It's here in case we need something
-    // like this later for some reason, but it shouldn't be used under
-    // normal circumstances -- and should be removed entirely at some point.
-    if (requests.length > 0) {
-      // requests = requests.map(this.addRequestFields);
+  makeLocaleDateTimeString = (dateString) => {
+    if (dateString === '') {
+      return '';
     }
 
-    const searchHeader = (<FilterPaneSearch
-      id="SearchField"
-      onChange={this.onChangeSearch}
-      onClear={this.onClearSearch}
-      value={this.state.searchTerm}
-      searchAriaLabel="Requests search"
-    />);
+    return <span><FormattedDate value={dateString} />, <FormattedTime value={dateString} /></span>;
+  }
 
-    const paneTitle = (
-      <div style={{ textAlign: 'center' }}>
-        <strong>Results</strong>
-        <div>
-          <em>{requests && requests.length > 0 ? requests.length : '0'} Result{requests.length === 1 ? '' : 's'} Found
-          </em>
-        </div>
-      </div>
-    );
+  render() {
+    const { resources, stripes } = this.props;
+    const patronGroups = resources.patronGroups;// (resources.patronGroups || {}).records || [];
+    const addressTypes = (resources.addressTypes && resources.addressTypes.hasLoaded) ? resources.addressTypes.records : [];
 
     const resultsFormatter = {
       'Item Barcode': rq => (rq.item ? rq.item.barcode : ''),
-      'Request Date': rq => new Date(Date.parse(rq.requestDate)).toLocaleDateString(this.props.stripes.locale),
+      'Request Date': rq => this.makeLocaleDateTimeString(rq.requestDate),
       Requester: rq => (rq.requester ? `${rq.requester.firstName} ${rq.requester.lastName}` : ''),
       'Requester Barcode': rq => (rq.requester ? rq.requester.barcode : ''),
       'Request Type': rq => rq.requestType,
       Title: rq => (rq.item ? rq.item.title : ''),
     };
 
-    const columnMapping = {
-      Author: 'author',
-    };
-
-    return (
-      <Paneset>
-        <Pane defaultWidth="16%" header={searchHeader}>
-          <FilterGroups
-            config={filterConfig}
-            filters={this.state.filters}
-            onChangeFilter={this.onChangeFilter}
-            onClearFilter={this.onClearFilter}
-            onClearAllFilters={this.onClearAllFilters}
-          />
-        </Pane>
-        <Pane
-          defaultWidth="fill"
-          paneTitle={paneTitle}
-          lastMenu={
-            <PaneMenu>
-              <Button
-                id="clickable-new-request"
-                title="Add New Request"
-                href={this.craftLayerUrl('create')}
-                onClick={this.onClickAddNewRequest}
-                buttonStyle="primary paneHeaderNewButton"
-              >+ New</Button>
-            </PaneMenu>
-          }
-        >
-          <MultiColumnList
-            contentData={requests}
-            virtualize
-            autosize
-            visibleColumns={['Title', 'Item Barcode', 'Request Type', 'Requester', 'Requester Barcode', 'Request Date']}
-            columnMapping={columnMapping}
-            formatter={resultsFormatter}
-            onHeaderClick={this.onSort}
-            onRowClick={this.onSelectRow}
-            rowMetadata={['id', 'title']}
-            selectedRow={this.state.selectedItem}
-            sortOrder={this.state.sortOrder.replace(/^-/, '').replace(/,.*/, '')}
-            sortDirection={this.state.sortOrder.startsWith('-') ? 'descending' : 'ascending'}
-            isEmptyMessage="No results found. Please check your spelling and filters."
-          />
-        </Pane>
-
-        {/* Details Pane */}
-        <Route
-          path={`${this.props.match.path}/view/:requestId`}
-          render={props => (
-            <this.connectedViewRequest
-              stripes={stripes}
-              joinRequest={this.addRequestFields}
-              paneWidth="44%"
-              onClose={this.collapseDetails}
-              dateFormatter={this.makeLocaleDateString}
-              notesToggle={this.toggleNotes}
-              {...props}
-            />
-          )
-          }
-        />
-        {/* Add new request form */}
-        <Layer isOpen={query.layer ? query.layer === 'create' : false} label="Add New Request Dialog">
-          <RequestForm
-            stripes={stripes}
-            onSubmit={(record) => { this.create(record); }}
-            onCancel={this.onClickCloseNewRequest}
-            findUser={this.findUser}
-            findItem={this.findItem}
-            findLoan={this.findLoan}
-            findRequestsForItem={this.findRequestsForItem}
-            optionLists={{ requestTypes, fulfilmentTypes, addressTypes }}
-            patronGroups={patronGroups}
-            initialValues={{ itemId: null, requesterId: null, requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' }}
-            dateFormatter={this.makeLocaleDateString}
-            uniquenessValidator={this.props.mutator}
-          />
-        </Layer>
-        {
-          this.state.showNotesPane &&
-          <Route
-            path={`${this.props.match.path}/view/:id`}
-            render={props => (<this.connectedNotes
-              stripes={stripes}
-              onToggle={this.toggleNotes}
-              link={`requests/${props.match.params.id}`}
-              notesResource={this.props.notes}
-              {...props}
-            />)}
-          />
-        }
-      </Paneset>
-    );
+    return (<SearchAndSort
+      moduleName={packageInfo.name.replace(/.*\//, '')}
+      moduleTitle={packageInfo.stripes.displayName}
+      objectName="request"
+      baseRoute={packageInfo.stripes.route}
+      filterConfig={filterConfig}
+      initialResultCount={INITIAL_RESULT_COUNT}
+      resultCountIncrement={RESULT_COUNT_INCREMENT}
+      viewRecordComponent={ViewRequest}
+      editRecordComponent={RequestForm}
+      visibleColumns={['Title', 'Item Barcode', 'Request Type', 'Requester', 'Requester Barcode', 'Request Date']}
+      resultsFormatter={resultsFormatter}
+      newRecordInitialValues={{ requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' }}
+      massageNewRecord={this.massageNewRecord}
+      onCreate={this.create}
+      parentResources={this.props.resources}
+      parentMutator={this.props.mutator}
+      detailProps={{
+        stripes,
+        findItem: this.findItem,
+        findLoan: this.findLoan,
+        findUser: this.findUser,
+        findRequestsForItem: this.findRequestsForItem,
+        joinRequest: this.addRequestFields,
+        optionLists: {
+          addressTypes,
+          requestTypes,
+          fulfilmentTypes,
+        },
+        patronGroups,
+        dateFormatter: this.makeLocaleDateString,
+        uniquenessValidator: this.props.mutator,
+      }}
+      viewRecordPerms="module.requests.enabled"
+      newRecordPerms="module.requests.enabled"
+    />);
   }
 }
 

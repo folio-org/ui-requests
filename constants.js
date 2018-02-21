@@ -20,4 +20,4 @@ export const toUserAddress = addr => (
     <div>{(addr && addr.region) || ''}</div>
     <div>{(addr && addr.postalCode) || ''}</div>
   </div>
-  );
+);
