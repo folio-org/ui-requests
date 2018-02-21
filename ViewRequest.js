@@ -9,8 +9,6 @@ import Layer from '@folio/stripes-components/lib/Layer';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import IconButton from '@folio/stripes-components/lib/IconButton';
-import transitionToParams from '@folio/stripes-components/util/transitionToParams';
-import removeQueryParam from '@folio/stripes-components/util/removeQueryParam';
 import craftLayerUrl from '@folio/stripes-components/util/craftLayerUrl';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
@@ -20,6 +18,7 @@ import { fulfilmentTypes, requestTypes, toUserAddress } from './constants';
 class ViewRequest extends React.Component {
   static propTypes = {
     dateFormatter: PropTypes.func.isRequired,
+    editLink: PropTypes.string,
     location: PropTypes.shape({
       pathname: PropTypes.string.isRequired,
       search: PropTypes.string,
@@ -32,6 +31,8 @@ class ViewRequest extends React.Component {
     }).isRequired,
     notesToggle: PropTypes.func,
     onClose: PropTypes.func.isRequired,
+    onCloseEdit: PropTypes.func.isRequired,
+    onEdit: PropTypes.func,
     paneWidth: PropTypes.string,
     resources: PropTypes.shape({
       addressTypes: PropTypes.shape({
@@ -66,14 +67,13 @@ class ViewRequest extends React.Component {
   static defaultProps = {
     paneWidth: '50%',
     location: {},
-    history: {},
     notesToggle: () => {},
   };
 
   static manifest = {
     selectedRequest: {
       type: 'okapi',
-      path: 'circulation/requests/:{requestId}',
+      path: 'circulation/requests/:{id}',
     },
     addressTypes: {
       type: 'okapi',
@@ -95,10 +95,6 @@ class ViewRequest extends React.Component {
     };
 
     this.makeLocaleDateString = this.makeLocaleDateString.bind(this);
-    this.onClickCloseEditRequest = this.onClickCloseEditRequest.bind(this);
-    this.onClickEditRequest = this.onClickEditRequest.bind(this);
-    this.transitionToParams = transitionToParams.bind(this);
-    this.removeQueryParam = removeQueryParam.bind(this);
     this.craftLayerUrl = craftLayerUrl.bind(this);
     this.update = this.update.bind(this);
   }
@@ -121,16 +117,6 @@ class ViewRequest extends React.Component {
     }
   }
 
-  onClickEditRequest(e) {
-    if (e) e.preventDefault();
-    this.transitionToParams({ layer: 'edit' });
-  }
-
-  onClickCloseEditRequest(e) {
-    if (e) e.preventDefault();
-    this.removeQueryParam('layer');
-  }
-
   update(record) {
     const updatedRecord = record;
 
@@ -147,7 +133,7 @@ class ViewRequest extends React.Component {
     delete updatedRecord.itemRequestCount;
 
     this.props.mutator.selectedRequest.PUT(updatedRecord).then(() => {
-      this.onClickCloseEditRequest();
+      this.props.onCloseEdit();
     });
   }
 
@@ -161,7 +147,7 @@ class ViewRequest extends React.Component {
   }
 
   render() {
-    const { resources, location } = this.props;
+    const { resources, location, stripes } = this.props;
     const query = location.search ? queryString.parse(location.search) : {};
     let request = (resources.selectedRequest && resources.selectedRequest.hasLoaded) ? resources.selectedRequest.records[0] : null;
 
@@ -202,15 +188,15 @@ class ViewRequest extends React.Component {
           icon="edit"
           id="clickable-edit-request"
           style={{ visibility: !request ? 'hidden' : 'visible' }}
-          href={this.craftLayerUrl('edit')}
-          onClick={this.onClickEditRequest}
+          href={this.props.editLink}
+          onClick={this.props.onEdit}
           title="Edit Request"
         />
       </PaneMenu>
     );
 
     const itemBarcode = _.get(request, ['itemBarcode'], '');
-    const itemRecordLink = itemBarcode ? <Link to={`/items/view/${request.itemId}`}>{itemBarcode}</Link> : '';
+    const itemRecordLink = itemBarcode ? <Link to={`/inventory/view/${request.item.instanceId}/${request.item.holdingsRecordId}/${request.itemId}`}>{itemBarcode}</Link> : '';
     const requesterName = _.get(request, ['requesterName'], '');
     const requesterRecordLink = requesterName ? <Link to={`/users/view/${request.requesterId}`}>{requesterName}</Link> : '';
     const borrowerRecordLink = borrowerName ? <Link to={`/users/view/${borrower.id}`}>{borrowerName}</Link> : '';
@@ -317,9 +303,10 @@ class ViewRequest extends React.Component {
         </fieldset>
         <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit Request Dialog">
           <RequestForm
+            stripes={stripes}
             initialValues={this.state.enhancedRequest}
             onSubmit={(record) => { this.update(record); }}
-            onCancel={this.onClickCloseEditRequest}
+            onCancel={this.props.onCloseEdit}
             optionLists={{ requestTypes, fulfilmentTypes, addressTypes }}
             patronGroups={this.props.resources.patronGroups}
             dateFormatter={this.props.dateFormatter}

@@ -15,6 +15,7 @@
     "type": "app",
     "displayName": "Requests",
     "route": "/requests",
+    "home": "/requests?filters=&sort=Request Date",
     "hasSettings": false,
     "icons": [
       {
@@ -23,6 +24,7 @@
         "title": "Requests manager"
       }
     ],
+    "queryResource": "query",
     "okapiInterfaces": {
       "notes": "1.0",
       "request-storage": "1.2",
@@ -64,7 +66,17 @@
         ],
         "visible": true
       }
-    ]
+    ],
+    "translations": {
+      "en": {
+        "search": "Search",
+        "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}"
+      },
+      "de": {
+        "search": "Suche",
+        "resultCount": "Gefunden {count, number} {count, plural, one {Aufzeichnung} other {Aufzeichnungen}}"
+      }
+    }
   },
   "scripts": {
     "lint": "eslint *.js lib settings"
@@ -76,13 +88,8 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "babel-register": "^6.18.0",
-    "eslint": "^3.8.0",
-    "eslint-config-airbnb": "^13.0.0",
-    "eslint-import-resolver-webpack": "0.7.1",
-    "eslint-plugin-babel": "^3.3.0",
-    "eslint-plugin-import": "^2.0.1",
-    "eslint-plugin-jsx-a11y": "^2.2.3",
-    "eslint-plugin-react": "^6.4.1",
+    "eslint": "^4.8.0",
+    "@folio/eslint-config-stripes": "^1.1.0",
     "webpack": "1.11.0"
   },
   "dependencies": {
