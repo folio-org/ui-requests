@@ -16,6 +16,13 @@
     "displayName": "Requests",
     "route": "/requests",
     "hasSettings": false,
+    "icons": [
+      {
+        "name": "app",
+        "alt": "Requests",
+        "title": "Requests manager"
+      }
+    ],
     "okapiInterfaces": {
       "notes": "1.0",
       "request-storage": "1.2",
