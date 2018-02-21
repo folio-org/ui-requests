@@ -17,6 +17,13 @@
     "route": "/requests",
     "home": "/requests?filters=&sort=Request Date",
     "hasSettings": false,
+    "icons": [
+      {
+        "name": "app",
+        "alt": "Requests",
+        "title": "Requests manager"
+      }
+    ],
     "queryResource": "query",
     "okapiInterfaces": {
       "notes": "1.0",
