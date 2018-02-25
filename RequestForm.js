@@ -113,16 +113,12 @@ class RequestForm extends React.Component {
         patronGroup: requester.patronGroup,
         personal: requester,
       } : null,
-      selectedItemBarcode: null,
-      selectedUserBarcode: null,
       itemSelectionError: null,
       userSelectionError: null,
     };
 
     this.onChangeAddress = this.onChangeAddress.bind(this);
     this.onChangeFulfilment = this.onChangeFulfilment.bind(this);
-    this.onChangeItem = this.onChangeItem.bind(this);
-    this.onChangeUser = this.onChangeUser.bind(this);
     this.onItemClick = this.onItemClick.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onSelectUser = this.onSelectUser.bind(this);
@@ -165,34 +161,22 @@ class RequestForm extends React.Component {
     });
   }
 
-  onChangeUser(e) {
-    this.setState({
-      selectedUserBarcode: e.target.value,
-    });
-  }
-
   // This function is called from the "search and select user" widget when
   // a user has been selected from the list
+  // TODO: see if this still works when the select user widget is functional again
   onSelectUser(user) {
     if (user) {
-      this.setState({
-        selectedUserBarcode: user.barcode,
-      });
       // Set the new value in the redux-form barcode field
       this.props.change('requester.barcode', user.barcode);
       setTimeout(() => this.onUserClick());
     }
   }
 
-  onChangeItem(e) {
-    this.setState({
-      selectedItemBarcode: e.target.value,
-    });
-  }
-
   onUserClick() {
     this.setState({ selectedUser: null, });
-    this.props.findUser(this.state.selectedUserBarcode, 'barcode').then((result) => {
+    const barcode = this.requesterBarcodeField.getRenderedComponent().input.value;
+
+    this.props.findUser(barcode, 'barcode').then((result) => {
       if (result.totalRecords === 1) {
         this.setState({
           selectedUser: result.users[0],
@@ -204,9 +188,11 @@ class RequestForm extends React.Component {
   }
 
   onItemClick() {
-    const { findItem, findLoan, findUser, findRequestsForItem } = this.props;
     this.setState({ selectedItem: null, });
-    findItem(this.state.selectedItemBarcode, 'barcode').then((result) => {
+    const { findItem, findLoan, findUser, findRequestsForItem } = this.props;
+    const barcode = this.itemBarcodeField.getRenderedComponent().input.value;
+
+    findItem(barcode, 'barcode').then((result) => {
       if (result.totalRecords === 1) {
         const item = result.items[0];
         this.props.change('itemId', item.id);
@@ -334,9 +320,11 @@ class RequestForm extends React.Component {
                           aria-label="Item barcode"
                           fullWidth
                           component={TextField}
-                          onInput={this.onChangeItem}
+                          withRef
+                          ref={input => this.itemBarcodeField = input}
+                          onInput={this.onItemClick}
                           onKeyDown={e => this.onKeyDown(e, 'item')}
-                          validate={[this.requireItem]}
+                          validate={this.requireItem}
                         />
                       </Col>
                       <Col xs={3}>
@@ -372,7 +360,9 @@ class RequestForm extends React.Component {
                           aria-label="Requester barcode"
                           fullWidth
                           component={TextField}
-                          onInput={this.onChangeUser}
+                          withRef
+                          ref={input => this.requesterBarcodeField = input}
+                          onInput={this.onUserClick}
                           onKeyDown={e => this.onKeyDown(e, 'requester')}
                           validate={this.requireUser}
                         />
