@@ -82,6 +82,8 @@ class Requests extends React.Component {
       type: 'okapi',
       path: 'circulation/requests',
       records: 'requests',
+      recordsRequired: '%{resultCount}',
+      perRequest: 30,
       GET: {
         params: {
           query: (...args) => {
