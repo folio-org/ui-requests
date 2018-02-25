@@ -173,7 +173,7 @@ class RequestForm extends React.Component {
   }
 
   onUserClick() {
-    this.setState({ selectedUser: null, });
+    this.setState({ selectedUser: null });
     const barcode = this.requesterBarcodeField.getRenderedComponent().input.value;
 
     this.props.findUser(barcode, 'barcode').then((result) => {
@@ -188,7 +188,7 @@ class RequestForm extends React.Component {
   }
 
   onItemClick() {
-    this.setState({ selectedItem: null, });
+    this.setState({ selectedItem: null });
     const { findItem, findLoan, findUser, findRequestsForItem } = this.props;
     const barcode = this.itemBarcodeField.getRenderedComponent().input.value;
 
@@ -330,7 +330,7 @@ class RequestForm extends React.Component {
                           fullWidth
                           component={TextField}
                           withRef
-                          ref={input => this.itemBarcodeField = input}
+                          ref={(input) => { this.itemBarcodeField = input; }}
                           onInput={this.onItemClick}
                           onKeyDown={e => this.onKeyDown(e, 'item')}
                           validate={this.requireItem}
@@ -370,7 +370,7 @@ class RequestForm extends React.Component {
                           fullWidth
                           component={TextField}
                           withRef
-                          ref={input => this.requesterBarcodeField = input}
+                          ref={(input) => { this.requesterBarcodeField = input; }}
                           onInput={this.onUserClick}
                           onKeyDown={e => this.onKeyDown(e, 'requester')}
                           validate={this.requireUser}
