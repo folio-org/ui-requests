@@ -191,8 +191,9 @@ class RequestForm extends React.Component {
   }
 
   onUserClick() {
+    this.setState({ selectedUser: null, });
     this.props.findUser(this.state.selectedUserBarcode, 'barcode').then((result) => {
-      if (result.totalRecords > 0) {
+      if (result.totalRecords === 1) {
         this.setState({
           selectedUser: result.users[0],
           userSelectionError: null,
@@ -204,8 +205,9 @@ class RequestForm extends React.Component {
 
   onItemClick() {
     const { findItem, findLoan, findUser, findRequestsForItem } = this.props;
+    this.setState({ selectedItem: null, });
     findItem(this.state.selectedItemBarcode, 'barcode').then((result) => {
-      if (result.totalRecords > 0) {
+      if (result.totalRecords === 1) {
         const item = result.items[0];
         this.props.change('itemId', item.id);
 
