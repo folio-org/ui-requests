@@ -197,6 +197,15 @@ class RequestForm extends React.Component {
         const item = result.items[0];
         this.props.change('itemId', item.id);
 
+        // Setting state here is redundant with what follows, but it lets us
+        // display the matched item as quickly as possible, without waiting for
+        // the slow loan and request lookups
+        this.setState({
+          selectedItem: {
+            itemRecord: item,
+          },
+        });
+
         return Promise.all(
           [
             findLoan(item.id),
