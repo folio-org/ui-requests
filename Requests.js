@@ -266,11 +266,14 @@ class Requests extends React.Component {
     const addressTypes = (resources.addressTypes && resources.addressTypes.hasLoaded) ? resources.addressTypes.records : [];
 
     const resultsFormatter = {
-      'Item Barcode': rq => (rq.item ? rq.item.barcode : ''),
-      'Request Date': rq => this.makeLocaleDateTimeString(rq.requestDate),
+      'Item barcode': rq => (rq.item ? rq.item.barcode : ''),
+      Position: () => '', // TODO: add correct function once this is implemented
+      Proxy: () => '',  // TODO: add correct function once this is implemented
+      'Request date': rq => this.makeLocaleDateTimeString(rq.requestDate),
       Requester: rq => (rq.requester ? `${rq.requester.firstName} ${rq.requester.lastName}` : ''),
-      'Requester Barcode': rq => (rq.requester ? rq.requester.barcode : ''),
-      'Request Type': rq => rq.requestType,
+      'Requester barcode': rq => (rq.requester ? rq.requester.barcode : ''),
+      'Request status': () => '',  // TODO: add correct function once this is implemented
+      Type: rq => rq.requestType,
       Title: rq => (rq.item ? rq.item.title : ''),
     };
 
@@ -284,7 +287,7 @@ class Requests extends React.Component {
       resultCountIncrement={RESULT_COUNT_INCREMENT}
       viewRecordComponent={ViewRequest}
       editRecordComponent={RequestForm}
-      visibleColumns={['Title', 'Item Barcode', 'Request Type', 'Requester', 'Requester Barcode', 'Request Date']}
+      visibleColumns={['Request date', 'Title', 'Item barcode', 'Type', 'Request status', 'Position', 'Requester', 'Requester barcode', 'Proxy']}
       resultsFormatter={resultsFormatter}
       newRecordInitialValues={{ requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' }}
       massageNewRecord={this.massageNewRecord}
