@@ -22,7 +22,16 @@ module.exports.test = function uiTest(uiTestCtx) {
       it('should find hit count with no filters applied ', (done) => {
         nightmare
 	  .wait('p[title*="Records found"]')
-          .then(done);
+	  .wait(2222)
+	  .evaluate(() => {
+	    let count = document.querySelector('p[title*="Records found"]').title;
+	    count = count.replace(/^(\d+).+/,'$1');
+	    return count;
+	  })
+          .then((result) => {
+	    done();
+	    console.log(result);
+	  });
       });
     });
   });
