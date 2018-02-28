@@ -79,7 +79,7 @@
     }
   },
   "scripts": {
-    "lint": "eslint *.js lib settings"
+    "lint": "eslint *.js lib settings test/ui-testing"
   },
   "devDependencies": {
     "babel-core": "^6.17.0",

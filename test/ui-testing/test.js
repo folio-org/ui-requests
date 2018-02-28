@@ -1,7 +1,5 @@
-const new_request = require('./new_request.js');
+const newRequest = require('./new_request.js');
 
-module.exports.test = function(uiTestCtx) {
-
-     new_request.test(uiTestCtx);
-
-}
+module.exports.test = function runTests(uiTestCtx) {
+  newRequest.test(uiTestCtx);
+};
