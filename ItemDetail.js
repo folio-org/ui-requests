@@ -96,7 +96,7 @@ ItemDetail.propTypes = {
   error: PropTypes.string,
   patronGroups: PropTypes.shape({
     hasLoaded: PropTypes.bool.isRequired,
-    isPending: PropTypes.bool.isPending,
+    isPending: PropTypes.bool,
     other: PropTypes.shape({
       totalRecords: PropTypes.number,
     }),
