@@ -463,7 +463,7 @@ class RequestForm extends React.Component {
                     </Col>
                   </Row>
                 }
-                <fieldset>
+                {/* <fieldset>
                   <legend>Request details</legend>
 
                   <Field
@@ -473,7 +473,7 @@ class RequestForm extends React.Component {
                     backendDateStandard="YYYY-MM-DD"
                     component={Datepicker}
                   />
-                </fieldset>
+                </fieldset> */}
               </Col>
             </Row>
           </Pane>

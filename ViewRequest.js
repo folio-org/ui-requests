@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import { Link } from 'react-router-dom';
 
+import { Accordion } from '@folio/stripes-components/lib/Accordion';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import Layer from '@folio/stripes-components/lib/Layer';
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -213,11 +214,87 @@ class ViewRequest extends React.Component {
 
     return request ? (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
-        <Row>
-          <Col xs={12}>
-            <KeyValue label="Request type" value={_.get(request, ['requestType'], '')} />
-          </Col>
-        </Row>
+        <Accordion
+          open
+          id="1"
+          onToggle={() => {}}
+          label="Request information"
+        >
+          <Row>
+            <Col xs={3}>
+              <KeyValue label="Request type" value={_.get(request, ['requestType'], '')} />
+            </Col>
+            <Col xs={3}>
+              <KeyValue label="Request status" value={_.get(request, ['status'], '')} />
+            </Col>
+            <Col xs={3}>
+              <KeyValue label="Request expiration date" value={this.makeLocaleDateString(_.get(request, ['requestExpirationDate'], ''))} />
+            </Col>
+            <Col xs={3}>
+              <KeyValue label="Hold shelf expiration date" value={this.makeLocaleDateString(_.get(request, ['holdShelfExpirationDate'], ''))} />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={3}>
+              <KeyValue label="Position in queue" value="" />
+            </Col>
+          </Row>
+        </Accordion>
+        <Accordion
+          open
+          id="1"
+          onToggle={() => {}}
+          label="Item information"
+        >
+          <Row>
+            <Col xs={3}>
+              <KeyValue label="Item barcode" value={itemRecordLink} />
+            </Col>
+            <Col xs={3}>
+              <KeyValue label="Title" value={_.get(request, ['title'], '')} />
+            </Col>
+            <Col xs={3}>
+              <KeyValue label="Author" value={_.get(request, ['author'], '')} />
+            </Col>
+            <Col xs={3}>
+              <KeyValue label="Shelving location" value={_.get(request, ['location'], '')} />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={3}>
+              <KeyValue label="Call number" value="" />
+            </Col>
+            <Col xs={3}>
+              <KeyValue label="Volume" value="" />
+            </Col>
+            <Col xs={3}>
+              <KeyValue label="Enumeration" value="" />
+            </Col>
+            <Col xs={3}>
+              <KeyValue label="Copy" value="" />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={3}>
+              <KeyValue label="Item status" value={_.get(request, ['itemStatus', 'name'], '')} />
+            </Col>
+            <Col xs={3}>
+              <KeyValue label="Current due date" value={this.makeLocaleDateString(_.get(request, ['loan', 'dueDate'], ''))} />
+            </Col>
+            <Col xs={3}>
+              <KeyValue label="Requests" value={_.get(request, ['itemRequestCount'], '')} />
+            </Col>
+          </Row>
+        </Accordion>
+        <Accordion
+          open
+          id="1"
+          onToggle={() => {}}
+          label="Requester information"
+        >
+          requester info
+        </Accordion>
+
         <fieldset>
           <legend>Item info</legend>
           <Row>
@@ -287,19 +364,6 @@ class ViewRequest extends React.Component {
               </Col>
             </Row>
           }
-        </fieldset>
-        <fieldset>
-          <legend>Request details</legend>
-          <Row>
-            <Col xs={12}>
-              <KeyValue label="Request expiration date" value={this.makeLocaleDateString(_.get(request, ['requestExpirationDate'], ''))} />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <KeyValue label="Hold shelf expiration date" value={this.makeLocaleDateString(_.get(request, ['holdShelfExpirationDate'], ''))} />
-            </Col>
-          </Row>
         </fieldset>
         <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit Request Dialog">
           <RequestForm

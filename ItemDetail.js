@@ -46,36 +46,48 @@ const ItemDetail = ({ item, error, patronGroups, dateFormatter }) => {
   return (
     <div>
       <Row>
-        <Col xs={12}>
+        <Col xs={3}>
           <KeyValue label="Item barcode" value={recordLink} />
         </Col>
-      </Row>
-      <Row>
-        <Col xs={12}>
+        <Col xs={3}>
           <KeyValue label="Title" value={_.get(itemRecord, ['title'], '')} />
         </Col>
-      </Row>
-      <Row>
-        <Col xs={12}>
+        <Col xs={3}>
+          <KeyValue label="Author" value={_.get(itemRecord, ['author'], '')} />
+        </Col>
+        <Col xs={3}>
           <KeyValue label="Shelving location" value={location} />
         </Col>
       </Row>
-      <h4>Current Loan</h4>
+      <Row>
+        <Col xs={3}>
+          <KeyValue label="Call number" value={_.get(itemRecord, ['callNumber'], '')} />
+        </Col>
+        <Col xs={3}>
+          <KeyValue label="Volume" value={_.get(itemRecord, ['volume'], '')} />
+        </Col>
+        <Col xs={3}>
+          <KeyValue label="Enumeration" value={_.get(itemRecord, ['enumeration'], '')} />
+        </Col>
+        <Col xs={3}>
+          <KeyValue label="Copy" value={_.get(itemRecord, ['copy'], '')} />
+        </Col>
+      </Row>
       {item && loanRecord &&
         <Row>
-          <Col xs={4}>
+          {/* <Col xs={4}>
             <KeyValue label="Loaned to" value={borrowerLink} />
           </Col>
           <Col xs={2}>
             <KeyValue label="Patron group" value={borrowerGroup} />
+          </Col> */}
+          <Col xs={4}>
+            <KeyValue label="Item status" value={_.get(itemRecord, ['status', 'name'], '') || _.get(loanRecord, ['status', 'name'])} />
           </Col>
-          <Col xs={2}>
-            <KeyValue label="Status" value={_.get(itemRecord, ['status', 'name'], '') || _.get(loanRecord, ['status', 'name'])} />
-          </Col>
-          <Col xs={2}>
+          <Col xs={4}>
             <KeyValue label="Current due date" value={dateFormatter(_.get(loanRecord, ['dueDate'], ''))} />
           </Col>
-          <Col xs={2}>
+          <Col xs={4}>
             <KeyValue label="Requests" value={_.get(item, ['requestCount'], '')} />
           </Col>
         </Row>
