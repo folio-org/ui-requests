@@ -16,12 +16,23 @@ const RESULT_COUNT_INCREMENT = 30;
 
 const filterConfig = [
   {
-    label: 'Request Type',
-    name: 'request',
+    label: 'Request type',
+    name: 'requestType',
     cql: 'requestType',
     values: [
       { name: 'Holds', cql: 'Hold' },
       { name: 'Recalls', cql: 'Recall' },
+    ],
+  },
+  {
+    label: 'Request status',
+    name: 'requestStatus',
+    cql: 'status',
+    values: [
+      { name: 'closed - cancelled', cql: 'Closed - Cancelled' },
+      { name: 'closed - filled', cql: 'Closed - Filled' },
+      { name: 'open - awaiting pickup', cql: 'Open - Awaiting Pickup' },
+      { name: 'open - not yet filled', cql: 'Open - Not Yet Filled' },
     ],
   },
 ];
