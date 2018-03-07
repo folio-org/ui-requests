@@ -70,7 +70,9 @@ class ViewRequest extends React.Component {
   };
 
   static defaultProps = {
+    editLink: '',
     paneWidth: '50%',
+    onEdit: () => {},
     notesToggle: () => {},
   };
 
@@ -157,7 +159,7 @@ class ViewRequest extends React.Component {
 
     let patronGroup;
     let borrower;
-  //  let borrowerName;
+    //  let borrowerName;
     let borrowerGroup;
 
     // Most of the values needed to populate the view come from the "enhanced" request
@@ -167,7 +169,7 @@ class ViewRequest extends React.Component {
       request = this.state.enhancedRequest;
       patronGroup = request.patronGroup;
       borrower = request && request.loan && request.loan.userDetail;
-  //    borrowerName = (borrower && borrower.personal) ? `${borrower.personal.firstName} ${borrower.personal.lastName}` : '';
+      //    borrowerName = (borrower && borrower.personal) ? `${borrower.personal.firstName} ${borrower.personal.lastName}` : '';
       borrowerGroup = borrower.patronGroup;
       if (resources.patronGroups && resources.patronGroups.hasLoaded) {
         const groupRecord = resources.patronGroups.records.find(g => g.id === request.patronGroup);
@@ -203,7 +205,7 @@ class ViewRequest extends React.Component {
     const requesterBarcode = _.get(request, ['requesterBarcode'], '');
     const requesterRecordLink = requesterName ? <Link to={`/users/view/${request.requesterId}`}>{requesterName}</Link> : '';
     const requesterBarcodeLink = requesterBarcode ? <Link to={`/users/view/${request.requesterId}`}>{requesterBarcode}</Link> : '';
-  //  const borrowerRecordLink = borrowerName ? <Link to={`/users/view/${borrower.id}`}>{borrowerName}</Link> : '';
+    //  const borrowerRecordLink = borrowerName ? <Link to={`/users/view/${borrower.id}`}>{borrowerName}</Link> : '';
 
     const addressTypes = (this.props.resources.addressTypes && this.props.resources.addressTypes.hasLoaded) ? this.props.resources.addressTypes.records : [];
     let deliveryAddressDetail;
