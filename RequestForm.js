@@ -378,9 +378,7 @@ class RequestForm extends React.Component {
                 }
                 { (this.state.selectedItem || this.state.itemSelectionError) &&
                   <ItemDetail
-                    item={this.state.selectedItem}
-                    error={this.state.itemSelectionError}
-                    patronGroups={patronGroups}
+                    request={initialValues}
                     dateFormatter={this.props.dateFormatter}
                   />
                 }

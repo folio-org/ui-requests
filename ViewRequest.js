@@ -15,6 +15,7 @@ import IconButton from '@folio/stripes-components/lib/IconButton';
 import craftLayerUrl from '@folio/stripes-components/util/craftLayerUrl';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
+import ItemDetail from './ItemDetail';
 import RequestForm from './RequestForm';
 import { fulfilmentTypes, requestTypes, toUserAddress } from './constants';
 import css from './requests.css';
@@ -199,8 +200,6 @@ class ViewRequest extends React.Component {
       </PaneMenu>
     );
 
-    const itemBarcode = _.get(request, ['itemBarcode'], '');
-    const itemRecordLink = itemBarcode ? <Link to={`/inventory/view/${request.item.instanceId}/${request.item.holdingsRecordId}/${request.itemId}`}>{itemBarcode}</Link> : '';
     const requesterName = _.get(request, ['requesterName'], '');
     const requesterBarcode = _.get(request, ['requesterBarcode'], '');
     const requesterRecordLink = requesterName ? <Link to={`/users/view/${request.requesterId}`}>{requesterName}</Link> : '';
@@ -216,50 +215,6 @@ class ViewRequest extends React.Component {
         deliveryAddressDetail = toUserAddress(deliveryLocationsDetail[deliveryAddressType]);
       }
     }
-
-    const itemSection = (
-      <div>
-        <Row>
-          <Col xs={3}>
-            <KeyValue label="Item barcode" value={itemRecordLink} />
-          </Col>
-          <Col xs={3}>
-            <KeyValue label="Title" value={_.get(request, ['title'], '')} />
-          </Col>
-          <Col xs={3}>
-            <KeyValue label="Author" value={_.get(request, ['author'], '')} />
-          </Col>
-          <Col xs={3}>
-            <KeyValue label="Shelving location" value={_.get(request, ['location'], '')} />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={3}>
-            <KeyValue label="Call number" value="" />
-          </Col>
-          <Col xs={3}>
-            <KeyValue label="Volume" value="" />
-          </Col>
-          <Col xs={3}>
-            <KeyValue label="Enumeration" value="" />
-          </Col>
-          <Col xs={3}>
-            <KeyValue label="Copy" value="" />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={3}>
-            <KeyValue label="Item status" value={_.get(request, ['itemStatus', 'name'], '')} />
-          </Col>
-          <Col xs={3}>
-            <KeyValue label="Current due date" value={this.makeLocaleDateString(_.get(request, ['loan', 'dueDate'], ''))} />
-          </Col>
-          <Col xs={3}>
-            <KeyValue label="Requests" value={_.get(request, ['itemRequestCount'], '')} />
-          </Col>
-        </Row>
-      </div>
-    );
 
     const requesterSection = (
       <div>
@@ -334,7 +289,7 @@ class ViewRequest extends React.Component {
           onToggle={() => {}}
           label="Item information"
         >
-          {itemRecordLink ? itemSection : 'Loading ...'}
+          <ItemDetail request={request} dateFormatter={this.makeLocaleDateString} />
         </Accordion>
         <Accordion
           open
