@@ -43,12 +43,16 @@ function asyncValidate(values, dispatch, props, blurredField) {
         if (items.length < 1) {
           // eslint-disable-next-line prefer-promise-reject-errors
           reject({ item: { barcode: 'Item with this barcode does not exist' } });
-        } else if (values.requestType === 'Recall' &&
-                   items[0].status.name !== 'Checked out' &&
+        } else if (items[0].status.name !== 'Checked out' &&
                    items[0].status.name !== 'Checked out - Held' &&
                    items[0].status.name !== 'Checked out - Recalled') {
-          // eslint-disable-next-line prefer-promise-reject-errors
-          reject({ item: { barcode: 'Only checked out items can be recalled' } });
+          if (values.requestType === 'Recall') {
+            // eslint-disable-next-line prefer-promise-reject-errors
+            reject({ item: { barcode: 'Only checked out items can be recalled' } });
+          } else if (values.requestType === 'Hold') {
+            // eslint-disable-next-line prefer-promise-reject-errors
+            reject({ item: { barcode: 'Only checked out items can be held' } });
+          }
         } else {
           resolve();
         }
