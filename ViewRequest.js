@@ -212,6 +212,50 @@ class ViewRequest extends React.Component {
       }
     }
 
+    const itemSection = (
+      <div>
+        <Row>
+          <Col xs={3}>
+            <KeyValue label="Item barcode" value={itemRecordLink} />
+          </Col>
+          <Col xs={3}>
+            <KeyValue label="Title" value={_.get(request, ['title'], '')} />
+          </Col>
+          <Col xs={3}>
+            <KeyValue label="Author" value={_.get(request, ['author'], '')} />
+          </Col>
+          <Col xs={3}>
+            <KeyValue label="Shelving location" value={_.get(request, ['location'], '')} />
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={3}>
+            <KeyValue label="Call number" value="" />
+          </Col>
+          <Col xs={3}>
+            <KeyValue label="Volume" value="" />
+          </Col>
+          <Col xs={3}>
+            <KeyValue label="Enumeration" value="" />
+          </Col>
+          <Col xs={3}>
+            <KeyValue label="Copy" value="" />
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={3}>
+            <KeyValue label="Item status" value={_.get(request, ['itemStatus', 'name'], '')} />
+          </Col>
+          <Col xs={3}>
+            <KeyValue label="Current due date" value={this.makeLocaleDateString(_.get(request, ['loan', 'dueDate'], ''))} />
+          </Col>
+          <Col xs={3}>
+            <KeyValue label="Requests" value={_.get(request, ['itemRequestCount'], '')} />
+          </Col>
+        </Row>
+      </div>
+    );
+
     return request ? (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
         <Accordion
@@ -246,45 +290,7 @@ class ViewRequest extends React.Component {
           onToggle={() => {}}
           label="Item information"
         >
-          <Row>
-            <Col xs={3}>
-              <KeyValue label="Item barcode" value={itemRecordLink} />
-            </Col>
-            <Col xs={3}>
-              <KeyValue label="Title" value={_.get(request, ['title'], '')} />
-            </Col>
-            <Col xs={3}>
-              <KeyValue label="Author" value={_.get(request, ['author'], '')} />
-            </Col>
-            <Col xs={3}>
-              <KeyValue label="Shelving location" value={_.get(request, ['location'], '')} />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={3}>
-              <KeyValue label="Call number" value="" />
-            </Col>
-            <Col xs={3}>
-              <KeyValue label="Volume" value="" />
-            </Col>
-            <Col xs={3}>
-              <KeyValue label="Enumeration" value="" />
-            </Col>
-            <Col xs={3}>
-              <KeyValue label="Copy" value="" />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={3}>
-              <KeyValue label="Item status" value={_.get(request, ['itemStatus', 'name'], '')} />
-            </Col>
-            <Col xs={3}>
-              <KeyValue label="Current due date" value={this.makeLocaleDateString(_.get(request, ['loan', 'dueDate'], ''))} />
-            </Col>
-            <Col xs={3}>
-              <KeyValue label="Requests" value={_.get(request, ['itemRequestCount'], '')} />
-            </Col>
-          </Row>
+          {itemRecordLink ? itemSection : 'Loading...'}
         </Accordion>
         <Accordion
           open
@@ -295,7 +301,7 @@ class ViewRequest extends React.Component {
           requester info
         </Accordion>
 
-        <fieldset>
+        {/* <fieldset>
           <legend>Item info</legend>
           <Row>
             <Col xs={12}>
@@ -339,7 +345,7 @@ class ViewRequest extends React.Component {
               <KeyValue label="Requests" value={_.get(request, ['itemRequestCount'], '')} />
             </Col>
           </Row>
-        </fieldset>
+        </fieldset> */}
         <fieldset>
           <legend>Requester info</legend>
           <Row>
