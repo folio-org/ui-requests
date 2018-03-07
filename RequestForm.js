@@ -7,6 +7,7 @@ import Button from '@folio/stripes-components/lib/Button';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
 import Headline from '@folio/stripes-components/lib/Headline';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
+import MetaSection from '@folio/stripes-components/lib/MetaSection';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
@@ -306,6 +307,15 @@ class RequestForm extends React.Component {
             <Headline tag="h3" margin="medium" faded>
               Request information
             </Headline>
+            { isEditForm &&
+              <Col xs={12}>
+                <MetaSection
+                  id="requestInfoMeta"
+                  contentId="requestInfoMetaContent"
+                  lastUpdatedDate={initialValues.metaData.updatedDate}
+                />
+              </Col>
+            }
             <Row>
               <Col xs={6}>
                 { !isEditForm &&

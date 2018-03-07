@@ -8,6 +8,7 @@ import { Accordion } from '@folio/stripes-components/lib/Accordion';
 import Headline from '@folio/stripes-components/lib/Headline';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import Layer from '@folio/stripes-components/lib/Layer';
+import MetaSection from '@folio/stripes-components/lib/MetaSection';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import IconButton from '@folio/stripes-components/lib/IconButton';
@@ -156,7 +157,7 @@ class ViewRequest extends React.Component {
 
     let patronGroup;
     let borrower;
-    let borrowerName;
+  //  let borrowerName;
     let borrowerGroup;
 
     // Most of the values needed to populate the view come from the "enhanced" request
@@ -166,7 +167,7 @@ class ViewRequest extends React.Component {
       request = this.state.enhancedRequest;
       patronGroup = request.patronGroup;
       borrower = request && request.loan && request.loan.userDetail;
-      borrowerName = (borrower && borrower.personal) ? `${borrower.personal.firstName} ${borrower.personal.lastName}` : '';
+  //    borrowerName = (borrower && borrower.personal) ? `${borrower.personal.firstName} ${borrower.personal.lastName}` : '';
       borrowerGroup = borrower.patronGroup;
       if (resources.patronGroups && resources.patronGroups.hasLoaded) {
         const groupRecord = resources.patronGroups.records.find(g => g.id === request.patronGroup);
@@ -299,6 +300,15 @@ class ViewRequest extends React.Component {
           label="Request information"
         >
           <Row>
+            <Col xs={12}>
+              <MetaSection
+                id="requestInfoMeta"
+                contentId="requestInfoMetaContent"
+                lastUpdatedDate={request.metaData.updatedDate}
+              />
+            </Col>
+          </Row>
+          <Row>
             <Col xs={3}>
               <KeyValue label="Request type" value={_.get(request, ['requestType'], '')} />
             </Col>
@@ -334,52 +344,6 @@ class ViewRequest extends React.Component {
         >
           {request.requesterBarcode ? requesterSection : 'Loading ...'}
         </Accordion>
-
-        {/* <fieldset>
-          <legend>Item info</legend>
-          <Row>
-            <Col xs={12}>
-              <KeyValue label="Item barcode" value={itemRecordLink} />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <KeyValue label="Title" value={_.get(request, ['title'], '')} />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <KeyValue label="Author" value={_.get(request, ['author'], '')} />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <KeyValue label="Shelving location" value={_.get(request, ['location'], '')} />
-            </Col>
-          </Row>
-        </fieldset>
-        <fieldset>
-          <legend>Current Loan</legend>
-          <Row>
-            <Col xs={4}>
-              <KeyValue label="Loaned to" value={borrowerRecordLink} />
-            </Col>
-            <Col xs={4}>
-              <KeyValue label="Patron group" value={borrowerGroup} />
-            </Col>
-            <Col xs={4}>
-              <KeyValue label="Status" value={_.get(request, ['itemStatus', 'name'], '')} />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={6}>
-              <KeyValue label="Current due date" value={this.makeLocaleDateString(_.get(request, ['loan', 'dueDate'], ''))} />
-            </Col>
-            <Col xs={6}>
-              <KeyValue label="Requests" value={_.get(request, ['itemRequestCount'], '')} />
-            </Col>
-          </Row>
-        </fieldset> */}
 
         <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit Request Dialog">
           <RequestForm
