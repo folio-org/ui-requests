@@ -256,6 +256,29 @@ class ViewRequest extends React.Component {
       </div>
     );
 
+    const requesterSection = (
+      <div>
+        <Row>
+          <Col xs={12}>
+            <KeyValue label="Requester name" value={requesterRecordLink} />
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={4}>
+            <KeyValue label="Patron group" value={patronGroup} />
+          </Col>
+          <Col xs={4}>
+            <KeyValue label="Fulfilment preference" value={_.get(request, ['fulfilmentPreference'], '')} />
+          </Col>
+          {(_.get(request, ['fulfilmentPreference'], '') === 'Delivery') &&
+            <Col xs={12}>
+              <KeyValue label="Pickup location" value={deliveryAddressDetail} />
+            </Col>
+          }
+        </Row>
+      </div>
+    );
+
     return request ? (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
         <Accordion
@@ -290,7 +313,7 @@ class ViewRequest extends React.Component {
           onToggle={() => {}}
           label="Item information"
         >
-          {itemRecordLink ? itemSection : 'Loading...'}
+          {itemRecordLink ? itemSection : 'Loading ...'}
         </Accordion>
         <Accordion
           open
@@ -298,7 +321,7 @@ class ViewRequest extends React.Component {
           onToggle={() => {}}
           label="Requester information"
         >
-          requester info
+          {request.requesterBarcode ? requesterSection : 'Loading ...'}
         </Accordion>
 
         {/* <fieldset>
@@ -346,31 +369,7 @@ class ViewRequest extends React.Component {
             </Col>
           </Row>
         </fieldset> */}
-        <fieldset>
-          <legend>Requester info</legend>
-          <Row>
-            <Col xs={12}>
-              <KeyValue label="Requester name" value={requesterRecordLink} />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <KeyValue label="Patron group" value={patronGroup} />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <KeyValue label="Fulfilment preference" value={_.get(request, ['fulfilmentPreference'], '')} />
-            </Col>
-          </Row>
-          {(_.get(request, ['fulfilmentPreference'], '') === 'Delivery') &&
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Delivery address" value={deliveryAddressDetail} />
-              </Col>
-            </Row>
-          }
-        </fieldset>
+
         <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit Request Dialog">
           <RequestForm
             stripes={stripes}
