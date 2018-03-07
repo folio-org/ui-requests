@@ -47,6 +47,8 @@ module.exports.test = function uiTest(uiTestCtx) {
           .click('#clickable-checkout-module')
           .wait('#section-patron button[title*="Find"]')
           .click('#section-patron button[title*="Find"]')
+          .wait('#clickable-filter-active-Active')
+          .click('#clickable-filter-active-Active')
           .wait('#list-users div[role="listitem"]:nth-of-type(9)')
           .click('#list-users div[role="listitem"]:nth-of-type(9) a')
           .wait(2222)
