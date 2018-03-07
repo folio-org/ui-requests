@@ -5,6 +5,7 @@ import queryString from 'query-string';
 import { Link } from 'react-router-dom';
 
 import { Accordion } from '@folio/stripes-components/lib/Accordion';
+import Headline from '@folio/stripes-components/lib/Headline';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import Layer from '@folio/stripes-components/lib/Layer';
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -15,6 +16,7 @@ import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
 import RequestForm from './RequestForm';
 import { fulfilmentTypes, requestTypes, toUserAddress } from './constants';
+import css from './requests.css';
 
 class ViewRequest extends React.Component {
   static propTypes = {
@@ -199,8 +201,10 @@ class ViewRequest extends React.Component {
     const itemBarcode = _.get(request, ['itemBarcode'], '');
     const itemRecordLink = itemBarcode ? <Link to={`/inventory/view/${request.item.instanceId}/${request.item.holdingsRecordId}/${request.itemId}`}>{itemBarcode}</Link> : '';
     const requesterName = _.get(request, ['requesterName'], '');
+    const requesterBarcode = _.get(request, ['requesterBarcode'], '');
     const requesterRecordLink = requesterName ? <Link to={`/users/view/${request.requesterId}`}>{requesterName}</Link> : '';
-    const borrowerRecordLink = borrowerName ? <Link to={`/users/view/${borrower.id}`}>{borrowerName}</Link> : '';
+    const requesterBarcodeLink = requesterBarcode ? <Link to={`/users/view/${request.requesterId}`}>{requesterBarcode}</Link> : '';
+  //  const borrowerRecordLink = borrowerName ? <Link to={`/users/view/${borrower.id}`}>{borrowerName}</Link> : '';
 
     const addressTypes = (this.props.resources.addressTypes && this.props.resources.addressTypes.hasLoaded) ? this.props.resources.addressTypes.records : [];
     let deliveryAddressDetail;
@@ -260,7 +264,14 @@ class ViewRequest extends React.Component {
       <div>
         <Row>
           <Col xs={12}>
-            <KeyValue label="Requester name" value={requesterRecordLink} />
+            <div className={`${css.section} ${css.active}`}>
+              <Headline size="medium" tag="h3">
+                Requester
+              </Headline>
+              <div>
+                {requesterRecordLink} Barcode: {requesterBarcodeLink}
+              </div>
+            </div>
           </Col>
         </Row>
         <Row>
@@ -271,7 +282,7 @@ class ViewRequest extends React.Component {
             <KeyValue label="Fulfilment preference" value={_.get(request, ['fulfilmentPreference'], '')} />
           </Col>
           {(_.get(request, ['fulfilmentPreference'], '') === 'Delivery') &&
-            <Col xs={12}>
+            <Col xs={4}>
               <KeyValue label="Pickup location" value={deliveryAddressDetail} />
             </Col>
           }
