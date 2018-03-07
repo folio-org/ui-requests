@@ -8,6 +8,7 @@
 * Display request date AND time in search results, and make that the primary sort. Completes UIREQ-3.
 * Upgrade query-string dependency to eliminate duplicate package warning. Fixes UIREQ-71. Available after v1.1.1. 
 * Lint. Fixes UIREQ-19. Available after v1.1.2.
+* Pass packageInfo to SearchAndSort; it's simpler. Refs STSMACOM-64. Available after v1.1.3. 
 
 ## [1.1.0](https://github.com/folio-org/ui-requests/tree/v1.1.0) (2018-01-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.0.0...v1.1.0)
