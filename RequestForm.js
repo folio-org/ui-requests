@@ -22,6 +22,17 @@ import UserDetail from './UserDetail';
 import ItemDetail from './ItemDetail';
 import { toUserAddress } from './constants';
 
+/**
+ * on-blur validation checks that the requested item is checked out
+ * and that the requesting user exists.
+ *
+ * redux-form requires that the rejected Promises have the form
+ * { field: "error message" }
+ * hence the eslint-disable-next-line comments since ESLint is picky
+ * about the format of rejected promises.
+ *
+ * @see https://redux-form.com/7.3.0/examples/asyncchangevalidation/
+ */
 function asyncValidate(values, dispatch, props, blurredField) {
   if (blurredField === 'item.barcode') {
     return new Promise((resolve, reject) => {
@@ -30,11 +41,13 @@ function asyncValidate(values, dispatch, props, blurredField) {
       uv.reset();
       uv.GET({ params: { query } }).then((items) => {
         if (items.length < 1) {
+          // eslint-disable-next-line prefer-promise-reject-errors
           reject({ item: { barcode: 'Item with this barcode does not exist' } });
         } else if (values.requestType === 'Recall' &&
                    items[0].status.name !== 'Checked out' &&
                    items[0].status.name !== 'Checked out - Held' &&
                    items[0].status.name !== 'Checked out - Recalled') {
+          // eslint-disable-next-line prefer-promise-reject-errors
           reject({ item: { barcode: 'Only checked out items can be recalled' } });
         } else {
           resolve();
@@ -48,6 +61,7 @@ function asyncValidate(values, dispatch, props, blurredField) {
       uv.reset();
       uv.GET({ params: { query } }).then((users) => {
         if (users.length < 1) {
+          // eslint-disable-next-line prefer-promise-reject-errors
           reject({ requester: { barcode: 'User with this barcode does not exist' } });
         } else {
           resolve();

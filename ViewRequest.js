@@ -71,7 +71,6 @@ class ViewRequest extends React.Component {
 
   static defaultProps = {
     paneWidth: '50%',
-    location: {},
     notesToggle: () => {},
   };
 

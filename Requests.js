@@ -289,10 +289,8 @@ class Requests extends React.Component {
     };
 
     return (<SearchAndSort
-      moduleName={packageInfo.name.replace(/.*\//, '')}
-      moduleTitle={packageInfo.stripes.displayName}
+      packageInfo={packageInfo}
       objectName="request"
-      baseRoute={packageInfo.stripes.route}
       filterConfig={filterConfig}
       initialResultCount={INITIAL_RESULT_COUNT}
       resultCountIncrement={RESULT_COUNT_INCREMENT}
