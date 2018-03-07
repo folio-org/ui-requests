@@ -268,7 +268,7 @@ class Requests extends React.Component {
       return '';
     }
 
-    return <span><FormattedDate value={dateString} />, <FormattedTime value={dateString} /></span>;
+    return <div><FormattedDate value={dateString} /><br /><FormattedTime value={dateString} /></div>;
   }
 
   render() {
@@ -281,7 +281,7 @@ class Requests extends React.Component {
       Position: () => '', // TODO: add correct function once this is implemented
       Proxy: () => '',  // TODO: add correct function once this is implemented
       'Request date': rq => this.makeLocaleDateTimeString(rq.requestDate),
-      Requester: rq => (rq.requester ? `${rq.requester.firstName} ${rq.requester.lastName}` : ''),
+      Requester: rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
       'Requester barcode': rq => (rq.requester ? rq.requester.barcode : ''),
       'Request status': () => '',  // TODO: add correct function once this is implemented
       Type: rq => rq.requestType,
@@ -299,6 +299,7 @@ class Requests extends React.Component {
       viewRecordComponent={ViewRequest}
       editRecordComponent={RequestForm}
       visibleColumns={['Request date', 'Title', 'Item barcode', 'Type', 'Request status', 'Position', 'Requester', 'Requester barcode', 'Proxy']}
+      columnWidths={{ 'Request date': '10%' }}
       resultsFormatter={resultsFormatter}
       newRecordInitialValues={{ requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' }}
       massageNewRecord={this.massageNewRecord}
