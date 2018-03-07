@@ -22,11 +22,13 @@ module.exports.test = function uiTest(uiTestCtx) {
           .use(openApp(nightmare, config, done, 'requests', testVersion))
           .then(result => result);
       });
-      it('should find a user barcode', (done) => {
+      it('should find an active user barcode', (done) => {
         const listitem = '#list-users div[role="listitem"] > a:not([aria-label*="Barcode: undef"])';
         const bcodeNode = `${listitem} > div:nth-child(3)`;
         nightmare
           .click('#clickable-users-module')
+          .wait(1000)
+          .click('#clickable-filter-active-Active')
           .wait(listitem)
           .evaluate((bcode) => {
             const bc = document.querySelector(bcode);
