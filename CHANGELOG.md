@@ -2,13 +2,13 @@
 
 ## 1.2.0 (IN PROGRESS)
 
-* Refactor code to use <SearchAndSort> component. Completes UIREQ-49.
+* Refactor code to use `<SearchAndSort>` component. Completes UIREQ-49.
 * Include clear-filter handlers. Refs STRIPES-495.
 * rewire loan links from items to inventory so we can deprecate items! Fixes UIREQ-57.
 * Display request date AND time in search results, and make that the primary sort. Completes UIREQ-3.
-* Upgrade query-string dependency to eliminate duplicate package warning. Fixes UIREQ-71. Available after v1.1.1. 
+* Upgrade query-string dependency to eliminate duplicate package warning. Fixes UIREQ-71. Available after v1.1.1.
 * Lint. Fixes UIREQ-19. Available after v1.1.2.
-* Pass packageInfo to SearchAndSort; it's simpler. Refs STSMACOM-64. Available after v1.1.3. 
+* Pass packageInfo to SearchAndSort; it's simpler. Refs STSMACOM-64. Available after v1.1.3.
 
 ## [1.1.0](https://github.com/folio-org/ui-requests/tree/v1.1.0) (2018-01-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.0.0...v1.1.0)
