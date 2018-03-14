@@ -26,8 +26,9 @@ module.exports.test = function uiTest(uiTestCtx) {
         const listitem = '#list-users div[role="listitem"] > a:not([aria-label*="Barcode: undef"])';
         const bcodeNode = `${listitem} > div:nth-child(3)`;
         nightmare
+          .wait(1111)
           .click('#clickable-users-module')
-          .wait(1000)
+          .wait(1111)
           .click('#clickable-filter-active-Active')
           .wait(listitem)
           .evaluate((bcode) => {
@@ -79,10 +80,18 @@ module.exports.test = function uiTest(uiTestCtx) {
           .insert('input[name="requestExpirationDate"]', nextMonth)
           .insert('input[name="holdShelfExpirationDate"]', nextMonth)
           .click('#clickable-create-request')
-          .wait(4444)
+          .wait(1111)
           .then(() => {
             done();
           })
+          .catch(done);
+      });
+      it('should find new request in requests list', (done) => {
+        nightmare
+          .wait('#input-request-search')
+          .insert('#input-request-search', itembc)
+          .wait(`#list-requests div[title="${itembc}"]`)
+          .then(done)
           .catch(done);
       });
     });
