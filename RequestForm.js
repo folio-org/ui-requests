@@ -119,21 +119,23 @@ class RequestForm extends React.Component {
   constructor(props) {
     super(props);
 
-    const { requester, item, loan, fulfilmentPreference, deliveryAddressTypeId } = props.initialValues;
+    const {
+      requester,
+      item,
+      fulfilmentPreference,
+      deliveryAddressTypeId,
+    } = props.initialValues;
 
     this.state = {
       selectedDelivery: fulfilmentPreference === 'Delivery',
       selectedAddressTypeId: deliveryAddressTypeId,
       selectedItem: item ? {
         itemRecord: item,
-        borrowerRecord: loan.userDetail,
-        loanRecord: loan,
       } : null,
       selectedUser: requester ? {
         patronGroup: requester.patronGroup,
         personal: requester,
       } : null,
-      itemSelectionError: null,
       userSelectionError: null,
     };
 
@@ -209,7 +211,7 @@ class RequestForm extends React.Component {
 
   onItemClick() {
     this.setState({ selectedItem: null });
-    const { findItem, findLoan, findUser, findRequestsForItem } = this.props;
+    const { findItem, findLoan, findRequestsForItem } = this.props;
     const barcode = this.itemBarcodeField.getRenderedComponent().input.value;
 
     findItem(barcode, 'barcode').then((result) => {
@@ -220,10 +222,18 @@ class RequestForm extends React.Component {
         // Setting state here is redundant with what follows, but it lets us
         // display the matched item as quickly as possible, without waiting for
         // the slow loan and request lookups
-        console.log("item", item)
         this.setState({
           selectedItem: {
-            itemRecord: item,
+            item: {
+              instanceId: item.instanceId,
+              holdingsRecordId: item.holdingsRecordId,
+            },
+            itemBarcode: item.barcode,
+            itemId: item.id,
+            title: item.title,
+            // author: ,
+            location: item.permanentLocation.name,
+            itemStatus: item.status.name,
           },
         });
 
@@ -234,28 +244,25 @@ class RequestForm extends React.Component {
           ],
         ).then((resultArray) => {
           const loan = resultArray[0].loans[0];
-          const requestCount = resultArray[1].requests.length;
-
+          const itemRequestCount = resultArray[1].requests.length;
           if (loan) {
-            return findUser(loan.userId).then((result2) => {
-              const borrower = result2.users[0];
-              this.setState({
-                selectedItem: {
-                  itemRecord: item,
-                  loanRecord: loan,
-                  borrowerRecord: borrower,
-                  requestCount,
+            this.setState(prevState => ({
+              selectedItem: {
+                ...prevState.selectedItem,
+                loan: {
+                  dueDate: loan.dueDate,
                 },
-              });
-            });
+                itemRequestCount,
+              },
+            }));
           }
           // If no loan is found, just set the item record and rq count
-          this.setState({
+          this.setState(prevState => ({
             selectedItem: {
-              itemRecord: item,
-              requestCount,
+              ...prevState.selectedItem,
+              itemRequestCount,
             },
-          });
+          }));
 
           return result;
         });
@@ -397,9 +404,9 @@ class RequestForm extends React.Component {
                         </Col>
                       </Row>
                     }
-                    { (this.state.selectedItem || this.state.itemSelectionError) &&
+                    { this.state.selectedItem &&
                       <ItemDetail
-                        request={initialValues}
+                        request={this.state.selectedItem}
                         dateFormatter={this.props.dateFormatter}
                       />
                     }
