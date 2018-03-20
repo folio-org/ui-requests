@@ -2,7 +2,7 @@
 
 ## 1.2.0 (IN PROGRESS)
 
-* Refactor code to use <SearchAndSort> component. Completes UIREQ-49.
+* Refactor code to use `<SearchAndSort>` component. Completes UIREQ-49.
 * Include clear-filter handlers. Refs STRIPES-495.
 * rewire loan links from items to inventory so we can deprecate items! Fixes UIREQ-57.
 * Display request date AND time in search results, and make that the primary sort. Completes UIREQ-3.
