@@ -158,9 +158,6 @@ class ViewRequest extends React.Component {
     let request = (resources.selectedRequest && resources.selectedRequest.hasLoaded) ? resources.selectedRequest.records[0] : null;
 
     let patronGroup;
-    let borrower;
-    //  let borrowerName;
-    let borrowerGroup;
 
     // Most of the values needed to populate the view come from the "enhanced" request
     // object, which includes parts of the requester's user record, the item record,
@@ -168,16 +165,12 @@ class ViewRequest extends React.Component {
     if (this.state.enhancedRequest.id) {
       request = this.state.enhancedRequest;
       patronGroup = request.patronGroup;
-      borrower = request && request.loan && request.loan.userDetail;
-      //    borrowerName = (borrower && borrower.personal) ? `${borrower.personal.firstName} ${borrower.personal.lastName}` : '';
-      borrowerGroup = borrower.patronGroup;
       if (resources.patronGroups && resources.patronGroups.hasLoaded) {
         const groupRecord = resources.patronGroups.records.find(g => g.id === request.patronGroup);
         patronGroup = groupRecord.group || patronGroup;
         if (this.state.enhancedRequest.requester) {
           this.state.enhancedRequest.requester.patronGroup = groupRecord ? groupRecord.id : null;
         }
-        borrowerGroup = resources.patronGroups.records.find(g => g.id === borrowerGroup).group || borrowerGroup;
       }
     }
 
