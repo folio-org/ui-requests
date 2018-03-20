@@ -7,7 +7,6 @@ import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
 const ItemDetail = ({ request, dateFormatter }) => {
-console.log("request", request)
   if (!request.itemBarcode) { return <div>Loading ...</div>; }
 
   const itemBarcode = _.get(request, ['itemBarcode'], '');
