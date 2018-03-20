@@ -6,106 +6,60 @@ import { Link } from 'react-router-dom';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
-const ItemDetail = ({ item, error, patronGroups, dateFormatter }) => {
-  let recordLink;
-  let borrowerLink;
-  let borrowerName;
-  let borrowerGroup;
-  let itemRecord;
-  let loanRecord;
-  let borrowerRecord;
+const ItemDetail = ({ request, dateFormatter }) => {
+  if (!request.itemBarcode) { return <div>Loading ...</div>; }
 
-  if (item) {
-    ({ itemRecord, loanRecord, borrowerRecord } = item);
-
-    borrowerName = `${_.get(borrowerRecord, ['personal', 'firstName'], '')} ${_.get(borrowerRecord, ['personal', 'lastName'], '')}`;
-    borrowerGroup = (borrowerRecord &&
-                     borrowerRecord.patronGroup &&
-                     patronGroups.records &&
-                     patronGroups.records.length > 0) ?
-      patronGroups.records.find(g => g.id === borrowerRecord.patronGroup).group : '';
-
-    if (itemRecord && loanRecord) {
-      recordLink = <Link to={`/inventory/view/${loanRecord.item.instanceId}/${loanRecord.item.holdingsRecordId}/${loanRecord.itemId}`}>{_.get(itemRecord, ['barcode'], '')}</Link>;
-    }
-    if (borrowerRecord) {
-      borrowerLink = <Link to={`/users/view/${borrowerRecord.id}`}>{borrowerName}</Link>;
-    }
-  }
-
-  if (error) {
-    return (
-      <div style={{ color: 'red' }}>
-        {error}
-      </div>
-    );
-  }
-
-  const location = _.get(itemRecord, ['temporaryLocation', 'name'], null) || _.get(itemRecord, ['permanentLocation', 'name'], '');
+  const itemBarcode = _.get(request, ['itemBarcode'], '');
+  const recordLink = itemBarcode ? <Link to={`/inventory/view/${request.item.instanceId}/${request.item.holdingsRecordId}/${request.itemId}`}>{itemBarcode}</Link> : '';
 
   return (
     <div>
       <Row>
-        <Col xs={12}>
+        <Col xs={3}>
           <KeyValue label="Item barcode" value={recordLink} />
         </Col>
-      </Row>
-      <Row>
-        <Col xs={12}>
-          <KeyValue label="Title" value={_.get(itemRecord, ['title'], '')} />
+        <Col xs={3}>
+          <KeyValue label="Title" value={_.get(request, ['title'], '')} />
+        </Col>
+        <Col xs={3}>
+          <KeyValue label="Author" value={_.get(request, ['author'], '')} />
+        </Col>
+        <Col xs={3}>
+          <KeyValue label="Shelving location" value={_.get(request, ['location'], '')} />
         </Col>
       </Row>
       <Row>
-        <Col xs={12}>
-          <KeyValue label="Shelving location" value={location} />
+        <Col xs={3}>
+          <KeyValue label="Call number" value="" />
+        </Col>
+        <Col xs={3}>
+          <KeyValue label="Volume" value="" />
+        </Col>
+        <Col xs={3}>
+          <KeyValue label="Enumeration" value="" />
+        </Col>
+        <Col xs={3}>
+          <KeyValue label="Copy" value="" />
         </Col>
       </Row>
-      <h4>Current Loan</h4>
-      {item && loanRecord &&
-        <Row>
-          <Col xs={4}>
-            <KeyValue label="Loaned to" value={borrowerLink} />
-          </Col>
-          <Col xs={2}>
-            <KeyValue label="Patron group" value={borrowerGroup} />
-          </Col>
-          <Col xs={2}>
-            <KeyValue label="Status" value={_.get(itemRecord, ['status', 'name'], '') || _.get(loanRecord, ['status', 'name'])} />
-          </Col>
-          <Col xs={2}>
-            <KeyValue label="Current due date" value={dateFormatter(_.get(loanRecord, ['dueDate'], ''))} />
-          </Col>
-          <Col xs={2}>
-            <KeyValue label="Requests" value={_.get(item, ['requestCount'], '')} />
-          </Col>
-        </Row>
-      }
-      {item && !loanRecord &&
-        <Row>
-          <Col xs={12}>
-            <p>Item not checked out</p>
-          </Col>
-        </Row>
-      }
+      <Row>
+        <Col xs={3}>
+          <KeyValue label="Item status" value={_.get(request, ['itemStatus', 'name'], '')} />
+        </Col>
+        <Col xs={3}>
+          <KeyValue label="Current due date" value={dateFormatter(_.get(request, ['loan', 'dueDate'], ''))} />
+        </Col>
+        <Col xs={3}>
+          <KeyValue label="Requests" value={_.get(request, ['itemRequestCount'], '')} />
+        </Col>
+      </Row>
     </div>
   );
 };
 
 ItemDetail.propTypes = {
-  item: PropTypes.object.isRequired,
-  error: PropTypes.string,
-  patronGroups: PropTypes.shape({
-    hasLoaded: PropTypes.bool.isRequired,
-    isPending: PropTypes.bool,
-    other: PropTypes.shape({
-      totalRecords: PropTypes.number,
-    }),
-  }).isRequired,
+  request: PropTypes.object.isRequired,
   dateFormatter: PropTypes.func.isRequired,
-};
-
-ItemDetail.defaultProps = {
-  error: '',
 };
 
 export default ItemDetail;

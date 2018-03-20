@@ -6,9 +6,13 @@
 * Include clear-filter handlers. Refs STRIPES-495.
 * rewire loan links from items to inventory so we can deprecate items! Fixes UIREQ-57.
 * Display request date AND time in search results, and make that the primary sort. Completes UIREQ-3.
+* Improve barcode lookups and display of results in the new request form. Completes UIREQ-2.
+* Refine UI throughout the app. Completes UIREQ-62, UIREQ-63, UIREQ-64.
+* Add a filter for request status. Completes UIREQ-42.
 * Upgrade query-string dependency to eliminate duplicate package warning. Fixes UIREQ-71. Available after v1.1.1.
 * Lint. Fixes UIREQ-19. Available after v1.1.2.
 * Pass packageInfo to SearchAndSort; it's simpler. Refs STSMACOM-64. Available after v1.1.3.
+* Add validation for holds. Fixes UIREQ-52.
 
 ## [1.1.0](https://github.com/folio-org/ui-requests/tree/v1.1.0) (2018-01-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.0.0...v1.1.0)

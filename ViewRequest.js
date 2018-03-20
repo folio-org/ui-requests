@@ -4,16 +4,21 @@ import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import { Link } from 'react-router-dom';
 
+import { Accordion } from '@folio/stripes-components/lib/Accordion';
+import Headline from '@folio/stripes-components/lib/Headline';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import Layer from '@folio/stripes-components/lib/Layer';
+import MetaSection from '@folio/stripes-components/lib/MetaSection';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import IconButton from '@folio/stripes-components/lib/IconButton';
 import craftLayerUrl from '@folio/stripes-components/util/craftLayerUrl';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
+import ItemDetail from './ItemDetail';
 import RequestForm from './RequestForm';
 import { fulfilmentTypes, requestTypes, toUserAddress } from './constants';
+import css from './requests.css';
 
 class ViewRequest extends React.Component {
   static propTypes = {
@@ -65,7 +70,9 @@ class ViewRequest extends React.Component {
   };
 
   static defaultProps = {
+    editLink: '',
     paneWidth: '50%',
+    onEdit: () => {},
     notesToggle: () => {},
   };
 
@@ -151,9 +158,6 @@ class ViewRequest extends React.Component {
     let request = (resources.selectedRequest && resources.selectedRequest.hasLoaded) ? resources.selectedRequest.records[0] : null;
 
     let patronGroup;
-    let borrower;
-    let borrowerName;
-    let borrowerGroup;
 
     // Most of the values needed to populate the view come from the "enhanced" request
     // object, which includes parts of the requester's user record, the item record,
@@ -161,16 +165,12 @@ class ViewRequest extends React.Component {
     if (this.state.enhancedRequest.id) {
       request = this.state.enhancedRequest;
       patronGroup = request.patronGroup;
-      borrower = request && request.loan && request.loan.userDetail;
-      borrowerName = (borrower && borrower.personal) ? `${borrower.personal.firstName} ${borrower.personal.lastName}` : '';
-      borrowerGroup = borrower.patronGroup;
       if (resources.patronGroups && resources.patronGroups.hasLoaded) {
         const groupRecord = resources.patronGroups.records.find(g => g.id === request.patronGroup);
         patronGroup = groupRecord.group || patronGroup;
         if (this.state.enhancedRequest.requester) {
           this.state.enhancedRequest.requester.patronGroup = groupRecord ? groupRecord.id : null;
         }
-        borrowerGroup = resources.patronGroups.records.find(g => g.id === borrowerGroup).group || borrowerGroup;
       }
     }
 
@@ -194,11 +194,11 @@ class ViewRequest extends React.Component {
       </PaneMenu>
     );
 
-    const itemBarcode = _.get(request, ['itemBarcode'], '');
-    const itemRecordLink = itemBarcode ? <Link to={`/inventory/view/${request.item.instanceId}/${request.item.holdingsRecordId}/${request.itemId}`}>{itemBarcode}</Link> : '';
     const requesterName = _.get(request, ['requesterName'], '');
+    const requesterBarcode = _.get(request, ['requesterBarcode'], '');
     const requesterRecordLink = requesterName ? <Link to={`/users/view/${request.requesterId}`}>{requesterName}</Link> : '';
-    const borrowerRecordLink = borrowerName ? <Link to={`/users/view/${borrower.id}`}>{borrowerName}</Link> : '';
+    const requesterBarcodeLink = requesterBarcode ? <Link to={`/users/view/${request.requesterId}`}>{requesterBarcode}</Link> : '';
+    //  const borrowerRecordLink = borrowerName ? <Link to={`/users/view/${borrower.id}`}>{borrowerName}</Link> : '';
 
     const addressTypes = (this.props.resources.addressTypes && this.props.resources.addressTypes.hasLoaded) ? this.props.resources.addressTypes.records : [];
     let deliveryAddressDetail;
@@ -210,96 +210,90 @@ class ViewRequest extends React.Component {
       }
     }
 
-    return request ? (
-      <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
+    const requesterSection = (
+      <div>
         <Row>
           <Col xs={12}>
-            <KeyValue label="Request type" value={_.get(request, ['requestType'], '')} />
+            <div className={`${css.section} ${css.active}`}>
+              <Headline size="medium" tag="h3">
+                Requester
+              </Headline>
+              <div>
+                {requesterRecordLink} Barcode: {requesterBarcodeLink}
+              </div>
+            </div>
           </Col>
         </Row>
-        <fieldset>
-          <legend>Item info</legend>
-          <Row>
-            <Col xs={12}>
-              <KeyValue label="Item barcode" value={itemRecordLink} />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <KeyValue label="Title" value={_.get(request, ['title'], '')} />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <KeyValue label="Author" value={_.get(request, ['author'], '')} />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <KeyValue label="Shelving location" value={_.get(request, ['location'], '')} />
-            </Col>
-          </Row>
-        </fieldset>
-        <fieldset>
-          <legend>Current Loan</legend>
-          <Row>
-            <Col xs={4}>
-              <KeyValue label="Loaned to" value={borrowerRecordLink} />
-            </Col>
-            <Col xs={4}>
-              <KeyValue label="Patron group" value={borrowerGroup} />
-            </Col>
-            <Col xs={4}>
-              <KeyValue label="Status" value={_.get(request, ['itemStatus', 'name'], '')} />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={6}>
-              <KeyValue label="Current due date" value={this.makeLocaleDateString(_.get(request, ['loan', 'dueDate'], ''))} />
-            </Col>
-            <Col xs={6}>
-              <KeyValue label="Requests" value={_.get(request, ['itemRequestCount'], '')} />
-            </Col>
-          </Row>
-        </fieldset>
-        <fieldset>
-          <legend>Requester info</legend>
-          <Row>
-            <Col xs={12}>
-              <KeyValue label="Requester name" value={requesterRecordLink} />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <KeyValue label="Patron group" value={patronGroup} />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <KeyValue label="Fulfilment preference" value={_.get(request, ['fulfilmentPreference'], '')} />
-            </Col>
-          </Row>
+        <Row>
+          <Col xs={4}>
+            <KeyValue label="Patron group" value={patronGroup} />
+          </Col>
+          <Col xs={4}>
+            <KeyValue label="Fulfilment preference" value={_.get(request, ['fulfilmentPreference'], '')} />
+          </Col>
           {(_.get(request, ['fulfilmentPreference'], '') === 'Delivery') &&
-            <Row>
-              <Col xs={12}>
-                <KeyValue label="Delivery address" value={deliveryAddressDetail} />
-              </Col>
-            </Row>
+            <Col xs={4}>
+              <KeyValue label="Pickup location" value={deliveryAddressDetail} />
+            </Col>
           }
-        </fieldset>
-        <fieldset>
-          <legend>Request details</legend>
+        </Row>
+      </div>
+    );
+
+    return request ? (
+      <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
+        <Accordion
+          open
+          id="1"
+          onToggle={() => {}}
+          label="Request information"
+        >
           <Row>
             <Col xs={12}>
+              <MetaSection
+                id="requestInfoMeta"
+                contentId="requestInfoMetaContent"
+                lastUpdatedDate={request.metaData.updatedDate}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={3}>
+              <KeyValue label="Request type" value={_.get(request, ['requestType'], '')} />
+            </Col>
+            <Col xs={3}>
+              <KeyValue label="Request status" value={_.get(request, ['status'], '')} />
+            </Col>
+            <Col xs={3}>
               <KeyValue label="Request expiration date" value={this.makeLocaleDateString(_.get(request, ['requestExpirationDate'], ''))} />
             </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
+            <Col xs={3}>
               <KeyValue label="Hold shelf expiration date" value={this.makeLocaleDateString(_.get(request, ['holdShelfExpirationDate'], ''))} />
             </Col>
           </Row>
-        </fieldset>
+          <Row>
+            <Col xs={3}>
+              <KeyValue label="Position in queue" value="" />
+            </Col>
+          </Row>
+        </Accordion>
+        <Accordion
+          open
+          id="1"
+          onToggle={() => {}}
+          label="Item information"
+        >
+          <ItemDetail request={request} dateFormatter={this.makeLocaleDateString} />
+        </Accordion>
+        <Accordion
+          open
+          id="1"
+          onToggle={() => {}}
+          label="Requester information"
+        >
+          {request.requesterBarcode ? requesterSection : 'Loading ...'}
+        </Accordion>
+
         <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit Request Dialog">
           <RequestForm
             stripes={stripes}

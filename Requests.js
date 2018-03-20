@@ -16,12 +16,23 @@ const RESULT_COUNT_INCREMENT = 30;
 
 const filterConfig = [
   {
-    label: 'Request Type',
-    name: 'request',
+    label: 'Request type',
+    name: 'requestType',
     cql: 'requestType',
     values: [
       { name: 'Holds', cql: 'Hold' },
       { name: 'Recalls', cql: 'Recall' },
+    ],
+  },
+  {
+    label: 'Request status',
+    name: 'requestStatus',
+    cql: 'status',
+    values: [
+      { name: 'closed - cancelled', cql: 'Closed - Cancelled' },
+      { name: 'closed - filled', cql: 'Closed - Filled' },
+      { name: 'open - awaiting pickup', cql: 'Open - Awaiting pickup' },
+      { name: 'open - not yet filled', cql: 'Open - Not yet filled' },
     ],
   },
 ];
@@ -82,6 +93,8 @@ class Requests extends React.Component {
       type: 'okapi',
       path: 'circulation/requests',
       records: 'requests',
+      recordsRequired: '%{resultCount}',
+      perRequest: 30,
       GET: {
         params: {
           query: (...args) => {
@@ -225,11 +238,7 @@ class Requests extends React.Component {
       enhancedRequest.loan = loan;
       enhancedRequest.itemRequestCount = requestCount;
 
-      // Look up the associated borrower (if any) for the loan
-      return this.findUser(loan.userId).then((loanUser) => {
-        enhancedRequest.loan.userDetail = loanUser.users[0];
-        return enhancedRequest;
-      });
+      return enhancedRequest;
     });
   }
 
@@ -255,7 +264,7 @@ class Requests extends React.Component {
       return '';
     }
 
-    return <span><FormattedDate value={dateString} />, <FormattedTime value={dateString} /></span>;
+    return <div><FormattedDate value={dateString} /><br /><FormattedTime value={dateString} /></div>;
   }
 
   render() {
@@ -264,11 +273,14 @@ class Requests extends React.Component {
     const addressTypes = (resources.addressTypes && resources.addressTypes.hasLoaded) ? resources.addressTypes.records : [];
 
     const resultsFormatter = {
-      'Item Barcode': rq => (rq.item ? rq.item.barcode : ''),
-      'Request Date': rq => this.makeLocaleDateTimeString(rq.requestDate),
-      Requester: rq => (rq.requester ? `${rq.requester.firstName} ${rq.requester.lastName}` : ''),
-      'Requester Barcode': rq => (rq.requester ? rq.requester.barcode : ''),
-      'Request Type': rq => rq.requestType,
+      'Item barcode': rq => (rq.item ? rq.item.barcode : ''),
+      Position: () => '', // TODO: add correct function once this is implemented
+      Proxy: () => '',  // TODO: add correct function once this is implemented
+      'Request date': rq => this.makeLocaleDateTimeString(rq.requestDate),
+      Requester: rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
+      'Requester barcode': rq => (rq.requester ? rq.requester.barcode : ''),
+      'Request status': () => '',  // TODO: add correct function once this is implemented
+      Type: rq => rq.requestType,
       Title: rq => (rq.item ? rq.item.title : ''),
     };
 
@@ -280,7 +292,8 @@ class Requests extends React.Component {
       resultCountIncrement={RESULT_COUNT_INCREMENT}
       viewRecordComponent={ViewRequest}
       editRecordComponent={RequestForm}
-      visibleColumns={['Title', 'Item Barcode', 'Request Type', 'Requester', 'Requester Barcode', 'Request Date']}
+      visibleColumns={['Request date', 'Title', 'Item barcode', 'Type', 'Request status', 'Position', 'Requester', 'Requester barcode', 'Proxy']}
+      columnWidths={{ 'Request date': '10%' }}
       resultsFormatter={resultsFormatter}
       newRecordInitialValues={{ requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' }}
       massageNewRecord={this.massageNewRecord}

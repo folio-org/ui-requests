@@ -5,7 +5,9 @@ import { Field } from 'redux-form';
 
 import Button from '@folio/stripes-components/lib/Button';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
+import Headline from '@folio/stripes-components/lib/Headline';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
+import MetaSection from '@folio/stripes-components/lib/MetaSection';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
@@ -41,12 +43,16 @@ function asyncValidate(values, dispatch, props, blurredField) {
         if (items.length < 1) {
           // eslint-disable-next-line prefer-promise-reject-errors
           reject({ item: { barcode: 'Item with this barcode does not exist' } });
-        } else if (values.requestType === 'Recall' &&
-                   items[0].status.name !== 'Checked out' &&
+        } else if (items[0].status.name !== 'Checked out' &&
                    items[0].status.name !== 'Checked out - Held' &&
                    items[0].status.name !== 'Checked out - Recalled') {
-          // eslint-disable-next-line prefer-promise-reject-errors
-          reject({ item: { barcode: 'Only checked out items can be recalled' } });
+          if (values.requestType === 'Recall') {
+            // eslint-disable-next-line prefer-promise-reject-errors
+            reject({ item: { barcode: 'Only checked out items can be recalled' } });
+          } else if (values.requestType === 'Hold') {
+            // eslint-disable-next-line prefer-promise-reject-errors
+            reject({ item: { barcode: 'Only checked out items can be held' } });
+          }
         } else {
           resolve();
         }
@@ -113,30 +119,28 @@ class RequestForm extends React.Component {
   constructor(props) {
     super(props);
 
-    const { requester, item, loan, fulfilmentPreference, deliveryAddressTypeId } = props.initialValues;
+    const {
+      requester,
+      item,
+      fulfilmentPreference,
+      deliveryAddressTypeId,
+    } = props.initialValues;
 
     this.state = {
       selectedDelivery: fulfilmentPreference === 'Delivery',
       selectedAddressTypeId: deliveryAddressTypeId,
       selectedItem: item ? {
         itemRecord: item,
-        borrowerRecord: loan.userDetail,
-        loanRecord: loan,
       } : null,
       selectedUser: requester ? {
         patronGroup: requester.patronGroup,
         personal: requester,
       } : null,
-      selectedItemBarcode: null,
-      selectedUserBarcode: null,
-      itemSelectionError: null,
       userSelectionError: null,
     };
 
     this.onChangeAddress = this.onChangeAddress.bind(this);
     this.onChangeFulfilment = this.onChangeFulfilment.bind(this);
-    this.onChangeItem = this.onChangeItem.bind(this);
-    this.onChangeUser = this.onChangeUser.bind(this);
     this.onItemClick = this.onItemClick.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onSelectUser = this.onSelectUser.bind(this);
@@ -179,34 +183,23 @@ class RequestForm extends React.Component {
     });
   }
 
-  onChangeUser(e) {
-    this.setState({
-      selectedUserBarcode: e.target.value,
-    });
-  }
-
   // This function is called from the "search and select user" widget when
   // a user has been selected from the list
+  // TODO: see if this still works when the select user widget is functional again
   onSelectUser(user) {
     if (user) {
-      this.setState({
-        selectedUserBarcode: user.barcode,
-      });
       // Set the new value in the redux-form barcode field
       this.props.change('requester.barcode', user.barcode);
       setTimeout(() => this.onUserClick());
     }
   }
 
-  onChangeItem(e) {
-    this.setState({
-      selectedItemBarcode: e.target.value,
-    });
-  }
-
   onUserClick() {
-    this.props.findUser(this.state.selectedUserBarcode, 'barcode').then((result) => {
-      if (result.totalRecords > 0) {
+    this.setState({ selectedUser: null });
+    const barcode = this.requesterBarcodeField.getRenderedComponent().input.value;
+
+    this.props.findUser(barcode, 'barcode').then((result) => {
+      if (result.totalRecords === 1) {
         this.setState({
           selectedUser: result.users[0],
           userSelectionError: null,
@@ -217,11 +210,32 @@ class RequestForm extends React.Component {
   }
 
   onItemClick() {
-    const { findItem, findLoan, findUser, findRequestsForItem } = this.props;
-    findItem(this.state.selectedItemBarcode, 'barcode').then((result) => {
-      if (result.totalRecords > 0) {
+    this.setState({ selectedItem: null });
+    const { findItem, findLoan, findRequestsForItem } = this.props;
+    const barcode = this.itemBarcodeField.getRenderedComponent().input.value;
+
+    findItem(barcode, 'barcode').then((result) => {
+      if (result.totalRecords === 1) {
         const item = result.items[0];
         this.props.change('itemId', item.id);
+
+        // Setting state here is redundant with what follows, but it lets us
+        // display the matched item as quickly as possible, without waiting for
+        // the slow loan and request lookups
+        this.setState({
+          selectedItem: {
+            item: {
+              instanceId: item.instanceId,
+              holdingsRecordId: item.holdingsRecordId,
+            },
+            itemBarcode: item.barcode,
+            itemId: item.id,
+            title: item.title,
+            // author: ,
+            location: item.permanentLocation.name,
+            itemStatus: item.status.name,
+          },
+        });
 
         return Promise.all(
           [
@@ -230,28 +244,25 @@ class RequestForm extends React.Component {
           ],
         ).then((resultArray) => {
           const loan = resultArray[0].loans[0];
-          const requestCount = resultArray[1].requests.length;
-
+          const itemRequestCount = resultArray[1].requests.length;
           if (loan) {
-            return findUser(loan.userId).then((result2) => {
-              const borrower = result2.users[0];
-              this.setState({
-                selectedItem: {
-                  itemRecord: item,
-                  loanRecord: loan,
-                  borrowerRecord: borrower,
-                  requestCount,
+            this.setState(prevState => ({
+              selectedItem: {
+                ...prevState.selectedItem,
+                loan: {
+                  dueDate: loan.dueDate,
                 },
-              });
-            });
+                itemRequestCount,
+              },
+            }));
           }
           // If no loan is found, just set the item record and rq count
-          this.setState({
+          this.setState(prevState => ({
             selectedItem: {
-              itemRecord: item,
-              requestCount,
+              ...prevState.selectedItem,
+              itemRequestCount,
             },
-          });
+          }));
 
           return result;
         });
@@ -319,173 +330,190 @@ class RequestForm extends React.Component {
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
           <Pane defaultWidth="100%" height="100%" firstMenu={addRequestFirstMenu} lastMenu={isEditForm ? editRequestLastMenu : addRequestLastMenu} paneTitle={isEditForm ? 'Edit request' : 'New request'}>
+            <Headline tag="h3" margin="medium" faded>
+              Request information
+            </Headline>
+            { isEditForm &&
+              <Col xs={12}>
+                <MetaSection
+                  id="requestInfoMeta"
+                  contentId="requestInfoMetaContent"
+                  lastUpdatedDate={initialValues.metaData.updatedDate}
+                />
+              </Col>
+            }
             <Row>
-              <Col sm={5} smOffset={1}>
-                <h2>Request record</h2>
-                { !isEditForm &&
-                  <Field
-                    label={`Request Type ${labelAsterisk}`}
-                    name="requestType"
-                    component={Select}
-                    fullWidth
-                    dataOptions={requestTypeOptions}
-                    disabled={isEditForm}
-                  />
-                }
-                { isEditForm &&
-                  <KeyValue label="Request Type" value={initialValues.requestType} />
-                }
-                <fieldset id="section-item-info">
-                  <legend>{`Item info ${labelAsterisk}`}</legend>
-                  {!isEditForm &&
-                    <Row>
-                      <Col xs={9}>
-                        <Field
-                          name="item.barcode"
-                          placeholder="Scan or enter item barcode"
-                          aria-label="Item barcode"
-                          fullWidth
-                          component={TextField}
-                          onInput={this.onChangeItem}
-                          onKeyDown={e => this.onKeyDown(e, 'item')}
-                          validate={[this.requireItem]}
-                        />
-                      </Col>
-                      <Col xs={3}>
-                        <Button
-                          id="clickable-select-item"
-                          buttonStyle="primary noRadius"
-                          fullWidth
-                          onClick={this.onItemClick}
-                          disabled={submitting}
-                        >Enter
-                        </Button>
-                      </Col>
-                    </Row>
-                  }
-                  { (this.state.selectedItem || this.state.itemSelectionError) &&
-                    <ItemDetail
-                      item={this.state.selectedItem}
-                      error={this.state.itemSelectionError}
-                      patronGroups={patronGroups}
-                      dateFormatter={this.props.dateFormatter}
+              <Col xs={8}>
+                <Row>
+                  <Col xs={3}>
+                    { !isEditForm &&
+                      <Field
+                        label="Request type"
+                        name="requestType"
+                        component={Select}
+                        fullWidth
+                        dataOptions={requestTypeOptions}
+                        disabled={isEditForm}
+                      />
+                    }
+                    { isEditForm &&
+                      <KeyValue label="Request type" value={initialValues.requestType} />
+                    }
+                  </Col>
+                  <Col xs={3}>
+                    <Field
+                      name="requestExpirationDate"
+                      label="Request expiration date"
+                      aria-label="Request expiration date"
+                      backendDateStandard="YYYY-MM-DD"
+                      component={Datepicker}
                     />
-                  }
-                </fieldset>
-                <br />
-                <fieldset id="section-requester-info">
-                  <legend>{`Requester info ${labelAsterisk}`}</legend>
-                  {!isEditForm &&
-                    <Row>
-                      <Col xs={9}>
-                        <Field
-                          name="requester.barcode"
-                          placeholder="Scan or enter requester barcode"
-                          aria-label="Requester barcode"
-                          fullWidth
-                          component={TextField}
-                          onInput={this.onChangeUser}
-                          onKeyDown={e => this.onKeyDown(e, 'requester')}
-                          validate={this.requireUser}
-                        />
-                        <Pluggable
-                          aria-haspopup="true"
-                          type="find-user"
-                          searchLabel="Requester look-up"
-                          marginTop0
-                          searchButtonStyle="link"
-                          {...this.props}
-                          dataKey="users"
-                          selectUser={this.onSelectUser}
-                          disableRecordCreation={disableRecordCreation}
-                          visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
-                        />
-
-                      </Col>
-                      <Col xs={3}>
-                        <Button
-                          id="clickable-select-requester"
-                          buttonStyle="primary noRadius"
-                          fullWidth
-                          onClick={this.onUserClick}
-                          disabled={submitting}
-                        >Enter
-                        </Button>
-                      </Col>
-                    </Row>
-                  }
-                  { (this.state.selectedUser || this.state.userSelectionError) &&
-                    <UserDetail
-                      user={this.state.selectedUser}
-                      error={this.state.userSelectionError}
-                      patronGroups={patronGroups}
-                    />
-                  }
-                  { this.state.selectedUser &&
-                    <Row>
-                      <Col xs={6}>
-                        <Field
-                          name="fulfilmentPreference"
-                          label="Fulfilment preference"
-                          component={Select}
-                          fullWidth
-                          dataOptions={fulfilmentTypeOptions}
-                          onChange={this.onChangeFulfilment}
-                        />
-                      </Col>
-                      { this.state.selectedDelivery && deliveryLocations &&
-                        <Col>
+                  </Col>
+                </Row>
+                <hr />
+                <Headline tag="h3" margin="medium" faded>
+                  {`Item information ${labelAsterisk}`}
+                </Headline>
+                <Row>
+                  <Col xs={12}>
+                    {!isEditForm &&
+                      <Row>
+                        <Col xs={9}>
                           <Field
-                            name="deliveryAddressTypeId"
-                            label="Delivery Address"
-                            component={Select}
+                            name="item.barcode"
+                            placeholder="Scan or enter item barcode"
+                            aria-label="Item barcode"
                             fullWidth
-                            dataOptions={[{ label: 'Select address type', value: '' }, ...deliveryLocations]}
-                            onChange={this.onChangeAddress}
+                            component={TextField}
+                            withRef
+                            ref={(input) => { this.itemBarcodeField = input; }}
+                            onInput={this.onItemClick}
+                            onKeyDown={e => this.onKeyDown(e, 'item')}
+                            validate={this.requireItem}
                           />
                         </Col>
-                      }
-                    </Row>
-                  }
-                  { this.state.selectedDelivery && this.state.selectedAddressTypeId &&
-                    <Row>
-                      <Col xsOffset={6} xs={6}>
-                        {addressDetail}
-                      </Col>
-                    </Row>
-                  }
-                </fieldset>
-                <fieldset>
-                  <legend>Request details</legend>
-                  <Field
-                    name="requestExpirationDate"
-                    label="Request expiration date"
-                    aria-label="Request expiration date"
-                    backendDateStandard="YYYY-MM-DD"
-                    component={Datepicker}
-                  />
-                  <Field
-                    name="holdShelfExpirationDate"
-                    label="Hold shelf expiration date"
-                    aria-label="Hold shelf expiration date"
-                    backendDateStandard="YYYY-MM-DD"
-                    component={Datepicker}
-                  />
-                </fieldset>
+                        <Col xs={3}>
+                          <Button
+                            id="clickable-select-item"
+                            buttonStyle="primary noRadius"
+                            fullWidth
+                            onClick={this.onItemClick}
+                            disabled={submitting}
+                          >Enter
+                          </Button>
+                        </Col>
+                      </Row>
+                    }
+                    { this.state.selectedItem &&
+                      <ItemDetail
+                        request={this.state.selectedItem}
+                        dateFormatter={this.props.dateFormatter}
+                      />
+                    }
+                  </Col>
+                </Row>
+                <hr />
+                <Headline tag="h3" margin="medium" faded>
+                  {`Requester information ${labelAsterisk}`}
+                </Headline>
+                <Row>
+                  <Col xs={12}>
+                    {!isEditForm &&
+                      <Row>
+                        <Col xs={9}>
+                          <Field
+                            name="requester.barcode"
+                            placeholder="Scan or enter requester barcode"
+                            aria-label="Requester barcode"
+                            fullWidth
+                            component={TextField}
+                            withRef
+                            ref={(input) => { this.requesterBarcodeField = input; }}
+                            onInput={this.onUserClick}
+                            onKeyDown={e => this.onKeyDown(e, 'requester')}
+                            validate={this.requireUser}
+                          />
+                          <Pluggable
+                            aria-haspopup="true"
+                            type="find-user"
+                            searchLabel="Requester look-up"
+                            marginTop0
+                            searchButtonStyle="link"
+                            {...this.props}
+                            dataKey="users"
+                            selectUser={this.onSelectUser}
+                            disableRecordCreation={disableRecordCreation}
+                            visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
+                          />
+
+                        </Col>
+                        <Col xs={3}>
+                          <Button
+                            id="clickable-select-requester"
+                            buttonStyle="primary noRadius"
+                            fullWidth
+                            onClick={this.onUserClick}
+                            disabled={submitting}
+                          >Enter
+                          </Button>
+                        </Col>
+                      </Row>
+                    }
+                    { (this.state.selectedUser || this.state.userSelectionError) &&
+                      <UserDetail
+                        user={this.state.selectedUser}
+                        error={this.state.userSelectionError}
+                        patronGroups={patronGroups}
+                      />
+                    }
+                    { this.state.selectedUser &&
+                      <Row>
+                        <Col xs={6}>
+                          <Field
+                            name="fulfilmentPreference"
+                            label="Fulfilment preference"
+                            component={Select}
+                            fullWidth
+                            dataOptions={fulfilmentTypeOptions}
+                            onChange={this.onChangeFulfilment}
+                          />
+                        </Col>
+                        { this.state.selectedDelivery && deliveryLocations &&
+                          <Col>
+                            <Field
+                              name="deliveryAddressTypeId"
+                              label="Delivery Address"
+                              component={Select}
+                              fullWidth
+                              dataOptions={[{ label: 'Select address type', value: '' }, ...deliveryLocations]}
+                              onChange={this.onChangeAddress}
+                            />
+                          </Col>
+                        }
+                      </Row>
+                    }
+                    { this.state.selectedDelivery && this.state.selectedAddressTypeId &&
+                      <Row>
+                        <Col xsOffset={6} xs={6}>
+                          {addressDetail}
+                        </Col>
+                      </Row>
+                    }
+                    {/* <fieldset>
+                      <legend>Request details</legend>
+
+                      <Field
+                        name="holdShelfExpirationDate"
+                        label="Hold shelf expiration date"
+                        aria-label="Hold shelf expiration date"
+                        backendDateStandard="YYYY-MM-DD"
+                        component={Datepicker}
+                      />
+                    </fieldset> */}
+                  </Col>
+                </Row>
               </Col>
             </Row>
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
           </Pane>
         </Paneset>
       </form>
