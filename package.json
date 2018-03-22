@@ -59,10 +59,7 @@
           "inventory.items.collection.get",
           "inventory.items.item.get",
           "addresstypes.collection.get",
-          "usergroups.collection.get",
-          "notes.domain.requests",
-          "notes.domain.all",
-          "notes.allops"
+          "usergroups.collection.get"
         ],
         "visible": true
       }
