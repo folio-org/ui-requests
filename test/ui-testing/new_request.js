@@ -78,7 +78,7 @@ module.exports.test = function uiTest(uiTestCtx) {
           .wait('#section-requester-info a[href^="/users/view/"]')
           .select('select[name="fulfilmentPreference"]', 'Hold Shelf')
           .insert('input[name="requestExpirationDate"]', nextMonth)
-          .insert('input[name="holdShelfExpirationDate"]', nextMonth)
+        //  .insert('input[name="holdShelfExpirationDate"]', nextMonth)
           .click('#clickable-create-request')
           .wait(1111)
           .then(() => {
