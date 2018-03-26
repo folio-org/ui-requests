@@ -37,7 +37,7 @@ module.exports.test = function uiTest(uiTestCtx) {
       requestTypes.forEach((filter) => {
         it(`should click ${filter} and change hit count`, (done) => {
           nightmare
-            .click(`#clickable-filter-request-${filter}`)
+            .click(`#clickable-filter-requestType-${filter}`)
             .wait(`p[title*="Records found"]:not([title^="${hitCount} "]`)
             /* .evaluate((hc) => {
               let count = document.querySelector('p[title*="Records found"]').title;
@@ -46,7 +46,7 @@ module.exports.test = function uiTest(uiTestCtx) {
                 throw new Error(`Filtered hit count (${count}) equals total count (${hc})`);
               }
             }, hitCount) */
-            .click(`#clickable-filter-request-${filter}`)
+            .click(`#clickable-filter-requestType-${filter}`)
             .wait(`p[title="${hitCount} Records found"]`)
             .then(done)
             .catch(done);
