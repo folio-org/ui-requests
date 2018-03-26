@@ -14,6 +14,7 @@
 * Pass packageInfo to SearchAndSort; it's simpler. Refs STSMACOM-64. Available after v1.1.3.
 * Add validation for holds. Fixes UIREQ-52.
 * Remove notes-related permissions. Fixes UIREQ-73.
+* Ignore yarn-error.log. Refs STRIPES-517.
 
 ## [1.1.0](https://github.com/folio-org/ui-requests/tree/v1.1.0) (2018-01-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.0.0...v1.1.0)
