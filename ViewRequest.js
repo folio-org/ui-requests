@@ -16,6 +16,7 @@ import craftLayerUrl from '@folio/stripes-components/util/craftLayerUrl';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
 import ItemDetail from './ItemDetail';
+import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
 import { fulfilmentTypes, requestTypes, toUserAddress } from './constants';
 import css from './requests.css';
@@ -188,6 +189,7 @@ class ViewRequest extends React.Component {
       }
     }
 
+    console.log("I've got stuff", resources.patronGroups)
     const detailMenu = (
       <PaneMenu>
         <IconButton
@@ -305,7 +307,7 @@ class ViewRequest extends React.Component {
             id="requester-info"
             label="Requester information"
           >
-            {request.requesterBarcode ? requesterSection : 'Loading ...'}
+            <UserDetail request={request} patronGroups={resources.patronGroups.records} />
           </Accordion>
         </AccordionSet>
 
