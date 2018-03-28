@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import fetch from 'isomorphic-fetch';
-import { FormattedDate, FormattedTime } from 'react-intl';
-
 import { filters2cql } from '@folio/stripes-components/lib/FilterGroups';
 import SearchAndSort from '@folio/stripes-smart-components/lib/SearchAndSort';
 
@@ -175,6 +173,8 @@ class Requests extends React.Component {
     super(props);
 
     this.okapiUrl = context.stripes.okapi.url;
+    this.formatDate = context.stripes.formatDate;
+    this.formatDateTime = context.stripes.formatDateTime;
     this.httpHeaders = Object.assign({}, {
       'X-Okapi-Tenant': context.stripes.okapi.tenant,
       'X-Okapi-Token': context.stripes.store.getState().okapi.token,
@@ -256,7 +256,7 @@ class Requests extends React.Component {
       return '';
     }
 
-    return <FormattedDate value={dateString} />;
+    return this.formatDate(dateString);
   };
 
   makeLocaleDateTimeString = (dateString) => {
@@ -264,7 +264,7 @@ class Requests extends React.Component {
       return '';
     }
 
-    return <div><FormattedDate value={dateString} /><br /><FormattedTime value={dateString} /></div>;
+    return this.formatDateTime(dateString);
   }
 
   render() {
@@ -275,11 +275,11 @@ class Requests extends React.Component {
     const resultsFormatter = {
       'Item barcode': rq => (rq.item ? rq.item.barcode : ''),
       Position: () => '', // TODO: add correct function once this is implemented
-      Proxy: () => '',  // TODO: add correct function once this is implemented
+      Proxy: () => '', // TODO: add correct function once this is implemented
       'Request date': rq => this.makeLocaleDateTimeString(rq.requestDate),
       Requester: rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
       'Requester barcode': rq => (rq.requester ? rq.requester.barcode : ''),
-      'Request status': () => '',  // TODO: add correct function once this is implemented
+      'Request status': () => '', // TODO: add correct function once this is implemented
       Type: rq => rq.requestType,
       Title: rq => (rq.item ? rq.item.title : ''),
     };
