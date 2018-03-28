@@ -223,6 +223,8 @@ class ViewRequest extends React.Component {
         deliveryAddressDetail = toUserAddress(deliveryLocationsDetail[deliveryAddressType]);
       }
     }
+    const holdShelfExpireDate = (_.get(request, ['status'], '') === 'Open - Awaiting pickup') ?
+                                this.makeLocaleDateString(_.get(request, ['holdShelfExpirationDate'], '')) : '-';
 
     const requesterSection = (
       <div>
@@ -281,11 +283,9 @@ class ViewRequest extends React.Component {
               <Col xs={3}>
                 <KeyValue label="Request expiration date" value={this.makeLocaleDateString(_.get(request, ['requestExpirationDate'], ''))} />
               </Col>
-              { _.get(request, ['status'], '') === 'Open - Awaiting pickup' &&
-                <Col xs={3}>
-                  <KeyValue label="Hold shelf expiration date" value={this.makeLocaleDateString(_.get(request, ['holdShelfExpirationDate'], ''))} />
-                </Col>
-              }
+              <Col xs={3}>
+                <KeyValue label="Hold shelf expiration date" value={holdShelfExpireDate} />
+              </Col>
             </Row>
             <Row>
               <Col xs={3}>

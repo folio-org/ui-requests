@@ -11,6 +11,8 @@ const ItemDetail = ({ request, dateFormatter }) => {
 
   const itemBarcode = _.get(request, ['itemBarcode'], '');
   const recordLink = itemBarcode ? <Link to={`/inventory/view/${request.item.instanceId}/${request.item.holdingsRecordId}/${request.itemId}`}>{itemBarcode}</Link> : '';
+  const currentDueDate = (_.get(request, ['itemStatus', 'name'], '').startsWith('Checked out')) ?
+                          dateFormatter(_.get(request, ['loan', 'dueDate'], '')) : '-';
 
   return (
     <div>
