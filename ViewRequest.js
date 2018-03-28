@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import { Link } from 'react-router-dom';
 
-import { Accordion } from '@folio/stripes-components/lib/Accordion';
+import { Accordion, AccordionSet } from '@folio/stripes-components/lib/Accordion';
 import Headline from '@folio/stripes-components/lib/Headline';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import Layer from '@folio/stripes-components/lib/Layer';
@@ -98,9 +98,15 @@ class ViewRequest extends React.Component {
 
     this.state = {
       enhancedRequest: {},
+      accordions: {
+        'request-info': true,
+        'item-info': true,
+        'requester-info': true,
+      },
     };
 
     this.makeLocaleDateString = this.makeLocaleDateString.bind(this);
+    this.onToggleSection = this.onToggleSection.bind(this);
     this.craftLayerUrl = craftLayerUrl.bind(this);
     this.update = this.update.bind(this);
   }
@@ -140,6 +146,14 @@ class ViewRequest extends React.Component {
 
     this.props.mutator.selectedRequest.PUT(updatedRecord).then(() => {
       this.props.onCloseEdit();
+    });
+  }
+
+  onToggleSection({id}) {
+    this.setState((curState) => {
+      let newState = _.cloneDeep(curState);
+      newState.accordions[id] = !curState.accordions[id];
+      return newState;
     });
   }
 
@@ -242,57 +256,56 @@ class ViewRequest extends React.Component {
 
     return request ? (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
-        <Accordion
-          open
-          id="1"
-          onToggle={() => {}}
-          label="Request information"
-        >
-          <Row>
-            <Col xs={12}>
-              <MetaSection
-                id="requestInfoMeta"
-                contentId="requestInfoMetaContent"
-                lastUpdatedDate={request.metaData.updatedDate}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={3}>
-              <KeyValue label="Request type" value={_.get(request, ['requestType'], '')} />
-            </Col>
-            <Col xs={3}>
-              <KeyValue label="Request status" value={_.get(request, ['status'], '')} />
-            </Col>
-            <Col xs={3}>
-              <KeyValue label="Request expiration date" value={this.makeLocaleDateString(_.get(request, ['requestExpirationDate'], ''))} />
-            </Col>
-            <Col xs={3}>
-              <KeyValue label="Hold shelf expiration date" value={this.makeLocaleDateString(_.get(request, ['holdShelfExpirationDate'], ''))} />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={3}>
-              <KeyValue label="Position in queue" value="" />
-            </Col>
-          </Row>
-        </Accordion>
-        <Accordion
-          open
-          id="1"
-          onToggle={() => {}}
-          label="Item information"
-        >
-          <ItemDetail request={request} dateFormatter={this.makeLocaleDateString} />
-        </Accordion>
-        <Accordion
-          open
-          id="1"
-          onToggle={() => {}}
-          label="Requester information"
-        >
-          {request.requesterBarcode ? requesterSection : 'Loading ...'}
-        </Accordion>
+        <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
+          <Accordion
+            open
+            id="request-info"
+            label="Request information"
+          >
+            <Row>
+              <Col xs={12}>
+                <MetaSection
+                  id="requestInfoMeta"
+                  contentId="requestInfoMetaContent"
+                  lastUpdatedDate={request.metaData.updatedDate}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={3}>
+                <KeyValue label="Request type" value={_.get(request, ['requestType'], '')} />
+              </Col>
+              <Col xs={3}>
+                <KeyValue label="Request status" value={_.get(request, ['status'], '')} />
+              </Col>
+              <Col xs={3}>
+                <KeyValue label="Request expiration date" value={this.makeLocaleDateString(_.get(request, ['requestExpirationDate'], ''))} />
+              </Col>
+              <Col xs={3}>
+                <KeyValue label="Hold shelf expiration date" value={this.makeLocaleDateString(_.get(request, ['holdShelfExpirationDate'], ''))} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={3}>
+                <KeyValue label="Position in queue" value="" />
+              </Col>
+            </Row>
+          </Accordion>
+          <Accordion
+            open
+            id="item-info"
+            label="Item information"
+          >
+            <ItemDetail request={request} dateFormatter={this.makeLocaleDateString} />
+          </Accordion>
+          <Accordion
+            open
+            id="requester-info"
+            label="Requester information"
+          >
+            {request.requesterBarcode ? requesterSection : 'Loading ...'}
+          </Accordion>
+        </AccordionSet>
 
         <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit Request Dialog">
           <RequestForm
