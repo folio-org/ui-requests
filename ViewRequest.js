@@ -281,9 +281,11 @@ class ViewRequest extends React.Component {
               <Col xs={3}>
                 <KeyValue label="Request expiration date" value={this.makeLocaleDateString(_.get(request, ['requestExpirationDate'], ''))} />
               </Col>
-              <Col xs={3}>
-                <KeyValue label="Hold shelf expiration date" value={this.makeLocaleDateString(_.get(request, ['holdShelfExpirationDate'], ''))} />
-              </Col>
+              { _.get(request, ['status'], '') === 'Open - Awaiting pickup' &&
+                <Col xs={3}>
+                  <KeyValue label="Hold shelf expiration date" value={this.makeLocaleDateString(_.get(request, ['holdShelfExpirationDate'], ''))} />
+                </Col>
+              }
             </Row>
             <Row>
               <Col xs={3}>
