@@ -189,7 +189,8 @@ class ViewRequest extends React.Component {
       }
     }
 
-    console.log("I've got stuff", resources.patronGroups)
+    // patronGroup, deliveryAddress, pickupLocation
+
     const detailMenu = (
       <PaneMenu>
         <IconButton
@@ -210,10 +211,10 @@ class ViewRequest extends React.Component {
       </PaneMenu>
     );
 
-    const requesterName = _.get(request, ['requesterName'], '');
-    const requesterBarcode = _.get(request, ['requesterBarcode'], '');
-    const requesterRecordLink = requesterName ? <Link to={`/users/view/${request.requesterId}`}>{requesterName}</Link> : '';
-    const requesterBarcodeLink = requesterBarcode ? <Link to={`/users/view/${request.requesterId}`}>{requesterBarcode}</Link> : '';
+    // const requesterName = _.get(request, ['requesterName'], '');
+    // const requesterBarcode = _.get(request, ['requesterBarcode'], '');
+    // const requesterRecordLink = requesterName ? <Link to={`/users/view/${request.requesterId}`}>{requesterName}</Link> : '';
+    // const requesterBarcodeLink = requesterBarcode ? <Link to={`/users/view/${request.requesterId}`}>{requesterBarcode}</Link> : '';
     //  const borrowerRecordLink = borrowerName ? <Link to={`/users/view/${borrower.id}`}>{borrowerName}</Link> : '';
 
     const addressTypes = (this.props.resources.addressTypes && this.props.resources.addressTypes.hasLoaded) ? this.props.resources.addressTypes.records : [];
@@ -228,35 +229,35 @@ class ViewRequest extends React.Component {
     const holdShelfExpireDate = (_.get(request, ['status'], '') === 'Open - Awaiting pickup') ?
                                 this.makeLocaleDateString(_.get(request, ['holdShelfExpirationDate'], '')) : '-';
 
-    const requesterSection = (
-      <div>
-        <Row>
-          <Col xs={12}>
-            <div className={`${css.section} ${css.active}`}>
-              <Headline size="medium" tag="h3">
-                Requester
-              </Headline>
-              <div>
-                {requesterRecordLink} Barcode: {requesterBarcodeLink}
-              </div>
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={4}>
-            <KeyValue label="Patron group" value={patronGroup} />
-          </Col>
-          <Col xs={4}>
-            <KeyValue label="Fulfilment preference" value={_.get(request, ['fulfilmentPreference'], '')} />
-          </Col>
-          {(_.get(request, ['fulfilmentPreference'], '') === 'Delivery') &&
-            <Col xs={4}>
-              <KeyValue label="Pickup location" value={deliveryAddressDetail} />
-            </Col>
-          }
-        </Row>
-      </div>
-    );
+    // const requesterSection = (
+    //   <div>
+    //     <Row>
+    //       <Col xs={12}>
+    //         <div className={`${css.section} ${css.active}`}>
+    //           <Headline size="medium" tag="h3">
+    //             Requester
+    //           </Headline>
+    //           <div>
+    //             {requesterRecordLink} Barcode: {requesterBarcodeLink}
+    //           </div>
+    //         </div>
+    //       </Col>
+    //     </Row>
+    //     <Row>
+    //       <Col xs={4}>
+    //         <KeyValue label="Patron group" value={patronGroup} />
+    //       </Col>
+    //       <Col xs={4}>
+    //         <KeyValue label="Fulfilment preference" value={_.get(request, ['fulfilmentPreference'], '')} />
+    //       </Col>
+    //       {(_.get(request, ['fulfilmentPreference'], '') === 'Delivery') &&
+    //         <Col xs={4}>
+    //           <KeyValue label="Pickup location" value={deliveryAddressDetail} />
+    //         </Col>
+    //       }
+    //     </Row>
+    //   </div>
+    // );
 
     return request ? (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -307,7 +308,12 @@ class ViewRequest extends React.Component {
             id="requester-info"
             label="Requester information"
           >
-            <UserDetail request={request} patronGroups={resources.patronGroups.records} />
+            <UserDetail
+              request={request}
+              patronGroup={patronGroup}
+              deliveryAddress={deliveryAddressDetail}
+              pickupLocation=""
+            />
           </Accordion>
         </AccordionSet>
 

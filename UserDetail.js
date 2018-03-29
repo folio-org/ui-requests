@@ -7,40 +7,32 @@ import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 
 import css from './requests.css';
+import { toUserAddress } from './constants';
 import { getFullName } from './utils';
 
-const UserDetail = ({request, patronGroups}) => {
+const UserDetail = ({request, patronGroup, deliveryAddress, pickupLocation }) => {
   console.log("using request", request)
-  console.log("got groups", patronGroups)
+//  console.log("got groups", patronGroups)
 
-  patronGroups = patronGroups || [];
-  const patronGroupId = request.patronGroup || {};
-  const requesterGroup = (patronGroups.find(g => g.id === patronGroupId) || {}).group || '';
+  // patronGroups = patronGroups || [];
+  // const patronGroupId = (request && request.patronGroup) || {};
+//  const requesterGroup = (patronGroups && patronGroups.find(g => g.id === patronGroupId) || {}).group || '';
 
   const name = _.get(request, ['requesterName'], '');
   const barcode = _.get(request, ['requesterBarcode'], '');
   const recordLink = name ? <Link to={`/users/view/${request.requesterId}`}>{name}</Link> : '';
   const barcodeLink = barcode ? <Link to={`/users/view/${request.requesterId}`}>{barcode}</Link> : '';
+  //
+  // let deliveryAddressDetail;
+  // if (_.get(request, ['fulfilmentPreference'], '') === 'Delivery') {
+  //   const deliveryAddressType = _.get(request, ['deliveryAddressTypeId'], null);
+  //   if (deliveryAddressType) {
+  //     const deliveryLocationsDetail = _.keyBy(request.requester.addresses, a => a.addressTypeId);
+  //     deliveryAddressDetail = toUserAddress(deliveryLocationsDetail[deliveryAddressType]);
+  //   }
+  // }
 
   return (
-    // <div>
-    //   <br />
-    //   <Row>
-    //     <Col xs={12}>
-    //       <KeyValue label="Requester name" value={<Link to={path}>{getFullName(user)}</Link>} />
-    //     </Col>
-    //   </Row>
-    //   <Row>
-    //     <Col xs={12}>
-    //       <KeyValue label="Barcode" value={user.barcode ? <Link to={path}>{user.barcode}</Link> : ''} />
-    //     </Col>
-    //   </Row>
-    //   <Row>
-    //     <Col xs={12}>
-    //       <KeyValue label="Patron group" value={requesterGroup} />
-    //     </Col>
-    //   </Row>
-    // </div>
     <div>
       <Row>
         <Col xs={12}>
@@ -56,16 +48,21 @@ const UserDetail = ({request, patronGroups}) => {
       </Row>
       <Row>
         <Col xs={4}>
-          <KeyValue label="Patron group" value={requesterGroup} />
+          <KeyValue label="Patron group" value={patronGroup} />
         </Col>
         <Col xs={4}>
           <KeyValue label="Fulfilment preference" value={_.get(request, ['fulfilmentPreference'], '')} />
         </Col>
-        {/* {(_.get(request, ['fulfilmentPreference'], '') === 'Delivery') &&
+        {deliveryAddress &&
           <Col xs={4}>
-            <KeyValue label="Pickup location" value={deliveryAddressDetail} />
+            <KeyValue label="Delivery address" value={deliveryAddress} />
           </Col>
-        } */}
+        }
+        {pickupLocation &&
+          <Col xs={4}>
+            <KeyValue label="Pickup location" value={pickupLocation} />
+          </Col>
+        }
       </Row>
     </div>
   );
