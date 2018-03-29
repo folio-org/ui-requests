@@ -1,4 +1,11 @@
 import { get } from 'lodash';
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+import Headline from '@folio/stripes-components/lib/Headline';
+import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+
+import css from './requests.css';
 
 // eslint-disable-next-line import/prefer-default-export
 export function getFullName(user) {
@@ -7,4 +14,24 @@ export function getFullName(user) {
   const middleName = get(user, ['personal', 'middleName'], '');
 
   return `${lastName}${firstName ? ', ' : ' '}${firstName} ${middleName}`;
+}
+
+export function userHighlightBox(title, name, id, barcode) {
+  const recordLink = name ? <Link to={`/users/view/${id}`}>{name}</Link> : '';
+  const barcodeLink = barcode ? <Link to={`/users/view/${id}`}>{barcode}</Link> : '';
+
+  return (
+    <Row>
+      <Col xs={12}>
+        <div className={`${css.section} ${css.active}`}>
+          <Headline size="medium" tag="h3">
+            {title}
+          </Headline>
+          <div>
+            {recordLink} Barcode: {barcodeLink}
+          </div>
+        </div>
+      </Col>
+    </Row>
+  );
 }

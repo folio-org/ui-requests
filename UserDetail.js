@@ -8,7 +8,7 @@ import KeyValue from '@folio/stripes-components/lib/KeyValue';
 
 import css from './requests.css';
 import { toUserAddress } from './constants';
-import { getFullName } from './utils';
+import { getFullName, userHighlightBox } from './utils';
 
 const UserDetail = ({request, patronGroup, deliveryAddress, pickupLocation }) => {
   console.log("using request", request)
@@ -20,8 +20,8 @@ const UserDetail = ({request, patronGroup, deliveryAddress, pickupLocation }) =>
 
   const name = _.get(request, ['requesterName'], '');
   const barcode = _.get(request, ['requesterBarcode'], '');
-  const recordLink = name ? <Link to={`/users/view/${request.requesterId}`}>{name}</Link> : '';
-  const barcodeLink = barcode ? <Link to={`/users/view/${request.requesterId}`}>{barcode}</Link> : '';
+  // const recordLink = name ? <Link to={`/users/view/${request.requesterId}`}>{name}</Link> : '';
+  // const barcodeLink = barcode ? <Link to={`/users/view/${request.requesterId}`}>{barcode}</Link> : '';
   //
   // let deliveryAddressDetail;
   // if (_.get(request, ['fulfilmentPreference'], '') === 'Delivery') {
@@ -32,20 +32,21 @@ const UserDetail = ({request, patronGroup, deliveryAddress, pickupLocation }) =>
   //   }
   // }
 
+  ///////////// TEMP FOR TESTING ///////////////////
+  request.proxyUserId = '104224-10482408-1030901-421413'
+  request.proxy = {
+    firstName: 'Charles',
+    lastName: 'Woofy',
+    barcode: 14082850283049,
+  };
+
+  const proxyName = _.get(request, ['proxy', 'lastName'], '') + ', ' + _.get(request, ['proxy', 'firstName'], '');
+  const proxyBarcode = _.get(request, ['proxy', 'barcode'], '');
+  const proxySection = request.proxy ? userHighlightBox("Requester's proxy", proxyName, request.proxyUserId, proxyBarcode) : '';
+
   return (
     <div>
-      <Row>
-        <Col xs={12}>
-          <div className={`${css.section} ${css.active}`}>
-            <Headline size="medium" tag="h3">
-              Requester
-            </Headline>
-            <div>
-              {recordLink} Barcode: {barcodeLink}
-            </div>
-          </div>
-        </Col>
-      </Row>
+      {userHighlightBox('Requester', name, request.requesterId, barcode)}
       <Row>
         <Col xs={4}>
           <KeyValue label="Patron group" value={patronGroup} />
@@ -64,6 +65,7 @@ const UserDetail = ({request, patronGroup, deliveryAddress, pickupLocation }) =>
           </Col>
         }
       </Row>
+      {proxySection}
     </div>
   );
 };
@@ -78,10 +80,6 @@ UserDetail.propTypes = {
     }),
   }).isRequired,
   user: PropTypes.object.isRequired,
-};
-
-UserDetail.defaultProps = {
-  error: '',
 };
 
 export default UserDetail;
