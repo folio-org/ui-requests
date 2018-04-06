@@ -419,7 +419,7 @@ class RequestForm extends React.Component {
                       }
                       { this.state.selectedItem &&
                         <ItemDetail
-                          request={this.state.selectedItem}
+                          request={this.props.initialValues}
                           dateFormatter={this.props.dateFormatter}
                         />
                       }
