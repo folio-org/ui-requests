@@ -63,6 +63,7 @@ class ViewRequest extends React.Component {
       hasPerm: PropTypes.func.isRequired,
       connect: PropTypes.func.isRequired,
       locale: PropTypes.string.isRequired,
+      formatDate: PropTypes.func.isRequired,
       logger: PropTypes.shape({
         log: PropTypes.func.isRequired,
       }).isRequired,
