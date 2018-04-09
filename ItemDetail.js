@@ -46,7 +46,7 @@ const ItemDetail = ({ request, dateFormatter }) => {
       </Row>
       <Row>
         <Col xs={3}>
-          <KeyValue label="Item status" value={_.get(request, ['itemStatus', 'name'], '')} />
+          <KeyValue label="Item status" value={_.get(request, ['itemStatus'], '')} />
         </Col>
         <Col xs={3}>
           <KeyValue label="Current due date" value={dateFormatter(_.get(request, ['loan', 'dueDate'], ''))} />
