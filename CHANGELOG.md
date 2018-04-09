@@ -15,6 +15,8 @@
 * Add validation for holds. Fixes UIREQ-52.
 * Remove notes-related permissions. Fixes UIREQ-73.
 * Ignore yarn-error.log. Refs STRIPES-517.
+* Bug fix: pass MCL keys, not values, to patron lookup. Fixes UIREQ-76.
+* Bug fix: display item-details on request-edit pane. Refs UIREQ-55.
 
 ## [1.1.0](https://github.com/folio-org/ui-requests/tree/v1.1.0) (2018-01-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.0.0...v1.1.0)

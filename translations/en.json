@@ -1,0 +1,8 @@
+{
+  "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
+
+  "user.name": "Name",
+  "user.username": "Username",
+  "user.barcode": "Barcode",
+  "user.patronGroup": "Patron group"
+}

@@ -64,6 +64,7 @@ class ViewRequest extends React.Component {
       hasPerm: PropTypes.func.isRequired,
       connect: PropTypes.func.isRequired,
       locale: PropTypes.string.isRequired,
+      formatDate: PropTypes.func.isRequired,
       logger: PropTypes.shape({
         log: PropTypes.func.isRequired,
       }).isRequired,
@@ -110,6 +111,7 @@ class ViewRequest extends React.Component {
     this.onToggleSection = this.onToggleSection.bind(this);
     this.craftLayerUrl = craftLayerUrl.bind(this);
     this.update = this.update.bind(this);
+    this.formatDate = this.props.stripes.formatDate;
   }
 
   // Use componentDidUpdate to pull in metadata from the related user and item records
@@ -163,8 +165,7 @@ class ViewRequest extends React.Component {
     if (dateString === '') {
       return '';
     }
-
-    return new Date(Date.parse(dateString)).toLocaleDateString(this.props.stripes.locale);
+    return this.formatDate(dateString);
   }
 
   render() {

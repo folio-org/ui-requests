@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import fetch from 'isomorphic-fetch';
+import moment from 'moment-timezone';
 import { filters2cql } from '@folio/stripes-components/lib/FilterGroups';
 import SearchAndSort from '@folio/stripes-smart-components/lib/SearchAndSort';
 
@@ -106,10 +107,10 @@ class Requests extends React.Component {
             */
             const resourceData = args[2];
             const sortMap = {
-              Title: 'item.title',
+              'Title': 'item.title',
               'Item Barcode': 'item.barcode',
               'Request Type': 'requestType',
-              Requester: 'requester.lastName requester.firstName',
+              'Requester': 'requester.lastName requester.firstName',
               'Requester Barcode': 'requester.barcode',
               'Request Date': 'requestDate',
             };
@@ -175,6 +176,7 @@ class Requests extends React.Component {
     this.okapiUrl = context.stripes.okapi.url;
     this.formatDate = context.stripes.formatDate;
     this.formatDateTime = context.stripes.formatDateTime;
+    this.timezone = context.stripes.timezone;
     this.httpHeaders = Object.assign({}, {
       'X-Okapi-Tenant': context.stripes.okapi.tenant,
       'X-Okapi-Token': context.stripes.store.getState().okapi.token,
@@ -243,8 +245,7 @@ class Requests extends React.Component {
   }
 
   massageNewRecord = (requestData) => {
-    const date = new Date();
-    const isoDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
+    const isoDate = moment.tz(this.timezone).format();
     Object.assign(requestData, { requestDate: isoDate });
   }
 
@@ -255,7 +256,6 @@ class Requests extends React.Component {
     if (dateString === '') {
       return '';
     }
-
     return this.formatDate(dateString);
   };
 
@@ -274,14 +274,14 @@ class Requests extends React.Component {
 
     const resultsFormatter = {
       'Item barcode': rq => (rq.item ? rq.item.barcode : ''),
-      Position: () => '', // TODO: add correct function once this is implemented
-      Proxy: () => '', // TODO: add correct function once this is implemented
+      'Position': () => '', // TODO: add correct function once this is implemented
+      'Proxy': () => '', // TODO: add correct function once this is implemented
       'Request date': rq => this.makeLocaleDateTimeString(rq.requestDate),
-      Requester: rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
+      'Requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
       'Requester barcode': rq => (rq.requester ? rq.requester.barcode : ''),
       'Request status': () => '', // TODO: add correct function once this is implemented
-      Type: rq => rq.requestType,
-      Title: rq => (rq.item ? rq.item.title : ''),
+      'Type': rq => rq.requestType,
+      'Title': rq => (rq.item ? rq.item.title : ''),
     };
 
     return (<SearchAndSort

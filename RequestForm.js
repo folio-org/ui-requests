@@ -79,6 +79,9 @@ function asyncValidate(values, dispatch, props, blurredField) {
 
 class RequestForm extends React.Component {
   static propTypes = {
+    stripes: PropTypes.shape({
+      intl: PropTypes.object.isRequired,
+    }).isRequired,
     change: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     findUser: PropTypes.func,
@@ -297,6 +300,7 @@ class RequestForm extends React.Component {
       patronGroups,
       pristine,
       submitting,
+      stripes: { intl },
     } = this.props;
 
     const { selectedUser } = this.state;
@@ -325,6 +329,14 @@ class RequestForm extends React.Component {
     if (this.state.selectedAddressTypeId) {
       addressDetail = toUserAddress(deliveryLocationsDetail[this.state.selectedAddressTypeId]);
     }
+
+    // map column-IDs to table-header-values
+    const columnMapping = {
+      name: intl.formatMessage({ id: 'ui-requests.user.name' }),
+      patronGroup: intl.formatMessage({ id: 'ui-requests.user.patronGroup' }),
+      username: intl.formatMessage({ id: 'ui-requests.user.username' }),
+      barcode: intl.formatMessage({ id: 'ui-requests.user.barcode' }),
+    };
 
     return (
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
@@ -407,7 +419,7 @@ class RequestForm extends React.Component {
                       }
                       { this.state.selectedItem &&
                         <ItemDetail
-                          request={this.state.selectedItem}
+                          request={this.props.initialValues}
                           dateFormatter={this.props.dateFormatter}
                         />
                       }
@@ -446,7 +458,8 @@ class RequestForm extends React.Component {
                               dataKey="users"
                               selectUser={this.onSelectUser}
                               disableRecordCreation={disableRecordCreation}
-                              visibleColumns={['Name', 'Patron Group', 'Username', 'Barcode']}
+                              visibleColumns={['name', 'patronGroup', 'username', 'barcode']}
+                              columnMapping={columnMapping}
                             />
 
                           </Col>
