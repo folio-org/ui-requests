@@ -330,6 +330,12 @@ class RequestForm extends React.Component {
       addressDetail = toUserAddress(deliveryLocationsDetail[this.state.selectedAddressTypeId]);
     }
 
+    let patronGroupName;
+    if (patronGroups && this.state.selectedUser) {
+      const group = patronGroups.records.find(g => g.id === this.state.selectedUser.patronGroup);
+      if (group) { patronGroupName = group.desc; }
+    }
+
     // map column-IDs to table-header-values
     const columnMapping = {
       name: intl.formatMessage({ id: 'ui-requests.user.name' }),
@@ -419,7 +425,7 @@ class RequestForm extends React.Component {
                       }
                       { this.state.selectedItem &&
                         <ItemDetail
-                          request={this.props.initialValues}
+                          request={this.state.selectedItem}
                           dateFormatter={this.props.dateFormatter}
                         />
                       }
@@ -475,11 +481,11 @@ class RequestForm extends React.Component {
                           </Col>
                         </Row>
                       }
-                      { (this.state.selectedUser || this.state.userSelectionError) &&
+                      { this.state.selectedUser &&
                         <UserDetail
-                          user={this.state.selectedUser}
-                          error={this.state.userSelectionError}
-                          patronGroups={patronGroups}
+                          request={this.state.selectedUser}
+                          newUser
+                          patronGroup={patronGroupName}
                         />
                       }
                       { this.state.selectedUser &&
