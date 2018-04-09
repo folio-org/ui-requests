@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import fetch from 'isomorphic-fetch';
+import moment from 'moment-timezone';
 import { filters2cql } from '@folio/stripes-components/lib/FilterGroups';
 import SearchAndSort from '@folio/stripes-smart-components/lib/SearchAndSort';
 
@@ -175,6 +176,7 @@ class Requests extends React.Component {
     this.okapiUrl = context.stripes.okapi.url;
     this.formatDate = context.stripes.formatDate;
     this.formatDateTime = context.stripes.formatDateTime;
+    this.timezone = context.stripes.timezone;
     this.httpHeaders = Object.assign({}, {
       'X-Okapi-Tenant': context.stripes.okapi.tenant,
       'X-Okapi-Token': context.stripes.store.getState().okapi.token,
@@ -243,8 +245,7 @@ class Requests extends React.Component {
   }
 
   massageNewRecord = (requestData) => {
-    const date = new Date();
-    const isoDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
+    const isoDate = moment.tz(this.timezone).format();
     Object.assign(requestData, { requestDate: isoDate });
   }
 
@@ -255,7 +256,6 @@ class Requests extends React.Component {
     if (dateString === '') {
       return '';
     }
-
     return this.formatDate(dateString);
   };
 
