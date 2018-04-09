@@ -103,6 +103,7 @@ class ViewRequest extends React.Component {
     this.makeLocaleDateString = this.makeLocaleDateString.bind(this);
     this.craftLayerUrl = craftLayerUrl.bind(this);
     this.update = this.update.bind(this);
+    this.formatDate = this.props.stripes.formatDate;
   }
 
   // Use componentDidUpdate to pull in metadata from the related user and item records
@@ -148,8 +149,7 @@ class ViewRequest extends React.Component {
     if (dateString === '') {
       return '';
     }
-
-    return new Date(Date.parse(dateString)).toLocaleDateString(this.props.stripes.locale);
+    return this.formatDate(dateString);
   }
 
   render() {
