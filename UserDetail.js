@@ -79,10 +79,20 @@ const UserDetail = ({ request,
         { selectedDelivery && deliveryLocations &&
           <Field
             name="deliveryAddressTypeId"
-            label="Delivery Address"
+            label="Delivery address"
             component={Select}
             fullWidth
             dataOptions={[{ label: 'Select address type', value: '' }, ...deliveryLocations]}
+            onChange={onChangeAddress}
+          />
+        }
+        { !selectedDelivery && deliveryLocations &&
+          <Field
+            name="deliveryAddressTypeId"
+            label="Pickup location"
+            component={Select}
+            fullWidth
+            dataOptions={[{ label: 'Select pickup location', value: '' }]}
             onChange={onChangeAddress}
           />
         }
