@@ -1,17 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { Field } from 'redux-form';
 
 import Headline from '@folio/stripes-components/lib/Headline';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
+import Select from '@folio/stripes-components/lib/Select';
 
 import css from './requests.css';
 import { toUserAddress } from './constants';
 import { getFullName, userHighlightBox } from './utils';
 
-const UserDetail = ({request, newUser, patronGroup, deliveryAddress, pickupLocation }) => {
+const UserDetail = ({ request,
+                      newUser,
+                      patronGroup,
+                      deliveryAddress,
+                      deliveryLocations,
+                      pickupLocation,
+                      selectedDelivery,
+                      fulfilmentTypeOptions,
+                      onChangeAddress,
+                      onChangeFulfilment,
+                   }) => {
   console.log("using request", request)
+  console.log("delivery address", deliveryAddress)
 
   const id = newUser ? _.get(request, ['id']) : _.get(request, ['requesterId']);
   const name = newUser ? getFullName(request) : _.get(request, ['requesterName'], '');
@@ -48,9 +61,41 @@ const UserDetail = ({request, newUser, patronGroup, deliveryAddress, pickupLocat
           <KeyValue label="Patron group" value={patronGroup} />
         </Col>
         <Col xs={4}>
-          <KeyValue label="Fulfilment preference" value={_.get(request, ['fulfilmentPreference'], '')} />
+          { newUser &&
+            <Field
+              name="fulfilmentPreference"
+              label="Fulfilment preference"
+              component={Select}
+              fullWidth
+              dataOptions={fulfilmentTypeOptions}
+              onChange={onChangeFulfilment}
+            />
+          }
+          { !newUser &&
+            <KeyValue label="Fulfilment preference" value={_.get(request, ['fulfilmentPreference'], '')} />
+          }
         </Col>
-        {deliveryAddress &&
+        <Col xs={4}>
+        { selectedDelivery && deliveryLocations &&
+          <Field
+            name="deliveryAddressTypeId"
+            label="Delivery Address"
+            component={Select}
+            fullWidth
+            dataOptions={[{ label: 'Select address type', value: '' }, ...deliveryLocations]}
+            onChange={onChangeAddress}
+          />
+        }
+      </Col>
+    </Row>
+    { selectedDelivery &&
+      <Row>
+        <Col xsOffset={8} xs={4}>
+          {deliveryAddress}
+        </Col>
+      </Row>
+    }
+        {/* {deliveryAddress &&
           <Col xs={4}>
             <KeyValue label="Delivery address" value={deliveryAddress} />
           </Col>
@@ -59,8 +104,8 @@ const UserDetail = ({request, newUser, patronGroup, deliveryAddress, pickupLocat
           <Col xs={4}>
             <KeyValue label="Pickup location" value={pickupLocation} />
           </Col>
-        }
-      </Row>
+        } */}
+
       {proxySection}
     </div>
   );

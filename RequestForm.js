@@ -486,40 +486,13 @@ class RequestForm extends React.Component {
                           request={this.state.selectedUser}
                           newUser
                           patronGroup={patronGroupName}
+                          selectedDelivery={this.state.selectedDelivery}
+                          deliveryAddress={addressDetail}
+                          deliveryLocations={deliveryLocations}
+                          fulfilmentTypeOptions={fulfilmentTypeOptions}
+                          onChangeAddress={this.onChangeAddress}
+                          onChangeFulfilment={this.onChangeFulfilment}
                         />
-                      }
-                      { this.state.selectedUser &&
-                        <Row>
-                          <Col xs={6}>
-                            <Field
-                              name="fulfilmentPreference"
-                              label="Fulfilment preference"
-                              component={Select}
-                              fullWidth
-                              dataOptions={fulfilmentTypeOptions}
-                              onChange={this.onChangeFulfilment}
-                            />
-                          </Col>
-                          { this.state.selectedDelivery && deliveryLocations &&
-                            <Col>
-                              <Field
-                                name="deliveryAddressTypeId"
-                                label="Delivery Address"
-                                component={Select}
-                                fullWidth
-                                dataOptions={[{ label: 'Select address type', value: '' }, ...deliveryLocations]}
-                                onChange={this.onChangeAddress}
-                              />
-                            </Col>
-                          }
-                        </Row>
-                      }
-                      { this.state.selectedDelivery && this.state.selectedAddressTypeId &&
-                        <Row>
-                          <Col xsOffset={6} xs={6}>
-                            {addressDetail}
-                          </Col>
-                        </Row>
                       }
                       {/* <fieldset>
                         <legend>Request details</legend>
