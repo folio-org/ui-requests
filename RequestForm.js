@@ -133,7 +133,7 @@ class RequestForm extends React.Component {
       selectedDelivery: fulfilmentPreference === 'Delivery',
       selectedAddressTypeId: deliveryAddressTypeId,
       selectedItem: item ? {
-        item: item,
+        item,
         itemBarcode: item.barcode,
         itemId: item.id,
       } : null,
