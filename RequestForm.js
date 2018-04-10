@@ -133,7 +133,9 @@ class RequestForm extends React.Component {
       selectedDelivery: fulfilmentPreference === 'Delivery',
       selectedAddressTypeId: deliveryAddressTypeId,
       selectedItem: item ? {
-        itemRecord: item,
+        item,
+        itemBarcode: item.barcode,
+        itemId: item.id,
       } : null,
       selectedUser: requester ? {
         patronGroup: requester.patronGroup,
@@ -419,7 +421,7 @@ class RequestForm extends React.Component {
                       }
                       { this.state.selectedItem &&
                         <ItemDetail
-                          request={this.props.initialValues}
+                          request={this.state.selectedItem}
                           dateFormatter={this.props.dateFormatter}
                         />
                       }
