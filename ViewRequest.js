@@ -223,8 +223,8 @@ class ViewRequest extends React.Component {
     if (_.get(request, ['fulfilmentPreference'], '') === 'Delivery') {
       const deliveryAddressType = _.get(request, ['deliveryAddressTypeId'], null);
       if (deliveryAddressType) {
-        const deliveryLocationsDetail = _.keyBy(request.requester.addresses, a => a.addressTypeId);
-        deliveryAddressDetail = toUserAddress(deliveryLocationsDetail[deliveryAddressType]);
+        const deliveryLocations = _.keyBy(request.requester.addresses, 'addressTypeId');
+        deliveryAddressDetail = toUserAddress(deliveryLocations[deliveryAddressType]);
       }
     }
     const holdShelfExpireDate = (_.get(request, ['status'], '') === 'Open - Awaiting pickup') ?

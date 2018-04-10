@@ -6,13 +6,15 @@ import { Link } from 'react-router-dom';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
-const ItemDetail = ({ request, dateFormatter }) => {
+const ItemDetail = ({ request, newRequest, dateFormatter }) => {
   if (!request.itemBarcode) { return <div>Loading ...</div>; }
+  console.log("using request", request)
 
   const itemBarcode = _.get(request, ['itemBarcode'], '');
   const recordLink = itemBarcode ? <Link to={`/inventory/view/${request.item.instanceId}/${request.item.holdingsRecordId}/${request.itemId}`}>{itemBarcode}</Link> : '';
   const currentDueDate = (_.get(request, ['itemStatus', 'name'], '').startsWith('Checked out')) ?
                           dateFormatter(_.get(request, ['loan', 'dueDate'], '')) : '-';
+  const status = newRequest ? _.get(request, ['itemStatus'], '') : _.get(request, ['itemStatus', 'name'], '')
 
   return (
     <div>
@@ -46,7 +48,7 @@ const ItemDetail = ({ request, dateFormatter }) => {
       </Row>
       <Row>
         <Col xs={3}>
-          <KeyValue label="Item status" value={_.get(request, ['itemStatus'], '')} />
+          <KeyValue label="Item status" value={status} />
         </Col>
         <Col xs={3}>
           <KeyValue label="Current due date" value={dateFormatter(_.get(request, ['loan', 'dueDate'], ''))} />

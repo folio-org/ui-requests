@@ -29,17 +29,6 @@ const UserDetail = ({ request,
   const id = newUser ? _.get(request, ['id']) : _.get(request, ['requesterId']);
   const name = newUser ? getFullName(request) : _.get(request, ['requesterName'], '');
   const barcode = newUser ? _.get(request, ['barcode']) : _.get(request, ['requesterBarcode'], '');
-  // const recordLink = name ? <Link to={`/users/view/${id}`}>{name}</Link> : '';
-  // const barcodeLink = barcode ? <Link to={`/users/view/${id}`}>{barcode}</Link> : '';
-  //
-  // let deliveryAddressDetail;
-  // if (_.get(request, ['fulfilmentPreference'], '') === 'Delivery') {
-  //   const deliveryAddressType = _.get(request, ['deliveryAddressTypeId'], null);
-  //   if (deliveryAddressType) {
-  //     const deliveryLocationsDetail = _.keyBy(request.requester.addresses, a => a.addressTypeId);
-  //     deliveryAddressDetail = toUserAddress(deliveryLocationsDetail[deliveryAddressType]);
-  //   }
-  // }
 
   ///////////// TEMP FOR TESTING ///////////////////
   // request.proxyUserId = '6ddbf001-936e-41ef-904e-7dfe54056990'
