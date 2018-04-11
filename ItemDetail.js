@@ -8,13 +8,12 @@ import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
 const ItemDetail = ({ request, newRequest, dateFormatter }) => {
   if (!request.itemBarcode) { return <div>Loading ...</div>; }
-  console.log("using request", request)
 
   const itemBarcode = _.get(request, ['itemBarcode'], '');
   const recordLink = itemBarcode ? <Link to={`/inventory/view/${request.item.instanceId}/${request.item.holdingsRecordId}/${request.itemId}`}>{itemBarcode}</Link> : '';
-  const currentDueDate = (_.get(request, ['itemStatus', 'name'], '').startsWith('Checked out')) ?
-                          dateFormatter(_.get(request, ['loan', 'dueDate'], '')) : '-';
-  const status = newRequest ? _.get(request, ['itemStatus'], '') : _.get(request, ['itemStatus', 'name'], '')
+  // const currentDueDate = (_.get(request, ['itemStatus', 'name'], '').startsWith('Checked out')) ?
+  //                        dateFormatter(_.get(request, ['loan', 'dueDate'], '')) : '-';
+  const status = newRequest ? _.get(request, ['itemStatus'], '') : _.get(request, ['itemStatus', 'name'], '');
 
   return (
     <div>
@@ -29,8 +28,10 @@ const ItemDetail = ({ request, newRequest, dateFormatter }) => {
           <KeyValue label="Author" value={_.get(request, ['author'], '-')} />
         </Col>
         <Col xs={3}>
-          <KeyValue label="Shelving location" value={_.get(request, ['location']) ||
-          '-'} />
+          <KeyValue
+            label="Shelving location"
+            value={_.get(request, ['location']) || '-'}
+          />
         </Col>
       </Row>
       <Row>
@@ -64,7 +65,12 @@ const ItemDetail = ({ request, newRequest, dateFormatter }) => {
 
 ItemDetail.propTypes = {
   request: PropTypes.object.isRequired,
+  newRequest: PropTypes.bool,
   dateFormatter: PropTypes.func.isRequired,
+};
+
+ItemDetail.defaultProps = {
+  newRequest: false,
 };
 
 export default ItemDetail;

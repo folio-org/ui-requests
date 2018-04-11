@@ -141,7 +141,6 @@ class RequestForm extends React.Component {
         patronGroup: requester.patronGroup,
         personal: requester,
       } : null,
-      userSelectionError: null,
     };
 
     this.onChangeAddress = this.onChangeAddress.bind(this);
@@ -207,7 +206,6 @@ class RequestForm extends React.Component {
       if (result.totalRecords === 1) {
         this.setState({
           selectedUser: result.users[0],
-          userSelectionError: null,
         });
         this.props.change('requesterId', result.users[0].id);
       }

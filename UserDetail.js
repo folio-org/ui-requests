@@ -1,46 +1,33 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { Field } from 'redux-form';
 
-import Headline from '@folio/stripes-components/lib/Headline';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import Select from '@folio/stripes-components/lib/Select';
 
-import css from './requests.css';
-import { toUserAddress } from './constants';
 import { getFullName, userHighlightBox } from './utils';
 
-const UserDetail = ({ request,
-                      newUser,
-                      patronGroup,
-                      deliveryAddress,
-                      deliveryLocations,
-                      pickupLocation,
-                      selectedDelivery,
-                      fulfilmentTypeOptions,
-                      onChangeAddress,
-                      onChangeFulfilment,
-                   }) => {
-  console.log("using request", request)
-  console.log("delivery address", deliveryAddress)
-
+const UserDetail = ({
+  request,
+  newUser,
+  patronGroup,
+  deliveryAddress,
+  deliveryLocations,
+  pickupLocation,
+  selectedDelivery,
+  fulfilmentTypeOptions,
+  onChangeAddress,
+  onChangeFulfilment,
+}) => {
   const id = newUser ? _.get(request, ['id'], '-') : _.get(request, ['requesterId'], '-');
   const name = newUser ? getFullName(request) : _.get(request, ['requesterName'], '-');
   const barcode = newUser ? _.get(request, ['barcode'], '-') : _.get(request, ['requesterBarcode'], '-');
 
-  ///////////// TEMP FOR TESTING ///////////////////
-  // request.proxyUserId = '6ddbf001-936e-41ef-904e-7dfe54056990'
-  // request.proxy = {
-  //   firstName: 'Charles',
-  //   lastName: 'Woofy',
-  //   barcode: 14082850283049,
-  // };
-
-  const proxyName = _.get(request, ['proxy', 'lastName'], '-') + ', ' + _.get(request, ['proxy', 'firstName'], '-');
+  const proxyName = `${_.get(request, ['proxy', 'lastName'], '-')}, ${_.get(request, ['proxy', 'firstName'], '-')}`;
   const proxyBarcode = _.get(request, ['proxy', 'barcode'], '-');
-  const proxySection = request && request.proxy ? userHighlightBox("Requester's proxy", proxyName, request.proxyUserId, proxyBarcode) : '';
+  const proxySection = request && request.proxy ? userHighlightBox('Requester\'s proxy', proxyName, request.proxyUserId, proxyBarcode) : '';
 
   return (
     <div>
@@ -93,33 +80,34 @@ const UserDetail = ({ request,
           }
         </Col>
       </Row>
-
-        {/* {deliveryAddress &&
-          <Col xs={4}>
-            <KeyValue label="Delivery address" value={deliveryAddress} />
-          </Col>
-        }
-        {pickupLocation &&
-          <Col xs={4}>
-            <KeyValue label="Pickup location" value={pickupLocation} />
-          </Col>
-        } */}
-
       {proxySection}
     </div>
   );
 };
 
-// UserDetail.propTypes = {
-//   error: PropTypes.string,
-//   patronGroups: PropTypes.shape({
-//     hasLoaded: PropTypes.bool.isRequired,
-//     isPending: PropTypes.bool,
-//     other: PropTypes.shape({
-//       totalRecords: PropTypes.number,
-//     }),
-//   }).isRequired,
-//   user: PropTypes.object.isRequired,
-// };
+UserDetail.propTypes = {
+  deliveryAddress: PropTypes.string,
+  deliveryLocations: PropTypes.arrayOf(PropTypes.object),
+  fulfilmentTypeOptions: PropTypes.arrayOf(PropTypes.object),
+  newUser: PropTypes.bool,
+  onChangeAddress: PropTypes.func,
+  onChangeFulfilment: PropTypes.func,
+  patronGroup: PropTypes.string,
+  pickupLocation: PropTypes.string,
+  request: PropTypes.object.isRequired,
+  selectedDelivery: PropTypes.bool,
+};
+
+UserDetail.defaultProps = {
+  deliveryAddress: '',
+  deliveryLocations: [],
+  fulfilmentTypeOptions: [],
+  newUser: false,
+  onChangeAddress: () => {},
+  onChangeFulfilment: () => {},
+  patronGroup: '',
+  pickupLocation: '',
+  selectedDelivery: false,
+};
 
 export default UserDetail;

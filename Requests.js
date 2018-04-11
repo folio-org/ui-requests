@@ -107,10 +107,10 @@ class Requests extends React.Component {
             */
             const resourceData = args[2];
             const sortMap = {
-              'Title': 'item.title',
+              Title: 'item.title',
               'Item Barcode': 'item.barcode',
               'Request Type': 'requestType',
-              'Requester': 'requester.lastName requester.firstName',
+              Requester: 'requester.lastName requester.firstName',
               'Requester Barcode': 'requester.barcode',
               'Request Date': 'requestDate',
             };
@@ -274,14 +274,14 @@ class Requests extends React.Component {
 
     const resultsFormatter = {
       'Item barcode': rq => (rq.item ? rq.item.barcode : ''),
-      'Position': () => '', // TODO: add correct function once this is implemented
-      'Proxy': () => '', // TODO: add correct function once this is implemented
+      Position: () => '', // TODO: add correct function once this is implemented
+      Proxy: () => '', // TODO: add correct function once this is implemented
       'Request date': rq => this.makeLocaleDateTimeString(rq.requestDate),
-      'Requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
+      Requester: rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
       'Requester barcode': rq => (rq.requester ? rq.requester.barcode : ''),
       'Request status': rq => rq.status,
-      'Type': rq => rq.requestType,
-      'Title': rq => (rq.item ? rq.item.title : ''),
+      Type: rq => rq.requestType,
+      Title: rq => (rq.item ? rq.item.title : ''),
     };
 
     return (<SearchAndSort
