@@ -141,7 +141,6 @@ class RequestForm extends React.Component {
         patronGroup: requester.patronGroup,
         personal: requester,
       } : null,
-      userSelectionError: null,
     };
 
     this.onChangeAddress = this.onChangeAddress.bind(this);
@@ -207,7 +206,6 @@ class RequestForm extends React.Component {
       if (result.totalRecords === 1) {
         this.setState({
           selectedUser: result.users[0],
-          userSelectionError: null,
         });
         this.props.change('requesterId', result.users[0].id);
       }
@@ -332,6 +330,12 @@ class RequestForm extends React.Component {
       addressDetail = toUserAddress(deliveryLocationsDetail[this.state.selectedAddressTypeId]);
     }
 
+    let patronGroupName;
+    if (patronGroups && this.state.selectedUser) {
+      const group = patronGroups.records.find(g => g.id === this.state.selectedUser.patronGroup);
+      if (group) { patronGroupName = group.desc; }
+    }
+
     // map column-IDs to table-header-values
     const columnMapping = {
       name: intl.formatMessage({ id: 'ui-requests.user.name' }),
@@ -422,6 +426,7 @@ class RequestForm extends React.Component {
                       { this.state.selectedItem &&
                         <ItemDetail
                           request={this.state.selectedItem}
+                          newRequest
                           dateFormatter={this.props.dateFormatter}
                         />
                       }
@@ -477,45 +482,18 @@ class RequestForm extends React.Component {
                           </Col>
                         </Row>
                       }
-                      { (this.state.selectedUser || this.state.userSelectionError) &&
-                        <UserDetail
-                          user={this.state.selectedUser}
-                          error={this.state.userSelectionError}
-                          patronGroups={patronGroups}
-                        />
-                      }
                       { this.state.selectedUser &&
-                        <Row>
-                          <Col xs={6}>
-                            <Field
-                              name="fulfilmentPreference"
-                              label="Fulfilment preference"
-                              component={Select}
-                              fullWidth
-                              dataOptions={fulfilmentTypeOptions}
-                              onChange={this.onChangeFulfilment}
-                            />
-                          </Col>
-                          { this.state.selectedDelivery && deliveryLocations &&
-                            <Col>
-                              <Field
-                                name="deliveryAddressTypeId"
-                                label="Delivery Address"
-                                component={Select}
-                                fullWidth
-                                dataOptions={[{ label: 'Select address type', value: '' }, ...deliveryLocations]}
-                                onChange={this.onChangeAddress}
-                              />
-                            </Col>
-                          }
-                        </Row>
-                      }
-                      { this.state.selectedDelivery && this.state.selectedAddressTypeId &&
-                        <Row>
-                          <Col xsOffset={6} xs={6}>
-                            {addressDetail}
-                          </Col>
-                        </Row>
+                        <UserDetail
+                          request={this.state.selectedUser}
+                          newUser
+                          patronGroup={patronGroupName}
+                          selectedDelivery={this.state.selectedDelivery}
+                          deliveryAddress={addressDetail}
+                          deliveryLocations={deliveryLocations}
+                          fulfilmentTypeOptions={fulfilmentTypeOptions}
+                          onChangeAddress={this.onChangeAddress}
+                          onChangeFulfilment={this.onChangeFulfilment}
+                        />
                       }
                       {/* <fieldset>
                         <legend>Request details</legend>

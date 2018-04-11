@@ -2,10 +2,8 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
-import { Link } from 'react-router-dom';
 
-import { Accordion } from '@folio/stripes-components/lib/Accordion';
-import Headline from '@folio/stripes-components/lib/Headline';
+import { Accordion, AccordionSet } from '@folio/stripes-components/lib/Accordion';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import Layer from '@folio/stripes-components/lib/Layer';
 import MetaSection from '@folio/stripes-components/lib/MetaSection';
@@ -16,9 +14,9 @@ import craftLayerUrl from '@folio/stripes-components/util/craftLayerUrl';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
 import ItemDetail from './ItemDetail';
+import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
 import { fulfilmentTypes, requestTypes, toUserAddress } from './constants';
-import css from './requests.css';
 
 class ViewRequest extends React.Component {
   static propTypes = {
@@ -99,9 +97,15 @@ class ViewRequest extends React.Component {
 
     this.state = {
       enhancedRequest: {},
+      accordions: {
+        'request-info': true,
+        'item-info': true,
+        'requester-info': true,
+      },
     };
 
     this.makeLocaleDateString = this.makeLocaleDateString.bind(this);
+    this.onToggleSection = this.onToggleSection.bind(this);
     this.craftLayerUrl = craftLayerUrl.bind(this);
     this.update = this.update.bind(this);
     this.formatDate = this.props.stripes.formatDate;
@@ -142,6 +146,14 @@ class ViewRequest extends React.Component {
 
     this.props.mutator.selectedRequest.PUT(updatedRecord).then(() => {
       this.props.onCloseEdit();
+    });
+  }
+
+  onToggleSection({ id }) {
+    this.setState((curState) => {
+      const newState = _.cloneDeep(curState);
+      newState.accordions[id] = !curState.accordions[id];
+      return newState;
     });
   }
 
@@ -195,105 +207,78 @@ class ViewRequest extends React.Component {
       </PaneMenu>
     );
 
-    const requesterName = _.get(request, ['requesterName'], '');
-    const requesterBarcode = _.get(request, ['requesterBarcode'], '');
-    const requesterRecordLink = requesterName ? <Link to={`/users/view/${request.requesterId}`}>{requesterName}</Link> : '';
-    const requesterBarcodeLink = requesterBarcode ? <Link to={`/users/view/${request.requesterId}`}>{requesterBarcode}</Link> : '';
-    //  const borrowerRecordLink = borrowerName ? <Link to={`/users/view/${borrower.id}`}>{borrowerName}</Link> : '';
-
     const addressTypes = (this.props.resources.addressTypes && this.props.resources.addressTypes.hasLoaded) ? this.props.resources.addressTypes.records : [];
     let deliveryAddressDetail;
+    let selectedDelivery = false;
     if (_.get(request, ['fulfilmentPreference'], '') === 'Delivery') {
+      selectedDelivery = true;
       const deliveryAddressType = _.get(request, ['deliveryAddressTypeId'], null);
       if (deliveryAddressType) {
-        const deliveryLocationsDetail = _.keyBy(request.requester.addresses, a => a.addressTypeId);
-        deliveryAddressDetail = toUserAddress(deliveryLocationsDetail[deliveryAddressType]);
+        const deliveryLocations = _.keyBy(request.requester.addresses, 'addressTypeId');
+        deliveryAddressDetail = toUserAddress(deliveryLocations[deliveryAddressType]);
       }
     }
-
-    const requesterSection = (
-      <div>
-        <Row>
-          <Col xs={12}>
-            <div className={`${css.section} ${css.active}`}>
-              <Headline size="medium" tag="h3">
-                Requester
-              </Headline>
-              <div>
-                {requesterRecordLink} Barcode: {requesterBarcodeLink}
-              </div>
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={4}>
-            <KeyValue label="Patron group" value={patronGroup} />
-          </Col>
-          <Col xs={4}>
-            <KeyValue label="Fulfilment preference" value={_.get(request, ['fulfilmentPreference'], '')} />
-          </Col>
-          {(_.get(request, ['fulfilmentPreference'], '') === 'Delivery') &&
-            <Col xs={4}>
-              <KeyValue label="Pickup location" value={deliveryAddressDetail} />
-            </Col>
-          }
-        </Row>
-      </div>
-    );
+    const holdShelfExpireDate = (_.get(request, ['status'], '') === 'Open - Awaiting pickup') ?
+      this.makeLocaleDateString(_.get(request, ['holdShelfExpirationDate'], '')) : '-';
 
     return request ? (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
-        <Accordion
-          open
-          id="1"
-          onToggle={() => {}}
-          label="Request information"
-        >
-          <Row>
-            <Col xs={12}>
-              <MetaSection
-                id="requestInfoMeta"
-                contentId="requestInfoMetaContent"
-                lastUpdatedDate={request.metaData.updatedDate}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={3}>
-              <KeyValue label="Request type" value={_.get(request, ['requestType'], '')} />
-            </Col>
-            <Col xs={3}>
-              <KeyValue label="Request status" value={_.get(request, ['status'], '')} />
-            </Col>
-            <Col xs={3}>
-              <KeyValue label="Request expiration date" value={this.makeLocaleDateString(_.get(request, ['requestExpirationDate'], ''))} />
-            </Col>
-            <Col xs={3}>
-              <KeyValue label="Hold shelf expiration date" value={this.makeLocaleDateString(_.get(request, ['holdShelfExpirationDate'], ''))} />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={3}>
-              <KeyValue label="Position in queue" value="" />
-            </Col>
-          </Row>
-        </Accordion>
-        <Accordion
-          open
-          id="1"
-          onToggle={() => {}}
-          label="Item information"
-        >
-          <ItemDetail request={request} dateFormatter={this.makeLocaleDateString} />
-        </Accordion>
-        <Accordion
-          open
-          id="1"
-          onToggle={() => {}}
-          label="Requester information"
-        >
-          {request.requesterBarcode ? requesterSection : 'Loading ...'}
-        </Accordion>
+        <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
+          <Accordion
+            open
+            id="request-info"
+            label="Request information"
+          >
+            <Row>
+              <Col xs={12}>
+                <MetaSection
+                  id="requestInfoMeta"
+                  contentId="requestInfoMetaContent"
+                  lastUpdatedDate={request.metaData.updatedDate}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={3}>
+                <KeyValue label="Request type" value={_.get(request, ['requestType'], '-')} />
+              </Col>
+              <Col xs={3}>
+                <KeyValue label="Request status" value={_.get(request, ['status'], '-')} />
+              </Col>
+              <Col xs={3}>
+                <KeyValue label="Request expiration date" value={this.makeLocaleDateString(_.get(request, ['requestExpirationDate'])) || '-'} />
+              </Col>
+              <Col xs={3}>
+                <KeyValue label="Hold shelf expiration date" value={holdShelfExpireDate} />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={3}>
+                <KeyValue label="Position in queue" value="-" />
+              </Col>
+            </Row>
+          </Accordion>
+          <Accordion
+            open
+            id="item-info"
+            label="Item information"
+          >
+            <ItemDetail request={request} dateFormatter={this.makeLocaleDateString} />
+          </Accordion>
+          <Accordion
+            open
+            id="requester-info"
+            label="Requester information"
+          >
+            <UserDetail
+              request={request}
+              patronGroup={patronGroup}
+              selectedDelivery={selectedDelivery}
+              deliveryAddress={deliveryAddressDetail}
+              pickupLocation=""
+            />
+          </Accordion>
+        </AccordionSet>
 
         <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit Request Dialog">
           <RequestForm

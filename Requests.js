@@ -279,7 +279,7 @@ class Requests extends React.Component {
       'Request date': rq => this.makeLocaleDateTimeString(rq.requestDate),
       'Requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
       'Requester barcode': rq => (rq.requester ? rq.requester.barcode : ''),
-      'Request status': () => '', // TODO: add correct function once this is implemented
+      'Request status': rq => rq.status,
       'Type': rq => rq.requestType,
       'Title': rq => (rq.item ? rq.item.title : ''),
     };

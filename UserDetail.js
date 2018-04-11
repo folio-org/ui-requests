@@ -1,58 +1,113 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Field } from 'redux-form';
+
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
+import Select from '@folio/stripes-components/lib/Select';
 
-import { getFullName } from './utils';
+import { getFullName, userHighlightBox } from './utils';
 
-const UserDetail = (props) => {
-  if (props.error) {
-    return <div style={{ color: 'red' }}>{props.error}</div>;
-  }
+const UserDetail = ({
+  request,
+  newUser,
+  patronGroup,
+  deliveryAddress,
+  deliveryLocations,
+  pickupLocation,
+  selectedDelivery,
+  fulfilmentTypeOptions,
+  onChangeAddress,
+  onChangeFulfilment,
+}) => {
+  const id = newUser ? _.get(request, ['id'], '-') : _.get(request, ['requesterId'], '-');
+  const name = newUser ? getFullName(request) : _.get(request, ['requesterName'], '-');
+  const barcode = newUser ? _.get(request, ['barcode'], '-') : _.get(request, ['requesterBarcode'], '-');
 
-  const patronGroups = (props.patronGroups || {}).records || [];
-  const user = props.user || {};
-  const patronGroupId = user.patronGroup || {};
-  const requesterGroup = (patronGroups.find(g => g.id === patronGroupId) || {}).group || '';
-  const path = `/users/view/${user.id}`;
+  const proxyName = `${_.get(request, ['proxy', 'lastName'], '-')}, ${_.get(request, ['proxy', 'firstName'], '-')}`;
+  const proxyBarcode = _.get(request, ['proxy', 'barcode'], '-');
+  const proxySection = request && request.proxy ? userHighlightBox('Requester\'s proxy', proxyName, request.proxyUserId, proxyBarcode) : '';
 
   return (
     <div>
-      <br />
+      {userHighlightBox('Requester', name, id, barcode)}
       <Row>
-        <Col xs={12}>
-          <KeyValue label="Requester name" value={<Link to={path}>{getFullName(user)}</Link>} />
+        <Col xs={4}>
+          <KeyValue label="Patron group" value={patronGroup || '-'} />
+        </Col>
+        <Col xs={4}>
+          { newUser &&
+            <Field
+              name="fulfilmentPreference"
+              label="Fulfilment preference"
+              component={Select}
+              fullWidth
+              dataOptions={fulfilmentTypeOptions}
+              onChange={onChangeFulfilment}
+            />
+          }
+          { !newUser &&
+            <KeyValue label="Fulfilment preference" value={_.get(request, ['fulfilmentPreference'], '-')} />
+          }
+        </Col>
+        <Col xs={4}>
+          { newUser && selectedDelivery && deliveryLocations &&
+            <Field
+              name="deliveryAddressTypeId"
+              label="Delivery address"
+              component={Select}
+              fullWidth
+              dataOptions={[{ label: 'Select address type', value: '' }, ...deliveryLocations]}
+              onChange={onChangeAddress}
+            />
+          }
+          { newUser && !selectedDelivery &&
+            <Field
+              name="pickupLocationId"
+              label="Pickup location"
+              component={Select}
+              fullWidth
+              dataOptions={[{ label: 'Select pickup location', value: '' }]}
+              onChange={onChangeAddress}
+            />
+          }
+          { !newUser && selectedDelivery &&
+            <KeyValue label="Delivery address" value={deliveryAddress || '-'} />
+          }
+          { !newUser && !selectedDelivery &&
+            <KeyValue label="Pickup location" value={pickupLocation || '-'} />
+          }
         </Col>
       </Row>
-      <Row>
-        <Col xs={12}>
-          <KeyValue label="Barcode" value={user.barcode ? <Link to={path}>{user.barcode}</Link> : ''} />
-        </Col>
-      </Row>
-      <Row>
-        <Col xs={12}>
-          <KeyValue label="Patron group" value={requesterGroup} />
-        </Col>
-      </Row>
+      {proxySection}
     </div>
   );
 };
 
 UserDetail.propTypes = {
-  error: PropTypes.string,
-  patronGroups: PropTypes.shape({
-    hasLoaded: PropTypes.bool.isRequired,
-    isPending: PropTypes.bool,
-    other: PropTypes.shape({
-      totalRecords: PropTypes.number,
-    }),
-  }).isRequired,
-  user: PropTypes.object.isRequired,
+  deliveryAddress: PropTypes.string,
+  deliveryLocations: PropTypes.arrayOf(PropTypes.object),
+  fulfilmentTypeOptions: PropTypes.arrayOf(PropTypes.object),
+  newUser: PropTypes.bool,
+  onChangeAddress: PropTypes.func,
+  onChangeFulfilment: PropTypes.func,
+  patronGroup: PropTypes.string,
+  pickupLocation: PropTypes.string,
+  request: PropTypes.object.isRequired,
+  selectedDelivery: PropTypes.bool,
 };
 
 UserDetail.defaultProps = {
-  error: '',
+  deliveryAddress: '',
+  deliveryLocations: [],
+  fulfilmentTypeOptions: [],
+  newUser: false,
+  onChangeAddress: () => {},
+  onChangeFulfilment: () => {},
+  patronGroup: '',
+  pickupLocation: '',
+  selectedDelivery: false,
 };
 
 export default UserDetail;
