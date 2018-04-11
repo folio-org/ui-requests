@@ -26,9 +26,9 @@ const UserDetail = ({ request,
   console.log("using request", request)
   console.log("delivery address", deliveryAddress)
 
-  const id = newUser ? _.get(request, ['id']) : _.get(request, ['requesterId']);
-  const name = newUser ? getFullName(request) : _.get(request, ['requesterName'], '');
-  const barcode = newUser ? _.get(request, ['barcode']) : _.get(request, ['requesterBarcode'], '');
+  const id = newUser ? _.get(request, ['id'], '-') : _.get(request, ['requesterId'], '-');
+  const name = newUser ? getFullName(request) : _.get(request, ['requesterName'], '-');
+  const barcode = newUser ? _.get(request, ['barcode'], '-') : _.get(request, ['requesterBarcode'], '-');
 
   ///////////// TEMP FOR TESTING ///////////////////
   // request.proxyUserId = '6ddbf001-936e-41ef-904e-7dfe54056990'
@@ -38,8 +38,8 @@ const UserDetail = ({ request,
   //   barcode: 14082850283049,
   // };
 
-  const proxyName = _.get(request, ['proxy', 'lastName'], '') + ', ' + _.get(request, ['proxy', 'firstName'], '');
-  const proxyBarcode = _.get(request, ['proxy', 'barcode'], '');
+  const proxyName = _.get(request, ['proxy', 'lastName'], '-') + ', ' + _.get(request, ['proxy', 'firstName'], '-');
+  const proxyBarcode = _.get(request, ['proxy', 'barcode'], '-');
   const proxySection = request && request.proxy ? userHighlightBox("Requester's proxy", proxyName, request.proxyUserId, proxyBarcode) : '';
 
   return (
@@ -47,7 +47,7 @@ const UserDetail = ({ request,
       {userHighlightBox('Requester', name, id, barcode)}
       <Row>
         <Col xs={4}>
-          <KeyValue label="Patron group" value={patronGroup} />
+          <KeyValue label="Patron group" value={patronGroup || '-'} />
         </Col>
         <Col xs={4}>
           { newUser &&
@@ -61,39 +61,39 @@ const UserDetail = ({ request,
             />
           }
           { !newUser &&
-            <KeyValue label="Fulfilment preference" value={_.get(request, ['fulfilmentPreference'], '')} />
+            <KeyValue label="Fulfilment preference" value={_.get(request, ['fulfilmentPreference'], '-')} />
           }
         </Col>
         <Col xs={4}>
-        { selectedDelivery && deliveryLocations &&
-          <Field
-            name="deliveryAddressTypeId"
-            label="Delivery address"
-            component={Select}
-            fullWidth
-            dataOptions={[{ label: 'Select address type', value: '' }, ...deliveryLocations]}
-            onChange={onChangeAddress}
-          />
-        }
-        { !selectedDelivery && deliveryLocations &&
-          <Field
-            name="deliveryAddressTypeId"
-            label="Pickup location"
-            component={Select}
-            fullWidth
-            dataOptions={[{ label: 'Select pickup location', value: '' }]}
-            onChange={onChangeAddress}
-          />
-        }
-      </Col>
-    </Row>
-    { selectedDelivery &&
-      <Row>
-        <Col xsOffset={8} xs={4}>
-          {deliveryAddress}
+          { newUser && selectedDelivery && deliveryLocations &&
+            <Field
+              name="deliveryAddressTypeId"
+              label="Delivery address"
+              component={Select}
+              fullWidth
+              dataOptions={[{ label: 'Select address type', value: '' }, ...deliveryLocations]}
+              onChange={onChangeAddress}
+            />
+          }
+          { newUser && !selectedDelivery &&
+            <Field
+              name="pickupLocationId"
+              label="Pickup location"
+              component={Select}
+              fullWidth
+              dataOptions={[{ label: 'Select pickup location', value: '' }]}
+              onChange={onChangeAddress}
+            />
+          }
+          { !newUser && selectedDelivery &&
+            <KeyValue label="Delivery address" value={deliveryAddress || '-'} />
+          }
+          { !newUser && !selectedDelivery &&
+            <KeyValue label="Pickup location" value={pickupLocation || '-'} />
+          }
         </Col>
       </Row>
-    }
+
         {/* {deliveryAddress &&
           <Col xs={4}>
             <KeyValue label="Delivery address" value={deliveryAddress} />

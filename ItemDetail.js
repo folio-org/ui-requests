@@ -23,38 +23,39 @@ const ItemDetail = ({ request, newRequest, dateFormatter }) => {
           <KeyValue label="Item barcode" value={recordLink} />
         </Col>
         <Col xs={3}>
-          <KeyValue label="Title" value={_.get(request, ['title'], '')} />
+          <KeyValue label="Title" value={_.get(request, ['title'], '-')} />
         </Col>
         <Col xs={3}>
-          <KeyValue label="Author" value={_.get(request, ['author'], '')} />
+          <KeyValue label="Author" value={_.get(request, ['author'], '-')} />
         </Col>
         <Col xs={3}>
-          <KeyValue label="Shelving location" value={_.get(request, ['location'], '')} />
-        </Col>
-      </Row>
-      <Row>
-        <Col xs={3}>
-          <KeyValue label="Call number" value="" />
-        </Col>
-        <Col xs={3}>
-          <KeyValue label="Volume" value="" />
-        </Col>
-        <Col xs={3}>
-          <KeyValue label="Enumeration" value="" />
-        </Col>
-        <Col xs={3}>
-          <KeyValue label="Copy" value="" />
+          <KeyValue label="Shelving location" value={_.get(request, ['location']) ||
+          '-'} />
         </Col>
       </Row>
       <Row>
         <Col xs={3}>
-          <KeyValue label="Item status" value={status} />
+          <KeyValue label="Call number" value="-" />
         </Col>
         <Col xs={3}>
-          <KeyValue label="Current due date" value={dateFormatter(_.get(request, ['loan', 'dueDate'], ''))} />
+          <KeyValue label="Volume" value="-" />
         </Col>
         <Col xs={3}>
-          <KeyValue label="Requests" value={_.get(request, ['itemRequestCount'], '')} />
+          <KeyValue label="Enumeration" value="-" />
+        </Col>
+        <Col xs={3}>
+          <KeyValue label="Copy" value="-" />
+        </Col>
+      </Row>
+      <Row>
+        <Col xs={3}>
+          <KeyValue label="Item status" value={status || '-'} />
+        </Col>
+        <Col xs={3}>
+          <KeyValue label="Current due date" value={dateFormatter(_.get(request, ['loan', 'dueDate'], '')) || '-'} />
+        </Col>
+        <Col xs={3}>
+          <KeyValue label="Requests" value={_.get(request, ['itemRequestCount'], '-')} />
         </Col>
       </Row>
     </div>

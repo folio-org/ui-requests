@@ -220,7 +220,9 @@ class ViewRequest extends React.Component {
 
     const addressTypes = (this.props.resources.addressTypes && this.props.resources.addressTypes.hasLoaded) ? this.props.resources.addressTypes.records : [];
     let deliveryAddressDetail;
+    let selectedDelivery = false;
     if (_.get(request, ['fulfilmentPreference'], '') === 'Delivery') {
+      selectedDelivery = true;
       const deliveryAddressType = _.get(request, ['deliveryAddressTypeId'], null);
       if (deliveryAddressType) {
         const deliveryLocations = _.keyBy(request.requester.addresses, 'addressTypeId');
@@ -279,13 +281,13 @@ class ViewRequest extends React.Component {
             </Row>
             <Row>
               <Col xs={3}>
-                <KeyValue label="Request type" value={_.get(request, ['requestType'], '')} />
+                <KeyValue label="Request type" value={_.get(request, ['requestType'], '-')} />
               </Col>
               <Col xs={3}>
-                <KeyValue label="Request status" value={_.get(request, ['status'], '')} />
+                <KeyValue label="Request status" value={_.get(request, ['status'], '-')} />
               </Col>
               <Col xs={3}>
-                <KeyValue label="Request expiration date" value={this.makeLocaleDateString(_.get(request, ['requestExpirationDate'], ''))} />
+                <KeyValue label="Request expiration date" value={this.makeLocaleDateString(_.get(request, ['requestExpirationDate'])) || '-'} />
               </Col>
               <Col xs={3}>
                 <KeyValue label="Hold shelf expiration date" value={holdShelfExpireDate} />
@@ -293,7 +295,7 @@ class ViewRequest extends React.Component {
             </Row>
             <Row>
               <Col xs={3}>
-                <KeyValue label="Position in queue" value="" />
+                <KeyValue label="Position in queue" value="-" />
               </Col>
             </Row>
           </Accordion>
@@ -312,6 +314,7 @@ class ViewRequest extends React.Component {
             <UserDetail
               request={request}
               patronGroup={patronGroup}
+              selectedDelivery={selectedDelivery}
               deliveryAddress={deliveryAddressDetail}
               pickupLocation=""
             />
