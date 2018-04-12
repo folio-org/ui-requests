@@ -2,6 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
+import queryString from 'query-string';
 
 import Button from '@folio/stripes-components/lib/Button';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
@@ -164,7 +165,6 @@ class RequestForm extends React.Component {
         selectedDelivery: initials.fulfilmentPreference === 'Delivery',
         selectedItem: {
           itemRecord: initials.item,
-          borrowerRecord: initials.loan.userDetail,
           loanRecord: initials.loan,
         },
         selectedUser: {
@@ -306,6 +306,7 @@ class RequestForm extends React.Component {
     const { selectedUser } = this.state;
 
     const isEditForm = (initialValues && initialValues.itemId);
+    const query = location.search ? queryString.parse(location.search) : {};
 
     const addRequestFirstMenu = <PaneMenu><Button onClick={onCancel} title="close" aria-label="Close New Request Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></Button></PaneMenu>;
     const addRequestLastMenu = <PaneMenu><Button id="clickable-create-request" type="button" title="Create New Request" disabled={pristine || submitting} onClick={handleSubmit}>Create Request</Button></PaneMenu>;
@@ -379,6 +380,11 @@ class RequestForm extends React.Component {
                     }
                   </Col>
                   <Col xs={3}>
+                    { isEditForm &&
+                      <KeyValue label="Request status" value={initialValues.status} />
+                    }
+                  </Col>
+                  <Col xs={3}>
                     <Field
                       name="requestExpirationDate"
                       label="Request expiration date"
@@ -387,6 +393,17 @@ class RequestForm extends React.Component {
                       component={Datepicker}
                     />
                   </Col>
+                  { isEditForm &&
+                    <Col xs={3}>
+                      <Field
+                        name="holdShelfExpirationDate"
+                        label="Hold shelf expiration date"
+                        aria-label="Hold shelf expiration date"
+                        backendDateStandard="YYYY-MM-DD"
+                        component={Datepicker}
+                      />
+                    </Col>
+                  }
                 </Row>
                 <hr />
                 <div id="section-item-info">
@@ -426,7 +443,7 @@ class RequestForm extends React.Component {
                       { this.state.selectedItem &&
                         <ItemDetail
                           request={this.state.selectedItem}
-                          newRequest
+                          newRequest={query.layer ? query.layer === 'create' : false}
                           dateFormatter={this.props.dateFormatter}
                         />
                       }
@@ -485,7 +502,7 @@ class RequestForm extends React.Component {
                       { this.state.selectedUser &&
                         <UserDetail
                           request={this.state.selectedUser}
-                          newUser
+                          newUser={query.layer ? query.layer === 'create' : false}
                           patronGroup={patronGroupName}
                           selectedDelivery={this.state.selectedDelivery}
                           deliveryAddress={addressDetail}
@@ -495,17 +512,6 @@ class RequestForm extends React.Component {
                           onChangeFulfilment={this.onChangeFulfilment}
                         />
                       }
-                      {/* <fieldset>
-                        <legend>Request details</legend>
-
-                        <Field
-                          name="holdShelfExpirationDate"
-                          label="Hold shelf expiration date"
-                          aria-label="Hold shelf expiration date"
-                          backendDateStandard="YYYY-MM-DD"
-                          component={Datepicker}
-                        />
-                      </fieldset> */}
                     </Col>
                   </Row>
                 </div>
