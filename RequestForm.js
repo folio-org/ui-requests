@@ -90,6 +90,10 @@ class RequestForm extends React.Component {
     findLoan: PropTypes.func,
     findRequestsForItem: PropTypes.func,
     initialValues: PropTypes.object,
+    location: PropTypes.shape({
+      pathname: PropTypes.string.isRequired,
+      search: PropTypes.string,
+    }).isRequired,
     onCancel: PropTypes.func.isRequired,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
@@ -302,8 +306,10 @@ class RequestForm extends React.Component {
       submitting,
       stripes: { intl },
     } = this.props;
+    console.log("initial values", initialValues)
 
     const { selectedUser } = this.state;
+    const { location } = this.props;
 
     const isEditForm = (initialValues && initialValues.itemId);
     const query = location.search ? queryString.parse(location.search) : {};

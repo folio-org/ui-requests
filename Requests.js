@@ -20,7 +20,7 @@ const filterConfig = [
     cql: 'requestType',
     values: [
       { name: 'Holds', cql: 'Hold' },
-      { name: 'Pages', cql: 'Page'},
+      { name: 'Pages', cql: 'Page' },
       { name: 'Recalls', cql: 'Recall' },
     ],
   },
