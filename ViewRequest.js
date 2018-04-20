@@ -96,7 +96,7 @@ class ViewRequest extends React.Component {
     super(props);
 
     this.state = {
-      enhancedRequest: {},
+      fullRequestDetail: {},
       accordions: {
         'request-info': true,
         'item-info': true,
@@ -118,11 +118,13 @@ class ViewRequest extends React.Component {
 
     // Only update if actually needed (otherwise, this gets called way too often)
     if (prevRQ && prevRQ.hasLoaded && currentRQ && currentRQ.hasLoaded) {
-      if (prevRQ.records[0].id !== currentRQ.records[0].id || !this.state.enhancedRequest.id) {
+      if (prevRQ.records[0].id !== currentRQ.records[0].id || !this.state.fullRequestDetail.id) {
         const basicRequest = currentRQ.records[0];
         this.props.joinRequest(basicRequest).then((newRequest) => {
+          console.log("basicRequest", basicRequest)
+          console.log("newRequest", newRequest)
           this.setState({
-            enhancedRequest: newRequest,
+            fullRequestDetail: newRequest,
           });
         });
       }
@@ -166,23 +168,33 @@ class ViewRequest extends React.Component {
   }
 
   render() {
-    const { resources, location, stripes } = this.props;
+    const { location, stripes } = this.props;
+    const { patronGroups, addressTypes, selectedRequest } = this.props.resources;
+    const { fullRequestDetail } = this.state;
     const query = location.search ? queryString.parse(location.search) : {};
-    let request = (resources.selectedRequest && resources.selectedRequest.hasLoaded) ? resources.selectedRequest.records[0] : null;
+    let request;// = (selectedRequest && selectedRequest.hasLoaded) ? selectedRequest.records[0] : null;
 
     let patronGroup;
 
     // Most of the values needed to populate the view come from the "enhanced" request
-    // object, which includes parts of the requester's user record, the item record,
-    // and the related loan record (if any) and its borrower.
-    if (this.state.enhancedRequest.id) {
-      request = this.state.enhancedRequest;
-      patronGroup = request.patronGroup;
-      if (resources.patronGroups && resources.patronGroups.hasLoaded) {
-        const groupRecord = resources.patronGroups.records.find(g => g.id === request.patronGroup);
+    // object, fullRequestDetail, which includes parts of the requester's user record,
+    // the item record,
+    // and the related loan record (if any), in the form:
+    // {
+    //  requestMeta: { top-level request details },
+    //  requester: { user details },
+    //  item: { item details },
+    //  loan: { loan details },
+    //  requestCount: number of requests for the item
+    // }
+    if (fullRequestDetail.requestMeta) {
+      request = fullRequestDetail;
+      patronGroup = request.requester.patronGroup;
+      if (patronGroups && patronGroups.hasLoaded) {
+        const groupRecord = patronGroups.records.find(g => g.id === patronGroup);
         patronGroup = groupRecord.group || patronGroup;
-        if (this.state.enhancedRequest.requester) {
-          this.state.enhancedRequest.requester.patronGroup = groupRecord ? groupRecord.id : null;
+        if (fullRequestDetail.requester) {
+          fullRequestDetail.requester.patronGroup = groupRecord ? groupRecord.id : null;
         }
       }
     }
@@ -207,19 +219,19 @@ class ViewRequest extends React.Component {
       </PaneMenu>
     );
 
-    const addressTypes = (this.props.resources.addressTypes && this.props.resources.addressTypes.hasLoaded) ? this.props.resources.addressTypes.records : [];
+    //addressTypes = (addressTypes && addressTypes.hasLoaded) ? addressTypes.records : [];
     let deliveryAddressDetail;
     let selectedDelivery = false;
-    if (_.get(request, ['fulfilmentPreference'], '') === 'Delivery') {
+    if (_.get(request, ['requestMeta', 'fulfilmentPreference'], '') === 'Delivery') {
       selectedDelivery = true;
-      const deliveryAddressType = _.get(request, ['deliveryAddressTypeId'], null);
+      const deliveryAddressType = _.get(request, ['requestMeta', 'deliveryAddressTypeId'], null);
       if (deliveryAddressType) {
-        const deliveryLocations = _.keyBy(request.requester.addresses, 'addressTypeId');
+        const deliveryLocations = _.keyBy(request.requester.personal.addresses, 'addressTypeId');
         deliveryAddressDetail = toUserAddress(deliveryLocations[deliveryAddressType]);
       }
     }
-    const holdShelfExpireDate = (_.get(request, ['status'], '') === 'Open - Awaiting pickup') ?
-      this.makeLocaleDateString(_.get(request, ['holdShelfExpirationDate'], '')) : '-';
+    const holdShelfExpireDate = (_.get(request, ['requestMeta', 'status'], '') === 'Open - Awaiting pickup') ?
+      this.makeLocaleDateString(_.get(request, ['requestMeta', 'holdShelfExpirationDate'], '')) : '-';
 
     return request ? (
       <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -234,19 +246,19 @@ class ViewRequest extends React.Component {
                 <MetaSection
                   id="requestInfoMeta"
                   contentId="requestInfoMetaContent"
-                  lastUpdatedDate={request.metaData.updatedDate}
+                  lastUpdatedDate={request.requestMeta.metaData.updatedDate}
                 />
               </Col>
             </Row>
             <Row>
               <Col xs={3}>
-                <KeyValue label="Request type" value={_.get(request, ['requestType'], '-')} />
+                <KeyValue label="Request type" value={_.get(request, ['requestMeta', 'requestType'], '-')} />
               </Col>
               <Col xs={3}>
-                <KeyValue label="Request status" value={_.get(request, ['status'], '-')} />
+                <KeyValue label="Request status" value={_.get(request, ['requestMeta', 'status'], '-')} />
               </Col>
               <Col xs={3}>
-                <KeyValue label="Request expiration date" value={this.makeLocaleDateString(_.get(request, ['requestExpirationDate'])) || '-'} />
+                <KeyValue label="Request expiration date" value={this.makeLocaleDateString(_.get(request, ['requestMeta', 'requestExpirationDate'])) || '-'} />
               </Col>
               <Col xs={3}>
                 <KeyValue label="Hold shelf expiration date" value={holdShelfExpireDate} />
@@ -263,7 +275,7 @@ class ViewRequest extends React.Component {
             id="item-info"
             label="Item information"
           >
-            <ItemDetail request={request} dateFormatter={this.makeLocaleDateString} />
+            <ItemDetail item={request.item} dateFormatter={this.makeLocaleDateString} />
           </Accordion>
           <Accordion
             open
@@ -271,7 +283,7 @@ class ViewRequest extends React.Component {
             label="Requester information"
           >
             <UserDetail
-              request={request}
+              user={request.requester}
               patronGroup={patronGroup}
               selectedDelivery={selectedDelivery}
               deliveryAddress={deliveryAddressDetail}
@@ -283,11 +295,11 @@ class ViewRequest extends React.Component {
         <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit Request Dialog">
           <RequestForm
             stripes={stripes}
-            initialValues={this.state.enhancedRequest}
+            initialValues={fullRequestDetail}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.props.onCloseEdit}
             optionLists={{ requestTypes, fulfilmentTypes, addressTypes }}
-            patronGroups={this.props.resources.patronGroups}
+            patronGroups={patronGroups}
             dateFormatter={this.props.dateFormatter}
           />
         </Layer>
