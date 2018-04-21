@@ -231,21 +231,7 @@ class Requests extends React.Component {
       // the original request
       item.instanceId = r.item.instanceId;
 
-      // const enhancedRequest = Object.assign({}, r, user, item, loan, requestCount);
-      // enhancedRequest.requesterName = (user && user.personal) ? `${user.personal.firstName} ${user.personal.lastName}` : '';
-      // enhancedRequest.requesterBarcode = (user && user.personal) ? user.barcode : '';
-      // enhancedRequest.patronGroup = (user && user.personal) ? user.patronGroup : '';
-      // enhancedRequest.requester.addresses = (user && user.personal && user.personal.addresses) ? user.personal.addresses : [];
-      //
-      // enhancedRequest.title = item ? item.title : '';
-      // enhancedRequest.itemBarcode = item ? item.barcode : '';
-      // enhancedRequest.itemStatus = item ? item.status : '';
-      // enhancedRequest.location = (item && item.location) ? item.location.name : '';
-      //
-      // enhancedRequest.loan = loan;
-      // enhancedRequest.itemRequestCount = requestCount;
       return { requestMeta: r, requester: user, item, loan, requestCount }
-    //  return enhancedRequest;
     });
   }
 

@@ -121,7 +121,6 @@ class ViewRequest extends React.Component {
       if ((prevRQ.records[0].id !== currentRQ.records[0].id) || !(this.state.fullRequestDetail.requestMeta && this.state.fullRequestDetail.requestMeta.id)) {
         const basicRequest = currentRQ.records[0];
         this.props.joinRequest(basicRequest).then((newRequest) => {
-          console.log("newRequest", newRequest)
           this.setState({
             fullRequestDetail: newRequest,
           });

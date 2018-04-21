@@ -159,12 +159,9 @@ class RequestForm extends React.Component {
     const fullRecord = this.props.fullRecord;
     const oldInitials = prevProps.initialValues;
     const oldRecord = prevProps.fullRecord;
-    console.log("initials", initials)
     if ((initials && initials.fulfilmentPreference &&
         oldInitials && !oldInitials.fulfilmentPreference) ||
         (fullRecord && !oldRecord)) {
-    //  initials.item.location = { name: initials.location };
-      /* eslint react/no-did-update-set-state: 0 */
       this.setState({
         selectedAddressTypeId: initials.deliveryAddressTypeId,
         selectedDelivery: initials.fulfilmentPreference === 'Delivery',
@@ -203,9 +200,7 @@ class RequestForm extends React.Component {
     const barcode = this.requesterBarcodeField.getRenderedComponent().input.value;
 
     this.props.findUser(barcode, 'barcode').then((result) => {
-      console.log("Finduser result", result)
       if (result.totalRecords === 1) {
-        console.log("setting user", result.users[0])
         this.setState({
           selectedUser: result.users[0],
         });
@@ -230,7 +225,6 @@ class RequestForm extends React.Component {
         this.setState({
           selectedItem: item,
         });
-        connsole.log("Looking for loan for ", item.id)
 
         return Promise.all(
           [
@@ -300,12 +294,6 @@ class RequestForm extends React.Component {
       requestType = requestMeta.requestType;
       fulfilmentPreference = requestMeta.fulfilmentPreference;
     };
-    console.log("initial values", initialValues)
-
-        console.log("selected item", this.state.selectedItem)
-        console.log("selected user", this.state.selectedUser)
-        console.log("selected loan", this.state.selectedLoan)
-        console.log("address types", optionLists.addressTypes)
 
     const { selectedUser } = this.state;
     const { location } = this.props;
@@ -333,10 +321,7 @@ class RequestForm extends React.Component {
       deliveryLocationsDetail = _.keyBy(selectedUser.personal.addresses, a => a.addressTypeId);
     }
     if (this.state.selectedAddressTypeId) {
-      console.log("Selected address type", this.state.selectedAddressTypeId)
-      console.log("locatoinsDetail", deliveryLocationsDetail)
       addressDetail = toUserAddress(deliveryLocationsDetail[this.state.selectedAddressTypeId]);
-      console.log("address detail", addressDetail)
     }
 
     let patronGroupName;

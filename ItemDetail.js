@@ -7,14 +7,10 @@ import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
 const ItemDetail = ({ item, newRequest, dateFormatter, loan, requestCount }) => {
-  console.log("item", item)
   if (!item.barcode) { return <div>Loading ...</div>; }
 
   const barcode = item.barcode;
   const recordLink = barcode ? <Link to={`/inventory/view/${item.instanceId}/${item.holdingsRecordId}/${item.itemId}`}>{barcode}</Link> : '';
-  // const currentDueDate = (_.get(request, ['itemStatus', 'name'], '').startsWith('Checked out')) ?
-  //                        dateFormatter(_.get(request, ['loan', 'dueDate'], '')) : '-';
-  //const status = newRequest ? _.get(item, ['status'], '') : _.get(item, ['status', 'name'], '');
   const status = _.get(item, ['status', 'name'], '');
 
   return (

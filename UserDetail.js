@@ -22,14 +22,9 @@ const UserDetail = ({
   onChangeAddress,
   onChangeFulfilment,
 }) => {
-  //const id = newUser ? _.get(request, ['id'], '-') : _.get(request, ['requesterId'], '-');
   const id = user.id;
-  //const name = newUser ? getFullName(request) : _.get(request, ['requesterName'], '-');
   const name = getFullName(user);
-  //const barcode = newUser ? _.get(request, ['barcode'], '-') : _.get(request, ['requesterBarcode'], '-');
   const barcode = user.barcode;
-console.log("user", user)
-  //const proxyName = `${_.get(request, ['proxy', 'lastName'], '-')}, ${_.get(request, ['proxy', 'firstName'], '-')}`;
   const proxy = _.get(requestMeta, ['proxy']);
   let proxyName, proxyBarcode;
   if (proxy) {
