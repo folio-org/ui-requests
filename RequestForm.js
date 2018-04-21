@@ -230,6 +230,7 @@ class RequestForm extends React.Component {
         this.setState({
           selectedItem: item,
         });
+        connsole.log("Looking for loan for ", item.id)
 
         return Promise.all(
           [
@@ -451,11 +452,11 @@ class RequestForm extends React.Component {
                       }
                       { this.state.selectedItem &&
                         <ItemDetail
-                          item={fullRequest ? fullRequest.item: {}}
-                          loan={fullRequest ? fullRequest.loan : {}}
+                          item={fullRequest ? fullRequest.item: this.state.selectedItem}
+                          loan={fullRequest ? fullRequest.loan : this.state.selectedLoan}
                           newRequest={query.layer ? query.layer === 'create' : false}
                           dateFormatter={this.props.dateFormatter}
-                          requestCount={fullRequest ? fullRequest.requestCount : '-'}
+                          requestCount={fullRequest ? fullRequest.requestCount : this.state.itemRequestCount}
                         />
                       }
                     </Col>
