@@ -300,7 +300,8 @@ class ViewRequest extends React.Component {
         <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit Request Dialog">
           <RequestForm
             stripes={stripes}
-            initialValues={fullRequestDetail}
+            initialValues={fullRequestDetail.requestMeta}
+            fullRequest={fullRequestDetail}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.props.onCloseEdit}
             optionLists={{ requestTypes, fulfilmentTypes, addressTypes }}

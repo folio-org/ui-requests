@@ -130,6 +130,9 @@ class RequestForm extends React.Component {
     const {
       requester,
       item,
+      loan,
+    } = props.fullRequest;
+    const {
       fulfilmentPreference,
       deliveryAddressTypeId,
     } = props.initialValues;
@@ -137,15 +140,9 @@ class RequestForm extends React.Component {
     this.state = {
       selectedDelivery: fulfilmentPreference === 'Delivery',
       selectedAddressTypeId: deliveryAddressTypeId,
-      selectedItem: item ? {
-        item,
-        itemBarcode: item.barcode,
-        itemId: item.id,
-      } : null,
-      selectedUser: requester ? {
-        patronGroup: requester.patronGroup,
-        personal: requester,
-      } : null,
+      selectedItem: item,
+      selectedUser: requester,
+      selectedLoan: loan
     };
 
     this.onChangeAddress = this.onChangeAddress.bind(this);
@@ -158,23 +155,21 @@ class RequestForm extends React.Component {
 
   componentDidUpdate(prevProps) {
     const initials = this.props.initialValues;
+    const fullRecord = this.props.fullRecord;
     const oldInitials = prevProps.initialValues;
-
-    if (initials && initials.requester &&
-        oldInitials && !oldInitials.requester) {
-      initials.item.location = { name: initials.location };
+    const oldRecord = prevProps.fullRecord;
+    console.log("initials", initials)
+    if ((initials && initials.fulfilmentPreference &&
+        oldInitials && !oldInitials.fulfilmentPreference) ||
+        (fullRecord && !oldRecord)) {
+    //  initials.item.location = { name: initials.location };
       /* eslint react/no-did-update-set-state: 0 */
       this.setState({
         selectedAddressTypeId: initials.deliveryAddressTypeId,
         selectedDelivery: initials.fulfilmentPreference === 'Delivery',
-        selectedItem: {
-          itemRecord: initials.item,
-          loanRecord: initials.loan,
-        },
-        selectedUser: {
-          patronGroup: initials.requester.patronGroup,
-          personal: initials.requester,
-        },
+        selectedItem: fullRecord.item,
+        selectedLoan: fullRecord.loan,
+        selectedUser: fullRecord.user,
       });
     }
   }
@@ -207,7 +202,9 @@ class RequestForm extends React.Component {
     const barcode = this.requesterBarcodeField.getRenderedComponent().input.value;
 
     this.props.findUser(barcode, 'barcode').then((result) => {
+      console.log("Finduser result", result)
       if (result.totalRecords === 1) {
+        console.log("setting user", result.users[0])
         this.setState({
           selectedUser: result.users[0],
         });
@@ -230,18 +227,7 @@ class RequestForm extends React.Component {
         // display the matched item as quickly as possible, without waiting for
         // the slow loan and request lookups
         this.setState({
-          selectedItem: {
-            item: {
-              instanceId: item.instanceId,
-              holdingsRecordId: item.holdingsRecordId,
-            },
-            itemBarcode: item.barcode,
-            itemId: item.id,
-            title: item.title,
-            // author: ,
-            location: item.permanentLocation.name,
-            itemStatus: item.status.name,
-          },
+          selectedItem: item,
         });
 
         return Promise.all(
@@ -254,21 +240,15 @@ class RequestForm extends React.Component {
           const itemRequestCount = resultArray[1].requests.length;
           if (loan) {
             this.setState(prevState => ({
-              selectedItem: {
-                ...prevState.selectedItem,
-                loan: {
-                  dueDate: loan.dueDate,
-                },
-                itemRequestCount,
-              },
+              selectedItem: item,
+              selectedLoan: loan,
+              itemRequestCount,
             }));
           }
           // If no loan is found, just set the item record and rq count
           this.setState(prevState => ({
-            selectedItem: {
-              ...prevState.selectedItem,
-              itemRequestCount,
-            },
+            selectedItem: item,
+            itemRequestCount,
           }));
 
           return result;
@@ -299,6 +279,7 @@ class RequestForm extends React.Component {
     const {
       handleSubmit,
       initialValues,
+      fullRequest,
       onCancel,
       optionLists,
       patronGroups,
@@ -306,19 +287,25 @@ class RequestForm extends React.Component {
       submitting,
       stripes: { intl },
     } = this.props;
+    const { requestMeta, requester, item, loan, requestCount } = fullRequest;
     console.log("initial values", initialValues)
+
+        console.log("selected item", this.state.selectedItem)
+        console.log("selected user", this.state.selectedUser)
+        console.log("selected loan", this.state.selectedLoan)
+        console.log("address types", optionLists.addressTypes)
 
     const { selectedUser } = this.state;
     const { location } = this.props;
 
-    const isEditForm = (initialValues && initialValues.itemId);
+    const isEditForm = (item && item.id);
     const query = location.search ? queryString.parse(location.search) : {};
 
     const addRequestFirstMenu = <PaneMenu><Button onClick={onCancel} title="close" aria-label="Close New Request Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></Button></PaneMenu>;
     const addRequestLastMenu = <PaneMenu><Button id="clickable-create-request" type="button" title="Create New Request" disabled={pristine || submitting} onClick={handleSubmit}>Create Request</Button></PaneMenu>;
     const editRequestLastMenu = <PaneMenu><Button id="clickable-update-request" type="button" title="Update Request" disabled={pristine || submitting} onClick={handleSubmit}>Update Request</Button></PaneMenu>;
-    const requestTypeOptions = _.sortBy(optionLists.requestTypes || [], ['label']).map(t => ({ label: t.label, value: t.id, selected: initialValues.requestType === t.id }));
-    const fulfilmentTypeOptions = _.sortBy(optionLists.fulfilmentTypes || [], ['label']).map(t => ({ label: t.label, value: t.id, selected: t.id === initialValues.fulfilmentPreference }));
+    const requestTypeOptions = _.sortBy(optionLists.requestTypes || [], ['label']).map(t => ({ label: t.label, value: t.id, selected: requestMeta.requestType === t.id }));
+    const fulfilmentTypeOptions = _.sortBy(optionLists.fulfilmentTypes || [], ['label']).map(t => ({ label: t.label, value: t.id, selected: t.id === requestMeta.fulfilmentPreference }));
     const labelAsterisk = isEditForm ? '' : '*';
     const disableRecordCreation = true;
 
@@ -327,7 +314,7 @@ class RequestForm extends React.Component {
     let addressDetail;
     if (selectedUser && selectedUser.personal && selectedUser.personal.addresses) {
       deliveryLocations = selectedUser.personal.addresses.map((a) => {
-        const typeName = _.find(optionLists.addressTypes, { id: a.addressTypeId }).addressType;
+        const typeName = _.find(optionLists.addressTypes.records, { id: a.addressTypeId }).addressType;
         return { label: typeName, value: a.addressTypeId };
       });
       deliveryLocations = _.sortBy(deliveryLocations, ['label']);
@@ -351,6 +338,8 @@ class RequestForm extends React.Component {
       barcode: intl.formatMessage({ id: 'ui-requests.user.barcode' }),
     };
 
+
+
     return (
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
@@ -363,7 +352,7 @@ class RequestForm extends React.Component {
                 <MetaSection
                   id="requestInfoMeta"
                   contentId="requestInfoMetaContent"
-                  lastUpdatedDate={initialValues.metaData.updatedDate}
+                  lastUpdatedDate={requestMeta.metaData.updatedDate}
                 />
               </Col>
             }
@@ -382,17 +371,18 @@ class RequestForm extends React.Component {
                       />
                     }
                     { isEditForm &&
-                      <KeyValue label="Request type" value={initialValues.requestType} />
+                      <KeyValue label="Request type" value={requestMeta.requestType} />
                     }
                   </Col>
                   <Col xs={3}>
                     { isEditForm &&
-                      <KeyValue label="Request status" value={initialValues.status} />
+                      <KeyValue label="Request status" value={requestMeta.status} />
                     }
                   </Col>
                   <Col xs={3}>
                     <Field
                       name="requestExpirationDate"
+                      value={requestMeta.requestExpirationDate}
                       label="Request expiration date"
                       aria-label="Request expiration date"
                       backendDateStandard="YYYY-MM-DD"
@@ -448,9 +438,11 @@ class RequestForm extends React.Component {
                       }
                       { this.state.selectedItem &&
                         <ItemDetail
-                          request={this.state.selectedItem}
+                          item={fullRequest.item}
+                          loan={fullRequest.loan}
                           newRequest={query.layer ? query.layer === 'create' : false}
                           dateFormatter={this.props.dateFormatter}
+                          requestCount={fullRequest.requestCount}
                         />
                       }
                     </Col>
@@ -507,7 +499,8 @@ class RequestForm extends React.Component {
                       }
                       { this.state.selectedUser &&
                         <UserDetail
-                          request={this.state.selectedUser}
+                          user={fullRequest.requester}
+                          requestMeta={fullRequest.requestMeta}
                           newUser={query.layer ? query.layer === 'create' : false}
                           patronGroup={patronGroupName}
                           selectedDelivery={this.state.selectedDelivery}
