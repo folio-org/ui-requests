@@ -118,10 +118,9 @@ class ViewRequest extends React.Component {
 
     // Only update if actually needed (otherwise, this gets called way too often)
     if (prevRQ && prevRQ.hasLoaded && currentRQ && currentRQ.hasLoaded) {
-      if (prevRQ.records[0].id !== currentRQ.records[0].id || !this.state.fullRequestDetail.id) {
+      if ((prevRQ.records[0].id !== currentRQ.records[0].id) || !(this.state.fullRequestDetail.requestMeta && this.state.fullRequestDetail.requestMeta.id)) {
         const basicRequest = currentRQ.records[0];
         this.props.joinRequest(basicRequest).then((newRequest) => {
-          console.log("basicRequest", basicRequest)
           console.log("newRequest", newRequest)
           this.setState({
             fullRequestDetail: newRequest,
@@ -275,7 +274,12 @@ class ViewRequest extends React.Component {
             id="item-info"
             label="Item information"
           >
-            <ItemDetail item={request.item} dateFormatter={this.makeLocaleDateString} />
+            <ItemDetail
+              item={request.item}
+              loan={request.loan}
+              dateFormatter={this.makeLocaleDateString}
+              requestCount={request.requestCount}
+            />
           </Accordion>
           <Accordion
             open
@@ -285,6 +289,7 @@ class ViewRequest extends React.Component {
             <UserDetail
               user={request.requester}
               patronGroup={patronGroup}
+              requestMeta={request.requestMeta}
               selectedDelivery={selectedDelivery}
               deliveryAddress={deliveryAddressDetail}
               pickupLocation=""
