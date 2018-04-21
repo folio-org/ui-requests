@@ -10,7 +10,8 @@ import Select from '@folio/stripes-components/lib/Select';
 import { getFullName, userHighlightBox } from './utils';
 
 const UserDetail = ({
-  request,
+  user,
+  requestMeta,
   newUser,
   patronGroup,
   deliveryAddress,
@@ -21,13 +22,21 @@ const UserDetail = ({
   onChangeAddress,
   onChangeFulfilment,
 }) => {
-  const id = newUser ? _.get(request, ['id'], '-') : _.get(request, ['requesterId'], '-');
-  const name = newUser ? getFullName(request) : _.get(request, ['requesterName'], '-');
-  const barcode = newUser ? _.get(request, ['barcode'], '-') : _.get(request, ['requesterBarcode'], '-');
+  //const id = newUser ? _.get(request, ['id'], '-') : _.get(request, ['requesterId'], '-');
+  const id = user.id;
+  //const name = newUser ? getFullName(request) : _.get(request, ['requesterName'], '-');
+  const name = getFullName(user);
+  //const barcode = newUser ? _.get(request, ['barcode'], '-') : _.get(request, ['requesterBarcode'], '-');
+  const barcode = user.barcode;
 
-  const proxyName = `${_.get(request, ['proxy', 'lastName'], '-')}, ${_.get(request, ['proxy', 'firstName'], '-')}`;
-  const proxyBarcode = _.get(request, ['proxy', 'barcode'], '-');
-  const proxySection = request && request.proxy ? userHighlightBox('Requester\'s proxy', proxyName, request.proxyUserId, proxyBarcode) : '';
+  //const proxyName = `${_.get(request, ['proxy', 'lastName'], '-')}, ${_.get(request, ['proxy', 'firstName'], '-')}`;
+  const proxy = _.get(requestMeta, ['proxy']);
+  let proxyName, proxyBarcode;
+  if (proxy) {
+    proxyName = getFullName(proxy);
+    proxyBarcode = _.get(proxy, ['barcode'], '-');
+  }
+  const proxySection = proxy ? userHighlightBox('Requester\'s proxy', proxyName, proxy.id, proxyBarcode) : '';
 
   return (
     <div>
@@ -48,7 +57,7 @@ const UserDetail = ({
             />
           }
           { !newUser &&
-            <KeyValue label="Fulfilment preference" value={_.get(request, ['fulfilmentPreference'], '-')} />
+            <KeyValue label="Fulfilment preference" value={_.get(requestMeta, ['fulfilmentPreference'], '-')} />
           }
         </Col>
         <Col xs={4}>
@@ -94,7 +103,8 @@ UserDetail.propTypes = {
   onChangeFulfilment: PropTypes.func,
   patronGroup: PropTypes.string,
   pickupLocation: PropTypes.string,
-  request: PropTypes.object.isRequired,
+  requestMeta: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
   selectedDelivery: PropTypes.bool,
 };
 

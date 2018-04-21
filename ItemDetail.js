@@ -6,14 +6,15 @@ import { Link } from 'react-router-dom';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
-const ItemDetail = ({ request, newRequest, dateFormatter }) => {
-  if (!request.itemBarcode) { return <div>Loading ...</div>; }
+const ItemDetail = ({ item, newRequest, dateFormatter, loan, requestCount }) => {
+  if (!item.barcode) { return <div>Loading ...</div>; }
 
-  const itemBarcode = _.get(request, ['itemBarcode'], '');
-  const recordLink = itemBarcode ? <Link to={`/inventory/view/${request.item.instanceId}/${request.item.holdingsRecordId}/${request.itemId}`}>{itemBarcode}</Link> : '';
+  const barcode = item.barcode;
+  const recordLink = barcode ? <Link to={`/inventory/view/${item.instanceId}/${item.holdingsRecordId}/${item.itemId}`}>{barcode}</Link> : '';
   // const currentDueDate = (_.get(request, ['itemStatus', 'name'], '').startsWith('Checked out')) ?
   //                        dateFormatter(_.get(request, ['loan', 'dueDate'], '')) : '-';
-  const status = newRequest ? _.get(request, ['itemStatus'], '') : _.get(request, ['itemStatus', 'name'], '');
+  //const status = newRequest ? _.get(item, ['status'], '') : _.get(item, ['status', 'name'], '');
+  const status = _.get(item, ['status', 'name'], '');
 
   return (
     <div>
@@ -22,15 +23,15 @@ const ItemDetail = ({ request, newRequest, dateFormatter }) => {
           <KeyValue label="Item barcode" value={recordLink} />
         </Col>
         <Col xs={3}>
-          <KeyValue label="Title" value={_.get(request, ['title'], '-')} />
+          <KeyValue label="Title" value={_.get(item, ['title'], '-')} />
         </Col>
         <Col xs={3}>
-          <KeyValue label="Author" value={_.get(request, ['author'], '-')} />
+          <KeyValue label="Author" value={_.get(item, ['author'], '-')} />
         </Col>
         <Col xs={3}>
           <KeyValue
             label="Shelving location"
-            value={_.get(request, ['location']) || '-'}
+            value={_.get(item, ['permanentLocation', 'name']) || '-'}
           />
         </Col>
       </Row>
@@ -53,10 +54,10 @@ const ItemDetail = ({ request, newRequest, dateFormatter }) => {
           <KeyValue label="Item status" value={status || '-'} />
         </Col>
         <Col xs={3}>
-          <KeyValue label="Current due date" value={dateFormatter(_.get(request, ['loan', 'dueDate'], '')) || '-'} />
+          <KeyValue label="Current due date" value={dateFormatter(_.get(loan, ['dueDate'], '')) || '-'} />
         </Col>
         <Col xs={3}>
-          <KeyValue label="Requests" value={_.get(request, ['itemRequestCount'], '-')} />
+          <KeyValue label="Requests" value={requestCount} />
         </Col>
       </Row>
     </div>
@@ -64,13 +65,17 @@ const ItemDetail = ({ request, newRequest, dateFormatter }) => {
 };
 
 ItemDetail.propTypes = {
-  request: PropTypes.object.isRequired,
+  item: PropTypes.object.isRequired,
+  loan: PropTypes.object,
   newRequest: PropTypes.bool,
+  requestCount: PropTypes.number,
   dateFormatter: PropTypes.func.isRequired,
 };
 
 ItemDetail.defaultProps = {
+  loan: {},
   newRequest: false,
+  requestCount: 0,
 };
 
 export default ItemDetail;
