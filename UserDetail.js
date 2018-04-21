@@ -28,7 +28,7 @@ const UserDetail = ({
   const name = getFullName(user);
   //const barcode = newUser ? _.get(request, ['barcode'], '-') : _.get(request, ['requesterBarcode'], '-');
   const barcode = user.barcode;
-
+console.log("user", user)
   //const proxyName = `${_.get(request, ['proxy', 'lastName'], '-')}, ${_.get(request, ['proxy', 'firstName'], '-')}`;
   const proxy = _.get(requestMeta, ['proxy']);
   let proxyName, proxyBarcode;
@@ -89,6 +89,13 @@ const UserDetail = ({
           }
         </Col>
       </Row>
+      { newUser && selectedDelivery &&
+        <Row>
+          <Col xs={4} xsOffset={8}>
+            {deliveryAddress}
+          </Col>
+        </Row>
+      }
       {proxySection}
     </div>
   );

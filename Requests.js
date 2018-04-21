@@ -275,7 +275,7 @@ class Requests extends React.Component {
   render() {
     const { resources, stripes } = this.props;
     const patronGroups = resources.patronGroups;// (resources.patronGroups || {}).records || [];
-    const addressTypes = (resources.addressTypes && resources.addressTypes.hasLoaded) ? resources.addressTypes.records : [];
+    const addressTypes = (resources.addressTypes && resources.addressTypes.hasLoaded) ? resources.addressTypes : [];
 
     const resultsFormatter = {
       'Item barcode': rq => (rq.item ? rq.item.barcode : ''),
