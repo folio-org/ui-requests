@@ -356,7 +356,7 @@ class RequestForm extends React.Component {
                 <MetaSection
                   id="requestInfoMeta"
                   contentId="requestInfoMetaContent"
-                  lastUpdatedDate={initialValues.metaData.updatedDate}
+                  lastUpdatedDate={initialValues.metadata.updatedDate}
                 />
               </Col>
             }

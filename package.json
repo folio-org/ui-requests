@@ -27,8 +27,8 @@
     "queryResource": "query",
     "okapiInterfaces": {
       "notes": "1.0",
-      "request-storage": "1.2",
-      "circulation": "2.5",
+      "request-storage": "2.0",
+      "circulation": "3.0",
       "inventory": "5.0"
     },
     "permissionSets": [

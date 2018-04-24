@@ -234,7 +234,7 @@ class ViewRequest extends React.Component {
                 <MetaSection
                   id="requestInfoMeta"
                   contentId="requestInfoMetaContent"
-                  lastUpdatedDate={request.metaData.updatedDate}
+                  lastUpdatedDate={request.metadata.updatedDate}
                 />
               </Col>
             </Row>
