@@ -17,6 +17,7 @@
 * Ignore yarn-error.log. Refs STRIPES-517.
 * Bug fix: pass MCL keys, not values, to patron lookup. Fixes UIREQ-76.
 * Bug fix: display item-details on request-edit pane. Refs UIREQ-55.
+* Prefer metadata over metaData. One case to rule them all! Refs UIREQ-80.
 * Refactor fetching and structure of extended request object.
 
 ## [1.1.0](https://github.com/folio-org/ui-requests/tree/v1.1.0) (2018-01-04)
