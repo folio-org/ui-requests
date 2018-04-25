@@ -119,7 +119,7 @@ class RequestForm extends React.Component {
     findItem: () => {},
     findLoan: () => {},
     findRequestsForItem: () => {},
-    fullRequest: () => {},
+    fullRequest: null,
     initialValues: {},
     optionLists: {},
     pristine: true,
