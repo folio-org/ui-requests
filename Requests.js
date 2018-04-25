@@ -20,6 +20,7 @@ const filterConfig = [
     cql: 'requestType',
     values: [
       { name: 'Holds', cql: 'Hold' },
+      { name: 'Pages', cql: 'Page' },
       { name: 'Recalls', cql: 'Recall' },
     ],
   },
@@ -226,21 +227,11 @@ class Requests extends React.Component {
       const loan = resultArray[2].loans[0];
       const requestCount = resultArray[3].requests.length;
 
-      const enhancedRequest = Object.assign({}, r);
-      enhancedRequest.requesterName = (user && user.personal) ? `${user.personal.firstName} ${user.personal.lastName}` : '';
-      enhancedRequest.requesterBarcode = (user && user.personal) ? user.barcode : '';
-      enhancedRequest.patronGroup = (user && user.personal) ? user.patronGroup : '';
-      enhancedRequest.requester.addresses = (user && user.personal && user.personal.addresses) ? user.personal.addresses : [];
+      // One field missing from item is the instanceId ... but it's included in
+      // the original request
+      item.instanceId = r.item.instanceId;
 
-      enhancedRequest.title = item ? item.title : '';
-      enhancedRequest.itemBarcode = item ? item.barcode : '';
-      enhancedRequest.itemStatus = item ? item.status : '';
-      enhancedRequest.location = (item && item.location) ? item.location.name : '';
-
-      enhancedRequest.loan = loan;
-      enhancedRequest.itemRequestCount = requestCount;
-
-      return enhancedRequest;
+      return { requestMeta: r, requester: user, item, loan, requestCount };
     });
   }
 
@@ -270,7 +261,7 @@ class Requests extends React.Component {
   render() {
     const { resources, stripes } = this.props;
     const patronGroups = resources.patronGroups;// (resources.patronGroups || {}).records || [];
-    const addressTypes = (resources.addressTypes && resources.addressTypes.hasLoaded) ? resources.addressTypes.records : [];
+    const addressTypes = (resources.addressTypes && resources.addressTypes.hasLoaded) ? resources.addressTypes : [];
 
     const resultsFormatter = {
       'Item barcode': rq => (rq.item ? rq.item.barcode : ''),
