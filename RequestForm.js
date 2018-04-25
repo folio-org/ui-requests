@@ -89,6 +89,7 @@ class RequestForm extends React.Component {
     findItem: PropTypes.func,
     findLoan: PropTypes.func,
     findRequestsForItem: PropTypes.func,
+    fullRequest: PropTypes.object,
     initialValues: PropTypes.object,
     location: PropTypes.shape({
       pathname: PropTypes.string.isRequired,
@@ -118,6 +119,7 @@ class RequestForm extends React.Component {
     findItem: () => {},
     findLoan: () => {},
     findRequestsForItem: () => {},
+    fullRequest: () => {},
     initialValues: {},
     optionLists: {},
     pristine: true,
@@ -127,7 +129,9 @@ class RequestForm extends React.Component {
   constructor(props) {
     super(props);
 
-    let requester, item, loan;
+    let requester;
+    let item;
+    let loan;
     if (props.fullRequest) {
       requester = props.fullRequest.requester;
       item = props.fullRequest.item;
@@ -143,7 +147,7 @@ class RequestForm extends React.Component {
       selectedAddressTypeId: deliveryAddressTypeId,
       selectedItem: item,
       selectedUser: requester,
-      selectedLoan: loan
+      selectedLoan: loan,
     };
 
     this.onChangeAddress = this.onChangeAddress.bind(this);
@@ -156,18 +160,19 @@ class RequestForm extends React.Component {
 
   componentDidUpdate(prevProps) {
     const initials = this.props.initialValues;
-    const fullRecord = this.props.fullRecord;
+    const fullRequest = this.props.fullRequest;
     const oldInitials = prevProps.initialValues;
-    const oldRecord = prevProps.fullRecord;
+    const oldRecord = prevProps.fullRequest;
     if ((initials && initials.fulfilmentPreference &&
         oldInitials && !oldInitials.fulfilmentPreference) ||
-        (fullRecord && !oldRecord)) {
+        (fullRequest && !oldRecord)) {
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         selectedAddressTypeId: initials.deliveryAddressTypeId,
         selectedDelivery: initials.fulfilmentPreference === 'Delivery',
-        selectedItem: fullRecord.item,
-        selectedLoan: fullRecord.loan,
-        selectedUser: fullRecord.user,
+        selectedItem: fullRequest.item,
+        selectedLoan: fullRequest.loan,
+        selectedUser: fullRequest.user,
       });
     }
   }
@@ -235,17 +240,17 @@ class RequestForm extends React.Component {
           const loan = resultArray[0].loans[0];
           const itemRequestCount = resultArray[1].requests.length;
           if (loan) {
-            this.setState(prevState => ({
+            this.setState({
               selectedItem: item,
               selectedLoan: loan,
               itemRequestCount,
-            }));
+            });
           }
           // If no loan is found, just set the item record and rq count
-          this.setState(prevState => ({
+          this.setState({
             selectedItem: item,
             itemRequestCount,
-          }));
+          });
 
           return result;
         });
@@ -274,7 +279,6 @@ class RequestForm extends React.Component {
   render() {
     const {
       handleSubmit,
-      initialValues,
       fullRequest,
       onCancel,
       optionLists,
@@ -284,16 +288,16 @@ class RequestForm extends React.Component {
       stripes: { intl },
     } = this.props;
 
-    let requestMeta, requester, item, loan, requestCount, requestType, fulfilmentPreference;
+    let requestMeta;
+    let item;
+    let requestType;
+    let fulfilmentPreference;
     if (fullRequest) {
       requestMeta = fullRequest.requestMeta;
-      requester = fullRequest.requester;
       item = fullRequest.item;
-      loan = fullRequest.loan;
-      requestCount = fullRequest.requestCount;
       requestType = requestMeta.requestType;
       fulfilmentPreference = requestMeta.fulfilmentPreference;
-    };
+    }
 
     const { selectedUser } = this.state;
     const { location } = this.props;
@@ -338,8 +342,6 @@ class RequestForm extends React.Component {
       barcode: intl.formatMessage({ id: 'ui-requests.user.barcode' }),
     };
 
-
-
     return (
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
@@ -352,7 +354,7 @@ class RequestForm extends React.Component {
                 <MetaSection
                   id="requestInfoMeta"
                   contentId="requestInfoMetaContent"
-                  lastUpdatedDate={requestMeta.metaData.updatedDate}
+                  lastUpdatedDate={requestMeta.metadata.updatedDate}
                 />
               </Col>
             }
@@ -437,9 +439,8 @@ class RequestForm extends React.Component {
                       }
                       { this.state.selectedItem &&
                         <ItemDetail
-                          item={fullRequest ? fullRequest.item: this.state.selectedItem}
+                          item={fullRequest ? fullRequest.item : this.state.selectedItem}
                           loan={fullRequest ? fullRequest.loan : this.state.selectedLoan}
-                          newRequest={query.layer ? query.layer === 'create' : false}
                           dateFormatter={this.props.dateFormatter}
                           requestCount={fullRequest ? fullRequest.requestCount : this.state.itemRequestCount}
                         />

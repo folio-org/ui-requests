@@ -167,7 +167,7 @@ class ViewRequest extends React.Component {
 
   render() {
     const { location, stripes } = this.props;
-    const { patronGroups, addressTypes, selectedRequest } = this.props.resources;
+    const { patronGroups, addressTypes } = this.props.resources;
     const { fullRequestDetail } = this.state;
     const query = location.search ? queryString.parse(location.search) : {};
     let request;// = (selectedRequest && selectedRequest.hasLoaded) ? selectedRequest.records[0] : null;
@@ -217,7 +217,6 @@ class ViewRequest extends React.Component {
       </PaneMenu>
     );
 
-    //addressTypes = (addressTypes && addressTypes.hasLoaded) ? addressTypes.records : [];
     let deliveryAddressDetail;
     let selectedDelivery = false;
     if (_.get(request, ['requestMeta', 'fulfilmentPreference'], '') === 'Delivery') {
@@ -244,7 +243,7 @@ class ViewRequest extends React.Component {
                 <MetaSection
                   id="requestInfoMeta"
                   contentId="requestInfoMetaContent"
-                  lastUpdatedDate={request.requestMeta.metaData.updatedDate}
+                  lastUpdatedDate={request.requestMeta.metadata.updatedDate}
                 />
               </Col>
             </Row>

@@ -26,7 +26,8 @@ const UserDetail = ({
   const name = getFullName(user);
   const barcode = user.barcode;
   const proxy = _.get(requestMeta, ['proxy']);
-  let proxyName, proxyBarcode;
+  let proxyName;
+  let proxyBarcode;
   if (proxy) {
     proxyName = getFullName(proxy);
     proxyBarcode = _.get(proxy, ['barcode'], '-');

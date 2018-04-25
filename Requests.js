@@ -231,7 +231,7 @@ class Requests extends React.Component {
       // the original request
       item.instanceId = r.item.instanceId;
 
-      return { requestMeta: r, requester: user, item, loan, requestCount }
+      return { requestMeta: r, requester: user, item, loan, requestCount };
     });
   }
 

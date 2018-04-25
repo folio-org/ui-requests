@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
-const ItemDetail = ({ item, newRequest, dateFormatter, loan, requestCount }) => {
+const ItemDetail = ({ item, dateFormatter, loan, requestCount }) => {
   if (!item.barcode) { return <div>Loading ...</div>; }
 
   const barcode = item.barcode;
@@ -64,14 +64,12 @@ const ItemDetail = ({ item, newRequest, dateFormatter, loan, requestCount }) => 
 ItemDetail.propTypes = {
   item: PropTypes.object.isRequired,
   loan: PropTypes.object,
-  newRequest: PropTypes.bool,
   requestCount: PropTypes.number,
   dateFormatter: PropTypes.func.isRequired,
 };
 
 ItemDetail.defaultProps = {
   loan: {},
-  newRequest: false,
   requestCount: 0,
 };
 
