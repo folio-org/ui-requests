@@ -508,7 +508,7 @@ class RequestForm extends React.Component {
                         <UserDetail
                           user={fullRequest ? fullRequest.requester : this.state.selectedUser}
                           requestMeta={fullRequest ? fullRequest.requestMeta : {}}
-                          newUser={query.layer ? query.layer === 'create' : false}
+                          newUser={query.layer}
                           patronGroup={patronGroupName}
                           selectedDelivery={this.state.selectedDelivery}
                           deliveryAddress={addressDetail}
