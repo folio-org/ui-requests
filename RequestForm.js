@@ -405,7 +405,7 @@ class RequestForm extends React.Component {
                 { isEditForm &&
                   <Row>
                     <Col xs={3}>
-                      <KeyValue label="Position in queue" value='-' />
+                      <KeyValue label="Position in queue" value="-" />
                     </Col>
                   </Row>
                 }
