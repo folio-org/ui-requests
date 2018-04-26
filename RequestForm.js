@@ -390,7 +390,7 @@ class RequestForm extends React.Component {
                       component={Datepicker}
                     />
                   </Col>
-                  { isEditForm &&
+                  { isEditForm && requestMeta.status === 'Open - awaiting pickup' &&
                     <Col xs={3}>
                       <Field
                         name="holdShelfExpirationDate"
@@ -402,6 +402,13 @@ class RequestForm extends React.Component {
                     </Col>
                   }
                 </Row>
+                { isEditForm &&
+                  <Row>
+                    <Col xs={3}>
+                      <KeyValue label="Position in queue" value="-" />
+                    </Col>
+                  </Row>
+                }
                 <hr />
                 <div id="section-item-info">
                   <Headline tag="h3" margin="medium" faded>
@@ -501,7 +508,7 @@ class RequestForm extends React.Component {
                         <UserDetail
                           user={fullRequest ? fullRequest.requester : this.state.selectedUser}
                           requestMeta={fullRequest ? fullRequest.requestMeta : {}}
-                          newUser={query.layer ? query.layer === 'create' : false}
+                          newUser={!!query.layer}
                           patronGroup={patronGroupName}
                           selectedDelivery={this.state.selectedDelivery}
                           deliveryAddress={addressDetail}
