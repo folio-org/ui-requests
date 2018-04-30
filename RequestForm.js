@@ -244,6 +244,7 @@ class RequestForm extends React.Component {
               proxy: user,
             });
             this.props.change('requesterId', proxyUser.id);
+            this.props.change('proxyUserId', user.id);
           }
         }
         else {
