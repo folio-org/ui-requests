@@ -8,6 +8,7 @@ import SearchAndSort from '@folio/stripes-smart-components/lib/SearchAndSort';
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
 import { requestTypes, fulfilmentTypes } from './constants';
+import { getFullName } from './utils';
 import packageInfo from './package';
 
 const INITIAL_RESULT_COUNT = 30;
@@ -266,7 +267,7 @@ class Requests extends React.Component {
     const resultsFormatter = {
       'Item barcode': rq => (rq.item ? rq.item.barcode : ''),
       'Position': () => '', // TODO: add correct function once this is implemented
-      'Proxy': () => '', // TODO: add correct function once this is implemented
+      'Proxy': rq => (rq.proxy ? getFullName(rq.proxy) : ''),
       'Request date': rq => this.makeLocaleDateTimeString(rq.requestDate),
       'Requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
       'Requester barcode': rq => (rq.requester ? rq.requester.barcode : ''),
