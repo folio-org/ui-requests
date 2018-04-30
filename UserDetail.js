@@ -11,7 +11,6 @@ import Select from '@folio/stripes-components/lib/Select';
 import { getFullName, userHighlightBox } from './utils';
 
 class UserDetail extends React.Component {
-
   static propTypes = {
     deliveryAddress: PropTypes.string,
     deliveryLocations: PropTypes.arrayOf(PropTypes.object),
@@ -19,15 +18,18 @@ class UserDetail extends React.Component {
     newUser: PropTypes.bool,
     onChangeAddress: PropTypes.func,
     onChangeFulfilment: PropTypes.func,
+    onCloseProxy: PropTypes.func.isRequired,
+    onSelectProxy: PropTypes.func.isRequired,
     patronGroup: PropTypes.string,
     pickupLocation: PropTypes.string,
+    proxy: PropTypes.object,
     requestMeta: PropTypes.object.isRequired,
     stripes: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     selectedDelivery: PropTypes.bool,
   };
 
-  static  defaultProps = {
+  static defaultProps = {
     deliveryAddress: '',
     deliveryLocations: [],
     fulfilmentTypeOptions: [],
@@ -36,6 +38,7 @@ class UserDetail extends React.Component {
     onChangeFulfilment: () => {},
     patronGroup: '',
     pickupLocation: '',
+    proxy: {},
     selectedDelivery: false,
   };
 
@@ -46,7 +49,6 @@ class UserDetail extends React.Component {
   }
 
   render() {
-
     const {
       user,
       proxy,
@@ -59,13 +61,13 @@ class UserDetail extends React.Component {
       selectedDelivery,
       fulfilmentTypeOptions,
       onChangeAddress,
-      onChangeFulfilment
+      onChangeFulfilment,
     } = this.props;
 
     const id = user.id;
     const name = getFullName(user);
     const barcode = user.barcode;
-  //  const proxy = _.get(requestMeta, ['proxy']);
+
     let proxyName;
     let proxyBarcode;
     let proxyId;

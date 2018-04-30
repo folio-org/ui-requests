@@ -155,7 +155,6 @@ class RequestForm extends React.Component {
     this.onChangeFulfilment = this.onChangeFulfilment.bind(this);
     this.onItemClick = this.onItemClick.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
-    this.onSelectProxy = this.onSelectProxy.bind(this);
     this.onSelectUser = this.onSelectUser.bind(this);
     this.onUserClick = this.onUserClick.bind(this);
   }
@@ -201,22 +200,6 @@ class RequestForm extends React.Component {
     }
   }
 
-  onSelectProxy(user) {
-    this.props.change('requester.barcode', user.barcode);
-    setTimeout(() => this.onUserClick());
-    //this.onUserClick();
-    if (this.state.selectedUser && this.state.selectedUser.id === user.id) {
-      console.log("same user!")
-    }
-    else {
-      console.log("different user!", this.state.selectedUser, user)
-    }
-  }
-
-  onCloseProxy() {
-
-  }
-
   onUserClick(proxyUser = null) {
     this.setState({ selectedUser: null, proxy: null });
     const barcode = this.requesterBarcodeField.getRenderedComponent().input.value;
@@ -224,21 +207,17 @@ class RequestForm extends React.Component {
     this.props.findUser(barcode, 'barcode').then((result) => {
       if (result.totalRecords === 1) {
         const user = result.users[0];
-        console.log("proxyuser", proxyUser)
         if (proxyUser && proxyUser.id) {
           // the ProxyManager has been used to select a role for this user,
           // so figure out if user is a proxy or not
           if (proxyUser.id === user.id) {
-                      console.log("condition 1")
             // Selected user is acting as self, so there is no proxy
             this.setState({
               selectedUser: user,
               proxy: user,
             });
             this.props.change('requesterId', user.id);
-          }
-          else {
-                      console.log("condition 2")
+          } else {
             this.setState({
               selectedUser: proxyUser,
               proxy: user,
@@ -246,15 +225,12 @@ class RequestForm extends React.Component {
             this.props.change('requesterId', proxyUser.id);
             this.props.change('proxyUserId', user.id);
           }
-        }
-        else {
-          console.log("condition 3")
+        } else {
           this.setState({
             selectedUser: user,
           });
           this.props.change('requesterId', user.id);
         }
-
       }
     });
   }
