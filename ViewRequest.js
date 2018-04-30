@@ -293,6 +293,8 @@ class ViewRequest extends React.Component {
               selectedDelivery={selectedDelivery}
               deliveryAddress={deliveryAddressDetail}
               pickupLocation=""
+              onSelectProxy={() => {}}
+              onCloseProxy={() => {}}
             />
           </Accordion>
         </AccordionSet>

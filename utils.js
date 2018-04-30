@@ -9,7 +9,6 @@ import css from './requests.css';
 
 // eslint-disable-next-line import/prefer-default-export
 export function getFullName(user) {
-
   const userNameObj = user.personal || user;
   const lastName = get(userNameObj, ['lastName'], '');
   const firstName = get(userNameObj, ['firstName'], '');
