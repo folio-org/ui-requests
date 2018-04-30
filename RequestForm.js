@@ -562,7 +562,7 @@ class RequestForm extends React.Component {
                           fulfilmentTypeOptions={fulfilmentTypeOptions}
                           onChangeAddress={this.onChangeAddress}
                           onChangeFulfilment={this.onChangeFulfilment}
-                          proxy={this.state.proxy}
+                          proxy={fullRequest ? fullRequest.requestMeta.proxy : this.state.proxy}
                           onSelectProxy={this.onUserClick}
                           onCloseProxy={this.onCloseProxy}
                         />
