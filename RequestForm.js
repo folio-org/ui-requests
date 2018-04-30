@@ -147,6 +147,7 @@ class RequestForm extends React.Component {
       selectedAddressTypeId: deliveryAddressTypeId,
       selectedItem: item,
       selectedUser: requester,
+      proxy: {},
       selectedLoan: loan,
     };
 
@@ -191,7 +192,6 @@ class RequestForm extends React.Component {
 
   // This function is called from the "search and select user" widget when
   // a user has been selected from the list
-  // TODO: see if this still works when the select user widget is functional again
   onSelectUser(user) {
     if (user) {
       // Set the new value in the redux-form barcode field
@@ -200,16 +200,37 @@ class RequestForm extends React.Component {
     }
   }
 
-  onUserClick() {
-    this.setState({ selectedUser: null });
+  onUserClick(proxyUser = null) {
+    this.setState({ selectedUser: null, proxy: null });
     const barcode = this.requesterBarcodeField.getRenderedComponent().input.value;
 
     this.props.findUser(barcode, 'barcode').then((result) => {
       if (result.totalRecords === 1) {
-        this.setState({
-          selectedUser: result.users[0],
-        });
-        this.props.change('requesterId', result.users[0].id);
+        const user = result.users[0];
+        if (proxyUser && proxyUser.id) {
+          // the ProxyManager has been used to select a role for this user,
+          // so figure out if user is a proxy or not
+          if (proxyUser.id === user.id) {
+            // Selected user is acting as self, so there is no proxy
+            this.setState({
+              selectedUser: user,
+              proxy: user,
+            });
+            this.props.change('requesterId', user.id);
+          } else {
+            this.setState({
+              selectedUser: proxyUser,
+              proxy: user,
+            });
+            this.props.change('requesterId', proxyUser.id);
+            this.props.change('proxyUserId', user.id);
+          }
+        } else {
+          this.setState({
+            selectedUser: user,
+          });
+          this.props.change('requesterId', user.id);
+        }
       }
     });
   }
@@ -507,6 +528,7 @@ class RequestForm extends React.Component {
                       { this.state.selectedUser &&
                         <UserDetail
                           user={fullRequest ? fullRequest.requester : this.state.selectedUser}
+                          stripes={this.props.stripes}
                           requestMeta={fullRequest ? fullRequest.requestMeta : {}}
                           newUser={!!query.layer}
                           patronGroup={patronGroupName}
@@ -516,6 +538,9 @@ class RequestForm extends React.Component {
                           fulfilmentTypeOptions={fulfilmentTypeOptions}
                           onChangeAddress={this.onChangeAddress}
                           onChangeFulfilment={this.onChangeFulfilment}
+                          proxy={fullRequest ? fullRequest.requestMeta.proxy : this.state.proxy}
+                          onSelectProxy={this.onUserClick}
+                          onCloseProxy={this.onCloseProxy}
                         />
                       }
                     </Col>

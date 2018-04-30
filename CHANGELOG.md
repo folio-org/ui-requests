@@ -19,6 +19,7 @@
 * Bug fix: display item-details on request-edit pane. Refs UIREQ-55.
 * Prefer metadata over metaData. One case to rule them all! Refs UIREQ-80.
 * Refactor fetching and structure of extended request object.
+* Implement request by proxy. Completes UIREQ-50.
 
 ## [1.1.0](https://github.com/folio-org/ui-requests/tree/v1.1.0) (2018-01-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.0.0...v1.1.0)

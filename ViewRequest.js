@@ -286,11 +286,15 @@ class ViewRequest extends React.Component {
           >
             <UserDetail
               user={request.requester}
+              proxy={request.requestMeta.proxy}
+              stripes={this.props.stripes}
               patronGroup={patronGroup}
               requestMeta={request.requestMeta}
               selectedDelivery={selectedDelivery}
               deliveryAddress={deliveryAddressDetail}
               pickupLocation=""
+              onSelectProxy={() => {}}
+              onCloseProxy={() => {}}
             />
           </Accordion>
         </AccordionSet>

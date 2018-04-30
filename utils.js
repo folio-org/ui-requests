@@ -9,9 +9,10 @@ import css from './requests.css';
 
 // eslint-disable-next-line import/prefer-default-export
 export function getFullName(user) {
-  const lastName = get(user, ['personal', 'lastName'], '');
-  const firstName = get(user, ['personal', 'firstName'], '');
-  const middleName = get(user, ['personal', 'middleName'], '');
+  const userNameObj = user.personal || user;
+  const lastName = get(userNameObj, ['lastName'], '');
+  const firstName = get(userNameObj, ['firstName'], '');
+  const middleName = get(userNameObj, ['middleName'], '');
 
   return `${lastName}${firstName ? ', ' : ' '}${firstName} ${middleName}`;
 }
