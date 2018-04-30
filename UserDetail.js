@@ -5,6 +5,7 @@ import { Field } from 'redux-form';
 
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
+import ProxyManager from '@folio/stripes-smart-components/lib/ProxyManager';
 import Select from '@folio/stripes-components/lib/Select';
 
 import { getFullName, userHighlightBox } from './utils';
@@ -21,6 +22,7 @@ class UserDetail extends React.Component {
     patronGroup: PropTypes.string,
     pickupLocation: PropTypes.string,
     requestMeta: PropTypes.object.isRequired,
+    stripes: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     selectedDelivery: PropTypes.bool,
   };
@@ -37,31 +39,40 @@ class UserDetail extends React.Component {
     selectedDelivery: false,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.connectedProxyManager = props.stripes.connect(ProxyManager);
+  }
+
   render() {
 
-    const { user,
-    requestMeta,
-    newUser,
-    patronGroup,
-    deliveryAddress,
-    deliveryLocations,
-    pickupLocation,
-    selectedDelivery,
-    fulfilmentTypeOptions,
-    onChangeAddress,
-    onChangeFulfilment } = this.props;
+    const {
+      user,
+      proxy,
+      requestMeta,
+      newUser,
+      patronGroup,
+      deliveryAddress,
+      deliveryLocations,
+      pickupLocation,
+      selectedDelivery,
+      fulfilmentTypeOptions,
+      onChangeAddress,
+      onChangeFulfilment
+    } = this.props;
 
     const id = user.id;
     const name = getFullName(user);
     const barcode = user.barcode;
-    const proxy = _.get(requestMeta, ['proxy']);
+  //  const proxy = _.get(requestMeta, ['proxy']);
     let proxyName;
     let proxyBarcode;
     if (proxy) {
       proxyName = getFullName(proxy);
       proxyBarcode = _.get(proxy, ['barcode'], '-');
     }
-    const proxySection = proxy ? userHighlightBox('Requester\'s proxy', proxyName, proxy.id, proxyBarcode) : '';
+    const proxySection = (proxy && proxy.id !== user.id) ? userHighlightBox('Requester\'s proxy', proxyName, proxy.id, proxyBarcode) : '';
 
     return (
       <div>
@@ -122,6 +133,12 @@ class UserDetail extends React.Component {
           </Row>
         }
         {proxySection}
+        <this.connectedProxyManager
+          patron={user}
+          proxy={proxy}
+          onSelectPatron={this.props.onSelectProxy}
+          onClose={this.props.onCloseProxy}
+        />
       </div>
     );
   }
