@@ -86,7 +86,7 @@ class Requests extends React.Component {
       initialValue: {
         query: '',
         filters: '',
-        sort: 'Request Date',
+        sort: 'request Date',
       },
     },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
@@ -111,10 +111,10 @@ class Requests extends React.Component {
             const sortMap = {
               'Title': 'item.title',
               'Item Barcode': 'item.barcode',
-              'Request Type': 'requestType',
+              'Type': 'requestType',
               'Requester': 'requester.lastName requester.firstName',
               'Requester Barcode': 'requester.barcode',
-              'Request Date': 'requestDate',
+              'request Date': 'requestDate',
             };
             let cql = `(requester.barcode="${resourceData.query.query}*" or item.title="${resourceData.query.query}*" or item.barcode="${resourceData.query.query}*")`;
             const filterCql = filters2cql(filterConfig, resourceData.query.filters);
@@ -265,12 +265,12 @@ class Requests extends React.Component {
     const addressTypes = (resources.addressTypes && resources.addressTypes.hasLoaded) ? resources.addressTypes : [];
 
     const resultsFormatter = {
-      'Item barcode': rq => (rq.item ? rq.item.barcode : ''),
+      'Item Barcode': rq => (rq.item ? rq.item.barcode : ''),
       'Position': () => '', // TODO: add correct function once this is implemented
       'Proxy': rq => (rq.proxy ? getFullName(rq.proxy) : ''),
-      'Request date': rq => this.makeLocaleDateTimeString(rq.requestDate),
+      'request Date': rq => this.makeLocaleDateTimeString(rq.requestDate),
       'Requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
-      'Requester barcode': rq => (rq.requester ? rq.requester.barcode : ''),
+      'Requester Barcode': rq => (rq.requester ? rq.requester.barcode : ''),
       'Request status': rq => rq.status,
       'Type': rq => rq.requestType,
       'Title': rq => (rq.item ? rq.item.title : ''),
@@ -284,8 +284,8 @@ class Requests extends React.Component {
       resultCountIncrement={RESULT_COUNT_INCREMENT}
       viewRecordComponent={ViewRequest}
       editRecordComponent={RequestForm}
-      visibleColumns={['Request date', 'Title', 'Item barcode', 'Type', 'Request status', 'Position', 'Requester', 'Requester barcode', 'Proxy']}
-      columnWidths={{ 'Request date': '10%' }}
+      visibleColumns={['request Date', 'Title', 'Item Barcode', 'Type', 'Request status', 'Position', 'Requester', 'Requester Barcode', 'Proxy']}
+      columnWidths={{ 'request Date': '10%' }}
       resultsFormatter={resultsFormatter}
       newRecordInitialValues={{ requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' }}
       massageNewRecord={this.massageNewRecord}
