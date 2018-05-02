@@ -110,8 +110,8 @@ class Requests extends React.Component {
             const resourceData = args[2];
             const sortMap = {
               'Title': 'item.title',
-              'Item Barcode': 'item.barcode',
-              'Request Type': 'requestType',
+              'Item barcode': 'item.barcode',
+              'Type': 'requestType',
               'Requester': 'requester.lastName requester.firstName',
               'Requester Barcode': 'requester.barcode',
               'Request Date': 'requestDate',
@@ -268,9 +268,9 @@ class Requests extends React.Component {
       'Item barcode': rq => (rq.item ? rq.item.barcode : ''),
       'Position': () => '', // TODO: add correct function once this is implemented
       'Proxy': rq => (rq.proxy ? getFullName(rq.proxy) : ''),
-      'Request date': rq => this.makeLocaleDateTimeString(rq.requestDate),
+      'Request Date': rq => this.makeLocaleDateTimeString(rq.requestDate),
       'Requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
-      'Requester barcode': rq => (rq.requester ? rq.requester.barcode : ''),
+      'Requester Barcode': rq => (rq.requester ? rq.requester.barcode : ''),
       'Request status': rq => rq.status,
       'Type': rq => rq.requestType,
       'Title': rq => (rq.item ? rq.item.title : ''),
@@ -284,8 +284,8 @@ class Requests extends React.Component {
       resultCountIncrement={RESULT_COUNT_INCREMENT}
       viewRecordComponent={ViewRequest}
       editRecordComponent={RequestForm}
-      visibleColumns={['Request date', 'Title', 'Item barcode', 'Type', 'Request status', 'Position', 'Requester', 'Requester barcode', 'Proxy']}
-      columnWidths={{ 'Request date': '10%' }}
+      visibleColumns={['Request Date', 'Title', 'Item barcode', 'Type', 'Request status', 'Position', 'Requester', 'Requester Barcode', 'Proxy']}
+      columnWidths={{ 'Request Date': '10%' }}
       resultsFormatter={resultsFormatter}
       newRecordInitialValues={{ requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' }}
       massageNewRecord={this.massageNewRecord}
