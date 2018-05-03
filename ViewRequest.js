@@ -14,6 +14,7 @@ import craftLayerUrl from '@folio/stripes-components/util/craftLayerUrl';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
 import ItemDetail from './ItemDetail';
+import ViewMetadata from './ViewMetadata';
 import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
 import { fulfilmentTypes, requestTypes, toUserAddress } from './constants';
@@ -90,6 +91,16 @@ class ViewRequest extends React.Component {
       path: 'groups',
       records: 'usergroups',
     },
+    createdBy: {
+      type: 'okapi',
+      records: 'users',
+      path: 'users?query=(id==!{metadata.createdByUserId})',
+    },
+    updatedBy: {
+      type: 'okapi',
+      records: 'users',
+      path: 'users?query=(id==!{metadata.updatedByUserId})',
+    },
   };
 
   constructor(props) {
@@ -104,6 +115,7 @@ class ViewRequest extends React.Component {
       },
     };
 
+    this.cViewMetadata = props.stripes.connect(ViewMetadata);
     this.makeLocaleDateString = this.makeLocaleDateString.bind(this);
     this.onToggleSection = this.onToggleSection.bind(this);
     this.craftLayerUrl = craftLayerUrl.bind(this);
@@ -242,11 +254,7 @@ class ViewRequest extends React.Component {
           >
             <Row>
               <Col xs={12}>
-                <MetaSection
-                  id="requestInfoMeta"
-                  contentId="requestInfoMetaContent"
-                  lastUpdatedDate={request.requestMeta.metadata.updatedDate}
-                />
+                <this.cViewMetadata metadata={request.requestMeta.metadata} />
               </Col>
             </Row>
             <Row>
