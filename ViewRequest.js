@@ -174,15 +174,19 @@ class ViewRequest extends React.Component {
 
     let patronGroup;
 
+    console.log("Full request",fullRequestDetail)
+
     // Most of the values needed to populate the view come from the "enhanced" request
     // object, fullRequestDetail, which includes parts of the requester's user record,
-    // the item record,
+    // the item records,
     // and the related loan record (if any), in the form:
     // {
     //  requestMeta: { top-level request details },
     //  requester: { user details },
     //  item: { item details },
     //  loan: { loan details },
+    //  holding: { holding record details },
+    //  instance: { instance record details },
     //  requestCount: number of requests for the item
     // }
     if (fullRequestDetail.requestMeta) {

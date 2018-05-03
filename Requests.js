@@ -203,6 +203,14 @@ class Requests extends React.Component {
     return fetch(`${this.okapiUrl}/inventory/items?query=(${idType}="${value}")`, { headers: this.httpHeaders }).then(response => response.json());
   }
 
+  findHolding(holdingId) {
+    return fetch(`${this.okapiUrl}/holdings-storage/holdings/${holdingId}`, { headers: this.httpHeaders }).then(response => response.json());
+  }
+
+  findInstance(instanceId) {
+    return fetch(`${this.okapiUrl}/inventory/instances/${instanceId}`, { headers: this.httpHeaders }).then(response => response.json());
+  }
+
   findLoan(itemId) {
     return fetch(`${this.okapiUrl}/circulation/loans?query=(itemId="${itemId}" and status.name<>"Closed")`, { headers: this.httpHeaders }).then(response => response.json());
   }
@@ -219,6 +227,8 @@ class Requests extends React.Component {
         this.findItem(r.itemId),
         this.findLoan(r.itemId),
         this.findRequestsForItem(r.itemId),
+        this.findHolding(r.item.holdingsRecordId),
+        this.findInstance(r.item.instanceId),
       ],
     ).then((resultArray) => {
       // Each element of the promises array returns an array of results, but in
@@ -227,12 +237,15 @@ class Requests extends React.Component {
       const item = resultArray[1].items[0];
       const loan = resultArray[2].loans[0];
       const requestCount = resultArray[3].requests.length;
+      const holding = resultArray[4];
+      const instance = resultArray[5];
+
 
       // One field missing from item is the instanceId ... but it's included in
       // the original request
       item.instanceId = r.item.instanceId;
 
-      return { requestMeta: r, requester: user, item, loan, requestCount };
+      return { requestMeta: r, requester: user, item, loan, requestCount, holding, instance };
     });
   }
 
