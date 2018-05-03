@@ -316,6 +316,7 @@ class ViewRequest extends React.Component {
             stripes={stripes}
             initialValues={fullRequestDetail.requestMeta}
             fullRequest={fullRequestDetail}
+            metadataDisplay={this.cViewMetadata}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.props.onCloseEdit}
             optionLists={{ requestTypes, fulfilmentTypes, addressTypes }}

@@ -8,7 +8,6 @@ import Button from '@folio/stripes-components/lib/Button';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
 import Headline from '@folio/stripes-components/lib/Headline';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
-import MetaSection from '@folio/stripes-components/lib/MetaSection';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
@@ -90,6 +89,7 @@ class RequestForm extends React.Component {
     findLoan: PropTypes.func,
     findRequestsForItem: PropTypes.func,
     fullRequest: PropTypes.object,
+    metadataDisplay: PropTypes.func,
     initialValues: PropTypes.object,
     location: PropTypes.shape({
       pathname: PropTypes.string.isRequired,
@@ -121,6 +121,7 @@ class RequestForm extends React.Component {
     findRequestsForItem: () => {},
     fullRequest: null,
     initialValues: {},
+    metadataDisplay: () => {},
     optionLists: {},
     pristine: true,
     submitting: false,
@@ -370,13 +371,9 @@ class RequestForm extends React.Component {
             <Headline tag="h3" margin="medium" faded>
               Request information
             </Headline>
-            { isEditForm &&
+            { isEditForm && requestMeta && requestMeta.metadata &&
               <Col xs={12}>
-                <MetaSection
-                  id="requestInfoMeta"
-                  contentId="requestInfoMetaContent"
-                  lastUpdatedDate={requestMeta.metadata.updatedDate}
-                />
+                <this.props.metadataDisplay metadata={requestMeta.metadata} />
               </Col>
             }
             <Row>
@@ -468,6 +465,8 @@ class RequestForm extends React.Component {
                       { this.state.selectedItem &&
                         <ItemDetail
                           item={fullRequest ? fullRequest.item : this.state.selectedItem}
+                          holding={fullRequest ? fullRequest.holding : null}
+                          instance={fullRequest ? fullRequest.instance : null}
                           loan={fullRequest ? fullRequest.loan : this.state.selectedLoan}
                           dateFormatter={this.props.dateFormatter}
                           requestCount={fullRequest ? fullRequest.requestCount : this.state.itemRequestCount}
