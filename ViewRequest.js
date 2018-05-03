@@ -174,8 +174,6 @@ class ViewRequest extends React.Component {
 
     let patronGroup;
 
-    console.log("Full request",fullRequestDetail)
-
     // Most of the values needed to populate the view come from the "enhanced" request
     // object, fullRequestDetail, which includes parts of the requester's user record,
     // the item records,
@@ -278,6 +276,8 @@ class ViewRequest extends React.Component {
           >
             <ItemDetail
               item={request.item}
+              holding={request.holding}
+              instance={request.instance}
               loan={request.loan}
               dateFormatter={this.makeLocaleDateString}
               requestCount={request.requestCount}
