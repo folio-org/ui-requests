@@ -202,7 +202,7 @@ class RequestForm extends React.Component {
 
   onUserClick(proxyUser = null) {
     this.setState({ selectedUser: null, proxy: null });
-    const barcode = this.requesterBarcodeField.getRenderedComponent().input.value;
+    const barcode = this.requesterBarcodeField.value;
 
     this.props.findUser(barcode, 'barcode').then((result) => {
       if (result.totalRecords === 1) {
@@ -238,7 +238,7 @@ class RequestForm extends React.Component {
   onItemClick() {
     this.setState({ selectedItem: null });
     const { findItem, findLoan, findRequestsForItem } = this.props;
-    const barcode = this.itemBarcodeField.getRenderedComponent().input.value;
+    const barcode = this.itemBarcodeField.value;
 
     findItem(barcode, 'barcode').then((result) => {
       if (result.totalRecords === 1) {
