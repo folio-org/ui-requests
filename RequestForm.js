@@ -421,7 +421,7 @@ class RequestForm extends React.Component {
                       component={Datepicker}
                     />
                   </Col>
-                  { isEditForm && requestMeta.status === 'Open - awaiting pickup' &&
+                  { isEditForm && requestMeta.status === 'Open - Awaiting pickup' &&
                     <Col xs={3}>
                       <Field
                         name="holdShelfExpirationDate"
