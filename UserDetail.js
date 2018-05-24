@@ -76,7 +76,7 @@ class UserDetail extends React.Component {
       proxyBarcode = _.get(proxy, ['barcode'], '-');
       proxyId = proxy.id || requestMeta.proxyUserId;
     }
-    const proxySection = (proxy && proxy.id !== user.id) ? userHighlightBox('Requester\'s proxy', proxyName, proxyId, proxyBarcode) : '';
+    const proxySection = proxyId ? userHighlightBox('Requester\'s proxy', proxyName, proxyId, proxyBarcode) : '';
 
     return (
       <div>
