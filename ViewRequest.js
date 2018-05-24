@@ -81,6 +81,11 @@ class ViewRequest extends React.Component {
       type: 'okapi',
       path: 'circulation/requests/:{id}',
     },
+    relatedRequesterId: {},
+    testRequester: {
+      type: 'okapi',
+      path: 'users?query=(id==%{relatedRequesterId})',
+    },
     addressTypes: {
       type: 'okapi',
       path: 'addresstypes',

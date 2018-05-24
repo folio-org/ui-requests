@@ -246,7 +246,6 @@ class RequestForm extends React.Component {
     findResource('item', barcode, 'barcode').then((result) => {
       if (result.totalRecords === 1) {
         const item = result.items[0];
-        console.log("item", item)
         this.props.change('itemId', item.id);
 
         // Setting state here is redundant with what follows, but it lets us
@@ -268,8 +267,6 @@ class RequestForm extends React.Component {
           const itemRequestCount = resultArray[1].requests.length;
           const instance = resultArray[2];
           const holding = resultArray[3];
-          console.log("instance", instance)
-          console.log("holding", holding)
           if (loan) {
             this.setState({
               selectedItem: item,
