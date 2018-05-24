@@ -128,13 +128,17 @@ class ViewRequest extends React.Component {
     this.formatDate = this.props.stripes.formatDate;
   }
 
+  componentDidMount() {
+    this._mounted = true;
+  }
+
   // Use componentDidUpdate to pull in metadata from the related user and item records
   componentDidUpdate(prevProps) {
     const prevRQ = prevProps.resources.selectedRequest;
     const currentRQ = this.props.resources.selectedRequest;
 
     // Only update if actually needed (otherwise, this gets called way too often)
-    if (prevRQ && prevRQ.hasLoaded && currentRQ && currentRQ.hasLoaded) {
+    if (this._mounted && prevRQ && prevRQ.hasLoaded && currentRQ && currentRQ.hasLoaded) {
       if ((prevRQ.records[0].id !== currentRQ.records[0].id) || !(this.state.fullRequestDetail.requestMeta && this.state.fullRequestDetail.requestMeta.id)) {
         const basicRequest = currentRQ.records[0];
         this.props.joinRequest(basicRequest).then((newRequest) => {
@@ -144,6 +148,10 @@ class ViewRequest extends React.Component {
         });
       }
     }
+  }
+
+  componentWillUnmount() {
+    this._mounted = false;
   }
 
   update(record) {
