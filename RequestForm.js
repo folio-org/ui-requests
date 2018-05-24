@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import queryString from 'query-string';
 
+import { Accordion, AccordionSet } from '@folio/stripes-components/lib/Accordion';
 import Button from '@folio/stripes-components/lib/Button';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
-import Headline from '@folio/stripes-components/lib/Headline';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
@@ -142,6 +142,11 @@ class RequestForm extends React.Component {
     } = props.initialValues;
 
     this.state = {
+      accordions: {
+        'request-info': true,
+        'item-info': true,
+        'requester-info': true,
+      },
       selectedDelivery: fulfilmentPreference === 'Delivery',
       selectedAddressTypeId: deliveryAddressTypeId,
       selectedItem: item,
@@ -157,6 +162,7 @@ class RequestForm extends React.Component {
     this.onItemClick = this.onItemClick.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onSelectUser = this.onSelectUser.bind(this);
+    this.onToggleSection = this.onToggleSection.bind(this);
     this.onUserClick = this.onUserClick.bind(this);
   }
 
@@ -179,6 +185,14 @@ class RequestForm extends React.Component {
         selectedUser: fullRequest.user,
       });
     }
+  }
+
+  onToggleSection({ id }) {
+    this.setState((curState) => {
+      const newState = _.cloneDeep(curState);
+      newState.accordions[id] = !curState.accordions[id];
+      return newState;
+    });
   }
 
   onChangeFulfilment(e) {
@@ -378,70 +392,77 @@ class RequestForm extends React.Component {
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
           <Pane defaultWidth="100%" height="100%" firstMenu={addRequestFirstMenu} lastMenu={isEditForm ? editRequestLastMenu : addRequestLastMenu} paneTitle={isEditForm ? 'Edit request' : 'New request'}>
-            <Headline tag="h3" margin="medium" faded>
-              Request information
-            </Headline>
-            { isEditForm && requestMeta && requestMeta.metadata &&
-              <Col xs={12}>
-                <this.props.metadataDisplay metadata={requestMeta.metadata} />
-              </Col>
-            }
-            <Row>
-              <Col xs={8}>
-                <Row>
-                  <Col xs={3}>
-                    { !isEditForm &&
-                      <Field
-                        label="Request type"
-                        name="requestType"
-                        component={Select}
-                        fullWidth
-                        dataOptions={requestTypeOptions}
-                        disabled={isEditForm}
-                      />
-                    }
-                    { isEditForm &&
-                      <KeyValue label="Request type" value={requestMeta.requestType} />
-                    }
+            <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
+              <Accordion
+                open
+                id="request-info"
+                label="Request information"
+              >
+                { isEditForm && requestMeta && requestMeta.metadata &&
+                  <Col xs={12}>
+                    <this.props.metadataDisplay metadata={requestMeta.metadata} />
                   </Col>
-                  <Col xs={3}>
-                    { isEditForm &&
-                      <KeyValue label="Request status" value={requestMeta.status} />
-                    }
-                  </Col>
-                  <Col xs={3}>
-                    <Field
-                      name="requestExpirationDate"
-                      label="Request expiration date"
-                      aria-label="Request expiration date"
-                      backendDateStandard="YYYY-MM-DD"
-                      component={Datepicker}
-                    />
-                  </Col>
-                  { isEditForm && requestMeta.status === 'Open - Awaiting pickup' &&
-                    <Col xs={3}>
-                      <Field
-                        name="holdShelfExpirationDate"
-                        label="Hold shelf expiration date"
-                        aria-label="Hold shelf expiration date"
-                        backendDateStandard="YYYY-MM-DD"
-                        component={Datepicker}
-                      />
-                    </Col>
-                  }
-                </Row>
-                { isEditForm &&
-                  <Row>
-                    <Col xs={3}>
-                      <KeyValue label="Position in queue" value="-" />
-                    </Col>
-                  </Row>
                 }
-                <hr />
+                <Row>
+                  <Col xs={8}>
+                    <Row>
+                      <Col xs={3}>
+                        { !isEditForm &&
+                          <Field
+                            label="Request type"
+                            name="requestType"
+                            component={Select}
+                            fullWidth
+                            dataOptions={requestTypeOptions}
+                            disabled={isEditForm}
+                          />
+                        }
+                        { isEditForm &&
+                          <KeyValue label="Request type" value={requestMeta.requestType} />
+                        }
+                      </Col>
+                      <Col xs={3}>
+                        { isEditForm &&
+                          <KeyValue label="Request status" value={requestMeta.status} />
+                        }
+                      </Col>
+                      <Col xs={3}>
+                        <Field
+                          name="requestExpirationDate"
+                          label="Request expiration date"
+                          aria-label="Request expiration date"
+                          backendDateStandard="YYYY-MM-DD"
+                          component={Datepicker}
+                        />
+                      </Col>
+                      { isEditForm && requestMeta.status === 'Open - Awaiting pickup' &&
+                        <Col xs={3}>
+                          <Field
+                            name="holdShelfExpirationDate"
+                            label="Hold shelf expiration date"
+                            aria-label="Hold shelf expiration date"
+                            backendDateStandard="YYYY-MM-DD"
+                            component={Datepicker}
+                          />
+                        </Col>
+                      }
+                    </Row>
+                    { isEditForm &&
+                      <Row>
+                        <Col xs={3}>
+                          <KeyValue label="Position in queue" value="-" />
+                        </Col>
+                      </Row>
+                    }
+                  </Col>
+                </Row>
+              </Accordion>
+              <Accordion
+                open
+                id="item-info"
+                label={`Item information ${labelAsterisk}`}
+              >
                 <div id="section-item-info">
-                  <Headline tag="h3" margin="medium" faded>
-                    {`Item information ${labelAsterisk}`}
-                  </Headline>
                   <Row>
                     <Col xs={12}>
                       {!isEditForm &&
@@ -485,11 +506,14 @@ class RequestForm extends React.Component {
                     </Col>
                   </Row>
                 </div>
-                <hr />
+              </Accordion>
+              <Accordion
+                open
+                id="requester-info"
+                label={`Requester information ${labelAsterisk}`}
+
+              >
                 <div id="section-requester-info">
-                  <Headline tag="h3" margin="medium" faded>
-                    {`Requester information ${labelAsterisk}`}
-                  </Headline>
                   <Row>
                     <Col xs={12}>
                       {!isEditForm &&
@@ -555,8 +579,8 @@ class RequestForm extends React.Component {
                     </Col>
                   </Row>
                 </div>
-              </Col>
-            </Row>
+              </Accordion>
+            </AccordionSet>
           </Pane>
           <br /><br /><br /><br /><br />
         </Paneset>
