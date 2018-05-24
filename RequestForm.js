@@ -84,10 +84,7 @@ class RequestForm extends React.Component {
     }).isRequired,
     change: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    findUser: PropTypes.func,
-    findItem: PropTypes.func,
-    findLoan: PropTypes.func,
-    findRequestsForItem: PropTypes.func,
+    findResource: PropTypes.func,
     fullRequest: PropTypes.object,
     metadataDisplay: PropTypes.func,
     initialValues: PropTypes.object,
@@ -115,10 +112,7 @@ class RequestForm extends React.Component {
   };
 
   static defaultProps = {
-    findUser: () => {},
-    findItem: () => {},
-    findLoan: () => {},
-    findRequestsForItem: () => {},
+    findResource: () => {},
     fullRequest: null,
     initialValues: {},
     metadataDisplay: () => {},
@@ -133,10 +127,14 @@ class RequestForm extends React.Component {
     let requester;
     let item;
     let loan;
+    let instance;
+    let holding;
     if (props.fullRequest) {
       requester = props.fullRequest.requester;
       item = props.fullRequest.item;
       loan = props.fullRequest.loan;
+      instance = props.fullRequest.instance;
+      holding = props.fullRequest.holding;
     }
     const {
       fulfilmentPreference,
@@ -147,6 +145,8 @@ class RequestForm extends React.Component {
       selectedDelivery: fulfilmentPreference === 'Delivery',
       selectedAddressTypeId: deliveryAddressTypeId,
       selectedItem: item,
+      selectedInstance: instance,
+      selectedHolding: holding,
       selectedUser: requester,
       proxy: {},
       selectedLoan: loan,
@@ -173,6 +173,8 @@ class RequestForm extends React.Component {
         selectedAddressTypeId: initials.deliveryAddressTypeId,
         selectedDelivery: initials.fulfilmentPreference === 'Delivery',
         selectedItem: fullRequest.item,
+        selectedInstance: fullRequest.instance,
+        selectedHolding: fullRequest.holding,
         selectedLoan: fullRequest.loan,
         selectedUser: fullRequest.user,
       });
@@ -205,7 +207,7 @@ class RequestForm extends React.Component {
     this.setState({ selectedUser: null, proxy: null });
     const barcode = this.requesterBarcodeField.getRenderedComponent().input.value;
 
-    this.props.findUser(barcode, 'barcode').then((result) => {
+    this.props.findResource('user', barcode, 'barcode').then((result) => {
       if (result.totalRecords === 1) {
         const user = result.users[0];
         if (proxyUser && proxyUser.id) {
@@ -238,12 +240,13 @@ class RequestForm extends React.Component {
 
   onItemClick() {
     this.setState({ selectedItem: null });
-    const { findItem, findLoan, findRequestsForItem } = this.props;
+    const { findResource } = this.props;
     const barcode = this.itemBarcodeField.getRenderedComponent().input.value;
 
-    findItem(barcode, 'barcode').then((result) => {
+    findResource('item', barcode, 'barcode').then((result) => {
       if (result.totalRecords === 1) {
         const item = result.items[0];
+        console.log("item", item)
         this.props.change('itemId', item.id);
 
         // Setting state here is redundant with what follows, but it lets us
@@ -255,22 +258,32 @@ class RequestForm extends React.Component {
 
         return Promise.all(
           [
-            findLoan(item.id),
-            findRequestsForItem(item.id),
+            findResource('loan', item.id),
+            findResource('requestsForItem', item.id),
+            findResource('instance', item.instanceId),
+            findResource('holding', item.holdingsRecordId),
           ],
         ).then((resultArray) => {
           const loan = resultArray[0].loans[0];
           const itemRequestCount = resultArray[1].requests.length;
+          const instance = resultArray[2];
+          const holding = resultArray[3];
+          console.log("instance", instance)
+          console.log("holding", holding)
           if (loan) {
             this.setState({
               selectedItem: item,
+              selectedInstance: instance,
+              selectedHolding: holding,
               selectedLoan: loan,
               itemRequestCount,
             });
           }
-          // If no loan is found, just set the item record and rq count
+          // If no loan is found, just set the item and related record(s) and rq count
           this.setState({
             selectedItem: item,
+            selectedInstance: instance,
+            selectedHolding: holding,
             itemRequestCount,
           });
 
@@ -465,8 +478,8 @@ class RequestForm extends React.Component {
                       { this.state.selectedItem &&
                         <ItemDetail
                           item={fullRequest ? fullRequest.item : this.state.selectedItem}
-                          holding={fullRequest ? fullRequest.holding : null}
-                          instance={fullRequest ? fullRequest.instance : null}
+                          holding={fullRequest ? fullRequest.holding : this.state.selectedHolding}
+                          instance={fullRequest ? fullRequest.instance : this.state.selectedInstance}
                           loan={fullRequest ? fullRequest.loan : this.state.selectedLoan}
                           dateFormatter={this.props.dateFormatter}
                           requestCount={fullRequest ? fullRequest.requestCount : this.state.itemRequestCount}

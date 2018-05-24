@@ -187,50 +187,33 @@ class Requests extends React.Component {
 
     this.addRequestFields = this.addRequestFields.bind(this);
     this.create = this.create.bind(this);
-    this.findItem = this.findItem.bind(this);
-    this.findInstance = this.findInstance.bind(this);
-    this.findHolding = this.findHolding.bind(this);
-    this.findLoan = this.findLoan.bind(this);
-    this.findRequestsForItem = this.findRequestsForItem.bind(this);
-    this.findUser = this.findUser.bind(this);
+    this.findResource = this.findResource.bind(this);
   }
 
   // idType can be 'id', 'barcode', etc.
-  findUser(value, idType = 'id') {
-    return fetch(`${this.okapiUrl}/users?query=(${idType}="${value}")`, { headers: this.httpHeaders }).then(response => response.json());
-  }
+  findResource(resource, value, idType = 'id') {
+    const urls = {
+      user: `users?query=(${idType}="${value}")`,
+      item: `inventory/items?query=(${idType}="${value}")`,
+      holding: `holdings-storage/holdings/${value}`,
+      instance: `inventory/instances/${value}`,
+      loan: `circulation/loans?query=(itemId="${value}")`,
+      requestsForItem: `request-storage/requests?query=(itemId="${value}")`,
+    };
 
-  // idType can be 'id', 'barcode', etc.
-  findItem(value, idType = 'id') {
-    return fetch(`${this.okapiUrl}/inventory/items?query=(${idType}="${value}")`, { headers: this.httpHeaders }).then(response => response.json());
-  }
-
-  findHolding(holdingId) {
-    return fetch(`${this.okapiUrl}/holdings-storage/holdings/${holdingId}`, { headers: this.httpHeaders }).then(response => response.json());
-  }
-
-  findInstance(instanceId) {
-    return fetch(`${this.okapiUrl}/inventory/instances/${instanceId}`, { headers: this.httpHeaders }).then(response => response.json());
-  }
-
-  findLoan(itemId) {
-    return fetch(`${this.okapiUrl}/circulation/loans?query=(itemId="${itemId}" and status.name<>"Closed")`, { headers: this.httpHeaders }).then(response => response.json());
-  }
-
-  findRequestsForItem(itemId) {
-    return fetch(`${this.okapiUrl}/request-storage/requests?query=(itemId="${itemId}")`, { headers: this.httpHeaders }).then(response => response.json());
+    return fetch(`${this.okapiUrl}/${urls[resource]}`, { headers: this.httpHeaders }).then(response => response.json());
   }
 
   // Called as a map function
   addRequestFields(r) {
     return Promise.all(
       [
-        this.findUser(r.requesterId),
-        this.findItem(r.itemId),
-        this.findLoan(r.itemId),
-        this.findRequestsForItem(r.itemId),
-        this.findHolding(r.item.holdingsRecordId),
-        this.findInstance(r.item.instanceId),
+        this.findResource('user', r.requesterId),
+        this.findResource('item', r.itemId),
+        this.findResource('loan', r.itemId),
+        this.findResource('requestsForItem', r.itemId),
+        this.findResource('holding', r.item.holdingsRecordId),
+        this.findResource('instance', r.item.instanceId),
       ],
     ).then((resultArray) => {
       // Each element of the promises array returns an array of results, but in
@@ -309,12 +292,7 @@ class Requests extends React.Component {
       parentMutator={this.props.mutator}
       detailProps={{
         stripes,
-        findItem: this.findItem,
-        findLoan: this.findLoan,
-        findUser: this.findUser,
-        findInstance: this.findInstance,
-        findHolding: this.findHolding,
-        findRequestsForItem: this.findRequestsForItem,
+        findResource: this.findResource,
         joinRequest: this.addRequestFields,
         optionLists: {
           addressTypes,
