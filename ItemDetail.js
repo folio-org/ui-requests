@@ -6,12 +6,13 @@ import { Link } from 'react-router-dom';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
-const ItemDetail = ({ item, dateFormatter, loan, requestCount }) => {
+const ItemDetail = ({ item, instance, holding, dateFormatter, loan, requestCount }) => {
   if (!item.barcode) { return <div>Loading ...</div>; }
 
   const barcode = item.barcode;
   const recordLink = barcode ? <Link to={`/inventory/view/${item.instanceId}/${item.holdingsRecordId}/${item.itemId}`}>{barcode}</Link> : '';
   const status = _.get(item, ['status', 'name'], '');
+  const contributor = instance && instance.contributors ? instance.contributors[0].name : '-';
 
   return (
     <div>
@@ -23,7 +24,7 @@ const ItemDetail = ({ item, dateFormatter, loan, requestCount }) => {
           <KeyValue label="Title" value={_.get(item, ['title'], '-')} />
         </Col>
         <Col xs={3}>
-          <KeyValue label="Author" value={_.get(item, ['author'], '-')} />
+          <KeyValue label="Contributor" value={contributor} />
         </Col>
         <Col xs={3}>
           <KeyValue
@@ -34,13 +35,13 @@ const ItemDetail = ({ item, dateFormatter, loan, requestCount }) => {
       </Row>
       <Row>
         <Col xs={3}>
-          <KeyValue label="Call number" value="-" />
+          <KeyValue label="Call number" value={_.get(holding, ['callNumber'], '-')} />
         </Col>
         <Col xs={3}>
           <KeyValue label="Volume" value="-" />
         </Col>
         <Col xs={3}>
-          <KeyValue label="Enumeration" value="-" />
+          <KeyValue label="Enumeration" value={_.get(item, ['enumeration'], '-')} />
         </Col>
         <Col xs={3}>
           <KeyValue label="Copy" value="-" />
@@ -63,12 +64,16 @@ const ItemDetail = ({ item, dateFormatter, loan, requestCount }) => {
 
 ItemDetail.propTypes = {
   item: PropTypes.object.isRequired,
+  holding: PropTypes.object,
+  instance: PropTypes.object,
   loan: PropTypes.object,
   requestCount: PropTypes.number,
   dateFormatter: PropTypes.func.isRequired,
 };
 
 ItemDetail.defaultProps = {
+  holding: {},
+  instance: {},
   loan: {},
   requestCount: 0,
 };

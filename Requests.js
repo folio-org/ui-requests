@@ -187,38 +187,33 @@ class Requests extends React.Component {
 
     this.addRequestFields = this.addRequestFields.bind(this);
     this.create = this.create.bind(this);
-    this.findItem = this.findItem.bind(this);
-    this.findLoan = this.findLoan.bind(this);
-    this.findRequestsForItem = this.findRequestsForItem.bind(this);
-    this.findUser = this.findUser.bind(this);
+    this.findResource = this.findResource.bind(this);
   }
 
   // idType can be 'id', 'barcode', etc.
-  findUser(value, idType = 'id') {
-    return fetch(`${this.okapiUrl}/users?query=(${idType}="${value}")`, { headers: this.httpHeaders }).then(response => response.json());
-  }
+  findResource(resource, value, idType = 'id') {
+    const urls = {
+      user: `users?query=(${idType}="${value}")`,
+      item: `inventory/items?query=(${idType}="${value}")`,
+      holding: `holdings-storage/holdings/${value}`,
+      instance: `inventory/instances/${value}`,
+      loan: `circulation/loans?query=(itemId="${value}")`,
+      requestsForItem: `request-storage/requests?query=(itemId="${value}")`,
+    };
 
-  // idType can be 'id', 'barcode', etc.
-  findItem(value, idType = 'id') {
-    return fetch(`${this.okapiUrl}/inventory/items?query=(${idType}="${value}")`, { headers: this.httpHeaders }).then(response => response.json());
-  }
-
-  findLoan(itemId) {
-    return fetch(`${this.okapiUrl}/circulation/loans?query=(itemId="${itemId}" and status.name<>"Closed")`, { headers: this.httpHeaders }).then(response => response.json());
-  }
-
-  findRequestsForItem(itemId) {
-    return fetch(`${this.okapiUrl}/request-storage/requests?query=(itemId="${itemId}")`, { headers: this.httpHeaders }).then(response => response.json());
+    return fetch(`${this.okapiUrl}/${urls[resource]}`, { headers: this.httpHeaders }).then(response => response.json());
   }
 
   // Called as a map function
   addRequestFields(r) {
     return Promise.all(
       [
-        this.findUser(r.requesterId),
-        this.findItem(r.itemId),
-        this.findLoan(r.itemId),
-        this.findRequestsForItem(r.itemId),
+        this.findResource('user', r.requesterId),
+        this.findResource('item', r.itemId),
+        this.findResource('loan', r.itemId),
+        this.findResource('requestsForItem', r.itemId),
+        this.findResource('holding', r.item.holdingsRecordId),
+        this.findResource('instance', r.item.instanceId),
       ],
     ).then((resultArray) => {
       // Each element of the promises array returns an array of results, but in
@@ -227,12 +222,15 @@ class Requests extends React.Component {
       const item = resultArray[1].items[0];
       const loan = resultArray[2].loans[0];
       const requestCount = resultArray[3].requests.length;
+      const holding = resultArray[4];
+      const instance = resultArray[5];
+
 
       // One field missing from item is the instanceId ... but it's included in
       // the original request
       item.instanceId = r.item.instanceId;
 
-      return { requestMeta: r, requester: user, item, loan, requestCount };
+      return { requestMeta: r, requester: user, item, loan, requestCount, holding, instance };
     });
   }
 
@@ -294,10 +292,7 @@ class Requests extends React.Component {
       parentMutator={this.props.mutator}
       detailProps={{
         stripes,
-        findItem: this.findItem,
-        findLoan: this.findLoan,
-        findUser: this.findUser,
-        findRequestsForItem: this.findRequestsForItem,
+        findResource: this.findResource,
         joinRequest: this.addRequestFields,
         optionLists: {
           addressTypes,

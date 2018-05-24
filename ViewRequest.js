@@ -14,6 +14,7 @@ import craftLayerUrl from '@folio/stripes-components/util/craftLayerUrl';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
 import ItemDetail from './ItemDetail';
+import ViewMetadata from './ViewMetadata';
 import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
 import { fulfilmentTypes, requestTypes, toUserAddress } from './constants';
@@ -80,6 +81,11 @@ class ViewRequest extends React.Component {
       type: 'okapi',
       path: 'circulation/requests/:{id}',
     },
+    relatedRequesterId: {},
+    testRequester: {
+      type: 'okapi',
+      path: 'users?query=(id==%{relatedRequesterId})',
+    },
     addressTypes: {
       type: 'okapi',
       path: 'addresstypes',
@@ -89,6 +95,16 @@ class ViewRequest extends React.Component {
       type: 'okapi',
       path: 'groups',
       records: 'usergroups',
+    },
+    createdBy: {
+      type: 'okapi',
+      records: 'users',
+      path: 'users?query=(id==!{metadata.createdByUserId})',
+    },
+    updatedBy: {
+      type: 'okapi',
+      records: 'users',
+      path: 'users?query=(id==!{metadata.updatedByUserId})',
     },
   };
 
@@ -104,6 +120,7 @@ class ViewRequest extends React.Component {
       },
     };
 
+    this.cViewMetadata = props.stripes.connect(ViewMetadata);
     this.makeLocaleDateString = this.makeLocaleDateString.bind(this);
     this.onToggleSection = this.onToggleSection.bind(this);
     this.craftLayerUrl = craftLayerUrl.bind(this);
@@ -176,13 +193,15 @@ class ViewRequest extends React.Component {
 
     // Most of the values needed to populate the view come from the "enhanced" request
     // object, fullRequestDetail, which includes parts of the requester's user record,
-    // the item record,
+    // the item records,
     // and the related loan record (if any), in the form:
     // {
     //  requestMeta: { top-level request details },
     //  requester: { user details },
     //  item: { item details },
     //  loan: { loan details },
+    //  holding: { holding record details },
+    //  instance: { instance record details },
     //  requestCount: number of requests for the item
     // }
     if (fullRequestDetail.requestMeta) {
@@ -240,11 +259,7 @@ class ViewRequest extends React.Component {
           >
             <Row>
               <Col xs={12}>
-                <MetaSection
-                  id="requestInfoMeta"
-                  contentId="requestInfoMetaContent"
-                  lastUpdatedDate={request.requestMeta.metadata.updatedDate}
-                />
+                <this.cViewMetadata metadata={request.requestMeta.metadata} />
               </Col>
             </Row>
             <Row>
@@ -274,6 +289,8 @@ class ViewRequest extends React.Component {
           >
             <ItemDetail
               item={request.item}
+              holding={request.holding}
+              instance={request.instance}
               loan={request.loan}
               dateFormatter={this.makeLocaleDateString}
               requestCount={request.requestCount}
@@ -304,6 +321,7 @@ class ViewRequest extends React.Component {
             stripes={stripes}
             initialValues={fullRequestDetail.requestMeta}
             fullRequest={fullRequestDetail}
+            metadataDisplay={this.cViewMetadata}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.props.onCloseEdit}
             optionLists={{ requestTypes, fulfilmentTypes, addressTypes }}
