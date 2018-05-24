@@ -188,6 +188,8 @@ class Requests extends React.Component {
     this.addRequestFields = this.addRequestFields.bind(this);
     this.create = this.create.bind(this);
     this.findItem = this.findItem.bind(this);
+    this.findInstance = this.findInstance.bind(this);
+    this.findHolding = this.findHolding.bind(this);
     this.findLoan = this.findLoan.bind(this);
     this.findRequestsForItem = this.findRequestsForItem.bind(this);
     this.findUser = this.findUser.bind(this);
@@ -310,6 +312,8 @@ class Requests extends React.Component {
         findItem: this.findItem,
         findLoan: this.findLoan,
         findUser: this.findUser,
+        findInstance: this.findInstance,
+        findHolding: this.findHolding,
         findRequestsForItem: this.findRequestsForItem,
         joinRequest: this.addRequestFields,
         optionLists: {
