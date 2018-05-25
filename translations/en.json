@@ -1,8 +1,18 @@
 {
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
-
   "user.name": "Name",
   "user.username": "Username",
   "user.barcode": "Barcode",
-  "user.patronGroup": "Patron group"
+  "user.patronGroup": "Patron group",
+  "viewRequest.detailMenu.showNotes": "Show Notes",
+  "viewRequest.detailMenu.editRequest": "Edit Request",
+  "viewRequest.requestDetail": "Request Detail",
+  "viewRequest.requestInfo": "Request information",
+  "viewRequest.requestType": "Request type",
+  "viewRequest.requestStatus": "Request status",
+  "viewRequest.requestExpiration": "Request expiration date",
+  "viewRequest.holdShelfExpiration": "Hold shelf expiration date",
+  "viewRequest.queuePosition": "Position in queue",
+  "viewRequest.itemInfo": "Item information",
+  "viewRequest.requesterInfo": "Requester information"
 }

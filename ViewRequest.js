@@ -18,6 +18,7 @@ import ViewMetadata from './ViewMetadata';
 import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
 import { fulfilmentTypes, requestTypes, toUserAddress } from './constants';
+import { translate } from './utils';
 
 class ViewRequest extends React.Component {
   static propTypes = {
@@ -231,7 +232,7 @@ class ViewRequest extends React.Component {
           id="clickable-show-notes"
           style={{ visibility: !request ? 'hidden' : 'visible' }}
           onClick={this.props.notesToggle}
-          title="Show Notes"
+          title={translate('viewRequest.detailMenu.showNotes', this.props.stripes)}
         />
         <IconButton
           icon="edit"
@@ -239,7 +240,7 @@ class ViewRequest extends React.Component {
           style={{ visibility: !request ? 'hidden' : 'visible' }}
           href={this.props.editLink}
           onClick={this.props.onEdit}
-          title="Edit Request"
+          title={translate('viewRequest.detailMenu.editRequest', this.props.stripes)}
         />
       </PaneMenu>
     );
@@ -258,12 +259,12 @@ class ViewRequest extends React.Component {
       this.makeLocaleDateString(_.get(request, ['requestMeta', 'holdShelfExpirationDate'], '')) : '-';
 
     return request ? (
-      <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
+      <Pane defaultWidth={this.props.paneWidth} paneTitle={translate('viewRequest.requestDetail', this.props.stripes)} lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
         <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
           <Accordion
             open
             id="request-info"
-            label="Request information"
+            label={translate('viewRequest.requestInfo', this.props.stripes)}
           >
             <Row>
               <Col xs={12}>
@@ -272,28 +273,28 @@ class ViewRequest extends React.Component {
             </Row>
             <Row>
               <Col xs={3}>
-                <KeyValue label="Request type" value={_.get(request, ['requestMeta', 'requestType'], '-')} />
+                <KeyValue label={translate('viewRequest.requestType', this.props.stripes)} value={_.get(request, ['requestMeta', 'requestType'], '-')} />
               </Col>
               <Col xs={3}>
-                <KeyValue label="Request status" value={_.get(request, ['requestMeta', 'status'], '-')} />
+                <KeyValue label={translate('viewRequest.requestStatus', this.props.stripes)} value={_.get(request, ['requestMeta', 'status'], '-')} />
               </Col>
               <Col xs={3}>
-                <KeyValue label="Request expiration date" value={this.makeLocaleDateString(_.get(request, ['requestMeta', 'requestExpirationDate'])) || '-'} />
+                <KeyValue label={translate('viewRequest.requestExpiration', this.props.stripes)} value={this.makeLocaleDateString(_.get(request, ['requestMeta', 'requestExpirationDate'])) || '-'} />
               </Col>
               <Col xs={3}>
-                <KeyValue label="Hold shelf expiration date" value={holdShelfExpireDate} />
+                <KeyValue label={translate('viewRequest.holdShelfExpiration', this.props.stripes)} value={holdShelfExpireDate} />
               </Col>
             </Row>
             <Row>
               <Col xs={3}>
-                <KeyValue label="Position in queue" value="-" />
+                <KeyValue label={translate('viewRequest.queuePosition', this.props.stripes)} value="-" />
               </Col>
             </Row>
           </Accordion>
           <Accordion
             open
             id="item-info"
-            label="Item information"
+            label={translate('viewRequest.itemInfo', this.props.stripes)}
           >
             <ItemDetail
               item={request.item}
@@ -307,7 +308,7 @@ class ViewRequest extends React.Component {
           <Accordion
             open
             id="requester-info"
-            label="Requester information"
+            label={translate('viewRequest.requesterInfo', this.props.stripes)}
           >
             <UserDetail
               user={request.requester}
