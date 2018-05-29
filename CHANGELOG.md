@@ -27,6 +27,7 @@
 * Add a guard against calling setState after component is unmounted. Fixes UIREQ-26.
 * Use perm or temp location in item summary. Fixes UIREQ-29.
 * Bug fix: make proxy modal cancellable (is that a word?). Fixes UIREQ-94.
+* Restore "active/inactive" filters since UIU-400 remains incomplete.
 
 ## [1.1.0](https://github.com/folio-org/ui-requests/tree/v1.1.0) (2018-01-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.0.0...v1.1.0)
