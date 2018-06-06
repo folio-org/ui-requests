@@ -39,43 +39,6 @@ const filterConfig = [
 ];
 
 class Requests extends React.Component {
-  static contextTypes = {
-    stripes: PropTypes.object,
-  }
-
-  static propTypes = {
-    mutator: PropTypes.shape({
-      records: PropTypes.shape({
-        GET: PropTypes.func,
-        POST: PropTypes.func,
-      }),
-      query: PropTypes.object,
-      requestCount: PropTypes.shape({
-        replace: PropTypes.func,
-      }),
-    }).isRequired,
-    resources: PropTypes.shape({
-      addressTypes: PropTypes.shape({
-        hasLoaded: PropTypes.bool.isRequired,
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
-      records: PropTypes.shape({
-        hasLoaded: PropTypes.bool.isRequired,
-        isPending: PropTypes.bool.isPending,
-        other: PropTypes.shape({
-          totalRecords: PropTypes.number,
-        }),
-      }),
-    }).isRequired,
-    stripes: PropTypes.shape({
-      connect: PropTypes.func.isRequired,
-      locale: PropTypes.string,
-      logger: PropTypes.shape({
-        log: PropTypes.func.isRequired,
-      }).isRequired,
-    }).isRequired,
-  };
-
   static manifest = {
     addressTypes: {
       type: 'okapi',
@@ -171,6 +134,43 @@ class Requests extends React.Component {
       fetch: false,
     },
   };
+
+  static propTypes = {
+    mutator: PropTypes.shape({
+      records: PropTypes.shape({
+        GET: PropTypes.func,
+        POST: PropTypes.func,
+      }),
+      query: PropTypes.object,
+      requestCount: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
+    }).isRequired,
+    resources: PropTypes.shape({
+      addressTypes: PropTypes.shape({
+        hasLoaded: PropTypes.bool.isRequired,
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      records: PropTypes.shape({
+        hasLoaded: PropTypes.bool.isRequired,
+        isPending: PropTypes.bool.isPending,
+        other: PropTypes.shape({
+          totalRecords: PropTypes.number,
+        }),
+      }),
+    }).isRequired,
+    stripes: PropTypes.shape({
+      connect: PropTypes.func.isRequired,
+      locale: PropTypes.string,
+      logger: PropTypes.shape({
+        log: PropTypes.func.isRequired,
+      }).isRequired,
+    }).isRequired,
+  };
+
+  static contextTypes = {
+    stripes: PropTypes.object,
+  }
 
   constructor(props, context) {
     super(props);
