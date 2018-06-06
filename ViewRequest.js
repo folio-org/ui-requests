@@ -6,13 +6,13 @@ import queryString from 'query-string';
 import { Accordion, AccordionSet } from '@folio/stripes-components/lib/Accordion';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import Layer from '@folio/stripes-components/lib/Layer';
-import MetaSection from '@folio/stripes-components/lib/MetaSection';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import IconButton from '@folio/stripes-components/lib/IconButton';
 import craftLayerUrl from '@folio/stripes-components/util/craftLayerUrl';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
+import CancelRequestDialog from './CancelRequestDialog';
 import ItemDetail from './ItemDetail';
 import ViewMetadata from './ViewMetadata';
 import UserDetail from './UserDetail';
@@ -20,6 +20,38 @@ import RequestForm from './RequestForm';
 import { fulfilmentTypes, requestTypes, toUserAddress } from './constants';
 
 class ViewRequest extends React.Component {
+  static manifest = {
+    selectedRequest: {
+      type: 'okapi',
+      path: 'circulation/requests/:{id}',
+    },
+    relatedRequesterId: {},
+    testRequester: {
+      type: 'okapi',
+      path: 'users?query=(id==%{relatedRequesterId})',
+    },
+    addressTypes: {
+      type: 'okapi',
+      path: 'addresstypes',
+      records: 'addressTypes',
+    },
+    patronGroups: {
+      type: 'okapi',
+      path: 'groups',
+      records: 'usergroups',
+    },
+    createdBy: {
+      type: 'okapi',
+      records: 'users',
+      path: 'users?query=(id==!{metadata.createdByUserId})',
+    },
+    updatedBy: {
+      type: 'okapi',
+      records: 'users',
+      path: 'users?query=(id==!{metadata.updatedByUserId})',
+    },
+  };
+
   static propTypes = {
     dateFormatter: PropTypes.func.isRequired,
     editLink: PropTypes.string,
@@ -69,43 +101,17 @@ class ViewRequest extends React.Component {
     }).isRequired,
   };
 
+  static contextTypes = {
+    intl: PropTypes.shape({
+      formatMessage: PropTypes.func,
+    })
+  }
+
   static defaultProps = {
     editLink: '',
     paneWidth: '50%',
     onEdit: () => {},
     notesToggle: () => {},
-  };
-
-  static manifest = {
-    selectedRequest: {
-      type: 'okapi',
-      path: 'circulation/requests/:{id}',
-    },
-    relatedRequesterId: {},
-    testRequester: {
-      type: 'okapi',
-      path: 'users?query=(id==%{relatedRequesterId})',
-    },
-    addressTypes: {
-      type: 'okapi',
-      path: 'addresstypes',
-      records: 'addressTypes',
-    },
-    patronGroups: {
-      type: 'okapi',
-      path: 'groups',
-      records: 'usergroups',
-    },
-    createdBy: {
-      type: 'okapi',
-      records: 'users',
-      path: 'users?query=(id==!{metadata.createdByUserId})',
-    },
-    updatedBy: {
-      type: 'okapi',
-      records: 'users',
-      path: 'users?query=(id==!{metadata.updatedByUserId})',
-    },
   };
 
   constructor(props) {
@@ -233,14 +239,6 @@ class ViewRequest extends React.Component {
           onClick={this.props.notesToggle}
           title="Show Notes"
         />
-        <IconButton
-          icon="edit"
-          id="clickable-edit-request"
-          style={{ visibility: !request ? 'hidden' : 'visible' }}
-          href={this.props.editLink}
-          onClick={this.props.onEdit}
-          title="Edit Request"
-        />
       </PaneMenu>
     );
 
@@ -258,7 +256,27 @@ class ViewRequest extends React.Component {
       this.makeLocaleDateString(_.get(request, ['requestMeta', 'holdShelfExpirationDate'], '')) : '-';
 
     return request ? (
-      <Pane defaultWidth={this.props.paneWidth} paneTitle="Request Detail" lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
+      <Pane
+        defaultWidth={this.props.paneWidth}
+        paneTitle="Request Detail"
+        lastMenu={detailMenu}
+        actionMenuItems={[{
+          id: 'clickable-edit-request',
+          title: 'Edit Request',
+          label: 'Edit',
+          href: this.props.editLink,
+          onClick: this.props.onEdit,
+          icon: 'edit',
+        }, {
+          id: 'clickable-cancel-request',
+          title: this.context.intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
+          label: this.context.intl.formatMessage({ id: 'ui-requests.cancel.cancel' }),
+          onClick: () => this.setState({ isCancellingRequest: true }),
+          icon: 'cancel',
+        }]}
+        dismissible
+        onClose={this.props.onClose}
+      >
         <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
           <Accordion
             open
@@ -337,6 +355,11 @@ class ViewRequest extends React.Component {
             dateFormatter={this.props.dateFormatter}
           />
         </Layer>
+        <CancelRequestDialog
+          open={this.state.isCancellingRequest}
+          onClose={() => this.setState({ isCancellingRequest: false })}
+          request={request}
+        />
       </Pane>
     ) : null;
   }

@@ -90,6 +90,7 @@
     "webpack": "1.11.0"
   },
   "dependencies": {
+    "@folio/react-intl-safe-html": "^1.0.10007",
     "@folio/stripes-components": "^2.0.0",
     "@folio/stripes-form": "^0.8.1",
     "@folio/stripes-smart-components": "^1.4.3",

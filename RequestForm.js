@@ -18,6 +18,7 @@ import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
 import stripesForm from '@folio/stripes-form';
 
+import CancelRequestDialog from './CancelRequestDialog';
 import UserDetail from './UserDetail';
 import ItemDetail from './ItemDetail';
 import { toUserAddress } from './constants';
@@ -391,7 +392,20 @@ class RequestForm extends React.Component {
     return (
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
-          <Pane defaultWidth="100%" height="100%" firstMenu={addRequestFirstMenu} lastMenu={isEditForm ? editRequestLastMenu : addRequestLastMenu} paneTitle={isEditForm ? 'Edit request' : 'New request'}>
+          <Pane
+            defaultWidth="100%"
+            height="100%"
+            firstMenu={addRequestFirstMenu}
+            lastMenu={isEditForm ? editRequestLastMenu : addRequestLastMenu}
+            paneTitle={isEditForm ? 'Edit request' : 'New request'}
+            actionMenuItems={[{
+              id: 'clickable-cancel-request',
+              title: intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
+              label: intl.formatMessage({ id: 'ui-requests.cancel.cancel' }),
+              onClick: () => this.setState({ isCancellingRequest: true }),
+              icon: 'cancel',
+            }]}
+          >
             <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
               <Accordion
                 open
@@ -582,6 +596,12 @@ class RequestForm extends React.Component {
               </Accordion>
             </AccordionSet>
           </Pane>
+          <CancelRequestDialog
+            open={this.state.isCancellingRequest}
+            onClose={() => this.setState({ isCancellingRequest: false })}
+            request={fullRequest}
+          />
+
           <br /><br /><br /><br /><br />
         </Paneset>
       </form>
