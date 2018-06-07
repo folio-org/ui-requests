@@ -398,13 +398,13 @@ class RequestForm extends React.Component {
             firstMenu={addRequestFirstMenu}
             lastMenu={isEditForm ? editRequestLastMenu : addRequestLastMenu}
             paneTitle={isEditForm ? 'Edit request' : 'New request'}
-            actionMenuItems={[{
+            actionMenuItems={isEditForm ? [{
               id: 'clickable-cancel-request',
               title: intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
               label: intl.formatMessage({ id: 'ui-requests.cancel.cancel' }),
               onClick: () => this.setState({ isCancellingRequest: true }),
               icon: 'cancel',
-            }]}
+            }] : undefined }
           >
             <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
               <Accordion
