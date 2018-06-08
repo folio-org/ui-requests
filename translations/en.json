@@ -6,7 +6,6 @@
   "user.barcode": "Barcode",
   "user.patronGroup": "Patron group",
 
-  "cancel.cancel": "Cancel",
   "cancel.cancelRequest": "Cancel request",
   "cancel.modalLabel": "Confirm request cancellation",
   "cancel.requestWillBeCancelled": "<b>{title}</b> will be <b>cancelled</b>",
@@ -14,7 +13,5 @@
   "cancel.notifyLabel": "Notify patron",
   "cancel.additionalInfoLabel": "Additional information{required}",
   "cancel.additionalInfoPlaceholderRequired": "Enter more information about the cancellation (required)",
-  "cancel.additionalInfoPlaceholderOptional": "Enter more information about the cancellation (optional)",
-  "cancel.backButton": "Back",
-  "cancel.confirmButton": "Confirm"
+  "cancel.additionalInfoPlaceholderOptional": "Enter more information about the cancellation (optional)"
 }

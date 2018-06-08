@@ -401,10 +401,10 @@ class RequestForm extends React.Component {
             actionMenuItems={isEditForm ? [{
               id: 'clickable-cancel-request',
               title: intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
-              label: intl.formatMessage({ id: 'ui-requests.cancel.cancel' }),
+              label: intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
               onClick: () => this.setState({ isCancellingRequest: true }),
               icon: 'cancel',
-            }] : undefined }
+            }] : undefined}
           >
             <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
               <Accordion

@@ -30,7 +30,7 @@ class CancelRequestDialog extends React.Component { // eslint-disable-line
     super(props);
 
     this.state = {
-      reason: 'q',
+      reason: 'itemNeededForCourseReserves',
       notify: false,
     };
   }
@@ -96,14 +96,14 @@ class CancelRequestDialog extends React.Component { // eslint-disable-line
         />
         <Layout className="textRight">
           <Button onClick={this.props.onClose}>
-            {formatMessage({ id: 'ui-requests.cancel.backButton' })}
+            {formatMessage({ id: 'stripes-core.button.back' })}
           </Button>
           <Button
             buttonStyle="primary"
             disabled={reason === 'other' && !additionalInfo}
             onClick={this.onCancelRequest}
           >
-            {formatMessage({ id: 'ui-requests.cancel.confirmButton' })}
+            {formatMessage({ id: 'stripes-core.button.confirm' })}
           </Button>
         </Layout>
       </Modal>

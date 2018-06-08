@@ -270,7 +270,7 @@ class ViewRequest extends React.Component {
         }, {
           id: 'clickable-cancel-request',
           title: this.context.intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
-          label: this.context.intl.formatMessage({ id: 'ui-requests.cancel.cancel' }),
+          label: this.context.intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
           onClick: () => this.setState({ isCancellingRequest: true }),
           icon: 'cancel',
         }]}
