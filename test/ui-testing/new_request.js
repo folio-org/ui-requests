@@ -29,8 +29,8 @@ module.exports.test = function uiTest(uiTestCtx) {
           .wait(1111)
           .click('#clickable-users-module')
           .wait(1111)
-          .wait('#input-user-search')
-          .type('#input-user-search', '0')
+          .wait('#clickable-filter-active-Active')
+          .click('#clickable-filter-active-Active')
           .wait(listitem)
           .evaluate((bcode) => {
             const bc = document.querySelector(bcode);
@@ -49,8 +49,8 @@ module.exports.test = function uiTest(uiTestCtx) {
           .click('#clickable-checkout-module')
           .wait('#section-patron button[title*="Find"]')
           .click('#section-patron button[title*="Find"]')
-          .wait('#input-user-search')
-          .type('#input-user-search', '0')
+          .wait('#clickable-filter-active-Active')
+          .click('#clickable-filter-active-Active')
           .wait('#list-users div[role="listitem"]:nth-of-type(9)')
           .click('#list-users div[role="listitem"]:nth-of-type(9) a')
           .wait(2222)
