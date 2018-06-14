@@ -137,10 +137,9 @@ class ViewRequest extends React.Component {
   componentDidUpdate(prevProps) {
     const prevRQ = prevProps.resources.selectedRequest;
     const currentRQ = this.props.resources.selectedRequest;
-
     // Only update if actually needed (otherwise, this gets called way too often)
-    if (this._mounted && prevRQ && prevRQ.hasLoaded && currentRQ && currentRQ.hasLoaded) {
-      if ((prevRQ.records[0].id !== currentRQ.records[0].id) || !(this.state.fullRequestDetail.requestMeta && this.state.fullRequestDetail.requestMeta.id)) {
+    if (this._mounted && prevRQ && currentRQ && currentRQ.hasLoaded) {
+      if ((prevRQ.records[0] && prevRQ.records[0].id !== currentRQ.records[0].id) || !(this.state.fullRequestDetail.requestMeta && this.state.fullRequestDetail.requestMeta.id)) {
         const basicRequest = currentRQ.records[0];
         this.props.joinRequest(basicRequest).then((newRequest) => {
           this.setState({
