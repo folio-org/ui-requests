@@ -273,18 +273,18 @@ class RequestForm extends React.Component {
           [
             findResource('loan', item.id),
             findResource('requestsForItem', item.id),
-            findResource('instance', item.instanceId),
+          //  findResource('instance', item.instanceId),
             findResource('holding', item.holdingsRecordId),
           ],
         ).then((resultArray) => {
           const loan = resultArray[0].loans[0];
           const itemRequestCount = resultArray[1].requests.length;
-          const instance = resultArray[2];
-          const holding = resultArray[3];
+        //  const instance = resultArray[2];
+          const holding = resultArray[2];
           if (loan) {
             this.setState({
               selectedItem: item,
-              selectedInstance: instance,
+           //   selectedInstance: instance,
               selectedHolding: holding,
               selectedLoan: loan,
               itemRequestCount,
@@ -293,7 +293,7 @@ class RequestForm extends React.Component {
           // If no loan is found, just set the item and related record(s) and rq count
           this.setState({
             selectedItem: item,
-            selectedInstance: instance,
+         //   selectedInstance: instance,
             selectedHolding: holding,
             itemRequestCount,
           });
