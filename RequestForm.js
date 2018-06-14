@@ -257,7 +257,7 @@ class RequestForm extends React.Component {
   onItemClick() {
     this.setState({ selectedItem: null });
     const { findResource } = this.props;
-    const barcode = this.itemBarcodeRef.getRenderedComponent().getInput().value;
+    const barcode = this.itemBarcodeRef.current.getRenderedComponent().getInput().value;
 
     findResource('item', barcode, 'barcode').then((result) => {
       if (result.totalRecords === 1) {
