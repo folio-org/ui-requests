@@ -403,7 +403,6 @@ class RequestForm extends React.Component {
           <Pane defaultWidth="100%" height="100%" firstMenu={addRequestFirstMenu} lastMenu={isEditForm ? editRequestLastMenu : addRequestLastMenu} paneTitle={isEditForm ? 'Edit request' : 'New request'}>
             <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
               <Accordion
-                open
                 id="request-info"
                 label="Request information"
               >
@@ -467,7 +466,6 @@ class RequestForm extends React.Component {
                 </Row>
               </Accordion>
               <Accordion
-                open
                 id="item-info"
                 label={`Item information ${labelAsterisk}`}
               >
@@ -517,10 +515,8 @@ class RequestForm extends React.Component {
                 </div>
               </Accordion>
               <Accordion
-                open
                 id="requester-info"
                 label={`Requester information ${labelAsterisk}`}
-
               >
                 <div id="section-requester-info">
                   <Row>
