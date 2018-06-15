@@ -166,6 +166,7 @@ class RequestForm extends React.Component {
     this.onUserClick = this.onUserClick.bind(this);
 
     this.itemBarcodeRef = React.createRef();
+    this.requesterBarcodeRef = React.createRef();
   }
 
   componentDidUpdate(prevProps) {
@@ -221,7 +222,7 @@ class RequestForm extends React.Component {
 
   onUserClick(proxyUser = null) {
     this.setState({ selectedUser: null, proxy: null });
-    const barcode = this.requesterBarcodeField.value;
+    const barcode = this.requesterBarcodeRef.current.getRenderedComponent().getInput().value;
 
     this.props.findResource('user', barcode, 'barcode').then((result) => {
       if (result.totalRecords === 1) {
@@ -275,18 +276,15 @@ class RequestForm extends React.Component {
           [
             findResource('loan', item.id),
             findResource('requestsForItem', item.id),
-            findResource('instance', item.instanceId),
             findResource('holding', item.holdingsRecordId),
           ],
         ).then((resultArray) => {
           const loan = resultArray[0].loans[0];
           const itemRequestCount = resultArray[1].requests.length;
-          const instance = resultArray[2];
-          const holding = resultArray[3];
+          const holding = resultArray[2];
           if (loan) {
             this.setState({
               selectedItem: item,
-              selectedInstance: instance,
               selectedHolding: holding,
               selectedLoan: loan,
               itemRequestCount,
@@ -295,11 +293,20 @@ class RequestForm extends React.Component {
           // If no loan is found, just set the item and related record(s) and rq count
           this.setState({
             selectedItem: item,
-            selectedInstance: instance,
             selectedHolding: holding,
             itemRequestCount,
           });
 
+          return result;
+        }).then(() => {
+          // Now that the holding record has been found, we can get the instance record
+          if (this.state.selectedHolding.instanceId) {
+            findResource('instance', this.state.selectedHolding.instanceId).then((result2) => {
+              this.setState({
+                selectedInstance: result2,
+              });
+            });
+          }
           return result;
         });
       }
@@ -396,7 +403,6 @@ class RequestForm extends React.Component {
           <Pane defaultWidth="100%" height="100%" firstMenu={addRequestFirstMenu} lastMenu={isEditForm ? editRequestLastMenu : addRequestLastMenu} paneTitle={isEditForm ? 'Edit request' : 'New request'}>
             <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
               <Accordion
-                open
                 id="request-info"
                 label="Request information"
               >
@@ -460,7 +466,6 @@ class RequestForm extends React.Component {
                 </Row>
               </Accordion>
               <Accordion
-                open
                 id="item-info"
                 label={`Item information ${labelAsterisk}`}
               >
@@ -510,10 +515,8 @@ class RequestForm extends React.Component {
                 </div>
               </Accordion>
               <Accordion
-                open
                 id="requester-info"
                 label={`Requester information ${labelAsterisk}`}
-
               >
                 <div id="section-requester-info">
                   <Row>
@@ -528,7 +531,7 @@ class RequestForm extends React.Component {
                               fullWidth
                               component={TextField}
                               withRef
-                              ref={(input) => { this.requesterBarcodeField = input; }}
+                              ref={this.requesterBarcodeRef}
                               onInput={this.onUserClick}
                               onKeyDown={e => this.onKeyDown(e, 'requester')}
                               validate={this.requireUser}
