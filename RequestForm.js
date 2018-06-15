@@ -301,9 +301,9 @@ class RequestForm extends React.Component {
         }).then(() => {
           // Now that the holding record has been found, we can get the instance record
           if (this.state.selectedHolding.instanceId) {
-            findResource('instance', this.state.selectedHolding.instanceId).then((result) => {
+            findResource('instance', this.state.selectedHolding.instanceId).then((result2) => {
               this.setState({
-                selectedInstance: result,
+                selectedInstance: result2,
               });
             });
           }
