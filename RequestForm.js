@@ -166,6 +166,7 @@ class RequestForm extends React.Component {
     this.onUserClick = this.onUserClick.bind(this);
 
     this.itemBarcodeRef = React.createRef();
+    this.requesterBarcodeRef = React.createRef();
   }
 
   componentDidUpdate(prevProps) {
@@ -221,7 +222,7 @@ class RequestForm extends React.Component {
 
   onUserClick(proxyUser = null) {
     this.setState({ selectedUser: null, proxy: null });
-    const barcode = this.requesterBarcodeField.getRenderedComponent().getInput().value;
+    const barcode = this.requesterBarcodeRef.current.getRenderedComponent().getInput().value;
 
     this.props.findResource('user', barcode, 'barcode').then((result) => {
       if (result.totalRecords === 1) {
@@ -534,7 +535,7 @@ class RequestForm extends React.Component {
                               fullWidth
                               component={TextField}
                               withRef
-                              ref={(input) => { this.requesterBarcodeField = input; }}
+                              ref={this.requesterBarcodeRef}
                               onInput={this.onUserClick}
                               onKeyDown={e => this.onKeyDown(e, 'requester')}
                               validate={this.requireUser}
