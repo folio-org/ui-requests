@@ -366,8 +366,9 @@ class RequestForm extends React.Component {
       <PaneMenu>
         <Button
           onClick={onCancel}
-          title={intl.formatMessage({ id: 'ui-requests.requestForm.closeNewRequest' })}
-          aria-label={intl.formatMessage({ id: 'ui-requests.requestForm.closeNewRequest' })}>
+          title={intl.formatMessage({ id: 'ui-requests.actions.closeNewRequest' })}
+          aria-label={intl.formatMessage({ id: 'ui-requests.actions.closeNewRequest' })}
+        >
           <span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span>
         </Button>
       </PaneMenu>;
@@ -376,7 +377,7 @@ class RequestForm extends React.Component {
         <Button
           id="clickable-create-request"
           type="button"
-          title={intl.formatMessage({ id: 'ui-requests.requestForm.createNewRequest' })}
+          title={intl.formatMessage({ id: 'ui-requests.actions.createNewRequest' })}
           disabled={pristine || submitting}
           onClick={handleSubmit}
         >
@@ -388,11 +389,11 @@ class RequestForm extends React.Component {
         <Button
           id="clickable-update-request"
           type="button"
-          title={intl.formatMessage({ id: 'ui-requests.requestForm.updateRequest' })}
+          title={intl.formatMessage({ id: 'ui-requests.actions.updateRequest' })}
           disabled={pristine || submitting}
           onClick={handleSubmit}
         >
-          <FormattedMessage id="ui-requests.requestForm.updateRequest" />
+          <FormattedMessage id="ui-requests.actions.updateRequest" />
         </Button>
       </PaneMenu>;
     const requestTypeOptions = _.sortBy(optionLists.requestTypes || [], ['label']).map(t => ({ label: t.label, value: t.id, selected: requestType === t.id }));
@@ -426,20 +427,26 @@ class RequestForm extends React.Component {
 
     // map column-IDs to table-header-values
     const columnMapping = {
-      name: intl.formatMessage({ id: 'ui-requests.user.name' }),
-      patronGroup: intl.formatMessage({ id: 'ui-requests.user.patronGroup' }),
-      username: intl.formatMessage({ id: 'ui-requests.user.username' }),
-      barcode: intl.formatMessage({ id: 'ui-requests.user.barcode' }),
+      name: intl.formatMessage({ id: 'ui-requests.requester.name' }),
+      patronGroup: intl.formatMessage({ id: 'ui-requests.requester.patronGroup' }),
+      username: intl.formatMessage({ id: 'ui-requests.requester.username' }),
+      barcode: intl.formatMessage({ id: 'ui-requests.barcode' }),
     };
 
     return (
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
-          <Pane defaultWidth="100%" height="100%" firstMenu={addRequestFirstMenu} lastMenu={isEditForm ? editRequestLastMenu : addRequestLastMenu} paneTitle={isEditForm ? 'Edit request' : 'New request'}>
+          <Pane
+            defaultWidth="100%"
+            height="100%"
+            firstMenu={addRequestFirstMenu}
+            lastMenu={isEditForm ? editRequestLastMenu : addRequestLastMenu}
+            paneTitle={isEditForm ? intl.formatMessage({ id: 'ui-requests.actions.editRequest' }) : intl.formatMessage({ id: 'ui-requests.actions.newRequest' })}
+          >
             <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
               <Accordion
                 id="request-info"
-                label="Request information"
+                label={intl.formatMessage({ id: 'ui-requests.requestMeta.information' })}
               >
                 { isEditForm && requestMeta && requestMeta.metadata &&
                   <Col xs={12}>
@@ -452,7 +459,7 @@ class RequestForm extends React.Component {
                       <Col xs={3}>
                         { !isEditForm &&
                           <Field
-                            label="Request type"
+                            label={intl.formatMessage({ id: 'ui-requests.requestMeta.type' })}
                             name="requestType"
                             component={Select}
                             fullWidth
@@ -461,19 +468,19 @@ class RequestForm extends React.Component {
                           />
                         }
                         { isEditForm &&
-                          <KeyValue label="Request type" value={requestMeta.requestType} />
+                          <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.type' })} value={requestMeta.requestType} />
                         }
                       </Col>
                       <Col xs={3}>
                         { isEditForm &&
-                          <KeyValue label="Request status" value={requestMeta.status} />
+                          <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.status' })} value={requestMeta.status} />
                         }
                       </Col>
                       <Col xs={3}>
                         <Field
                           name="requestExpirationDate"
-                          label="Request expiration date"
-                          aria-label="Request expiration date"
+                          label={intl.formatMessage({ id: 'ui-requests.requestMeta.expirationDate' })}
+                          aria-label={intl.formatMessage({ id: 'ui-requests.requestMeta.expirationDate' })}
                           backendDateStandard="YYYY-MM-DD"
                           component={Datepicker}
                         />
@@ -482,8 +489,8 @@ class RequestForm extends React.Component {
                         <Col xs={3}>
                           <Field
                             name="holdShelfExpirationDate"
-                            label="Hold shelf expiration date"
-                            aria-label="Hold shelf expiration date"
+                            label={intl.formatMessage({ id: 'ui-requests.requestMeta.holdShelfExpirationDate' })}
+                            aria-label={intl.formatMessage({ id: 'ui-requests.requestMeta.holdShelfExpirationDate' })}
                             backendDateStandard="YYYY-MM-DD"
                             component={Datepicker}
                           />
@@ -491,14 +498,14 @@ class RequestForm extends React.Component {
                       }
                       { isEditForm && requestMeta.status !== 'Open - Awaiting pickup' &&
                         <Col xs={3}>
-                          <KeyValue label="Hold shelf expiration date" value={holdShelfExpireDate} />
+                          <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.holdShelfExpirationDate' })} value={holdShelfExpireDate} />
                         </Col>
                       }
                     </Row>
                     { isEditForm &&
                       <Row>
                         <Col xs={3}>
-                          <KeyValue label="Position in queue" value="-" />
+                          <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.queuePosition' })} value="-" />
                         </Col>
                       </Row>
                     }
@@ -507,7 +514,7 @@ class RequestForm extends React.Component {
               </Accordion>
               <Accordion
                 id="item-info"
-                label={`Item information ${labelAsterisk}`}
+                label={`${intl.formatMessage({ id: 'ui-requests.item.information' })} ${labelAsterisk}`}
               >
                 <div id="section-item-info">
                   <Row>
@@ -517,8 +524,8 @@ class RequestForm extends React.Component {
                           <Col xs={9}>
                             <Field
                               name="item.barcode"
-                              placeholder="Scan or enter item barcode"
-                              aria-label="Item barcode"
+                              placeholder={intl.formatMessage({ id: 'ui-requests.item.scanOrEnterBarcode' })}
+                              aria-label={intl.formatMessage({ id: 'ui-requests.item.barcode' })}
                               fullWidth
                               component={TextField}
                               withRef
@@ -556,7 +563,7 @@ class RequestForm extends React.Component {
               </Accordion>
               <Accordion
                 id="requester-info"
-                label={`Requester information ${labelAsterisk}`}
+                label={`${intl.formatMessage({ id: 'ui-requests.requester.information' })} ${labelAsterisk}`}
               >
                 <div id="section-requester-info">
                   <Row>
@@ -566,8 +573,8 @@ class RequestForm extends React.Component {
                           <Col xs={9}>
                             <Field
                               name="requester.barcode"
-                              placeholder="Scan or enter requester barcode"
-                              aria-label="Requester barcode"
+                              placeholder={intl.formatMessage({ id: 'ui-requests.requester.scanOrEnterBarcode' })}
+                              aria-label={intl.formatMessage({ id: 'ui-requests.requester.barcode' })}
                               fullWidth
                               component={TextField}
                               withRef
@@ -579,7 +586,7 @@ class RequestForm extends React.Component {
                             <Pluggable
                               aria-haspopup="true"
                               type="find-user"
-                              searchLabel="Requester look-up"
+                              searchLabel={intl.formatMessage({ id: 'ui-requests.requester.findUserPluginLabel' })}
                               marginTop0
                               searchButtonStyle="link"
                               {...this.props}
