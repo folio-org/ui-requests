@@ -14,5 +14,18 @@
   "viewRequest.holdShelfExpiration": "Hold shelf expiration date",
   "viewRequest.queuePosition": "Position in queue",
   "viewRequest.itemInfo": "Item information",
-  "viewRequest.requesterInfo": "Requester information"
+  "viewRequest.requesterInfo": "Requester information",
+  "viewRequest.editRequestLink": "Edit Request Dialog",
+  "errors.itemBarcodeDoesNotExist": "Item with this barcode does not exist",
+  "errors.userBarcodeDoesNotExist": "User with this barcode does not exist",
+  "errors.onlyCheckedOutForRecall": "Only checked out items can be recalled",
+  "errors.onlyCheckedOutForHold": "Only checked out items can be held",
+  "errors.selectItem": "Please select an item",
+  "errors.selectUser": "Please select a requester",
+  "requestForm.closeNewRequest": "Close New Request",
+  "requestForm.createNewRequest": "Create New Request",
+  "requestForm.newRequest": "New request",
+  "requestForm.updateRequest": "Update request",
+  "requestForm.editRequest": "Edit request",
+  "itemDetail.loading": "Loading..."
 }

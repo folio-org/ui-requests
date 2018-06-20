@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import queryString from 'query-string';
+import { FormattedMessage } from 'react-intl';
 
 import { Accordion, AccordionSet } from '@folio/stripes-components/lib/Accordion';
 import Button from '@folio/stripes-components/lib/Button';
@@ -21,6 +22,7 @@ import stripesForm from '@folio/stripes-form';
 import UserDetail from './UserDetail';
 import ItemDetail from './ItemDetail';
 import { toUserAddress } from './constants';
+import { translate } from './utils';
 
 /**
  * on-blur validation checks that the requested item is checked out
@@ -42,16 +44,16 @@ function asyncValidate(values, dispatch, props, blurredField) {
       uv.GET({ params: { query } }).then((items) => {
         if (items.length < 1) {
           // eslint-disable-next-line prefer-promise-reject-errors
-          reject({ item: { barcode: 'Item with this barcode does not exist' } });
+          reject({ item: { barcode: <FormattedMessage id="ui-requests.errors.itemBarcodeDoesNotExist" /> } });
         } else if (items[0].status.name !== 'Checked out' &&
                    items[0].status.name !== 'Checked out - Held' &&
                    items[0].status.name !== 'Checked out - Recalled') {
           if (values.requestType === 'Recall') {
             // eslint-disable-next-line prefer-promise-reject-errors
-            reject({ item: { barcode: 'Only checked out items can be recalled' } });
+            reject({ item: { barcode: <FormattedMessage id="ui-requests.errors.onlyCheckedOutForRecall" /> } });
           } else if (values.requestType === 'Hold') {
             // eslint-disable-next-line prefer-promise-reject-errors
-            reject({ item: { barcode: 'Only checked out items can be held' } });
+            reject({ item: { barcode: <FormattedMessage id="ui-requests.errors.onlyCheckedOutForHold" /> } });
           }
         } else {
           resolve();
@@ -66,7 +68,7 @@ function asyncValidate(values, dispatch, props, blurredField) {
       uv.GET({ params: { query } }).then((users) => {
         if (users.length < 1) {
           // eslint-disable-next-line prefer-promise-reject-errors
-          reject({ requester: { barcode: 'User with this barcode does not exist' } });
+          reject({ requester: { barcode: <FormattedMessage id="ui-requests.errors.userBarcodeDoesNotExist" /> } });
         } else {
           resolve();
         }
@@ -328,8 +330,8 @@ class RequestForm extends React.Component {
     }
   }
 
-  requireItem = value => (value ? undefined : 'Please select an item');
-  requireUser = value => (value ? undefined : 'Please select a requester');
+  requireItem = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectItem" />);
+  requireUser = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectUser" />);
 
   render() {
     const {
@@ -360,9 +362,39 @@ class RequestForm extends React.Component {
     const isEditForm = (item && item.id);
     const query = location.search ? queryString.parse(location.search) : {};
 
-    const addRequestFirstMenu = <PaneMenu><Button onClick={onCancel} title="close" aria-label="Close New Request Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></Button></PaneMenu>;
-    const addRequestLastMenu = <PaneMenu><Button id="clickable-create-request" type="button" title="Create New Request" disabled={pristine || submitting} onClick={handleSubmit}>Create Request</Button></PaneMenu>;
-    const editRequestLastMenu = <PaneMenu><Button id="clickable-update-request" type="button" title="Update Request" disabled={pristine || submitting} onClick={handleSubmit}>Update Request</Button></PaneMenu>;
+    const addRequestFirstMenu =
+      <PaneMenu>
+        <Button
+          onClick={onCancel}
+          title={intl.formatMessage({ id: 'ui-requests.requestForm.closeNewRequest' })}
+          aria-label={intl.formatMessage({ id: 'ui-requests.requestForm.closeNewRequest' })}>
+          <span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span>
+        </Button>
+      </PaneMenu>;
+    const addRequestLastMenu =
+      <PaneMenu>
+        <Button
+          id="clickable-create-request"
+          type="button"
+          title={intl.formatMessage({ id: 'ui-requests.requestForm.createNewRequest' })}
+          disabled={pristine || submitting}
+          onClick={handleSubmit}
+        >
+          <FormattedMessage id="ui-requests.requestForm.newRequest" />
+        </Button>
+      </PaneMenu>;
+    const editRequestLastMenu =
+      <PaneMenu>
+        <Button
+          id="clickable-update-request"
+          type="button"
+          title={intl.formatMessage({ id: 'ui-requests.requestForm.updateRequest' })}
+          disabled={pristine || submitting}
+          onClick={handleSubmit}
+        >
+          <FormattedMessage id="ui-requests.requestForm.updateRequest" />
+        </Button>
+      </PaneMenu>;
     const requestTypeOptions = _.sortBy(optionLists.requestTypes || [], ['label']).map(t => ({ label: t.label, value: t.id, selected: requestType === t.id }));
     const fulfilmentTypeOptions = _.sortBy(optionLists.fulfilmentTypes || [], ['label']).map(t => ({ label: t.label, value: t.id, selected: t.id === fulfilmentPreference }));
     const labelAsterisk = isEditForm ? '' : '*';
