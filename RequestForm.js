@@ -342,7 +342,7 @@ class RequestForm extends React.Component {
       patronGroups,
       pristine,
       submitting,
-      stripes: { intl },
+      stripes: { intl, formatDate },
     } = this.props;
 
     let requestMeta;
@@ -421,6 +421,9 @@ class RequestForm extends React.Component {
       if (group) { patronGroupName = group.desc; }
     }
 
+    const holdShelfExpireDate = (_.get(requestMeta, ['status'], '') === 'Open - Awaiting pickup') ?
+      formatDate(_.get(requestMeta, ['holdShelfExpirationDate'], '')) : '-';
+
     // map column-IDs to table-header-values
     const columnMapping = {
       name: intl.formatMessage({ id: 'ui-requests.user.name' }),
@@ -484,6 +487,11 @@ class RequestForm extends React.Component {
                             backendDateStandard="YYYY-MM-DD"
                             component={Datepicker}
                           />
+                        </Col>
+                      }
+                      { isEditForm && requestMeta.status !== 'Open - Awaiting pickup' &&
+                        <Col xs={3}>
+                          <KeyValue label="Hold shelf expiration date" value={holdShelfExpireDate} />
                         </Col>
                       }
                     </Row>

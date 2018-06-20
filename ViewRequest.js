@@ -122,7 +122,6 @@ class ViewRequest extends React.Component {
     };
 
     this.cViewMetadata = props.stripes.connect(ViewMetadata);
-    this.makeLocaleDateString = this.makeLocaleDateString.bind(this);
     this.onToggleSection = this.onToggleSection.bind(this);
     this.craftLayerUrl = craftLayerUrl.bind(this);
     this.update = this.update.bind(this);
@@ -180,14 +179,6 @@ class ViewRequest extends React.Component {
       newState.accordions[id] = !curState.accordions[id];
       return newState;
     });
-  }
-
-  // Helper function to form a locale-aware date for display
-  makeLocaleDateString(dateString) {
-    if (dateString === '') {
-      return '';
-    }
-    return this.formatDate(dateString);
   }
 
   render() {
@@ -255,7 +246,7 @@ class ViewRequest extends React.Component {
       }
     }
     const holdShelfExpireDate = (_.get(request, ['requestMeta', 'status'], '') === 'Open - Awaiting pickup') ?
-      this.makeLocaleDateString(_.get(request, ['requestMeta', 'holdShelfExpirationDate'], '')) : '-';
+      stripes.formatDate(_.get(request, ['requestMeta', 'holdShelfExpirationDate'], '')) : '-';
 
     return request ? (
       <Pane defaultWidth={this.props.paneWidth} paneTitle={translate('viewRequest.requestDetail', this.props.stripes)} lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
@@ -278,7 +269,7 @@ class ViewRequest extends React.Component {
                 <KeyValue label={translate('viewRequest.requestStatus', this.props.stripes)} value={_.get(request, ['requestMeta', 'status'], '-')} />
               </Col>
               <Col xs={3}>
-                <KeyValue label={translate('viewRequest.requestExpiration', this.props.stripes)} value={this.makeLocaleDateString(_.get(request, ['requestMeta', 'requestExpirationDate'])) || '-'} />
+                <KeyValue label={translate('viewRequest.requestExpiration', this.props.stripes)} value={stripes.formatDate(_.get(request, ['requestMeta', 'requestExpirationDate'])) || '-'} />
               </Col>
               <Col xs={3}>
                 <KeyValue label={translate('viewRequest.holdShelfExpiration', this.props.stripes)} value={holdShelfExpireDate} />
@@ -300,7 +291,7 @@ class ViewRequest extends React.Component {
               holding={request.holding}
               instance={request.instance}
               loan={request.loan}
-              dateFormatter={this.makeLocaleDateString}
+              dateFormatter={stripes.formatDate}
               requestCount={request.requestCount}
             />
           </Accordion>
