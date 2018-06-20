@@ -18,7 +18,6 @@ import ViewMetadata from './ViewMetadata';
 import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
 import { fulfilmentTypes, requestTypes, toUserAddress } from './constants';
-import { translate } from './utils';
 
 class ViewRequest extends React.Component {
   static propTypes = {
@@ -183,6 +182,7 @@ class ViewRequest extends React.Component {
 
   render() {
     const { location, stripes } = this.props;
+    const { intl } = stripes;
     const { patronGroups, addressTypes } = this.props.resources;
     const { fullRequestDetail } = this.state;
     const query = location.search ? queryString.parse(location.search) : {};
@@ -222,7 +222,7 @@ class ViewRequest extends React.Component {
           id="clickable-show-notes"
           style={{ visibility: !request ? 'hidden' : 'visible' }}
           onClick={this.props.notesToggle}
-          title={translate('actions.showNotes', this.props.stripes)}
+          title={intl.formatMessage({ id: 'ui-requests.actions.showNotes' })}
         />
         <IconButton
           icon="edit"
@@ -230,7 +230,7 @@ class ViewRequest extends React.Component {
           style={{ visibility: !request ? 'hidden' : 'visible' }}
           href={this.props.editLink}
           onClick={this.props.onEdit}
-          title={translate('viewRequest.detailMenu.actions.editRequest', this.props.stripes)}
+          title={intl.formatMessage({ id: 'ui-requests.actions.editRequest' })}
         />
       </PaneMenu>
     );
@@ -249,12 +249,12 @@ class ViewRequest extends React.Component {
       stripes.formatDate(_.get(request, ['requestMeta', 'holdShelfExpirationDate'], '')) : '-';
 
     return request ? (
-      <Pane defaultWidth={this.props.paneWidth} paneTitle={translate('requestMeta.detailLabel', this.props.stripes)} lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
+      <Pane defaultWidth={this.props.paneWidth} paneTitle={intl.formatMessage({ id: 'ui-requests.requestMeta.detailLabel' })} lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
         <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
           <Accordion
             open
             id="request-info"
-            label={translate('requestMeta.information', this.props.stripes)}
+            label={intl.formatMessage({ id: 'ui-requests.requestMeta.information' })}
           >
             <Row>
               <Col xs={12}>
@@ -263,28 +263,28 @@ class ViewRequest extends React.Component {
             </Row>
             <Row>
               <Col xs={3}>
-                <KeyValue label={translate('requestMeta.type', this.props.stripes)} value={_.get(request, ['requestMeta', 'requestType'], '-')} />
+                <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.type' })} value={_.get(request, ['requestMeta', 'requestType'], '-')} />
               </Col>
               <Col xs={3}>
-                <KeyValue label={translate('requestMeta.status', this.props.stripes)} value={_.get(request, ['requestMeta', 'status'], '-')} />
+                <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.status' })} value={_.get(request, ['requestMeta', 'status'], '-')} />
               </Col>
               <Col xs={3}>
-                <KeyValue label={translate('requestMeta.expirationDate', this.props.stripes)} value={stripes.formatDate(_.get(request, ['requestMeta', 'requestExpirationDate'])) || '-'} />
+                <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.expirationDate' })} value={stripes.formatDate(_.get(request, ['requestMeta', 'requestExpirationDate'])) || '-'} />
               </Col>
               <Col xs={3}>
-                <KeyValue label={translate('requestMeta.holdShelfExpirationDate', this.props.stripes)} value={holdShelfExpireDate} />
+                <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.holdShelfExpirationDate' })} value={holdShelfExpireDate} />
               </Col>
             </Row>
             <Row>
               <Col xs={3}>
-                <KeyValue label={translate('requestMeta.queuePosition', this.props.stripes)} value="-" />
+                <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.queuePosition' })} value="-" />
               </Col>
             </Row>
           </Accordion>
           <Accordion
             open
             id="item-info"
-            label={translate('item.information', this.props.stripes)}
+            label={intl.formatMessage({ id: 'ui-requests.item.information' })}
           >
             <ItemDetail
               item={request.item}
@@ -298,7 +298,7 @@ class ViewRequest extends React.Component {
           <Accordion
             open
             id="requester-info"
-            label={translate('requester.information', this.props.stripes)}
+            label={intl.formatMessage({ id: 'ui-requests.requester.information' })}
           >
             <UserDetail
               user={request.requester}
@@ -315,7 +315,7 @@ class ViewRequest extends React.Component {
           </Accordion>
         </AccordionSet>
 
-        <Layer isOpen={query.layer ? query.layer === 'edit' : false} label={translate('actions.editRequestLink', this.props.stripes)}>
+        <Layer isOpen={query.layer ? query.layer === 'edit' : false} label={intl.formatMessage({ id: 'ui-requests.actions.editRequestLink' })}>
           <RequestForm
             stripes={stripes}
             initialValues={fullRequestDetail.requestMeta}

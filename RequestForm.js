@@ -22,7 +22,6 @@ import stripesForm from '@folio/stripes-form';
 import UserDetail from './UserDetail';
 import ItemDetail from './ItemDetail';
 import { toUserAddress } from './constants';
-import { translate } from './utils';
 
 /**
  * on-blur validation checks that the requested item is checked out
