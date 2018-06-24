@@ -6,7 +6,6 @@ import queryString from 'query-string';
 import { Accordion, AccordionSet } from '@folio/stripes-components/lib/Accordion';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import Layer from '@folio/stripes-components/lib/Layer';
-import MetaSection from '@folio/stripes-components/lib/MetaSection';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import IconButton from '@folio/stripes-components/lib/IconButton';
