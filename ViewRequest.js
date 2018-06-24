@@ -215,6 +215,10 @@ class ViewRequest extends React.Component {
       }
     }
 
+    const requestStatus = _.get(request, ['requestMeta', 'status'], '-');
+    // TODO: Internationalize this
+    const isRequestClosed = requestStatus.startsWith('Closed');
+
     const detailMenu = (
       <PaneMenu>
         <IconButton
@@ -224,14 +228,16 @@ class ViewRequest extends React.Component {
           onClick={this.props.notesToggle}
           title={intl.formatMessage({ id: 'ui-requests.actions.showNotes' })}
         />
-        <IconButton
-          icon="edit"
-          id="clickable-edit-request"
-          style={{ visibility: !request ? 'hidden' : 'visible' }}
-          href={this.props.editLink}
-          onClick={this.props.onEdit}
-          title={intl.formatMessage({ id: 'ui-requests.actions.editRequest' })}
-        />
+        {!isRequestClosed &&
+          <IconButton
+            icon="edit"
+            id="clickable-edit-request"
+            style={{ visibility: !request ? 'hidden' : 'visible' }}
+            href={this.props.editLink}
+            onClick={this.props.onEdit}
+            title={intl.formatMessage({ id: 'ui-requests.actions.editRequest' })}
+          />
+        }
       </PaneMenu>
     );
 
