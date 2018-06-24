@@ -554,6 +554,7 @@ class RequestForm extends React.Component {
                           loan={fullRequest ? fullRequest.loan : this.state.selectedLoan}
                           dateFormatter={this.props.dateFormatter}
                           requestCount={fullRequest ? fullRequest.requestCount : this.state.itemRequestCount}
+                          intl={intl}
                         />
                       }
                     </Col>

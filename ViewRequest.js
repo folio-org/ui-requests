@@ -299,6 +299,7 @@ class ViewRequest extends React.Component {
               loan={request.loan}
               dateFormatter={stripes.formatDate}
               requestCount={request.requestCount}
+              intl={intl}
             />
           </Accordion>
           <Accordion
