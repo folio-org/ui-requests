@@ -22,44 +22,44 @@ const ItemDetail = ({ item, instance, holding, dateFormatter, loan, requestCount
     <div>
       <Row>
         <Col xs={3}>
-          <KeyValue label={intl.formatMessage({ id: 'item.barcode' })} value={recordLink} />
+          <KeyValue label={intl.formatMessage({ id: 'ui-requests.item.barcode' })} value={recordLink} />
         </Col>
         <Col xs={3}>
-          <KeyValue label={intl.formatMessage({ id: 'item.title' })} value={_.get(item, ['title'], '-')} />
+          <KeyValue label={intl.formatMessage({ id: 'ui-requests.item.title' })} value={_.get(item, ['title'], '-')} />
         </Col>
         <Col xs={3}>
-          <KeyValue label={intl.formatMessage({ id: 'item.contributor' })} value={contributor} />
+          <KeyValue label={intl.formatMessage({ id: 'ui-requests.item.contributor' })} value={contributor} />
         </Col>
         <Col xs={3}>
           <KeyValue
-            label={intl.formatMessage({ id: 'item.shelfLocation' })}
+            label={intl.formatMessage({ id: 'ui-requests.item.shelfLocation' })}
             value={_.get(item, ['permanentLocation', 'name']) || '-'}
           />
         </Col>
       </Row>
       <Row>
         <Col xs={3}>
-          <KeyValue label={intl.formatMessage({ id: 'item.callNumber' })} value={_.get(holding, ['callNumber'], '-')} />
+          <KeyValue label={intl.formatMessage({ id: 'ui-requests.item.callNumber' })} value={_.get(holding, ['callNumber'], '-')} />
         </Col>
         <Col xs={3}>
-          <KeyValue label={intl.formatMessage({ id: 'item.volume' })} value="-" />
+          <KeyValue label={intl.formatMessage({ id: 'ui-requests.item.volume' })} value="-" />
         </Col>
         <Col xs={3}>
-          <KeyValue label={intl.formatMessage({ id: 'item.enumeration' })} value={_.get(item, ['enumeration'], '-')} />
+          <KeyValue label={intl.formatMessage({ id: 'ui-requests.item.enumeration' })} value={_.get(item, ['enumeration'], '-')} />
         </Col>
         <Col xs={3}>
-          <KeyValue label={intl.formatMessage({ id: 'item.copyNumber' })} value="-" />
+          <KeyValue label={intl.formatMessage({ id: 'ui-requests.item.copyNumber' })} value="-" />
         </Col>
       </Row>
       <Row>
         <Col xs={3}>
-          <KeyValue label={intl.formatMessage({ id: 'item.status' })} value={status || '-'} />
+          <KeyValue label={intl.formatMessage({ id: 'ui-requests.item.status' })} value={status || '-'} />
         </Col>
         <Col xs={3}>
-          <KeyValue label={intl.formatMessage({ id: 'item.dueDate' })} value={dateFormatter(_.get(loan, ['dueDate'], '')) || '-'} />
+          <KeyValue label={intl.formatMessage({ id: 'ui-requests.item.dueDate' })} value={dateFormatter(_.get(loan, ['dueDate'], '')) || '-'} />
         </Col>
         <Col xs={3}>
-          <KeyValue label={intl.formatMessage({ id: 'item.numRequests' })} value={requestCount} />
+          <KeyValue label={intl.formatMessage({ id: 'ui-requests.item.numRequests' })} value={requestCount} />
         </Col>
       </Row>
     </div>
