@@ -14,6 +14,7 @@ import packageInfo from './package';
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
 
+// TODO: Translate these filter labels
 const filterConfig = [
   {
     label: 'Request type',
@@ -224,7 +225,6 @@ class Requests extends React.Component {
       const requestCount = resultArray[3].requests.length;
       const holding = resultArray[4];
       const instance = resultArray[5];
-
 
       // One field missing from item is the instanceId ... but it's included in
       // the original request
