@@ -67,6 +67,7 @@ class UserDetail extends React.Component {
     const id = user.id;
     const name = getFullName(user);
     const barcode = user.barcode;
+    const intl = this.props.stripes.intl;
 
     let proxyName;
     let proxyBarcode;
@@ -76,20 +77,20 @@ class UserDetail extends React.Component {
       proxyBarcode = _.get(proxy, ['barcode'], '-');
       proxyId = proxy.id || requestMeta.proxyUserId;
     }
-    const proxySection = proxyId ? userHighlightBox('Requester\'s proxy', proxyName, proxyId, proxyBarcode) : '';
+    const proxySection = proxyId ? userHighlightBox(intl.formatMessage({ id: 'ui-requests.requester.proxy' }), proxyName, proxyId, proxyBarcode) : '';
 
     return (
       <div>
-        {userHighlightBox('Requester', name, id, barcode)}
+        {userHighlightBox(intl.formatMessage({ id: 'ui-requests.requester.requester' }), name, id, barcode)}
         <Row>
           <Col xs={4}>
-            <KeyValue label="Patron group" value={patronGroup || '-'} />
+            <KeyValue label={intl.formatMessage({ id: 'ui-requests.requester.patronGroup' })} value={patronGroup || '-'} />
           </Col>
           <Col xs={4}>
             { newUser &&
               <Field
                 name="fulfilmentPreference"
-                label="Fulfilment preference"
+                label={intl.formatMessage({ id: 'ui-requests.requester.fulfilmentPref' })}
                 component={Select}
                 fullWidth
                 dataOptions={fulfilmentTypeOptions}
@@ -97,35 +98,35 @@ class UserDetail extends React.Component {
               />
             }
             { !newUser &&
-              <KeyValue label="Fulfilment preference" value={_.get(requestMeta, ['fulfilmentPreference'], '-')} />
+              <KeyValue label={intl.formatMessage({ id: 'ui-requests.requester.fulfilmentPref' })} value={_.get(requestMeta, ['fulfilmentPreference'], '-')} />
             }
           </Col>
           <Col xs={4}>
             { newUser && selectedDelivery && deliveryLocations &&
               <Field
                 name="deliveryAddressTypeId"
-                label="Delivery address"
+                label={intl.formatMessage({ id: 'ui-requests.requester.deliveryAddress' })}
                 component={Select}
                 fullWidth
-                dataOptions={[{ label: 'Select address type', value: '' }, ...deliveryLocations]}
+                dataOptions={[{ label: intl.formatMessage({ id: 'ui-requests.actions.selectAddressType' }), value: '' }, ...deliveryLocations]}
                 onChange={onChangeAddress}
               />
             }
             { newUser && !selectedDelivery &&
               <Field
                 name="pickupLocationId"
-                label="Pickup location"
+                label={intl.formatMessage({ id: 'ui-requests.requester.pickupLocation' })}
                 component={Select}
                 fullWidth
-                dataOptions={[{ label: 'Select pickup location', value: '' }]}
+                dataOptions={[{ label: intl.formatMessage({ id: 'ui-requests.actions.selectPickupLoc' }), value: '' }]}
                 onChange={onChangeAddress}
               />
             }
             { !newUser && selectedDelivery &&
-              <KeyValue label="Delivery address" value={deliveryAddress || '-'} />
+              <KeyValue label={intl.formatMessage({ id: 'ui-requests.requester.deliveryAddress' })} value={deliveryAddress || '-'} />
             }
             { !newUser && !selectedDelivery &&
-              <KeyValue label="Pickup location" value={pickupLocation || '-'} />
+              <KeyValue label={intl.formatMessage({ id: 'ui-requests.requester.pickupLocation' })} value={pickupLocation || '-'} />
             }
           </Col>
         </Row>

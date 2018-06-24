@@ -40,6 +40,13 @@
   "requester.barcode": "Requester barcode",
   "requester.scanOrEnterBarcode": "Scan or enter requester barcode",
   "requester.findUserPluginLabel": "Requester look-up",
+  "requester.proxy": "Requester's proxy",
+  "requester.fulfilmentPref": "Fulfilment preference",
+  "requester.requester": "Requester",
+  "requester.deliveryAddress": "Delivery address",
+  "requester.pickupLocation": "Pickup location",
   "actions.editRequest": "Edit request",
+  "actions.selectAddressType": "Select address type",
+  "actions.selectPickupLoc": "Select pickup location",
   "actions.loading": "Loading..."
 }
