@@ -8,7 +8,7 @@ import SearchAndSort from '@folio/stripes-smart-components/lib/SearchAndSort';
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
 import { requestTypes, fulfilmentTypes } from './constants';
-import { getFullName, translate } from './utils';
+import { getFullName } from './utils';
 import packageInfo from './package';
 
 const INITIAL_RESULT_COUNT = 30;
