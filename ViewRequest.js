@@ -127,7 +127,6 @@ class ViewRequest extends React.Component {
     };
 
     this.cViewMetadata = props.stripes.connect(ViewMetadata);
-    this.makeLocaleDateString = this.makeLocaleDateString.bind(this);
     this.onToggleSection = this.onToggleSection.bind(this);
     this.craftLayerUrl = craftLayerUrl.bind(this);
     this.update = this.update.bind(this);
@@ -142,10 +141,9 @@ class ViewRequest extends React.Component {
   componentDidUpdate(prevProps) {
     const prevRQ = prevProps.resources.selectedRequest;
     const currentRQ = this.props.resources.selectedRequest;
-
     // Only update if actually needed (otherwise, this gets called way too often)
-    if (this._mounted && prevRQ && prevRQ.hasLoaded && currentRQ && currentRQ.hasLoaded) {
-      if ((prevRQ.records[0].id !== currentRQ.records[0].id) || !(this.state.fullRequestDetail.requestMeta && this.state.fullRequestDetail.requestMeta.id)) {
+    if (this._mounted && prevRQ && currentRQ && currentRQ.hasLoaded) {
+      if ((prevRQ.records[0] && prevRQ.records[0].id !== currentRQ.records[0].id) || !(this.state.fullRequestDetail.requestMeta && this.state.fullRequestDetail.requestMeta.id)) {
         const basicRequest = currentRQ.records[0];
         this.props.joinRequest(basicRequest).then((newRequest) => {
           this.setState({
@@ -188,16 +186,9 @@ class ViewRequest extends React.Component {
     });
   }
 
-  // Helper function to form a locale-aware date for display
-  makeLocaleDateString(dateString) {
-    if (dateString === '') {
-      return '';
-    }
-    return this.formatDate(dateString);
-  }
-
   render() {
     const { location, stripes } = this.props;
+    const { intl } = stripes;
     const { patronGroups, addressTypes } = this.props.resources;
     const { fullRequestDetail } = this.state;
     const query = location.search ? queryString.parse(location.search) : {};
@@ -230,6 +221,10 @@ class ViewRequest extends React.Component {
       }
     }
 
+    const requestStatus = _.get(request, ['requestMeta', 'status'], '-');
+    // TODO: Internationalize this
+    const isRequestClosed = requestStatus.startsWith('Closed');
+
     const detailMenu = (
       <PaneMenu>
         <IconButton
@@ -237,8 +232,18 @@ class ViewRequest extends React.Component {
           id="clickable-show-notes"
           style={{ visibility: !request ? 'hidden' : 'visible' }}
           onClick={this.props.notesToggle}
-          title="Show Notes"
+          title={intl.formatMessage({ id: 'ui-requests.actions.showNotes' })}
         />
+        {!isRequestClosed &&
+          <IconButton
+            icon="edit"
+            id="clickable-edit-request"
+            style={{ visibility: !request ? 'hidden' : 'visible' }}
+            href={this.props.editLink}
+            onClick={this.props.onEdit}
+            title={intl.formatMessage({ id: 'ui-requests.actions.editRequest' })}
+          />
+        }
       </PaneMenu>
     );
 
@@ -253,12 +258,12 @@ class ViewRequest extends React.Component {
       }
     }
     const holdShelfExpireDate = (_.get(request, ['requestMeta', 'status'], '') === 'Open - Awaiting pickup') ?
-      this.makeLocaleDateString(_.get(request, ['requestMeta', 'holdShelfExpirationDate'], '')) : '-';
+      stripes.formatDate(_.get(request, ['requestMeta', 'holdShelfExpirationDate'], '')) : '-';
 
     return request ? (
       <Pane
         defaultWidth={this.props.paneWidth}
-        paneTitle="Request Detail"
+        paneTitle={intl.formatMessage({ id: 'ui-requests.requestMeta.detailLabel' })}
         lastMenu={detailMenu}
         actionMenuItems={[{
           id: 'clickable-edit-request',
@@ -281,7 +286,7 @@ class ViewRequest extends React.Component {
           <Accordion
             open
             id="request-info"
-            label="Request information"
+            label={intl.formatMessage({ id: 'ui-requests.requestMeta.information' })}
           >
             <Row>
               <Col xs={12}>
@@ -290,42 +295,43 @@ class ViewRequest extends React.Component {
             </Row>
             <Row>
               <Col xs={3}>
-                <KeyValue label="Request type" value={_.get(request, ['requestMeta', 'requestType'], '-')} />
+                <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.type' })} value={_.get(request, ['requestMeta', 'requestType'], '-')} />
               </Col>
               <Col xs={3}>
-                <KeyValue label="Request status" value={_.get(request, ['requestMeta', 'status'], '-')} />
+                <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.status' })} value={_.get(request, ['requestMeta', 'status'], '-')} />
               </Col>
               <Col xs={3}>
-                <KeyValue label="Request expiration date" value={this.makeLocaleDateString(_.get(request, ['requestMeta', 'requestExpirationDate'])) || '-'} />
+                <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.expirationDate' })} value={stripes.formatDate(_.get(request, ['requestMeta', 'requestExpirationDate'])) || '-'} />
               </Col>
               <Col xs={3}>
-                <KeyValue label="Hold shelf expiration date" value={holdShelfExpireDate} />
+                <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.holdShelfExpirationDate' })} value={holdShelfExpireDate} />
               </Col>
             </Row>
             <Row>
               <Col xs={3}>
-                <KeyValue label="Position in queue" value="-" />
+                <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.queuePosition' })} value="-" />
               </Col>
             </Row>
           </Accordion>
           <Accordion
             open
             id="item-info"
-            label="Item information"
+            label={intl.formatMessage({ id: 'ui-requests.item.information' })}
           >
             <ItemDetail
               item={request.item}
               holding={request.holding}
               instance={request.instance}
               loan={request.loan}
-              dateFormatter={this.makeLocaleDateString}
+              dateFormatter={stripes.formatDate}
               requestCount={request.requestCount}
+              intl={intl}
             />
           </Accordion>
           <Accordion
             open
             id="requester-info"
-            label="Requester information"
+            label={intl.formatMessage({ id: 'ui-requests.requester.information' })}
           >
             <UserDetail
               user={request.requester}
@@ -342,7 +348,7 @@ class ViewRequest extends React.Component {
           </Accordion>
         </AccordionSet>
 
-        <Layer isOpen={query.layer ? query.layer === 'edit' : false} label="Edit Request Dialog">
+        <Layer isOpen={query.layer ? query.layer === 'edit' : false} label={intl.formatMessage({ id: 'ui-requests.actions.editRequestLink' })}>
           <RequestForm
             stripes={stripes}
             initialValues={fullRequestDetail.requestMeta}

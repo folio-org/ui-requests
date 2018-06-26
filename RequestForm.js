@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import queryString from 'query-string';
+import { FormattedMessage } from 'react-intl';
 
 import { Accordion, AccordionSet } from '@folio/stripes-components/lib/Accordion';
 import Button from '@folio/stripes-components/lib/Button';
@@ -43,16 +44,16 @@ function asyncValidate(values, dispatch, props, blurredField) {
       uv.GET({ params: { query } }).then((items) => {
         if (items.length < 1) {
           // eslint-disable-next-line prefer-promise-reject-errors
-          reject({ item: { barcode: 'Item with this barcode does not exist' } });
+          reject({ item: { barcode: <FormattedMessage id="ui-requests.errors.itemBarcodeDoesNotExist" /> } });
         } else if (items[0].status.name !== 'Checked out' &&
                    items[0].status.name !== 'Checked out - Held' &&
                    items[0].status.name !== 'Checked out - Recalled') {
           if (values.requestType === 'Recall') {
             // eslint-disable-next-line prefer-promise-reject-errors
-            reject({ item: { barcode: 'Only checked out items can be recalled' } });
+            reject({ item: { barcode: <FormattedMessage id="ui-requests.errors.onlyCheckedOutForRecall" /> } });
           } else if (values.requestType === 'Hold') {
             // eslint-disable-next-line prefer-promise-reject-errors
-            reject({ item: { barcode: 'Only checked out items can be held' } });
+            reject({ item: { barcode: <FormattedMessage id="ui-requests.errors.onlyCheckedOutForHold" /> } });
           }
         } else {
           resolve();
@@ -67,7 +68,7 @@ function asyncValidate(values, dispatch, props, blurredField) {
       uv.GET({ params: { query } }).then((users) => {
         if (users.length < 1) {
           // eslint-disable-next-line prefer-promise-reject-errors
-          reject({ requester: { barcode: 'User with this barcode does not exist' } });
+          reject({ requester: { barcode: <FormattedMessage id="ui-requests.errors.userBarcodeDoesNotExist" /> } });
         } else {
           resolve();
         }
@@ -167,6 +168,7 @@ class RequestForm extends React.Component {
     this.onUserClick = this.onUserClick.bind(this);
 
     this.itemBarcodeRef = React.createRef();
+    this.requesterBarcodeRef = React.createRef();
   }
 
   componentDidUpdate(prevProps) {
@@ -222,7 +224,7 @@ class RequestForm extends React.Component {
 
   onUserClick(proxyUser = null) {
     this.setState({ selectedUser: null, proxy: null });
-    const barcode = this.requesterBarcodeField.value;
+    const barcode = this.requesterBarcodeRef.current.getRenderedComponent().getInput().value;
 
     this.props.findResource('user', barcode, 'barcode').then((result) => {
       if (result.totalRecords === 1) {
@@ -276,18 +278,15 @@ class RequestForm extends React.Component {
           [
             findResource('loan', item.id),
             findResource('requestsForItem', item.id),
-            findResource('instance', item.instanceId),
             findResource('holding', item.holdingsRecordId),
           ],
         ).then((resultArray) => {
           const loan = resultArray[0].loans[0];
           const itemRequestCount = resultArray[1].requests.length;
-          const instance = resultArray[2];
-          const holding = resultArray[3];
+          const holding = resultArray[2];
           if (loan) {
             this.setState({
               selectedItem: item,
-              selectedInstance: instance,
               selectedHolding: holding,
               selectedLoan: loan,
               itemRequestCount,
@@ -296,11 +295,20 @@ class RequestForm extends React.Component {
           // If no loan is found, just set the item and related record(s) and rq count
           this.setState({
             selectedItem: item,
-            selectedInstance: instance,
             selectedHolding: holding,
             itemRequestCount,
           });
 
+          return result;
+        }).then(() => {
+          // Now that the holding record has been found, we can get the instance record
+          if (this.state.selectedHolding.instanceId) {
+            findResource('instance', this.state.selectedHolding.instanceId).then((result2) => {
+              this.setState({
+                selectedInstance: result2,
+              });
+            });
+          }
           return result;
         });
       }
@@ -322,8 +330,8 @@ class RequestForm extends React.Component {
     }
   }
 
-  requireItem = value => (value ? undefined : 'Please select an item');
-  requireUser = value => (value ? undefined : 'Please select a requester');
+  requireItem = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectItem" />);
+  requireUser = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectUser" />);
 
   render() {
     const {
@@ -334,7 +342,7 @@ class RequestForm extends React.Component {
       patronGroups,
       pristine,
       submitting,
-      stripes: { intl },
+      stripes: { intl, formatDate },
     } = this.props;
 
     let requestMeta;
@@ -354,9 +362,40 @@ class RequestForm extends React.Component {
     const isEditForm = (item && item.id);
     const query = location.search ? queryString.parse(location.search) : {};
 
-    const addRequestFirstMenu = <PaneMenu><Button onClick={onCancel} title="close" aria-label="Close New Request Dialog"><span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span></Button></PaneMenu>;
-    const addRequestLastMenu = <PaneMenu><Button id="clickable-create-request" type="button" title="Create New Request" disabled={pristine || submitting} onClick={handleSubmit}>Create Request</Button></PaneMenu>;
-    const editRequestLastMenu = <PaneMenu><Button id="clickable-update-request" type="button" title="Update Request" disabled={pristine || submitting} onClick={handleSubmit}>Update Request</Button></PaneMenu>;
+    const addRequestFirstMenu =
+      <PaneMenu>
+        <Button
+          onClick={onCancel}
+          title={intl.formatMessage({ id: 'ui-requests.actions.closeNewRequest' })}
+          aria-label={intl.formatMessage({ id: 'ui-requests.actions.closeNewRequest' })}
+        >
+          <span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span>
+        </Button>
+      </PaneMenu>;
+    const addRequestLastMenu =
+      <PaneMenu>
+        <Button
+          id="clickable-create-request"
+          type="button"
+          title={intl.formatMessage({ id: 'ui-requests.actions.createNewRequest' })}
+          disabled={pristine || submitting}
+          onClick={handleSubmit}
+        >
+          <FormattedMessage id="ui-requests.requestForm.newRequest" />
+        </Button>
+      </PaneMenu>;
+    const editRequestLastMenu =
+      <PaneMenu>
+        <Button
+          id="clickable-update-request"
+          type="button"
+          title={intl.formatMessage({ id: 'ui-requests.actions.updateRequest' })}
+          disabled={pristine || submitting}
+          onClick={handleSubmit}
+        >
+          <FormattedMessage id="ui-requests.actions.updateRequest" />
+        </Button>
+      </PaneMenu>;
     const requestTypeOptions = _.sortBy(optionLists.requestTypes || [], ['label']).map(t => ({ label: t.label, value: t.id, selected: requestType === t.id }));
     const fulfilmentTypeOptions = _.sortBy(optionLists.fulfilmentTypes || [], ['label']).map(t => ({ label: t.label, value: t.id, selected: t.id === fulfilmentPreference }));
     const labelAsterisk = isEditForm ? '' : '*';
@@ -383,12 +422,15 @@ class RequestForm extends React.Component {
       if (group) { patronGroupName = group.desc; }
     }
 
+    const holdShelfExpireDate = (_.get(requestMeta, ['status'], '') === 'Open - Awaiting pickup') ?
+      formatDate(_.get(requestMeta, ['holdShelfExpirationDate'], '')) : '-';
+
     // map column-IDs to table-header-values
     const columnMapping = {
-      name: intl.formatMessage({ id: 'ui-requests.user.name' }),
-      patronGroup: intl.formatMessage({ id: 'ui-requests.user.patronGroup' }),
-      username: intl.formatMessage({ id: 'ui-requests.user.username' }),
-      barcode: intl.formatMessage({ id: 'ui-requests.user.barcode' }),
+      name: intl.formatMessage({ id: 'ui-requests.requester.name' }),
+      patronGroup: intl.formatMessage({ id: 'ui-requests.requester.patronGroup' }),
+      username: intl.formatMessage({ id: 'ui-requests.requester.username' }),
+      barcode: intl.formatMessage({ id: 'ui-requests.barcode' }),
     };
 
     return (
@@ -399,7 +441,6 @@ class RequestForm extends React.Component {
             height="100%"
             firstMenu={addRequestFirstMenu}
             lastMenu={isEditForm ? editRequestLastMenu : addRequestLastMenu}
-            paneTitle={isEditForm ? 'Edit request' : 'New request'}
             actionMenuItems={isEditForm ? [{
               id: 'clickable-cancel-request',
               title: intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
@@ -407,12 +448,12 @@ class RequestForm extends React.Component {
               onClick: () => this.setState({ isCancellingRequest: true }),
               icon: 'cancel',
             }] : undefined}
+            paneTitle={isEditForm ? intl.formatMessage({ id: 'ui-requests.actions.editRequest' }) : intl.formatMessage({ id: 'ui-requests.actions.newRequest' })}
           >
             <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
               <Accordion
-                open
                 id="request-info"
-                label="Request information"
+                label={intl.formatMessage({ id: 'ui-requests.requestMeta.information' })}
               >
                 { isEditForm && requestMeta && requestMeta.metadata &&
                   <Col xs={12}>
@@ -425,7 +466,7 @@ class RequestForm extends React.Component {
                       <Col xs={3}>
                         { !isEditForm &&
                           <Field
-                            label="Request type"
+                            label={intl.formatMessage({ id: 'ui-requests.requestMeta.type' })}
                             name="requestType"
                             component={Select}
                             fullWidth
@@ -434,19 +475,19 @@ class RequestForm extends React.Component {
                           />
                         }
                         { isEditForm &&
-                          <KeyValue label="Request type" value={requestMeta.requestType} />
+                          <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.type' })} value={requestMeta.requestType} />
                         }
                       </Col>
                       <Col xs={3}>
                         { isEditForm &&
-                          <KeyValue label="Request status" value={requestMeta.status} />
+                          <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.status' })} value={requestMeta.status} />
                         }
                       </Col>
                       <Col xs={3}>
                         <Field
                           name="requestExpirationDate"
-                          label="Request expiration date"
-                          aria-label="Request expiration date"
+                          label={intl.formatMessage({ id: 'ui-requests.requestMeta.expirationDate' })}
+                          aria-label={intl.formatMessage({ id: 'ui-requests.requestMeta.expirationDate' })}
                           backendDateStandard="YYYY-MM-DD"
                           component={Datepicker}
                         />
@@ -455,18 +496,23 @@ class RequestForm extends React.Component {
                         <Col xs={3}>
                           <Field
                             name="holdShelfExpirationDate"
-                            label="Hold shelf expiration date"
-                            aria-label="Hold shelf expiration date"
+                            label={intl.formatMessage({ id: 'ui-requests.requestMeta.holdShelfExpirationDate' })}
+                            aria-label={intl.formatMessage({ id: 'ui-requests.requestMeta.holdShelfExpirationDate' })}
                             backendDateStandard="YYYY-MM-DD"
                             component={Datepicker}
                           />
+                        </Col>
+                      }
+                      { isEditForm && requestMeta.status !== 'Open - Awaiting pickup' &&
+                        <Col xs={3}>
+                          <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.holdShelfExpirationDate' })} value={holdShelfExpireDate} />
                         </Col>
                       }
                     </Row>
                     { isEditForm &&
                       <Row>
                         <Col xs={3}>
-                          <KeyValue label="Position in queue" value="-" />
+                          <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.queuePosition' })} value="-" />
                         </Col>
                       </Row>
                     }
@@ -474,9 +520,8 @@ class RequestForm extends React.Component {
                 </Row>
               </Accordion>
               <Accordion
-                open
                 id="item-info"
-                label={`Item information ${labelAsterisk}`}
+                label={`${intl.formatMessage({ id: 'ui-requests.item.information' })} ${labelAsterisk}`}
               >
                 <div id="section-item-info">
                   <Row>
@@ -486,8 +531,8 @@ class RequestForm extends React.Component {
                           <Col xs={9}>
                             <Field
                               name="item.barcode"
-                              placeholder="Scan or enter item barcode"
-                              aria-label="Item barcode"
+                              placeholder={intl.formatMessage({ id: 'ui-requests.item.scanOrEnterBarcode' })}
+                              aria-label={intl.formatMessage({ id: 'ui-requests.item.barcode' })}
                               fullWidth
                               component={TextField}
                               withRef
@@ -517,6 +562,7 @@ class RequestForm extends React.Component {
                           loan={fullRequest ? fullRequest.loan : this.state.selectedLoan}
                           dateFormatter={this.props.dateFormatter}
                           requestCount={fullRequest ? fullRequest.requestCount : this.state.itemRequestCount}
+                          intl={intl}
                         />
                       }
                     </Col>
@@ -524,10 +570,8 @@ class RequestForm extends React.Component {
                 </div>
               </Accordion>
               <Accordion
-                open
                 id="requester-info"
-                label={`Requester information ${labelAsterisk}`}
-
+                label={`${intl.formatMessage({ id: 'ui-requests.requester.information' })} ${labelAsterisk}`}
               >
                 <div id="section-requester-info">
                   <Row>
@@ -537,12 +581,12 @@ class RequestForm extends React.Component {
                           <Col xs={9}>
                             <Field
                               name="requester.barcode"
-                              placeholder="Scan or enter requester barcode"
-                              aria-label="Requester barcode"
+                              placeholder={intl.formatMessage({ id: 'ui-requests.requester.scanOrEnterBarcode' })}
+                              aria-label={intl.formatMessage({ id: 'ui-requests.requester.barcode' })}
                               fullWidth
                               component={TextField}
                               withRef
-                              ref={(input) => { this.requesterBarcodeField = input; }}
+                              ref={this.requesterBarcodeRef}
                               onInput={this.onUserClick}
                               onKeyDown={e => this.onKeyDown(e, 'requester')}
                               validate={this.requireUser}
@@ -550,7 +594,7 @@ class RequestForm extends React.Component {
                             <Pluggable
                               aria-haspopup="true"
                               type="find-user"
-                              searchLabel="Requester look-up"
+                              searchLabel={intl.formatMessage({ id: 'ui-requests.requester.findUserPluginLabel' })}
                               marginTop0
                               searchButtonStyle="link"
                               {...this.props}

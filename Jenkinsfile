@@ -4,4 +4,5 @@ buildNPM {
   runLint = 'yes'
   runTest = 'no'
   runRegression = 'partial'
+  stripesPlatform = 'platform-core'
 }
