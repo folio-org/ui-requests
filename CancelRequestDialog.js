@@ -54,8 +54,11 @@ class CancelRequestDialog extends React.Component { // eslint-disable-line
   onChangeReason = (e) => this.setState({ reason: e.target.value })
 
   render() {
+    const { request } = this.props;
     const { reason, notify, additionalInfo } = this.state;
     const { intl: { formatMessage } } = this.context;
+
+    if (!request) return null;
 
     return (
       <Modal
@@ -66,7 +69,7 @@ class CancelRequestDialog extends React.Component { // eslint-disable-line
         <p>
           <SafeHTMLMessage
             id="ui-requests.cancel.requestWillBeCancelled"
-            values={{ title: this.props.request.item.title }}
+            values={{ title: request.item.title }}
           />
         </p>
         <Select
