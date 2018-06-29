@@ -127,10 +127,27 @@ class ViewRequest extends React.Component {
     };
 
     this.cViewMetadata = props.stripes.connect(ViewMetadata);
+    this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
     this.onToggleSection = this.onToggleSection.bind(this);
     this.craftLayerUrl = craftLayerUrl.bind(this);
+    this.cancelRequest = this.cancelRequest.bind(this);
     this.update = this.update.bind(this);
     this.formatDate = this.props.stripes.formatDate;
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    const request = _.get(props.resources.selectedRequest, ['records', 0]);
+    const prevRequest = state.fullRequestDetail.requestMeta;
+    if (request && prevRequest && !_.isEqual(request, prevRequest)) {
+      return {
+        fullRequestDetail: {
+          ...state.fullRequestDetail,
+          requestMeta: request,
+        }
+      };
+    }
+
+    return null;
   }
 
   componentDidMount() {
@@ -174,6 +191,21 @@ class ViewRequest extends React.Component {
     delete updatedRecord.itemRequestCount;
 
     this.props.mutator.selectedRequest.PUT(updatedRecord).then(() => {
+      this.props.onCloseEdit();
+    });
+  }
+
+  cancelRequest(cancellationInfo) {
+    // Get the initial request data, mix in the cancellation info, PUT,
+    // and then close cancel/edit modes since cancelled requests can't be edited.
+    const request = _.get(this.props.resources, ['selectedRequest', 'records', 0], {});
+    const cancelledRequest = {
+      ...request,
+      ...cancellationInfo,
+    };
+
+    this.props.mutator.selectedRequest.PUT(cancelledRequest).then(() => {
+      this.setState({ isCancellingRequest: false });
       this.props.onCloseEdit();
     });
   }
@@ -265,7 +297,7 @@ class ViewRequest extends React.Component {
         defaultWidth={this.props.paneWidth}
         paneTitle={intl.formatMessage({ id: 'ui-requests.requestMeta.detailLabel' })}
         lastMenu={detailMenu}
-        actionMenuItems={[{
+        actionMenuItems={!isRequestClosed ? [{
           id: 'clickable-edit-request',
           title: 'Edit Request',
           label: 'Edit',
@@ -278,7 +310,7 @@ class ViewRequest extends React.Component {
           label: this.context.intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
           onClick: () => this.setState({ isCancellingRequest: true }),
           icon: 'cancel',
-        }]}
+        }] : undefined}
         dismissible
         onClose={this.props.onClose}
       >
@@ -356,15 +388,18 @@ class ViewRequest extends React.Component {
             metadataDisplay={this.cViewMetadata}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.props.onCloseEdit}
+            onCancelRequest={this.cancelRequest}
             optionLists={{ requestTypes, fulfilmentTypes, addressTypes }}
             patronGroups={patronGroups}
             dateFormatter={this.props.dateFormatter}
           />
         </Layer>
-        <CancelRequestDialog
+        <this.connectedCancelRequestDialog
           open={this.state.isCancellingRequest}
+          onCancelRequest={this.cancelRequest}
           onClose={() => this.setState({ isCancellingRequest: false })}
           request={request}
+          stripes={this.props.stripes}
         />
       </Pane>
     ) : null;

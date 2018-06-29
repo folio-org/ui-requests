@@ -82,6 +82,7 @@ function asyncValidate(values, dispatch, props, blurredField) {
 class RequestForm extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
+      connect: PropTypes.func.isRequired,
       intl: PropTypes.object.isRequired,
     }).isRequired,
     change: PropTypes.func.isRequired,
@@ -94,6 +95,7 @@ class RequestForm extends React.Component {
       pathname: PropTypes.string.isRequired,
       search: PropTypes.string,
     }).isRequired,
+    onCancelRequest: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
@@ -159,6 +161,7 @@ class RequestForm extends React.Component {
       selectedLoan: loan,
     };
 
+    this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
     this.onChangeAddress = this.onChangeAddress.bind(this);
     this.onChangeFulfilment = this.onChangeFulfilment.bind(this);
     this.onItemClick = this.onItemClick.bind(this);
@@ -328,6 +331,11 @@ class RequestForm extends React.Component {
         this.onUserClick();
       }
     }
+  }
+
+  onCancelRequest = (cancellationInfo) => {
+    this.setState({ isCancellingRequest: false });
+    this.props.onCancelRequest(cancellationInfo);
   }
 
   requireItem = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectItem" />);
@@ -642,10 +650,12 @@ class RequestForm extends React.Component {
               </Accordion>
             </AccordionSet>
           </Pane>
-          <CancelRequestDialog
+          <this.connectedCancelRequestDialog
             open={this.state.isCancellingRequest}
+            onCancelRequest={this.onCancelRequest}
             onClose={() => this.setState({ isCancellingRequest: false })}
             request={fullRequest}
+            stripes={this.props.stripes}
           />
 
           <br /><br /><br /><br /><br />

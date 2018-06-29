@@ -1,16 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { get } from 'lodash';
 
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import Button from '@folio/stripes-components/lib/Button';
-import Checkbox from '@folio/stripes-components/lib/Checkbox';
+// import Checkbox from '@folio/stripes-components/lib/Checkbox';
 import Layout from '@folio/stripes-components/lib/Layout';
 import Modal from '@folio/stripes-components/lib/Modal';
 import Select from '@folio/stripes-components/lib/Select';
 import TextArea from '@folio/stripes-components/lib/TextArea';
 
-class CancelRequestDialog extends React.Component { // eslint-disable-line
+class CancelRequestDialog extends React.Component {
+  static manifest = {
+    cancellationReasons: {
+      type: 'okapi',
+      path: 'cancellation-reason-storage/cancellation-reasons',
+      records: 'cancellationReasons',
+    },
+  }
+
   static propTypes = {
+    onCancelRequest: PropTypes.func.isRequired,
     onClose: PropTypes.func,
     open: PropTypes.bool,
     request: PropTypes.shape({
@@ -18,44 +28,87 @@ class CancelRequestDialog extends React.Component { // eslint-disable-line
         title: PropTypes.string
       })
     }),
+    resources: PropTypes.shape({
+      cancellationReasons: PropTypes.shape({
+        records: PropTypes.array,
+      }),
+    }),
+    stripes: PropTypes.shape({
+      user: PropTypes.shape({
+        user: PropTypes.shape({
+          id: PropTypes.string,
+        })
+      })
+    }),
   }
 
   static contextTypes = {
     intl: PropTypes.shape({
+      formatDate: PropTypes.func,
       formatMessage: PropTypes.func,
     })
+  }
+
+  static defaultProps = {
+    onClose: () => {},
   }
 
   constructor(props) {
     super(props);
 
     this.state = {
-      reason: 'itemNeededForCourseReserves',
-      notify: false,
+      reasons: [],
+      reason: { label: '', value: '' },
+      // notify: false,
     };
   }
 
-  // Not translating. Eventually this will be pulled from a controlled vocab list.
-  cancellationReasons = [
-    { value: 'itemNeededForCourseReserves', label: 'Item is needed for course reserves' },
-    { value: 'cancelledByPatron', label: 'Cancelled at patron\'s request' },
-    { value: 'noLongerAvailable', label: 'Item is no longer available' },
-    { value: 'other', label: 'Other' },
-  ]
+  static getDerivedStateFromProps(props, state) {
+    const reasonRecords = get(props.resources, ['cancellationReasons', 'records'], []);
+    if (state.reasons.length !== reasonRecords.length) {
+      const reasons = reasonRecords.map(r => ({
+        label: r.description,
+        value: r.id,
+        requiresAdditionalInformation: r.requiresAdditionalInformation,
+      })).sort((a, b) => a.label > b.label);
+
+      return {
+        reasons,
+        reason: reasons[0] || {},
+      };
+    }
+
+    return null;
+  }
 
   onCancelRequest = () => {
-    console.log(this.state); // eslint-disable-line
+    const { additionalInfo, reason } = this.state;
+    const { stripes } = this.props;
+
+    const cancellationInfo = {
+      cancelledByUserId: stripes.user.user.id,
+      cancellationReasonId: reason.value,
+      cancellationAdditionalInformation: additionalInfo,
+      cancelledDate: new Date().toISOString(),
+      status: 'Closed - Cancelled',
+    };
+
+    this.props.onCancelRequest(cancellationInfo);
   }
 
   onChangeAdditionalInfo = (e) => this.setState({ additionalInfo: e.target.value })
 
-  onChangeNotify = () => this.setState(prevState => ({ notify: !prevState.notify }))
+  // onChangeNotify = () => this.setState(prevState => ({ notify: !prevState.notify }))
 
-  onChangeReason = (e) => this.setState({ reason: e.target.value })
+  onChangeReason = (e) => {
+    const value = e.target.value;
+    const reason = this.state.reasons.find(r => r.value === value);
+    this.setState({ reason });
+  }
 
   render() {
     const { request } = this.props;
-    const { reason, notify, additionalInfo } = this.state;
+    const { reason, reasons, /* notify, */ additionalInfo } = this.state;
     const { intl: { formatMessage } } = this.context;
 
     if (!request) return null;
@@ -74,23 +127,25 @@ class CancelRequestDialog extends React.Component { // eslint-disable-line
         </p>
         <Select
           label={formatMessage({ id: 'ui-requests.cancel.reasonLabel' })}
-          dataOptions={this.cancellationReasons}
-          value={reason}
+          dataOptions={reasons}
+          value={reason.value}
           onChange={this.onChangeReason}
         />
+        {/*
         <Checkbox
           id="notify-patron-checkbox"
           label={formatMessage({ id: 'ui-requests.cancel.notifyLabel' })}
           checked={notify}
           onChange={this.onChangeNotify}
         />
+        */}
         <TextArea
           label={formatMessage(
             { id: 'ui-requests.cancel.additionalInfoLabel' },
-            { required: reason === 'other' ? '*' : ' ' }
+            { required: reason.requiresAdditionalInformation ? '*' : ' ' }
           )}
           placeholder={
-            reason === 'other' ?
+            reason.requiresAdditionalInformation ?
               formatMessage({ id: 'ui-requests.cancel.additionalInfoPlaceholderRequired' }) :
               formatMessage({ id: 'ui-requests.cancel.additionalInfoPlaceholderOptional' })
           }
@@ -103,7 +158,7 @@ class CancelRequestDialog extends React.Component { // eslint-disable-line
           </Button>
           <Button
             buttonStyle="primary"
-            disabled={reason === 'other' && !additionalInfo}
+            disabled={reason.requiresAdditionalInformation && !additionalInfo}
             onClick={this.onCancelRequest}
           >
             {formatMessage({ id: 'stripes-core.button.confirm' })}
