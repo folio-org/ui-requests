@@ -30,6 +30,7 @@
 * Restore "active/inactive" filters since UIU-400 remains incomplete.
 * Don't choke on undefined instance.contributors[0].
 * Fix input field value reference. Fixes UIREQ-96.
+* Depend on "5.0 6.0" of "inventory". MODINV-56.
 
 ## [1.1.0](https://github.com/folio-org/ui-requests/tree/v1.1.0) (2018-01-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.0.0...v1.1.0)
