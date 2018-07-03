@@ -40,10 +40,6 @@ const filterConfig = [
 ];
 
 class Requests extends React.Component {
-  static contextTypes = {
-    stripes: PropTypes.object,
-  }
-
   static propTypes = {
     mutator: PropTypes.shape({
       records: PropTypes.shape({
@@ -173,16 +169,16 @@ class Requests extends React.Component {
     },
   };
 
-  constructor(props, context) {
+  constructor(props) {
     super(props);
 
-    this.okapiUrl = context.stripes.okapi.url;
-    this.formatDate = context.stripes.formatDate;
-    this.formatDateTime = context.stripes.formatDateTime;
-    this.timezone = context.stripes.timezone;
+    this.okapiUrl = props.stripes.okapi.url;
+    this.formatDate = props.stripes.formatDate;
+    this.formatDateTime = props.stripes.formatDateTime;
+    this.timezone = props.stripes.timezone;
     this.httpHeaders = Object.assign({}, {
-      'X-Okapi-Tenant': context.stripes.okapi.tenant,
-      'X-Okapi-Token': context.stripes.store.getState().okapi.token,
+      'X-Okapi-Tenant': props.stripes.okapi.tenant,
+      'X-Okapi-Token': props.stripes.store.getState().okapi.token,
       'Content-Type': 'application/json',
     });
 
