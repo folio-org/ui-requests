@@ -18,63 +18,63 @@ import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
 import { fulfilmentTypes, requestTypes, toUserAddress } from './constants';
 
+const propTypes = {
+  dateFormatter: PropTypes.func.isRequired,
+  editLink: PropTypes.string,
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+    search: PropTypes.string,
+  }).isRequired,
+  joinRequest: PropTypes.func.isRequired,
+  mutator: PropTypes.shape({
+    selectedRequest: PropTypes.shape({
+      PUT: PropTypes.func,
+    }),
+  }).isRequired,
+  notesToggle: PropTypes.func,
+  onClose: PropTypes.func.isRequired,
+  onCloseEdit: PropTypes.func.isRequired,
+  onEdit: PropTypes.func,
+  paneWidth: PropTypes.string,
+  resources: PropTypes.shape({
+    addressTypes: PropTypes.shape({
+      hasLoaded: PropTypes.bool.isRequired,
+      records: PropTypes.arrayOf(PropTypes.object),
+    }),
+    patronGroups: PropTypes.shape({
+      hasLoaded: PropTypes.bool.isRequired,
+      isPending: PropTypes.bool.isPending,
+      other: PropTypes.shape({
+        totalRecords: PropTypes.number,
+      }),
+    }),
+    selectedRequest: PropTypes.shape({
+      hasLoaded: PropTypes.bool.isRequired,
+      isPending: PropTypes.bool.isPending,
+      other: PropTypes.shape({
+        totalRecords: PropTypes.number,
+      }),
+    }),
+  }).isRequired,
+  stripes: PropTypes.shape({
+    hasPerm: PropTypes.func.isRequired,
+    connect: PropTypes.func.isRequired,
+    locale: PropTypes.string.isRequired,
+    formatDate: PropTypes.func.isRequired,
+    logger: PropTypes.shape({
+      log: PropTypes.func.isRequired,
+    }).isRequired,
+  }).isRequired,
+};
+
+const defaultProps = {
+  editLink: '',
+  paneWidth: '50%',
+  onEdit: () => {},
+  notesToggle: () => {},
+};
+
 class ViewRequest extends React.Component {
-  static propTypes = {
-    dateFormatter: PropTypes.func.isRequired,
-    editLink: PropTypes.string,
-    location: PropTypes.shape({
-      pathname: PropTypes.string.isRequired,
-      search: PropTypes.string,
-    }).isRequired,
-    joinRequest: PropTypes.func.isRequired,
-    mutator: PropTypes.shape({
-      selectedRequest: PropTypes.shape({
-        PUT: PropTypes.func,
-      }),
-    }).isRequired,
-    notesToggle: PropTypes.func,
-    onClose: PropTypes.func.isRequired,
-    onCloseEdit: PropTypes.func.isRequired,
-    onEdit: PropTypes.func,
-    paneWidth: PropTypes.string,
-    resources: PropTypes.shape({
-      addressTypes: PropTypes.shape({
-        hasLoaded: PropTypes.bool.isRequired,
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
-      patronGroups: PropTypes.shape({
-        hasLoaded: PropTypes.bool.isRequired,
-        isPending: PropTypes.bool.isPending,
-        other: PropTypes.shape({
-          totalRecords: PropTypes.number,
-        }),
-      }),
-      selectedRequest: PropTypes.shape({
-        hasLoaded: PropTypes.bool.isRequired,
-        isPending: PropTypes.bool.isPending,
-        other: PropTypes.shape({
-          totalRecords: PropTypes.number,
-        }),
-      }),
-    }).isRequired,
-    stripes: PropTypes.shape({
-      hasPerm: PropTypes.func.isRequired,
-      connect: PropTypes.func.isRequired,
-      locale: PropTypes.string.isRequired,
-      formatDate: PropTypes.func.isRequired,
-      logger: PropTypes.shape({
-        log: PropTypes.func.isRequired,
-      }).isRequired,
-    }).isRequired,
-  };
-
-  static defaultProps = {
-    editLink: '',
-    paneWidth: '50%',
-    onEdit: () => {},
-    notesToggle: () => {},
-  };
-
   static manifest = {
     selectedRequest: {
       type: 'okapi',
@@ -339,4 +339,6 @@ class ViewRequest extends React.Component {
   }
 }
 
+ViewRequest.propTypes = propTypes;
+ViewRequest.defaultProps = defaultProps;
 export default ViewRequest;

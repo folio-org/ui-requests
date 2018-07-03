@@ -78,50 +78,50 @@ function asyncValidate(values, dispatch, props, blurredField) {
   return new Promise(resolve => resolve());
 }
 
-class RequestForm extends React.Component {
-  static propTypes = {
-    stripes: PropTypes.shape({
-      intl: PropTypes.object.isRequired,
-    }).isRequired,
-    change: PropTypes.func.isRequired,
-    handleSubmit: PropTypes.func.isRequired,
-    findResource: PropTypes.func,
-    fullRequest: PropTypes.object,
-    metadataDisplay: PropTypes.func,
-    initialValues: PropTypes.object,
-    location: PropTypes.shape({
-      pathname: PropTypes.string.isRequired,
-      search: PropTypes.string,
-    }).isRequired,
-    onCancel: PropTypes.func.isRequired,
-    pristine: PropTypes.bool,
-    submitting: PropTypes.bool,
-    //  okapi: PropTypes.object,
-    optionLists: PropTypes.shape({
-      addressTypes: PropTypes.arrayOf(PropTypes.object),
-      requestTypes: PropTypes.arrayOf(PropTypes.object),
-      fulfilmentTypes: PropTypes.arrayOf(PropTypes.object),
+const propTypes = {
+  stripes: PropTypes.shape({
+    intl: PropTypes.object.isRequired,
+  }).isRequired,
+  change: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  findResource: PropTypes.func,
+  fullRequest: PropTypes.object,
+  metadataDisplay: PropTypes.func,
+  initialValues: PropTypes.object,
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+    search: PropTypes.string,
+  }).isRequired,
+  onCancel: PropTypes.func.isRequired,
+  pristine: PropTypes.bool,
+  submitting: PropTypes.bool,
+  //  okapi: PropTypes.object,
+  optionLists: PropTypes.shape({
+    addressTypes: PropTypes.arrayOf(PropTypes.object),
+    requestTypes: PropTypes.arrayOf(PropTypes.object),
+    fulfilmentTypes: PropTypes.arrayOf(PropTypes.object),
+  }),
+  patronGroups: PropTypes.shape({
+    hasLoaded: PropTypes.bool.isRequired,
+    isPending: PropTypes.bool.isPending,
+    other: PropTypes.shape({
+      totalRecords: PropTypes.number,
     }),
-    patronGroups: PropTypes.shape({
-      hasLoaded: PropTypes.bool.isRequired,
-      isPending: PropTypes.bool.isPending,
-      other: PropTypes.shape({
-        totalRecords: PropTypes.number,
-      }),
-    }).isRequired,
-    dateFormatter: PropTypes.func.isRequired,
-  };
+  }).isRequired,
+  dateFormatter: PropTypes.func.isRequired,
+};
 
-  static defaultProps = {
-    findResource: () => {},
-    fullRequest: null,
-    initialValues: {},
-    metadataDisplay: () => {},
-    optionLists: {},
-    pristine: true,
-    submitting: false,
-  };
+const defaultProps = {
+  findResource: () => {},
+  fullRequest: null,
+  initialValues: {},
+  metadataDisplay: () => {},
+  optionLists: {},
+  pristine: true,
+  submitting: false,
+};
 
+class RequestForm extends React.Component {
   constructor(props) {
     super(props);
 
@@ -640,6 +640,9 @@ class RequestForm extends React.Component {
     );
   }
 }
+
+RequestForm.propTypes = propTypes;
+RequestForm.defaultProps = defaultProps;
 
 export default stripesForm({
   form: 'requestForm',
