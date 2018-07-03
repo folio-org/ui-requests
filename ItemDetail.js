@@ -15,8 +15,6 @@ const ItemDetail = ({ item, instance, holding, dateFormatter, loan, requestCount
   const recordLink = barcode ? <Link to={`/inventory/view/${item.instanceId}/${item.holdingsRecordId}/${item.itemId}`}>{barcode}</Link> : '';
   const status = _.get(item, ['status', 'name'], '');
   const contributor = _.get(instance, ['contributors', '0', 'name'], '-');
-  const location = _.get(item, ['tempLocation', 'name']) ||
-                   _.get(item, ['permLocation', 'name']) || '';
 
   return (
     <div>
@@ -73,7 +71,7 @@ ItemDetail.propTypes = {
   loan: PropTypes.object,
   requestCount: PropTypes.number,
   dateFormatter: PropTypes.func.isRequired,
-  intl: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 ItemDetail.defaultProps = {

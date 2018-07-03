@@ -39,44 +39,50 @@ const filterConfig = [
   },
 ];
 
+const propTypes = {
+  mutator: PropTypes.shape({
+    records: PropTypes.shape({
+      GET: PropTypes.func,
+      POST: PropTypes.func,
+    }),
+    query: PropTypes.object,
+    requestCount: PropTypes.shape({
+      replace: PropTypes.func,
+    }),
+  }).isRequired,
+  resources: PropTypes.shape({
+    addressTypes: PropTypes.shape({
+      hasLoaded: PropTypes.bool.isRequired,
+      records: PropTypes.arrayOf(PropTypes.object),
+    }),
+    records: PropTypes.shape({
+      hasLoaded: PropTypes.bool.isRequired,
+      isPending: PropTypes.bool.isPending,
+      other: PropTypes.shape({
+        totalRecords: PropTypes.number,
+      }),
+    }),
+  }).isRequired,
+  stripes: PropTypes.shape({
+    connect: PropTypes.func.isRequired,
+    formatDate: PropTypes.func.isRequired,
+    formatDateTime: PropTypes.func.isRequired,
+    locale: PropTypes.string,
+    logger: PropTypes.shape({
+      log: PropTypes.func.isRequired,
+    }).isRequired,
+    okapi: PropTypes.shape({
+      url: PropTypes.string.isRequired,
+      tenant: PropTypes.string.isRequired,
+    }),
+    store: PropTypes.shape({
+      getState: PropTypes.func.isRequired,
+    }),
+    timezone: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
 class Requests extends React.Component {
-  static contextTypes = {
-    stripes: PropTypes.object,
-  }
-
-  static propTypes = {
-    mutator: PropTypes.shape({
-      records: PropTypes.shape({
-        GET: PropTypes.func,
-        POST: PropTypes.func,
-      }),
-      query: PropTypes.object,
-      requestCount: PropTypes.shape({
-        replace: PropTypes.func,
-      }),
-    }).isRequired,
-    resources: PropTypes.shape({
-      addressTypes: PropTypes.shape({
-        hasLoaded: PropTypes.bool.isRequired,
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
-      records: PropTypes.shape({
-        hasLoaded: PropTypes.bool.isRequired,
-        isPending: PropTypes.bool.isPending,
-        other: PropTypes.shape({
-          totalRecords: PropTypes.number,
-        }),
-      }),
-    }).isRequired,
-    stripes: PropTypes.shape({
-      connect: PropTypes.func.isRequired,
-      locale: PropTypes.string,
-      logger: PropTypes.shape({
-        log: PropTypes.func.isRequired,
-      }).isRequired,
-    }).isRequired,
-  };
-
   static manifest = {
     addressTypes: {
       type: 'okapi',
@@ -173,16 +179,16 @@ class Requests extends React.Component {
     },
   };
 
-  constructor(props, context) {
+  constructor(props) {
     super(props);
 
-    this.okapiUrl = context.stripes.okapi.url;
-    this.formatDate = context.stripes.formatDate;
-    this.formatDateTime = context.stripes.formatDateTime;
-    this.timezone = context.stripes.timezone;
+    this.okapiUrl = props.stripes.okapi.url;
+    this.formatDate = props.stripes.formatDate;
+    this.formatDateTime = props.stripes.formatDateTime;
+    this.timezone = props.stripes.timezone;
     this.httpHeaders = Object.assign({}, {
-      'X-Okapi-Tenant': context.stripes.okapi.tenant,
-      'X-Okapi-Token': context.stripes.store.getState().okapi.token,
+      'X-Okapi-Tenant': props.stripes.okapi.tenant,
+      'X-Okapi-Token': props.stripes.store.getState().okapi.token,
       'Content-Type': 'application/json',
     });
 
@@ -309,4 +315,5 @@ class Requests extends React.Component {
   }
 }
 
+Requests.propTypes = propTypes;
 export default Requests;
