@@ -71,7 +71,7 @@ ItemDetail.propTypes = {
   loan: PropTypes.object,
   requestCount: PropTypes.number,
   dateFormatter: PropTypes.func.isRequired,
-  intl: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 ItemDetail.defaultProps = {
