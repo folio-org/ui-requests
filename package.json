@@ -13,7 +13,7 @@
   "main": "index.js",
   "stripes": {
     "type": "app",
-    "displayName": "Requests",
+    "displayName": "ui-requests.meta.title",
     "route": "/requests",
     "home": "/requests?filters=&sort=Request Date",
     "hasSettings": false,
