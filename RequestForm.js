@@ -95,8 +95,8 @@ class RequestForm extends React.Component {
       pathname: PropTypes.string.isRequired,
       search: PropTypes.string,
     }).isRequired,
-    onCancelRequest: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
+    onCancelRequest: PropTypes.func.isRequired,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
     //  okapi: PropTypes.object,
@@ -113,7 +113,7 @@ class RequestForm extends React.Component {
       }),
     }).isRequired,
     dateFormatter: PropTypes.func.isRequired,
-  };
+  }
 
   static defaultProps = {
     findResource: () => {},
@@ -123,7 +123,7 @@ class RequestForm extends React.Component {
     optionLists: {},
     pristine: true,
     submitting: false,
-  };
+  }
 
   constructor(props) {
     super(props);

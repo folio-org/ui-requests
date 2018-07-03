@@ -50,7 +50,7 @@ class ViewRequest extends React.Component {
       records: 'users',
       path: 'users?query=(id==!{metadata.updatedByUserId})',
     },
-  };
+  }
 
   static propTypes = {
     dateFormatter: PropTypes.func.isRequired,
@@ -89,7 +89,7 @@ class ViewRequest extends React.Component {
           totalRecords: PropTypes.number,
         }),
       }),
-    }).isRequired,
+    }),
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
       connect: PropTypes.func.isRequired,
@@ -99,12 +99,6 @@ class ViewRequest extends React.Component {
         log: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
-  };
-
-  static contextTypes = {
-    intl: PropTypes.shape({
-      formatMessage: PropTypes.func,
-    })
   }
 
   static defaultProps = {
@@ -112,7 +106,7 @@ class ViewRequest extends React.Component {
     paneWidth: '50%',
     onEdit: () => {},
     notesToggle: () => {},
-  };
+  }
 
   constructor(props) {
     super(props);
@@ -306,8 +300,8 @@ class ViewRequest extends React.Component {
           icon: 'edit',
         }, {
           id: 'clickable-cancel-request',
-          title: this.context.intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
-          label: this.context.intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
+          title: intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
+          label: intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
           onClick: () => this.setState({ isCancellingRequest: true }),
           icon: 'cancel',
         }] : undefined}

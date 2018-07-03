@@ -134,7 +134,7 @@ class Requests extends React.Component {
       path: 'users',
       fetch: false,
     },
-  };
+  }
 
   static propTypes = {
     mutator: PropTypes.shape({
@@ -162,27 +162,33 @@ class Requests extends React.Component {
     }).isRequired,
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
+      formatDate: PropTypes.func.isRequired,
+      formatDateTime: PropTypes.func.isRequired,
       locale: PropTypes.string,
       logger: PropTypes.shape({
         log: PropTypes.func.isRequired,
       }).isRequired,
+      okapi: PropTypes.shape({
+        url: PropTypes.string.isRequired,
+        tenant: PropTypes.string.isRequired,
+      }),
+      store: PropTypes.shape({
+        getState: PropTypes.func.isRequired,
+      }),
+      timezone: PropTypes.string.isRequired,
     }).isRequired,
-  };
-
-  static contextTypes = {
-    stripes: PropTypes.object,
   }
 
-  constructor(props, context) {
+  constructor(props) {
     super(props);
 
-    this.okapiUrl = context.stripes.okapi.url;
-    this.formatDate = context.stripes.formatDate;
-    this.formatDateTime = context.stripes.formatDateTime;
-    this.timezone = context.stripes.timezone;
+    this.okapiUrl = props.stripes.okapi.url;
+    this.formatDate = props.stripes.formatDate;
+    this.formatDateTime = props.stripes.formatDateTime;
+    this.timezone = props.stripes.timezone;
     this.httpHeaders = Object.assign({}, {
-      'X-Okapi-Tenant': context.stripes.okapi.tenant,
-      'X-Okapi-Token': context.stripes.store.getState().okapi.token,
+      'X-Okapi-Tenant': props.stripes.okapi.tenant,
+      'X-Okapi-Token': props.stripes.store.getState().okapi.token,
       'Content-Type': 'application/json',
     });
 
