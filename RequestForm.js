@@ -19,6 +19,7 @@ import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
 import stripesForm from '@folio/stripes-form';
 
+import CancelRequestDialog from './CancelRequestDialog';
 import UserDetail from './UserDetail';
 import ItemDetail from './ItemDetail';
 import { toUserAddress } from './constants';
@@ -78,50 +79,52 @@ function asyncValidate(values, dispatch, props, blurredField) {
   return new Promise(resolve => resolve());
 }
 
-const propTypes = {
-  stripes: PropTypes.shape({
-    intl: PropTypes.object.isRequired,
-  }).isRequired,
-  change: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  findResource: PropTypes.func,
-  fullRequest: PropTypes.object,
-  metadataDisplay: PropTypes.func,
-  initialValues: PropTypes.object,
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-    search: PropTypes.string,
-  }).isRequired,
-  onCancel: PropTypes.func.isRequired,
-  pristine: PropTypes.bool,
-  submitting: PropTypes.bool,
-  //  okapi: PropTypes.object,
-  optionLists: PropTypes.shape({
-    addressTypes: PropTypes.arrayOf(PropTypes.object),
-    requestTypes: PropTypes.arrayOf(PropTypes.object),
-    fulfilmentTypes: PropTypes.arrayOf(PropTypes.object),
-  }),
-  patronGroups: PropTypes.shape({
-    hasLoaded: PropTypes.bool.isRequired,
-    isPending: PropTypes.bool.isPending,
-    other: PropTypes.shape({
-      totalRecords: PropTypes.number,
-    }),
-  }).isRequired,
-  dateFormatter: PropTypes.func.isRequired,
-};
-
-const defaultProps = {
-  findResource: () => {},
-  fullRequest: null,
-  initialValues: {},
-  metadataDisplay: () => {},
-  optionLists: {},
-  pristine: true,
-  submitting: false,
-};
-
 class RequestForm extends React.Component {
+  static propTypes = {
+    stripes: PropTypes.shape({
+      connect: PropTypes.func.isRequired,
+      intl: PropTypes.object.isRequired,
+    }).isRequired,
+    change: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
+    findResource: PropTypes.func,
+    fullRequest: PropTypes.object,
+    metadataDisplay: PropTypes.func,
+    initialValues: PropTypes.object,
+    location: PropTypes.shape({
+      pathname: PropTypes.string.isRequired,
+      search: PropTypes.string,
+    }).isRequired,
+    onCancel: PropTypes.func.isRequired,
+    onCancelRequest: PropTypes.func.isRequired,
+    pristine: PropTypes.bool,
+    submitting: PropTypes.bool,
+    //  okapi: PropTypes.object,
+    optionLists: PropTypes.shape({
+      addressTypes: PropTypes.arrayOf(PropTypes.object),
+      requestTypes: PropTypes.arrayOf(PropTypes.object),
+      fulfilmentTypes: PropTypes.arrayOf(PropTypes.object),
+    }),
+    patronGroups: PropTypes.shape({
+      hasLoaded: PropTypes.bool.isRequired,
+      isPending: PropTypes.bool.isPending,
+      other: PropTypes.shape({
+        totalRecords: PropTypes.number,
+      }),
+    }).isRequired,
+    dateFormatter: PropTypes.func.isRequired,
+  }
+
+  static defaultProps = {
+    findResource: () => {},
+    fullRequest: null,
+    initialValues: {},
+    metadataDisplay: () => {},
+    optionLists: {},
+    pristine: true,
+    submitting: false,
+  }
+
   constructor(props) {
     super(props);
 
@@ -158,6 +161,7 @@ class RequestForm extends React.Component {
       selectedLoan: loan,
     };
 
+    this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
     this.onChangeAddress = this.onChangeAddress.bind(this);
     this.onChangeFulfilment = this.onChangeFulfilment.bind(this);
     this.onItemClick = this.onItemClick.bind(this);
@@ -329,6 +333,11 @@ class RequestForm extends React.Component {
     }
   }
 
+  onCancelRequest = (cancellationInfo) => {
+    this.setState({ isCancellingRequest: false });
+    this.props.onCancelRequest(cancellationInfo);
+  }
+
   requireItem = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectItem" />);
   requireUser = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectUser" />);
 
@@ -440,6 +449,13 @@ class RequestForm extends React.Component {
             height="100%"
             firstMenu={addRequestFirstMenu}
             lastMenu={isEditForm ? editRequestLastMenu : addRequestLastMenu}
+            actionMenuItems={isEditForm ? [{
+              id: 'clickable-cancel-request',
+              title: intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
+              label: intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
+              onClick: () => this.setState({ isCancellingRequest: true }),
+              icon: 'cancel',
+            }] : undefined}
             paneTitle={isEditForm ? intl.formatMessage({ id: 'ui-requests.actions.editRequest' }) : intl.formatMessage({ id: 'ui-requests.actions.newRequest' })}
           >
             <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
@@ -634,15 +650,20 @@ class RequestForm extends React.Component {
               </Accordion>
             </AccordionSet>
           </Pane>
+          <this.connectedCancelRequestDialog
+            open={this.state.isCancellingRequest}
+            onCancelRequest={this.onCancelRequest}
+            onClose={() => this.setState({ isCancellingRequest: false })}
+            request={fullRequest}
+            stripes={this.props.stripes}
+          />
+
           <br /><br /><br /><br /><br />
         </Paneset>
       </form>
     );
   }
 }
-
-RequestForm.propTypes = propTypes;
-RequestForm.defaultProps = defaultProps;
 
 export default stripesForm({
   form: 'requestForm',

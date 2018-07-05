@@ -49,5 +49,13 @@
   "actions.editRequest": "Edit request",
   "actions.selectAddressType": "Select address type",
   "actions.selectPickupLoc": "Select pickup location",
-  "actions.loading": "Loading..."
+  "actions.loading": "Loading...",
+  "cancel.cancelRequest": "Cancel request",
+  "cancel.modalLabel": "Confirm request cancellation",
+  "cancel.requestWillBeCancelled": "<b>{title}</b> will be <b>cancelled</b>",
+  "cancel.reasonLabel": "Reason for cancellation",
+  "cancel.notifyLabel": "Notify patron",
+  "cancel.additionalInfoLabel": "Additional information{required}",
+  "cancel.additionalInfoPlaceholderRequired": "Enter more information about the cancellation (required)",
+  "cancel.additionalInfoPlaceholderOptional": "Enter more information about the cancellation (optional)"
 }

@@ -39,49 +39,6 @@ const filterConfig = [
   },
 ];
 
-const propTypes = {
-  mutator: PropTypes.shape({
-    records: PropTypes.shape({
-      GET: PropTypes.func,
-      POST: PropTypes.func,
-    }),
-    query: PropTypes.object,
-    requestCount: PropTypes.shape({
-      replace: PropTypes.func,
-    }),
-  }).isRequired,
-  resources: PropTypes.shape({
-    addressTypes: PropTypes.shape({
-      hasLoaded: PropTypes.bool.isRequired,
-      records: PropTypes.arrayOf(PropTypes.object),
-    }),
-    records: PropTypes.shape({
-      hasLoaded: PropTypes.bool.isRequired,
-      isPending: PropTypes.bool.isPending,
-      other: PropTypes.shape({
-        totalRecords: PropTypes.number,
-      }),
-    }),
-  }).isRequired,
-  stripes: PropTypes.shape({
-    connect: PropTypes.func.isRequired,
-    formatDate: PropTypes.func.isRequired,
-    formatDateTime: PropTypes.func.isRequired,
-    locale: PropTypes.string,
-    logger: PropTypes.shape({
-      log: PropTypes.func.isRequired,
-    }).isRequired,
-    okapi: PropTypes.shape({
-      url: PropTypes.string.isRequired,
-      tenant: PropTypes.string.isRequired,
-    }),
-    store: PropTypes.shape({
-      getState: PropTypes.func.isRequired,
-    }),
-    timezone: PropTypes.string.isRequired,
-  }).isRequired,
-};
-
 class Requests extends React.Component {
   static manifest = {
     addressTypes: {
@@ -177,7 +134,50 @@ class Requests extends React.Component {
       path: 'users',
       fetch: false,
     },
-  };
+  }
+
+  static propTypes = {
+    mutator: PropTypes.shape({
+      records: PropTypes.shape({
+        GET: PropTypes.func,
+        POST: PropTypes.func,
+      }),
+      query: PropTypes.object,
+      requestCount: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
+    }).isRequired,
+    resources: PropTypes.shape({
+      addressTypes: PropTypes.shape({
+        hasLoaded: PropTypes.bool.isRequired,
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      records: PropTypes.shape({
+        hasLoaded: PropTypes.bool.isRequired,
+        isPending: PropTypes.bool.isPending,
+        other: PropTypes.shape({
+          totalRecords: PropTypes.number,
+        }),
+      }),
+    }).isRequired,
+    stripes: PropTypes.shape({
+      connect: PropTypes.func.isRequired,
+      formatDate: PropTypes.func.isRequired,
+      formatDateTime: PropTypes.func.isRequired,
+      locale: PropTypes.string,
+      logger: PropTypes.shape({
+        log: PropTypes.func.isRequired,
+      }).isRequired,
+      okapi: PropTypes.shape({
+        url: PropTypes.string.isRequired,
+        tenant: PropTypes.string.isRequired,
+      }),
+      store: PropTypes.shape({
+        getState: PropTypes.func.isRequired,
+      }),
+      timezone: PropTypes.string.isRequired,
+    }).isRequired,
+  }
 
   constructor(props) {
     super(props);
@@ -315,5 +315,4 @@ class Requests extends React.Component {
   }
 }
 
-Requests.propTypes = propTypes;
 export default Requests;

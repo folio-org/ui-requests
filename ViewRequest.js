@@ -12,67 +12,12 @@ import IconButton from '@folio/stripes-components/lib/IconButton';
 import craftLayerUrl from '@folio/stripes-components/util/craftLayerUrl';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 
+import CancelRequestDialog from './CancelRequestDialog';
 import ItemDetail from './ItemDetail';
 import ViewMetadata from './ViewMetadata';
 import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
 import { fulfilmentTypes, requestTypes, toUserAddress } from './constants';
-
-const propTypes = {
-  dateFormatter: PropTypes.func.isRequired,
-  editLink: PropTypes.string,
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-    search: PropTypes.string,
-  }).isRequired,
-  joinRequest: PropTypes.func.isRequired,
-  mutator: PropTypes.shape({
-    selectedRequest: PropTypes.shape({
-      PUT: PropTypes.func,
-    }),
-  }).isRequired,
-  notesToggle: PropTypes.func,
-  onClose: PropTypes.func.isRequired,
-  onCloseEdit: PropTypes.func.isRequired,
-  onEdit: PropTypes.func,
-  paneWidth: PropTypes.string,
-  resources: PropTypes.shape({
-    addressTypes: PropTypes.shape({
-      hasLoaded: PropTypes.bool.isRequired,
-      records: PropTypes.arrayOf(PropTypes.object),
-    }),
-    patronGroups: PropTypes.shape({
-      hasLoaded: PropTypes.bool.isRequired,
-      isPending: PropTypes.bool.isPending,
-      other: PropTypes.shape({
-        totalRecords: PropTypes.number,
-      }),
-    }),
-    selectedRequest: PropTypes.shape({
-      hasLoaded: PropTypes.bool.isRequired,
-      isPending: PropTypes.bool.isPending,
-      other: PropTypes.shape({
-        totalRecords: PropTypes.number,
-      }),
-    }),
-  }).isRequired,
-  stripes: PropTypes.shape({
-    hasPerm: PropTypes.func.isRequired,
-    connect: PropTypes.func.isRequired,
-    locale: PropTypes.string.isRequired,
-    formatDate: PropTypes.func.isRequired,
-    logger: PropTypes.shape({
-      log: PropTypes.func.isRequired,
-    }).isRequired,
-  }).isRequired,
-};
-
-const defaultProps = {
-  editLink: '',
-  paneWidth: '50%',
-  onEdit: () => {},
-  notesToggle: () => {},
-};
 
 class ViewRequest extends React.Component {
   static manifest = {
@@ -105,7 +50,63 @@ class ViewRequest extends React.Component {
       records: 'users',
       path: 'users?query=(id==!{metadata.updatedByUserId})',
     },
-  };
+  }
+
+  static propTypes = {
+    dateFormatter: PropTypes.func.isRequired,
+    editLink: PropTypes.string,
+    location: PropTypes.shape({
+      pathname: PropTypes.string.isRequired,
+      search: PropTypes.string,
+    }).isRequired,
+    joinRequest: PropTypes.func.isRequired,
+    mutator: PropTypes.shape({
+      selectedRequest: PropTypes.shape({
+        PUT: PropTypes.func,
+      }),
+    }).isRequired,
+    notesToggle: PropTypes.func,
+    onClose: PropTypes.func.isRequired,
+    onCloseEdit: PropTypes.func.isRequired,
+    onEdit: PropTypes.func,
+    paneWidth: PropTypes.string,
+    resources: PropTypes.shape({
+      addressTypes: PropTypes.shape({
+        hasLoaded: PropTypes.bool.isRequired,
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      patronGroups: PropTypes.shape({
+        hasLoaded: PropTypes.bool.isRequired,
+        isPending: PropTypes.bool.isPending,
+        other: PropTypes.shape({
+          totalRecords: PropTypes.number,
+        }),
+      }),
+      selectedRequest: PropTypes.shape({
+        hasLoaded: PropTypes.bool.isRequired,
+        isPending: PropTypes.bool.isPending,
+        other: PropTypes.shape({
+          totalRecords: PropTypes.number,
+        }),
+      }),
+    }),
+    stripes: PropTypes.shape({
+      hasPerm: PropTypes.func.isRequired,
+      connect: PropTypes.func.isRequired,
+      locale: PropTypes.string.isRequired,
+      formatDate: PropTypes.func.isRequired,
+      logger: PropTypes.shape({
+        log: PropTypes.func.isRequired,
+      }).isRequired,
+    }).isRequired,
+  }
+
+  static defaultProps = {
+    editLink: '',
+    paneWidth: '50%',
+    onEdit: () => {},
+    notesToggle: () => {},
+  }
 
   constructor(props) {
     super(props);
@@ -120,10 +121,27 @@ class ViewRequest extends React.Component {
     };
 
     this.cViewMetadata = props.stripes.connect(ViewMetadata);
+    this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
     this.onToggleSection = this.onToggleSection.bind(this);
     this.craftLayerUrl = craftLayerUrl.bind(this);
+    this.cancelRequest = this.cancelRequest.bind(this);
     this.update = this.update.bind(this);
     this.formatDate = this.props.stripes.formatDate;
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    const request = _.get(props.resources.selectedRequest, ['records', 0]);
+    const prevRequest = state.fullRequestDetail.requestMeta;
+    if (request && prevRequest && !_.isEqual(request, prevRequest)) {
+      return {
+        fullRequestDetail: {
+          ...state.fullRequestDetail,
+          requestMeta: request,
+        }
+      };
+    }
+
+    return null;
   }
 
   componentDidMount() {
@@ -167,6 +185,21 @@ class ViewRequest extends React.Component {
     delete updatedRecord.itemRequestCount;
 
     this.props.mutator.selectedRequest.PUT(updatedRecord).then(() => {
+      this.props.onCloseEdit();
+    });
+  }
+
+  cancelRequest(cancellationInfo) {
+    // Get the initial request data, mix in the cancellation info, PUT,
+    // and then close cancel/edit modes since cancelled requests can't be edited.
+    const request = _.get(this.props.resources, ['selectedRequest', 'records', 0], {});
+    const cancelledRequest = {
+      ...request,
+      ...cancellationInfo,
+    };
+
+    this.props.mutator.selectedRequest.PUT(cancelledRequest).then(() => {
+      this.setState({ isCancellingRequest: false });
       this.props.onCloseEdit();
     });
   }
@@ -254,7 +287,27 @@ class ViewRequest extends React.Component {
       stripes.formatDate(_.get(request, ['requestMeta', 'holdShelfExpirationDate'], '')) : '-';
 
     return request ? (
-      <Pane defaultWidth={this.props.paneWidth} paneTitle={intl.formatMessage({ id: 'ui-requests.requestMeta.detailLabel' })} lastMenu={detailMenu} dismissible onClose={this.props.onClose}>
+      <Pane
+        defaultWidth={this.props.paneWidth}
+        paneTitle={intl.formatMessage({ id: 'ui-requests.requestMeta.detailLabel' })}
+        lastMenu={detailMenu}
+        actionMenuItems={!isRequestClosed ? [{
+          id: 'clickable-edit-request',
+          title: 'Edit Request',
+          label: 'Edit',
+          href: this.props.editLink,
+          onClick: this.props.onEdit,
+          icon: 'edit',
+        }, {
+          id: 'clickable-cancel-request',
+          title: intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
+          label: intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
+          onClick: () => this.setState({ isCancellingRequest: true }),
+          icon: 'cancel',
+        }] : undefined}
+        dismissible
+        onClose={this.props.onClose}
+      >
         <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
           <Accordion
             open
@@ -329,16 +382,22 @@ class ViewRequest extends React.Component {
             metadataDisplay={this.cViewMetadata}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.props.onCloseEdit}
+            onCancelRequest={this.cancelRequest}
             optionLists={{ requestTypes, fulfilmentTypes, addressTypes }}
             patronGroups={patronGroups}
             dateFormatter={this.props.dateFormatter}
           />
         </Layer>
+        <this.connectedCancelRequestDialog
+          open={this.state.isCancellingRequest}
+          onCancelRequest={this.cancelRequest}
+          onClose={() => this.setState({ isCancellingRequest: false })}
+          request={request}
+          stripes={this.props.stripes}
+        />
       </Pane>
     ) : null;
   }
 }
 
-ViewRequest.propTypes = propTypes;
-ViewRequest.defaultProps = defaultProps;
 export default ViewRequest;
