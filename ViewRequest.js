@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 
+import TitleManager from '@folio/stripes-core/src/components/TitleManager';
 import { Accordion, AccordionSet } from '@folio/stripes-components/lib/Accordion';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import Layer from '@folio/stripes-components/lib/Layer';
@@ -308,6 +309,7 @@ class ViewRequest extends React.Component {
         dismissible
         onClose={this.props.onClose}
       >
+        <TitleManager record={_.get(request, ['item', 'title'])} />
         <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
           <Accordion
             open

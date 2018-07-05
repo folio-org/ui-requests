@@ -389,7 +389,7 @@ class RequestForm extends React.Component {
           disabled={pristine || submitting}
           onClick={handleSubmit}
         >
-          <FormattedMessage id="ui-requests.requestForm.newRequest" />
+          <FormattedMessage id="ui-requests.actions.newRequest" />
         </Button>
       </PaneMenu>;
     const editRequestLastMenu =
