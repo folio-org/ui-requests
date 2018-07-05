@@ -12,10 +12,10 @@ import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import IconButton from '@folio/stripes-components/lib/IconButton';
 import craftLayerUrl from '@folio/stripes-components/util/craftLayerUrl';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+import ViewMetaData from '@folio/stripes-smart-components/lib/ViewMetaData';
 
 import CancelRequestDialog from './CancelRequestDialog';
 import ItemDetail from './ItemDetail';
-import ViewMetadata from './ViewMetadata';
 import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
 import { fulfilmentTypes, requestTypes, toUserAddress } from './constants';
@@ -121,7 +121,7 @@ class ViewRequest extends React.Component {
       },
     };
 
-    this.cViewMetadata = props.stripes.connect(ViewMetadata);
+    this.cViewMetaData = props.stripes.connect(ViewMetaData);
     this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
     this.onToggleSection = this.onToggleSection.bind(this);
     this.craftLayerUrl = craftLayerUrl.bind(this);
@@ -318,7 +318,7 @@ class ViewRequest extends React.Component {
           >
             <Row>
               <Col xs={12}>
-                <this.cViewMetadata metadata={request.requestMeta.metadata} />
+                <this.cViewMetaData metadata={request.requestMeta.metadata} />
               </Col>
             </Row>
             <Row>
@@ -381,7 +381,7 @@ class ViewRequest extends React.Component {
             stripes={stripes}
             initialValues={fullRequestDetail.requestMeta}
             fullRequest={fullRequestDetail}
-            metadataDisplay={this.cViewMetadata}
+            metadataDisplay={this.cViewMetaData}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.props.onCloseEdit}
             onCancelRequest={this.cancelRequest}
