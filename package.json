@@ -83,7 +83,7 @@
     "@folio/react-intl-safe-html": "^1.0.10007",
     "@folio/stripes-components": "^2.1.5",
     "@folio/stripes-form": "^0.8.1",
-    "@folio/stripes-smart-components": "^1.4.3",
+    "@folio/stripes-smart-components": "^1.4.19",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.4",
     "moment-timezone": "^0.5.14",
