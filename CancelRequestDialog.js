@@ -20,6 +20,10 @@ class CancelRequestDialog extends React.Component {
   }
 
   static propTypes = {
+    intl: PropTypes.shape({
+      formatDate: PropTypes.func,
+      formatMessage: PropTypes.func.isRequired,
+    }),
     onCancelRequest: PropTypes.func.isRequired,
     onClose: PropTypes.func,
     open: PropTypes.bool,
@@ -40,13 +44,6 @@ class CancelRequestDialog extends React.Component {
         })
       })
     }),
-  }
-
-  static contextTypes = {
-    intl: PropTypes.shape({
-      formatDate: PropTypes.func,
-      formatMessage: PropTypes.func,
-    })
   }
 
   static defaultProps = {
@@ -107,9 +104,9 @@ class CancelRequestDialog extends React.Component {
   }
 
   render() {
-    const { request } = this.props;
+    const { request, intl } = this.props;
     const { reason, reasons, /* notify, */ additionalInfo } = this.state;
-    const { intl: { formatMessage } } = this.context;
+    const { formatMessage } = intl;
 
     if (!request) return null;
 

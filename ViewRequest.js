@@ -396,6 +396,7 @@ class ViewRequest extends React.Component {
           onClose={() => this.setState({ isCancellingRequest: false })}
           request={request}
           stripes={this.props.stripes}
+          intl={intl}
         />
       </Pane>
     ) : null;

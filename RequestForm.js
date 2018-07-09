@@ -656,6 +656,7 @@ class RequestForm extends React.Component {
             onClose={() => this.setState({ isCancellingRequest: false })}
             request={fullRequest}
             stripes={this.props.stripes}
+            intl={intl}
           />
 
           <br /><br /><br /><br /><br />
