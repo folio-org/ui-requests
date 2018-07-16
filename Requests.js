@@ -154,7 +154,6 @@ class Requests extends React.Component {
       }),
       records: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
-        isPending: PropTypes.bool.isPending,
         other: PropTypes.shape({
           totalRecords: PropTypes.number,
         }),

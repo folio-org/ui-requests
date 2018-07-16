@@ -28,7 +28,7 @@
     "okapiInterfaces": {
       "notes": "1.0",
       "request-storage": "2.0",
-      "circulation": "3.0",
+      "circulation": "5.3",
       "inventory": "5.0 6.0"
     },
     "permissionSets": [

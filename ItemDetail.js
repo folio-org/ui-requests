@@ -31,7 +31,7 @@ const ItemDetail = ({ item, instance, holding, dateFormatter, loan, requestCount
         <Col xs={3}>
           <KeyValue
             label={intl.formatMessage({ id: 'ui-requests.item.shelfLocation' })}
-            value={_.get(item, ['permanentLocation', 'name']) || '-'}
+            value={_.get(item, ['effectiveLocation', 'name']) || '-'}
           />
         </Col>
       </Row>

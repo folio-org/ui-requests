@@ -107,7 +107,6 @@ class RequestForm extends React.Component {
     }),
     patronGroups: PropTypes.shape({
       hasLoaded: PropTypes.bool.isRequired,
-      isPending: PropTypes.bool.isPending,
       other: PropTypes.shape({
         totalRecords: PropTypes.number,
       }),
