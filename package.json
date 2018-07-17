@@ -1,6 +1,6 @@
 {
   "name": "@folio/requests",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Requests manager",
   "repository": "folio-org/ui-requests",
   "publishConfig": {
@@ -28,7 +28,7 @@
     "okapiInterfaces": {
       "notes": "1.0",
       "request-storage": "2.0",
-      "circulation": "5.3",
+      "circulation": "3.4",
       "inventory": "5.0 6.0"
     },
     "permissionSets": [
