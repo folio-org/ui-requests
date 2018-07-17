@@ -28,7 +28,7 @@
     "okapiInterfaces": {
       "notes": "1.0",
       "request-storage": "2.0",
-      "circulation": "3.0",
+      "circulation": "5.3",
       "inventory": "5.0 6.0"
     },
     "permissionSets": [
@@ -71,7 +71,7 @@
   "devDependencies": {
     "@folio/eslint-config-stripes": "^1.1.0",
     "babel-core": "^6.17.0",
-    "babel-eslint": "^7.0.0",
+    "babel-eslint": "^8.0.0",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
