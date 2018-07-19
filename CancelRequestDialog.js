@@ -64,7 +64,7 @@ class CancelRequestDialog extends React.Component {
     const reasonRecords = get(props.resources, ['cancellationReasons', 'records'], []);
     if (state.reasons.length !== reasonRecords.length) {
       const reasons = reasonRecords.map(r => ({
-        label: r.description,
+        label: r.name,
         value: r.id,
         requiresAdditionalInformation: r.requiresAdditionalInformation,
       })).sort((a, b) => a.label > b.label);
