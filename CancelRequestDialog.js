@@ -7,6 +7,7 @@ import Button from '@folio/stripes-components/lib/Button';
 // import Checkbox from '@folio/stripes-components/lib/Checkbox';
 import Layout from '@folio/stripes-components/lib/Layout';
 import Modal from '@folio/stripes-components/lib/Modal';
+import ModalFooter from '@folio/stripes-components/lib/ModalFooter';
 import Select from '@folio/stripes-components/lib/Select';
 import TextArea from '@folio/stripes-components/lib/TextArea';
 
@@ -110,11 +111,26 @@ class CancelRequestDialog extends React.Component {
 
     if (!request) return null;
 
+    const footer = (
+      <ModalFooter
+        primaryButton={{
+          label: formatMessage({ id: 'stripes-core.button.confirm' }),
+          disabled: reason.requiresAdditionalInformation && !additionalInfo,
+          onClick: this.onCancelRequest,
+        }}
+        secondaryButton={{
+          label: formatMessage({ id: 'stripes-core.button.back' }),
+          onClick: this.props.onClose,
+        }}
+      />
+    );
+
     return (
       <Modal
         label={formatMessage({ id: 'ui-requests.cancel.modalLabel' })}
         open={this.props.open}
         onClose={this.props.onClose}
+        footer={footer}
       >
         <p>
           <SafeHTMLMessage
@@ -149,20 +165,7 @@ class CancelRequestDialog extends React.Component {
           value={additionalInfo}
           onChange={this.onChangeAdditionalInfo}
         />
-        <Layout className="textRight">
-          <Button onClick={this.props.onClose}>
-            {formatMessage({ id: 'stripes-core.button.back' })}
-          </Button>
-          <Button
-            buttonStyle="primary"
-            disabled={reason.requiresAdditionalInformation && !additionalInfo}
-            onClick={this.onCancelRequest}
-          >
-            {formatMessage({ id: 'stripes-core.button.confirm' })}
-          </Button>
-        </Layout>
       </Modal>
-
     );
   }
 }
