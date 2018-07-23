@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import { get } from 'lodash';
 
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
-import Button from '@folio/stripes-components/lib/Button';
 // import Checkbox from '@folio/stripes-components/lib/Checkbox';
-import Layout from '@folio/stripes-components/lib/Layout';
 import Modal from '@folio/stripes-components/lib/Modal';
 import ModalFooter from '@folio/stripes-components/lib/ModalFooter';
 import Select from '@folio/stripes-components/lib/Select';
