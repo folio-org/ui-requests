@@ -4,6 +4,7 @@ import fetch from 'isomorphic-fetch';
 import moment from 'moment-timezone';
 import { filters2cql } from '@folio/stripes-components/lib/FilterGroups';
 import SearchAndSort from '@folio/stripes-smart-components/lib/SearchAndSort';
+import IconWithText from '@folio/stripes-components/lib/IconWithText';
 
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
@@ -271,7 +272,12 @@ class Requests extends React.Component {
       'Item barcode': rq => (rq.item ? rq.item.barcode : ''),
       'Position': () => '', // TODO: add correct function once this is implemented
       'Proxy': rq => (rq.proxy ? getFullName(rq.proxy) : ''),
-      'Request Date': rq => this.makeLocaleDateTimeString(rq.requestDate),
+      'Request Date': rq => (
+        <IconWithText
+          text={this.makeLocaleDateTimeString(rq.requestDate)}
+          app="requests"
+        />
+      ),
       'Requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
       'Requester Barcode': rq => (rq.requester ? rq.requester.barcode : ''),
       'Request status': rq => rq.status,
@@ -288,7 +294,7 @@ class Requests extends React.Component {
       viewRecordComponent={ViewRequest}
       editRecordComponent={RequestForm}
       visibleColumns={['Request Date', 'Title', 'Item barcode', 'Type', 'Request status', 'Position', 'Requester', 'Requester Barcode', 'Proxy']}
-      columnWidths={{ 'Request Date': '10%' }}
+      columnWidths={{ 'Request Date': '175px' }}
       resultsFormatter={resultsFormatter}
       newRecordInitialValues={{ requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' }}
       massageNewRecord={this.massageNewRecord}
