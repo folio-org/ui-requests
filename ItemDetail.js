@@ -11,8 +11,7 @@ import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 const ItemDetail = ({ item, instance, holding, dateFormatter, loan, requestCount, intl }) => {
   if (!item.barcode) { return <div>{intl.formatMessage({ id: 'ui-requests.actions.loading' })}</div>; }
 
-  const barcode = item.barcode;
-  const recordLink = barcode ? <Link to={`/inventory/view/${item.instanceId}/${item.holdingsRecordId}/${item.itemId}`}>{barcode}</Link> : '';
+  const recordLink = item.barcode ? <Link to={`/inventory/view/${item.instanceId}/${item.holdingsRecordId}/${item.id}`}>{item.barcode}</Link> : '';
   const status = _.get(item, ['status', 'name'], '');
   const contributor = _.get(instance, ['contributors', '0', 'name'], '-');
 
