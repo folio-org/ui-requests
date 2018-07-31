@@ -81,7 +81,7 @@ module.exports.test = function uiTest(uiTestCtx) {
           .insert('input[name="requestExpirationDate"]', nextMonth)
         //  .insert('input[name="holdShelfExpirationDate"]', nextMonth)
           .click('#clickable-create-request')
-          .wait(1111)
+          .wait(1110)
           .then(() => {
             done();
           })
