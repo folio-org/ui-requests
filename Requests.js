@@ -269,7 +269,7 @@ class Requests extends React.Component {
 
     const resultsFormatter = {
       'Item barcode': rq => (rq.item ? rq.item.barcode : ''),
-      'Position': () => '', // TODO: add correct function once this is implemented
+      'Position': rq => (rq.position || ''),
       'Proxy': rq => (rq.proxy ? getFullName(rq.proxy) : ''),
       'Request Date': rq => this.makeLocaleDateTimeString(rq.requestDate),
       'Requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
