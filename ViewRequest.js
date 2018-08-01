@@ -335,7 +335,7 @@ class ViewRequest extends React.Component {
             </Row>
             <Row>
               <Col xs={3}>
-                <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.queuePosition' })} value="-" />
+                <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.queuePosition' })} value={_.get(request, ['requestMeta', 'position'], '-')} />
               </Col>
             </Row>
           </Accordion>
