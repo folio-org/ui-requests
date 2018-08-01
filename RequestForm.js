@@ -497,6 +497,7 @@ class RequestForm extends React.Component {
                           aria-label={intl.formatMessage({ id: 'ui-requests.requestMeta.expirationDate' })}
                           backendDateStandard="YYYY-MM-DD"
                           component={Datepicker}
+                          dateFormat="YYYY-MM-DD"
                         />
                       </Col>
                       { isEditForm && requestMeta.status === 'Open - Awaiting pickup' &&
@@ -507,6 +508,7 @@ class RequestForm extends React.Component {
                             aria-label={intl.formatMessage({ id: 'ui-requests.requestMeta.holdShelfExpirationDate' })}
                             backendDateStandard="YYYY-MM-DD"
                             component={Datepicker}
+                            dateFormat="YYYY-MM-DD"
                           />
                         </Col>
                       }
@@ -519,7 +521,7 @@ class RequestForm extends React.Component {
                     { isEditForm &&
                       <Row>
                         <Col xs={3}>
-                          <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.queuePosition' })} value="-" />
+                          <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.queuePosition' })} value={_.get(requestMeta, ['position'], '')} />
                         </Col>
                       </Row>
                     }
