@@ -45,9 +45,7 @@ function asyncValidate(values, dispatch, props, blurredField) {
         if (items.length < 1) {
           // eslint-disable-next-line prefer-promise-reject-errors
           reject({ item: { barcode: <FormattedMessage id="ui-requests.errors.itemBarcodeDoesNotExist" /> } });
-        } else if (items[0].status.name !== 'Checked out' &&
-                   items[0].status.name !== 'Checked out - Held' &&
-                   items[0].status.name !== 'Checked out - Recalled') {
+        } else if (items[0].status.name !== 'Checked out') {
           if (values.requestType === 'Recall') {
             // eslint-disable-next-line prefer-promise-reject-errors
             reject({ item: { barcode: <FormattedMessage id="ui-requests.errors.onlyCheckedOutForRecall" /> } });
