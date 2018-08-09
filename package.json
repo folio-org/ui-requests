@@ -26,10 +26,11 @@
     ],
     "queryResource": "query",
     "okapiInterfaces": {
-      "notes": "1.0",
-      "request-storage": "2.0",
+      "cancellation-reason-storage": "1.1",
       "circulation": "3.4",
-      "inventory": "5.0 6.0"
+      "inventory": "5.0 6.0",
+      "notes": "1.0",
+      "request-storage": "2.0"
     },
     "permissionSets": [
       {
