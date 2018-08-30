@@ -4,6 +4,7 @@ import fetch from 'isomorphic-fetch';
 import moment from 'moment-timezone';
 import { filters2cql } from '@folio/stripes-components/lib/FilterGroups';
 import SearchAndSort from '@folio/stripes-smart-components/lib/SearchAndSort';
+import exportToCsv from '@folio/stripes-util/lib/exportCsv';
 
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
@@ -146,6 +147,9 @@ class Requests extends React.Component {
       requestCount: PropTypes.shape({
         replace: PropTypes.func,
       }),
+      resultCount: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
     }).isRequired,
     resources: PropTypes.shape({
       addressTypes: PropTypes.shape({
@@ -157,6 +161,7 @@ class Requests extends React.Component {
         other: PropTypes.shape({
           totalRecords: PropTypes.number,
         }),
+        records: PropTypes.arrayOf(PropTypes.object),
       }),
     }).isRequired,
     stripes: PropTypes.shape({
@@ -194,6 +199,17 @@ class Requests extends React.Component {
     this.addRequestFields = this.addRequestFields.bind(this);
     this.create = this.create.bind(this);
     this.findResource = this.findResource.bind(this);
+  }
+
+  componentDidUpdate() {
+    if (this.csvExportPending) {
+      const recordsLoaded = this.props.resources.records.records;
+      const numTotalRecords = this.props.resources.records.other.totalRecords;
+      if (recordsLoaded.length === numTotalRecords) {
+        exportToCsv(recordsLoaded, ['id']);
+        this.csvExportPending = false;
+      }
+    }
   }
 
   // idType can be 'id', 'barcode', etc.
@@ -279,7 +295,21 @@ class Requests extends React.Component {
       'Title': rq => (rq.item ? rq.item.title : ''),
     };
 
+    const actionMenuItems = [
+      {
+        label: stripes.intl.formatMessage({ id: 'stripes-components.exportToCsv' }),
+        onClick: (() => {
+          if (!this.csvExportPending) {
+            this.props.mutator.resultCount.replace(this.props.resources.records.other.totalRecords);
+            this.csvExportPending = true;
+          }
+        }),
+        id: 'exportToCsvPaneHeaderBtn',
+      },
+    ];
+
     return (<SearchAndSort
+      actionMenuItems={actionMenuItems}
       packageInfo={packageInfo}
       objectName="request"
       filterConfig={filterConfig}
