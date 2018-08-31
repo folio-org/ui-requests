@@ -55,7 +55,7 @@
     "cancel.additionalInfoLabel": "Additional information{required}",
     "cancel.additionalInfoPlaceholderRequired": "Enter more information about the cancellation (required)",
     "cancel.additionalInfoPlaceholderOptional": "Enter more information about the cancellation (optional)",
-    "meta.title": "Vormerkungen",
+    "meta.title": "Requests",
     "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
     "barcode": "Barcode"
 }
