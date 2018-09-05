@@ -39,9 +39,6 @@ const ItemDetail = ({ item, instance, holding, dateFormatter, loan, requestCount
           <KeyValue label={intl.formatMessage({ id: 'ui-requests.item.callNumber' })} value={_.get(holding, ['callNumber'], '-')} />
         </Col>
         <Col xs={3}>
-          <KeyValue label={intl.formatMessage({ id: 'ui-requests.item.volume' })} value="-" />
-        </Col>
-        <Col xs={3}>
           <KeyValue label={intl.formatMessage({ id: 'ui-requests.item.enumeration' })} value={_.get(item, ['enumeration'], '-')} />
         </Col>
         <Col xs={3}>
