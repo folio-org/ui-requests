@@ -33,6 +33,7 @@
 * Added ability to cancel requests. Fixes UIREQ-58 and UIREQ-67.
 * Depend on "5.0 6.0" of "inventory". MODINV-56.
 * Use effectiveLocation in item displays. Completes UIREQ-29 and UIREQ-98.
+* Updated result column label's sentence structure to be consistent with the overall styling goals of FOLIO (STCOM-337)
 
 ## [1.1.0](https://github.com/folio-org/ui-requests/tree/v1.1.0) (2018-01-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.0.0...v1.1.0)
