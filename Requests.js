@@ -317,8 +317,8 @@ class Requests extends React.Component {
       resultCountIncrement={RESULT_COUNT_INCREMENT}
       viewRecordComponent={ViewRequest}
       editRecordComponent={RequestForm}
-      visibleColumns={['Request Date', 'Title', 'Item barcode', 'Type', 'Request status', 'Position', 'Requester', 'Requester Barcode', 'Proxy']}
-      columnWidths={{ 'Request Date': '10%' }}
+      visibleColumns={['Request date', 'Title', 'Item barcode', 'Type', 'Request status', 'Position', 'Requester', 'Requester barcode', 'Proxy']}
+      columnWidths={{ 'Request date': '10%' }}
       resultsFormatter={resultsFormatter}
       newRecordInitialValues={{ requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' }}
       massageNewRecord={this.massageNewRecord}
