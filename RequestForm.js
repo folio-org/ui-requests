@@ -5,6 +5,7 @@ import { Field } from 'redux-form';
 import queryString from 'query-string';
 import { FormattedMessage } from 'react-intl';
 
+import { Pluggable } from '@folio/stripes-core';
 import { Accordion, AccordionSet } from '@folio/stripes-components/lib/Accordion';
 import Button from '@folio/stripes-components/lib/Button';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
@@ -12,7 +13,6 @@ import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import Pluggable from '@folio/stripes-components/lib/Pluggable';
 import Select from '@folio/stripes-components/lib/Select';
 import TextField from '@folio/stripes-components/lib/TextField';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
