@@ -1,5 +1,9 @@
 # Change history for ui-requests
 
+## 1.3.0 (IN PROGRESS)
+
+* Update to stripes-form 0.9.0. Refs STRIPES-555.
+
 ## 1.2.0 (https://github.com/folio-org/ui-requests/tree/v1.2.0) (2018-09-10)
 
 * Refactor code to use `<SearchAndSort>` component. Completes UIREQ-49.
