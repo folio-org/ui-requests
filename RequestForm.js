@@ -374,7 +374,7 @@ class RequestForm extends React.Component {
           title={intl.formatMessage({ id: 'ui-requests.actions.closeNewRequest' })}
           aria-label={intl.formatMessage({ id: 'ui-requests.actions.closeNewRequest' })}
         >
-          <span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }} >&times;</span>
+          <span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }}>&times;</span>
         </Button>
       </PaneMenu>;
     const addRequestLastMenu =
@@ -556,7 +556,8 @@ class RequestForm extends React.Component {
                               fullWidth
                               onClick={this.onItemClick}
                               disabled={submitting}
-                            >Enter
+                            >
+                              Enter
                             </Button>
                           </Col>
                         </Row>
@@ -620,7 +621,8 @@ class RequestForm extends React.Component {
                               fullWidth
                               onClick={this.onUserClick}
                               disabled={submitting}
-                            >Enter
+                            >
+                              Enter
                             </Button>
                           </Col>
                         </Row>
@@ -658,7 +660,11 @@ class RequestForm extends React.Component {
             intl={intl}
           />
 
-          <br /><br /><br /><br /><br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
         </Paneset>
       </form>
     );

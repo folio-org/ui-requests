@@ -68,7 +68,7 @@
   },
   "scripts": {
     "start": "stripes serve",
-    "lint": "eslint *.js lib settings test/ui-testing"
+    "lint": "eslint ."
   },
   "devDependencies": {
     "@folio/eslint-config-stripes": "^3.2.1",
