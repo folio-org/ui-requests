@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 1.3.0 (IN PROGRESS)
+## 1.2.1 (https://github.com/folio-org/ui-requests/tree/v1.2.1) (2018-09-14)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.2.0...v1.2.1)
 
 * Update to stripes-form 0.9.0. Refs STRIPES-555.
 
