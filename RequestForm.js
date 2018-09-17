@@ -46,9 +46,7 @@ function asyncValidate(values, dispatch, props, blurredField) {
         if (items.length < 1) {
           // eslint-disable-next-line prefer-promise-reject-errors
           reject({ item: { barcode: <FormattedMessage id="ui-requests.errors.itemBarcodeDoesNotExist" /> } });
-        } else if (items[0].status.name !== 'Checked out' &&
-                   items[0].status.name !== 'Checked out - Held' &&
-                   items[0].status.name !== 'Checked out - Recalled') {
+        } else if (items[0].status.name !== 'Checked out') {
           if (values.requestType === 'Recall') {
             // eslint-disable-next-line prefer-promise-reject-errors
             reject({ item: { barcode: <FormattedMessage id="ui-requests.errors.onlyCheckedOutForRecall" /> } });
@@ -501,6 +499,7 @@ class RequestForm extends React.Component {
                           aria-label={intl.formatMessage({ id: 'ui-requests.requestMeta.expirationDate' })}
                           backendDateStandard="YYYY-MM-DD"
                           component={Datepicker}
+                          dateFormat="YYYY-MM-DD"
                         />
                       </Col>
                       { isEditForm && requestMeta.status === 'Open - Awaiting pickup' &&
@@ -511,6 +510,7 @@ class RequestForm extends React.Component {
                             aria-label={intl.formatMessage({ id: 'ui-requests.requestMeta.holdShelfExpirationDate' })}
                             backendDateStandard="YYYY-MM-DD"
                             component={Datepicker}
+                            dateFormat="YYYY-MM-DD"
                           />
                         </Col>
                       }
@@ -523,7 +523,7 @@ class RequestForm extends React.Component {
                     { isEditForm &&
                       <Row>
                         <Col xs={3}>
-                          <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.queuePosition' })} value="-" />
+                          <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.queuePosition' })} value={_.get(requestMeta, ['position'], '')} />
                         </Col>
                       </Row>
                     }
