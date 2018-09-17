@@ -10,6 +10,7 @@ import Layer from '@folio/stripes-components/lib/Layer';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import IconButton from '@folio/stripes-components/lib/IconButton';
+import Icon from '@folio/stripes-components/lib/Icon';
 import craftLayerUrl from '@folio/stripes-components/util/craftLayerUrl';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import ViewMetaData from '@folio/stripes-smart-components/lib/ViewMetaData';
@@ -292,17 +293,15 @@ class ViewRequest extends React.Component {
         lastMenu={detailMenu}
         actionMenuItems={!isRequestClosed ? [{
           id: 'clickable-edit-request',
-          title: 'Edit Request',
-          label: 'Edit',
+          title: intl.formatMessage({ id: 'ui-requests.actions.editRequest' }),
+          label: <Icon icon="edit">{intl.formatMessage({ id: 'ui-requests.actions.editRequest' })}</Icon>,
           href: this.props.editLink,
           onClick: this.props.onEdit,
-          icon: 'edit',
         }, {
           id: 'clickable-cancel-request',
           title: intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
-          label: intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
+          label: <Icon icon="clearX">{intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' })}</Icon>,
           onClick: () => this.setState({ isCancellingRequest: true }),
-          icon: 'cancel',
         }] : undefined}
         dismissible
         onClose={this.props.onClose}
