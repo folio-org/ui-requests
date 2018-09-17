@@ -289,7 +289,7 @@ class Requests extends React.Component {
       'Position': rq => (rq.position || ''),
       'Proxy': rq => (rq.proxy ? getFullName(rq.proxy) : ''),
       'Request Date': rq => (
-        <AppIcon app="requests">{this.makeLocaleDateTimeString(rq.requestDate)}</AppIcon>
+        <AppIcon size="small" app="requests">{this.makeLocaleDateTimeString(rq.requestDate)}</AppIcon>
       ),
       'Requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
       'Requester Barcode': rq => (rq.requester ? rq.requester.barcode : ''),
