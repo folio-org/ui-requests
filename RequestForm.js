@@ -8,6 +8,7 @@ import { FormattedMessage } from 'react-intl';
 import { Accordion, AccordionSet } from '@folio/stripes-components/lib/Accordion';
 import Button from '@folio/stripes-components/lib/Button';
 import IconButton from '@folio/stripes-components/lib/IconButton';
+import Icon from '@folio/stripes-components/lib/Icon';
 import Datepicker from '@folio/stripes-components/lib/Datepicker';
 import KeyValue from '@folio/stripes-components/lib/KeyValue';
 import Pane from '@folio/stripes-components/lib/Pane';
@@ -453,7 +454,7 @@ class RequestForm extends React.Component {
             actionMenuItems={isEditForm ? [{
               id: 'clickable-cancel-request',
               title: intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
-              label: intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
+              label: <Icon icon="clearX">{intl.formatMessage({ id: 'ui-requests.cancel.cancelRequest' })}</Icon>,
               onClick: () => this.setState({ isCancellingRequest: true }),
               icon: 'cancel',
             }] : undefined}
