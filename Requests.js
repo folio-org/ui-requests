@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import fetch from 'isomorphic-fetch';
 import moment from 'moment-timezone';
+import { injectIntl, intlShape } from 'react-intl';
 import { filters2cql } from '@folio/stripes-components/lib/FilterGroups';
 import SearchAndSort from '@folio/stripes-smart-components/lib/SearchAndSort';
 import exportToCsv from '@folio/stripes-util/lib/exportCsv';
@@ -74,12 +75,12 @@ class Requests extends React.Component {
             */
             const resourceData = args[2];
             const sortMap = {
-              'Title': 'item.title',
-              'Item barcode': 'item.barcode',
-              'Type': 'requestType',
-              'Requester': 'requester.lastName requester.firstName',
-              'Requester Barcode': 'requester.barcode',
-              'Request Date': 'requestDate',
+              'title': 'item.title',
+              'item_barcode': 'item.barcode',
+              'type': 'requestType',
+              'requester': 'requester.lastName requester.firstName',
+              'requester_barcode': 'requester.barcode',
+              'request_date': 'requestDate',
             };
             let cql = `(requester.barcode="${resourceData.query.query}*" or item.title="${resourceData.query.query}*" or item.barcode="${resourceData.query.query}*")`;
             const filterCql = filters2cql(filterConfig, resourceData.query.filters);
@@ -138,6 +139,7 @@ class Requests extends React.Component {
   }
 
   static propTypes = {
+    intl: intlShape,
     mutator: PropTypes.shape({
       records: PropTypes.shape({
         GET: PropTypes.func,
@@ -279,25 +281,25 @@ class Requests extends React.Component {
   }
 
   render() {
-    const { resources, stripes } = this.props;
+    const { resources, stripes, intl } = this.props;
     const patronGroups = resources.patronGroups;// (resources.patronGroups || {}).records || [];
     const addressTypes = (resources.addressTypes && resources.addressTypes.hasLoaded) ? resources.addressTypes : [];
 
     const resultsFormatter = {
-      'Item barcode': rq => (rq.item ? rq.item.barcode : ''),
-      'Position': rq => (rq.position || ''),
-      'Proxy': rq => (rq.proxy ? getFullName(rq.proxy) : ''),
-      'Request Date': rq => this.makeLocaleDateTimeString(rq.requestDate),
-      'Requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
-      'Requester Barcode': rq => (rq.requester ? rq.requester.barcode : ''),
-      'Request status': rq => rq.status,
-      'Type': rq => rq.requestType,
-      'Title': rq => (rq.item ? rq.item.title : ''),
+      'item_barcode': rq => (rq.item ? rq.item.barcode : ''),
+      'position': rq => (rq.position || ''),
+      'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : ''),
+      'request_date': rq => this.makeLocaleDateTimeString(rq.requestDate),
+      'requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
+      'requester_barcode': rq => (rq.requester ? rq.requester.barcode : ''),
+      'request_status': rq => rq.status,
+      'type': rq => rq.requestType,
+      'title': rq => (rq.item ? rq.item.title : ''),
     };
 
     const actionMenuItems = [
       {
-        label: stripes.intl.formatMessage({ id: 'stripes-components.exportToCsv' }),
+        label: intl.formatMessage({ id: 'stripes-components.exportToCsv' }),
         onClick: (() => {
           if (!this.csvExportPending) {
             this.props.mutator.resultCount.replace(this.props.resources.records.other.totalRecords);
@@ -317,8 +319,19 @@ class Requests extends React.Component {
       resultCountIncrement={RESULT_COUNT_INCREMENT}
       viewRecordComponent={ViewRequest}
       editRecordComponent={RequestForm}
-      visibleColumns={['Request date', 'Title', 'Item barcode', 'Type', 'Request status', 'Position', 'Requester', 'Requester barcode', 'Proxy']}
-      columnWidths={{ 'Request date': '10%' }}
+      visibleColumns={['request_date', 'title', 'item_barcode', 'type', 'request_status', 'position', 'requester', 'requester_barcode', 'proxy']}
+      columnMapping={{
+        request_date: intl.formatMessage({ id: 'ui-requests.item.requestDate' }),
+        title: intl.formatMessage({ id: 'ui-requests.item.title' }),
+        item_barcode: intl.formatMessage({ id: 'ui-requests.item.barcode' }),
+        type: intl.formatMessage({ id: 'ui-requests.item.type' }),
+        request_status: intl.formatMessage({ id: 'ui-requests.requestMeta.status' }),
+        position: intl.formatMessage({ id: 'ui-requests.item.position' }),
+        requester: intl.formatMessage({ id: 'ui-requests.item.requester' }),
+        requester_barcode: intl.formatMessage({ id: 'ui-requests.requester.barcode' }),
+        proxy: intl.formatMessage({ id: 'ui-requests.item.proxy' }),
+      }}
+      columnWidths={{ 'request_date': '165px' }}
       resultsFormatter={resultsFormatter}
       newRecordInitialValues={{ requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' }}
       massageNewRecord={this.massageNewRecord}
@@ -344,4 +357,4 @@ class Requests extends React.Component {
   }
 }
 
-export default Requests;
+export default injectIntl(Requests);

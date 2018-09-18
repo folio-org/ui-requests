@@ -29,8 +29,13 @@
   "actions.loading": "Loading...",
   "actions.showNotes": "Show Notes",
 
+  "item.requestDate": "Request Date",
   "item.information": "Item information",
   "item.barcode": "Item barcode",
+  "item.type": "Type",
+  "item.proxy": "Proxy",
+  "item.requester": "Requester",
+  "item.position": "Position",
   "item.scanOrEnterBarcode": "Scan or enter item barcode",
   "item.title": "Title",
   "item.contributor": "Contributor",
