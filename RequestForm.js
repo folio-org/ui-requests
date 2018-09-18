@@ -561,7 +561,8 @@ class RequestForm extends React.Component {
                               fullWidth
                               onClick={this.onItemClick}
                               disabled={submitting}
-                            >Enter
+                            >
+                              Enter
                             </Button>
                           </Col>
                         </Row>
@@ -625,7 +626,8 @@ class RequestForm extends React.Component {
                               fullWidth
                               onClick={this.onUserClick}
                               disabled={submitting}
-                            >Enter
+                            >
+                              Enter
                             </Button>
                           </Col>
                         </Row>
@@ -663,7 +665,11 @@ class RequestForm extends React.Component {
             intl={intl}
           />
 
-          <br /><br /><br /><br /><br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
         </Paneset>
       </form>
     );

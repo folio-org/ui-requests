@@ -98,8 +98,9 @@ class CancelRequestDialog extends React.Component {
 
   onChangeReason = (e) => {
     const value = e.target.value;
-    const reason = this.state.reasons.find(r => r.value === value);
-    this.setState({ reason });
+    this.setState(({ reasons }) => ({
+      reason: reasons.find(r => r.value === value)
+    }));
   }
 
   render() {
