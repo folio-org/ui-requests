@@ -1,6 +1,11 @@
 # Change history for ui-requests
 
+## 1.3.0 (IN PROGRESS)
+
+* Update `stripes-form` dependency to v1.0.0.
+
 ## 1.2.0 (https://github.com/folio-org/ui-requests/tree/v1.2.0) (2018-09-10)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.1.0...v1.2.0)
 
 * Refactor code to use `<SearchAndSort>` component. Completes UIREQ-49.
 * Include clear-filter handlers. Refs STRIPES-495.
