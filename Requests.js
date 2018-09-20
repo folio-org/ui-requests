@@ -206,7 +206,10 @@ class Requests extends React.Component {
       const recordsLoaded = this.props.resources.records.records;
       const numTotalRecords = this.props.resources.records.other.totalRecords;
       if (recordsLoaded.length === numTotalRecords) {
-        exportToCsv(recordsLoaded, ['id']);
+        exportToCsv(recordsLoaded, {
+          excludeFields: ['id'],
+          explicitlyIncludeFields: ['proxy.firstName', 'proxy.lastName', 'proxy.barcode']
+        });
         this.csvExportPending = false;
       }
     }
