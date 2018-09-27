@@ -10,7 +10,7 @@ import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
 import { requestTypes, fulfilmentTypes } from './constants';
 import { getFullName } from './utils';
-import packageInfo from './package';
+import packageInfo from '../package';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
