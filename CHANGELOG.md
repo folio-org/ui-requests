@@ -4,6 +4,7 @@
 
 * Add alternate dependency `inventory` 7.0. Completes UIREQ-115
 * Update `stripes-form` dependency to v1.0.0.
+* Fix case-sensitive filter tests. Fixes UIREQ-119.
 
 ## 1.2.0 (https://github.com/folio-org/ui-requests/tree/v1.2.0) (2018-09-10)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.1.0...v1.2.0)

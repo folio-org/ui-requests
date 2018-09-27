@@ -22,9 +22,9 @@ module.exports.test = function uiTest(uiTestCtx) {
       });
       it('should find hit count with no filters applied ', (done) => {
         nightmare
-          .wait('p[title*="Records found"]:not([title^="0 "]')
+          .wait('p[title*="records found"]:not([title^="0 "]')
           .evaluate(() => {
-            let count = document.querySelector('p[title*="Records found"]').title;
+            let count = document.querySelector('p[title*="records found"]').title;
             count = count.replace(/^(\d+).+/, '$1');
             return count;
           })
@@ -37,17 +37,16 @@ module.exports.test = function uiTest(uiTestCtx) {
       requestTypes.forEach((filter) => {
         it(`should click ${filter} and change hit count`, (done) => {
           nightmare
+            .wait('#input-request-search')
+            .type('#input-request-search', 0)
+            .wait('#clickable-reset-all')
+            .click('#clickable-reset-all')
+            .wait(`#clickable-filter-requestType-${filter}`)
             .click(`#clickable-filter-requestType-${filter}`)
-            .wait(`p[title*="Records found"]:not([title^="${hitCount} "]`)
-            /* .evaluate((hc) => {
-              let count = document.querySelector('p[title*="Records found"]').title;
-              count = count.replace(/^(\d+).+/, '$1');
-              if (count === hc) {
-                throw new Error(`Filtered hit count (${count}) equals total count (${hc})`);
-              }
-            }, hitCount) */
+            .wait('#clickable-reset-all')
+            .wait(`p[title*="records found"]:not([title^="${hitCount} "]`)
             .click(`#clickable-filter-requestType-${filter}`)
-            .wait(`p[title="${hitCount} Records found"]`)
+            .wait(`p[title="${hitCount} records found"]`)
             .then(done)
             .catch(done);
         });
