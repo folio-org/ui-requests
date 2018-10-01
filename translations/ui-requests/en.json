@@ -27,7 +27,6 @@
   "actions.selectAddressType": "Select address type",
   "actions.selectPickupLoc": "Select pickup location",
   "actions.loading": "Loading...",
-  "actions.showNotes": "Show Notes",
 
   "item.information": "Item information",
   "item.barcode": "Item barcode",

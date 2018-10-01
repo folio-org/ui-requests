@@ -66,7 +66,6 @@ class ViewRequest extends React.Component {
         PUT: PropTypes.func,
       }),
     }).isRequired,
-    notesToggle: PropTypes.func,
     onClose: PropTypes.func.isRequired,
     onCloseEdit: PropTypes.func.isRequired,
     onEdit: PropTypes.func,
@@ -103,8 +102,7 @@ class ViewRequest extends React.Component {
   static defaultProps = {
     editLink: '',
     paneWidth: '50%',
-    onEdit: () => {},
-    notesToggle: () => {},
+    onEdit: () => {}
   }
 
   constructor(props) {
@@ -252,13 +250,6 @@ class ViewRequest extends React.Component {
 
     const detailMenu = (
       <PaneMenu>
-        <IconButton
-          icon="comment"
-          id="clickable-show-notes"
-          style={{ visibility: !request ? 'hidden' : 'visible' }}
-          onClick={this.props.notesToggle}
-          title={intl.formatMessage({ id: 'ui-requests.actions.showNotes' })}
-        />
         {!isRequestClosed &&
           <IconButton
             icon="edit"
