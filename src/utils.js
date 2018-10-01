@@ -29,7 +29,11 @@ export function userHighlightBox(title, name, id, barcode) {
             {title}
           </Headline>
           <div>
-            {`${recordLink} Barcode: ${barcodeLink}`}
+            {recordLink}
+            {' '}
+            Barcode:
+            {' '}
+            {barcodeLink}
           </div>
         </div>
       </Col>
