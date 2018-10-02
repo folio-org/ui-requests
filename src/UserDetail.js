@@ -2,12 +2,8 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import KeyValue from '@folio/stripes-components/lib/KeyValue';
-import ProxyManager from '@folio/stripes-smart-components/lib/ProxyManager';
-import Select from '@folio/stripes-components/lib/Select';
-
+import { Col, KeyValue, Row, Select } from '@folio/stripes/components';
+import { ProxyManager } from '@folio/stripes/smart-components';
 import { getFullName, userHighlightBox } from './utils';
 
 class UserDetail extends React.Component {

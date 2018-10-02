@@ -3,12 +3,7 @@ import PropTypes from 'prop-types';
 import { get } from 'lodash';
 
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
-import Button from '@folio/stripes-components/lib/Button';
-// import Checkbox from '@folio/stripes-components/lib/Checkbox';
-import Layout from '@folio/stripes-components/lib/Layout';
-import Modal from '@folio/stripes-components/lib/Modal';
-import Select from '@folio/stripes-components/lib/Select';
-import TextArea from '@folio/stripes-components/lib/TextArea';
+import { Button, Layout, Modal, Select, TextArea } from '@folio/stripes/components';
 
 class CancelRequestDialog extends React.Component {
   static manifest = {
