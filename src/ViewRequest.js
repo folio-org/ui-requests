@@ -10,7 +10,6 @@ import Layer from '@folio/stripes-components/lib/Layer';
 import Pane from '@folio/stripes-components/lib/Pane';
 import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
 import IconButton from '@folio/stripes-components/lib/IconButton';
-import craftLayerUrl from '@folio/stripes-components/util/craftLayerUrl';
 import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import ViewMetaData from '@folio/stripes-smart-components/lib/ViewMetaData';
 
@@ -120,7 +119,7 @@ class ViewRequest extends React.Component {
     this.cViewMetaData = props.stripes.connect(ViewMetaData);
     this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
     this.onToggleSection = this.onToggleSection.bind(this);
-    this.craftLayerUrl = craftLayerUrl.bind(this);
+    this.craftLayerUrl = this.craftLayerUrl.bind(this);
     this.cancelRequest = this.cancelRequest.bind(this);
     this.update = this.update.bind(this);
     this.formatDate = this.props.stripes.formatDate;
@@ -207,6 +206,11 @@ class ViewRequest extends React.Component {
       newState.accordions[id] = !curState.accordions[id];
       return newState;
     });
+  }
+
+  craftLayerUrl(mode) {
+    const url = this.props.location.pathname + this.props.location.search;
+    return _.includes(url, '?') ? `${url}&layer=${mode}` : `${url}?layer=${mode}`;
   }
 
   render() {
