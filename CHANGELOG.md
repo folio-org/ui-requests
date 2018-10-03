@@ -1,12 +1,14 @@
 # Change history for ui-requests
 
-## 1.3.0 (IN PROGRESS)
+## 1.3.0 (https://github.com/folio-org/ui-requests/tree/v1.3.0) (2018-10-03)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.2.0...v1.3.0)
 
 * Add alternate dependency `inventory` 7.0. Completes UIREQ-115
 * Update `stripes-form` dependency to v1.0.0.
 * Fix case-sensitive filter tests. Fixes UIREQ-119.
 * Remove notes helper app
 * Copy `craftLayerUrl()` from `stripes-components`
+* Use `stripes` 1.0 framework
 
 ## 1.2.0 (https://github.com/folio-org/ui-requests/tree/v1.2.0) (2018-09-10)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.1.0...v1.2.0)
