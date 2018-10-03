@@ -3,15 +3,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 
-import TitleManager from '@folio/stripes-core/src/components/TitleManager';
-import { Accordion, AccordionSet } from '@folio/stripes-components/lib/Accordion';
-import KeyValue from '@folio/stripes-components/lib/KeyValue';
-import Layer from '@folio/stripes-components/lib/Layer';
-import Pane from '@folio/stripes-components/lib/Pane';
-import PaneMenu from '@folio/stripes-components/lib/PaneMenu';
-import IconButton from '@folio/stripes-components/lib/IconButton';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import ViewMetaData from '@folio/stripes-smart-components/lib/ViewMetaData';
+import { TitleManager } from '@folio/stripes/core';
+import {
+  Accordion,
+  AccordionSet,
+  Col,
+  IconButton,
+  KeyValue,
+  Layer,
+  Pane,
+  PaneMenu,
+  Row
+} from '@folio/stripes/components';
+import { ViewMetaData } from '@folio/stripes/smart-components';
 
 import CancelRequestDialog from './CancelRequestDialog';
 import ItemDetail from './ItemDetail';

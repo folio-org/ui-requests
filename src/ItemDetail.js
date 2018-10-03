@@ -3,10 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
-
-
-import KeyValue from '@folio/stripes-components/lib/KeyValue';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
+import { Col, KeyValue, Row } from '@folio/stripes/components';
 
 const ItemDetail = ({ item, instance, holding, dateFormatter, loan, requestCount, intl }) => {
   if (!item.barcode) { return <div>{intl.formatMessage({ id: 'ui-requests.actions.loading' })}</div>; }
