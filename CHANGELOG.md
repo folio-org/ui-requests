@@ -6,6 +6,7 @@
 * Update `stripes-form` dependency to v1.0.0.
 * Fix case-sensitive filter tests. Fixes UIREQ-119.
 * Remove notes helper app
+* Copy `craftLayerUrl()` from `stripes-components`
 
 ## 1.2.0 (https://github.com/folio-org/ui-requests/tree/v1.2.0) (2018-09-10)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.1.0...v1.2.0)
