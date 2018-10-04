@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import queryString from 'query-string';
 
 import { TitleManager } from '@folio/stripes/core';
+import { Link } from 'react-router-dom';
 import {
   Accordion,
   AccordionSet,
@@ -255,6 +256,8 @@ class ViewRequest extends React.Component {
     const requestStatus = _.get(request, ['requestMeta', 'status'], '-');
     // TODO: Internationalize this
     const isRequestClosed = requestStatus.startsWith('Closed');
+    const queuePosition = _.get(request, ['requestMeta', 'position'], '-');
+    const positionLink = request ? <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup?&query=${request.item.barcode}&sort=Request%20Date`}>{queuePosition}</Link> : '-';
 
     const detailMenu = (
       <PaneMenu>
@@ -334,7 +337,7 @@ class ViewRequest extends React.Component {
             </Row>
             <Row>
               <Col xs={3}>
-                <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.queuePosition' })} value={_.get(request, ['requestMeta', 'position'], '-')} />
+                <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.queuePosition' })} value={positionLink} />
               </Col>
             </Row>
           </Accordion>
