@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import fetch from 'isomorphic-fetch';
 import moment from 'moment-timezone';
-import { FilterGroups } from '@folio/stripes/components';
+import { filters2cql } from '@folio/stripes/components';
 import { SearchAndSort } from '@folio/stripes/smart-components';
 import { exportToCsv } from '@folio/stripes/util';
 
@@ -11,8 +11,6 @@ import RequestForm from './RequestForm';
 import { requestTypes, fulfilmentTypes } from './constants';
 import { getFullName } from './utils';
 import packageInfo from '../package';
-
-const { filters2cql } = FilterGroups;
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
