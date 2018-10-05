@@ -1,5 +1,10 @@
 # Change history for ui-requests
 
+## 1.4.1 (https://github.com/folio-org/ui-requests/tree/v1.4.1) (2018-10-05)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.4.0...v1.4.1)
+
+* Fix `exportCsv` import
+
 ## 1.4.0 (https://github.com/folio-org/ui-requests/tree/v1.4.0) (2018-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.3.0...v1.4.0)
 
