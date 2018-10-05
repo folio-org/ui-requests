@@ -4,7 +4,7 @@ import fetch from 'isomorphic-fetch';
 import moment from 'moment-timezone';
 import { filters2cql } from '@folio/stripes/components';
 import { SearchAndSort } from '@folio/stripes/smart-components';
-import { exportToCsv } from '@folio/stripes/util';
+import { exportCsv } from '@folio/stripes/util';
 
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
@@ -206,7 +206,7 @@ class Requests extends React.Component {
       const recordsLoaded = this.props.resources.records.records;
       const numTotalRecords = this.props.resources.records.other.totalRecords;
       if (recordsLoaded.length === numTotalRecords) {
-        exportToCsv(recordsLoaded, {
+        exportCsv(recordsLoaded, {
           excludeFields: ['id'],
           explicitlyIncludeFields: ['proxy.firstName', 'proxy.lastName', 'proxy.barcode']
         });
