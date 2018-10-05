@@ -1,5 +1,11 @@
 # Change history for ui-requests
 
+## 1.4.0 (https://github.com/folio-org/ui-requests/tree/v1.4.0) (2018-10-05)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.3.0...v1.4.0)
+
+* Link to request queue from detailed view, refs UIREQ-122
+* Fix filters2cql import
+
 ## 1.3.0 (https://github.com/folio-org/ui-requests/tree/v1.3.0) (2018-10-03)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.2.0...v1.3.0)
 
