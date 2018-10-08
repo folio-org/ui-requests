@@ -257,7 +257,7 @@ class ViewRequest extends React.Component {
     // TODO: Internationalize this
     const isRequestClosed = requestStatus.startsWith('Closed');
     const queuePosition = _.get(request, ['requestMeta', 'position'], '-');
-    const positionLink = request ? <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup?&query=${request.item.barcode}&sort=Request%20Date`}>{queuePosition}</Link> : '-';
+    const positionLink = request ? <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${request.item.barcode}&sort=Request%20Date`}>{queuePosition}</Link> : '-';
 
     const detailMenu = (
       <PaneMenu>
