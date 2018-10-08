@@ -257,7 +257,15 @@ class ViewRequest extends React.Component {
     // TODO: Internationalize this
     const isRequestClosed = requestStatus.startsWith('Closed');
     const queuePosition = _.get(request, ['requestMeta', 'position'], '-');
-    const positionLink = request ? <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${request.item.barcode}&sort=Request%20Date`}>{queuePosition}</Link> : '-';
+    const positionLink = request ?
+      <div>
+        <span>
+          {queuePosition}
+        </span>
+        <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${request.item.barcode}&sort=Request%20Date`}>
+          {intl.formatMessage({ id: 'ui-requests.actions.viewQueuePosition' })}
+        </Link>
+      </div> : '-';
 
     const detailMenu = (
       <PaneMenu>
@@ -336,7 +344,7 @@ class ViewRequest extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col xs={3}>
+              <Col xs={4}>
                 <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.queuePosition' })} value={positionLink} />
               </Col>
             </Row>

@@ -27,6 +27,7 @@
   "actions.selectAddressType": "Select address type",
   "actions.selectPickupLoc": "Select pickup location",
   "actions.loading": "Loading...",
+  "actions.viewQueuePosition": "view position in queue",
 
   "item.information": "Item information",
   "item.barcode": "Item barcode",
@@ -40,6 +41,7 @@
   "item.status": "Item status",
   "item.dueDate": "Current due date",
   "item.numRequests": "Requests",
+  "item.requestsOnItem": "Requests on item",
 
   "requester.information": "Requester information",
   "requester.name": "Name",

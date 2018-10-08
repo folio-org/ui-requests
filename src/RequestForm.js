@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import queryString from 'query-string';
 import { FormattedMessage } from 'react-intl';
-
+import { Link } from 'react-router-dom';
 import { Pluggable } from '@folio/stripes/core';
 import {
   Accordion,
@@ -441,6 +441,17 @@ class RequestForm extends React.Component {
       barcode: intl.formatMessage({ id: 'ui-requests.barcode' }),
     };
 
+    const queuePosition = _.get(requestMeta, ['position'], '');
+    const positionLink = requestMeta ?
+      <div>
+        <span>
+          {queuePosition}
+        </span>
+        <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${requestMeta.item.barcode}&sort=Request%20Date`}>
+          {intl.formatMessage({ id: 'ui-requests.actions.viewQueuePosition' })}
+        </Link>
+      </div> : '-';
+
     return (
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
@@ -522,7 +533,7 @@ class RequestForm extends React.Component {
                     { isEditForm &&
                       <Row>
                         <Col xs={3}>
-                          <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.queuePosition' })} value={_.get(requestMeta, ['position'], '')} />
+                          <KeyValue label={intl.formatMessage({ id: 'ui-requests.requestMeta.queuePosition' })} value={positionLink} />
                         </Col>
                       </Row>
                     }

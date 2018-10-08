@@ -11,6 +11,7 @@ const ItemDetail = ({ item, instance, holding, dateFormatter, loan, requestCount
   const recordLink = item.barcode ? <Link to={`/inventory/view/${item.instanceId}/${item.holdingsRecordId}/${item.id}`}>{item.barcode}</Link> : '';
   const status = _.get(item, ['status', 'name'], '');
   const contributor = _.get(instance, ['contributors', '0', 'name'], '-');
+  const positionLink = item ? <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${item.barcode}&sort=Request%20Date`}>{requestCount}</Link> : '-';
 
   return (
     <div>
@@ -50,7 +51,7 @@ const ItemDetail = ({ item, instance, holding, dateFormatter, loan, requestCount
           <KeyValue label={intl.formatMessage({ id: 'ui-requests.item.dueDate' })} value={dateFormatter(_.get(loan, ['dueDate'], '')) || '-'} />
         </Col>
         <Col xs={3}>
-          <KeyValue label={intl.formatMessage({ id: 'ui-requests.item.numRequests' })} value={requestCount} />
+          <KeyValue label={intl.formatMessage({ id: 'ui-requests.item.requestsOnItem' })} value={positionLink} />
         </Col>
       </Row>
     </div>
