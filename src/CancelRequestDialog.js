@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
+import { injectIntl, intlShape } from 'react-intl';
 
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import { Button, Layout, Modal, Select, TextArea } from '@folio/stripes/components';
@@ -15,10 +16,7 @@ class CancelRequestDialog extends React.Component {
   }
 
   static propTypes = {
-    intl: PropTypes.shape({
-      formatDate: PropTypes.func,
-      formatMessage: PropTypes.func.isRequired,
-    }),
+    intl: intlShape,
     onCancelRequest: PropTypes.func.isRequired,
     onClose: PropTypes.func,
     open: PropTypes.bool,
@@ -100,9 +98,8 @@ class CancelRequestDialog extends React.Component {
   }
 
   render() {
-    const { request, intl } = this.props;
+    const { request, intl: { formatMessage } } = this.props;
     const { reason, reasons, /* notify, */ additionalInfo } = this.state;
-    const { formatMessage } = intl;
 
     if (!request) return null;
 
@@ -163,4 +160,4 @@ class CancelRequestDialog extends React.Component {
   }
 }
 
-export default CancelRequestDialog;
+export default injectIntl(CancelRequestDialog);

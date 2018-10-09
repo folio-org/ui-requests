@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { injectIntl, intlShape } from 'react-intl';
 import { Field } from 'redux-form';
 import { Col, KeyValue, Row, Select } from '@folio/stripes/components';
 import { ProxyManager } from '@folio/stripes/smart-components';
@@ -23,6 +24,7 @@ class UserDetail extends React.Component {
     stripes: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     selectedDelivery: PropTypes.bool,
+    intl: intlShape
   };
 
   static defaultProps = {
@@ -46,6 +48,7 @@ class UserDetail extends React.Component {
 
   render() {
     const {
+      intl: { formatMessage },
       user,
       proxy,
       requestMeta,
@@ -63,7 +66,6 @@ class UserDetail extends React.Component {
     const id = user.id;
     const name = getFullName(user);
     const barcode = user.barcode;
-    const intl = this.props.stripes.intl;
 
     let proxyName;
     let proxyBarcode;
@@ -73,20 +75,20 @@ class UserDetail extends React.Component {
       proxyBarcode = _.get(proxy, ['barcode'], '-');
       proxyId = proxy.id || requestMeta.proxyUserId;
     }
-    const proxySection = proxyId ? userHighlightBox(intl.formatMessage({ id: 'ui-requests.requester.proxy' }), proxyName, proxyId, proxyBarcode) : '';
+    const proxySection = proxyId ? userHighlightBox(formatMessage({ id: 'ui-requests.requester.proxy' }), proxyName, proxyId, proxyBarcode) : '';
 
     return (
       <div>
-        {userHighlightBox(intl.formatMessage({ id: 'ui-requests.requester.requester' }), name, id, barcode)}
+        {userHighlightBox(formatMessage({ id: 'ui-requests.requester.requester' }), name, id, barcode)}
         <Row>
           <Col xs={4}>
-            <KeyValue label={intl.formatMessage({ id: 'ui-requests.requester.patronGroup' })} value={patronGroup || '-'} />
+            <KeyValue label={formatMessage({ id: 'ui-requests.requester.patronGroup' })} value={patronGroup || '-'} />
           </Col>
           <Col xs={4}>
             { newUser &&
               <Field
                 name="fulfilmentPreference"
-                label={intl.formatMessage({ id: 'ui-requests.requester.fulfilmentPref' })}
+                label={formatMessage({ id: 'ui-requests.requester.fulfilmentPref' })}
                 component={Select}
                 fullWidth
                 dataOptions={fulfilmentTypeOptions}
@@ -94,35 +96,35 @@ class UserDetail extends React.Component {
               />
             }
             { !newUser &&
-              <KeyValue label={intl.formatMessage({ id: 'ui-requests.requester.fulfilmentPref' })} value={_.get(requestMeta, ['fulfilmentPreference'], '-')} />
+              <KeyValue label={formatMessage({ id: 'ui-requests.requester.fulfilmentPref' })} value={_.get(requestMeta, ['fulfilmentPreference'], '-')} />
             }
           </Col>
           <Col xs={4}>
             { newUser && selectedDelivery && deliveryLocations &&
               <Field
                 name="deliveryAddressTypeId"
-                label={intl.formatMessage({ id: 'ui-requests.requester.deliveryAddress' })}
+                label={formatMessage({ id: 'ui-requests.requester.deliveryAddress' })}
                 component={Select}
                 fullWidth
-                dataOptions={[{ label: intl.formatMessage({ id: 'ui-requests.actions.selectAddressType' }), value: '' }, ...deliveryLocations]}
+                dataOptions={[{ label: formatMessage({ id: 'ui-requests.actions.selectAddressType' }), value: '' }, ...deliveryLocations]}
                 onChange={onChangeAddress}
               />
             }
             { newUser && !selectedDelivery &&
               <Field
                 name="pickupLocationId"
-                label={intl.formatMessage({ id: 'ui-requests.requester.pickupLocation' })}
+                label={formatMessage({ id: 'ui-requests.requester.pickupLocation' })}
                 component={Select}
                 fullWidth
-                dataOptions={[{ label: intl.formatMessage({ id: 'ui-requests.actions.selectPickupLoc' }), value: '' }]}
+                dataOptions={[{ label: formatMessage({ id: 'ui-requests.actions.selectPickupLoc' }), value: '' }]}
                 onChange={onChangeAddress}
               />
             }
             { !newUser && selectedDelivery &&
-              <KeyValue label={intl.formatMessage({ id: 'ui-requests.requester.deliveryAddress' })} value={deliveryAddress || '-'} />
+              <KeyValue label={formatMessage({ id: 'ui-requests.requester.deliveryAddress' })} value={deliveryAddress || '-'} />
             }
             { !newUser && !selectedDelivery &&
-              <KeyValue label={intl.formatMessage({ id: 'ui-requests.requester.pickupLocation' })} value={pickupLocation || '-'} />
+              <KeyValue label={formatMessage({ id: 'ui-requests.requester.pickupLocation' })} value={pickupLocation || '-'} />
             }
           </Col>
         </Row>
@@ -145,4 +147,4 @@ class UserDetail extends React.Component {
   }
 }
 
-export default UserDetail;
+export default injectIntl(UserDetail);

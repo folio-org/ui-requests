@@ -37,7 +37,3 @@ export function userHighlightBox(title, name, id, barcode) {
     </Row>
   );
 }
-
-export function translate(message, stripes) {
-  return stripes.intl.formatMessage({ id: `ui-requests.${message}` });
-}
