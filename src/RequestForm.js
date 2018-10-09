@@ -446,9 +446,11 @@ class RequestForm extends React.Component {
       <div>
         <span>
           {queuePosition}
+          &nbsp;
+          &nbsp;
         </span>
         <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${requestMeta.item.barcode}&sort=Request%20Date`}>
-          {intl.formatMessage({ id: 'ui-requests.actions.viewQueuePosition' })}
+          {intl.formatMessage({ id: 'ui-requests.actions.viewRequestsInQueue' })}
         </Link>
       </div> : '-';
 
