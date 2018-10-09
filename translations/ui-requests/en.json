@@ -27,7 +27,7 @@
   "actions.selectAddressType": "Select address type",
   "actions.selectPickupLoc": "Select pickup location",
   "actions.loading": "Loading...",
-  "actions.viewQueuePosition": "view position in queue",
+  "actions.viewRequestsInQueue": "view requests in queue",
 
   "item.information": "Item information",
   "item.barcode": "Item barcode",
