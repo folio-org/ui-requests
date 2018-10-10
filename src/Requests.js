@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import fetch from 'isomorphic-fetch';
 import moment from 'moment-timezone';
+import { FormattedTime, injectIntl, intlShape } from 'react-intl';
 import { filters2cql } from '@folio/stripes/components';
 import { SearchAndSort } from '@folio/stripes/smart-components';
 import { exportCsv } from '@folio/stripes/util';
@@ -138,6 +139,7 @@ class Requests extends React.Component {
   }
 
   static propTypes = {
+    intl: intlShape,
     mutator: PropTypes.shape({
       records: PropTypes.shape({
         GET: PropTypes.func,
@@ -167,8 +169,6 @@ class Requests extends React.Component {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
       formatDate: PropTypes.func.isRequired,
-      formatDateTime: PropTypes.func.isRequired,
-      locale: PropTypes.string,
       logger: PropTypes.shape({
         log: PropTypes.func.isRequired,
       }).isRequired,
@@ -179,7 +179,6 @@ class Requests extends React.Component {
       store: PropTypes.shape({
         getState: PropTypes.func.isRequired,
       }),
-      timezone: PropTypes.string.isRequired,
     }).isRequired,
   }
 
@@ -188,8 +187,6 @@ class Requests extends React.Component {
 
     this.okapiUrl = props.stripes.okapi.url;
     this.formatDate = props.stripes.formatDate;
-    this.formatDateTime = props.stripes.formatDateTime;
-    this.timezone = props.stripes.timezone;
     this.httpHeaders = Object.assign({}, {
       'X-Okapi-Tenant': props.stripes.okapi.tenant,
       'X-Okapi-Token': props.stripes.store.getState().okapi.token,
@@ -259,30 +256,15 @@ class Requests extends React.Component {
   }
 
   massageNewRecord = (requestData) => {
-    const isoDate = moment.tz(this.timezone).format();
+    const { intl: { timeZone } } = this.props;
+    const isoDate = moment.tz(timeZone).format();
     Object.assign(requestData, { requestDate: isoDate });
   }
 
   create = data => this.props.mutator.records.POST(data).then(() => this.props.mutator.query.update({ layer: null }));
 
-  // Helper function to form a locale-aware date for display
-  makeLocaleDateString = (dateString) => {
-    if (dateString === '') {
-      return '';
-    }
-    return this.formatDate(dateString);
-  };
-
-  makeLocaleDateTimeString = (dateString) => {
-    if (dateString === '') {
-      return '';
-    }
-
-    return this.formatDateTime(dateString);
-  }
-
   render() {
-    const { resources, stripes } = this.props;
+    const { resources, stripes, intl: { formatMessage } } = this.props;
     const patronGroups = resources.patronGroups;// (resources.patronGroups || {}).records || [];
     const addressTypes = (resources.addressTypes && resources.addressTypes.hasLoaded) ? resources.addressTypes : [];
 
@@ -290,7 +272,7 @@ class Requests extends React.Component {
       'Item barcode': rq => (rq.item ? rq.item.barcode : ''),
       'Position': rq => (rq.position || ''),
       'Proxy': rq => (rq.proxy ? getFullName(rq.proxy) : ''),
-      'Request Date': rq => this.makeLocaleDateTimeString(rq.requestDate),
+      'Request Date': rq => <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />,
       'Requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
       'Requester Barcode': rq => (rq.requester ? rq.requester.barcode : ''),
       'Request status': rq => rq.status,
@@ -300,7 +282,7 @@ class Requests extends React.Component {
 
     const actionMenuItems = [
       {
-        label: stripes.intl.formatMessage({ id: 'stripes-components.exportToCsv' }),
+        label: formatMessage({ id: 'stripes-components.exportToCsv' }),
         onClick: (() => {
           if (!this.csvExportPending) {
             this.props.mutator.resultCount.replace(this.props.resources.records.other.totalRecords);
@@ -338,7 +320,6 @@ class Requests extends React.Component {
           fulfilmentTypes,
         },
         patronGroups,
-        dateFormatter: this.makeLocaleDateString,
         uniquenessValidator: this.props.mutator,
       }}
       viewRecordPerms="module.requests.enabled"
@@ -347,4 +328,4 @@ class Requests extends React.Component {
   }
 }
 
-export default Requests;
+export default injectIntl(Requests);
