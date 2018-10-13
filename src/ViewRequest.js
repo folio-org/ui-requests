@@ -319,7 +319,6 @@ class ViewRequest extends React.Component {
         <TitleManager record={_.get(request, ['item', 'title'])} />
         <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
           <Accordion
-            open
             id="request-info"
             label={formatMessage({ id: 'ui-requests.requestMeta.information' })}
           >
@@ -349,7 +348,6 @@ class ViewRequest extends React.Component {
             </Row>
           </Accordion>
           <Accordion
-            open
             id="item-info"
             label={formatMessage({ id: 'ui-requests.item.information' })}
           >
@@ -362,7 +360,6 @@ class ViewRequest extends React.Component {
             />
           </Accordion>
           <Accordion
-            open
             id="requester-info"
             label={formatMessage({ id: 'ui-requests.requester.information' })}
           >
