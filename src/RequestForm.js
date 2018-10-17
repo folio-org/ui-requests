@@ -39,7 +39,7 @@ import { toUserAddress } from './constants';
  * @see https://redux-form.com/7.3.0/examples/asyncchangevalidation/
  */
 function asyncValidate(values, dispatch, props, blurredField) {
-  if (blurredField === 'item.barcode') {
+  if (blurredField === 'item.barcode' && values.item.barcode !== undefined) {
     return new Promise((resolve, reject) => {
       const uv = props.uniquenessValidator.itemUniquenessValidator;
       const query = `(barcode="${values.item.barcode}")`;
@@ -61,7 +61,7 @@ function asyncValidate(values, dispatch, props, blurredField) {
         }
       });
     });
-  } else if (blurredField === 'requester.barcode') {
+  } else if (blurredField === 'requester.barcode' && values.requester.barcode !== undefined) {
     return new Promise((resolve, reject) => {
       const uv = props.uniquenessValidator.userUniquenessValidator;
       const query = `(barcode="${values.requester.barcode}")`;

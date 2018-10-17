@@ -3,6 +3,7 @@
 ## IN PROGRESS
 
 * Fix bug preventing item view accordions from closing. Fixes UIREQ-123.
+* Fix bug causing barcode validation to misbehave. Fixes UIREQ-127.
 
 
 ## 1.4.1 (https://github.com/folio-org/ui-requests/tree/v1.4.1) (2018-10-05)
