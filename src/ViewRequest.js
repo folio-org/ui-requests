@@ -10,6 +10,7 @@ import {
   Accordion,
   AccordionSet,
   Col,
+  Icon,
   IconButton,
   KeyValue,
   Layer,
@@ -99,7 +100,8 @@ class ViewRequest extends React.Component {
         log: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
-    intl: intlShape
+    intl: intlShape,
+    match: PropTypes.object,
   }
 
   static defaultProps = {
@@ -134,7 +136,6 @@ class ViewRequest extends React.Component {
     if (request && prevRequest && !_.isEqual(request, prevRequest)) {
       return {
         fullRequestDetail: {
-          ...state.fullRequestDetail,
           requestMeta: request,
         }
       };
@@ -155,6 +156,7 @@ class ViewRequest extends React.Component {
     if (this._mounted && prevRQ && currentRQ && currentRQ.hasLoaded) {
       if ((prevRQ.records[0] && prevRQ.records[0].id !== currentRQ.records[0].id) || !(this.state.fullRequestDetail.requestMeta && this.state.fullRequestDetail.requestMeta.id)) {
         const basicRequest = currentRQ.records[0];
+
         this.props.joinRequest(basicRequest).then((newRequest) => {
           this.setState({
             fullRequestDetail: newRequest,
@@ -216,13 +218,24 @@ class ViewRequest extends React.Component {
     return _.includes(url, '?') ? `${url}&layer=${mode}` : `${url}?layer=${mode}`;
   }
 
+  getRequest() {
+    const { resources, match: { params: { id } } } = this.props;
+    const { fullRequestDetail } = this.state;
+    const selRequest = (resources.selectedRequest || {}).records || [];
+
+    if (!id || selRequest.length === 0 || !fullRequestDetail.instance) return null;
+
+    const request = selRequest.find(r => r.id === id);
+    return (request && request.id === fullRequestDetail.requestMeta.id) ? fullRequestDetail : null;
+  }
+
   render() {
     const { location, stripes, intl: { formatMessage } } = this.props;
     const { patronGroups, addressTypes } = this.props.resources;
     const { fullRequestDetail } = this.state;
     const query = location.search ? queryString.parse(location.search) : {};
-    let request;// = (selectedRequest && selectedRequest.hasLoaded) ? selectedRequest.records[0] : null;
 
+    const request = this.getRequest();
     let patronGroup;
 
     // Most of the values needed to populate the view come from the "enhanced" request
@@ -238,8 +251,8 @@ class ViewRequest extends React.Component {
     //  instance: { instance record details },
     //  requestCount: number of requests for the item
     // }
-    if (fullRequestDetail.requestMeta) {
-      request = fullRequestDetail;
+
+    if (request) {
       patronGroup = request.requester.patronGroup;
       if (patronGroups && patronGroups.hasLoaded) {
         const groupRecord = patronGroups.records.find(g => g.id === patronGroup);
@@ -283,6 +296,7 @@ class ViewRequest extends React.Component {
 
     let deliveryAddressDetail;
     let selectedDelivery = false;
+
     if (_.get(request, ['requestMeta', 'fulfilmentPreference'], '') === 'Delivery') {
       selectedDelivery = true;
       const deliveryAddressType = _.get(request, ['requestMeta', 'deliveryAddressTypeId'], null);
@@ -291,10 +305,27 @@ class ViewRequest extends React.Component {
         deliveryAddressDetail = toUserAddress(deliveryLocations[deliveryAddressType]);
       }
     }
+
     const holdShelfExpireDate = (_.get(request, ['requestMeta', 'status'], '') === 'Open - Awaiting pickup') ?
       stripes.formatDate(_.get(request, ['requestMeta', 'holdShelfExpirationDate'], '')) : '-';
 
-    return request ? (
+    if (!request) {
+      return (
+        <Pane
+          defaultWidth={this.props.paneWidth}
+          paneTitle={formatMessage({ id: 'ui-requests.requestMeta.detailLabel' })}
+          lastMenu={detailMenu}
+          dismissible
+          onClose={this.props.onClose}
+        >
+          <div style={{ paddingTop: '1rem' }}>
+            <Icon icon="spinner-ellipsis" width="100px" />
+          </div>
+        </Pane>
+      );
+    }
+
+    return (
       <Pane
         defaultWidth={this.props.paneWidth}
         paneTitle={formatMessage({ id: 'ui-requests.requestMeta.detailLabel' })}
@@ -372,8 +403,6 @@ class ViewRequest extends React.Component {
               selectedDelivery={selectedDelivery}
               deliveryAddress={deliveryAddressDetail}
               pickupLocation=""
-              onSelectProxy={() => {}}
-              onCloseProxy={() => {}}
             />
           </Accordion>
         </AccordionSet>
@@ -399,7 +428,7 @@ class ViewRequest extends React.Component {
           stripes={this.props.stripes}
         />
       </Pane>
-    ) : null;
+    );
   }
 }
 
