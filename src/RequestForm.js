@@ -2,7 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import queryString from 'query-string';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { Pluggable } from '@folio/stripes/core';
@@ -23,7 +22,7 @@ import {
 import stripesForm from '@folio/stripes/form';
 
 import CancelRequestDialog from './CancelRequestDialog';
-import UserDetail from './UserDetail';
+import UserForm from './UserForm';
 import ItemDetail from './ItemDetail';
 import { toUserAddress } from './constants';
 
@@ -364,10 +363,7 @@ class RequestForm extends React.Component {
     }
 
     const { selectedUser } = this.state;
-    const { location } = this.props;
-
     const isEditForm = (item && item.id);
-    const query = location.search ? queryString.parse(location.search) : {};
 
     const addRequestFirstMenu =
       <PaneMenu>
@@ -641,11 +637,10 @@ class RequestForm extends React.Component {
                         </Row>
                       }
                       { this.state.selectedUser &&
-                        <UserDetail
+                        <UserForm
                           user={fullRequest ? fullRequest.requester : this.state.selectedUser}
                           stripes={this.props.stripes}
                           requestMeta={fullRequest ? fullRequest.requestMeta : {}}
-                          newUser={!!query.layer}
                           patronGroup={patronGroupName}
                           selectedDelivery={this.state.selectedDelivery}
                           deliveryAddress={addressDetail}
