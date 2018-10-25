@@ -223,8 +223,7 @@ class ViewRequest extends React.Component {
     const { fullRequestDetail } = this.state;
     const selRequest = (resources.selectedRequest || {}).records || [];
 
-    if (!selRequest || selRequest.length === 0 || !id
-      || !fullRequestDetail.instance) return null;
+    if (!id || selRequest.length === 0 || !fullRequestDetail.instance) return null;
 
     const request = selRequest.find(r => r.id === id);
     return (request && request.id === fullRequestDetail.requestMeta.id) ? fullRequestDetail : null;
