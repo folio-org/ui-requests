@@ -57,5 +57,8 @@
     "cancel.additionalInfoPlaceholderOptional": "Digite mais informações sobre o cancelamento (opcional)",
     "meta.title": "Solicitações de compra",
     "resultCount": "{count, number} {count, plural, one {Registro encontrado} other {Registros encontrados}}",
-    "barcode": "Código de barras"
+    "barcode": "Código de barras",
+    "actions.viewQueuePosition": "ver posição na fila",
+    "item.requestsOnItem": "Solicitações de compra no item",
+    "actions.viewRequestsInQueue": "ver pedidos na fila"
 }

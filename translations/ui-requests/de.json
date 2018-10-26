@@ -57,5 +57,8 @@
     "cancel.additionalInfoPlaceholderOptional": "Enter more information about the cancellation (optional)",
     "meta.title": "Vormerkungen",
     "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
-    "barcode": "Barcode"
+    "barcode": "Barcode",
+    "actions.viewQueuePosition": "view position in queue",
+    "item.requestsOnItem": "Requests on item",
+    "actions.viewRequestsInQueue": "view requests in queue"
 }
