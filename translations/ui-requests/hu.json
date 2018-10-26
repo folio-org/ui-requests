@@ -57,5 +57,8 @@
     "cancel.additionalInfoPlaceholderOptional": "Írjon be további információt a törlésről (opcionális)",
     "meta.title": "Kérések",
     "resultCount": "{count, number} {count, plural, one {rekord található} other {rekordok találhatók}}",
-    "barcode": "Vonalkód"
+    "barcode": "Vonalkód",
+    "actions.viewQueuePosition": "view position in queue",
+    "item.requestsOnItem": "Requests on item",
+    "actions.viewRequestsInQueue": "view requests in queue"
 }
