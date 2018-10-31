@@ -60,5 +60,7 @@
     "barcode": "Código de barras",
     "actions.viewQueuePosition": "ver posição na fila",
     "item.requestsOnItem": "Solicitações de compra no item",
-    "actions.viewRequestsInQueue": "ver pedidos na fila"
+    "actions.viewRequestsInQueue": "ver pedidos na fila",
+    "actions.selectPickupSp": "Select pickup service point",
+    "requester.pickupServicePoint": "Pickup service point"
 }
