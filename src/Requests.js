@@ -122,6 +122,11 @@ class Requests extends React.Component {
       path: 'groups',
       records: 'usergroups',
     },
+    servicePoints: {
+      type: 'okapi',
+      records: 'servicepoints',
+      path: 'service-points?query=(pickupLocation==true)&limit=100',
+    },
     itemUniquenessValidator: {
       type: 'okapi',
       records: 'items',
@@ -265,8 +270,9 @@ class Requests extends React.Component {
 
   render() {
     const { resources, stripes, intl: { formatMessage } } = this.props;
-    const patronGroups = resources.patronGroups;// (resources.patronGroups || {}).records || [];
-    const addressTypes = (resources.addressTypes && resources.addressTypes.hasLoaded) ? resources.addressTypes : [];
+    const patronGroups = (resources.patronGroups || {}).records || [];
+    const addressTypes = (resources.addressTypes || {}).records || [];
+    const servicePoints = (resources.servicePoints || {}).records || [];
 
     const resultsFormatter = {
       'Item barcode': rq => (rq.item ? rq.item.barcode : ''),
@@ -318,6 +324,7 @@ class Requests extends React.Component {
           addressTypes,
           requestTypes,
           fulfilmentTypes,
+          servicePoints
         },
         patronGroups,
         uniquenessValidator: this.props.mutator,

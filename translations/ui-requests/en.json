@@ -26,6 +26,7 @@
   "actions.editRequest": "Edit request",
   "actions.selectAddressType": "Select address type",
   "actions.selectPickupLoc": "Select pickup location",
+  "actions.selectPickupSp": "Select pickup service point",
   "actions.loading": "Loading...",
   "actions.viewRequestsInQueue": "view requests in queue",
 
@@ -54,6 +55,7 @@
   "requester.requester": "Requester",
   "requester.deliveryAddress": "Delivery address",
   "requester.pickupLocation": "Pickup location",
+  "requester.pickupServicePoint": "Pickup service point",
   "requester.patronGroup": "Patron group",
 
   "cancel.cancelRequest": "Cancel request",
