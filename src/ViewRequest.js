@@ -24,7 +24,7 @@ import CancelRequestDialog from './CancelRequestDialog';
 import ItemDetail from './ItemDetail';
 import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
-import { fulfilmentTypes, requestTypes, toUserAddress } from './constants';
+import { toUserAddress } from './constants';
 
 class ViewRequest extends React.Component {
   static manifest = {
@@ -37,16 +37,6 @@ class ViewRequest extends React.Component {
       type: 'okapi',
       path: 'users?query=(id==%{relatedRequesterId})',
     },
-    addressTypes: {
-      type: 'okapi',
-      path: 'addresstypes',
-      records: 'addressTypes',
-    },
-    patronGroups: {
-      type: 'okapi',
-      path: 'groups',
-      records: 'usergroups',
-    },
     createdBy: {
       type: 'okapi',
       records: 'users',
@@ -57,7 +47,7 @@ class ViewRequest extends React.Component {
       records: 'users',
       path: 'users?query=(id==!{metadata.updatedByUserId})',
     },
-  }
+  };
 
   static propTypes = {
     editLink: PropTypes.string,
@@ -74,18 +64,10 @@ class ViewRequest extends React.Component {
     onClose: PropTypes.func.isRequired,
     onCloseEdit: PropTypes.func.isRequired,
     onEdit: PropTypes.func,
+    optionLists: PropTypes.object,
     paneWidth: PropTypes.string,
+    patronGroups: PropTypes.arrayOf(PropTypes.object),
     resources: PropTypes.shape({
-      addressTypes: PropTypes.shape({
-        hasLoaded: PropTypes.bool.isRequired,
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
-      patronGroups: PropTypes.shape({
-        hasLoaded: PropTypes.bool.isRequired,
-        other: PropTypes.shape({
-          totalRecords: PropTypes.number,
-        }),
-      }),
       selectedRequest: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         other: PropTypes.shape({
@@ -154,14 +136,10 @@ class ViewRequest extends React.Component {
     const currentRQ = this.props.resources.selectedRequest;
     // Only update if actually needed (otherwise, this gets called way too often)
     if (this._mounted && prevRQ && currentRQ && currentRQ.hasLoaded) {
-      if ((prevRQ.records[0] && prevRQ.records[0].id !== currentRQ.records[0].id) || !(this.state.fullRequestDetail.requestMeta && this.state.fullRequestDetail.requestMeta.id)) {
+      const requestId = _.get(this.state, ['fullRequestDetail', 'requestMeta', 'id'], '');
+      if ((prevRQ.records[0] && !_.isEqual(prevRQ.records[0], currentRQ.records[0])) || !requestId) {
         const basicRequest = currentRQ.records[0];
-
-        this.props.joinRequest(basicRequest).then((newRequest) => {
-          this.setState({
-            fullRequestDetail: newRequest,
-          });
-        });
+        this.props.joinRequest(basicRequest).then(fullRequestDetail => (this.setState({ fullRequestDetail })));
       }
     }
   }
@@ -229,14 +207,25 @@ class ViewRequest extends React.Component {
     return (request && request.id === fullRequestDetail.requestMeta.id) ? fullRequestDetail : null;
   }
 
-  render() {
-    const { location, stripes, intl: { formatMessage } } = this.props;
-    const { patronGroups, addressTypes } = this.props.resources;
-    const { fullRequestDetail } = this.state;
-    const query = location.search ? queryString.parse(location.search) : {};
+  getPatronGroupName(request) {
+    if (!request) return '';
+    const { patronGroups } = this.props;
+    if (!patronGroups.length) return '';
+    const pgId = request.requester.patronGroup;
+    const patronGroup = patronGroups.find(g => (g.id === pgId));
+    return _.get(patronGroup, ['desc'], '');
+  }
 
-    const request = this.getRequest();
-    let patronGroup;
+  getPickupServicePointName(request) {
+    if (!request) return '';
+    const { optionLists: { servicePoints } } = this.props;
+    const servicePoint = servicePoints.find(sp => (sp.id === request.requestMeta.pickupServicePointId));
+    return _.get(servicePoint, ['name'], '');
+  }
+
+  render() {
+    const { patronGroups, optionLists, location, stripes, intl: { formatMessage } } = this.props;
+    const query = location.search ? queryString.parse(location.search) : {};
 
     // Most of the values needed to populate the view come from the "enhanced" request
     // object, fullRequestDetail, which includes parts of the requester's user record,
@@ -251,18 +240,9 @@ class ViewRequest extends React.Component {
     //  instance: { instance record details },
     //  requestCount: number of requests for the item
     // }
-
-    if (request) {
-      patronGroup = request.requester.patronGroup;
-      if (patronGroups && patronGroups.hasLoaded) {
-        const groupRecord = patronGroups.records.find(g => g.id === patronGroup);
-        patronGroup = groupRecord.group || patronGroup;
-        if (fullRequestDetail.requester) {
-          fullRequestDetail.requester.patronGroup = groupRecord ? groupRecord.id : null;
-        }
-      }
-    }
-
+    const request = this.getRequest();
+    const patronGroupName = this.getPatronGroupName(request);
+    const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = _.get(request, ['requestMeta', 'status'], '-');
     // TODO: Internationalize this
     const isRequestClosed = requestStatus.startsWith('Closed');
@@ -398,11 +378,11 @@ class ViewRequest extends React.Component {
               user={request.requester}
               proxy={request.requestMeta.proxy}
               stripes={this.props.stripes}
-              patronGroup={patronGroup}
+              patronGroup={patronGroupName}
               requestMeta={request.requestMeta}
               selectedDelivery={selectedDelivery}
               deliveryAddress={deliveryAddressDetail}
-              pickupLocation=""
+              pickupServicePoint={getPickupServicePointName}
             />
           </Accordion>
         </AccordionSet>
@@ -410,13 +390,13 @@ class ViewRequest extends React.Component {
         <Layer isOpen={query.layer ? query.layer === 'edit' : false} label={formatMessage({ id: 'ui-requests.actions.editRequestLink' })}>
           <RequestForm
             stripes={stripes}
-            initialValues={fullRequestDetail.requestMeta}
-            fullRequest={fullRequestDetail}
+            initialValues={request.requestMeta}
+            fullRequest={request}
             metadataDisplay={this.cViewMetaData}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.props.onCloseEdit}
             onCancelRequest={this.cancelRequest}
-            optionLists={{ requestTypes, fulfilmentTypes, addressTypes }}
+            optionLists={optionLists}
             patronGroups={patronGroups}
           />
         </Layer>

@@ -22,6 +22,7 @@ class UserForm extends React.Component {
     stripes: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     selectedDelivery: PropTypes.bool,
+    servicePoints: PropTypes.arrayOf(PropTypes.object),
     intl: intlShape
   };
 
@@ -54,6 +55,7 @@ class UserForm extends React.Component {
       fulfilmentTypeOptions,
       onChangeAddress,
       onChangeFulfilment,
+      servicePoints,
     } = this.props;
 
     const id = user.id;
@@ -70,6 +72,11 @@ class UserForm extends React.Component {
     }
 
     const proxySection = proxyId ? userHighlightBox(formatMessage({ id: 'ui-requests.requester.proxy' }), proxyName, proxyId, proxyBarcode) : '';
+    const servicePointOptions = [{ label: formatMessage({ id: 'ui-requests.actions.selectPickupSp' }), value: '' }];
+
+    if (servicePoints) {
+      servicePointOptions.push(...servicePoints.map(sp => ({ value: sp.id, label: sp.name })));
+    }
 
     return (
       <div>
@@ -101,12 +108,11 @@ class UserForm extends React.Component {
             }
             { !selectedDelivery &&
               <Field
-                name="pickupLocationId"
-                label={formatMessage({ id: 'ui-requests.requester.pickupLocation' })}
+                name="pickupServicePointId"
+                label={formatMessage({ id: 'ui-requests.requester.pickupServicePoint' })}
                 component={Select}
                 fullWidth
-                dataOptions={[{ label: formatMessage({ id: 'ui-requests.actions.selectPickupLoc' }), value: '' }]}
-                onChange={onChangeAddress}
+                dataOptions={servicePointOptions}
               />
             }
           </Col>

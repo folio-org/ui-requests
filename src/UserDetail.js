@@ -9,7 +9,7 @@ class UserDetail extends React.Component {
   static propTypes = {
     deliveryAddress: PropTypes.string,
     patronGroup: PropTypes.string,
-    pickupLocation: PropTypes.string,
+    pickupServicePoint: PropTypes.string,
     proxy: PropTypes.object,
     requestMeta: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
@@ -20,7 +20,7 @@ class UserDetail extends React.Component {
   static defaultProps = {
     deliveryAddress: '',
     patronGroup: '',
-    pickupLocation: '',
+    pickupServicePoint: '',
     proxy: {},
     selectedDelivery: false,
   };
@@ -33,7 +33,7 @@ class UserDetail extends React.Component {
       requestMeta,
       patronGroup,
       deliveryAddress,
-      pickupLocation,
+      pickupServicePoint,
       selectedDelivery,
     } = this.props;
 
@@ -65,7 +65,7 @@ class UserDetail extends React.Component {
           <Col xs={4}>
             { selectedDelivery
               ? <KeyValue label={formatMessage({ id: 'ui-requests.requester.deliveryAddress' })} value={deliveryAddress || '-'} />
-              : <KeyValue label={formatMessage({ id: 'ui-requests.requester.pickupLocation' })} value={pickupLocation || '-'} />
+              : <KeyValue label={formatMessage({ id: 'ui-requests.requester.pickupServicePoint' })} value={pickupServicePoint || '-'} />
             }
           </Col>
         </Row>

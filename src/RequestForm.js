@@ -103,13 +103,9 @@ class RequestForm extends React.Component {
       addressTypes: PropTypes.arrayOf(PropTypes.object),
       requestTypes: PropTypes.arrayOf(PropTypes.object),
       fulfilmentTypes: PropTypes.arrayOf(PropTypes.object),
+      servicePoints: PropTypes.arrayOf(PropTypes.object),
     }),
-    patronGroups: PropTypes.shape({
-      hasLoaded: PropTypes.bool.isRequired,
-      other: PropTypes.shape({
-        totalRecords: PropTypes.number,
-      }),
-    }).isRequired,
+    patronGroups: PropTypes.arrayOf(PropTypes.object),
     intl: intlShape
   }
 
@@ -409,7 +405,7 @@ class RequestForm extends React.Component {
     let addressDetail;
     if (selectedUser && selectedUser.personal && selectedUser.personal.addresses) {
       deliveryLocations = selectedUser.personal.addresses.map((a) => {
-        const typeName = _.find(optionLists.addressTypes.records, { id: a.addressTypeId }).addressType;
+        const typeName = _.find(optionLists.addressTypes, { id: a.addressTypeId }).addressType;
         return { label: typeName, value: a.addressTypeId };
       });
       deliveryLocations = _.sortBy(deliveryLocations, ['label']);
@@ -421,7 +417,7 @@ class RequestForm extends React.Component {
 
     let patronGroupName;
     if (patronGroups && this.state.selectedUser) {
-      const group = patronGroups.records.find(g => g.id === this.state.selectedUser.patronGroup);
+      const group = patronGroups.find(g => g.id === this.state.selectedUser.patronGroup);
       if (group) { patronGroupName = group.desc; }
     }
 
@@ -649,6 +645,7 @@ class RequestForm extends React.Component {
                           onChangeAddress={this.onChangeAddress}
                           onChangeFulfilment={this.onChangeFulfilment}
                           proxy={fullRequest ? fullRequest.requestMeta.proxy : this.state.proxy}
+                          servicePoints={optionLists.servicePoints}
                           onSelectProxy={this.onUserClick}
                           onCloseProxy={() => { this.setState({ selectedUser: null, proxy: null }); }}
                         />

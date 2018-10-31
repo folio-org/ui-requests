@@ -6,6 +6,7 @@
 * Fix bug causing barcode validation to misbehave. Fixes UIREQ-127.
 * Refactor requests app to address UIREQ-124, UIREQ-132 and UIREQ-126.
 * Show `active` column in find-user popup. Refs STCOM-385.
+* Populate pickup service point with service points. Fixes UIREQ-131.
 
 ## 1.4.1 (https://github.com/folio-org/ui-requests/tree/v1.4.1) (2018-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.4.0...v1.4.1)
