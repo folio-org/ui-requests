@@ -60,5 +60,7 @@
     "barcode": "Barcode",
     "actions.viewQueuePosition": "view position in queue",
     "item.requestsOnItem": "Requests on item",
-    "actions.viewRequestsInQueue": "view requests in queue"
+    "actions.viewRequestsInQueue": "view requests in queue",
+    "actions.selectPickupSp": "Select pickup service point",
+    "requester.pickupServicePoint": "Pickup service point"
 }
