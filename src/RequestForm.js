@@ -618,7 +618,7 @@ class RequestForm extends React.Component {
                               dataKey="users"
                               selectUser={this.onSelectUser}
                               disableRecordCreation={disableRecordCreation}
-                              visibleColumns={['name', 'patronGroup', 'username', 'barcode']}
+                              visibleColumns={['active', 'name', 'patronGroup', 'username', 'barcode']}
                               columnMapping={columnMapping}
                             />
 
