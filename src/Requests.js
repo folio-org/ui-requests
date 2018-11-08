@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import fetch from 'isomorphic-fetch';
 import moment from 'moment-timezone';
 import { FormattedTime, injectIntl, intlShape } from 'react-intl';
-import { filters2cql } from '@folio/stripes/components';
-import { SearchAndSort } from '@folio/stripes/smart-components';
+import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
 import { exportCsv } from '@folio/stripes/util';
 
 import ViewRequest from './ViewRequest';
@@ -64,55 +63,20 @@ class Requests extends React.Component {
       perRequest: 30,
       GET: {
         params: {
-          query: (...args) => {
-            /*
-              As per other SearchAndSort modules (users, instances) ...
-              This code is not DRY as it is copied from makeQueryFunction in stripes-components.
-              This is necessary, as makeQueryFunction only referneces query paramaters as a data source.
-              STRIPES-480 is intended to correct this and allow this query function to be replace with a call
-              to makeQueryFunction.
-              https://issues.folio.org/browse/STRIPES-480
-            */
-            const resourceData = args[2];
-            const sortMap = {
+          query: makeQueryFunction(
+            'cql.allRecords=1',
+            '(requester.barcode="%{query.query}*" or item.title="%{query.query}*" or item.barcode="%{query.query}*")',
+            {
               'Title': 'item.title',
               'Item barcode': 'item.barcode',
               'Type': 'requestType',
               'Requester': 'requester.lastName requester.firstName',
               'Requester Barcode': 'requester.barcode',
               'Request Date': 'requestDate',
-            };
-            let cql = `(requester.barcode="${resourceData.query.query}*" or item.title="${resourceData.query.query}*" or item.barcode="${resourceData.query.query}*")`;
-            const filterCql = filters2cql(filterConfig, resourceData.query.filters);
-
-            if (filterCql) {
-              if (cql) {
-                cql = `(${cql}) and ${filterCql}`;
-              } else {
-                cql = filterCql;
-              }
-            }
-
-            const { sort } = resourceData.query;
-            if (sort) {
-              const sortIndexes = sort.split(',').map((sort1) => {
-                let reverse = false;
-                if (sort1.startsWith('-')) {
-                  // eslint-disable-next-line no-param-reassign
-                  sort1 = sort1.substr(1);
-                  reverse = true;
-                }
-                let sortIndex = sortMap[sort1] || sort1;
-                if (reverse) {
-                  sortIndex = `${sortIndex.replace(' ', '/sort.descending ')}/sort.descending`;
-                }
-                return sortIndex;
-              });
-
-              cql += ` sortby ${sortIndexes.join(' ')}`;
-            }
-            return cql;
-          },
+            },
+            filterConfig,
+            2,
+          ),
         },
         staticFallback: { params: {} },
       },
