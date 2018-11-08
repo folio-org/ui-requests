@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Route from 'react-router-dom/Route';
 import Switch from 'react-router-dom/Switch';
+import { hot } from 'react-hot-loader';
 import Requests from './Requests';
 
 class RequestsRouting extends React.Component {
@@ -45,4 +46,4 @@ class RequestsRouting extends React.Component {
   }
 }
 
-export default RequestsRouting;
+export default hot(module)(RequestsRouting);
