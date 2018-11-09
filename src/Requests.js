@@ -75,7 +75,7 @@ class Requests extends React.Component {
               'Request Date': 'requestDate',
             },
             filterConfig,
-            2,
+            2, // do not fetch unless we have a query or a filter
           ),
         },
         staticFallback: { params: {} },
