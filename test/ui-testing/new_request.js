@@ -91,7 +91,9 @@ module.exports.test = function uiTest(uiTestCtx) {
         nightmare
           .wait('#input-request-search')
           .insert('#input-request-search', itembc)
-          .wait(`#list-requests div[title="${itembc}"]`)
+          .wait('button[type="submit"]')
+          .click('button[type="submit"]')
+          .wait('#list-requests[data-total-count="1"]')
           .then(done)
           .catch(done);
       });
