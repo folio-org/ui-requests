@@ -61,6 +61,6 @@
     "actions.viewQueuePosition": "ver posição na fila",
     "item.requestsOnItem": "Solicitações de compra no item",
     "actions.viewRequestsInQueue": "ver pedidos na fila",
-    "actions.selectPickupSp": "Select pickup service point",
-    "requester.pickupServicePoint": "Pickup service point"
+    "actions.selectPickupSp": "Selecione o ponto de serviço para retirada",
+    "requester.pickupServicePoint": "Ponto de serviço para retirada"
 }
