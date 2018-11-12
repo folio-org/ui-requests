@@ -9,6 +9,7 @@
 * Populate pickup service point with service points. Fixes UIREQ-131.
 * Configure 'Requests: All permissions' permission set. Fixes UIREQ-106.
 * Show No Requests By Default. Fixes UIREQ-150.
+* Support circulation v5.0, requiring service-point information on loans. Refs UIREQ-161.
 
 ## 1.4.1 (https://github.com/folio-org/ui-requests/tree/v1.4.1) (2018-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.4.0...v1.4.1)
