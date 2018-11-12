@@ -58,9 +58,9 @@
     "meta.title": "Requests",
     "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
     "barcode": "Barcode",
-    "actions.viewQueuePosition": "view position in queue",
-    "item.requestsOnItem": "Requests on item",
-    "actions.viewRequestsInQueue": "view requests in queue",
+    "actions.viewQueuePosition": "عرض الموضع في الصف",
+    "item.requestsOnItem": "طلبات على المادة",
+    "actions.viewRequestsInQueue": "عرض الطلبات في الصف",
     "actions.selectPickupSp": "قم بتحديد نقطة خدمة الالتقاط",
     "requester.pickupServicePoint": "نقطة خدمة الالتقاط"
 }
