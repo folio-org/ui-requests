@@ -1,10 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
-import { injectIntl, intlShape } from 'react-intl';
+import {
+  injectIntl,
+  intlShape,
+  FormattedMessage,
+} from 'react-intl';
 
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
-import { Button, Layout, Modal, Select, TextArea } from '@folio/stripes/components';
+import {
+  Button,
+  Layout,
+  Modal,
+  Select,
+  TextArea,
+} from '@folio/stripes/components';
 
 class CancelRequestDialog extends React.Component {
   static manifest = {
@@ -105,7 +115,7 @@ class CancelRequestDialog extends React.Component {
 
     return (
       <Modal
-        label={formatMessage({ id: 'ui-requests.cancel.modalLabel' })}
+        label={<FormattedMessage id="ui-requests.cancel.modalLabel" />}
         open={this.props.open}
         onClose={this.props.onClose}
       >
@@ -116,7 +126,7 @@ class CancelRequestDialog extends React.Component {
           />
         </p>
         <Select
-          label={formatMessage({ id: 'ui-requests.cancel.reasonLabel' })}
+          label={<FormattedMessage id="ui-requests.cancel.reasonLabel" />}
           dataOptions={reasons}
           value={reason.value}
           onChange={this.onChangeReason}
@@ -130,10 +140,14 @@ class CancelRequestDialog extends React.Component {
         />
         */}
         <TextArea
-          label={formatMessage(
-            { id: 'ui-requests.cancel.additionalInfoLabel' },
-            { required: reason.requiresAdditionalInformation ? '*' : ' ' }
-          )}
+          label={
+            <FormattedMessage
+              id="ui-requests.cancel.additionalInfoLabel"
+              values={{
+                required: reason.requiresAdditionalInformation ? '*' : ' '
+              }}
+            />
+          }
           placeholder={
             reason.requiresAdditionalInformation ?
               formatMessage({ id: 'ui-requests.cancel.additionalInfoPlaceholderRequired' }) :
@@ -144,14 +158,14 @@ class CancelRequestDialog extends React.Component {
         />
         <Layout className="textRight">
           <Button onClick={this.props.onClose}>
-            {formatMessage({ id: 'stripes-core.button.back' })}
+            <FormattedMessage id="stripes-core.button.back" />
           </Button>
           <Button
             buttonStyle="primary"
             disabled={reason.requiresAdditionalInformation && !additionalInfo}
             onClick={this.onCancelRequest}
           >
-            {formatMessage({ id: 'stripes-core.button.confirm' })}
+            <FormattedMessage id="stripes-core.button.confirm" />
           </Button>
         </Layout>
       </Modal>

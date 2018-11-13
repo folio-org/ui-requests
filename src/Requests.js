@@ -2,7 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import fetch from 'isomorphic-fetch';
 import moment from 'moment-timezone';
-import { FormattedTime, injectIntl, intlShape } from 'react-intl';
+import {
+  FormattedTime,
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
 import { exportCsv } from '@folio/stripes/util';
 
@@ -155,7 +160,6 @@ class Requests extends React.Component {
     super(props);
 
     this.okapiUrl = props.stripes.okapi.url;
-    this.formatDate = props.stripes.formatDate;
     this.httpHeaders = Object.assign({}, {
       'X-Okapi-Tenant': props.stripes.okapi.tenant,
       'X-Okapi-Token': props.stripes.store.getState().okapi.token,
@@ -233,7 +237,10 @@ class Requests extends React.Component {
   create = data => this.props.mutator.records.POST(data).then(() => this.props.mutator.query.update({ layer: null }));
 
   render() {
-    const { resources, stripes, intl: { formatMessage } } = this.props;
+    const {
+      resources,
+      stripes,
+    } = this.props;
     const patronGroups = (resources.patronGroups || {}).records || [];
     const addressTypes = (resources.addressTypes || {}).records || [];
     const servicePoints = (resources.servicePoints || {}).records || [];
@@ -252,7 +259,7 @@ class Requests extends React.Component {
 
     const actionMenuItems = [
       {
-        label: formatMessage({ id: 'stripes-components.exportToCsv' }),
+        label: <FormattedMessage id="stripes-components.exportToCsv" />,
         onClick: (() => {
           if (!this.csvExportPending) {
             this.props.mutator.resultCount.replace(this.props.resources.records.other.totalRecords);

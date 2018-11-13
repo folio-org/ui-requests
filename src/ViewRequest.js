@@ -2,7 +2,12 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
-import { injectIntl, intlShape } from 'react-intl';
+import {
+  injectIntl,
+  intlShape,
+  FormattedMessage,
+  FormattedDate
+} from 'react-intl';
 
 import { TitleManager } from '@folio/stripes/core';
 import { Link } from 'react-router-dom';
@@ -255,7 +260,7 @@ class ViewRequest extends React.Component {
           &nbsp;
         </span>
         <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${request.item.barcode}&sort=Request%20Date`}>
-          {formatMessage({ id: 'ui-requests.actions.viewRequestsInQueue' })}
+          <FormattedMessage id="ui-requests.actions.viewRequestsInQueue" />
         </Link>
       </div> : '-';
 
@@ -286,14 +291,15 @@ class ViewRequest extends React.Component {
       }
     }
 
-    const holdShelfExpireDate = (_.get(request, ['requestMeta', 'status'], '') === 'Open - Awaiting pickup') ?
-      stripes.formatDate(_.get(request, ['requestMeta', 'holdShelfExpirationDate'], '')) : '-';
+    const holdShelfExpireDate = (_.get(request, ['requestMeta', 'status'], '') === 'Open - Awaiting pickup')
+      ? <FormattedDate value={_.get(request, ['requestMeta', 'holdShelfExpirationDate'], '')} />
+      : '-';
 
     if (!request) {
       return (
         <Pane
           defaultWidth={this.props.paneWidth}
-          paneTitle={formatMessage({ id: 'ui-requests.requestMeta.detailLabel' })}
+          paneTitle={<FormattedMessage id="ui-requests.requestMeta.detailLabel" />}
           lastMenu={detailMenu}
           dismissible
           onClose={this.props.onClose}
@@ -308,7 +314,7 @@ class ViewRequest extends React.Component {
     return (
       <Pane
         defaultWidth={this.props.paneWidth}
-        paneTitle={formatMessage({ id: 'ui-requests.requestMeta.detailLabel' })}
+        paneTitle={<FormattedMessage id="ui-requests.requestMeta.detailLabel" />}
         lastMenu={detailMenu}
         actionMenuItems={!isRequestClosed ? [{
           id: 'clickable-edit-request',
@@ -320,7 +326,7 @@ class ViewRequest extends React.Component {
         }, {
           id: 'clickable-cancel-request',
           title: formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
-          label: formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
+          label: <FormattedMessage id="ui-requests.cancel.cancelRequest" />,
           onClick: () => this.setState({ isCancellingRequest: true }),
           icon: 'cancel',
         }] : undefined}
@@ -331,7 +337,7 @@ class ViewRequest extends React.Component {
         <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
           <Accordion
             id="request-info"
-            label={formatMessage({ id: 'ui-requests.requestMeta.information' })}
+            label={<FormattedMessage id="ui-requests.requestMeta.information" />}
           >
             <Row>
               <Col xs={12}>
@@ -340,27 +346,51 @@ class ViewRequest extends React.Component {
             </Row>
             <Row>
               <Col xs={3}>
-                <KeyValue label={formatMessage({ id: 'ui-requests.requestMeta.type' })} value={_.get(request, ['requestMeta', 'requestType'], '-')} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.requestMeta.type" />}
+                  value={_.get(request, ['requestMeta', 'requestType'], '-')}
+                />
               </Col>
               <Col xs={3}>
-                <KeyValue label={formatMessage({ id: 'ui-requests.requestMeta.status' })} value={_.get(request, ['requestMeta', 'status'], '-')} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.requestMeta.status" />}
+                  value={_.get(request, ['requestMeta', 'status'], '-')}
+                />
               </Col>
               <Col xs={3}>
-                <KeyValue label={formatMessage({ id: 'ui-requests.requestMeta.expirationDate' })} value={stripes.formatDate(_.get(request, ['requestMeta', 'requestExpirationDate'])) || '-'} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.requestMeta.expirationDate" />}
+                  value={
+                    <FormattedDate value={_.get(request, ['requestMeta', 'requestExpirationDate'])}>
+                      {message => message || '-'}
+                    </FormattedDate>
+                  }
+                />
               </Col>
               <Col xs={3}>
-                <KeyValue label={formatMessage({ id: 'ui-requests.requestMeta.holdShelfExpirationDate' })} value={holdShelfExpireDate} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.requestMeta.holdShelfExpirationDate" />}
+                  value={holdShelfExpireDate}
+                />
               </Col>
             </Row>
             <Row>
               <Col xs={5}>
-                <KeyValue label={formatMessage({ id: 'ui-requests.requestMeta.queuePosition' })} value={positionLink} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.requestMeta.queuePosition" />}
+                  value={positionLink}
+                />
               </Col>
             </Row>
           </Accordion>
           <Accordion
             id="item-info"
-            label={formatMessage({ id: 'ui-requests.item.information' })}
+            label={
+              <FormattedMessage
+                id="ui-requests.item.information"
+                values={{ required: '' }}
+              />
+            }
           >
             <ItemDetail
               item={request.item}
@@ -372,7 +402,11 @@ class ViewRequest extends React.Component {
           </Accordion>
           <Accordion
             id="requester-info"
-            label={formatMessage({ id: 'ui-requests.requester.information' })}
+            label={
+              <FormattedMessage id="ui-requests.requester.information">
+                {message => message}
+              </FormattedMessage>
+            }
           >
             <UserDetail
               user={request.requester}
@@ -387,7 +421,10 @@ class ViewRequest extends React.Component {
           </Accordion>
         </AccordionSet>
 
-        <Layer isOpen={query.layer ? query.layer === 'edit' : false} label={formatMessage({ id: 'ui-requests.actions.editRequestLink' })}>
+        <Layer
+          isOpen={query.layer ? query.layer === 'edit' : false}
+          label={<FormattedMessage id="ui-requests.actions.editRequestLink" />}
+        >
           <RequestForm
             stripes={stripes}
             initialValues={request.requestMeta}
