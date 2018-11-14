@@ -5,11 +5,7 @@ import { Link } from 'react-router-dom';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 import { Col, KeyValue, Row } from '@folio/stripes/components';
 
-const ItemDetail = ({ request }) => {
-
-  const { requestMeta, requestCount } = request;
-  const { item, instance, loan } = requestMeta;
-
+const ItemDetail = ({ item, loan, requestCount }) => {
   if (!item.barcode) {
     return <FormattedMessage id="ui-requests.actions.loading" />;
   }
@@ -56,7 +52,7 @@ const ItemDetail = ({ request }) => {
         </Col>
         <Col xs={3}>
           <KeyValue label={<FormattedMessage id="ui-requests.item.copyNumber" />}>
-            {'-'}
+            {get(item, ['copyNumber'], '-')}
           </KeyValue>
         </Col>
       </Row>
@@ -68,7 +64,7 @@ const ItemDetail = ({ request }) => {
         </Col>
         <Col xs={3}>
           <KeyValue label={<FormattedMessage id="ui-requests.item.dueDate" />}>
-            {loan.dueDate ? <FormattedDate value={loan.dueDate} /> : '-'}
+            {loan && loan.dueDate ? <FormattedDate value={loan.dueDate} /> : '-'}
           </KeyValue>
         </Col>
         <Col xs={3}>
@@ -82,7 +78,9 @@ const ItemDetail = ({ request }) => {
 };
 
 ItemDetail.propTypes = {
-  request: PropTypes.object,
+  item: PropTypes.object,
+  loan: PropTypes.object,
+  requestCount: PropTypes.number
 };
 
 export default ItemDetail;

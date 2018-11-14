@@ -20,7 +20,7 @@ class UserForm extends React.Component {
     onSelectProxy: PropTypes.func.isRequired,
     patronGroup: PropTypes.string,
     proxy: PropTypes.object,
-    requestMeta: PropTypes.object.isRequired,
+    request: PropTypes.object.isRequired,
     stripes: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     selectedDelivery: PropTypes.bool,
@@ -89,7 +89,7 @@ class UserForm extends React.Component {
     const {
       user,
       proxy,
-      requestMeta,
+      request,
       patronGroup,
       deliveryAddress,
       deliveryLocations,
@@ -108,7 +108,7 @@ class UserForm extends React.Component {
     if (proxy) {
       proxyName = getFullName(proxy);
       proxyBarcode = get(proxy, ['barcode'], '-');
-      proxyId = proxy.id || requestMeta.proxyUserId;
+      proxyId = proxy.id || request.proxyUserId;
     }
 
     const proxySection = proxyId

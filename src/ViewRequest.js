@@ -37,21 +37,6 @@ class ViewRequest extends React.Component {
       type: 'okapi',
       path: 'circulation/requests/:{id}',
     },
-    relatedRequesterId: {},
-    testRequester: {
-      type: 'okapi',
-      path: 'users?query=(id==%{relatedRequesterId})',
-    },
-    createdBy: {
-      type: 'okapi',
-      records: 'users',
-      path: 'users?query=(id==!{metadata.createdByUserId})',
-    },
-    updatedBy: {
-      type: 'okapi',
-      records: 'users',
-      path: 'users?query=(id==!{metadata.updatedByUserId})',
-    },
   };
 
   static propTypes = {
@@ -101,7 +86,7 @@ class ViewRequest extends React.Component {
     super(props);
 
     this.state = {
-      fullRequestDetail: {},
+      request: {},
       accordions: {
         'request-info': true,
         'item-info': true,
@@ -117,20 +102,6 @@ class ViewRequest extends React.Component {
     this.update = this.update.bind(this);
   }
 
-  static getDerivedStateFromProps(props, state) {
-    const request = _.get(props.resources.selectedRequest, ['records', 0]);
-    const prevRequest = state.fullRequestDetail.requestMeta;
-    if (request && prevRequest && !_.isEqual(request, prevRequest)) {
-      return {
-        fullRequestDetail: {
-          requestMeta: request,
-        }
-      };
-    }
-
-    return null;
-  }
-
   componentDidMount() {
     this._mounted = true;
   }
@@ -141,10 +112,12 @@ class ViewRequest extends React.Component {
     const currentRQ = this.props.resources.selectedRequest;
     // Only update if actually needed (otherwise, this gets called way too often)
     if (this._mounted && prevRQ && currentRQ && currentRQ.hasLoaded) {
-      const requestId = _.get(this.state, ['fullRequestDetail', 'requestMeta', 'id'], '');
+      const requestId = _.get(this.state, ['request', 'id'], '');
       if ((prevRQ.records[0] && !_.isEqual(prevRQ.records[0], currentRQ.records[0])) || !requestId) {
         const basicRequest = currentRQ.records[0];
-        this.props.joinRequest(basicRequest).then(fullRequestDetail => (this.setState({ fullRequestDetail })));
+        this.props.joinRequest(basicRequest).then(request => {
+          this.setState({ request });
+        });
       }
     }
   }
@@ -166,7 +139,7 @@ class ViewRequest extends React.Component {
     delete updatedRecord.location;
     delete updatedRecord.loan;
     delete updatedRecord.itemStatus;
-    delete updatedRecord.itemRequestCount;
+    delete updatedRecord.requestCount;
 
     this.props.mutator.selectedRequest.PUT(updatedRecord).then(() => {
       this.props.onCloseEdit();
@@ -203,13 +176,12 @@ class ViewRequest extends React.Component {
 
   getRequest() {
     const { resources, match: { params: { id } } } = this.props;
-    const { fullRequestDetail } = this.state;
     const selRequest = (resources.selectedRequest || {}).records || [];
+    if (!id || selRequest.length === 0) return null;
+    const curRequest = selRequest.find(r => r.id === id);
+    if (!curRequest) return null;
 
-    if (!id || selRequest.length === 0 || !fullRequestDetail.item) return null;
-
-    const request = selRequest.find(r => r.id === id);
-    return (request && request.id === fullRequestDetail.requestMeta.id) ? fullRequestDetail : null;
+    return (curRequest.id === this.state.request.id) ? this.state.request : curRequest;
   }
 
   getPatronGroupName(request) {
@@ -224,7 +196,7 @@ class ViewRequest extends React.Component {
   getPickupServicePointName(request) {
     if (!request) return '';
     const { optionLists: { servicePoints } } = this.props;
-    const servicePoint = servicePoints.find(sp => (sp.id === request.requestMeta.pickupServicePointId));
+    const servicePoint = servicePoints.find(sp => (sp.id === request.pickupServicePointId));
     return _.get(servicePoint, ['name'], '');
   }
 
@@ -240,26 +212,13 @@ class ViewRequest extends React.Component {
     } = this.props;
     const query = location.search ? queryString.parse(location.search) : {};
 
-    // Most of the values needed to populate the view come from the "enhanced" request
-    // object, fullRequestDetail, which includes parts of the requester's user record,
-    // the item records,
-    // and the related loan record (if any), in the form:
-    // {
-    //  requestMeta: { top-level request details },
-    //  requester: { user details },
-    //  item: { item details },
-    //  loan: { loan details },
-    //  holding: { holding record details },
-    //  instance: { instance record details },
-    //  requestCount: number of requests for the item
-    // }
     const request = this.getRequest();
     const patronGroupName = this.getPatronGroupName(request);
     const getPickupServicePointName = this.getPickupServicePointName(request);
-    const requestStatus = _.get(request, ['requestMeta', 'status'], '-');
+    const requestStatus = _.get(request, ['status'], '-');
     // TODO: Internationalize this
     const isRequestClosed = requestStatus.startsWith('Closed');
-    const queuePosition = _.get(request, ['requestMeta', 'position'], '-');
+    const queuePosition = _.get(request, ['position'], '-');
     const positionLink = request ?
       <div>
         <span>
@@ -294,9 +253,9 @@ class ViewRequest extends React.Component {
     let deliveryAddressDetail;
     let selectedDelivery = false;
 
-    if (_.get(request, ['requestMeta', 'fulfilmentPreference'], '') === 'Delivery') {
+    if (_.get(request, ['fulfilmentPreference'], '') === 'Delivery') {
       selectedDelivery = true;
-      const deliveryAddressType = _.get(request, ['requestMeta', 'deliveryAddressTypeId'], null);
+      const deliveryAddressType = _.get(request, ['deliveryAddressTypeId'], null);
       if (deliveryAddressType) {
         const deliveryLocations = _.keyBy(request.requester.personal.addresses, 'addressTypeId');
         deliveryAddressDetail = toUserAddress(deliveryLocations[deliveryAddressType]);
@@ -353,7 +312,7 @@ class ViewRequest extends React.Component {
           >
             <Row>
               <Col xs={12}>
-                <this.cViewMetaData metadata={request.requestMeta.metadata} />
+                <this.cViewMetaData metadata={request.metadata} />
               </Col>
             </Row>
             <Row>
@@ -404,7 +363,11 @@ class ViewRequest extends React.Component {
               />
             }
           >
-            <ItemDetail request={request} />
+            <ItemDetail
+              item={request.item}
+              loan={request.loan}
+              requestCount={request.requestCount}
+            />
           </Accordion>
           <Accordion
             id="requester-info"
@@ -416,10 +379,10 @@ class ViewRequest extends React.Component {
           >
             <UserDetail
               user={request.requester}
-              proxy={request.requestMeta.proxy}
-              stripes={this.props.stripes}
+              proxy={request.proxy}
+              stripes={stripes}
               patronGroup={patronGroupName}
-              requestMeta={request.requestMeta}
+              request={request}
               selectedDelivery={selectedDelivery}
               deliveryAddress={deliveryAddressDetail}
               pickupServicePoint={getPickupServicePointName}
@@ -433,7 +396,7 @@ class ViewRequest extends React.Component {
         >
           <RequestForm
             stripes={stripes}
-            initialValues={request.requestMeta}
+            initialValues={request}
             fullRequest={request}
             metadataDisplay={this.cViewMetaData}
             onSubmit={(record) => { this.update(record); }}

@@ -204,25 +204,14 @@ class Requests extends React.Component {
     return Promise.all(
       [
         this.findResource('user', r.requesterId),
-        this.findResource('item', r.itemId),
-        this.findResource('loan', r.itemId),
         this.findResource('requestsForItem', r.itemId),
-       //this.findResource('holding', r.item.holdingsRecordId),
-        //this.findResource('instance', r.item.instanceId),
       ],
     ).then((resultArray) => {
       // Each element of the promises array returns an array of results, but in
       // this case, there should only ever be one result for each.
-      const user = resultArray[0].users[0];
-      const item = resultArray[1].items[0];
-      const loan = resultArray[2].loans[0];
-      const requestCount = resultArray[3].requests.length;
-
-      // One field missing from item is the instanceId ... but it's included in
-      // the original request
-      item.instanceId = r.item.instanceId;
-
-      return { requestMeta: r, requester: user, item, loan, requestCount };
+      const requester = resultArray[0].users[0];
+      const requestCount = resultArray[1].requests.length;
+      return Object.assign({}, r, { requester, requestCount });
     });
   }
 
