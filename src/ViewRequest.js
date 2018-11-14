@@ -404,13 +404,7 @@ class ViewRequest extends React.Component {
               />
             }
           >
-            <ItemDetail
-              item={request.item}
-              holding={request.holding}
-              instance={request.instance}
-              loan={request.loan}
-              requestCount={request.requestCount}
-            />
+            <ItemDetail request={request} />
           </Accordion>
           <Accordion
             id="requester-info"

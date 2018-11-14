@@ -208,7 +208,7 @@ class Requests extends React.Component {
         this.findResource('loan', r.itemId),
         this.findResource('requestsForItem', r.itemId),
         this.findResource('holding', r.item.holdingsRecordId),
-        this.findResource('instance', r.item.instanceId),
+        //this.findResource('instance', r.item.instanceId),
       ],
     ).then((resultArray) => {
       // Each element of the promises array returns an array of results, but in

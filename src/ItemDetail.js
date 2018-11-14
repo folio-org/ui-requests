@@ -5,14 +5,18 @@ import { Link } from 'react-router-dom';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 import { Col, KeyValue, Row } from '@folio/stripes/components';
 
-const ItemDetail = ({ item, instance, holding, loan, requestCount }) => {
+const ItemDetail = ({ request }) => {
+
+  const { requestMeta, requestCount } = request;
+  const { item, instance, holding, loan } = requestMeta;
+
   if (!item.barcode) {
     return <FormattedMessage id="ui-requests.actions.loading" />;
   }
 
   const recordLink = item.barcode ? <Link to={`/inventory/view/${item.instanceId}/${item.holdingsRecordId}/${item.id}`}>{item.barcode}</Link> : '';
   const status = get(item, ['status', 'name'], '');
-  const contributor = get(instance, ['contributors', '0', 'name'], '-');
+  const contributor = get(item, ['contributorNames', '0', 'name'], '-');
   const positionLink = item ? <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${item.barcode}&sort=Request%20Date`}>{requestCount}</Link> : '-';
 
   return (
@@ -78,18 +82,7 @@ const ItemDetail = ({ item, instance, holding, loan, requestCount }) => {
 };
 
 ItemDetail.propTypes = {
-  item: PropTypes.object.isRequired,
-  holding: PropTypes.object,
-  instance: PropTypes.object,
-  loan: PropTypes.object,
-  requestCount: PropTypes.number,
-};
-
-ItemDetail.defaultProps = {
-  holding: {},
-  instance: {},
-  loan: {},
-  requestCount: 0,
+  request: PropTypes.object,
 };
 
 export default ItemDetail;
