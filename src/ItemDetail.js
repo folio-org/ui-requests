@@ -8,7 +8,7 @@ import { Col, KeyValue, Row } from '@folio/stripes/components';
 const ItemDetail = ({ request }) => {
 
   const { requestMeta, requestCount } = request;
-  const { item, instance, holding, loan } = requestMeta;
+  const { item, instance, loan } = requestMeta;
 
   if (!item.barcode) {
     return <FormattedMessage id="ui-requests.actions.loading" />;
@@ -46,7 +46,7 @@ const ItemDetail = ({ request }) => {
       <Row>
         <Col xs={3}>
           <KeyValue label={<FormattedMessage id="ui-requests.item.callNumber" />}>
-            {get(holding, ['callNumber'], '-')}
+            {get(item, ['callNumber'], '-')}
           </KeyValue>
         </Col>
         <Col xs={3}>

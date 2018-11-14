@@ -207,7 +207,7 @@ class Requests extends React.Component {
         this.findResource('item', r.itemId),
         this.findResource('loan', r.itemId),
         this.findResource('requestsForItem', r.itemId),
-        this.findResource('holding', r.item.holdingsRecordId),
+       //this.findResource('holding', r.item.holdingsRecordId),
         //this.findResource('instance', r.item.instanceId),
       ],
     ).then((resultArray) => {
@@ -217,14 +217,12 @@ class Requests extends React.Component {
       const item = resultArray[1].items[0];
       const loan = resultArray[2].loans[0];
       const requestCount = resultArray[3].requests.length;
-      const holding = resultArray[4];
-      const instance = resultArray[5];
 
       // One field missing from item is the instanceId ... but it's included in
       // the original request
       item.instanceId = r.item.instanceId;
 
-      return { requestMeta: r, requester: user, item, loan, requestCount, holding, instance };
+      return { requestMeta: r, requester: user, item, loan, requestCount };
     });
   }
 
