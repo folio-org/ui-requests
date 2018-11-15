@@ -368,7 +368,7 @@ class RequestForm extends React.Component {
     const { selectedUser } = this.state;
     const isEditForm = (item && item.id);
 
-    const addRequestFirstMenu =
+    const addRequestFirstMenu = (
       <PaneMenu>
         <FormattedMessage id="ui-requests.actions.closeNewRequest">
           {title => (
@@ -381,8 +381,9 @@ class RequestForm extends React.Component {
             </Button>
           )}
         </FormattedMessage>
-      </PaneMenu>;
-    const addRequestLastMenu =
+      </PaneMenu>
+    );
+    const addRequestLastMenu = (
       <PaneMenu>
         <FormattedMessage id="ui-requests.actions.createNewRequest">
           {title => (
@@ -397,8 +398,9 @@ class RequestForm extends React.Component {
             </Button>
           )}
         </FormattedMessage>
-      </PaneMenu>;
-    const editRequestLastMenu =
+      </PaneMenu>
+    );
+    const editRequestLastMenu = (
       <PaneMenu>
         <FormattedMessage id="ui-requests.actions.updateRequest">
           {title => (
@@ -413,7 +415,8 @@ class RequestForm extends React.Component {
             </Button>
           )}
         </FormattedMessage>
-      </PaneMenu>;
+      </PaneMenu>
+    );
     const requestTypeOptions = _.sortBy(optionLists.requestTypes || [], ['label']).map(t => ({ label: t.label, value: t.id, selected: requestType === t.id }));
     const fulfilmentTypeOptions = _.sortBy(optionLists.fulfilmentTypes || [], ['label']).map(t => ({ label: t.label, value: t.id, selected: t.id === fulfilmentPreference }));
     const labelAsterisk = isEditForm ? '' : ' *';

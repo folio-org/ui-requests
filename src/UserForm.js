@@ -60,14 +60,7 @@ class UserForm extends React.Component {
         <FormattedMessage id="ui-requests.actions.selectAddressType">
           {(optionLabel) => <option value="">{optionLabel}</option>}
         </FormattedMessage>
-        {deliveryLocations.map(location => {
-          const {
-            value,
-            label,
-          } = location;
-
-          return <option value={value}>{label}</option>;
-        })}
+        {deliveryLocations.map(({ value, label }) => <option value={value}>{label}</option>)}
       </Field>
     );
   }
@@ -87,14 +80,7 @@ class UserForm extends React.Component {
         <FormattedMessage id="ui-requests.actions.selectPickupSp">
           {optionLabel => <option value="">{optionLabel}</option>}
         </FormattedMessage>
-        {servicePoints.map(servicePoint => {
-          const {
-            id,
-            name,
-          } = servicePoint;
-
-          return <option value={id}>{name}</option>;
-        })}
+        {servicePoints.map(({ id, name }) => <option value={id}>{name}</option>)}
       </Field>
     );
   }
@@ -127,7 +113,7 @@ class UserForm extends React.Component {
 
     const proxySection = proxyId
       ? userHighlightBox(<FormattedMessage id="ui-requests.requester.proxy" />, proxyName, proxyId, proxyBarcode)
-      : '';
+      : null;
 
     return (
       <div>

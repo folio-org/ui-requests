@@ -104,6 +104,8 @@ class CancelRequestDialog extends React.Component {
   render() {
     const {
       request,
+      open,
+      onClose,
     } = this.props;
 
     const {
@@ -121,8 +123,8 @@ class CancelRequestDialog extends React.Component {
     return (
       <Modal
         label={<FormattedMessage id="ui-requests.cancel.modalLabel" />}
-        open={this.props.open}
-        onClose={this.props.onClose}
+        open={open}
+        onClose={onClose}
       >
         <p>
           <SafeHTMLMessage
@@ -162,7 +164,7 @@ class CancelRequestDialog extends React.Component {
           )}
         </FormattedMessage>
         <Layout className="textRight">
-          <Button onClick={this.props.onClose}>
+          <Button onClick={onClose}>
             <FormattedMessage id="stripes-core.button.back" />
           </Button>
           <Button

@@ -50,7 +50,7 @@ class UserDetail extends React.Component {
 
     const proxySection = proxyId
       ? userHighlightBox(<FormattedMessage id="ui-requests.requester.proxy" />, proxyName, proxyId, proxyBarcode)
-      : '';
+      : null;
 
     return (
       <div>
