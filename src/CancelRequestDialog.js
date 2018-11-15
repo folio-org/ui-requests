@@ -1,10 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
-import { injectIntl, intlShape } from 'react-intl';
-
+import { FormattedMessage } from 'react-intl';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
-import { Button, Layout, Modal, Select, TextArea } from '@folio/stripes/components';
+import {
+  Button,
+  Layout,
+  Modal,
+  Select,
+  TextArea,
+} from '@folio/stripes/components';
 
 class CancelRequestDialog extends React.Component {
   static manifest = {
@@ -16,7 +21,6 @@ class CancelRequestDialog extends React.Component {
   }
 
   static propTypes = {
-    intl: intlShape,
     onCancelRequest: PropTypes.func.isRequired,
     onClose: PropTypes.func,
     open: PropTypes.bool,
@@ -98,16 +102,29 @@ class CancelRequestDialog extends React.Component {
   }
 
   render() {
-    const { request, intl: { formatMessage } } = this.props;
-    const { reason, reasons, /* notify, */ additionalInfo } = this.state;
+    const {
+      request,
+      open,
+      onClose,
+    } = this.props;
+
+    const {
+      reason,
+      reasons,
+      additionalInfo,
+    } = this.state;
+
+    const additionalInfoPlaceholder = reason.requiresAdditionalInformation
+      ? 'ui-requests.cancel.additionalInfoPlaceholderRequired'
+      : 'ui-requests.cancel.additionalInfoPlaceholderOptional';
 
     if (!request) return null;
 
     return (
       <Modal
-        label={formatMessage({ id: 'ui-requests.cancel.modalLabel' })}
-        open={this.props.open}
-        onClose={this.props.onClose}
+        label={<FormattedMessage id="ui-requests.cancel.modalLabel" />}
+        open={open}
+        onClose={onClose}
       >
         <p>
           <SafeHTMLMessage
@@ -116,7 +133,7 @@ class CancelRequestDialog extends React.Component {
           />
         </p>
         <Select
-          label={formatMessage({ id: 'ui-requests.cancel.reasonLabel' })}
+          label={<FormattedMessage id="ui-requests.cancel.reasonLabel" />}
           dataOptions={reasons}
           value={reason.value}
           onChange={this.onChangeReason}
@@ -129,29 +146,33 @@ class CancelRequestDialog extends React.Component {
           onChange={this.onChangeNotify}
         />
         */}
-        <TextArea
-          label={formatMessage(
-            { id: 'ui-requests.cancel.additionalInfoLabel' },
-            { required: reason.requiresAdditionalInformation ? '*' : ' ' }
+        <FormattedMessage id={additionalInfoPlaceholder}>
+          {placeholder => (
+            <TextArea
+              label={
+                <FormattedMessage
+                  id="ui-requests.cancel.additionalInfoLabel"
+                  values={{
+                    required: reason.requiresAdditionalInformation ? '*' : ' '
+                  }}
+                />
+              }
+              placeholder={placeholder}
+              value={additionalInfo}
+              onChange={this.onChangeAdditionalInfo}
+            />
           )}
-          placeholder={
-            reason.requiresAdditionalInformation ?
-              formatMessage({ id: 'ui-requests.cancel.additionalInfoPlaceholderRequired' }) :
-              formatMessage({ id: 'ui-requests.cancel.additionalInfoPlaceholderOptional' })
-          }
-          value={additionalInfo}
-          onChange={this.onChangeAdditionalInfo}
-        />
+        </FormattedMessage>
         <Layout className="textRight">
-          <Button onClick={this.props.onClose}>
-            {formatMessage({ id: 'stripes-core.button.back' })}
+          <Button onClick={onClose}>
+            <FormattedMessage id="stripes-core.button.back" />
           </Button>
           <Button
             buttonStyle="primary"
             disabled={reason.requiresAdditionalInformation && !additionalInfo}
             onClick={this.onCancelRequest}
           >
-            {formatMessage({ id: 'stripes-core.button.confirm' })}
+            <FormattedMessage id="stripes-core.button.confirm" />
           </Button>
         </Layout>
       </Modal>
@@ -160,4 +181,4 @@ class CancelRequestDialog extends React.Component {
   }
 }
 
-export default injectIntl(CancelRequestDialog);
+export default CancelRequestDialog;

@@ -1,7 +1,9 @@
 import { get } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import {
+  FormattedMessage,
+} from 'react-intl';
 import { Field } from 'redux-form';
 import { Col, KeyValue, Row, Select } from '@folio/stripes/components';
 import { ProxyManager } from '@folio/stripes/smart-components';
@@ -22,8 +24,7 @@ class UserForm extends React.Component {
     stripes: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     selectedDelivery: PropTypes.bool,
-    servicePoints: PropTypes.arrayOf(PropTypes.object),
-    intl: intlShape
+    servicePoints: PropTypes.arrayOf(PropTypes.object)
   };
 
   static defaultProps = {
@@ -42,9 +43,50 @@ class UserForm extends React.Component {
     this.connectedProxyManager = props.stripes.connect(ProxyManager);
   }
 
+  renderDeliveryAddressSelect() {
+    const {
+      onChangeAddress,
+      deliveryLocations,
+    } = this.props;
+
+    return (
+      <Field
+        name="deliveryAddressTypeId"
+        label={<FormattedMessage id="ui-requests.requester.deliveryAddress" />}
+        component={Select}
+        fullWidth
+        onChange={onChangeAddress}
+      >
+        <FormattedMessage id="ui-requests.actions.selectAddressType">
+          {(optionLabel) => <option value="">{optionLabel}</option>}
+        </FormattedMessage>
+        {deliveryLocations.map(({ value, label }) => <option value={value}>{label}</option>)}
+      </Field>
+    );
+  }
+
+  renderPickupServicePointSelect() {
+    const {
+      servicePoints,
+    } = this.props;
+
+    return (
+      <Field
+        name="pickupServicePointId"
+        label={<FormattedMessage id="ui-requests.requester.pickupServicePoint" />}
+        component={Select}
+        fullWidth
+      >
+        <FormattedMessage id="ui-requests.actions.selectPickupSp">
+          {optionLabel => <option value="">{optionLabel}</option>}
+        </FormattedMessage>
+        {servicePoints.map(({ id, name }) => <option value={id}>{name}</option>)}
+      </Field>
+    );
+  }
+
   render() {
     const {
-      intl: { formatMessage },
       user,
       proxy,
       requestMeta,
@@ -53,9 +95,7 @@ class UserForm extends React.Component {
       deliveryLocations,
       selectedDelivery,
       fulfilmentTypeOptions,
-      onChangeAddress,
       onChangeFulfilment,
-      servicePoints,
     } = this.props;
 
     const id = user.id;
@@ -71,24 +111,21 @@ class UserForm extends React.Component {
       proxyId = proxy.id || requestMeta.proxyUserId;
     }
 
-    const proxySection = proxyId ? userHighlightBox(formatMessage({ id: 'ui-requests.requester.proxy' }), proxyName, proxyId, proxyBarcode) : '';
-    const servicePointOptions = [{ label: formatMessage({ id: 'ui-requests.actions.selectPickupSp' }), value: '' }];
-
-    if (servicePoints) {
-      servicePointOptions.push(...servicePoints.map(sp => ({ value: sp.id, label: sp.name })));
-    }
+    const proxySection = proxyId
+      ? userHighlightBox(<FormattedMessage id="ui-requests.requester.proxy" />, proxyName, proxyId, proxyBarcode)
+      : null;
 
     return (
       <div>
-        {userHighlightBox(formatMessage({ id: 'ui-requests.requester.requester' }), name, id, barcode)}
+        {userHighlightBox(<FormattedMessage id="ui-requests.requester.requester" />, name, id, barcode)}
         <Row>
           <Col xs={4}>
-            <KeyValue label={formatMessage({ id: 'ui-requests.requester.patronGroup' })} value={patronGroup || '-'} />
+            <KeyValue label={<FormattedMessage id="ui-requests.requester.patronGroup" />} value={patronGroup || '-'} />
           </Col>
           <Col xs={4}>
             <Field
               name="fulfilmentPreference"
-              label={formatMessage({ id: 'ui-requests.requester.fulfilmentPref' })}
+              label={<FormattedMessage id="ui-requests.requester.fulfilmentPref" />}
               component={Select}
               fullWidth
               dataOptions={fulfilmentTypeOptions}
@@ -96,24 +133,9 @@ class UserForm extends React.Component {
             />
           </Col>
           <Col xs={4}>
-            { selectedDelivery && deliveryLocations &&
-              <Field
-                name="deliveryAddressTypeId"
-                label={formatMessage({ id: 'ui-requests.requester.deliveryAddress' })}
-                component={Select}
-                fullWidth
-                dataOptions={[{ label: formatMessage({ id: 'ui-requests.actions.selectAddressType' }), value: '' }, ...deliveryLocations]}
-                onChange={onChangeAddress}
-              />
-            }
-            { !selectedDelivery &&
-              <Field
-                name="pickupServicePointId"
-                label={formatMessage({ id: 'ui-requests.requester.pickupServicePoint' })}
-                component={Select}
-                fullWidth
-                dataOptions={servicePointOptions}
-              />
+            {
+              (!selectedDelivery && this.renderPickupServicePointSelect()) ||
+              (deliveryLocations && this.renderDeliveryAddressSelect())
             }
           </Col>
         </Row>
@@ -141,4 +163,4 @@ class UserForm extends React.Component {
   }
 }
 
-export default injectIntl(UserForm);
+export default UserForm;

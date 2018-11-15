@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Col, KeyValue, Row } from '@folio/stripes/components';
 import { getFullName, userHighlightBox } from './utils';
 
@@ -14,7 +14,6 @@ class UserDetail extends React.Component {
     requestMeta: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     selectedDelivery: PropTypes.bool,
-    intl: intlShape
   };
 
   static defaultProps = {
@@ -27,7 +26,6 @@ class UserDetail extends React.Component {
 
   render() {
     const {
-      intl: { formatMessage },
       user,
       proxy,
       requestMeta,
@@ -50,22 +48,36 @@ class UserDetail extends React.Component {
       proxyId = proxy.id || requestMeta.proxyUserId;
     }
 
-    const proxySection = proxyId ? userHighlightBox(formatMessage({ id: 'ui-requests.requester.proxy' }), proxyName, proxyId, proxyBarcode) : '';
+    const proxySection = proxyId
+      ? userHighlightBox(<FormattedMessage id="ui-requests.requester.proxy" />, proxyName, proxyId, proxyBarcode)
+      : null;
 
     return (
       <div>
-        {userHighlightBox(formatMessage({ id: 'ui-requests.requester.requester' }), name, id, barcode)}
+        {userHighlightBox(<FormattedMessage id="ui-requests.requester.requester" />, name, id, barcode)}
         <Row>
           <Col xs={4}>
-            <KeyValue label={formatMessage({ id: 'ui-requests.requester.patronGroup' })} value={patronGroup || '-'} />
+            <KeyValue
+              label={<FormattedMessage id="ui-requests.requester.patronGroup" />}
+              value={patronGroup || '-'}
+            />
           </Col>
           <Col xs={4}>
-            <KeyValue label={formatMessage({ id: 'ui-requests.requester.fulfilmentPref' })} value={_.get(requestMeta, ['fulfilmentPreference'], '-')} />
+            <KeyValue
+              label={<FormattedMessage id="ui-requests.requester.fulfilmentPref" />}
+              value={_.get(requestMeta, ['fulfilmentPreference'], '-')}
+            />
           </Col>
           <Col xs={4}>
-            { selectedDelivery
-              ? <KeyValue label={formatMessage({ id: 'ui-requests.requester.deliveryAddress' })} value={deliveryAddress || '-'} />
-              : <KeyValue label={formatMessage({ id: 'ui-requests.requester.pickupServicePoint' })} value={pickupServicePoint || '-'} />
+            { selectedDelivery ?
+              <KeyValue
+                label={<FormattedMessage id="ui-requests.requester.deliveryAddress" />}
+                value={deliveryAddress || '-'}
+              /> :
+              <KeyValue
+                label={<FormattedMessage id="ui-requests.requester.pickupServicePoint" />}
+                value={pickupServicePoint || '-'}
+              />
             }
           </Col>
         </Row>
@@ -75,4 +87,4 @@ class UserDetail extends React.Component {
   }
 }
 
-export default injectIntl(UserDetail);
+export default UserDetail;
