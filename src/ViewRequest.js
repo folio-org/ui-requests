@@ -6,7 +6,7 @@ import {
   injectIntl,
   intlShape,
   FormattedMessage,
-  FormattedDate
+  FormattedDate,
 } from 'react-intl';
 
 import { TitleManager } from '@folio/stripes/core';
@@ -229,7 +229,15 @@ class ViewRequest extends React.Component {
   }
 
   render() {
-    const { patronGroups, optionLists, location, stripes, intl: { formatMessage } } = this.props;
+    const {
+      patronGroups,
+      optionLists,
+      location,
+      stripes,
+      intl: { formatMessage },
+      editLink,
+      onEdit,
+    } = this.props;
     const query = location.search ? queryString.parse(location.search) : {};
 
     // Most of the values needed to populate the view come from the "enhanced" request
@@ -267,14 +275,18 @@ class ViewRequest extends React.Component {
     const detailMenu = (
       <PaneMenu>
         {!isRequestClosed &&
-          <IconButton
-            icon="edit"
-            id="clickable-edit-request"
-            style={{ visibility: !request ? 'hidden' : 'visible' }}
-            href={this.props.editLink}
-            onClick={this.props.onEdit}
-            title={formatMessage({ id: 'ui-requests.actions.editRequest' })}
-          />
+        <FormattedMessage id="ui-requests.actions.editRequest">
+          {title => (
+            <IconButton
+              icon="edit"
+              id="clickable-edit-request"
+              style={{ visibility: !request ? 'hidden' : 'visible' }}
+              href={editLink}
+              onClick={onEdit}
+              title={title}
+            />
+          )}
+        </FormattedMessage>
         }
       </PaneMenu>
     );

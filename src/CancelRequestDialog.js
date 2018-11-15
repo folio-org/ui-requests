@@ -1,12 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
-import {
-  injectIntl,
-  intlShape,
-  FormattedMessage,
-} from 'react-intl';
-
+import { FormattedMessage } from 'react-intl';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
   Button,
@@ -26,7 +21,6 @@ class CancelRequestDialog extends React.Component {
   }
 
   static propTypes = {
-    intl: intlShape,
     onCancelRequest: PropTypes.func.isRequired,
     onClose: PropTypes.func,
     open: PropTypes.bool,
@@ -108,8 +102,19 @@ class CancelRequestDialog extends React.Component {
   }
 
   render() {
-    const { request, intl: { formatMessage } } = this.props;
-    const { reason, reasons, /* notify, */ additionalInfo } = this.state;
+    const {
+      request,
+    } = this.props;
+
+    const {
+      reason,
+      reasons,
+      additionalInfo,
+    } = this.state;
+
+    const additionalInfoPlaceholder = reason.requiresAdditionalInformation
+      ? 'ui-requests.cancel.additionalInfoPlaceholderRequired'
+      : 'ui-requests.cancel.additionalInfoPlaceholderOptional';
 
     if (!request) return null;
 
@@ -139,23 +144,23 @@ class CancelRequestDialog extends React.Component {
           onChange={this.onChangeNotify}
         />
         */}
-        <TextArea
-          label={
-            <FormattedMessage
-              id="ui-requests.cancel.additionalInfoLabel"
-              values={{
-                required: reason.requiresAdditionalInformation ? '*' : ' '
-              }}
+        <FormattedMessage id={additionalInfoPlaceholder}>
+          {placeholder => (
+            <TextArea
+              label={
+                <FormattedMessage
+                  id="ui-requests.cancel.additionalInfoLabel"
+                  values={{
+                    required: reason.requiresAdditionalInformation ? '*' : ' '
+                  }}
+                />
+              }
+              placeholder={placeholder}
+              value={additionalInfo}
+              onChange={this.onChangeAdditionalInfo}
             />
-          }
-          placeholder={
-            reason.requiresAdditionalInformation ?
-              formatMessage({ id: 'ui-requests.cancel.additionalInfoPlaceholderRequired' }) :
-              formatMessage({ id: 'ui-requests.cancel.additionalInfoPlaceholderOptional' })
-          }
-          value={additionalInfo}
-          onChange={this.onChangeAdditionalInfo}
-        />
+          )}
+        </FormattedMessage>
         <Layout className="textRight">
           <Button onClick={this.props.onClose}>
             <FormattedMessage id="stripes-core.button.back" />
@@ -174,4 +179,4 @@ class CancelRequestDialog extends React.Component {
   }
 }
 
-export default injectIntl(CancelRequestDialog);
+export default CancelRequestDialog;

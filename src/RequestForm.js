@@ -370,37 +370,49 @@ class RequestForm extends React.Component {
 
     const addRequestFirstMenu =
       <PaneMenu>
-        <Button
-          onClick={onCancel}
-          title={formatMessage({ id: 'ui-requests.actions.closeNewRequest' })}
-          aria-label={<FormattedMessage id="ui-requests.actions.closeNewRequest" />}
-        >
-          <span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }}>&times;</span>
-        </Button>
+        <FormattedMessage id="ui-requests.actions.closeNewRequest">
+          {title => (
+            <Button
+              onClick={onCancel}
+              title={title}
+              aria-label={title}
+            >
+              <span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }}>&times;</span>
+            </Button>
+          )}
+        </FormattedMessage>
       </PaneMenu>;
     const addRequestLastMenu =
       <PaneMenu>
-        <Button
-          id="clickable-create-request"
-          type="button"
-          title={formatMessage({ id: 'ui-requests.actions.createNewRequest' })}
-          disabled={pristine || submitting}
-          onClick={handleSubmit}
-        >
-          <FormattedMessage id="ui-requests.actions.newRequest" />
-        </Button>
+        <FormattedMessage id="ui-requests.actions.createNewRequest">
+          {title => (
+            <Button
+              id="clickable-create-request"
+              type="button"
+              title={title}
+              disabled={pristine || submitting}
+              onClick={handleSubmit}
+            >
+              <FormattedMessage id="ui-requests.actions.newRequest" />
+            </Button>
+          )}
+        </FormattedMessage>
       </PaneMenu>;
     const editRequestLastMenu =
       <PaneMenu>
-        <Button
-          id="clickable-update-request"
-          type="button"
-          title={formatMessage({ id: 'ui-requests.actions.updateRequest' })}
-          disabled={pristine || submitting}
-          onClick={handleSubmit}
-        >
-          <FormattedMessage id="ui-requests.actions.updateRequest" />
-        </Button>
+        <FormattedMessage id="ui-requests.actions.updateRequest">
+          {title => (
+            <Button
+              id="clickable-update-request"
+              type="button"
+              title={title}
+              disabled={pristine || submitting}
+              onClick={handleSubmit}
+            >
+              <FormattedMessage id="ui-requests.actions.updateRequest" />
+            </Button>
+          )}
+        </FormattedMessage>
       </PaneMenu>;
     const requestTypeOptions = _.sortBy(optionLists.requestTypes || [], ['label']).map(t => ({ label: t.label, value: t.id, selected: requestType === t.id }));
     const fulfilmentTypeOptions = _.sortBy(optionLists.fulfilmentTypes || [], ['label']).map(t => ({ label: t.label, value: t.id, selected: t.id === fulfilmentPreference }));
@@ -469,9 +481,9 @@ class RequestForm extends React.Component {
               icon: 'cancel',
             }] : undefined}
             paneTitle={
-              isEditForm ?
-                <FormattedMessage id="ui-requests.actions.editRequest" /> :
-                <FormattedMessage id="ui-requests.actions.newRequest" />
+              isEditForm
+                ? <FormattedMessage id="ui-requests.actions.editRequest" />
+                : <FormattedMessage id="ui-requests.actions.newRequest" />
             }
           >
             <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
@@ -571,18 +583,22 @@ class RequestForm extends React.Component {
                       {!isEditForm &&
                         <Row>
                           <Col xs={9}>
-                            <Field
-                              name="item.barcode"
-                              placeholder={formatMessage({ id: 'ui-requests.item.scanOrEnterBarcode' })}
-                              aria-label={<FormattedMessage id="ui-requests.item.barcode" />}
-                              fullWidth
-                              component={TextField}
-                              withRef
-                              ref={this.itemBarcodeRef}
-                              onInput={this.onItemClick}
-                              onKeyDown={e => this.onKeyDown(e, 'item')}
-                              validate={this.requireItem}
-                            />
+                            <FormattedMessage id="ui-requests.item.scanOrEnterBarcode">
+                              {placeholder => (
+                                <Field
+                                  name="item.barcode"
+                                  placeholder={placeholder}
+                                  aria-label={<FormattedMessage id="ui-requests.item.barcode" />}
+                                  fullWidth
+                                  component={TextField}
+                                  withRef
+                                  ref={this.itemBarcodeRef}
+                                  onInput={this.onItemClick}
+                                  onKeyDown={e => this.onKeyDown(e, 'item')}
+                                  validate={this.requireItem}
+                                />
+                              )}
+                            </FormattedMessage>
                           </Col>
                           <Col xs={3}>
                             <Button
@@ -624,18 +640,22 @@ class RequestForm extends React.Component {
                       {!isEditForm &&
                         <Row>
                           <Col xs={9}>
-                            <Field
-                              name="requester.barcode"
-                              placeholder={formatMessage({ id: 'ui-requests.requester.scanOrEnterBarcode' })}
-                              aria-label={<FormattedMessage id="ui-requests.requester.barcode" />}
-                              fullWidth
-                              component={TextField}
-                              withRef
-                              ref={this.requesterBarcodeRef}
-                              onInput={this.onUserClick}
-                              onKeyDown={e => this.onKeyDown(e, 'requester')}
-                              validate={this.requireUser}
-                            />
+                            <FormattedMessage id="ui-requests.requester.scanOrEnterBarcode">
+                              {placeholder => (
+                                <Field
+                                  name="requester.barcode"
+                                  placeholder={placeholder}
+                                  aria-label={<FormattedMessage id="ui-requests.requester.barcode" />}
+                                  fullWidth
+                                  component={TextField}
+                                  withRef
+                                  ref={this.requesterBarcodeRef}
+                                  onInput={this.onUserClick}
+                                  onKeyDown={e => this.onKeyDown(e, 'requester')}
+                                  validate={this.requireUser}
+                                />
+                              )}
+                            </FormattedMessage>
                             <Pluggable
                               aria-haspopup="true"
                               type="find-user"
