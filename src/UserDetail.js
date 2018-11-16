@@ -65,7 +65,7 @@ class UserDetail extends React.Component {
           <Col xs={4}>
             <KeyValue
               label={<FormattedMessage id="ui-requests.requester.fulfilmentPref" />}
-              value={_.get(requestMeta, ['fulfilmentPreference'], '-')}
+              value={_.get(request, ['fulfilmentPreference'], '-')}
             />
           </Col>
           <Col xs={4}>

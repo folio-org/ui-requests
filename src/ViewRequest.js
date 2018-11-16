@@ -262,8 +262,8 @@ class ViewRequest extends React.Component {
       }
     }
 
-    const holdShelfExpireDate = (_.get(request, ['requestMeta', 'status'], '') === 'Open - Awaiting pickup')
-      ? <FormattedDate value={_.get(request, ['requestMeta', 'holdShelfExpirationDate'], '')} />
+    const holdShelfExpireDate = (_.get(request, ['status'], '') === 'Open - Awaiting pickup')
+      ? <FormattedDate value={_.get(request, ['holdShelfExpirationDate'], '')} />
       : '-';
 
     if (!request) {
@@ -319,20 +319,20 @@ class ViewRequest extends React.Component {
               <Col xs={3}>
                 <KeyValue
                   label={<FormattedMessage id="ui-requests.requestMeta.type" />}
-                  value={_.get(request, ['requestMeta', 'requestType'], '-')}
+                  value={_.get(request, ['requestType'], '-')}
                 />
               </Col>
               <Col xs={3}>
                 <KeyValue
                   label={<FormattedMessage id="ui-requests.requestMeta.status" />}
-                  value={_.get(request, ['requestMeta', 'status'], '-')}
+                  value={_.get(request, ['status'], '-')}
                 />
               </Col>
               <Col xs={3}>
                 <KeyValue
                   label={<FormattedMessage id="ui-requests.requestMeta.expirationDate" />}
                   value={
-                    <FormattedDate value={_.get(request, ['requestMeta', 'requestExpirationDate'])}>
+                    <FormattedDate value={_.get(request, ['requestExpirationDate'])}>
                       {message => message || '-'}
                     </FormattedDate>
                   }

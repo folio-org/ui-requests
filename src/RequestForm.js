@@ -406,8 +406,8 @@ class RequestForm extends React.Component {
       if (group) { patronGroupName = group.desc; }
     }
 
-    const holdShelfExpireDate = (_.get(requestMeta, ['status'], '') === 'Open - Awaiting pickup')
-      ? <FormattedDate value={_.get(requestMeta, ['holdShelfExpirationDate'], '')} />
+    const holdShelfExpireDate = (_.get(fullRequest, ['status'], '') === 'Open - Awaiting pickup')
+      ? <FormattedDate value={_.get(fullRequest, ['holdShelfExpirationDate'], '')} />
       : '-';
 
     // map column-IDs to table-header-values
@@ -426,7 +426,7 @@ class RequestForm extends React.Component {
           &nbsp;
           &nbsp;
         </span>
-        <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${requestMeta.item.barcode}&sort=Request%20Date`}>
+        <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${fullRequest.item.barcode}&sort=Request%20Date`}>
           <FormattedMessage id="ui-requests.actions.viewRequestsInQueue" />
         </Link>
       </div> : '-';
@@ -479,7 +479,7 @@ class RequestForm extends React.Component {
                         {isEditForm &&
                           <KeyValue
                             label={<FormattedMessage id="ui-requests.requestMeta.type" />}
-                            value={requestMeta.requestType}
+                            value={fullRequest.requestType}
                           />
                         }
                       </Col>
@@ -487,7 +487,7 @@ class RequestForm extends React.Component {
                         {isEditForm &&
                           <KeyValue
                             label={<FormattedMessage id="ui-requests.requestMeta.status" />}
-                            value={requestMeta.status}
+                            value={fullRequest.status}
                           />
                         }
                       </Col>
