@@ -80,13 +80,13 @@ class ViewRequest extends React.Component {
     }).isRequired,
     intl: intlShape,
     match: PropTypes.object,
-  }
+  };
 
   static defaultProps = {
     editLink: '',
     paneWidth: '50%',
     onEdit: () => {}
-  }
+  };
 
   constructor(props) {
     super(props);
