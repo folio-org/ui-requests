@@ -5,14 +5,14 @@ import { Link } from 'react-router-dom';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 import { Col, KeyValue, Row } from '@folio/stripes/components';
 
-const ItemDetail = ({ item, instance, holding, loan, requestCount }) => {
+const ItemDetail = ({ item, loan, requestCount }) => {
   if (!item.barcode) {
     return <FormattedMessage id="ui-requests.actions.loading" />;
   }
 
   const recordLink = item.barcode ? <Link to={`/inventory/view/${item.instanceId}/${item.holdingsRecordId}/${item.id}`}>{item.barcode}</Link> : '';
   const status = get(item, ['status', 'name'], '');
-  const contributor = get(instance, ['contributors', '0', 'name'], '-');
+  const contributor = get(item, ['contributorNames', '0', 'name'], '-');
   const positionLink = item ? <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${item.barcode}&sort=Request%20Date`}>{requestCount}</Link> : '-';
 
   return (
@@ -42,7 +42,7 @@ const ItemDetail = ({ item, instance, holding, loan, requestCount }) => {
       <Row>
         <Col xs={3}>
           <KeyValue label={<FormattedMessage id="ui-requests.item.callNumber" />}>
-            {get(holding, ['callNumber'], '-')}
+            {get(item, ['callNumber'], '-')}
           </KeyValue>
         </Col>
         <Col xs={3}>
@@ -52,7 +52,7 @@ const ItemDetail = ({ item, instance, holding, loan, requestCount }) => {
         </Col>
         <Col xs={3}>
           <KeyValue label={<FormattedMessage id="ui-requests.item.copyNumber" />}>
-            {'-'}
+            {get(item, ['copyNumber'], '-')}
           </KeyValue>
         </Col>
       </Row>
@@ -64,7 +64,7 @@ const ItemDetail = ({ item, instance, holding, loan, requestCount }) => {
         </Col>
         <Col xs={3}>
           <KeyValue label={<FormattedMessage id="ui-requests.item.dueDate" />}>
-            {loan.dueDate ? <FormattedDate value={loan.dueDate} /> : '-'}
+            {loan && loan.dueDate ? <FormattedDate value={loan.dueDate} /> : '-'}
           </KeyValue>
         </Col>
         <Col xs={3}>
@@ -78,18 +78,9 @@ const ItemDetail = ({ item, instance, holding, loan, requestCount }) => {
 };
 
 ItemDetail.propTypes = {
-  item: PropTypes.object.isRequired,
-  holding: PropTypes.object,
-  instance: PropTypes.object,
+  item: PropTypes.object,
   loan: PropTypes.object,
-  requestCount: PropTypes.number,
-};
-
-ItemDetail.defaultProps = {
-  holding: {},
-  instance: {},
-  loan: {},
-  requestCount: 0,
+  requestCount: PropTypes.number
 };
 
 export default ItemDetail;

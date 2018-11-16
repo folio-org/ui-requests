@@ -11,7 +11,7 @@ class UserDetail extends React.Component {
     patronGroup: PropTypes.string,
     pickupServicePoint: PropTypes.string,
     proxy: PropTypes.object,
-    requestMeta: PropTypes.object.isRequired,
+    request: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     selectedDelivery: PropTypes.bool,
   };
@@ -28,7 +28,7 @@ class UserDetail extends React.Component {
     const {
       user,
       proxy,
-      requestMeta,
+      request,
       patronGroup,
       deliveryAddress,
       pickupServicePoint,
@@ -45,7 +45,7 @@ class UserDetail extends React.Component {
     if (proxy) {
       proxyName = getFullName(proxy);
       proxyBarcode = _.get(proxy, ['barcode'], '-');
-      proxyId = proxy.id || requestMeta.proxyUserId;
+      proxyId = proxy.id || request.proxyUserId;
     }
 
     const proxySection = proxyId
@@ -65,7 +65,7 @@ class UserDetail extends React.Component {
           <Col xs={4}>
             <KeyValue
               label={<FormattedMessage id="ui-requests.requester.fulfilmentPref" />}
-              value={_.get(requestMeta, ['fulfilmentPreference'], '-')}
+              value={_.get(request, ['fulfilmentPreference'], '-')}
             />
           </Col>
           <Col xs={4}>
