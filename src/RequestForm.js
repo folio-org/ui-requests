@@ -127,22 +127,9 @@ class RequestForm extends React.Component {
   constructor(props) {
     super(props);
 
-    let requester;
-    let item;
-    let loan;
-    let instance;
-    let holding;
-    if (props.fullRequest) {
-      requester = props.fullRequest.requester;
-      item = props.fullRequest.item;
-      loan = props.fullRequest.loan;
-      instance = props.fullRequest.instance;
-      holding = props.fullRequest.holding;
-    }
-    const {
-      fulfilmentPreference,
-      deliveryAddressTypeId,
-    } = props.initialValues;
+    const { fullRequest, initialValues } = props;
+    const { requester, item, loan } = (fullRequest || {});
+    const { fulfilmentPreference, deliveryAddressTypeId } = initialValues;
 
     this.state = {
       accordions: {
@@ -150,13 +137,11 @@ class RequestForm extends React.Component {
         'item-info': true,
         'requester-info': true,
       },
+      proxy: {},
       selectedDelivery: fulfilmentPreference === 'Delivery',
       selectedAddressTypeId: deliveryAddressTypeId,
       selectedItem: item,
-      selectedInstance: instance,
-      selectedHolding: holding,
       selectedUser: requester,
-      proxy: {},
       selectedLoan: loan,
     };
 
@@ -178,6 +163,7 @@ class RequestForm extends React.Component {
     const fullRequest = this.props.fullRequest;
     const oldInitials = prevProps.initialValues;
     const oldRecord = prevProps.fullRequest;
+
     if ((initials && initials.fulfilmentPreference &&
         oldInitials && !oldInitials.fulfilmentPreference) ||
         (fullRequest && !oldRecord)) {
@@ -186,8 +172,6 @@ class RequestForm extends React.Component {
         selectedAddressTypeId: initials.deliveryAddressTypeId,
         selectedDelivery: initials.fulfilmentPreference === 'Delivery',
         selectedItem: fullRequest.item,
-        selectedInstance: fullRequest.instance,
-        selectedHolding: fullRequest.holding,
         selectedLoan: fullRequest.loan,
         selectedUser: fullRequest.user,
       });
@@ -259,13 +243,34 @@ class RequestForm extends React.Component {
     });
   }
 
-  onItemClick() {
-    this.setState({ selectedItem: null });
+  findLoan(item) {
     const { findResource } = this.props;
-    const barcode = this.itemBarcodeRef.current.getRenderedComponent().getInput().value;
 
-    findResource('item', barcode, 'barcode').then((result) => {
-      if (result.totalRecords === 1) {
+    return Promise.all(
+      [
+        findResource('loan', item.id),
+        findResource('requestsForItem', item.id),
+      ],
+    ).then((results) => {
+      const selectedLoan = results[0].loans[0];
+      const requestCount = results[1].requests.length;
+
+      this.setState({ requestCount });
+
+      if (selectedLoan) {
+        this.setState({ selectedLoan });
+      }
+
+      return item;
+    });
+  }
+
+  findItem(barcode) {
+    const { findResource } = this.props;
+    findResource('item', barcode, 'barcode')
+      .then((result) => {
+        if (!result || result.totalRecords === 0) return result;
+
         const item = result.items[0];
         this.props.change('itemId', item.id);
 
@@ -276,47 +281,15 @@ class RequestForm extends React.Component {
           selectedItem: item,
         });
 
-        return Promise.all(
-          [
-            findResource('loan', item.id),
-            findResource('requestsForItem', item.id),
-            findResource('holding', item.holdingsRecordId),
-          ],
-        ).then((resultArray) => {
-          const loan = resultArray[0].loans[0];
-          const itemRequestCount = resultArray[1].requests.length;
-          const holding = resultArray[2];
-          if (loan) {
-            this.setState({
-              selectedItem: item,
-              selectedHolding: holding,
-              selectedLoan: loan,
-              itemRequestCount,
-            });
-          }
-          // If no loan is found, just set the item and related record(s) and rq count
-          this.setState({
-            selectedItem: item,
-            selectedHolding: holding,
-            itemRequestCount,
-          });
+        return item;
+      })
+      .then(item => this.findLoan(item));
+  }
 
-          return result;
-        }).then(() => {
-          // Now that the holding record has been found, we can get the instance record
-          if (this.state.selectedHolding.instanceId) {
-            findResource('instance', this.state.selectedHolding.instanceId).then((result2) => {
-              this.setState({
-                selectedInstance: result2,
-              });
-            });
-          }
-          return result;
-        });
-      }
-
-      return result;
-    });
+  onItemClick() {
+    this.setState({ selectedItem: null });
+    const barcode = this.itemBarcodeRef.current.getRenderedComponent().getInput().value;
+    this.findItem(barcode);
   }
 
   // This function only exists to enable 'do lookup on enter' for item and
@@ -354,19 +327,9 @@ class RequestForm extends React.Component {
       },
     } = this.props;
 
-    let requestMeta;
-    let item;
-    let requestType;
-    let fulfilmentPreference;
-    if (fullRequest) {
-      requestMeta = fullRequest.requestMeta;
-      item = fullRequest.item;
-      requestType = requestMeta.requestType;
-      fulfilmentPreference = requestMeta.fulfilmentPreference;
-    }
-
-    const { selectedUser } = this.state;
-    const isEditForm = (item && item.id);
+    const { selectedUser, selectedItem, selectedLoan, requestCount } = this.state;
+    const { item, requestType, fulfilmentPreference } = (fullRequest || {});
+    const isEditForm = (item && item.barcode);
 
     const addRequestFirstMenu = (
       <PaneMenu>
@@ -443,8 +406,8 @@ class RequestForm extends React.Component {
       if (group) { patronGroupName = group.desc; }
     }
 
-    const holdShelfExpireDate = (_.get(requestMeta, ['status'], '') === 'Open - Awaiting pickup')
-      ? <FormattedDate value={_.get(requestMeta, ['holdShelfExpirationDate'], '')} />
+    const holdShelfExpireDate = (_.get(fullRequest, ['status'], '') === 'Open - Awaiting pickup')
+      ? <FormattedDate value={_.get(fullRequest, ['holdShelfExpirationDate'], '')} />
       : '-';
 
     // map column-IDs to table-header-values
@@ -455,15 +418,15 @@ class RequestForm extends React.Component {
       barcode: formatMessage({ id: 'ui-requests.barcode' }),
     };
 
-    const queuePosition = _.get(requestMeta, ['position'], '');
-    const positionLink = requestMeta ?
+    const queuePosition = _.get(fullRequest, ['position'], '');
+    const positionLink = fullRequest ?
       <div>
         <span>
           {queuePosition}
           &nbsp;
           &nbsp;
         </span>
-        <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${requestMeta.item.barcode}&sort=Request%20Date`}>
+        <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${fullRequest.item.barcode}&sort=Request%20Date`}>
           <FormattedMessage id="ui-requests.actions.viewRequestsInQueue" />
         </Link>
       </div> : '-';
@@ -494,9 +457,9 @@ class RequestForm extends React.Component {
                 id="request-info"
                 label={<FormattedMessage id="ui-requests.requestMeta.information" />}
               >
-                { isEditForm && requestMeta && requestMeta.metadata &&
+                { isEditForm && fullRequest && fullRequest.metadata &&
                   <Col xs={12}>
-                    <this.props.metadataDisplay metadata={requestMeta.metadata} />
+                    <this.props.metadataDisplay metadata={fullRequest.metadata} />
                   </Col>
                 }
                 <Row>
@@ -516,7 +479,7 @@ class RequestForm extends React.Component {
                         {isEditForm &&
                           <KeyValue
                             label={<FormattedMessage id="ui-requests.requestMeta.type" />}
-                            value={requestMeta.requestType}
+                            value={fullRequest.requestType}
                           />
                         }
                       </Col>
@@ -524,7 +487,7 @@ class RequestForm extends React.Component {
                         {isEditForm &&
                           <KeyValue
                             label={<FormattedMessage id="ui-requests.requestMeta.status" />}
-                            value={requestMeta.status}
+                            value={fullRequest.status}
                           />
                         }
                       </Col>
@@ -538,7 +501,7 @@ class RequestForm extends React.Component {
                           dateFormat="YYYY-MM-DD"
                         />
                       </Col>
-                      { isEditForm && requestMeta.status === 'Open - Awaiting pickup' &&
+                      { isEditForm && fullRequest.status === 'Open - Awaiting pickup' &&
                         <Col xs={3}>
                           <Field
                             name="holdShelfExpirationDate"
@@ -550,7 +513,7 @@ class RequestForm extends React.Component {
                           />
                         </Col>
                       }
-                      { isEditForm && requestMeta.status !== 'Open - Awaiting pickup' &&
+                      { isEditForm && fullRequest.status !== 'Open - Awaiting pickup' &&
                         <Col xs={3}>
                           <KeyValue
                             label={<FormattedMessage id="ui-requests.requestMeta.holdShelfExpirationDate" />}
@@ -616,13 +579,11 @@ class RequestForm extends React.Component {
                           </Col>
                         </Row>
                       }
-                      { this.state.selectedItem &&
+                      { selectedItem &&
                         <ItemDetail
-                          item={fullRequest ? fullRequest.item : this.state.selectedItem}
-                          holding={fullRequest ? fullRequest.holding : this.state.selectedHolding}
-                          instance={fullRequest ? fullRequest.instance : this.state.selectedInstance}
-                          loan={fullRequest ? fullRequest.loan : this.state.selectedLoan}
-                          requestCount={fullRequest ? fullRequest.requestCount : this.state.itemRequestCount}
+                          item={fullRequest ? fullRequest.item : selectedItem}
+                          loan={fullRequest ? fullRequest.loan : selectedLoan}
+                          requestCount={fullRequest ? fullRequest.requestCount : requestCount}
                         />
                       }
                     </Col>
@@ -691,7 +652,7 @@ class RequestForm extends React.Component {
                         <UserForm
                           user={fullRequest ? fullRequest.requester : this.state.selectedUser}
                           stripes={this.props.stripes}
-                          requestMeta={fullRequest ? fullRequest.requestMeta : {}}
+                          request={fullRequest}
                           patronGroup={patronGroupName}
                           selectedDelivery={this.state.selectedDelivery}
                           deliveryAddress={addressDetail}
@@ -699,7 +660,7 @@ class RequestForm extends React.Component {
                           fulfilmentTypeOptions={fulfilmentTypeOptions}
                           onChangeAddress={this.onChangeAddress}
                           onChangeFulfilment={this.onChangeFulfilment}
-                          proxy={fullRequest ? fullRequest.requestMeta.proxy : this.state.proxy}
+                          proxy={fullRequest ? fullRequest.proxy : this.state.proxy}
                           servicePoints={optionLists.servicePoints}
                           onSelectProxy={this.onUserClick}
                           onCloseProxy={() => { this.setState({ selectedUser: null, proxy: null }); }}
