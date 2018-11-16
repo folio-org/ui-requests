@@ -320,25 +320,25 @@ class ViewRequest extends React.Component {
             <Row>
               <Col xs={3}>
                 <KeyValue
-                  label={<FormattedMessage id="ui-requests.requestMeta.type" />}
+                  label={<FormattedMessage id="ui-requests.requestType" />}
                   value={get(request, ['requestType'], '-')}
                 />
               </Col>
               <Col xs={3}>
                 <KeyValue
-                  label={<FormattedMessage id="ui-requests.requestMeta.status" />}
+                  label={<FormattedMessage id="ui-requests.status" />}
                   value={get(request, ['status'], '-')}
                 />
               </Col>
               <Col xs={3}>
                 <KeyValue
-                  label={<FormattedMessage id="ui-requests.requestMeta.expirationDate" />}
+                  label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
                   value={expirationDate}
                 />
               </Col>
               <Col xs={3}>
                 <KeyValue
-                  label={<FormattedMessage id="ui-requests.requestMeta.holdShelfExpirationDate" />}
+                  label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
                   value={holdShelfExpireDate}
                 />
               </Col>
@@ -346,7 +346,7 @@ class ViewRequest extends React.Component {
             <Row>
               <Col xs={5}>
                 <KeyValue
-                  label={<FormattedMessage id="ui-requests.requestMeta.queuePosition" />}
+                  label={<FormattedMessage id="ui-requests.position" />}
                   value={positionLink}
                 />
               </Col>
