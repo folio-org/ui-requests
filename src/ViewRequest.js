@@ -319,21 +319,36 @@ class ViewRequest extends React.Component {
             </Row>
             <Row>
               <Col xs={3}>
-                <KeyValue label={formatMessage({ id: 'ui-requests.requestType' })} value={_.get(request, ['requestMeta', 'requestType'], '-')} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.requestMeta.type" />}
+                  value={get(request, ['requestType'], '-')}
+                />
               </Col>
               <Col xs={3}>
-                <KeyValue label={formatMessage({ id: 'ui-requests.status' })} value={_.get(request, ['requestMeta', 'status'], '-')} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.requestMeta.status" />}
+                  value={get(request, ['status'], '-')}
+                />
               </Col>
               <Col xs={3}>
-                <KeyValue label={formatMessage({ id: 'ui-requests.requestExpirationDate' })} value={stripes.formatDate(_.get(request, ['requestMeta', 'requestExpirationDate'])) || '-'} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.requestMeta.expirationDate" />}
+                  value={expirationDate}
+                />
               </Col>
               <Col xs={3}>
-                <KeyValue label={formatMessage({ id: 'ui-requests.holdShelfExpirationDate' })} value={holdShelfExpireDate} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.requestMeta.holdShelfExpirationDate" />}
+                  value={holdShelfExpireDate}
+                />
               </Col>
             </Row>
             <Row>
               <Col xs={5}>
-                <KeyValue label={formatMessage({ id: 'ui-requests.position' })} value={positionLink} />
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.requestMeta.queuePosition" />}
+                  value={positionLink}
+                />
               </Col>
             </Row>
           </Accordion>

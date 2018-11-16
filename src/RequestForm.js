@@ -468,7 +468,7 @@ class RequestForm extends React.Component {
                       <Col xs={3}>
                         { !isEditForm &&
                           <Field
-                            label={formatMessage({ id: 'ui-requests.requestType' })}
+                            label={<FormattedMessage id="ui-requests.requestMeta.type" />}
                             name="requestType"
                             component={Select}
                             fullWidth
@@ -476,20 +476,26 @@ class RequestForm extends React.Component {
                             disabled={isEditForm}
                           />
                         }
-                        { isEditForm &&
-                          <KeyValue label={formatMessage({ id: 'ui-requests.requestType' })} value={requestMeta.requestType} />
+                        {isEditForm &&
+                          <KeyValue
+                            label={<FormattedMessage id="ui-requests.requestMeta.type" />}
+                            value={fullRequest.requestType}
+                          />
                         }
                       </Col>
                       <Col xs={3}>
-                        { isEditForm &&
-                          <KeyValue label={formatMessage({ id: 'ui-requests.status' })} value={requestMeta.status} />
+                        {isEditForm &&
+                          <KeyValue
+                            label={<FormattedMessage id="ui-requests.requestMeta.status" />}
+                            value={fullRequest.status}
+                          />
                         }
                       </Col>
                       <Col xs={3}>
                         <Field
                           name="requestExpirationDate"
-                          label={formatMessage({ id: 'ui-requests.requestExpirationDate' })}
-                          aria-label={formatMessage({ id: 'ui-requests.requestExpirationDate' })}
+                          label={<FormattedMessage id="ui-requests.requestMeta.expirationDate" />}
+                          aria-label={<FormattedMessage id="ui-requests.requestMeta.expirationDate" />}
                           backendDateStandard="YYYY-MM-DD"
                           component={Datepicker}
                           dateFormat="YYYY-MM-DD"
@@ -499,8 +505,8 @@ class RequestForm extends React.Component {
                         <Col xs={3}>
                           <Field
                             name="holdShelfExpirationDate"
-                            label={formatMessage({ id: 'ui-requests.holdShelfExpirationDate' })}
-                            aria-label={formatMessage({ id: 'ui-requests.holdShelfExpirationDate' })}
+                            label={<FormattedMessage id="ui-requests.requestMeta.holdShelfExpirationDate" />}
+                            aria-label={<FormattedMessage id="ui-requests.requestMeta.holdShelfExpirationDate" />}
                             backendDateStandard="YYYY-MM-DD"
                             component={Datepicker}
                             dateFormat="YYYY-MM-DD"
@@ -509,14 +515,20 @@ class RequestForm extends React.Component {
                       }
                       { isEditForm && fullRequest.status !== 'Open - Awaiting pickup' &&
                         <Col xs={3}>
-                          <KeyValue label={formatMessage({ id: 'ui-requests.holdShelfExpirationDate' })} value={holdShelfExpireDate} />
+                          <KeyValue
+                            label={<FormattedMessage id="ui-requests.requestMeta.holdShelfExpirationDate" />}
+                            value={holdShelfExpireDate}
+                          />
                         </Col>
                       }
                     </Row>
                     { isEditForm &&
                       <Row>
                         <Col xs={3}>
-                          <KeyValue label={formatMessage({ id: 'ui-requests.position' })} value={positionLink} />
+                          <KeyValue
+                            label={<FormattedMessage id="ui-requests.requestMeta.queuePosition" />}
+                            value={positionLink}
+                          />
                         </Col>
                       </Row>
                     }
