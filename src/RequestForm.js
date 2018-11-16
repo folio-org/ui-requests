@@ -468,7 +468,7 @@ class RequestForm extends React.Component {
                       <Col xs={3}>
                         { !isEditForm &&
                           <Field
-                            label={<FormattedMessage id="ui-requests.requestMeta.type" />}
+                            label={<FormattedMessage id="ui-requests.requestType" />}
                             name="requestType"
                             component={Select}
                             fullWidth
@@ -478,7 +478,7 @@ class RequestForm extends React.Component {
                         }
                         {isEditForm &&
                           <KeyValue
-                            label={<FormattedMessage id="ui-requests.requestMeta.type" />}
+                            label={<FormattedMessage id="ui-requests.requestType" />}
                             value={fullRequest.requestType}
                           />
                         }
@@ -486,7 +486,7 @@ class RequestForm extends React.Component {
                       <Col xs={3}>
                         {isEditForm &&
                           <KeyValue
-                            label={<FormattedMessage id="ui-requests.requestMeta.status" />}
+                            label={<FormattedMessage id="ui-requests.status" />}
                             value={fullRequest.status}
                           />
                         }
@@ -494,8 +494,8 @@ class RequestForm extends React.Component {
                       <Col xs={3}>
                         <Field
                           name="requestExpirationDate"
-                          label={<FormattedMessage id="ui-requests.requestMeta.expirationDate" />}
-                          aria-label={<FormattedMessage id="ui-requests.requestMeta.expirationDate" />}
+                          label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
+                          aria-label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
                           backendDateStandard="YYYY-MM-DD"
                           component={Datepicker}
                           dateFormat="YYYY-MM-DD"
@@ -505,8 +505,8 @@ class RequestForm extends React.Component {
                         <Col xs={3}>
                           <Field
                             name="holdShelfExpirationDate"
-                            label={<FormattedMessage id="ui-requests.requestMeta.holdShelfExpirationDate" />}
-                            aria-label={<FormattedMessage id="ui-requests.requestMeta.holdShelfExpirationDate" />}
+                            label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
+                            aria-label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
                             backendDateStandard="YYYY-MM-DD"
                             component={Datepicker}
                             dateFormat="YYYY-MM-DD"
@@ -516,7 +516,7 @@ class RequestForm extends React.Component {
                       { isEditForm && fullRequest.status !== 'Open - Awaiting pickup' &&
                         <Col xs={3}>
                           <KeyValue
-                            label={<FormattedMessage id="ui-requests.requestMeta.holdShelfExpirationDate" />}
+                            label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
                             value={holdShelfExpireDate}
                           />
                         </Col>
@@ -526,7 +526,7 @@ class RequestForm extends React.Component {
                       <Row>
                         <Col xs={3}>
                           <KeyValue
-                            label={<FormattedMessage id="ui-requests.requestMeta.queuePosition" />}
+                            label={<FormattedMessage id="ui-requests.position" />}
                             value={positionLink}
                           />
                         </Col>
