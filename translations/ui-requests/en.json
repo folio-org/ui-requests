@@ -34,7 +34,7 @@
   "item.barcode": "Item barcode",
   "item.scanOrEnterBarcode": "Scan or enter item barcode",
   "item.title": "Title",
-  "item.contributor": "Contributor",
+  "item.contributorNames": "Contributor names",
   "item.shelfLocation": "Shelving location",
   "item.callNumber": "Call number",
   "item.enumeration": "Enumeration",
