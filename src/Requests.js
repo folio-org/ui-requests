@@ -169,6 +169,8 @@ class Requests extends React.Component {
     this.addRequestFields = this.addRequestFields.bind(this);
     this.create = this.create.bind(this);
     this.findResource = this.findResource.bind(this);
+    this.headersMapping = this.headersMapping.bind(this);
+    this.buildRecords = this.buildRecords.bind(this);
   }
 
   componentDidUpdate() {
@@ -176,13 +178,44 @@ class Requests extends React.Component {
       const recordsLoaded = this.props.resources.records.records;
       const numTotalRecords = this.props.resources.records.other.totalRecords;
       if (recordsLoaded.length === numTotalRecords) {
-        exportCsv(recordsLoaded, {
+        const recordsToCSV = this.buildRecords(recordsLoaded);
+        const onlyFields = this.headersMapping();
+        exportCsv(recordsToCSV, {
+          onlyFields,
           excludeFields: ['id'],
-          explicitlyIncludeFields: ['proxy.firstName', 'proxy.lastName', 'proxy.barcode']
         });
         this.csvExportPending = false;
       }
     }
+  }
+
+  headersMapping() {
+    const headers = ['requestType', 'status', 'requestExpirationDate', 'holdShelfExpirationDate',
+      'position', 'item.barcode', 'item.title', 'item.contributorNames', 'item.shelfLocation',
+      'item.callNumber', 'item.enumeration', 'item.status', 'loan.dueDate', 'requester.firstName',
+      'requester.barcode', 'requester.patronGroup', 'fulfilmentPreference', 'requester.pickupServicePoint',
+      'requester.deliveryAddress', 'proxy.firstName', 'proxy.barcode'];
+
+    const headersArray = headers.map(item => {
+      return {
+        label: this.props.intl.formatMessage({ id: `ui-requests.${item}` }),
+        value: item
+      };
+    });
+    return headersArray;
+  }
+
+  buildRecords(recordsLoaded) {
+    recordsLoaded.forEach(record => {
+      const contributorNamesMap = [];
+      if (record.item.contributorNames.length > 0) {
+        record.item.contributorNames.forEach(item => {
+          contributorNamesMap.push(item.name);
+        });
+      }
+      record.item.contributorNames = contributorNamesMap.join('; ');
+    });
+    return recordsLoaded;
   }
 
   // idType can be 'id', 'barcode', etc.
