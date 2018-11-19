@@ -255,7 +255,8 @@ class ViewRequest extends React.Component {
       selectedDelivery = true;
       const deliveryAddressType = get(request, ['deliveryAddressTypeId'], null);
       if (deliveryAddressType) {
-        const deliveryLocations = keyBy(request.requester.personal.addresses, 'addressTypeId');
+        const addresses = get(request, ['requester', 'personal', 'addresses'], []);
+        const deliveryLocations = keyBy(addresses, 'addressTypeId');
         deliveryAddressDetail = toUserAddress(deliveryLocations[deliveryAddressType]);
       }
     }
