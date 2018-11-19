@@ -76,8 +76,15 @@ class CancelRequestDialog extends React.Component {
   }
 
   onCancelRequest = () => {
-    const { additionalInfo, reason } = this.state;
-    const { stripes } = this.props;
+    const {
+      additionalInfo,
+      reason,
+    } = this.state;
+
+    const {
+      stripes,
+      onCancelRequest,
+    } = this.props;
 
     const cancellationInfo = {
       cancelledByUserId: stripes.user.user.id,
@@ -87,7 +94,7 @@ class CancelRequestDialog extends React.Component {
       status: 'Closed - Cancelled',
     };
 
-    this.props.onCancelRequest(cancellationInfo);
+    onCancelRequest(cancellationInfo);
   }
 
   onChangeAdditionalInfo = (e) => this.setState({ additionalInfo: e.target.value })

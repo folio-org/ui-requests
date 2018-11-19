@@ -318,7 +318,12 @@ class RequestForm extends React.Component {
       handleSubmit,
       fullRequest,
       onCancel,
-      optionLists,
+      optionLists: {
+        servicePoints,
+        addressTypes,
+        requestTypes = [],
+        fulfilmentTypes = [],
+      },
       patronGroups,
       pristine,
       submitting,
@@ -326,6 +331,7 @@ class RequestForm extends React.Component {
         formatMessage,
       },
     } = this.props;
+
 
     const { selectedUser, selectedItem, selectedLoan, requestCount } = this.state;
     const { item, requestType, fulfilmentPreference } = (fullRequest || {});
@@ -380,8 +386,21 @@ class RequestForm extends React.Component {
         </FormattedMessage>
       </PaneMenu>
     );
-    const requestTypeOptions = _.sortBy(optionLists.requestTypes || [], ['label']).map(t => ({ label: t.label, value: t.id, selected: requestType === t.id }));
-    const fulfilmentTypeOptions = _.sortBy(optionLists.fulfilmentTypes || [], ['label']).map(t => ({ label: t.label, value: t.id, selected: t.id === fulfilmentPreference }));
+    const sortedRequestTypes = _.sortBy(requestTypes, ['label']);
+    const sortedFulfilmentTypes = _.sortBy(fulfilmentTypes, ['label']);
+
+    const requestTypeOptions = sortedRequestTypes.map(option => ({
+      labelTranslationPath: option.label,
+      value: option.id,
+      selected: requestType === option.id
+    }));
+
+    const fulfilmentTypeOptions = sortedFulfilmentTypes.map(option => ({
+      labelTranslationPath: option.label,
+      value: option.id,
+      selected: option.id === fulfilmentPreference
+    }));
+
     const labelAsterisk = isEditForm ? '' : ' *';
     const disableRecordCreation = true;
 
@@ -390,7 +409,7 @@ class RequestForm extends React.Component {
     let addressDetail;
     if (selectedUser && selectedUser.personal && selectedUser.personal.addresses) {
       deliveryLocations = selectedUser.personal.addresses.map((a) => {
-        const typeName = _.find(optionLists.addressTypes, { id: a.addressTypeId }).addressType;
+        const typeName = _.find(addressTypes, { id: a.addressTypeId }).addressType;
         return { label: typeName, value: a.addressTypeId };
       });
       deliveryLocations = _.sortBy(deliveryLocations, ['label']);
@@ -472,9 +491,21 @@ class RequestForm extends React.Component {
                             name="requestType"
                             component={Select}
                             fullWidth
-                            dataOptions={requestTypeOptions}
                             disabled={isEditForm}
-                          />
+                          >
+                            {requestTypeOptions.map(({ labelTranslationPath, value, selected }) => (
+                              <FormattedMessage id={labelTranslationPath}>
+                                {translatedLabel => (
+                                  <option
+                                    value={value}
+                                    selected={selected}
+                                  >
+                                    {translatedLabel}
+                                  </option>
+                                )}
+                              </FormattedMessage>
+                            ))}
+                          </Field>
                         }
                         {isEditForm &&
                           <KeyValue
@@ -661,7 +692,7 @@ class RequestForm extends React.Component {
                           onChangeAddress={this.onChangeAddress}
                           onChangeFulfilment={this.onChangeFulfilment}
                           proxy={fullRequest ? fullRequest.proxy : this.state.proxy}
-                          servicePoints={optionLists.servicePoints}
+                          servicePoints={servicePoints}
                           onSelectProxy={this.onUserClick}
                           onCloseProxy={() => { this.setState({ selectedUser: null, proxy: null }); }}
                         />

@@ -291,8 +291,8 @@ class ViewRequest extends React.Component {
         lastMenu={detailMenu}
         actionMenuItems={!isRequestClosed ? [{
           id: 'clickable-edit-request',
-          title: 'Edit Request',
-          label: 'Edit',
+          title: formatMessage({ id: 'ui-requests.actions.editRequest' }),
+          label: <FormattedMessage id="ui-requests.actions.edit" />,
           href: this.props.editLink,
           onClick: this.props.onEdit,
           icon: 'edit',

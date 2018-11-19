@@ -1,14 +1,14 @@
 import React from 'react';
 
 export const requestTypes = [
-  { id: 'Recall', label: 'Recall' },
-  { id: 'Hold', label: 'Hold' },
-  { id: 'Page', label: 'Page' },
+  { id: 'Recall', label: 'ui-requests.requestMeta.type.recall' },
+  { id: 'Hold', label: 'ui-requests.requestMeta.type.hold' },
+  { id: 'Page', label: 'ui-requests.requestMeta.type.page' },
 ];
 
 export const fulfilmentTypes = [
-  { id: 'Hold Shelf', label: 'Hold Shelf' },
-  { id: 'Delivery', label: 'Delivery' },
+  { id: 'Hold Shelf', label: 'ui-requests.requestMeta.fulfilment.holdShelf' },
+  { id: 'Delivery', label: 'ui-requests.requestMeta.fulfilment.delivery' },
 ];
 
 export const toUserAddress = addr => (
