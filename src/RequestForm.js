@@ -354,36 +354,26 @@ class RequestForm extends React.Component {
     );
     const addRequestLastMenu = (
       <PaneMenu>
-        <FormattedMessage id="ui-requests.actions.createNewRequest">
-          {title => (
-            <Button
-              id="clickable-create-request"
-              type="button"
-              title={title}
-              disabled={pristine || submitting}
-              onClick={handleSubmit}
-            >
-              <FormattedMessage id="ui-requests.actions.newRequest" />
-            </Button>
-          )}
-        </FormattedMessage>
+        <Button
+          id="clickable-create-request"
+          type="button"
+          disabled={pristine || submitting}
+          onClick={handleSubmit}
+        >
+          <FormattedMessage id="ui-requests.actions.newRequest" />
+        </Button>
       </PaneMenu>
     );
     const editRequestLastMenu = (
       <PaneMenu>
-        <FormattedMessage id="ui-requests.actions.updateRequest">
-          {title => (
-            <Button
-              id="clickable-update-request"
-              type="button"
-              title={title}
-              disabled={pristine || submitting}
-              onClick={handleSubmit}
-            >
-              <FormattedMessage id="ui-requests.actions.updateRequest" />
-            </Button>
-          )}
-        </FormattedMessage>
+        <Button
+          id="clickable-update-request"
+          type="button"
+          disabled={pristine || submitting}
+          onClick={handleSubmit}
+        >
+          <FormattedMessage id="ui-requests.actions.updateRequest" />
+        </Button>
       </PaneMenu>
     );
     const sortedRequestTypes = _.sortBy(requestTypes, ['label']);
@@ -460,7 +450,6 @@ class RequestForm extends React.Component {
             lastMenu={isEditForm ? editRequestLastMenu : addRequestLastMenu}
             actionMenuItems={isEditForm ? [{
               id: 'clickable-cancel-request',
-              title: formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
               label: <FormattedMessage id="ui-requests.cancel.cancelRequest" />,
               onClick: () => this.setState({ isCancellingRequest: true }),
               icon: 'cancel',

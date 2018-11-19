@@ -1,6 +1,6 @@
 {
   "routingErrorOops": "Uh-oh!",
-  "routingError":"How did you get to",
+  "routingError":"How did you get to {pathname}?",
 
   "meta.title": "Requests",
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",

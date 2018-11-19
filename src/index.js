@@ -25,10 +25,10 @@ class RequestsRouting extends React.Component {
       <div>
         <h2><FormattedMessage id="ui-requests.routingErrorOops" /></h2>
         <p>
-          <FormattedMessage id="ui-requests.routingError" />
-          {' '}
-          <tt>{this.props.location.pathname}</tt>
-          ?
+          <FormattedMessage
+            id="ui-requests.routingError"
+            values={{ pathname: <tt>{this.props.location.pathname}</tt> }}
+          />
         </p>
       </div>
     );
