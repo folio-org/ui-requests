@@ -184,10 +184,10 @@ class Requests extends React.Component {
       if (recordsLoaded.length === numTotalRecords) {
         const columnHeaders = this.headers;
         const recordsToCSV = this.buildRecords(recordsLoaded); // logic to concatenate the contributors list
-        exportCsv(recordsToCSV, this.props.intl, {
+        exportCsv(recordsToCSV, {
           onlyFields: { columnHeaders, module: 'ui-requests' },
           excludeFields: ['id'],
-        });
+        }, this.props.intl);
         this.csvExportPending = false;
       }
     }
