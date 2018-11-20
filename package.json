@@ -1,6 +1,6 @@
 {
   "name": "@folio/requests",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Requests manager",
   "repository": "folio-org/ui-requests",
   "publishConfig": {
@@ -60,6 +60,7 @@
           "users.item.get",
           "proxiesfor.collection.get",
           "inventory-storage.service-points.collection.get",
+          "inventory-storage.service-points.item.get",
           "addresstypes.collection.get",
           "usergroups.collection.get",
           "configuration.entries.collection.get",
