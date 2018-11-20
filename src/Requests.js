@@ -175,6 +175,14 @@ class Requests extends React.Component {
       'item.callNumber', 'item.enumeration', 'item.status', 'loan.dueDate', 'requester.firstName',
       'requester.barcode', 'requester.patronGroup', 'fulfilmentPreference', 'requester.pickupServicePoint',
       'requester.deliveryAddress', 'proxy.firstName', 'proxy.barcode'];
+
+    // Map to pass into exportCsv
+    this.columnHeadersMap = this.headers.map(item => {
+      return {
+        label: this.props.intl.formatMessage({ id: `ui-requests.${item}` }),
+        value: item
+      };
+    });
   }
 
   componentDidUpdate() {
@@ -182,12 +190,12 @@ class Requests extends React.Component {
       const recordsLoaded = this.props.resources.records.records;
       const numTotalRecords = this.props.resources.records.other.totalRecords;
       if (recordsLoaded.length === numTotalRecords) {
-        const columnHeaders = this.headers;
+        const columnHeadersMap = this.columnHeadersMap;
         const recordsToCSV = this.buildRecords(recordsLoaded); // logic to concatenate the contributors list
         exportCsv(recordsToCSV, {
-          onlyFields: { columnHeaders, module: 'ui-requests' },
+          onlyFields: { columnHeadersMap },
           excludeFields: ['id'],
-        }, this.props.intl);
+        });
         this.csvExportPending = false;
       }
     }
