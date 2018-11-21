@@ -336,6 +336,7 @@ class RequestForm extends React.Component {
     const { selectedUser, selectedItem, selectedLoan, requestCount } = this.state;
     const { item, requestType, fulfilmentPreference } = (fullRequest || {});
     const isEditForm = (item && item.barcode);
+    const submittingButtonIsDisabled = pristine || submitting;
 
     const addRequestFirstMenu = (
       <PaneMenu>
@@ -357,7 +358,7 @@ class RequestForm extends React.Component {
         <Button
           id="clickable-create-request"
           type="button"
-          disabled={pristine || submitting}
+          disabled={submittingButtonIsDisabled}
           onClick={handleSubmit}
         >
           <FormattedMessage id="ui-requests.actions.newRequest" />
@@ -369,7 +370,7 @@ class RequestForm extends React.Component {
         <Button
           id="clickable-update-request"
           type="button"
-          disabled={pristine || submitting}
+          disabled={submittingButtonIsDisabled}
           onClick={handleSubmit}
         >
           <FormattedMessage id="ui-requests.actions.updateRequest" />
@@ -379,16 +380,16 @@ class RequestForm extends React.Component {
     const sortedRequestTypes = _.sortBy(requestTypes, ['label']);
     const sortedFulfilmentTypes = _.sortBy(fulfilmentTypes, ['label']);
 
-    const requestTypeOptions = sortedRequestTypes.map(option => ({
-      labelTranslationPath: option.label,
-      value: option.id,
-      selected: requestType === option.id
+    const requestTypeOptions = sortedRequestTypes.map(({ label, id }) => ({
+      labelTranslationPath: label,
+      value: id,
+      selected: requestType === id
     }));
 
-    const fulfilmentTypeOptions = sortedFulfilmentTypes.map(option => ({
-      labelTranslationPath: option.label,
-      value: option.id,
-      selected: option.id === fulfilmentPreference
+    const fulfilmentTypeOptions = sortedFulfilmentTypes.map(({ label, id }) => ({
+      labelTranslationPath: label,
+      value: id,
+      selected: id === fulfilmentPreference
     }));
 
     const labelAsterisk = isEditForm ? '' : ' *';

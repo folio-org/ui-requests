@@ -75,7 +75,7 @@ class CancelRequestDialog extends React.Component {
     return null;
   }
 
-  onCancelRequest = () => {
+  onCancelRequestHandler = () => {
     const {
       additionalInfo,
       reason,
@@ -177,7 +177,7 @@ class CancelRequestDialog extends React.Component {
           <Button
             buttonStyle="primary"
             disabled={reason.requiresAdditionalInformation && !additionalInfo}
-            onClick={this.onCancelRequest}
+            onClick={this.onCancelRequestHandler}
           >
             <FormattedMessage id="stripes-core.button.confirm" />
           </Button>
