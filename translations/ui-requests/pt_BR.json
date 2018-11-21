@@ -26,7 +26,7 @@
     "item.barcode": "Código de barras do item",
     "item.scanOrEnterBarcode": "Scaneie ou insira o código de barras do item",
     "item.title": "Título",
-    "item.contributor": "Colaborador",
+    "item.contributorNames": "Colaborador",
     "item.location.name": "Localização das estantes",
     "item.callNumber": "Número de chamada",
     "item.volume": "Volume",

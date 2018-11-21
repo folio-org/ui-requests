@@ -26,7 +26,7 @@
     "item.barcode": "Tétel vonalkódja",
     "item.scanOrEnterBarcode": "Olvassa vagy írja be a tétel vonalkódját",
     "item.title": "Cím",
-    "item.contributor": "Közreműködő",
+    "item.contributorNames": "Közreműködő",
     "item.location.name": "Polc lelőhely",
     "item.callNumber": "Raktári jelzet",
     "item.volume": "Kötet",
