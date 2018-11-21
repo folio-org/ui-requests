@@ -9,8 +9,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import {
-  injectIntl,
-  intlShape,
   FormattedMessage,
   FormattedDate,
 } from 'react-intl';
@@ -78,7 +76,6 @@ class ViewRequest extends React.Component {
         log: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
-    intl: intlShape,
     match: PropTypes.object,
   };
 
@@ -204,7 +201,6 @@ class ViewRequest extends React.Component {
       optionLists,
       location,
       stripes,
-      intl: { formatMessage },
       editLink,
       onEdit,
     } = this.props;
@@ -232,18 +228,13 @@ class ViewRequest extends React.Component {
     const detailMenu = (
       <PaneMenu>
         {!isRequestClosed &&
-        <FormattedMessage id="ui-requests.actions.editRequest">
-          {title => (
-            <IconButton
-              icon="edit"
-              id="clickable-edit-request"
-              style={{ visibility: !request ? 'hidden' : 'visible' }}
-              href={editLink}
-              onClick={onEdit}
-              title={title}
-            />
-          )}
-        </FormattedMessage>
+          <IconButton
+            icon="edit"
+            id="clickable-edit-request"
+            style={{ visibility: !request ? 'hidden' : 'visible' }}
+            href={editLink}
+            onClick={onEdit}
+          />
         }
       </PaneMenu>
     );
@@ -292,14 +283,12 @@ class ViewRequest extends React.Component {
         lastMenu={detailMenu}
         actionMenuItems={!isRequestClosed ? [{
           id: 'clickable-edit-request',
-          title: 'Edit Request',
-          label: 'Edit',
+          label: <FormattedMessage id="ui-requests.actions.edit" />,
           href: this.props.editLink,
           onClick: this.props.onEdit,
           icon: 'edit',
         }, {
           id: 'clickable-cancel-request',
-          title: formatMessage({ id: 'ui-requests.cancel.cancelRequest' }),
           label: <FormattedMessage id="ui-requests.cancel.cancelRequest" />,
           onClick: () => this.setState({ isCancellingRequest: true }),
           icon: 'cancel',
@@ -417,4 +406,4 @@ class ViewRequest extends React.Component {
   }
 }
 
-export default injectIntl(ViewRequest);
+export default ViewRequest;
