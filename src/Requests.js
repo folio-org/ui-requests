@@ -171,10 +171,10 @@ class Requests extends React.Component {
     this.findResource = this.findResource.bind(this);
     this.buildRecords = this.buildRecords.bind(this);
     this.headers = ['requestType', 'status', 'requestExpirationDate', 'holdShelfExpirationDate',
-      'position', 'item.barcode', 'item.title', 'item.contributorNames', 'item.shelfLocation',
-      'item.callNumber', 'item.enumeration', 'item.status', 'loan.dueDate', 'requester.firstName',
-      'requester.barcode', 'requester.patronGroup', 'fulfilmentPreference', 'requester.pickupServicePoint',
-      'requester.deliveryAddress', 'proxy.firstName', 'proxy.barcode'];
+      'position', 'item.barcode', 'item.title', 'item.contributorNames', 'item.location.name',
+      'item.callNumber', 'item.enumeration', 'item.status', 'loan.dueDate', 'requester.name',
+      'requester.barcode', 'requester.patronGroup.group', 'fulfilmentPreference', 'requester.pickupServicePoint',
+      'deliveryAddress', 'proxy.name', 'proxy.barcode'];
 
     // Map to pass into exportCsv
     this.columnHeadersMap = this.headers.map(item => {
@@ -193,7 +193,7 @@ class Requests extends React.Component {
         const columnHeadersMap = this.columnHeadersMap;
         const onlyFields = columnHeadersMap;
         const clonedRequests = JSON.parse(JSON.stringify(recordsLoaded)); // Do not mutate the actual resource
-        const recordsToCSV = this.buildRecords(clonedRequests); // logic to concatenate the contributors list
+        const recordsToCSV = this.buildRecords(clonedRequests);
         exportCsv(recordsToCSV, {
           onlyFields,
           excludeFields: ['id'],
@@ -210,6 +210,18 @@ class Requests extends React.Component {
         record.item.contributorNames.forEach(item => {
           contributorNamesMap.push(item.name);
         });
+      }
+      if (record.requester) {
+        const { firstName, middleName, lastName } = record.requester;
+        record.requester.name = `${firstName} ${middleName} ${lastName}`;
+      }
+      if (record.proxy) {
+        const { firstName, middleName, lastName } = record.proxy;
+        record.proxy.name = `${firstName} ${middleName} ${lastName}`;
+      }
+      if (record.deliveryAddress) {
+        const { addressLine1, city, region, postalCode, countryId } = record.deliveryAddress;
+        record.deliveryAddress = `${addressLine1} ${city} ${region} ${countryId} ${postalCode}`;
       }
       record.item.contributorNames = contributorNamesMap.join('; ');
     });
