@@ -191,9 +191,11 @@ class Requests extends React.Component {
       const numTotalRecords = this.props.resources.records.other.totalRecords;
       if (recordsLoaded.length === numTotalRecords) {
         const columnHeadersMap = this.columnHeadersMap;
-        const recordsToCSV = this.buildRecords(recordsLoaded); // logic to concatenate the contributors list
+        const onlyFields = columnHeadersMap;
+        const clonedRequests = JSON.parse(JSON.stringify(recordsLoaded)); // Do not mutate the actual resource
+        const recordsToCSV = this.buildRecords(clonedRequests); // logic to concatenate the contributors list
         exportCsv(recordsToCSV, {
-          onlyFields: { columnHeadersMap },
+          onlyFields,
           excludeFields: ['id'],
         });
         this.csvExportPending = false;
