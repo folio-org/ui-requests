@@ -23,7 +23,7 @@ const RESULT_COUNT_INCREMENT = 30;
 // TODO: Translate these filter labels
 const filterConfig = [
   {
-    label: 'Request type',
+    label: <FormattedMessage id="ui-requests.requestMeta.type" />,
     name: 'requestType',
     cql: 'requestType',
     values: [
@@ -33,7 +33,7 @@ const filterConfig = [
     ],
   },
   {
-    label: 'Request status',
+    label: <FormattedMessage id="ui-requests.requestMeta.status" />,
     name: 'requestStatus',
     cql: 'status',
     values: [
@@ -158,6 +158,9 @@ class Requests extends React.Component {
 
   constructor(props) {
     super(props);
+    const {
+      intl: { formatMessage }
+    } = props;
 
     this.okapiUrl = props.stripes.okapi.url;
     this.httpHeaders = Object.assign({}, {
@@ -165,6 +168,18 @@ class Requests extends React.Component {
       'X-Okapi-Token': props.stripes.store.getState().okapi.token,
       'Content-Type': 'application/json',
     });
+
+    this.columnLabels = {
+      title: formatMessage({ id: 'ui-requests.requests.title' }),
+      type: formatMessage({ id: 'ui-requests.requests.type' }),
+      requestStatus: formatMessage({ id: 'ui-requests.requests.status' }),
+      requesterBarcode: formatMessage({ id: 'ui-requests.requests.requesterBarcode' }),
+      requester: formatMessage({ id: 'ui-requests.requests.requester' }),
+      requestDate: formatMessage({ id: 'ui-requests.requests.requestDate' }),
+      proxy: formatMessage({ id: 'ui-requests.requests.proxy' }),
+      position: formatMessage({ id: 'ui-requests.requests.position' }),
+      itemBarcode: formatMessage({ id: 'ui-requests.requests.itemBarcode' })
+    };
 
     this.addRequestFields = this.addRequestFields.bind(this);
     this.create = this.create.bind(this);
@@ -271,20 +286,32 @@ class Requests extends React.Component {
       resources,
       stripes,
     } = this.props;
+
+    const {
+      itemBarcode,
+      position,
+      proxy,
+      requestDate,
+      requester,
+      requesterBarcode,
+      requestStatus,
+      type,
+      title,
+    } = this.columnLabels;
+
     const patronGroups = (resources.patronGroups || {}).records || [];
     const addressTypes = (resources.addressTypes || {}).records || [];
     const servicePoints = (resources.servicePoints || {}).records || [];
-
     const resultsFormatter = {
-      'Item barcode': rq => (rq.item ? rq.item.barcode : ''),
-      'Position': rq => (rq.position || ''),
-      'Proxy': rq => (rq.proxy ? getFullName(rq.proxy) : ''),
-      'Request Date': rq => <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />,
-      'Requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
-      'Requester Barcode': rq => (rq.requester ? rq.requester.barcode : ''),
-      'Request status': rq => rq.status,
-      'Type': rq => rq.requestType,
-      'Title': rq => (rq.item ? rq.item.title : ''),
+      [itemBarcode]: rq => (rq.item ? rq.item.barcode : ''),
+      [position]: rq => (rq.position || ''),
+      [proxy]: rq => (rq.proxy ? getFullName(rq.proxy) : ''),
+      [requestDate]: rq => <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />,
+      [requester]: rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
+      [requesterBarcode]: rq => (rq.requester ? rq.requester.barcode : ''),
+      [requestStatus]: rq => rq.status,
+      [type]: rq => rq.requestType,
+      [title]: rq => (rq.item ? rq.item.title : ''),
     };
 
     const actionMenuItems = [
@@ -309,8 +336,20 @@ class Requests extends React.Component {
       resultCountIncrement={RESULT_COUNT_INCREMENT}
       viewRecordComponent={ViewRequest}
       editRecordComponent={RequestForm}
-      visibleColumns={['Request Date', 'Title', 'Item barcode', 'Type', 'Request status', 'Position', 'Requester', 'Requester Barcode', 'Proxy']}
-      columnWidths={{ 'Request Date': '10%' }}
+      visibleColumns={[
+        requestDate,
+        title,
+        itemBarcode,
+        type,
+        requestStatus,
+        position,
+        requester,
+        requesterBarcode,
+        proxy,
+      ]}
+      columnWidths={{
+        [requestDate]: '10%'
+      }}
       resultsFormatter={resultsFormatter}
       newRecordInitialValues={{ requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' }}
       massageNewRecord={this.massageNewRecord}

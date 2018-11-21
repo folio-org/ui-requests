@@ -128,9 +128,21 @@ class UserForm extends React.Component {
               label={<FormattedMessage id="ui-requests.requester.fulfilmentPref" />}
               component={Select}
               fullWidth
-              dataOptions={fulfilmentTypeOptions}
               onChange={onChangeFulfilment}
-            />
+            >
+              {fulfilmentTypeOptions.map(({ labelTranslationPath, value, selected }) => (
+                <FormattedMessage id={labelTranslationPath}>
+                  {translatedLabel => (
+                    <option
+                      value={value}
+                      selected={selected}
+                    >
+                      {translatedLabel}
+                    </option>
+                  )}
+                </FormattedMessage>
+              ))}
+            </Field>
           </Col>
           <Col xs={4}>
             {
