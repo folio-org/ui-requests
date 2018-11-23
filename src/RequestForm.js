@@ -454,7 +454,7 @@ class RequestForm extends React.Component {
             }}
           >
             <Icon icon="hollowX">
-              <FormattedMessage id="ui-requests.cancel.cancelRequest" />,
+              <FormattedMessage id="ui-requests.cancel.cancelRequest" />
             </Icon>
           </Button>
         );
