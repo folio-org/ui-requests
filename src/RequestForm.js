@@ -443,23 +443,24 @@ class RequestForm extends React.Component {
       </div> : '-';
 
     const actionMenu = ({ onToggle }) => {
-      if (isEditForm) {
-        return (
-          <Button
-            buttonStyle="dropdownItem"
-            id="clickable-cancel-request"
-            onClick={() => {
-              this.setState({ isCancellingRequest: true });
-              onToggle();
-            }}
-          >
-            <Icon icon="hollowX">
-              <FormattedMessage id="ui-requests.cancel.cancelRequest" />
-            </Icon>
-          </Button>
-        );
+      if (!isEditForm) {
+        return undefined;
       }
-      return undefined;
+
+      return (
+        <Button
+          buttonStyle="dropdownItem"
+          id="clickable-cancel-request"
+          onClick={() => {
+            this.setState({ isCancellingRequest: true });
+            onToggle();
+          }}
+        >
+          <Icon icon="hollowX">
+            <FormattedMessage id="ui-requests.cancel.cancelRequest" />
+          </Icon>
+        </Button>
+      );
     };
 
     return (
