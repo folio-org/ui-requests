@@ -186,10 +186,18 @@ class Requests extends React.Component {
     this.findResource = this.findResource.bind(this);
     this.buildRecords = this.buildRecords.bind(this);
     this.headers = ['requestType', 'status', 'requestExpirationDate', 'holdShelfExpirationDate',
-      'position', 'item.barcode', 'item.title', 'item.contributorNames', 'item.shelfLocation',
-      'item.callNumber', 'item.enumeration', 'item.status', 'loan.dueDate', 'requester.firstName',
-      'requester.barcode', 'requester.patronGroup', 'fulfilmentPreference', 'requester.pickupServicePoint',
-      'requester.deliveryAddress', 'proxy.firstName', 'proxy.barcode'];
+      'position', 'item.barcode', 'item.title', 'item.contributorNames', 'item.location.name',
+      'item.callNumber', 'item.enumeration', 'item.status', 'loan.dueDate', 'requester.name',
+      'requester.barcode', 'requester.patronGroup.group', 'fulfilmentPreference', 'requester.pickupServicePoint',
+      'deliveryAddress', 'proxy.name', 'proxy.barcode'];
+
+    // Map to pass into exportCsv
+    this.columnHeadersMap = this.headers.map(item => {
+      return {
+        label: this.props.intl.formatMessage({ id: `ui-requests.${item}` }),
+        value: item
+      };
+    });
   }
 
   componentDidUpdate() {
@@ -197,12 +205,14 @@ class Requests extends React.Component {
       const recordsLoaded = this.props.resources.records.records;
       const numTotalRecords = this.props.resources.records.other.totalRecords;
       if (recordsLoaded.length === numTotalRecords) {
-        const columnHeaders = this.headers;
-        const recordsToCSV = this.buildRecords(recordsLoaded); // logic to concatenate the contributors list
+        const columnHeadersMap = this.columnHeadersMap;
+        const onlyFields = columnHeadersMap;
+        const clonedRequests = JSON.parse(JSON.stringify(recordsLoaded)); // Do not mutate the actual resource
+        const recordsToCSV = this.buildRecords(clonedRequests);
         exportCsv(recordsToCSV, {
-          onlyFields: { columnHeaders, module: 'ui-requests' },
+          onlyFields,
           excludeFields: ['id'],
-        }, this.props.intl);
+        });
         this.csvExportPending = false;
       }
     }
@@ -215,6 +225,18 @@ class Requests extends React.Component {
         record.item.contributorNames.forEach(item => {
           contributorNamesMap.push(item.name);
         });
+      }
+      if (record.requester) {
+        const { firstName, middleName, lastName } = record.requester;
+        record.requester.name = `${firstName} ${middleName} ${lastName}`;
+      }
+      if (record.proxy) {
+        const { firstName, middleName, lastName } = record.proxy;
+        record.proxy.name = `${firstName} ${middleName} ${lastName}`;
+      }
+      if (record.deliveryAddress) {
+        const { addressLine1, city, region, postalCode, countryId } = record.deliveryAddress;
+        record.deliveryAddress = `${addressLine1} ${city} ${region} ${countryId} ${postalCode}`;
       }
       record.item.contributorNames = contributorNamesMap.join('; ');
     });

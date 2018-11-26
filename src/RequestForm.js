@@ -423,7 +423,7 @@ class RequestForm extends React.Component {
     // map column-IDs to table-header-values
     const columnMapping = {
       name: formatMessage({ id: 'ui-requests.requester.name' }),
-      patronGroup: formatMessage({ id: 'ui-requests.requester.patronGroup' }),
+      patronGroup: formatMessage({ id: 'ui-requests.requester.patronGroup.group' }),
       username: formatMessage({ id: 'ui-requests.requester.username' }),
       barcode: formatMessage({ id: 'ui-requests.barcode' }),
     };
