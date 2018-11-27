@@ -1,6 +1,41 @@
 # Change history for ui-requests
 
+## IN PROGRESS
+
+* Fix bug preventing item view accordions from closing. Fixes UIREQ-123.
+* Fix bug causing barcode validation to misbehave. Fixes UIREQ-127.
+* Refactor requests app to address UIREQ-124, UIREQ-132 and UIREQ-126.
+* Show `active` column in find-user popup. Refs STCOM-385.
+* Populate pickup service point with service points. Fixes UIREQ-131.
+* Configure 'Requests: All permissions' permission set. Fixes UIREQ-106.
+* Show No Requests By Default. Fixes UIREQ-150.
+* Support circulation v5.0, requiring service-point information on loans. Refs UIREQ-161.
+* Use documented react-intl patterns instead of stripes.intl. UIREQ-135
+* Improve opening request record. Fixes UIREQ-134.
+
+## 1.4.1 (https://github.com/folio-org/ui-requests/tree/v1.4.1) (2018-10-05)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.4.0...v1.4.1)
+
+* Fix `exportCsv` import
+
+## 1.4.0 (https://github.com/folio-org/ui-requests/tree/v1.4.0) (2018-10-05)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.3.0...v1.4.0)
+
+* Link to request queue from detailed view, refs UIREQ-122
+* Fix filters2cql import
+
+## 1.3.0 (https://github.com/folio-org/ui-requests/tree/v1.3.0) (2018-10-03)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.2.0...v1.3.0)
+
+* Add alternate dependency `inventory` 7.0. Completes UIREQ-115
+* Update `stripes-form` dependency to v1.0.0.
+* Fix case-sensitive filter tests. Fixes UIREQ-119.
+* Remove notes helper app
+* Copy `craftLayerUrl()` from `stripes-components`
+* Use `stripes` 1.0 framework
+
 ## 1.2.0 (https://github.com/folio-org/ui-requests/tree/v1.2.0) (2018-09-10)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.1.0...v1.2.0)
 
 * Refactor code to use `<SearchAndSort>` component. Completes UIREQ-49.
 * Include clear-filter handlers. Refs STRIPES-495.

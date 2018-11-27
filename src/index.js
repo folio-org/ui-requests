@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Route from 'react-router-dom/Route';
 import Switch from 'react-router-dom/Switch';
+import { hot } from 'react-hot-loader';
+import { FormattedMessage } from 'react-intl';
 import Requests from './Requests';
 
 class RequestsRouting extends React.Component {
@@ -21,12 +23,12 @@ class RequestsRouting extends React.Component {
   NoMatch() {
     return (
       <div>
-        <h2>Uh-oh!</h2>
+        <h2><FormattedMessage id="ui-requests.routingErrorOops" /></h2>
         <p>
-          How did you get to
-          {' '}
-          <tt>{this.props.location.pathname}</tt>
-          ?
+          <FormattedMessage
+            id="ui-requests.routingError"
+            values={{ pathname: <tt>{this.props.location.pathname}</tt> }}
+          />
         </p>
       </div>
     );
@@ -36,7 +38,7 @@ class RequestsRouting extends React.Component {
     return (
       <Switch>
         <Route
-          path={`${this.props.match.path}`}
+          path={this.props.match.path}
           render={() => <this.connectedApp {...this.props} />}
         />
         <Route component={() => { this.NoMatch(); }} />
@@ -45,4 +47,4 @@ class RequestsRouting extends React.Component {
   }
 }
 
-export default RequestsRouting;
+export default hot(module)(RequestsRouting);

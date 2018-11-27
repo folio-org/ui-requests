@@ -1,10 +1,7 @@
 import { get } from 'lodash';
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-import Headline from '@folio/stripes-components/lib/Headline';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-
+import { Col, Headline, Row } from '@folio/stripes/components';
 import css from './requests.css';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -29,14 +26,14 @@ export function userHighlightBox(title, name, id, barcode) {
             {title}
           </Headline>
           <div>
-            {`${recordLink} Barcode: ${barcodeLink}`}
+            {recordLink}
+            {' '}
+            Barcode:
+            {' '}
+            {barcodeLink}
           </div>
         </div>
       </Col>
     </Row>
   );
-}
-
-export function translate(message, stripes) {
-  return stripes.intl.formatMessage({ id: `ui-requests.${message}` });
 }

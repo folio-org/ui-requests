@@ -1,6 +1,6 @@
 {
   "name": "@folio/requests",
-  "version": "1.2.0",
+  "version": "1.4.3",
   "description": "Requests manager",
   "repository": "folio-org/ui-requests",
   "publishConfig": {
@@ -10,7 +10,7 @@
   "engines": {
     "node": ">=6.0.0"
   },
-  "main": "index.js",
+  "main": "src/index.js",
   "stripes": {
     "type": "app",
     "displayName": "ui-requests.meta.title",
@@ -27,9 +27,8 @@
     "queryResource": "query",
     "okapiInterfaces": {
       "cancellation-reason-storage": "1.1",
-      "circulation": "3.4 4.0",
-      "inventory": "5.0 6.0",
-      "notes": "1.0",
+      "circulation": "3.4 4.0 5.0",
+      "inventory": "6.0 7.0",
       "request-storage": "2.0"
     },
     "permissionSets": [
@@ -43,10 +42,14 @@
         "description": "All permissions for the Requests app",
         "subPermissions": [
           "module.requests.enabled",
+          "circulation.loans.collection.get",
           "circulation.requests.collection.get",
           "circulation.requests.item.post",
           "circulation.requests.item.put",
           "circulation.requests.item.get",
+          "circulation-storage.cancellation-reasons.collection.get",
+          "circulation-storage.loans.collection.get",
+          "circulation-storage.loans.item.get",
           "circulation-storage.requests.collection.get",
           "circulation-storage.requests.collection.delete",
           "circulation-storage.requests.item.get",
@@ -55,12 +58,24 @@
           "circulation-storage.requests.item.delete",
           "users.collection.get",
           "users.item.get",
-          "circulation-storage.loans.collection.get",
-          "circulation-storage.loans.item.get",
+          "proxiesfor.collection.get",
+          "inventory-storage.service-points.collection.get",
+          "inventory-storage.service-points.item.get",
+          "addresstypes.collection.get",
+          "usergroups.collection.get",
+          "configuration.entries.collection.get",
+
           "inventory.items.collection.get",
           "inventory.items.item.get",
-          "addresstypes.collection.get",
-          "usergroups.collection.get"
+          "inventory.instances.item.get",
+          "inventory.instances.collection.get",
+          "inventory-storage.items.collection.get",
+          "inventory-storage.items.item.get",
+          "inventory-storage.holdings.collection.get",
+          "inventory-storage.holdings.item.get",
+          "inventory-storage.instances.item.get",
+          "inventory-storage.instances.collection.get"
+
         ],
         "visible": true
       }
@@ -72,10 +87,8 @@
   },
   "devDependencies": {
     "@folio/eslint-config-stripes": "^3.2.1",
+    "@folio/stripes": "^1.0.0",
     "@folio/stripes-cli": "^1.4.0",
-    "@folio/stripes-connect": "^3.1.0",
-    "@folio/stripes-core": "^2.11.1",
-    "@folio/stripes-logger": "^0.0.2",
     "babel-eslint": "^9.0.0",
     "eslint": "^5.5.0",
     "react": "^16.5.1",
@@ -85,22 +98,18 @@
   },
   "dependencies": {
     "@folio/react-intl-safe-html": "^1.0.2",
-    "@folio/stripes-components": "^3.0.0",
-    "@folio/stripes-form": "^0.8.1",
-    "@folio/stripes-smart-components": "^1.4.19",
-    "@folio/stripes-util": "^1.0.0",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.4",
     "moment-timezone": "^0.5.14",
     "prop-types": "^15.5.10",
     "query-string": "^5.1.0",
+    "react-hot-loader": "^4.3.12",
     "react-intl": "^2.4.0",
     "react-router-dom": "^4.0.0",
     "redux-form": "^7.0.3"
   },
   "peerDependencies": {
-    "@folio/stripes-connect": "^3.1.0",
-    "@folio/stripes-core": "^2.11.1",
+    "@folio/stripes": "^1.0.0",
     "react": "*"
   },
   "optionalDependencies": {

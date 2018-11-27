@@ -14,49 +14,58 @@ module.exports.test = function uiTest(uiTestCtx) {
       before((done) => {
         login(nightmare, config, done); // logs in with the default admin credentials
       });
+
       after((done) => {
         logout(nightmare, config, done);
       });
+
       it('should open module "Requests" and find version tag ', (done) => {
         nightmare
           .use(openApp(nightmare, config, done, 'requests', testVersion))
           .then(result => result);
       });
+
       it('should find an active user barcode', (done) => {
         const listitem = '#list-users div[role="listitem"] > a:not([aria-label*="Barcode: undef"])';
         const bcodeNode = `${listitem} > div:nth-child(3)`;
         nightmare
           .wait(1111)
+          .wait('#clickable-users-module')
           .click('#clickable-users-module')
-          .wait(1111)
           .wait('#clickable-filter-pg-faculty')
           .click('#clickable-filter-pg-faculty')
+          .wait('#list-users:not([data-total-count="0"])')
           .wait(listitem)
           .evaluate((bcode) => {
-            const bc = document.querySelector(bcode);
-            return bc.textContent;
+            return document.querySelector(bcode).textContent;
           }, bcodeNode)
           .then((result) => {
-            userbc = result;
             done();
+            userbc = result;
             console.log(`        Found ${userbc}`);
           })
           .catch(done);
       });
+
       const itembc = createInventory(nightmare, config, 'Request title');
+
       it('should check out newly created item', (done) => {
         nightmare
+          .wait('#clickable-checkout-module')
           .click('#clickable-checkout-module')
-          .wait('#section-patron button[title*="Find"]')
-          .click('#section-patron button[title*="Find"]')
+          .wait('#section-patron #clickable-plugin-find-user')
+          .click('#section-patron #clickable-plugin-find-user')
           .wait('#clickable-filter-pg-faculty')
           .click('#clickable-filter-pg-faculty')
-          .wait('#list-users div[role="listitem"]:nth-of-type(9)')
-          .click('#list-users div[role="listitem"]:nth-of-type(9) a')
+          .wait('#list-users div[role="listitem"]:nth-of-type(3)')
+          .click('#list-users div[role="listitem"]:nth-of-type(3) a')
           .wait(2222)
+          .wait('#input-item-barcode')
           .insert('#input-item-barcode', itembc)
+          .wait('#clickable-add-item')
           .click('#clickable-add-item')
           .wait('#list-items-checked-out')
+          .wait('#clickable-done')
           .click('#clickable-done')
           .then(() => {
             done();
@@ -87,11 +96,14 @@ module.exports.test = function uiTest(uiTestCtx) {
           })
           .catch(done);
       });
+
       it('should find new request in requests list', (done) => {
         nightmare
           .wait('#input-request-search')
           .insert('#input-request-search', itembc)
-          .wait(`#list-requests div[title="${itembc}"]`)
+          .wait('button[type="submit"]')
+          .click('button[type="submit"]')
+          .wait('#list-requests[data-total-count="1"]')
           .then(done)
           .catch(done);
       });

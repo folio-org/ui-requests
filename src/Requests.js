@@ -2,16 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import fetch from 'isomorphic-fetch';
 import moment from 'moment-timezone';
-import { filters2cql } from '@folio/stripes-components/lib/FilterGroups';
-import SearchAndSort from '@folio/stripes-smart-components/lib/SearchAndSort';
-import AppIcon from '@folio/stripes-components/lib/AppIcon';
-import exportToCsv from '@folio/stripes-util/lib/exportCsv';
+import {
+  FormattedTime,
+  FormattedMessage,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
+import { AppIcon } from '@folio/stripes/components';
+import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
+import { exportCsv } from '@folio/stripes/util';
 
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
 import { requestTypes, fulfilmentTypes } from './constants';
 import { getFullName } from './utils';
-import packageInfo from './package';
+import packageInfo from '../package';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -19,7 +24,7 @@ const RESULT_COUNT_INCREMENT = 30;
 // TODO: Translate these filter labels
 const filterConfig = [
   {
-    label: 'Request type',
+    label: <FormattedMessage id="ui-requests.requestMeta.type" />,
     name: 'requestType',
     cql: 'requestType',
     values: [
@@ -29,7 +34,7 @@ const filterConfig = [
     ],
   },
   {
-    label: 'Request status',
+    label: <FormattedMessage id="ui-requests.requestMeta.status" />,
     name: 'requestStatus',
     cql: 'status',
     values: [
@@ -64,55 +69,20 @@ class Requests extends React.Component {
       perRequest: 30,
       GET: {
         params: {
-          query: (...args) => {
-            /*
-              As per other SearchAndSort modules (users, instances) ...
-              This code is not DRY as it is copied from makeQueryFunction in stripes-components.
-              This is necessary, as makeQueryFunction only referneces query paramaters as a data source.
-              STRIPES-480 is intended to correct this and allow this query function to be replace with a call
-              to makeQueryFunction.
-              https://issues.folio.org/browse/STRIPES-480
-            */
-            const resourceData = args[2];
-            const sortMap = {
+          query: makeQueryFunction(
+            'cql.allRecords=1',
+            '(requester.barcode="%{query.query}*" or item.title="%{query.query}*" or item.barcode="%{query.query}*")',
+            {
               'Title': 'item.title',
               'Item barcode': 'item.barcode',
               'Type': 'requestType',
               'Requester': 'requester.lastName requester.firstName',
               'Requester Barcode': 'requester.barcode',
               'Request Date': 'requestDate',
-            };
-            let cql = `(requester.barcode="${resourceData.query.query}*" or item.title="${resourceData.query.query}*" or item.barcode="${resourceData.query.query}*")`;
-            const filterCql = filters2cql(filterConfig, resourceData.query.filters);
-
-            if (filterCql) {
-              if (cql) {
-                cql = `(${cql}) and ${filterCql}`;
-              } else {
-                cql = filterCql;
-              }
-            }
-
-            const { sort } = resourceData.query;
-            if (sort) {
-              const sortIndexes = sort.split(',').map((sort1) => {
-                let reverse = false;
-                if (sort1.startsWith('-')) {
-                  // eslint-disable-next-line no-param-reassign
-                  sort1 = sort1.substr(1);
-                  reverse = true;
-                }
-                let sortIndex = sortMap[sort1] || sort1;
-                if (reverse) {
-                  sortIndex = `${sortIndex.replace(' ', '/sort.descending ')}/sort.descending`;
-                }
-                return sortIndex;
-              });
-
-              cql += ` sortby ${sortIndexes.join(' ')}`;
-            }
-            return cql;
-          },
+            },
+            filterConfig,
+            2, // do not fetch unless we have a query or a filter
+          ),
         },
         staticFallback: { params: {} },
       },
@@ -121,6 +91,11 @@ class Requests extends React.Component {
       type: 'okapi',
       path: 'groups',
       records: 'usergroups',
+    },
+    servicePoints: {
+      type: 'okapi',
+      records: 'servicepoints',
+      path: 'service-points?query=(pickupLocation==true)&limit=100',
     },
     itemUniquenessValidator: {
       type: 'okapi',
@@ -139,6 +114,7 @@ class Requests extends React.Component {
   }
 
   static propTypes = {
+    intl: intlShape,
     mutator: PropTypes.shape({
       records: PropTypes.shape({
         GET: PropTypes.func,
@@ -168,8 +144,6 @@ class Requests extends React.Component {
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
       formatDate: PropTypes.func.isRequired,
-      formatDateTime: PropTypes.func.isRequired,
-      locale: PropTypes.string,
       logger: PropTypes.shape({
         log: PropTypes.func.isRequired,
       }).isRequired,
@@ -180,26 +154,51 @@ class Requests extends React.Component {
       store: PropTypes.shape({
         getState: PropTypes.func.isRequired,
       }),
-      timezone: PropTypes.string.isRequired,
     }).isRequired,
   }
 
   constructor(props) {
     super(props);
+    const {
+      intl: { formatMessage }
+    } = props;
 
     this.okapiUrl = props.stripes.okapi.url;
-    this.formatDate = props.stripes.formatDate;
-    this.formatDateTime = props.stripes.formatDateTime;
-    this.timezone = props.stripes.timezone;
     this.httpHeaders = Object.assign({}, {
       'X-Okapi-Tenant': props.stripes.okapi.tenant,
       'X-Okapi-Token': props.stripes.store.getState().okapi.token,
       'Content-Type': 'application/json',
     });
 
+    this.columnLabels = {
+      title: formatMessage({ id: 'ui-requests.requests.title' }),
+      type: formatMessage({ id: 'ui-requests.requests.type' }),
+      requestStatus: formatMessage({ id: 'ui-requests.requests.status' }),
+      requesterBarcode: formatMessage({ id: 'ui-requests.requests.requesterBarcode' }),
+      requester: formatMessage({ id: 'ui-requests.requests.requester' }),
+      requestDate: formatMessage({ id: 'ui-requests.requests.requestDate' }),
+      proxy: formatMessage({ id: 'ui-requests.requests.proxy' }),
+      position: formatMessage({ id: 'ui-requests.requests.position' }),
+      itemBarcode: formatMessage({ id: 'ui-requests.requests.itemBarcode' })
+    };
+
     this.addRequestFields = this.addRequestFields.bind(this);
     this.create = this.create.bind(this);
     this.findResource = this.findResource.bind(this);
+    this.buildRecords = this.buildRecords.bind(this);
+    this.headers = ['requestType', 'status', 'requestExpirationDate', 'holdShelfExpirationDate',
+      'position', 'item.barcode', 'item.title', 'item.contributorNames', 'item.location.name',
+      'item.callNumber', 'item.enumeration', 'item.status', 'loan.dueDate', 'requester.name',
+      'requester.barcode', 'requester.patronGroup.group', 'fulfilmentPreference', 'requester.pickupServicePoint',
+      'deliveryAddress', 'proxy.name', 'proxy.barcode'];
+
+    // Map to pass into exportCsv
+    this.columnHeadersMap = this.headers.map(item => {
+      return {
+        label: this.props.intl.formatMessage({ id: `ui-requests.${item}` }),
+        value: item
+      };
+    });
   }
 
   componentDidUpdate() {
@@ -207,10 +206,42 @@ class Requests extends React.Component {
       const recordsLoaded = this.props.resources.records.records;
       const numTotalRecords = this.props.resources.records.other.totalRecords;
       if (recordsLoaded.length === numTotalRecords) {
-        exportToCsv(recordsLoaded, ['id']);
+        const columnHeadersMap = this.columnHeadersMap;
+        const onlyFields = columnHeadersMap;
+        const clonedRequests = JSON.parse(JSON.stringify(recordsLoaded)); // Do not mutate the actual resource
+        const recordsToCSV = this.buildRecords(clonedRequests);
+        exportCsv(recordsToCSV, {
+          onlyFields,
+          excludeFields: ['id'],
+        });
         this.csvExportPending = false;
       }
     }
+  }
+
+  buildRecords(recordsLoaded) {
+    recordsLoaded.forEach(record => {
+      const contributorNamesMap = [];
+      if (record.item.contributorNames.length > 0) {
+        record.item.contributorNames.forEach(item => {
+          contributorNamesMap.push(item.name);
+        });
+      }
+      if (record.requester) {
+        const { firstName, middleName, lastName } = record.requester;
+        record.requester.name = `${firstName} ${middleName} ${lastName}`;
+      }
+      if (record.proxy) {
+        const { firstName, middleName, lastName } = record.proxy;
+        record.proxy.name = `${firstName} ${middleName} ${lastName}`;
+      }
+      if (record.deliveryAddress) {
+        const { addressLine1, city, region, postalCode, countryId } = record.deliveryAddress;
+        record.deliveryAddress = `${addressLine1} ${city} ${region} ${countryId} ${postalCode}`;
+      }
+      record.item.contributorNames = contributorNamesMap.join('; ');
+    });
+    return recordsLoaded;
   }
 
   // idType can be 'id', 'barcode', etc.
@@ -232,75 +263,65 @@ class Requests extends React.Component {
     return Promise.all(
       [
         this.findResource('user', r.requesterId),
-        this.findResource('item', r.itemId),
-        this.findResource('loan', r.itemId),
         this.findResource('requestsForItem', r.itemId),
-        this.findResource('holding', r.item.holdingsRecordId),
-        this.findResource('instance', r.item.instanceId),
       ],
     ).then((resultArray) => {
       // Each element of the promises array returns an array of results, but in
       // this case, there should only ever be one result for each.
-      const user = resultArray[0].users[0];
-      const item = resultArray[1].items[0];
-      const loan = resultArray[2].loans[0];
-      const requestCount = resultArray[3].requests.length;
-      const holding = resultArray[4];
-      const instance = resultArray[5];
-
-      // One field missing from item is the instanceId ... but it's included in
-      // the original request
-      item.instanceId = r.item.instanceId;
-
-      return { requestMeta: r, requester: user, item, loan, requestCount, holding, instance };
+      const requester = resultArray[0].users[0];
+      const requestCount = resultArray[1].requests.length;
+      return Object.assign({}, r, { requester, requestCount });
     });
   }
 
   massageNewRecord = (requestData) => {
-    const isoDate = moment.tz(this.timezone).format();
+    const { intl: { timeZone } } = this.props;
+    const isoDate = moment.tz(timeZone).format();
     Object.assign(requestData, { requestDate: isoDate });
   }
 
   create = data => this.props.mutator.records.POST(data).then(() => this.props.mutator.query.update({ layer: null }));
 
-  // Helper function to form a locale-aware date for display
-  makeLocaleDateString = (dateString) => {
-    if (dateString === '') {
-      return '';
-    }
-    return this.formatDate(dateString);
-  };
-
-  makeLocaleDateTimeString = (dateString) => {
-    if (dateString === '') {
-      return '';
-    }
-
-    return this.formatDateTime(dateString);
-  }
-
   render() {
-    const { resources, stripes } = this.props;
-    const patronGroups = resources.patronGroups;// (resources.patronGroups || {}).records || [];
-    const addressTypes = (resources.addressTypes && resources.addressTypes.hasLoaded) ? resources.addressTypes : [];
+    const {
+      resources,
+      stripes,
+    } = this.props;
 
+    const {
+      itemBarcode,
+      position,
+      proxy,
+      requestDate,
+      requester,
+      requesterBarcode,
+      requestStatus,
+      type,
+      title,
+    } = this.columnLabels;
+
+    const patronGroups = (resources.patronGroups || {}).records || [];
+    const addressTypes = (resources.addressTypes || {}).records || [];
+    const servicePoints = (resources.servicePoints || {}).records || [];
     const resultsFormatter = {
-      'Item barcode': rq => (rq.item ? rq.item.barcode : ''),
-      'Position': rq => (rq.position || ''),
-      'Proxy': rq => (rq.proxy ? getFullName(rq.proxy) : ''),
-      'Request Date': rq => (
-        <AppIcon size="small" app="requests">{this.makeLocaleDateTimeString(rq.requestDate)}</AppIcon>
+      [itemBarcode]: rq => (rq.item ? rq.item.barcode : ''),
+      [position]: rq => (rq.position || ''),
+      [proxy]: rq => (rq.proxy ? getFullName(rq.proxy) : ''),
+      [requestDate]: rq => (
+        <AppIcon size="small" app="requests">
+          <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
+        </AppIcon>
       ),
-      'Requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
-      'Requester Barcode': rq => (rq.requester ? rq.requester.barcode : ''),
-      'Request status': rq => rq.status,
-      'Type': rq => rq.requestType,
-      'Title': rq => (rq.item ? rq.item.title : ''),
+      [requester]: rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
+      [requesterBarcode]: rq => (rq.requester ? rq.requester.barcode : ''),
+      [requestStatus]: rq => rq.status,
+      [type]: rq => rq.requestType,
+      [title]: rq => (rq.item ? rq.item.title : ''),
     };
 
     const actionMenuItems = [
       {
-        label: stripes.intl.formatMessage({ id: 'stripes-components.exportToCsv' }),
+        label: <FormattedMessage id="stripes-components.exportToCsv" />,
         onClick: (() => {
           if (!this.csvExportPending) {
             this.props.mutator.resultCount.replace(this.props.resources.records.other.totalRecords);
@@ -320,8 +341,20 @@ class Requests extends React.Component {
       resultCountIncrement={RESULT_COUNT_INCREMENT}
       viewRecordComponent={ViewRequest}
       editRecordComponent={RequestForm}
-      visibleColumns={['Request Date', 'Title', 'Item barcode', 'Type', 'Request status', 'Position', 'Requester', 'Requester Barcode', 'Proxy']}
-      columnWidths={{ 'Request Date': '175px' }}
+      visibleColumns={[
+        requestDate,
+        title,
+        itemBarcode,
+        type,
+        requestStatus,
+        position,
+        requester,
+        requesterBarcode,
+        proxy,
+      ]}
+      columnWidths={{
+        [requestDate]: '10%'
+      }}
       resultsFormatter={resultsFormatter}
       newRecordInitialValues={{ requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' }}
       massageNewRecord={this.massageNewRecord}
@@ -336,9 +369,9 @@ class Requests extends React.Component {
           addressTypes,
           requestTypes,
           fulfilmentTypes,
+          servicePoints
         },
         patronGroups,
-        dateFormatter: this.makeLocaleDateString,
         uniquenessValidator: this.props.mutator,
       }}
       viewRecordPerms="module.requests.enabled"
@@ -347,4 +380,4 @@ class Requests extends React.Component {
   }
 }
 
-export default Requests;
+export default injectIntl(Requests);

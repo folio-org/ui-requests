@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
-
+import { FormattedMessage } from 'react-intl';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
-// import Checkbox from '@folio/stripes-components/lib/Checkbox';
-import Modal from '@folio/stripes-components/lib/Modal';
-import ModalFooter from '@folio/stripes-components/lib/ModalFooter';
-import Select from '@folio/stripes-components/lib/Select';
-import TextArea from '@folio/stripes-components/lib/TextArea';
+import {
+  Button,
+  Layout,
+  Modal,
+  ModalFooter,
+  Select,
+  TextArea,
+} from '@folio/stripes/components';
 
 class CancelRequestDialog extends React.Component {
   static manifest = {
@@ -19,10 +22,6 @@ class CancelRequestDialog extends React.Component {
   }
 
   static propTypes = {
-    intl: PropTypes.shape({
-      formatDate: PropTypes.func,
-      formatMessage: PropTypes.func.isRequired,
-    }),
     onCancelRequest: PropTypes.func.isRequired,
     onClose: PropTypes.func,
     open: PropTypes.bool,
@@ -77,9 +76,16 @@ class CancelRequestDialog extends React.Component {
     return null;
   }
 
-  onCancelRequest = () => {
-    const { additionalInfo, reason } = this.state;
-    const { stripes } = this.props;
+  onCancelRequestHandler = () => {
+    const {
+      additionalInfo,
+      reason,
+    } = this.state;
+
+    const {
+      stripes,
+      onCancelRequest,
+    } = this.props;
 
     const cancellationInfo = {
       cancelledByUserId: stripes.user.user.id,
@@ -89,7 +95,7 @@ class CancelRequestDialog extends React.Component {
       status: 'Closed - Cancelled',
     };
 
-    this.props.onCancelRequest(cancellationInfo);
+    onCancelRequest(cancellationInfo);
   }
 
   onChangeAdditionalInfo = (e) => this.setState({ additionalInfo: e.target.value })
@@ -104,31 +110,43 @@ class CancelRequestDialog extends React.Component {
   }
 
   render() {
-    const { request, intl } = this.props;
-    const { reason, reasons, /* notify, */ additionalInfo } = this.state;
-    const { formatMessage } = intl;
+    const {
+      request,
+      open,
+      onClose,
+    } = this.props;
+
+    const {
+      reason,
+      reasons,
+      additionalInfo,
+    } = this.state;
+
+    const additionalInfoPlaceholder = reason.requiresAdditionalInformation
+      ? 'ui-requests.cancel.additionalInfoPlaceholderRequired'
+      : 'ui-requests.cancel.additionalInfoPlaceholderOptional';
 
     if (!request) return null;
 
     const footer = (
       <ModalFooter
         primaryButton={{
-          label: formatMessage({ id: 'stripes-core.button.confirm' }),
+          label: <FormattedMessage id="stripes-core.button.confirm" />,
           disabled: reason.requiresAdditionalInformation && !additionalInfo,
-          onClick: this.onCancelRequest,
+          onClick: this.onCancelRequestHandler,
         }}
         secondaryButton={{
-          label: formatMessage({ id: 'stripes-core.button.back' }),
-          onClick: this.props.onClose,
+          label: <FormattedMessage id="stripes-core.button.back" />,
+          onClick: onClose,
         }}
       />
     );
 
     return (
       <Modal
-        label={formatMessage({ id: 'ui-requests.cancel.modalLabel' })}
-        open={this.props.open}
-        onClose={this.props.onClose}
+        label={<FormattedMessage id="ui-requests.cancel.modalLabel" />}
+        open={open}
+        onClose={onClose}
         footer={footer}
       >
         <p>
@@ -138,7 +156,7 @@ class CancelRequestDialog extends React.Component {
           />
         </p>
         <Select
-          label={formatMessage({ id: 'ui-requests.cancel.reasonLabel' })}
+          label={<FormattedMessage id="ui-requests.cancel.reasonLabel" />}
           dataOptions={reasons}
           value={reason.value}
           onChange={this.onChangeReason}
@@ -151,19 +169,23 @@ class CancelRequestDialog extends React.Component {
           onChange={this.onChangeNotify}
         />
         */}
-        <TextArea
-          label={formatMessage(
-            { id: 'ui-requests.cancel.additionalInfoLabel' },
-            { required: reason.requiresAdditionalInformation ? '*' : ' ' }
+        <FormattedMessage id={additionalInfoPlaceholder}>
+          {placeholder => (
+            <TextArea
+              label={
+                <FormattedMessage
+                  id="ui-requests.cancel.additionalInfoLabel"
+                  values={{
+                    required: reason.requiresAdditionalInformation ? '*' : ' '
+                  }}
+                />
+              }
+              placeholder={placeholder}
+              value={additionalInfo}
+              onChange={this.onChangeAdditionalInfo}
+            />
           )}
-          placeholder={
-            reason.requiresAdditionalInformation ?
-              formatMessage({ id: 'ui-requests.cancel.additionalInfoPlaceholderRequired' }) :
-              formatMessage({ id: 'ui-requests.cancel.additionalInfoPlaceholderOptional' })
-          }
-          value={additionalInfo}
-          onChange={this.onChangeAdditionalInfo}
-        />
+        </FormattedMessage>
       </Modal>
     );
   }
