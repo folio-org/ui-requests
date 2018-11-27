@@ -4,8 +4,6 @@ import { get } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
-  Button,
-  Layout,
   Modal,
   ModalFooter,
   Select,
