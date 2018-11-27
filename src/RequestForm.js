@@ -16,6 +16,7 @@ import {
   Button,
   Col,
   Datepicker,
+  Icon,
   IconButton,
   KeyValue,
   Pane,
@@ -444,6 +445,27 @@ class RequestForm extends React.Component {
         </Link>
       </div> : '-';
 
+    const actionMenu = ({ onToggle }) => {
+      if (!isEditForm) {
+        return undefined;
+      }
+
+      return (
+        <Button
+          buttonStyle="dropdownItem"
+          id="clickable-cancel-request"
+          onClick={() => {
+            this.setState({ isCancellingRequest: true });
+            onToggle();
+          }}
+        >
+          <Icon icon="hollowX">
+            <FormattedMessage id="ui-requests.cancel.cancelRequest" />
+          </Icon>
+        </Button>
+      );
+    };
+
     return (
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
@@ -452,12 +474,7 @@ class RequestForm extends React.Component {
             height="100%"
             firstMenu={addRequestFirstMenu}
             lastMenu={isEditForm ? editRequestLastMenu : addRequestLastMenu}
-            actionMenuItems={isEditForm ? [{
-              id: 'clickable-cancel-request',
-              label: <FormattedMessage id="ui-requests.cancel.cancelRequest" />,
-              onClick: () => this.setState({ isCancellingRequest: true }),
-              icon: 'cancel',
-            }] : undefined}
+            actionMenu={actionMenu}
             paneTitle={
               isEditForm
                 ? <FormattedMessage id="ui-requests.actions.editRequest" />

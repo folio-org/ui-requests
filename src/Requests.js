@@ -10,6 +10,7 @@ import {
 } from 'react-intl';
 import { AppIcon } from '@folio/stripes/components';
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
+import { Button } from '@folio/stripes/components';
 import { exportCsv } from '@folio/stripes/util';
 
 import ViewRequest from './ViewRequest';
@@ -319,21 +320,24 @@ class Requests extends React.Component {
       [title]: rq => (rq.item ? rq.item.title : ''),
     };
 
-    const actionMenuItems = [
-      {
-        label: <FormattedMessage id="stripes-components.exportToCsv" />,
-        onClick: (() => {
+    const actionMenu = ({ onToggle }) => (
+      <Button
+        buttonStyle="dropdownItem"
+        id="exportToCsvPaneHeaderBtn"
+        onClick={() => {
           if (!this.csvExportPending) {
             this.props.mutator.resultCount.replace(this.props.resources.records.other.totalRecords);
             this.csvExportPending = true;
           }
-        }),
-        id: 'exportToCsvPaneHeaderBtn',
-      },
-    ];
+          onToggle();
+        }}
+      >
+        <FormattedMessage id="stripes-components.exportToCsv" />
+      </Button>
+    );
 
     return (<SearchAndSort
-      actionMenuItems={actionMenuItems}
+      actionMenu={actionMenu}
       packageInfo={packageInfo}
       objectName="request"
       filterConfig={filterConfig}
