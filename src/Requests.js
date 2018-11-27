@@ -8,6 +8,7 @@ import {
   injectIntl,
   intlShape,
 } from 'react-intl';
+import { AppIcon } from '@folio/stripes/components';
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
 import { Button } from '@folio/stripes/components';
 import { exportCsv } from '@folio/stripes/util';
@@ -307,7 +308,11 @@ class Requests extends React.Component {
       [itemBarcode]: rq => (rq.item ? rq.item.barcode : ''),
       [position]: rq => (rq.position || ''),
       [proxy]: rq => (rq.proxy ? getFullName(rq.proxy) : ''),
-      [requestDate]: rq => <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />,
+      [requestDate]: rq => (
+        <AppIcon size="small" app="requests">
+          <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
+        </AppIcon>
+      ),
       [requester]: rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
       [requesterBarcode]: rq => (rq.requester ? rq.requester.barcode : ''),
       [requestStatus]: rq => rq.status,
@@ -352,7 +357,7 @@ class Requests extends React.Component {
         proxy,
       ]}
       columnWidths={{
-        [requestDate]: '10%'
+        [requestDate]: '220px'
       }}
       resultsFormatter={resultsFormatter}
       newRecordInitialValues={{ requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' }}

@@ -17,6 +17,7 @@ import {
   Col,
   Datepicker,
   Icon,
+  IconButton,
   KeyValue,
   Pane,
   PaneMenu,
@@ -343,13 +344,11 @@ class RequestForm extends React.Component {
       <PaneMenu>
         <FormattedMessage id="ui-requests.actions.closeNewRequest">
           {title => (
-            <Button
+            <IconButton
               onClick={onCancel}
-              title={title}
-              aria-label={title}
-            >
-              <span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }}>&times;</span>
-            </Button>
+              ariaLabel={title}
+              icon="closeX"
+            />
           )}
         </FormattedMessage>
       </PaneMenu>
@@ -361,6 +360,8 @@ class RequestForm extends React.Component {
           type="button"
           disabled={submittingButtonIsDisabled}
           onClick={handleSubmit}
+          marginBottom0
+          buttonStyle="primary paneHeaderNewButton"
         >
           <FormattedMessage id="ui-requests.actions.newRequest" />
         </Button>
@@ -373,6 +374,8 @@ class RequestForm extends React.Component {
           type="button"
           disabled={submittingButtonIsDisabled}
           onClick={handleSubmit}
+          marginBottom0
+          buttonStyle="primary paneHeaderNewButton"
         >
           <FormattedMessage id="ui-requests.actions.updateRequest" />
         </Button>
