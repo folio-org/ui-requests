@@ -353,7 +353,7 @@ class Requests extends React.Component {
         proxy,
       ]}
       columnWidths={{
-        [requestDate]: '10%'
+        [requestDate]: '220px'
       }}
       resultsFormatter={resultsFormatter}
       newRecordInitialValues={{ requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' }}
