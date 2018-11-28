@@ -1,7 +1,7 @@
 {
     "requester.name": "Név",
     "requester.username": "Felhasználónév",
-    "requester.patronGroup.group": "Olvasói csoport",
+    "requester.patronGroup": "Olvasói csoport",
     "actions.showNotes": "Megjegyzések mutatása",
     "requestMeta.detailLabel": "Igény részletes adati",
     "requestMeta.information": "Igény adatai",
@@ -26,8 +26,8 @@
     "item.barcode": "Tétel vonalkódja",
     "item.scanOrEnterBarcode": "Olvassa vagy írja be a tétel vonalkódját",
     "item.title": "Cím",
-    "item.contributorNames": "Közreműködő",
-    "item.location.name": "Polc lelőhely",
+    "item.contributor": "Közreműködő",
+    "item.shelfLocation": "Polc lelőhely",
     "item.callNumber": "Raktári jelzet",
     "item.volume": "Kötet",
     "item.enumeration": "Felsorolás",
@@ -41,7 +41,7 @@
     "requester.proxy": "Igénylő meghatalmazottja",
     "requester.fulfilmentPref": "Teljesítési preferencia",
     "requester.requester": "Igénylő",
-    "deliveryAddress": "Szállítási cím",
+    "requester.deliveryAddress": "Szállítási cím",
     "requester.pickupLocation": "Átvételi lelőhely",
     "actions.editRequest": "Kérés szerkesztése",
     "actions.selectAddressType": "Cím típusának kiválasztása",
@@ -93,5 +93,10 @@
     "requestMeta.type.pages": "Pages",
     "requestMeta.fulfilment.holdShelf": "Hold Shelf",
     "requestMeta.fulfilment.delivery": "Delivery",
-    "actions.edit": "Edit"
+    "actions.edit": "Edit",
+    "item.contributorNamesNames": "Contributor names",
+    "item.location.name": "Shelving location",
+    "proxy.name": "Requester's proxy name",
+    "deliveryAddress": "Delivery address",
+    "requester.patronGroup.group": "Requester Patron group"
 }
