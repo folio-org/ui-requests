@@ -1,7 +1,7 @@
 {
     "requester.name": "Nome",
     "requester.username": "Nome de usuário",
-    "requester.patronGroup.group": "Grupo de usuário",
+    "requester.patronGroup": "Grupo de usuário",
     "actions.showNotes": "Mostrar notas",
     "requestMeta.detailLabel": "Detalhes sobre a solicitação de compra",
     "requestMeta.information": "Informações sobre a solicitação de compra",
@@ -26,8 +26,8 @@
     "item.barcode": "Código de barras do item",
     "item.scanOrEnterBarcode": "Scaneie ou insira o código de barras do item",
     "item.title": "Título",
-    "item.contributorNames": "Colaborador",
-    "item.location.name": "Localização das estantes",
+    "item.contributor": "Colaborador",
+    "item.shelfLocation": "Localização das estantes",
     "item.callNumber": "Número de chamada",
     "item.volume": "Volume",
     "item.enumeration": "Enumeração",
@@ -41,7 +41,7 @@
     "requester.proxy": "Autorizados para solicitação",
     "requester.fulfilmentPref": "Preferência de preenchimento",
     "requester.requester": "Solicitante",
-    "deliveryAddress": "Endereço de entrega",
+    "requester.deliveryAddress": "Endereço de entrega",
     "requester.pickupLocation": "Localização de retirada",
     "actions.editRequest": "Editar solicitação de compra",
     "actions.selectAddressType": "Selecione o tipo de endereço",
@@ -93,5 +93,10 @@
     "requestMeta.type.pages": "Páginas",
     "requestMeta.fulfilment.holdShelf": "Prateleira de espera",
     "requestMeta.fulfilment.delivery": "Entrega",
-    "actions.edit": "Editar"
+    "actions.edit": "Editar",
+    "item.contributorNamesNames": "Nomes de colaborador",
+    "item.location.name": "Localização das estantes",
+    "proxy.name": "Nome dos autorizados para solicitação",
+    "deliveryAddress": "Endereço de entrega",
+    "requester.patronGroup.group": "Grupo do usuário solicitante"
 }

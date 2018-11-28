@@ -1,7 +1,7 @@
 {
     "requester.name": "Nombre",
     "requester.username": "Nombre de usuario",
-    "requester.patronGroup.group": "Grupo de usuarios",
+    "requester.patronGroup": "Grupo de usuarios",
     "actions.showNotes": "Mostrar Notas",
     "requestMeta.detailLabel": "Detalle de la solicitud",
     "requestMeta.information": "Solicitar información",
@@ -26,8 +26,8 @@
     "item.barcode": "Código de barras del artículo",
     "item.scanOrEnterBarcode": "Escanear o introducir el código de barras del artículo",
     "item.title": "Título",
-    "item.contributorNames": "Colaborador",
-    "item.location.name": "Ubicación de estantería",
+    "item.contributor": "Colaborador",
+    "item.shelfLocation": "Ubicación de estantería",
     "item.callNumber": "Número de llamada",
     "item.volume": "Volumen",
     "item.enumeration": "Enumeración",
@@ -41,7 +41,7 @@
     "requester.proxy": "Proxy del solicitante",
     "requester.fulfilmentPref": "Preferencia de cumplimiento",
     "requester.requester": "Solicitante",
-    "deliveryAddress": "Dirección de entrega",
+    "requester.deliveryAddress": "Dirección de entrega",
     "requester.pickupLocation": "Lugar de recogida",
     "actions.editRequest": "Editar solicitud",
     "actions.selectAddressType": "Seleccionar el tipo de dirección",
@@ -93,5 +93,10 @@
     "requestMeta.type.pages": "Pages",
     "requestMeta.fulfilment.holdShelf": "Hold Shelf",
     "requestMeta.fulfilment.delivery": "Delivery",
-    "actions.edit": "Edit"
+    "actions.edit": "Edit",
+    "item.contributorNamesNames": "Contributor names",
+    "item.location.name": "Shelving location",
+    "proxy.name": "Requester's proxy name",
+    "deliveryAddress": "Delivery address",
+    "requester.patronGroup.group": "Requester Patron group"
 }

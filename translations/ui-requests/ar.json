@@ -93,5 +93,10 @@
     "requestMeta.type.pages": "Pages",
     "requestMeta.fulfilment.holdShelf": "Hold Shelf",
     "requestMeta.fulfilment.delivery": "Delivery",
-    "actions.edit": "Edit"
+    "actions.edit": "Edit",
+    "item.contributorNamesNames": "Contributor names",
+    "item.location.name": "Shelving location",
+    "proxy.name": "Requester's proxy name",
+    "deliveryAddress": "Delivery address",
+    "requester.patronGroup.group": "Requester Patron group"
 }
