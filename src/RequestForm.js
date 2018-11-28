@@ -16,6 +16,8 @@ import {
   Button,
   Col,
   Datepicker,
+  Icon,
+  IconButton,
   KeyValue,
   Pane,
   PaneMenu,
@@ -342,13 +344,11 @@ class RequestForm extends React.Component {
       <PaneMenu>
         <FormattedMessage id="ui-requests.actions.closeNewRequest">
           {title => (
-            <Button
+            <IconButton
               onClick={onCancel}
-              title={title}
-              aria-label={title}
-            >
-              <span style={{ fontSize: '30px', color: '#999', lineHeight: '18px' }}>&times;</span>
-            </Button>
+              ariaLabel={title}
+              icon="closeX"
+            />
           )}
         </FormattedMessage>
       </PaneMenu>
@@ -360,6 +360,8 @@ class RequestForm extends React.Component {
           type="button"
           disabled={submittingButtonIsDisabled}
           onClick={handleSubmit}
+          marginBottom0
+          buttonStyle="primary paneHeaderNewButton"
         >
           <FormattedMessage id="ui-requests.actions.newRequest" />
         </Button>
@@ -372,6 +374,8 @@ class RequestForm extends React.Component {
           type="button"
           disabled={submittingButtonIsDisabled}
           onClick={handleSubmit}
+          marginBottom0
+          buttonStyle="primary paneHeaderNewButton"
         >
           <FormattedMessage id="ui-requests.actions.updateRequest" />
         </Button>
@@ -423,7 +427,7 @@ class RequestForm extends React.Component {
     // map column-IDs to table-header-values
     const columnMapping = {
       name: formatMessage({ id: 'ui-requests.requester.name' }),
-      patronGroup: formatMessage({ id: 'ui-requests.requester.patronGroup' }),
+      patronGroup: formatMessage({ id: 'ui-requests.requester.patronGroup.group' }),
       username: formatMessage({ id: 'ui-requests.requester.username' }),
       barcode: formatMessage({ id: 'ui-requests.barcode' }),
     };
@@ -441,6 +445,27 @@ class RequestForm extends React.Component {
         </Link>
       </div> : '-';
 
+    const actionMenu = ({ onToggle }) => {
+      if (!isEditForm) {
+        return undefined;
+      }
+
+      return (
+        <Button
+          buttonStyle="dropdownItem"
+          id="clickable-cancel-request"
+          onClick={() => {
+            this.setState({ isCancellingRequest: true });
+            onToggle();
+          }}
+        >
+          <Icon icon="hollowX">
+            <FormattedMessage id="ui-requests.cancel.cancelRequest" />
+          </Icon>
+        </Button>
+      );
+    };
+
     return (
       <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
         <Paneset isRoot>
@@ -449,12 +474,7 @@ class RequestForm extends React.Component {
             height="100%"
             firstMenu={addRequestFirstMenu}
             lastMenu={isEditForm ? editRequestLastMenu : addRequestLastMenu}
-            actionMenuItems={isEditForm ? [{
-              id: 'clickable-cancel-request',
-              label: <FormattedMessage id="ui-requests.cancel.cancelRequest" />,
-              onClick: () => this.setState({ isCancellingRequest: true }),
-              icon: 'cancel',
-            }] : undefined}
+            actionMenu={actionMenu}
             paneTitle={
               isEditForm
                 ? <FormattedMessage id="ui-requests.actions.editRequest" />

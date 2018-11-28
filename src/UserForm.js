@@ -52,7 +52,7 @@ class UserForm extends React.Component {
     return (
       <Field
         name="deliveryAddressTypeId"
-        label={<FormattedMessage id="ui-requests.requester.deliveryAddress" />}
+        label={<FormattedMessage id="ui-requests.deliveryAddress" />}
         component={Select}
         fullWidth
         onChange={onChangeAddress}
@@ -120,7 +120,7 @@ class UserForm extends React.Component {
         {userHighlightBox(<FormattedMessage id="ui-requests.requester.requester" />, name, id, barcode)}
         <Row>
           <Col xs={4}>
-            <KeyValue label={<FormattedMessage id="ui-requests.requester.patronGroup" />} value={patronGroup || '-'} />
+            <KeyValue label={<FormattedMessage id="ui-requests.requester.patronGroup.group" />} value={patronGroup || '-'} />
           </Col>
           <Col xs={4}>
             <Field

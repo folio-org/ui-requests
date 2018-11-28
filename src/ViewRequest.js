@@ -5,7 +5,7 @@ import {
   includes,
   keyBy
 } from 'lodash';
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import {
@@ -16,6 +16,7 @@ import {
 import { TitleManager } from '@folio/stripes/core';
 import { Link } from 'react-router-dom';
 import {
+  Button,
   Accordion,
   AccordionSet,
   Col,
@@ -276,23 +277,48 @@ class ViewRequest extends React.Component {
       );
     }
 
+    const actionMenu = ({ onToggle }) => {
+      if (isRequestClosed) {
+        return undefined;
+      }
+
+      return (
+        <Fragment>
+          <Button
+            buttonStyle="dropdownItem"
+            id="clickable-edit-request"
+            href={this.props.editLink}
+            onClick={() => {
+              this.props.onEdit();
+              onToggle();
+            }}
+          >
+            <Icon icon="edit">
+              <FormattedMessage id="ui-requests.actions.edit" />
+            </Icon>
+          </Button>
+          <Button
+            buttonStyle="dropdownItem"
+            id="clickable-cancel-request"
+            onClick={() => {
+              this.setState({ isCancellingRequest: true });
+              onToggle();
+            }}
+          >
+            <Icon icon="hollowX">
+              <FormattedMessage id="ui-requests.cancel.cancelRequest" />
+            </Icon>
+          </Button>
+        </Fragment>
+      );
+    };
+
     return (
       <Pane
         defaultWidth={this.props.paneWidth}
         paneTitle={<FormattedMessage id="ui-requests.requestMeta.detailLabel" />}
         lastMenu={detailMenu}
-        actionMenuItems={!isRequestClosed ? [{
-          id: 'clickable-edit-request',
-          label: <FormattedMessage id="ui-requests.actions.edit" />,
-          href: this.props.editLink,
-          onClick: this.props.onEdit,
-          icon: 'edit',
-        }, {
-          id: 'clickable-cancel-request',
-          label: <FormattedMessage id="ui-requests.cancel.cancelRequest" />,
-          onClick: () => this.setState({ isCancellingRequest: true }),
-          icon: 'cancel',
-        }] : undefined}
+        actionMenu={actionMenu}
         dismissible
         onClose={this.props.onClose}
       >

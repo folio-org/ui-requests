@@ -58,7 +58,7 @@ class UserDetail extends React.Component {
         <Row>
           <Col xs={4}>
             <KeyValue
-              label={<FormattedMessage id="ui-requests.requester.patronGroup" />}
+              label={<FormattedMessage id="ui-requests.requester.patronGroup.group" />}
               value={patronGroup || '-'}
             />
           </Col>
@@ -71,7 +71,7 @@ class UserDetail extends React.Component {
           <Col xs={4}>
             { selectedDelivery ?
               <KeyValue
-                label={<FormattedMessage id="ui-requests.requester.deliveryAddress" />}
+                label={<FormattedMessage id="ui-requests.deliveryAddress" />}
                 value={deliveryAddress || '-'}
               /> :
               <KeyValue

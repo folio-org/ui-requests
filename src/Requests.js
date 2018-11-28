@@ -8,7 +8,9 @@ import {
   injectIntl,
   intlShape,
 } from 'react-intl';
+import { AppIcon } from '@folio/stripes/components';
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
+import { Button } from '@folio/stripes/components';
 import { exportCsv } from '@folio/stripes/util';
 
 import ViewRequest from './ViewRequest';
@@ -186,10 +188,18 @@ class Requests extends React.Component {
     this.findResource = this.findResource.bind(this);
     this.buildRecords = this.buildRecords.bind(this);
     this.headers = ['requestType', 'status', 'requestExpirationDate', 'holdShelfExpirationDate',
-      'position', 'item.barcode', 'item.title', 'item.contributorNames', 'item.shelfLocation',
-      'item.callNumber', 'item.enumeration', 'item.status', 'loan.dueDate', 'requester.firstName',
-      'requester.barcode', 'requester.patronGroup', 'fulfilmentPreference', 'requester.pickupServicePoint',
-      'requester.deliveryAddress', 'proxy.firstName', 'proxy.barcode'];
+      'position', 'item.barcode', 'item.title', 'item.contributorNames', 'item.location.name',
+      'item.callNumber', 'item.enumeration', 'item.status', 'loan.dueDate', 'requester.name',
+      'requester.barcode', 'requester.patronGroup.group', 'fulfilmentPreference', 'requester.pickupServicePoint',
+      'deliveryAddress', 'proxy.name', 'proxy.barcode'];
+
+    // Map to pass into exportCsv
+    this.columnHeadersMap = this.headers.map(item => {
+      return {
+        label: this.props.intl.formatMessage({ id: `ui-requests.${item}` }),
+        value: item
+      };
+    });
   }
 
   componentDidUpdate() {
@@ -197,12 +207,14 @@ class Requests extends React.Component {
       const recordsLoaded = this.props.resources.records.records;
       const numTotalRecords = this.props.resources.records.other.totalRecords;
       if (recordsLoaded.length === numTotalRecords) {
-        const columnHeaders = this.headers;
-        const recordsToCSV = this.buildRecords(recordsLoaded); // logic to concatenate the contributors list
+        const columnHeadersMap = this.columnHeadersMap;
+        const onlyFields = columnHeadersMap;
+        const clonedRequests = JSON.parse(JSON.stringify(recordsLoaded)); // Do not mutate the actual resource
+        const recordsToCSV = this.buildRecords(clonedRequests);
         exportCsv(recordsToCSV, {
-          onlyFields: { columnHeaders, module: 'ui-requests' },
+          onlyFields,
           excludeFields: ['id'],
-        }, this.props.intl);
+        });
         this.csvExportPending = false;
       }
     }
@@ -215,6 +227,18 @@ class Requests extends React.Component {
         record.item.contributorNames.forEach(item => {
           contributorNamesMap.push(item.name);
         });
+      }
+      if (record.requester) {
+        const { firstName, middleName, lastName } = record.requester;
+        record.requester.name = `${firstName} ${middleName} ${lastName}`;
+      }
+      if (record.proxy) {
+        const { firstName, middleName, lastName } = record.proxy;
+        record.proxy.name = `${firstName} ${middleName} ${lastName}`;
+      }
+      if (record.deliveryAddress) {
+        const { addressLine1, city, region, postalCode, countryId } = record.deliveryAddress;
+        record.deliveryAddress = `${addressLine1} ${city} ${region} ${countryId} ${postalCode}`;
       }
       record.item.contributorNames = contributorNamesMap.join('; ');
     });
@@ -284,7 +308,11 @@ class Requests extends React.Component {
       [itemBarcode]: rq => (rq.item ? rq.item.barcode : ''),
       [position]: rq => (rq.position || ''),
       [proxy]: rq => (rq.proxy ? getFullName(rq.proxy) : ''),
-      [requestDate]: rq => <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />,
+      [requestDate]: rq => (
+        <AppIcon size="small" app="requests">
+          <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
+        </AppIcon>
+      ),
       [requester]: rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
       [requesterBarcode]: rq => (rq.requester ? rq.requester.barcode : ''),
       [requestStatus]: rq => rq.status,
@@ -292,21 +320,24 @@ class Requests extends React.Component {
       [title]: rq => (rq.item ? rq.item.title : ''),
     };
 
-    const actionMenuItems = [
-      {
-        label: <FormattedMessage id="stripes-components.exportToCsv" />,
-        onClick: (() => {
+    const actionMenu = ({ onToggle }) => (
+      <Button
+        buttonStyle="dropdownItem"
+        id="exportToCsvPaneHeaderBtn"
+        onClick={() => {
           if (!this.csvExportPending) {
             this.props.mutator.resultCount.replace(this.props.resources.records.other.totalRecords);
             this.csvExportPending = true;
           }
-        }),
-        id: 'exportToCsvPaneHeaderBtn',
-      },
-    ];
+          onToggle();
+        }}
+      >
+        <FormattedMessage id="stripes-components.exportToCsv" />
+      </Button>
+    );
 
     return (<SearchAndSort
-      actionMenuItems={actionMenuItems}
+      actionMenu={actionMenu}
       packageInfo={packageInfo}
       objectName="request"
       filterConfig={filterConfig}
@@ -326,7 +357,7 @@ class Requests extends React.Component {
         proxy,
       ]}
       columnWidths={{
-        [requestDate]: '10%'
+        [requestDate]: '220px'
       }}
       resultsFormatter={resultsFormatter}
       newRecordInitialValues={{ requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' }}

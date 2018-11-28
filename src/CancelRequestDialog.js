@@ -4,9 +4,8 @@ import { get } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
-  Button,
-  Layout,
   Modal,
+  ModalFooter,
   Select,
   TextArea,
 } from '@folio/stripes/components';
@@ -127,11 +126,26 @@ class CancelRequestDialog extends React.Component {
 
     if (!request) return null;
 
+    const footer = (
+      <ModalFooter
+        primaryButton={{
+          label: <FormattedMessage id="stripes-core.button.confirm" />,
+          disabled: reason.requiresAdditionalInformation && !additionalInfo,
+          onClick: this.onCancelRequestHandler,
+        }}
+        secondaryButton={{
+          label: <FormattedMessage id="stripes-core.button.back" />,
+          onClick: onClose,
+        }}
+      />
+    );
+
     return (
       <Modal
         label={<FormattedMessage id="ui-requests.cancel.modalLabel" />}
         open={open}
         onClose={onClose}
+        footer={footer}
       >
         <p>
           <SafeHTMLMessage
@@ -170,20 +184,7 @@ class CancelRequestDialog extends React.Component {
             />
           )}
         </FormattedMessage>
-        <Layout className="textRight">
-          <Button onClick={onClose}>
-            <FormattedMessage id="stripes-core.button.back" />
-          </Button>
-          <Button
-            buttonStyle="primary"
-            disabled={reason.requiresAdditionalInformation && !additionalInfo}
-            onClick={this.onCancelRequestHandler}
-          >
-            <FormattedMessage id="stripes-core.button.confirm" />
-          </Button>
-        </Layout>
       </Modal>
-
     );
   }
 }
