@@ -8,9 +8,8 @@ import {
   injectIntl,
   intlShape,
 } from 'react-intl';
-import { AppIcon } from '@folio/stripes/components';
+import { AppIcon, Button } from '@folio/stripes/components';
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
-import { Button } from '@folio/stripes/components';
 import { exportCsv } from '@folio/stripes/util';
 
 import ViewRequest from './ViewRequest';
