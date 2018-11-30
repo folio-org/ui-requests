@@ -76,7 +76,7 @@
   "proxy.barcode": "Requester's proxy barcode",
   "requester.information": "Requester information",
   "requester.firstName": "Requester First Name",
-  "requester.name": "Requester Name",
+  "requester.name": "Requester name",
   "requester.username": "Username",
   "requester.barcode": "Requester barcode",
   "requester.scanOrEnterBarcode": "Scan or enter requester barcode",
