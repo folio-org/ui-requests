@@ -220,6 +220,7 @@ class Requests extends React.Component {
   }
 
   buildRecords(recordsLoaded) {
+    const { formatDate, formatTime } = this.props.intl;
     recordsLoaded.forEach(record => {
       const contributorNamesMap = [];
       if (record.item.contributorNames.length > 0) {
@@ -229,15 +230,19 @@ class Requests extends React.Component {
       }
       if (record.requester) {
         const { firstName, middleName, lastName } = record.requester;
-        record.requester.name = `${firstName} ${middleName} ${lastName}`;
+        record.requester.name = `${firstName || ''} ${middleName || ''} ${lastName || ''}`;
+      }
+      if (record.loan.dueDate) {
+        const { dueDate } = record.loan;
+        record.loan.dueDate = `${formatDate(dueDate)}, ${formatTime(dueDate)}`;
       }
       if (record.proxy) {
         const { firstName, middleName, lastName } = record.proxy;
-        record.proxy.name = `${firstName} ${middleName} ${lastName}`;
+        record.proxy.name = `${firstName || ''} ${middleName || ''} ${lastName || ''}`;
       }
       if (record.deliveryAddress) {
         const { addressLine1, city, region, postalCode, countryId } = record.deliveryAddress;
-        record.deliveryAddress = `${addressLine1} ${city} ${region} ${countryId} ${postalCode}`;
+        record.deliveryAddress = `${addressLine1 || ''} ${city || ''} ${region || ''} ${countryId || ''} ${postalCode || ''}`;
       }
       record.item.contributorNames = contributorNamesMap.join('; ');
     });
