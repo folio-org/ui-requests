@@ -104,6 +104,9 @@ class RequestForm extends React.Component {
     onCancel: PropTypes.func.isRequired,
     onCancelRequest: PropTypes.func.isRequired,
     pristine: PropTypes.bool,
+    resources: PropTypes.shape({
+      query: PropTypes.object,
+    }),
     submitting: PropTypes.bool,
     //  okapi: PropTypes.object,
     optionLists: PropTypes.shape({
@@ -160,6 +163,16 @@ class RequestForm extends React.Component {
     this.requesterBarcodeRef = React.createRef();
   }
 
+  componentDidMount() {
+    if (this.props.query.userBarcode) {
+      this.onSelectUser({ barcode: this.props.query.userBarcode });
+    }
+
+    if (this.props.query.itemBarcode) {
+      this.onItemClick(this.props.query.itemBarcode);
+    }
+  }
+
   componentDidUpdate(prevProps) {
     const initials = this.props.initialValues;
     const fullRequest = this.props.fullRequest;
@@ -177,6 +190,14 @@ class RequestForm extends React.Component {
         selectedLoan: fullRequest.loan,
         selectedUser: fullRequest.user,
       });
+    }
+
+    if (prevProps.query.userBarcode !== this.props.query.userBarcode) {
+      this.onSelectUser({ barcode: this.props.query.userBarcode });
+    }
+
+    if (prevProps.query.itemBarcode !== this.props.query.itemBarcode) {
+      this.onItemClick(this.props.query.itemBarcode);
     }
   }
 
@@ -206,13 +227,19 @@ class RequestForm extends React.Component {
     if (user) {
       // Set the new value in the redux-form barcode field
       this.props.change('requester.barcode', user.barcode);
-      setTimeout(() => this.onUserClick());
+      this.onUserClick(null, user.barcode);
     }
   }
 
-  onUserClick(proxyUser = null) {
+  onUserClick(proxyUser = null, userBarcode = null) {
     this.setState({ selectedUser: null, proxy: null });
-    const barcode = this.requesterBarcodeRef.current.getRenderedComponent().getInput().value;
+
+    // when selecting a user via the plugin, we'll get it via an argument.
+    // when plucking it from the form, we need to read it from the component
+    let barcode = userBarcode;
+    if (!barcode) {
+      barcode = this.requesterBarcodeRef.current.getRenderedComponent().getInput().value;
+    }
 
     this.props.findResource('user', barcode, 'barcode').then((result) => {
       if (result.totalRecords === 1) {
@@ -288,9 +315,15 @@ class RequestForm extends React.Component {
       .then(item => this.findLoan(item));
   }
 
-  onItemClick() {
+  onItemClick(itemBarcode = null) {
     this.setState({ selectedItem: null });
-    const barcode = this.itemBarcodeRef.current.getRenderedComponent().getInput().value;
+
+    // if we get an item-ID via a query-param, we'll get it via an argument.
+    // when plucking it from the form, we need to read it from the component
+    let barcode = itemBarcode;
+    if (!barcode) {
+      barcode = this.itemBarcodeRef.current.getRenderedComponent().getInput().value;
+    }
     this.findItem(barcode);
   }
 

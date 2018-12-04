@@ -133,6 +133,7 @@ class Requests extends React.Component {
         hasLoaded: PropTypes.bool.isRequired,
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      query: PropTypes.object,
       records: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         other: PropTypes.shape({
@@ -380,6 +381,7 @@ class Requests extends React.Component {
           servicePoints
         },
         patronGroups,
+        query: this.props.resources.query,
         uniquenessValidator: this.props.mutator,
       }}
       viewRecordPerms="module.requests.enabled"
