@@ -13,6 +13,7 @@
 * Use documented react-intl patterns instead of stripes.intl. UIREQ-135
 * Improve opening request record. Fixes UIREQ-134.
 * Removed deprecated actionMenuItems-prop. Fixes UIREQ-170.
+* Read user and item barcodes from the query string for new requests. Fixes UIREQ-146.
 
 ## 1.4.1 (https://github.com/folio-org/ui-requests/tree/v1.4.1) (2018-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.4.0...v1.4.1)
