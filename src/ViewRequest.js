@@ -70,6 +70,7 @@ class ViewRequest extends React.Component {
         }),
       }),
     }),
+    query: PropTypes.object,
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
       connect: PropTypes.func.isRequired,
@@ -205,8 +206,8 @@ class ViewRequest extends React.Component {
       editLink,
       onEdit,
     } = this.props;
-    const query = location.search ? queryString.parse(location.search) : {};
 
+    const query = location.search ? queryString.parse(location.search) : {};
     const request = this.getRequest();
     const patronGroupName = this.getPatronGroupName(request);
     const getPickupServicePointName = this.getPickupServicePointName(request);
@@ -418,6 +419,7 @@ class ViewRequest extends React.Component {
             onCancelRequest={this.cancelRequest}
             optionLists={optionLists}
             patronGroups={patronGroups}
+            query={this.props.query}
           />
         </Layer>
         <this.connectedCancelRequestDialog
