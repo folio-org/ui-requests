@@ -305,7 +305,7 @@ class ViewRequest extends React.Component {
               onToggle();
             }}
           >
-            <Icon icon="hollowX">
+            <Icon icon="times-circle">
               <FormattedMessage id="ui-requests.cancel.cancelRequest" />
             </Icon>
           </Button>

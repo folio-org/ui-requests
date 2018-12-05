@@ -380,7 +380,7 @@ class RequestForm extends React.Component {
             <IconButton
               onClick={onCancel}
               ariaLabel={title}
-              icon="closeX"
+              icon="times"
             />
           )}
         </FormattedMessage>
@@ -492,7 +492,7 @@ class RequestForm extends React.Component {
             onToggle();
           }}
         >
-          <Icon icon="hollowX">
+          <Icon icon="times-circle">
             <FormattedMessage id="ui-requests.cancel.cancelRequest" />
           </Icon>
         </Button>
