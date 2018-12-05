@@ -1,4 +1,11 @@
-import _ from 'lodash';
+import {
+  sortBy,
+  find,
+  get,
+  keyBy,
+  cloneDeep,
+  debounce
+} from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
@@ -94,7 +101,7 @@ class RequestForm extends React.Component {
     change: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     findResource: PropTypes.func,
-    fullRequest: PropTypes.object,
+    request: PropTypes.object,
     metadataDisplay: PropTypes.func,
     initialValues: PropTypes.object,
     location: PropTypes.shape({
@@ -117,23 +124,23 @@ class RequestForm extends React.Component {
     }),
     patronGroups: PropTypes.arrayOf(PropTypes.object),
     intl: intlShape
-  }
+  };
 
   static defaultProps = {
     findResource: () => {},
-    fullRequest: null,
+    request: null,
     initialValues: {},
     metadataDisplay: () => {},
     optionLists: {},
     pristine: true,
     submitting: false,
-  }
+  };
 
   constructor(props) {
     super(props);
 
-    const { fullRequest, initialValues } = props;
-    const { requester, item, loan } = (fullRequest || {});
+    const { request, initialValues } = props;
+    const { requester, item, loan } = (request || {});
     const { fulfilmentPreference, deliveryAddressTypeId } = initialValues;
 
     this.state = {
@@ -157,53 +164,55 @@ class RequestForm extends React.Component {
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onSelectUser = this.onSelectUser.bind(this);
     this.onToggleSection = this.onToggleSection.bind(this);
+    this.onSelectProxy = this.onSelectProxy.bind(this);
     this.onUserClick = this.onUserClick.bind(this);
-
+    this.onUserClickDebounce = debounce(this.onUserClick, 300, { leading: false, trailing: true });
+    this.onItemClickDebounce = debounce(this.onItemClick, 300, { leading: false, trailing: true });
     this.itemBarcodeRef = React.createRef();
     this.requesterBarcodeRef = React.createRef();
   }
 
   componentDidMount() {
     if (this.props.query.userBarcode) {
-      this.onSelectUser({ barcode: this.props.query.userBarcode });
+      this.findUser(this.props.query.userBarcode);
     }
 
     if (this.props.query.itemBarcode) {
-      this.onItemClick(this.props.query.itemBarcode);
+      this.findItem(this.props.query.itemBarcode);
     }
   }
 
   componentDidUpdate(prevProps) {
     const initials = this.props.initialValues;
-    const fullRequest = this.props.fullRequest;
+    const request = this.props.request;
     const oldInitials = prevProps.initialValues;
-    const oldRecord = prevProps.fullRequest;
+    const oldRecord = prevProps.request;
 
     if ((initials && initials.fulfilmentPreference &&
         oldInitials && !oldInitials.fulfilmentPreference) ||
-        (fullRequest && !oldRecord)) {
+        (request && !oldRecord)) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         selectedAddressTypeId: initials.deliveryAddressTypeId,
         selectedDelivery: initials.fulfilmentPreference === 'Delivery',
-        selectedItem: fullRequest.item,
-        selectedLoan: fullRequest.loan,
-        selectedUser: fullRequest.user,
+        selectedItem: request.item,
+        selectedLoan: request.loan,
+        selectedUser: request.user,
       });
     }
 
     if (prevProps.query.userBarcode !== this.props.query.userBarcode) {
-      this.onSelectUser({ barcode: this.props.query.userBarcode });
+      this.findUser(this.props.query.userBarcode);
     }
 
     if (prevProps.query.itemBarcode !== this.props.query.itemBarcode) {
-      this.onItemClick(this.props.query.itemBarcode);
+      this.findItem(this.props.query.itemBarcode);
     }
   }
 
   onToggleSection({ id }) {
     this.setState((curState) => {
-      const newState = _.cloneDeep(curState);
+      const newState = cloneDeep(curState);
       newState.accordions[id] = !curState.accordions[id];
       return newState;
     });
@@ -225,49 +234,40 @@ class RequestForm extends React.Component {
   // a user has been selected from the list
   onSelectUser(user) {
     if (user) {
-      // Set the new value in the redux-form barcode field
-      this.props.change('requester.barcode', user.barcode);
-      this.onUserClick(null, user.barcode);
+      this.findUser(user.barcode);
     }
   }
 
-  onUserClick(proxyUser = null, userBarcode = null) {
-    this.setState({ selectedUser: null, proxy: null });
+  // Executed when user is selected from the proxy dialog
+  onSelectProxy(proxy) {
+    const { selectedUser } = this.state;
 
-    // when selecting a user via the plugin, we'll get it via an argument.
-    // when plucking it from the form, we need to read it from the component
-    let barcode = userBarcode;
-    if (!barcode) {
-      barcode = this.requesterBarcodeRef.current.getRenderedComponent().getInput().value;
+    if (selectedUser.id === proxy.id) {
+      this.setState({ selectedUser, proxy: selectedUser });
+      this.props.change('requesterId', selectedUser.id);
+    } else {
+      this.setState({ selectedUser, proxy });
+      this.props.change('requesterId', proxy.id);
+      this.props.change('proxyUserId', selectedUser.id);
     }
+  }
+
+  onUserClick() {
+    const barcode = this.requesterBarcodeRef.current.value;
+    if (!barcode) return;
+    this.findUser(barcode);
+  }
+
+  findUser(barcode) {
+    // Set the new value in the redux-form barcode field
+    this.props.change('requester.barcode', barcode);
+    this.setState({ selectedUser: null, proxy: null });
 
     this.props.findResource('user', barcode, 'barcode').then((result) => {
       if (result.totalRecords === 1) {
-        const user = result.users[0];
-        if (proxyUser && proxyUser.id) {
-          // the ProxyManager has been used to select a role for this user,
-          // so figure out if user is a proxy or not
-          if (proxyUser.id === user.id) {
-            // Selected user is acting as self, so there is no proxy
-            this.setState({
-              selectedUser: user,
-              proxy: user,
-            });
-            this.props.change('requesterId', user.id);
-          } else {
-            this.setState({
-              selectedUser: proxyUser,
-              proxy: user,
-            });
-            this.props.change('requesterId', proxyUser.id);
-            this.props.change('proxyUserId', user.id);
-          }
-        } else {
-          this.setState({
-            selectedUser: user,
-          });
-          this.props.change('requesterId', user.id);
-        }
+        const selectedUser = result.users[0];
+        this.setState({ selectedUser });
+        this.props.change('requesterId', selectedUser.id);
       }
     });
   }
@@ -315,15 +315,9 @@ class RequestForm extends React.Component {
       .then(item => this.findLoan(item));
   }
 
-  onItemClick(itemBarcode = null) {
+  onItemClick() {
     this.setState({ selectedItem: null });
-
-    // if we get an item-ID via a query-param, we'll get it via an argument.
-    // when plucking it from the form, we need to read it from the component
-    let barcode = itemBarcode;
-    if (!barcode) {
-      barcode = this.itemBarcodeRef.current.getRenderedComponent().getInput().value;
-    }
+    const barcode = this.itemBarcodeRef.current.value;
     this.findItem(barcode);
   }
 
@@ -348,10 +342,21 @@ class RequestForm extends React.Component {
   requireItem = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectItem" />);
   requireUser = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectUser" />);
 
+
+  getProxy() {
+    const { request } = this.props;
+    const { proxy } = this.state;
+    const userProxy = request ? request.proxy : proxy;
+    if (!userProxy) return null;
+
+    const id = proxy.id || request.proxyUserId;
+    return Object.assign({}, userProxy, { id });
+  }
+
   render() {
     const {
       handleSubmit,
-      fullRequest,
+      request,
       onCancel,
       optionLists: {
         servicePoints,
@@ -367,12 +372,20 @@ class RequestForm extends React.Component {
       },
     } = this.props;
 
+    const {
+      accordions,
+      selectedUser,
+      selectedItem,
+      selectedLoan,
+      requestCount,
+      selectedAddressTypeId,
+      selectedDelivery,
+      isCancellingRequest,
+    } = this.state;
 
-    const { selectedUser, selectedItem, selectedLoan, requestCount } = this.state;
-    const { item, requestType, fulfilmentPreference } = (fullRequest || {});
+    const { item, requestType, fulfilmentPreference } = (request || {});
     const isEditForm = (item && item.barcode);
     const submittingButtonIsDisabled = pristine || submitting;
-
     const addRequestFirstMenu = (
       <PaneMenu>
         <FormattedMessage id="ui-requests.actions.closeNewRequest">
@@ -414,8 +427,8 @@ class RequestForm extends React.Component {
         </Button>
       </PaneMenu>
     );
-    const sortedRequestTypes = _.sortBy(requestTypes, ['label']);
-    const sortedFulfilmentTypes = _.sortBy(fulfilmentTypes, ['label']);
+    const sortedRequestTypes = sortBy(requestTypes, ['label']);
+    const sortedFulfilmentTypes = sortBy(fulfilmentTypes, ['label']);
 
     const requestTypeOptions = sortedRequestTypes.map(({ label, id }) => ({
       labelTranslationPath: label,
@@ -437,24 +450,25 @@ class RequestForm extends React.Component {
     let addressDetail;
     if (selectedUser && selectedUser.personal && selectedUser.personal.addresses) {
       deliveryLocations = selectedUser.personal.addresses.map((a) => {
-        const typeName = _.find(addressTypes, { id: a.addressTypeId }).addressType;
+        const typeName = find(addressTypes, { id: a.addressTypeId }).addressType;
         return { label: typeName, value: a.addressTypeId };
       });
-      deliveryLocations = _.sortBy(deliveryLocations, ['label']);
-      deliveryLocationsDetail = _.keyBy(selectedUser.personal.addresses, a => a.addressTypeId);
+      deliveryLocations = sortBy(deliveryLocations, ['label']);
+      deliveryLocationsDetail = keyBy(selectedUser.personal.addresses, a => a.addressTypeId);
     }
-    if (this.state.selectedAddressTypeId) {
-      addressDetail = toUserAddress(deliveryLocationsDetail[this.state.selectedAddressTypeId]);
+
+    if (selectedAddressTypeId) {
+      addressDetail = toUserAddress(deliveryLocationsDetail[selectedAddressTypeId]);
     }
 
     let patronGroupName;
-    if (patronGroups && this.state.selectedUser) {
-      const group = patronGroups.find(g => g.id === this.state.selectedUser.patronGroup);
+    if (patronGroups && selectedUser) {
+      const group = patronGroups.find(g => g.id === selectedUser.patronGroup);
       if (group) { patronGroupName = group.desc; }
     }
 
-    const holdShelfExpireDate = (_.get(fullRequest, ['status'], '') === 'Open - Awaiting pickup')
-      ? <FormattedDate value={_.get(fullRequest, ['holdShelfExpirationDate'], '')} />
+    const holdShelfExpireDate = (get(request, ['status'], '') === 'Open - Awaiting pickup')
+      ? <FormattedDate value={get(request, ['holdShelfExpirationDate'], '')} />
       : '-';
 
     // map column-IDs to table-header-values
@@ -465,15 +479,15 @@ class RequestForm extends React.Component {
       barcode: formatMessage({ id: 'ui-requests.barcode' }),
     };
 
-    const queuePosition = _.get(fullRequest, ['position'], '');
-    const positionLink = fullRequest ?
+    const queuePosition = get(request, ['position'], '');
+    const positionLink = request ?
       <div>
         <span>
           {queuePosition}
           &nbsp;
           &nbsp;
         </span>
-        <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${fullRequest.item.barcode}&sort=Request%20Date`}>
+        <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${request.item.barcode}&sort=Request%20Date`}>
           <FormattedMessage id="ui-requests.actions.viewRequestsInQueue" />
         </Link>
       </div> : '-';
@@ -492,7 +506,7 @@ class RequestForm extends React.Component {
             onToggle();
           }}
         >
-          <Icon icon="hollowX">
+          <Icon icon="times-circle">
             <FormattedMessage id="ui-requests.cancel.cancelRequest" />
           </Icon>
         </Button>
@@ -514,14 +528,14 @@ class RequestForm extends React.Component {
                 : <FormattedMessage id="ui-requests.actions.newRequest" />
             }
           >
-            <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
+            <AccordionSet accordionStatus={accordions} onToggle={this.onToggleSection}>
               <Accordion
                 id="request-info"
                 label={<FormattedMessage id="ui-requests.requestMeta.information" />}
               >
-                { isEditForm && fullRequest && fullRequest.metadata &&
+                { isEditForm && request && request.metadata &&
                   <Col xs={12}>
-                    <this.props.metadataDisplay metadata={fullRequest.metadata} />
+                    <this.props.metadataDisplay metadata={request.metadata} />
                   </Col>
                 }
                 <Row>
@@ -553,7 +567,7 @@ class RequestForm extends React.Component {
                         {isEditForm &&
                           <KeyValue
                             label={<FormattedMessage id="ui-requests.requestType" />}
-                            value={fullRequest.requestType}
+                            value={request.requestType}
                           />
                         }
                       </Col>
@@ -561,7 +575,7 @@ class RequestForm extends React.Component {
                         {isEditForm &&
                           <KeyValue
                             label={<FormattedMessage id="ui-requests.status" />}
-                            value={fullRequest.status}
+                            value={request.status}
                           />
                         }
                       </Col>
@@ -575,7 +589,7 @@ class RequestForm extends React.Component {
                           dateFormat="YYYY-MM-DD"
                         />
                       </Col>
-                      { isEditForm && fullRequest.status === 'Open - Awaiting pickup' &&
+                      { isEditForm && request.status === 'Open - Awaiting pickup' &&
                         <Col xs={3}>
                           <Field
                             name="holdShelfExpirationDate"
@@ -587,7 +601,7 @@ class RequestForm extends React.Component {
                           />
                         </Col>
                       }
-                      { isEditForm && fullRequest.status !== 'Open - Awaiting pickup' &&
+                      { isEditForm && request.status !== 'Open - Awaiting pickup' &&
                         <Col xs={3}>
                           <KeyValue
                             label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
@@ -633,7 +647,7 @@ class RequestForm extends React.Component {
                                   component={TextField}
                                   withRef
                                   ref={this.itemBarcodeRef}
-                                  onInput={this.onItemClick}
+                                  onInput={this.onItemClickDebounce}
                                   onKeyDown={e => this.onKeyDown(e, 'item')}
                                   validate={this.requireItem}
                                 />
@@ -655,9 +669,9 @@ class RequestForm extends React.Component {
                       }
                       { selectedItem &&
                         <ItemDetail
-                          item={fullRequest ? fullRequest.item : selectedItem}
-                          loan={fullRequest ? fullRequest.loan : selectedLoan}
-                          requestCount={fullRequest ? fullRequest.requestCount : requestCount}
+                          item={request ? request.item : selectedItem}
+                          loan={request ? request.loan : selectedLoan}
+                          requestCount={request ? request.requestCount : requestCount}
                         />
                       }
                     </Col>
@@ -688,7 +702,7 @@ class RequestForm extends React.Component {
                                   component={TextField}
                                   withRef
                                   ref={this.requesterBarcodeRef}
-                                  onInput={this.onUserClick}
+                                  onInput={this.onUserClickDebounce}
                                   onKeyDown={e => this.onKeyDown(e, 'requester')}
                                   validate={this.requireUser}
                                 />
@@ -722,21 +736,21 @@ class RequestForm extends React.Component {
                           </Col>
                         </Row>
                       }
-                      { this.state.selectedUser &&
+                      { selectedUser &&
                         <UserForm
-                          user={fullRequest ? fullRequest.requester : this.state.selectedUser}
+                          user={request ? request.requester : selectedUser}
                           stripes={this.props.stripes}
-                          request={fullRequest}
+                          request={request}
                           patronGroup={patronGroupName}
-                          selectedDelivery={this.state.selectedDelivery}
+                          selectedDelivery={selectedDelivery}
                           deliveryAddress={addressDetail}
                           deliveryLocations={deliveryLocations}
                           fulfilmentTypeOptions={fulfilmentTypeOptions}
                           onChangeAddress={this.onChangeAddress}
                           onChangeFulfilment={this.onChangeFulfilment}
-                          proxy={fullRequest ? fullRequest.proxy : this.state.proxy}
+                          proxy={this.getProxy()}
                           servicePoints={servicePoints}
-                          onSelectProxy={this.onUserClick}
+                          onSelectProxy={this.onSelectProxy}
                           onCloseProxy={() => { this.setState({ selectedUser: null, proxy: null }); }}
                         />
                       }
@@ -747,10 +761,10 @@ class RequestForm extends React.Component {
             </AccordionSet>
           </Pane>
           <this.connectedCancelRequestDialog
-            open={this.state.isCancellingRequest}
+            open={isCancellingRequest}
             onCancelRequest={this.onCancelRequest}
             onClose={() => this.setState({ isCancellingRequest: false })}
-            request={fullRequest}
+            request={request}
             stripes={this.props.stripes}
           />
 
