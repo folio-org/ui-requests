@@ -234,8 +234,7 @@ class RequestForm extends React.Component {
   // a user has been selected from the list
   onSelectUser(user) {
     if (user) {
-      const { barcode } = user;
-      this.findUser(barcode);
+      this.findUser(user.barcode);
     }
   }
 
