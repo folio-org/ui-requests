@@ -306,7 +306,7 @@ class ViewRequest extends React.Component {
               onToggle();
             }}
           >
-            <Icon icon="hollowX">
+            <Icon icon="times-circle">
               <FormattedMessage id="ui-requests.cancel.cancelRequest" />
             </Icon>
           </Button>
@@ -412,7 +412,7 @@ class ViewRequest extends React.Component {
           <RequestForm
             stripes={stripes}
             initialValues={request}
-            fullRequest={request}
+            request={request}
             metadataDisplay={this.cViewMetaData}
             onSubmit={(record) => { this.update(record); }}
             onCancel={this.props.onCloseEdit}

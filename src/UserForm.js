@@ -20,7 +20,6 @@ class UserForm extends React.Component {
     onSelectProxy: PropTypes.func.isRequired,
     patronGroup: PropTypes.string,
     proxy: PropTypes.object,
-    request: PropTypes.object.isRequired,
     stripes: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     selectedDelivery: PropTypes.bool,
@@ -60,7 +59,7 @@ class UserForm extends React.Component {
         <FormattedMessage id="ui-requests.actions.selectAddressType">
           {(optionLabel) => <option value="">{optionLabel}</option>}
         </FormattedMessage>
-        {deliveryLocations.map(({ value, label }) => <option value={value}>{label}</option>)}
+        {deliveryLocations.map(({ value, label }) => <option key={value} value={value}>{label}</option>)}
       </Field>
     );
   }
@@ -80,7 +79,7 @@ class UserForm extends React.Component {
         <FormattedMessage id="ui-requests.actions.selectPickupSp">
           {optionLabel => <option value="">{optionLabel}</option>}
         </FormattedMessage>
-        {servicePoints.map(({ id, name }) => <option value={id}>{name}</option>)}
+        {servicePoints.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
       </Field>
     );
   }
@@ -89,7 +88,6 @@ class UserForm extends React.Component {
     const {
       user,
       proxy,
-      request,
       patronGroup,
       deliveryAddress,
       deliveryLocations,
@@ -108,7 +106,7 @@ class UserForm extends React.Component {
     if (proxy) {
       proxyName = getFullName(proxy);
       proxyBarcode = get(proxy, ['barcode'], '-');
-      proxyId = proxy.id || request.proxyUserId;
+      proxyId = proxy.id;
     }
 
     const proxySection = proxyId
@@ -131,7 +129,7 @@ class UserForm extends React.Component {
               onChange={onChangeFulfilment}
             >
               {fulfilmentTypeOptions.map(({ labelTranslationPath, value, selected }) => (
-                <FormattedMessage id={labelTranslationPath}>
+                <FormattedMessage key={value} id={labelTranslationPath}>
                   {translatedLabel => (
                     <option
                       value={value}
