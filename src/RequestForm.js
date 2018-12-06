@@ -393,7 +393,7 @@ class RequestForm extends React.Component {
             <IconButton
               onClick={onCancel}
               ariaLabel={title}
-              icon="closeX"
+              icon="times"
             />
           )}
         </FormattedMessage>
