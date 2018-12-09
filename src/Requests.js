@@ -233,7 +233,7 @@ class Requests extends React.Component {
         const { firstName, middleName, lastName } = record.requester;
         record.requester.name = `${firstName || ''} ${middleName || ''} ${lastName || ''}`;
       }
-      if (record.loan.dueDate) {
+      if (record.loan) {
         const { dueDate } = record.loan;
         record.loan.dueDate = `${formatDate(dueDate)}, ${formatTime(dueDate)}`;
       }
