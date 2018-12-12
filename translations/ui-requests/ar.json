@@ -93,10 +93,10 @@
     "requestMeta.type.pages": "Pages",
     "requestMeta.fulfilment.holdShelf": "Hold Shelf",
     "requestMeta.fulfilment.delivery": "Delivery",
-    "actions.edit": "Edit",
-    "item.contributorNamesNames": "Contributor names",
-    "item.location.name": "Shelving location",
+    "actions.edit": "تحرير",
+    "item.contributorNamesNames": "أسماء المساهمين",
+    "item.location.name": "موقع الرف",
     "proxy.name": "Requester's proxy name",
-    "deliveryAddress": "Delivery address",
+    "deliveryAddress": "عنوان التوصيل",
     "requester.patronGroup.group": "Requester Patron group"
 }
