@@ -9,8 +9,10 @@
 * Populate pickup service point with service points. Fixes UIREQ-131.
 * Configure 'Requests: All permissions' permission set. Fixes UIREQ-106.
 * Show No Requests By Default. Fixes UIREQ-150.
-* Support circulation v5.0, requiring service-point information on loans. Refs UIREQ-161.
-* Use documented react-intl patterns instead of stripes.intl. UIREQ-135
+* Support `circulation` v5.0, requiring service-point information on loans. Refs UIREQ-161.
+* Upgrade dependency on `inventory`. Completes UIREQ-173.
+* Use documented react-intl patterns instead of stripes.intl. Completes UIREQ-135.
+* Apply internationalization to all hardcoded strings. Completes UIREQ-147.
 * Improve opening request record. Fixes UIREQ-134.
 * Removed deprecated actionMenuItems-prop. Fixes UIREQ-170.
 * Read user and item barcodes from the query string for new requests. Fixes UIREQ-146.
@@ -25,6 +27,7 @@
 
 * Link to request queue from detailed view, refs UIREQ-122
 * Fix filters2cql import
+* Fix bug where patron details display as "[object Object]". Fixes UIREQ-120.
 
 ## 1.3.0 (https://github.com/folio-org/ui-requests/tree/v1.3.0) (2018-10-03)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.2.0...v1.3.0)
