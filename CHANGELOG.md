@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## IN PROGRESS
+## 1.5.0 (https://github.com/folio-org/ui-requests/tree/v1.5.0) (2018-12-13)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.4.1...v1.5.0)
 
 * Fix bug preventing item view accordions from closing. Fixes UIREQ-123.
 * Fix bug causing barcode validation to misbehave. Fixes UIREQ-127.
