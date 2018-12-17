@@ -100,7 +100,7 @@ class RequestForm extends React.Component {
     }).isRequired,
     change: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    findResource: PropTypes.func,
+    findResource: PropTypes.func.isRequired,
     request: PropTypes.object,
     metadataDisplay: PropTypes.func,
     initialValues: PropTypes.object,
@@ -127,7 +127,6 @@ class RequestForm extends React.Component {
   };
 
   static defaultProps = {
-    findResource: () => {},
     request: null,
     initialValues: {},
     metadataDisplay: () => {},
