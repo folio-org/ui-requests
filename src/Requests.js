@@ -1,3 +1,4 @@
+import { omit } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import fetch from 'isomorphic-fetch';
@@ -111,7 +112,7 @@ class Requests extends React.Component {
       path: 'users',
       fetch: false,
     },
-  }
+  };
 
   static propTypes = {
     intl: intlShape,
@@ -156,7 +157,7 @@ class Requests extends React.Component {
         getState: PropTypes.func.isRequired,
       }),
     }).isRequired,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -200,6 +201,17 @@ class Requests extends React.Component {
         value: item
       };
     });
+
+    this.state = {};
+  }
+
+  static getDerivedStateFromProps(props) {
+    const layer = (props.resources.query || {}).layer;
+    if (!layer) {
+      return { dupRequest: null };
+    }
+
+    return null;
   }
 
   componentDidUpdate() {
@@ -288,9 +300,28 @@ class Requests extends React.Component {
 
   create = data => this.props.mutator.records.POST(data).then(() => this.props.mutator.query.update({ layer: null }));
 
+  onDuplicate = (request) => {
+    const dupRequest = omit(request, [
+      'id',
+      'metadata',
+      'status',
+      'requestCount',
+      'position',
+      'requester',
+    ]);
+
+    this.setState({ dupRequest });
+    this.props.mutator.query.update({
+      layer: 'create',
+      itemBarcode: request.item.barcode,
+      userBarcode: request.requester.barcode,
+    });
+  }
+
   render() {
     const {
       resources,
+      mutator,
       stripes,
     } = this.props;
 
@@ -306,9 +337,16 @@ class Requests extends React.Component {
       title,
     } = this.columnLabels;
 
+    const {
+      dupRequest
+    } = this.state;
+
     const patronGroups = (resources.patronGroups || {}).records || [];
     const addressTypes = (resources.addressTypes || {}).records || [];
     const servicePoints = (resources.servicePoints || {}).records || [];
+    const InitialValues = dupRequest ||
+      { requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' };
+
     const resultsFormatter = {
       [itemBarcode]: rq => (rq.item ? rq.item.barcode : ''),
       [position]: rq => (rq.position || ''),
@@ -331,7 +369,7 @@ class Requests extends React.Component {
         id="exportToCsvPaneHeaderBtn"
         onClick={() => {
           if (!this.csvExportPending) {
-            this.props.mutator.resultCount.replace(this.props.resources.records.other.totalRecords);
+            mutator.resultCount.replace(resources.records.other.totalRecords);
             this.csvExportPending = true;
           }
           onToggle();
@@ -367,11 +405,11 @@ class Requests extends React.Component {
             [requestDate]: '220px'
           }}
           resultsFormatter={resultsFormatter}
-          newRecordInitialValues={{ requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' }}
+          newRecordInitialValues={InitialValues}
           massageNewRecord={this.massageNewRecord}
           onCreate={this.create}
-          parentResources={this.props.resources}
-          parentMutator={this.props.mutator}
+          parentResources={resources}
+          parentMutator={mutator}
           detailProps={{
             stripes,
             findResource: this.findResource,
@@ -383,14 +421,14 @@ class Requests extends React.Component {
               servicePoints
             },
             patronGroups,
-            query: this.props.resources.query,
-            uniquenessValidator: this.props.mutator,
+            query: resources.query,
+            uniquenessValidator: mutator,
+            onDuplicate: this.onDuplicate,
           }}
           viewRecordPerms="module.requests.enabled"
           newRecordPerms="module.requests.enabled"
         />
-      </div>
-    );
+      </div>);
   }
 }
 

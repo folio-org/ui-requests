@@ -51,6 +51,7 @@ class ViewRequest extends React.Component {
       search: PropTypes.string,
     }).isRequired,
     joinRequest: PropTypes.func.isRequired,
+    findResource: PropTypes.func.isRequired,
     mutator: PropTypes.shape({
       selectedRequest: PropTypes.shape({
         PUT: PropTypes.func,
@@ -59,6 +60,7 @@ class ViewRequest extends React.Component {
     onClose: PropTypes.func.isRequired,
     onCloseEdit: PropTypes.func.isRequired,
     onEdit: PropTypes.func,
+    onDuplicate: PropTypes.func,
     optionLists: PropTypes.object,
     paneWidth: PropTypes.string,
     patronGroups: PropTypes.arrayOf(PropTypes.object),
@@ -205,6 +207,8 @@ class ViewRequest extends React.Component {
       stripes,
       editLink,
       onEdit,
+      onCloseEdit,
+      findResource,
     } = this.props;
 
     const query = location.search ? queryString.parse(location.search) : {};
@@ -308,6 +312,18 @@ class ViewRequest extends React.Component {
           >
             <Icon icon="times-circle">
               <FormattedMessage id="ui-requests.cancel.cancelRequest" />
+            </Icon>
+          </Button>
+          <Button
+            id="duplicate-request"
+            onClick={() => {
+              onToggle();
+              this.props.onDuplicate(request);
+            }}
+            buttonStyle="dropdownItem"
+          >
+            <Icon icon="duplicate">
+              <FormattedMessage id="ui-requests.actions.duplicateRequest" />
             </Icon>
           </Button>
         </Fragment>
@@ -416,11 +432,12 @@ class ViewRequest extends React.Component {
             request={request}
             metadataDisplay={this.cViewMetaData}
             onSubmit={(record) => { this.update(record); }}
-            onCancel={this.props.onCloseEdit}
+            onCancel={onCloseEdit}
             onCancelRequest={this.cancelRequest}
             optionLists={optionLists}
             patronGroups={patronGroups}
             query={this.props.query}
+            findResource={findResource}
           />
         </Layer>
         <this.connectedCancelRequestDialog
@@ -428,7 +445,7 @@ class ViewRequest extends React.Component {
           onCancelRequest={this.cancelRequest}
           onClose={() => this.setState({ isCancellingRequest: false })}
           request={request}
-          stripes={this.props.stripes}
+          stripes={stripes}
         />
       </Pane>
     );
