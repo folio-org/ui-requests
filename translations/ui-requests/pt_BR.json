@@ -86,10 +86,10 @@
     "requests.position": "Posição",
     "requests.itemBarcode": "Código de barras do item",
     "requestMeta.type.recall": "Devolução",
-    "requestMeta.type.hold": "Aguardado",
+    "requestMeta.type.hold": "Acervo",
     "requestMeta.type.page": "Página",
     "requestMeta.type.recalls": "Devoluções",
-    "requestMeta.type.holds": "Aguardados",
+    "requestMeta.type.holds": "Acervos",
     "requestMeta.type.pages": "Páginas",
     "requestMeta.fulfilment.holdShelf": "Prateleira de espera",
     "requestMeta.fulfilment.delivery": "Entrega",
@@ -98,5 +98,6 @@
     "item.location.name": "Localização das estantes",
     "proxy.name": "Nome dos autorizados para solicitação",
     "deliveryAddress": "Endereço de entrega",
-    "requester.patronGroup.group": "Grupo do usuário solicitante"
+    "requester.patronGroup.group": "Grupo do usuário solicitante",
+    "actions.duplicateRequest": "Duplicar"
 }
