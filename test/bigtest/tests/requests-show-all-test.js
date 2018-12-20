@@ -11,7 +11,7 @@ describe('Requests', () => {
 
   beforeEach(async function () {
     this.server.create('request');
-    this.visit('/requests');
+    this.visit('/requests?filters=requestType.Holds%2CrequestType.Pages%2CrequestType.Recalls&sort=Request%20Date');
   });
 
   it('shows the list of requests items', () => {

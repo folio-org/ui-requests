@@ -55,11 +55,7 @@ class Requests extends React.Component {
       records: 'addressTypes',
     },
     query: {
-      initialValue: {
-        query: '',
-        filters: '',
-        sort: 'Request Date',
-      },
+      initialValue: { sort: 'Request Date' },
     },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
     records: {
