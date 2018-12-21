@@ -10,7 +10,7 @@ export default Factory.extend({
   dateOfBirth: () => faker.date.past().toISOString().substring(0, 10),
   preferredContactTypeId: () => '003',
   afterCreate(userPersonal, server) {
-    const addresses = server.createList('addresse', 1);
+    const addresses = server.createList('address', 1);
     userPersonal.update('addresses', addresses);
     userPersonal.save();
   }
