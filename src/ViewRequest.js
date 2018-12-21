@@ -332,6 +332,7 @@ class ViewRequest extends React.Component {
 
     return (
       <Pane
+        data-test-instance-details
         defaultWidth={this.props.paneWidth}
         paneTitle={<FormattedMessage id="ui-requests.requestMeta.detailLabel" />}
         lastMenu={detailMenu}

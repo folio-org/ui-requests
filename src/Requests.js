@@ -55,11 +55,7 @@ class Requests extends React.Component {
       records: 'addressTypes',
     },
     query: {
-      initialValue: {
-        query: '',
-        filters: '',
-        sort: 'Request Date',
-      },
+      initialValue: { sort: 'Request Date' },
     },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
     records: {
@@ -379,53 +375,56 @@ class Requests extends React.Component {
       </Button>
     );
 
-    return (<SearchAndSort
-      actionMenu={actionMenu}
-      packageInfo={packageInfo}
-      objectName="request"
-      filterConfig={filterConfig}
-      initialResultCount={INITIAL_RESULT_COUNT}
-      resultCountIncrement={RESULT_COUNT_INCREMENT}
-      viewRecordComponent={ViewRequest}
-      editRecordComponent={RequestForm}
-      visibleColumns={[
-        requestDate,
-        title,
-        itemBarcode,
-        type,
-        requestStatus,
-        position,
-        requester,
-        requesterBarcode,
-        proxy,
-      ]}
-      columnWidths={{
-        [requestDate]: '220px'
-      }}
-      resultsFormatter={resultsFormatter}
-      newRecordInitialValues={InitialValues}
-      massageNewRecord={this.massageNewRecord}
-      onCreate={this.create}
-      parentResources={resources}
-      parentMutator={mutator}
-      detailProps={{
-        stripes,
-        findResource: this.findResource,
-        joinRequest: this.addRequestFields,
-        optionLists: {
-          addressTypes,
-          requestTypes,
-          fulfilmentTypes,
-          servicePoints
-        },
-        patronGroups,
-        query: resources.query,
-        uniquenessValidator: mutator,
-        onDuplicate: this.onDuplicate,
-      }}
-      viewRecordPerms="module.requests.enabled"
-      newRecordPerms="module.requests.enabled"
-    />);
+    return (
+      <div data-test-request-instances>
+        <SearchAndSort
+          actionMenu={actionMenu}
+          packageInfo={packageInfo}
+          objectName="request"
+          filterConfig={filterConfig}
+          initialResultCount={INITIAL_RESULT_COUNT}
+          resultCountIncrement={RESULT_COUNT_INCREMENT}
+          viewRecordComponent={ViewRequest}
+          editRecordComponent={RequestForm}
+          visibleColumns={[
+            requestDate,
+            title,
+            itemBarcode,
+            type,
+            requestStatus,
+            position,
+            requester,
+            requesterBarcode,
+            proxy,
+          ]}
+          columnWidths={{
+            [requestDate]: '220px'
+          }}
+          resultsFormatter={resultsFormatter}
+          newRecordInitialValues={InitialValues}
+          massageNewRecord={this.massageNewRecord}
+          onCreate={this.create}
+          parentResources={resources}
+          parentMutator={mutator}
+          detailProps={{
+            stripes,
+            findResource: this.findResource,
+            joinRequest: this.addRequestFields,
+            optionLists: {
+              addressTypes,
+              requestTypes,
+              fulfilmentTypes,
+              servicePoints
+            },
+            patronGroups,
+            query: resources.query,
+            uniquenessValidator: mutator,
+            onDuplicate: this.onDuplicate,
+          }}
+          viewRecordPerms="module.requests.enabled"
+          newRecordPerms="module.requests.enabled"
+        />
+      </div>);
   }
 }
 
