@@ -493,7 +493,20 @@ class RequestForm extends React.Component {
 
     const actionMenu = ({ onToggle }) => {
       if (!isEditForm) {
-        return undefined;
+        return (
+          <Button
+            buttonStyle="dropdownItem"
+            id="clickable-cancel-new-request"
+            onClick={() => {
+              onCancel();
+              onToggle();
+            }}
+          >
+            <Icon icon="times-circle">
+              <FormattedMessage id="ui-requests.actions.cancelNewRequest" />
+            </Icon>
+          </Button>
+        );
       }
 
       return (
