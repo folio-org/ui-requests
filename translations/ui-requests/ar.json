@@ -98,5 +98,6 @@
     "item.location.name": "موقع الرف",
     "proxy.name": "Requester's proxy name",
     "deliveryAddress": "عنوان التوصيل",
-    "requester.patronGroup.group": "Requester Patron group"
+    "requester.patronGroup.group": "Requester Patron group",
+    "actions.duplicateRequest": "Duplicate"
 }
