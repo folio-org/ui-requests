@@ -495,6 +495,7 @@ class RequestForm extends React.Component {
       if (!isEditForm) {
         return (
           <Button
+            data-test-cancel-new-request-action
             buttonStyle="dropdownItem"
             id="clickable-cancel-new-request"
             onClick={() => {
@@ -526,7 +527,14 @@ class RequestForm extends React.Component {
     };
 
     return (
-      <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
+      <form
+        id="form-requests"
+        data-test-form-page
+        style={{
+          height: '100%',
+          overflow: 'auto'
+        }}
+      >
         <Paneset isRoot>
           <Pane
             defaultWidth="100%"
