@@ -40,6 +40,8 @@ import UserForm from './UserForm';
 import ItemDetail from './ItemDetail';
 import { toUserAddress } from './constants';
 
+import css from './requests.css';
+
 /**
  * on-blur validation checks that the requested item is checked out
  * and that the requesting user exists.
@@ -491,7 +493,7 @@ class RequestForm extends React.Component {
         </Link>
       </div> : '-';
 
-    const actionMenu = ({ onToggle }) => {
+    const renderActionMenu = ({ onToggle }) => {
       if (!isEditForm) {
         return (
           <Button
@@ -529,11 +531,8 @@ class RequestForm extends React.Component {
     return (
       <form
         id="form-requests"
+        className={css.requestForm}
         data-test-form-page
-        style={{
-          height: '100%',
-          overflow: 'auto'
-        }}
       >
         <Paneset isRoot>
           <Pane
@@ -541,7 +540,7 @@ class RequestForm extends React.Component {
             height="100%"
             firstMenu={addRequestFirstMenu}
             lastMenu={isEditForm ? editRequestLastMenu : addRequestLastMenu}
-            actionMenu={actionMenu}
+            actionMenu={renderActionMenu}
             paneTitle={
               isEditForm
                 ? <FormattedMessage id="ui-requests.actions.editRequest" />
