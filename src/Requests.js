@@ -1,5 +1,4 @@
-import { get } from 'lodash';
-import { omit } from 'lodash';
+import { omit, get } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import fetch from 'isomorphic-fetch';
@@ -118,8 +117,7 @@ class Requests extends React.Component {
       },
     },
     activeRecord: {},
-  }
-};
+  };
 
   static propTypes = {
     intl: intlShape,
@@ -216,7 +214,6 @@ class Requests extends React.Component {
     });
 
     this.state = { submitting: false };
-
   }
 
   static getDerivedStateFromProps(props) {
@@ -226,7 +223,6 @@ class Requests extends React.Component {
     }
 
     return null;
->>>>>>> 852788fa83865a80b290cc3b58ed718f1a8d9617
   }
 
   componentDidUpdate(prevProps) {
