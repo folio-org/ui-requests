@@ -1,3 +1,4 @@
+import { get } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import fetch from 'isomorphic-fetch';
@@ -111,6 +112,15 @@ class Requests extends React.Component {
       path: 'users',
       fetch: false,
     },
+    patronBlocks: {
+      type: 'okapi',
+      records: 'manualblocks',
+      path: 'manualblocks?query=userId=%{activeRecord.patronId}',
+      DELETE: {
+        path: 'manualblocks/%{activeRecord.blockId}',
+      },
+    },
+    activeRecord: {},
   }
 
   static propTypes = {
@@ -126,6 +136,12 @@ class Requests extends React.Component {
       }),
       resultCount: PropTypes.shape({
         replace: PropTypes.func,
+      }),
+      activeRecord: PropTypes.shape({
+        update: PropTypes.func,
+      }),
+      patronBlocks: PropTypes.shape({
+        DELETE: PropTypes.func,
       }),
     }).isRequired,
     resources: PropTypes.shape({
@@ -200,9 +216,30 @@ class Requests extends React.Component {
         value: item
       };
     });
+    this.state = { submitting: false };
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
+    const patronBlocks = get(this.props.resources, ['patronBlocks', 'records'], []);
+    const prevBlocks = get(prevProps.resources, ['patronBlocks', 'records'], []);
+    const { submitting } = this.state;
+    const prevExpirated = prevBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
+    const expirated = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
+
+    if (prevExpirated.length > 0 && expirated.length === 0) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ submitting: false });
+    }
+
+    if (expirated.length > 0 && !submitting) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ submitting: true });
+      expirated.forEach(p => {
+        this.props.mutator.activeRecord.update({ blockId: p.id });
+        this.props.mutator.patronBlocks.DELETE({ id: p.id });
+      });
+    }
+
     if (this.csvExportPending) {
       const recordsLoaded = this.props.resources.records.records;
       const numTotalRecords = this.props.resources.records.other.totalRecords;
@@ -284,6 +321,10 @@ class Requests extends React.Component {
     const { intl: { timeZone } } = this.props;
     const isoDate = moment.tz(timeZone).format();
     Object.assign(requestData, { requestDate: isoDate });
+  }
+
+  onChangePatron = (patron) => {
+    this.props.mutator.activeRecord.update({ patronId: patron.id });
   }
 
   create = data => this.props.mutator.records.POST(data).then(() => this.props.mutator.query.update({ layer: null }));
@@ -371,6 +412,7 @@ class Requests extends React.Component {
       parentResources={this.props.resources}
       parentMutator={this.props.mutator}
       detailProps={{
+        onChangePatron: this.onChangePatron,
         stripes,
         findResource: this.findResource,
         joinRequest: this.addRequestFields,
