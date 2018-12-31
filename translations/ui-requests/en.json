@@ -11,6 +11,10 @@
   "requestExpirationDate": "Request expiration date",
   "holdShelfExpirationDate": "Hold shelf expiration date",
   "position": "Position in queue",
+  "close": "Close",
+  "blockedLabel": "Reason for block:",
+  "blockModal": "Patron blocked from requesting",
+  "detailsButton": "Block details",
 
   "requests.title": "Title",
   "requests.type": "Type",
