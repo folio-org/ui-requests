@@ -1,6 +1,6 @@
 {
   "name": "@folio/requests",
-  "version": "1.4.3",
+  "version": "1.5.1",
   "description": "Requests manager",
   "repository": "folio-org/ui-requests",
   "publishConfig": {
@@ -64,7 +64,6 @@
           "addresstypes.collection.get",
           "usergroups.collection.get",
           "configuration.entries.collection.get",
-
           "inventory.items.collection.get",
           "inventory.items.item.get",
           "inventory.instances.item.get",
@@ -75,7 +74,6 @@
           "inventory-storage.holdings.item.get",
           "inventory-storage.instances.item.get",
           "inventory-storage.instances.collection.get"
-
         ],
         "visible": true
       }
@@ -83,18 +81,28 @@
   },
   "scripts": {
     "start": "stripes serve",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "stripes test karma"
   },
   "devDependencies": {
+    "@bigtest/interactor": "^0.9.1",
+    "@bigtest/mirage": "^0.0.1",
+    "@bigtest/mocha": "^0.5.2",
+    "@bigtest/react": "^0.1.2",
     "@folio/eslint-config-stripes": "^3.2.1",
     "@folio/stripes": "^1.0.0",
-    "@folio/stripes-cli": "^1.4.0",
+    "@folio/stripes-cli": "^1.6.0",
+    "@folio/stripes-core": "^2.17.0",
     "babel-eslint": "^9.0.0",
+    "babel-polyfill": "^6.26.0",
+    "chai": "^4.2.0",
     "eslint": "^5.5.0",
+    "mocha": "^5.2.0",
     "react": "^16.5.1",
     "react-dom": "^16.5.1",
     "react-redux": "^5.0.7",
-    "redux": "^4.0.0"
+    "redux": "^4.0.0",
+    "sinon": "^7.2.0"
   },
   "dependencies": {
     "@folio/react-intl-safe-html": "^1.0.2",

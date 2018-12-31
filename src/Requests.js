@@ -1,4 +1,5 @@
 import { get } from 'lodash';
+import { omit } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import fetch from 'isomorphic-fetch';
@@ -55,11 +56,7 @@ class Requests extends React.Component {
       records: 'addressTypes',
     },
     query: {
-      initialValue: {
-        query: '',
-        filters: '',
-        sort: 'Request Date',
-      },
+      initialValue: { sort: 'Request Date' },
     },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
     records: {
@@ -122,6 +119,7 @@ class Requests extends React.Component {
     },
     activeRecord: {},
   }
+};
 
   static propTypes = {
     intl: intlShape,
@@ -172,7 +170,7 @@ class Requests extends React.Component {
         getState: PropTypes.func.isRequired,
       }),
     }).isRequired,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -216,7 +214,19 @@ class Requests extends React.Component {
         value: item
       };
     });
+
     this.state = { submitting: false };
+
+  }
+
+  static getDerivedStateFromProps(props) {
+    const layer = (props.resources.query || {}).layer;
+    if (!layer) {
+      return { dupRequest: null };
+    }
+
+    return null;
+>>>>>>> 852788fa83865a80b290cc3b58ed718f1a8d9617
   }
 
   componentDidUpdate(prevProps) {
@@ -270,7 +280,7 @@ class Requests extends React.Component {
         const { firstName, middleName, lastName } = record.requester;
         record.requester.name = `${firstName || ''} ${middleName || ''} ${lastName || ''}`;
       }
-      if (record.loan.dueDate) {
+      if (record.loan) {
         const { dueDate } = record.loan;
         record.loan.dueDate = `${formatDate(dueDate)}, ${formatTime(dueDate)}`;
       }
@@ -329,9 +339,28 @@ class Requests extends React.Component {
 
   create = data => this.props.mutator.records.POST(data).then(() => this.props.mutator.query.update({ layer: null }));
 
+  onDuplicate = (request) => {
+    const dupRequest = omit(request, [
+      'id',
+      'metadata',
+      'status',
+      'requestCount',
+      'position',
+      'requester',
+    ]);
+
+    this.setState({ dupRequest });
+    this.props.mutator.query.update({
+      layer: 'create',
+      itemBarcode: request.item.barcode,
+      userBarcode: request.requester.barcode,
+    });
+  }
+
   render() {
     const {
       resources,
+      mutator,
       stripes,
     } = this.props;
 
@@ -347,9 +376,16 @@ class Requests extends React.Component {
       title,
     } = this.columnLabels;
 
+    const {
+      dupRequest
+    } = this.state;
+
     const patronGroups = (resources.patronGroups || {}).records || [];
     const addressTypes = (resources.addressTypes || {}).records || [];
     const servicePoints = (resources.servicePoints || {}).records || [];
+    const InitialValues = dupRequest ||
+      { requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' };
+
     const resultsFormatter = {
       [itemBarcode]: rq => (rq.item ? rq.item.barcode : ''),
       [position]: rq => (rq.position || ''),
@@ -372,7 +408,7 @@ class Requests extends React.Component {
         id="exportToCsvPaneHeaderBtn"
         onClick={() => {
           if (!this.csvExportPending) {
-            this.props.mutator.resultCount.replace(this.props.resources.records.other.totalRecords);
+            mutator.resultCount.replace(resources.records.other.totalRecords);
             this.csvExportPending = true;
           }
           onToggle();
@@ -382,53 +418,57 @@ class Requests extends React.Component {
       </Button>
     );
 
-    return (<SearchAndSort
-      actionMenu={actionMenu}
-      packageInfo={packageInfo}
-      objectName="request"
-      filterConfig={filterConfig}
-      initialResultCount={INITIAL_RESULT_COUNT}
-      resultCountIncrement={RESULT_COUNT_INCREMENT}
-      viewRecordComponent={ViewRequest}
-      editRecordComponent={RequestForm}
-      visibleColumns={[
-        requestDate,
-        title,
-        itemBarcode,
-        type,
-        requestStatus,
-        position,
-        requester,
-        requesterBarcode,
-        proxy,
-      ]}
-      columnWidths={{
-        [requestDate]: '220px'
-      }}
-      resultsFormatter={resultsFormatter}
-      newRecordInitialValues={{ requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' }}
-      massageNewRecord={this.massageNewRecord}
-      onCreate={this.create}
-      parentResources={this.props.resources}
-      parentMutator={this.props.mutator}
-      detailProps={{
-        onChangePatron: this.onChangePatron,
-        stripes,
-        findResource: this.findResource,
-        joinRequest: this.addRequestFields,
-        optionLists: {
-          addressTypes,
-          requestTypes,
-          fulfilmentTypes,
-          servicePoints
-        },
-        patronGroups,
-        query: this.props.resources.query,
-        uniquenessValidator: this.props.mutator,
-      }}
-      viewRecordPerms="module.requests.enabled"
-      newRecordPerms="module.requests.enabled"
-    />);
+    return (
+      <div data-test-request-instances>
+        <SearchAndSort
+          actionMenu={actionMenu}
+          packageInfo={packageInfo}
+          objectName="request"
+          filterConfig={filterConfig}
+          initialResultCount={INITIAL_RESULT_COUNT}
+          resultCountIncrement={RESULT_COUNT_INCREMENT}
+          viewRecordComponent={ViewRequest}
+          editRecordComponent={RequestForm}
+          visibleColumns={[
+            requestDate,
+            title,
+            itemBarcode,
+            type,
+            requestStatus,
+            position,
+            requester,
+            requesterBarcode,
+            proxy,
+          ]}
+          columnWidths={{
+            [requestDate]: '220px'
+          }}
+          resultsFormatter={resultsFormatter}
+          newRecordInitialValues={InitialValues}
+          massageNewRecord={this.massageNewRecord}
+          onCreate={this.create}
+          parentResources={resources}
+          parentMutator={mutator}
+          detailProps={{
+            onChangePatron: this.onChangePatron,
+            stripes,
+            findResource: this.findResource,
+            joinRequest: this.addRequestFields,
+            optionLists: {
+              addressTypes,
+              requestTypes,
+              fulfilmentTypes,
+              servicePoints
+            },
+            patronGroups,
+            query: resources.query,
+            uniquenessValidator: mutator,
+            onDuplicate: this.onDuplicate,
+          }}
+          viewRecordPerms="module.requests.enabled"
+          newRecordPerms="module.requests.enabled"
+        />
+      </div>);
   }
 }
 

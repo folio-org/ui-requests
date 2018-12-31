@@ -61,6 +61,7 @@
   "actions.selectPickupSp": "Select pickup service point",
   "actions.loading": "Loading...",
   "actions.viewRequestsInQueue": "view requests in queue",
+  "actions.duplicateRequest": "Duplicate",
 
   "item.information": "Item information",
   "item.barcode": "Item barcode",
