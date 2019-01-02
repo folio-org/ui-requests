@@ -25,4 +25,4 @@ import {
   headerDropdownMenu = new HeaderDropdownMenu();
 }
 
-export default new NewRequestsInteractor('[data-test-form-page]');
+export default new NewRequestsInteractor('[data-test-requests-form]');

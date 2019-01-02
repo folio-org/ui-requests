@@ -532,7 +532,7 @@ class RequestForm extends React.Component {
       <form
         id="form-requests"
         className={css.requestForm}
-        data-test-form-page
+        data-test-requests-form
       >
         <Paneset isRoot>
           <Pane
