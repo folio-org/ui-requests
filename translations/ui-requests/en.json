@@ -48,6 +48,7 @@
   "actions.edit": "Edit",
   "actions.editRequestLink": "Edit Request Dialog",
   "actions.closeNewRequest": "Close New Request",
+  "actions.cancelNewRequest": "Cancel",
   "actions.createNewRequest": "Create New Request",
   "actions.newRequest": "New request",
   "actions.updateRequest": "Update request",

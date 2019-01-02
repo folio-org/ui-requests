@@ -40,6 +40,8 @@ import UserForm from './UserForm';
 import ItemDetail from './ItemDetail';
 import { toUserAddress } from './constants';
 
+import css from './requests.css';
+
 /**
  * on-blur validation checks that the requested item is checked out
  * and that the requesting user exists.
@@ -491,9 +493,23 @@ class RequestForm extends React.Component {
         </Link>
       </div> : '-';
 
-    const actionMenu = ({ onToggle }) => {
+    const renderActionMenu = ({ onToggle }) => {
       if (!isEditForm) {
-        return undefined;
+        return (
+          <Button
+            data-test-cancel-new-request-action
+            buttonStyle="dropdownItem"
+            id="clickable-cancel-new-request"
+            onClick={() => {
+              onCancel();
+              onToggle();
+            }}
+          >
+            <Icon icon="times-circle">
+              <FormattedMessage id="ui-requests.actions.cancelNewRequest" />
+            </Icon>
+          </Button>
+        );
       }
 
       return (
@@ -513,14 +529,18 @@ class RequestForm extends React.Component {
     };
 
     return (
-      <form id="form-requests" style={{ height: '100%', overflow: 'auto' }}>
+      <form
+        id="form-requests"
+        className={css.requestForm}
+        data-test-requests-form
+      >
         <Paneset isRoot>
           <Pane
             defaultWidth="100%"
             height="100%"
             firstMenu={addRequestFirstMenu}
             lastMenu={isEditForm ? editRequestLastMenu : addRequestLastMenu}
-            actionMenu={actionMenu}
+            actionMenu={renderActionMenu}
             paneTitle={
               isEditForm
                 ? <FormattedMessage id="ui-requests.actions.editRequest" />
