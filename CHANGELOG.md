@@ -3,6 +3,7 @@
 ## 1.6.0 (IN PROGRESS)
 
 * Add ability to duplicate request record. Fixes UIREQ-166.
+* Fill item barcode if itemBarcode is present in the url. Part of UIIN-410.
 
 ## 1.5.0 (https://github.com/folio-org/ui-requests/tree/v1.5.0) (2018-12-13)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.4.1...v1.5.0)
