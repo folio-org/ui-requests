@@ -303,6 +303,7 @@ class RequestForm extends React.Component {
 
         const item = result.items[0];
         this.props.change('itemId', item.id);
+        this.props.change('item.barcode', barcode);
 
         // Setting state here is redundant with what follows, but it lets us
         // display the matched item as quickly as possible, without waiting for
