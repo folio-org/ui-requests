@@ -99,5 +99,6 @@
     "proxy.name": "Nome dos autorizados para solicitação",
     "deliveryAddress": "Endereço de entrega",
     "requester.patronGroup.group": "Grupo do usuário solicitante",
-    "actions.duplicateRequest": "Duplicar"
+    "actions.duplicateRequest": "Duplicar",
+    "actions.cancelNewRequest": "Cancelar"
 }
