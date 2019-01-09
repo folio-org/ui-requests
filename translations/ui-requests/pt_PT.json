@@ -99,5 +99,6 @@
     "proxy.name": "Requester's proxy name",
     "deliveryAddress": "Delivery address",
     "requester.patronGroup.group": "Requester Patron group",
-    "actions.duplicateRequest": "Duplicate"
+    "actions.duplicateRequest": "Duplicate",
+    "actions.cancelNewRequest": "Cancelar"
 }

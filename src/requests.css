@@ -8,3 +8,8 @@
     border-radius: 6px;
   }
 }
+
+.requestForm {
+  height: 100%;
+  overflow: auto;
+}
