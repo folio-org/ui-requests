@@ -2,6 +2,7 @@ import {
   sortBy,
   find,
   get,
+  isEqual,
   keyBy,
   cloneDeep,
   debounce
@@ -38,6 +39,7 @@ import stripesForm from '@folio/stripes/form';
 import CancelRequestDialog from './CancelRequestDialog';
 import UserForm from './UserForm';
 import ItemDetail from './ItemDetail';
+import PatronBlockModal from './PatronBlockModal';
 import { toUserAddress } from './constants';
 
 import css from './requests.css';
@@ -156,6 +158,7 @@ class RequestForm extends React.Component {
       selectedItem: item,
       selectedUser: requester,
       selectedLoan: loan,
+      blocked: false,
     };
 
     this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
@@ -188,6 +191,8 @@ class RequestForm extends React.Component {
     const request = this.props.request;
     const oldInitials = prevProps.initialValues;
     const oldRecord = prevProps.request;
+    const prevBlocks = get(prevProps.parentResources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
+    const blocks = get(this.props.parentResources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
 
     if ((initials && initials.fulfilmentPreference &&
         oldInitials && !oldInitials.fulfilmentPreference) ||
@@ -208,6 +213,11 @@ class RequestForm extends React.Component {
 
     if (prevProps.query.itemBarcode !== this.props.query.itemBarcode) {
       this.findItem(this.props.query.itemBarcode);
+    }
+
+    if (!isEqual(blocks, prevBlocks) && blocks.length > 0) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ blocked: true });
     }
   }
 
@@ -260,6 +270,7 @@ class RequestForm extends React.Component {
   }
 
   findUser(barcode) {
+    const blocks = get(this.props.parentResources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
     // Set the new value in the redux-form barcode field
     this.props.change('requester.barcode', barcode);
     this.setState({ selectedUser: null, proxy: null });
@@ -267,6 +278,10 @@ class RequestForm extends React.Component {
     this.props.findResource('user', barcode, 'barcode').then((result) => {
       if (result.totalRecords === 1) {
         const selectedUser = result.users[0];
+        if (blocks.length > 0 && blocks[0].userId === selectedUser.id) {
+          this.setState({ blocked: true });
+        }
+        this.props.onChangePatron(selectedUser);
         this.setState({ selectedUser });
         this.props.change('requesterId', selectedUser.id);
       }
@@ -318,6 +333,11 @@ class RequestForm extends React.Component {
   }
 
   onItemClick() {
+    const blocks = get(this.props.parentResources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
+    if (blocks.length > 0 && this.state.selectedUser) {
+      this.setState({ blocked: true });
+    }
+
     this.setState({ selectedItem: null });
     const barcode = this.itemBarcodeRef.current.value;
     this.findItem(barcode);
@@ -339,6 +359,16 @@ class RequestForm extends React.Component {
   onCancelRequest = (cancellationInfo) => {
     this.setState({ isCancellingRequest: false });
     this.props.onCancelRequest(cancellationInfo);
+  }
+
+  onCloseBlockedModal = () => {
+    this.setState({ blocked: false });
+  }
+
+  onViewUserPath(e, selectedUser, isCancellingRequest, patronGroup) {
+    this.setState({ isCancellingRequest: false });
+    const viewUserPath = `/users/view/${(selectedUser || {}).id}?filters=pg.${patronGroup}`;
+    this.props.history.push(viewUserPath);
   }
 
   requireItem = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectItem" />);
@@ -367,6 +397,7 @@ class RequestForm extends React.Component {
         fulfilmentTypes = [],
       },
       patronGroups,
+      parentResources,
       pristine,
       submitting,
       intl: {
@@ -376,6 +407,7 @@ class RequestForm extends React.Component {
 
     const {
       accordions,
+      blocked,
       selectedUser,
       selectedItem,
       selectedLoan,
@@ -385,6 +417,7 @@ class RequestForm extends React.Component {
       isCancellingRequest,
     } = this.state;
 
+    const patronBlocks = get(parentResources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
     const { item, requestType, fulfilmentPreference } = (request || {});
     const isEditForm = (item && item.barcode);
     const submittingButtonIsDisabled = pristine || submitting;
@@ -464,9 +497,13 @@ class RequestForm extends React.Component {
     }
 
     let patronGroupName;
+    let patronGroupGroup;
     if (patronGroups && selectedUser) {
       const group = patronGroups.find(g => g.id === selectedUser.patronGroup);
-      if (group) { patronGroupName = group.desc; }
+      if (group) {
+        patronGroupName = group.desc;
+        patronGroupGroup = group.group;
+      }
     }
 
     const holdShelfExpireDate = (get(request, ['status'], '') === 'Open - Awaiting pickup')
@@ -787,7 +824,12 @@ class RequestForm extends React.Component {
             request={request}
             stripes={this.props.stripes}
           />
-
+          <PatronBlockModal
+            open={blocked}
+            onClose={this.onCloseBlockedModal}
+            viewUserPath={e => { this.setState({ isCancellingRequest: false }); this.onViewUserPath(e, selectedUser, isCancellingRequest, patronGroupGroup); }}
+            patronBlocks={patronBlocks[0] || {}}
+          />
           <br />
           <br />
           <br />
@@ -803,7 +845,7 @@ export default stripesForm({
   form: 'requestForm',
   asyncValidate,
   asyncBlurFields: ['item.barcode', 'requester.barcode'],
-  navigationCheck: true,
+  navigationCheck: false,
   enableReinitialize: true,
   keepDirtyOnReinitialize: true,
 })(injectIntl(RequestForm));
