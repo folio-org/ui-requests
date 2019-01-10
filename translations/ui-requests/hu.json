@@ -100,5 +100,9 @@
     "deliveryAddress": "Delivery address",
     "requester.patronGroup.group": "Requester Patron group",
     "actions.duplicateRequest": "Duplicate",
-    "actions.cancelNewRequest": "Cancel"
+    "actions.cancelNewRequest": "Cancel",
+    "close": "Close",
+    "blockedLabel": "Reason for block:",
+    "blockModal": "Patron blocked from requesting",
+    "detailsButton": "Block details"
 }
