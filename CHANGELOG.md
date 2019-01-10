@@ -1,12 +1,13 @@
 # Change history for ui-requests
 
-## 1.6.0 (IN PROGRESS)
+## [1.6.0](https://github.com/folio-org/ui-requests/tree/v1.6.0) (2019-01-10)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.5.0...v1.6.0)
 
 * Add ability to duplicate request record. Fixes UIREQ-166.
 * Fill item barcode if itemBarcode is present in the url. Part of UIIN-410.
 * Add feature enforce manual patron blocks. Ref UIU-675.
 
-## 1.5.0 (https://github.com/folio-org/ui-requests/tree/v1.5.0) (2018-12-13)
+## [1.5.0](https://github.com/folio-org/ui-requests/tree/v1.5.0) (2018-12-13)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.4.1...v1.5.0)
 
 * Fix bug preventing item view accordions from closing. Fixes UIREQ-123.
