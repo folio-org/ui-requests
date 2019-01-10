@@ -100,5 +100,9 @@
     "deliveryAddress": "送货地址",
     "requester.patronGroup.group": "请求者用户组",
     "actions.duplicateRequest": "重复",
-    "actions.cancelNewRequest": "取消"
+    "actions.cancelNewRequest": "取消",
+    "close": "关闭",
+    "blockedLabel": "阻止的原因:",
+    "blockModal": "读者被禁止请求",
+    "detailsButton": "阻止详情"
 }
