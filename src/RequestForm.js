@@ -35,6 +35,7 @@ import {
   TextField
 } from '@folio/stripes/components';
 import stripesForm from '@folio/stripes/form';
+import moment from 'moment-timezone';
 
 import CancelRequestDialog from './CancelRequestDialog';
 import UserForm from './UserForm';
@@ -191,8 +192,10 @@ class RequestForm extends React.Component {
     const request = this.props.request;
     const oldInitials = prevProps.initialValues;
     const oldRecord = prevProps.request;
-    const prevBlocks = get(prevProps.parentResources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
-    const blocks = get(this.props.parentResources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
+    let prevBlocks = get(prevProps.parentResources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
+    prevBlocks = prevBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
+    let blocks = get(this.props.parentResources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
+    blocks = blocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
 
     if ((initials && initials.fulfilmentPreference &&
         oldInitials && !oldInitials.fulfilmentPreference) ||
@@ -270,7 +273,8 @@ class RequestForm extends React.Component {
   }
 
   findUser(barcode) {
-    const blocks = get(this.props.parentResources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
+    let blocks = get(this.props.parentResources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
+    blocks = blocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
     // Set the new value in the redux-form barcode field
     this.props.change('requester.barcode', barcode);
     this.setState({ selectedUser: null, proxy: null });
@@ -333,7 +337,8 @@ class RequestForm extends React.Component {
   }
 
   onItemClick() {
-    const blocks = get(this.props.parentResources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
+    let blocks = get(this.props.parentResources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
+    blocks = blocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
     if (blocks.length > 0 && this.state.selectedUser) {
       this.setState({ blocked: true });
     }
@@ -417,7 +422,8 @@ class RequestForm extends React.Component {
       isCancellingRequest,
     } = this.state;
 
-    const patronBlocks = get(parentResources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
+    let patronBlocks = get(parentResources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
+    patronBlocks = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
     const { item, requestType, fulfilmentPreference } = (request || {});
     const isEditForm = (item && item.barcode);
     const submittingButtonIsDisabled = pristine || submitting;
