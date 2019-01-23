@@ -128,7 +128,13 @@ class RequestForm extends React.Component {
       servicePoints: PropTypes.arrayOf(PropTypes.object),
     }),
     patronGroups: PropTypes.arrayOf(PropTypes.object),
-    intl: intlShape
+    parentResources: PropTypes.object,
+    history: PropTypes.shape({
+      push: PropTypes.func,
+    }),
+    intl: intlShape,
+    onChangePatron: PropTypes.func,
+    query: PropTypes.object,
   };
 
   static defaultProps = {
