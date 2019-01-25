@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 1.7.0 (IN PROGRESS)
+## [1.7.0](https://github.com/folio-org/ui-requests/tree/v1.7.0) (2019-01-25)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.6.0...v1.7.0)
 
 * Upgrade to stripes v2.0.0.
 
