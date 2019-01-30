@@ -1,5 +1,5 @@
 {
-    "requester.name": "Nome",
+    "requester.name": "Nome do solicitante",
     "requester.username": "Nome de usuário",
     "requester.patronGroup": "Grupo de usuário",
     "actions.showNotes": "Mostrar notas",
@@ -69,7 +69,7 @@
     "requestExpirationDate": "Data de vencimento da solicitação de compra",
     "holdShelfExpirationDate": "Data de vencimento da estante de reservas",
     "position": "Posição na fila",
-    "item.contributorNames": "Nomes de colaborador",
+    "item.contributorNames": "Colaborador",
     "loan.dueDate": "Data de vencimento atual",
     "proxy.firstName": "Nome dos autorizados para solicitação",
     "proxy.barcode": "Código de barras dos autorizados para solicitação",
