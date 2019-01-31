@@ -168,6 +168,7 @@ class Requests extends React.Component {
         getState: PropTypes.func.isRequired,
       }),
     }).isRequired,
+    history: PropTypes.object,
   };
 
   constructor(props) {
@@ -358,6 +359,7 @@ class Requests extends React.Component {
       resources,
       mutator,
       stripes,
+      history,
     } = this.props;
 
     const {
@@ -448,6 +450,7 @@ class Requests extends React.Component {
           detailProps={{
             onChangePatron: this.onChangePatron,
             stripes,
+            history,
             findResource: this.findResource,
             joinRequest: this.addRequestFields,
             optionLists: {

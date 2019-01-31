@@ -35,6 +35,7 @@ import {
   TextField
 } from '@folio/stripes/components';
 import stripesForm from '@folio/stripes/form';
+import moment from 'moment-timezone';
 
 import CancelRequestDialog from './CancelRequestDialog';
 import UserForm from './UserForm';
@@ -127,7 +128,13 @@ class RequestForm extends React.Component {
       servicePoints: PropTypes.arrayOf(PropTypes.object),
     }),
     patronGroups: PropTypes.arrayOf(PropTypes.object),
-    intl: intlShape
+    parentResources: PropTypes.object,
+    history: PropTypes.shape({
+      push: PropTypes.func,
+    }),
+    intl: intlShape,
+    onChangePatron: PropTypes.func,
+    query: PropTypes.object,
   };
 
   static defaultProps = {
@@ -191,8 +198,8 @@ class RequestForm extends React.Component {
     const request = this.props.request;
     const oldInitials = prevProps.initialValues;
     const oldRecord = prevProps.request;
-    const prevBlocks = get(prevProps.parentResources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
-    const blocks = get(this.props.parentResources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
+    const prevBlocks = this.getPatronBlocks(prevProps.parentResources);
+    const blocks = this.getPatronBlocks(this.props.parentResources);
 
     if ((initials && initials.fulfilmentPreference &&
         oldInitials && !oldInitials.fulfilmentPreference) ||
@@ -270,7 +277,7 @@ class RequestForm extends React.Component {
   }
 
   findUser(barcode) {
-    const blocks = get(this.props.parentResources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
+    const blocks = this.getPatronBlocks(this.props.parentResources);
     // Set the new value in the redux-form barcode field
     this.props.change('requester.barcode', barcode);
     this.setState({ selectedUser: null, proxy: null });
@@ -333,7 +340,7 @@ class RequestForm extends React.Component {
   }
 
   onItemClick() {
-    const blocks = get(this.props.parentResources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
+    const blocks = this.getPatronBlocks(this.props.parentResources);
     if (blocks.length > 0 && this.state.selectedUser) {
       this.setState({ blocked: true });
     }
@@ -385,6 +392,12 @@ class RequestForm extends React.Component {
     return Object.assign({}, userProxy, { id });
   }
 
+  getPatronBlocks = (resources) => {
+    let patronBlocks = get(resources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
+    patronBlocks = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
+    return patronBlocks;
+  }
+
   render() {
     const {
       handleSubmit,
@@ -417,7 +430,7 @@ class RequestForm extends React.Component {
       isCancellingRequest,
     } = this.state;
 
-    const patronBlocks = get(parentResources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
+    const patronBlocks = this.getPatronBlocks(parentResources);
     const { item, requestType, fulfilmentPreference } = (request || {});
     const isEditForm = (item && item.barcode);
     const submittingButtonIsDisabled = pristine || submitting;
