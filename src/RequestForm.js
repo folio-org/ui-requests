@@ -858,7 +858,7 @@ export default stripesForm({
   form: 'requestForm',
   asyncValidate,
   asyncBlurFields: ['item.barcode', 'requester.barcode'],
-  navigationCheck: false,
+  navigationCheck: true,
   enableReinitialize: true,
   keepDirtyOnReinitialize: true,
 })(injectIntl(RequestForm));
