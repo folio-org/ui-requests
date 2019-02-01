@@ -101,7 +101,7 @@
     "requester.patronGroup.group": "Requester patron group",
     "actions.duplicateRequest": "Duplicate",
     "actions.cancelNewRequest": "Cancel",
-    "close": "Close",
+    "close": "غلق",
     "blockedLabel": "Reason for block:",
     "blockModal": "Patron blocked from requesting",
     "detailsButton": "Block details"
