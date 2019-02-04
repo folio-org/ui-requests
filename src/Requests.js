@@ -9,7 +9,8 @@ import {
   injectIntl,
   intlShape,
 } from 'react-intl';
-import { AppIcon, Button } from '@folio/stripes/components';
+import { AppIcon } from '@folio/stripes/core';
+import { Button } from '@folio/stripes/components';
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
 import { exportCsv } from '@folio/stripes/util';
 
