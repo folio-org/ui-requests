@@ -5,7 +5,8 @@ import {
   isEqual,
   keyBy,
   cloneDeep,
-  debounce
+  debounce,
+  defer,
 } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -372,10 +373,15 @@ class RequestForm extends React.Component {
     this.setState({ blocked: false });
   }
 
-  onViewUserPath(e, selectedUser, isCancellingRequest, patronGroup) {
-    this.setState({ isCancellingRequest: false });
-    const viewUserPath = `/users/view/${(selectedUser || {}).id}?filters=pg.${patronGroup}`;
-    this.props.history.push(viewUserPath);
+  onViewUserPath(selectedUser, patronGroup) {
+    // reinitialize form (mark it as pristine)
+    this.props.reset();
+    // wait for the form to be reinitialized
+    defer(() => {
+      this.setState({ isCancellingRequest: false });
+      const viewUserPath = `/users/view/${(selectedUser || {}).id}?filters=pg.${patronGroup}`;
+      this.props.history.push(viewUserPath);
+    });
   }
 
   requireItem = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectItem" />);
@@ -840,7 +846,7 @@ class RequestForm extends React.Component {
           <PatronBlockModal
             open={blocked}
             onClose={this.onCloseBlockedModal}
-            viewUserPath={e => { this.setState({ isCancellingRequest: false }); this.onViewUserPath(e, selectedUser, isCancellingRequest, patronGroupGroup); }}
+            viewUserPath={() => this.onViewUserPath(selectedUser, patronGroupGroup)}
             patronBlocks={patronBlocks[0] || {}}
           />
           <br />
