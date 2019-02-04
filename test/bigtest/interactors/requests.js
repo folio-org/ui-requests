@@ -7,6 +7,6 @@ import {
 export default @interactor class RequestsInteractor {
   static defaultScope = '[data-test-request-instances]';
 
-  instances = collection('[role=listitem] a');
+  instances = collection('[role=row] a');
   instance = scoped('[data-test-instance-details]');
 }

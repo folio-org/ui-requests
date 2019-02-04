@@ -1,5 +1,9 @@
 # Change history for ui-requests
 
+## 1.8.0 [IN PROGRESS]
+
+* Update BigTest interactors to reflect MCL aria changes. Refs STRIPES-597.
+
 ## [1.7.0](https://github.com/folio-org/ui-requests/tree/v1.7.0) (2019-01-25)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.6.0...v1.7.0)
 
