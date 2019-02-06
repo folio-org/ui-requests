@@ -26,7 +26,7 @@ module.exports.test = function uiTest(uiTestCtx) {
       });
 
       it('should find an active user barcode', (done) => {
-        const listitem = '#list-users div[role="listitem"] > a:not([aria-label*="Barcode: undef"])';
+        const listitem = '#list-users div[role="row"] > a';
         const bcodeNode = `${listitem} > div:nth-child(3)`;
         nightmare
           .wait(1111)
@@ -57,8 +57,8 @@ module.exports.test = function uiTest(uiTestCtx) {
           .click('#section-patron #clickable-plugin-find-user')
           .wait('#clickable-filter-pg-faculty')
           .click('#clickable-filter-pg-faculty')
-          .wait('#list-users div[role="listitem"]:nth-of-type(3)')
-          .click('#list-users div[role="listitem"]:nth-of-type(3) a')
+          .wait('#list-users div[role="row"][aria-rowindex="2"]')
+          .click('#list-users div[role="row"][aria-rowindex="2"] a')
           .wait(2222)
           .wait('#input-item-barcode')
           .insert('#input-item-barcode', itembc)
