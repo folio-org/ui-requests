@@ -24,7 +24,7 @@ module.exports.test = function uiTest(uiTestCtx) {
 
       it('should find "choose a filter" message', (done) => {
         nightmare
-          .wait('div[class^="emptyMessage"]')
+          .wait('div[class^="mclEmptyMessage"]')
           .then(done)
           .catch(done);
       });
@@ -40,7 +40,7 @@ module.exports.test = function uiTest(uiTestCtx) {
             .click(`#clickable-filter-requestType-${filter}`)
             .wait('#list-requests:not([data-total-count^="0"])')
             .click('#clickable-reset-all')
-            .wait('div[class^="emptyMessage"]')
+            .wait('div[class^="mclEmptyMessage"]')
             .then(done)
             .catch(done);
         });

@@ -4,6 +4,7 @@
 
 * Update BigTest interactors to reflect MCL aria changes. Refs STRIPES-597.
 * Move AppIcon import to `@folio/stripes/core`. Refs STCOM-411.
+* Update integration tests to accommodate MCL aria changes. Fixes UIREQ-205.
 
 ## [1.7.0](https://github.com/folio-org/ui-requests/tree/v1.7.0) (2019-01-25)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.6.0...v1.7.0)
