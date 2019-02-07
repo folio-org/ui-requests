@@ -96,13 +96,13 @@
     "actions.edit": "تحرير",
     "item.contributorNamesNames": "أسماء المساهمين",
     "item.location.name": "موقع الرف",
-    "proxy.name": "Requester's proxy name",
+    "proxy.name": "اسم نائب مقدم الطلب",
     "deliveryAddress": "عنوان التوصيل",
     "requester.patronGroup.group": "Requester patron group",
-    "actions.duplicateRequest": "Duplicate",
-    "actions.cancelNewRequest": "Cancel",
-    "close": "Close",
-    "blockedLabel": "Reason for block:",
-    "blockModal": "Patron blocked from requesting",
-    "detailsButton": "Block details"
+    "actions.duplicateRequest": "تكرار",
+    "actions.cancelNewRequest": "إلغاء",
+    "close": "غلق",
+    "blockedLabel": "سبب الحظر:",
+    "blockModal": "تم حظرالمستفيد من الطلب",
+    "detailsButton": "تفاصيل الحظر"
 }
