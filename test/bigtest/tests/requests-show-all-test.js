@@ -11,7 +11,11 @@ describe('Requests', () => {
 
   beforeEach(async function () {
     this.server.create('request');
-    this.visit('/requests?filters=requestType.Holds%2CrequestType.Pages%2CrequestType.Recalls&sort=Request%20Date');
+    this.visit('/requests');
+
+    await requests.clickHoldsCheckbox();
+    await requests.clickPagesCheckbox();
+    await requests.clickRecallsCheckbox();
   });
 
   it('shows the list of requests items', () => {
