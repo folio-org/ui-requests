@@ -26,7 +26,7 @@ import {
   Col,
   Datepicker,
   Icon,
-  IconButton,
+  PaneHeaderIconButton,
   KeyValue,
   Pane,
   PaneMenu,
@@ -444,7 +444,7 @@ class RequestForm extends React.Component {
       <PaneMenu>
         <FormattedMessage id="ui-requests.actions.closeNewRequest">
           {title => (
-            <IconButton
+            <PaneHeaderIconButton
               onClick={onCancel}
               ariaLabel={title}
               icon="times"

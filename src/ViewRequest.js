@@ -21,7 +21,7 @@ import {
   AccordionSet,
   Col,
   Icon,
-  IconButton,
+  PaneHeaderIconButton,
   KeyValue,
   Layer,
   Pane,
@@ -234,7 +234,7 @@ class ViewRequest extends React.Component {
     const detailMenu = (
       <PaneMenu>
         {!isRequestClosed &&
-          <IconButton
+          <PaneHeaderIconButton
             icon="edit"
             id="clickable-edit-request"
             style={{ visibility: !request ? 'hidden' : 'visible' }}
