@@ -42,6 +42,8 @@ const filterConfig = [
     values: [
       { name: 'closed - cancelled', cql: 'Closed - Cancelled' },
       { name: 'closed - filled', cql: 'Closed - Filled' },
+      { name: 'closed - unfilled', cql: 'Closed - Unfilled' },
+      { name: 'closed - pickup expired', cql: 'Closed - Pickup expired' },
       { name: 'open - awaiting pickup', cql: 'Open - Awaiting pickup' },
       { name: 'open - not yet filled', cql: 'Open - Not yet filled' },
     ],
