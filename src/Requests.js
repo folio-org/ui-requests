@@ -40,10 +40,11 @@ const filterConfig = [
     name: 'requestStatus',
     cql: 'status',
     values: [
-      { name: 'closed - cancelled', cql: 'Closed - Cancelled' },
-      { name: 'closed - filled', cql: 'Closed - Filled' },
-      { name: 'open - awaiting pickup', cql: 'Open - Awaiting pickup' },
-      { name: 'open - not yet filled', cql: 'Open - Not yet filled' },
+      { name: 'Closed - Cancelled', cql: 'Closed - Cancelled' },
+      { name: 'Closed - Filled', cql: 'Closed - Filled' },
+      { name: 'Open - Awaiting pickup', cql: 'Open - Awaiting pickup' },
+      { name: 'Open - In transit', cql: 'Open - In transit' },
+      { name: 'Open - Not yet filled', cql: 'Open - Not yet filled' },
     ],
   },
 ];
