@@ -10,7 +10,7 @@ export default @interactor class RequestsInteractor {
 
   instances = collection('[role=row] a');
   instance = scoped('[data-test-instance-details]');
-  clickHoldsCheckbox = clickable('#clickable-filter-requestType-Holds');
-  clickPagesCheckbox = clickable('#clickable-filter-requestType-Pages');
-  clickRecallsCheckbox = clickable('#clickable-filter-requestType-Recalls');
+  clickHoldsCheckbox = clickable('#clickable-filter-request-type-holds');
+  clickPagesCheckbox = clickable('#clickable-filter-request-type-pages');
+  clickRecallsCheckbox = clickable('#clickable-filter-request-type-recalls');
 }
