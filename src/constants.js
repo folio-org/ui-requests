@@ -11,6 +11,11 @@ export const fulfilmentTypes = [
   { id: 'Delivery', label: 'ui-requests.requestMeta.fulfilment.delivery' },
 ];
 
+export const requestStatuses = {
+  checkedOut: 'Checked out',
+  awaitingPickup: 'Open - Awaiting pickup',
+};
+
 export const toUserAddress = addr => (
   // const countryId = (addr.country) ? countriesByName[addr.country].alpha2 : '';
   <div>
