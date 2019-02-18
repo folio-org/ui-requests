@@ -11,6 +11,8 @@ export const fulfilmentTypes = [
   { id: 'Delivery', label: 'ui-requests.requestMeta.fulfilment.delivery' },
 ];
 
+// used to perform queries with the backend
+// not used for data display
 export const requestStatuses = {
   checkedOut: 'Checked out',
   awaitingPickup: 'Open - Awaiting pickup',
