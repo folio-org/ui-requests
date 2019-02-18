@@ -34,7 +34,7 @@ import CancelRequestDialog from './CancelRequestDialog';
 import ItemDetail from './ItemDetail';
 import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
-import { toUserAddress } from './constants';
+import { toUserAddress, requestStatuses } from './constants';
 
 class ViewRequest extends React.Component {
   static manifest = {
@@ -258,8 +258,9 @@ class ViewRequest extends React.Component {
       }
     }
 
-    const holdShelfExpireDate = (get(request, ['status'], '') === 'Open - Awaiting pickup')
-      ? <FormattedDate value={get(request, ['holdShelfExpirationDate'], '')} />
+    const holdShelfExpireDate = (get(request, 'holdShelfExpirationDate', '') &&
+      get(request, ['status'], '') === requestStatuses.awaitingPickup)
+      ? <FormattedDate value={request.holdShelfExpirationDate} />
       : '-';
 
     const expirationDate = (get(request, 'requestExpirationDate', ''))

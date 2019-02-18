@@ -410,6 +410,10 @@ class RequestForm extends React.Component {
       unset(data, 'requestExpirationDate');
     }
 
+    if (!data.holdShelfExpirationDate) {
+      unset(data, 'holdShelfExpirationDate');
+    }
+
     this.props.onSubmit(data);
   }
 
