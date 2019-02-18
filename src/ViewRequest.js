@@ -262,7 +262,7 @@ class ViewRequest extends React.Component {
       ? <FormattedDate value={get(request, ['holdShelfExpirationDate'], '')} />
       : '-';
 
-    const expirationDate = (get(request, ['requestExpirationDate', '']))
+    const expirationDate = (get(request, 'requestExpirationDate', ''))
       ? <FormattedDate value={request.requestExpirationDate} />
       : '-';
 

@@ -7,6 +7,7 @@ import {
   cloneDeep,
   debounce,
   defer,
+  unset,
 } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -404,6 +405,14 @@ class RequestForm extends React.Component {
     return patronBlocks;
   }
 
+  onSave = (data) => {
+    if (!data.requestExpirationDate) {
+      unset(data, 'requestExpirationDate');
+    }
+
+    this.props.onSubmit(data);
+  }
+
   render() {
     const {
       handleSubmit,
@@ -457,9 +466,9 @@ class RequestForm extends React.Component {
       <PaneMenu>
         <Button
           id="clickable-create-request"
-          type="button"
+          type="submit"
           disabled={submittingButtonIsDisabled}
-          onClick={handleSubmit}
+
           marginBottom0
           buttonStyle="primary paneHeaderNewButton"
         >
@@ -471,9 +480,8 @@ class RequestForm extends React.Component {
       <PaneMenu>
         <Button
           id="clickable-update-request"
-          type="button"
+          type="submit"
           disabled={submittingButtonIsDisabled}
-          onClick={handleSubmit}
           marginBottom0
           buttonStyle="primary paneHeaderNewButton"
         >
@@ -589,6 +597,7 @@ class RequestForm extends React.Component {
       <form
         id="form-requests"
         className={css.requestForm}
+        onSubmit={handleSubmit(this.onSave)}
         data-test-requests-form
       >
         <Paneset isRoot>
