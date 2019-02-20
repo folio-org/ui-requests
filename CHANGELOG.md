@@ -9,6 +9,7 @@
 * Update circulation OKAPI interface to v6.0. Part of UICIRC-164.
 * Fix request expiration date not displaying on details view. Part of UIREQ-192.
 * Fix saving empty hold shelf expiration date. Part of UIREQ-206.
+* Update circulation v7.0 and request-storage v3.0 OKAPI interfaces Part of UIREQ-214.
 
 ## [1.7.0](https://github.com/folio-org/ui-requests/tree/v1.7.0) (2019-01-25)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.6.0...v1.7.0)
