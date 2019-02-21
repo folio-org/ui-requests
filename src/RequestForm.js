@@ -406,11 +406,19 @@ class RequestForm extends React.Component {
   }
 
   onSave = (data) => {
-    if (!data.requestExpirationDate) {
+    const { intl: { timeZone } } = this.props;
+    const { requestExpirationDate, holdShelfExpirationDate } = data;
+
+    if (requestExpirationDate) {
+      data.requestExpirationDate = moment(requestExpirationDate).utc().format();
+    } else {
       unset(data, 'requestExpirationDate');
     }
 
-    if (!data.holdShelfExpirationDate) {
+    if (holdShelfExpirationDate) {
+      const time = moment.tz(timeZone).format('HH:mm:ss');
+      data.holdShelfExpirationDate = moment.tz(`${holdShelfExpirationDate} ${time}`, timeZone).utc().format();
+    } else {
       unset(data, 'holdShelfExpirationDate');
     }
 
