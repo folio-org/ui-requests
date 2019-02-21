@@ -27,9 +27,9 @@
     "queryResource": "query",
     "okapiInterfaces": {
       "cancellation-reason-storage": "1.1",
-      "circulation": "3.4 4.0 5.0 6.0 7.0",
+      "circulation": "7.0",
       "inventory": "6.0 7.0 8.0",
-      "request-storage": "2.5 3.0"
+      "request-storage": "3.0"
     },
     "permissionSets": [
       {
