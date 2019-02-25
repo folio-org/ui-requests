@@ -104,5 +104,6 @@
     "close": "Fechar",
     "blockedLabel": "Razão para o bloqueio:",
     "blockModal": "Pedidos bloqueados ao utilizador",
-    "detailsButton": "Detalhes do bloqueio"
+    "detailsButton": "Detalhes do bloqueio",
+    "enter": "Enter"
 }
