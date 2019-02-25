@@ -104,5 +104,6 @@
     "close": "Chiudi",
     "blockedLabel": "Reason for block:",
     "blockModal": "Patron blocked from requesting",
-    "detailsButton": "Block details"
+    "detailsButton": "Block details",
+    "enter": "Enter"
 }
