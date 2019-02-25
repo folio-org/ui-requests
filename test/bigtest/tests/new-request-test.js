@@ -40,4 +40,30 @@ describe('New Request page', () => {
       });
     });
   });
+
+  describe('showing request type message', () => {
+    it('should show request type message', () => {
+      expect(NewRequestInteractor.requestTypeMessageIsPresent).to.be.true;
+    });
+  });
+
+  describe('hiding request type message', () => {
+    beforeEach(async function () {
+      this.server.create('item', {
+        barcode: '9676761472500',
+        title: 'Best Book Ever',
+        materialType: {
+          name: 'book'
+        }
+      });
+
+      await NewRequestInteractor
+        .fillItemBarcode('9676761472500')
+        .pressEnter();
+    });
+
+    it('should hide request type message', () => {
+      expect(NewRequestInteractor.requestTypeMessageIsPresent).to.be.false;
+    });
+  });
 });

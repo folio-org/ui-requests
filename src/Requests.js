@@ -1,6 +1,7 @@
 import { omit, get } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { stringify } from 'query-string';
 import fetch from 'isomorphic-fetch';
 import moment from 'moment-timezone';
 import {
@@ -50,6 +51,27 @@ const filterConfig = [
     ],
   },
 ];
+
+const urls = {
+  user: (value, idType) => {
+    const query = stringify({ query: `(${idType}=="${value}")` });
+    return `users?${query}`;
+  },
+  item: (value, idType) => {
+    const query = stringify({ query: `(${idType}=="${value}")` });
+    return `inventory/items?${query}`;
+  },
+  holding: value => `holdings-storage/holdings/${value}`,
+  instance: value => `inventory/instances/${value}`,
+  loan: (value) => {
+    const query = stringify({ query: `(itemId=="${value}")` });
+    return `circulation/loans?${query}`;
+  },
+  requestsForItem: (value) => {
+    const query = stringify({ query: `(itemId=="${value}")` });
+    return `request-storage/requests?${query}`;
+  },
+};
 
 class Requests extends React.Component {
   static manifest = {
@@ -300,16 +322,9 @@ class Requests extends React.Component {
 
   // idType can be 'id', 'barcode', etc.
   findResource(resource, value, idType = 'id') {
-    const urls = {
-      user: `users?query=(${idType}="${value}")`,
-      item: `inventory/items?query=(${idType}="${value}")`,
-      holding: `holdings-storage/holdings/${value}`,
-      instance: `inventory/instances/${value}`,
-      loan: `circulation/loans?query=(itemId="${value}")`,
-      requestsForItem: `request-storage/requests?query=(itemId="${value}")`,
-    };
-
-    return fetch(`${this.okapiUrl}/${urls[resource]}`, { headers: this.httpHeaders }).then(response => response.json());
+    const query = urls[resource](value, idType);
+    const options = { headers: this.httpHeaders };
+    return fetch(`${this.okapiUrl}/${query}`, options).then(response => response.json());
   }
 
   // Called as a map function
