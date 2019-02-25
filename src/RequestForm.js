@@ -759,7 +759,7 @@ class RequestForm extends React.Component {
                               onClick={this.onItemClick}
                               disabled={submitting}
                             >
-                              Enter
+                              <FormattedMessage id="ui-requests.enter" />
                             </Button>
                           </Col>
                         </Row>
@@ -828,7 +828,7 @@ class RequestForm extends React.Component {
                               onClick={this.onUserClick}
                               disabled={submitting}
                             >
-                              Enter
+                              <FormattedMessage id="ui-requests.enter" />
                             </Button>
                           </Col>
                         </Row>
