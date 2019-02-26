@@ -1,12 +1,13 @@
 {
   "routingErrorOops": "Uh-oh!",
-  "routingError":"How did you get to {pathname}?",
+  "routingError": "How did you get to {pathname}?",
 
   "meta.title": "Requests",
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
   "barcode": "Barcode",
   "fulfilmentPreference": "Request fulfilment preference",
   "requestType": "Request type",
+  "requestType.message": "Select item to view available request types",
   "status": "Request status",
   "requestExpirationDate": "Request expiration date",
   "holdShelfExpirationDate": "Hold shelf expiration date",
