@@ -104,5 +104,6 @@
     "close": "إغلاق",
     "blockedLabel": "سبب الحظر:",
     "blockModal": "تم حظرالمستفيد من الطلب",
-    "detailsButton": "تفاصيل الحظر"
+    "detailsButton": "تفاصيل الحظر",
+    "enter": "Enter"
 }

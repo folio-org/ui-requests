@@ -104,5 +104,6 @@
     "close": "Fechar",
     "blockedLabel": "Razão para suspensão:",
     "blockModal": "Usuário suspenso de solicitação de compra",
-    "detailsButton": "Detalhes da suspensão"
+    "detailsButton": "Detalhes da suspensão",
+    "enter": "Enter"
 }
