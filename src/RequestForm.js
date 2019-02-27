@@ -425,11 +425,125 @@ class RequestForm extends React.Component {
     this.props.onSubmit(data);
   }
 
+  renderActionMenu = ({ onToggle }) => {
+    const {
+      onCancel,
+      request,
+    } = this.props;
+
+    const { item } = (request || {});
+    const isEditForm = (item && item.barcode);
+
+
+    if (!isEditForm) {
+      return (
+        <Button
+          buttonStyle="dropdownItem"
+          id="clickable-cancel-new-request"
+          data-test-cancel-new-request-action
+          onClick={() => {
+            onCancel();
+            onToggle();
+          }}
+        >
+          <Icon icon="times-circle">
+            <FormattedMessage id="ui-requests.newRequest.cancel" />
+          </Icon>
+        </Button>
+      );
+    }
+
+    return (
+      <React.Fragment>
+        <Button
+          onClick={onCancel}
+          buttonStyle="dropdownItem"
+          data-test-cancel-editing
+        >
+          <Icon icon="times-circle">
+            <FormattedMessage id="ui-requests.edit.cancelEditing" />
+          </Icon>
+        </Button>
+        <Button
+          buttonStyle="dropdownItem"
+          id="clickable-cancel-request"
+          data-test-delete-request
+          onClick={() => {
+            this.setState({ isCancellingRequest: true });
+            onToggle();
+          }}
+        >
+          <Icon icon="trash">
+            <FormattedMessage id="ui-requests.edit.deleteRequest" />
+          </Icon>
+        </Button>
+      </React.Fragment>
+    );
+  };
+
+  renderAddRequestFirstMenu = () => (
+    <PaneMenu>
+      <FormattedMessage id="ui-requests.actions.closeNewRequest">
+        {title => (
+          <IconButton
+            onClick={this.props.onCancel}
+            ariaLabel={title}
+            icon="times"
+          />
+        )}
+      </FormattedMessage>
+    </PaneMenu>
+  );
+
+  renderAddRequestLastMenu = () => {
+    const {
+      pristine,
+      submitting,
+    } = this.props;
+
+    const submittingButtonIsDisabled = pristine || submitting;
+
+    return (
+      <PaneMenu>
+        <Button
+          id="clickable-create-request"
+          type="submit"
+          disabled={submittingButtonIsDisabled}
+          marginBottom0
+          buttonStyle="primary paneHeaderNewButton"
+        >
+          <FormattedMessage id="ui-requests.actions.newRequest" />
+        </Button>
+      </PaneMenu>
+    );
+  }
+
+  renderEditRequestLastMenu = () => {
+    const {
+      pristine,
+      submitting,
+    } = this.props;
+
+    const submittingButtonIsDisabled = pristine || submitting;
+    return (
+      <PaneMenu>
+        <Button
+          id="clickable-update-request"
+          type="submit"
+          disabled={submittingButtonIsDisabled}
+          marginBottom0
+          buttonStyle="primary paneHeaderNewButton"
+        >
+          <FormattedMessage id="ui-requests.actions.updateRequest" />
+        </Button>
+      </PaneMenu>
+    );
+  }
+
   render() {
     const {
       handleSubmit,
       request,
-      onCancel,
       optionLists: {
         servicePoints,
         addressTypes,
@@ -438,7 +552,6 @@ class RequestForm extends React.Component {
       },
       patronGroups,
       parentResources,
-      pristine,
       submitting,
       intl: {
         formatMessage,
@@ -460,47 +573,7 @@ class RequestForm extends React.Component {
     const patronBlocks = this.getPatronBlocks(parentResources);
     const { item, requestType, fulfilmentPreference } = (request || {});
     const isEditForm = (item && item.barcode);
-    const submittingButtonIsDisabled = pristine || submitting;
-    const addRequestFirstMenu = (
-      <PaneMenu>
-        <FormattedMessage id="ui-requests.actions.closeNewRequest">
-          {title => (
-            <IconButton
-              onClick={onCancel}
-              ariaLabel={title}
-              icon="times"
-            />
-          )}
-        </FormattedMessage>
-      </PaneMenu>
-    );
-    const addRequestLastMenu = (
-      <PaneMenu>
-        <Button
-          id="clickable-create-request"
-          type="submit"
-          disabled={submittingButtonIsDisabled}
 
-          marginBottom0
-          buttonStyle="primary paneHeaderNewButton"
-        >
-          <FormattedMessage id="ui-requests.actions.newRequest" />
-        </Button>
-      </PaneMenu>
-    );
-    const editRequestLastMenu = (
-      <PaneMenu>
-        <Button
-          id="clickable-update-request"
-          type="submit"
-          disabled={submittingButtonIsDisabled}
-          marginBottom0
-          buttonStyle="primary paneHeaderNewButton"
-        >
-          <FormattedMessage id="ui-requests.actions.updateRequest" />
-        </Button>
-      </PaneMenu>
-    );
     const sortedRequestTypes = sortBy(requestTypes, ['label']);
     const sortedFulfilmentTypes = sortBy(fulfilmentTypes, ['label']);
 
@@ -570,51 +643,6 @@ class RequestForm extends React.Component {
         </Link>
       </div> : '-';
 
-    const renderActionMenu = ({ onToggle }) => {
-      if (!isEditForm) {
-        return (
-          <Button
-            data-test-cancel-new-request-action
-            buttonStyle="dropdownItem"
-            id="clickable-cancel-new-request"
-            onClick={() => {
-              onCancel();
-              onToggle();
-            }}
-          >
-            <Icon icon="times-circle">
-              <FormattedMessage id="ui-requests.newRequest.cancel" />
-            </Icon>
-          </Button>
-        );
-      }
-
-      return (
-        <React.Fragment>
-          <Button
-            onClick={onCancel}
-            buttonStyle="dropdownItem"
-          >
-            <Icon icon="times-circle">
-              <FormattedMessage id="ui-requests.edit.cancelEditing" />
-            </Icon>
-          </Button>
-          <Button
-            buttonStyle="dropdownItem"
-            id="clickable-cancel-request"
-            onClick={() => {
-              this.setState({ isCancellingRequest: true });
-              onToggle();
-            }}
-          >
-            <Icon icon="trash">
-              <FormattedMessage id="ui-requests.edit.deleteRequest" />
-            </Icon>
-          </Button>
-        </React.Fragment>
-      );
-    };
-
     return (
       <form
         id="form-requests"
@@ -626,9 +654,12 @@ class RequestForm extends React.Component {
           <Pane
             defaultWidth="100%"
             height="100%"
-            firstMenu={addRequestFirstMenu}
-            lastMenu={isEditForm ? editRequestLastMenu : addRequestLastMenu}
-            actionMenu={renderActionMenu}
+            firstMenu={this.renderAddRequestFirstMenu()}
+            lastMenu={isEditForm
+              ? this.renderEditRequestLastMenu()
+              : this.renderAddRequestLastMenu()
+            }
+            actionMenu={this.renderActionMenu}
             paneTitle={
               isEditForm
                 ? <FormattedMessage id="ui-requests.actions.editRequest" />
