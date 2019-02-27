@@ -105,5 +105,6 @@
     "blockedLabel": "Razão para o bloqueio:",
     "blockModal": "Pedidos bloqueados ao utilizador",
     "detailsButton": "Detalhes do bloqueio",
-    "enter": "Enter"
+    "enter": "Enter",
+    "requestType.message": "Select item to view available request types"
 }
