@@ -788,6 +788,7 @@ class RequestForm extends React.Component {
                           backendDateStandard="YYYY-MM-DD"
                           component={Datepicker}
                           dateFormat="YYYY-MM-DD"
+                          id="requestExpirationDate"
                         />
                       </Col>
                       { isEditForm && request.status === 'Open - Awaiting pickup' &&
