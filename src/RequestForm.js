@@ -627,16 +627,6 @@ class RequestForm extends React.Component {
           >
             <AccordionSet accordionStatus={accordions} onToggle={this.onToggleSection}>
               <Accordion
-                id="request-info"
-                label={<FormattedMessage id="ui-requests.requestMeta.information" />}
-              >
-                { isEditForm && request && request.metadata &&
-                  <Col xs={12}>
-                    <this.props.metadataDisplay metadata={request.metadata} />
-                  </Col>
-                }
-              </Accordion>
-              <Accordion
                 id="item-info"
                 label={
                   <FormattedMessage id="ui-requests.item.information">
@@ -689,100 +679,109 @@ class RequestForm extends React.Component {
                       }
                     </Col>
                   </Row>
-                  <hr />
-                  <Row>
-                    <Col xs={8}>
-                      <Row>
-                        <Col xs={4}>
-                          { !isEditForm && !selectedItem &&
-                            <span data-test-request-type-message>
-                              <KeyValue
-                                label={<FormattedMessage id="ui-requests.requestType" />}
-                                value={<FormattedMessage id="ui-requests.requestType.message" />}
-                              />
-                            </span>
-                          }
-                          { !isEditForm && selectedItem &&
-                            <Field
-                              label={<FormattedMessage id="ui-requests.requestType" />}
-                              name="requestType"
-                              component={Select}
-                              fullWidth
-                              disabled={isEditForm}
-                            >
-                              {requestTypeOptions.map(({ labelTranslationPath, value, selected }) => (
-                                <FormattedMessage id={labelTranslationPath}>
-                                  {translatedLabel => (
-                                    <option
-                                      value={value}
-                                      selected={selected}
-                                    >
-                                      {translatedLabel}
-                                    </option>
-                                  )}
-                                </FormattedMessage>
-                              ))}
-                            </Field>
-                          }
-                          {isEditForm &&
+                </div>
+              </Accordion>
+              <Accordion
+                id="request-info"
+                label={<FormattedMessage id="ui-requests.requestMeta.information" />}
+              >
+                { isEditForm && request && request.metadata &&
+                  <Col xs={12}>
+                    <this.props.metadataDisplay metadata={request.metadata} />
+                  </Col>
+                }
+                <Row>
+                  <Col xs={8}>
+                    <Row>
+                      <Col xs={4}>
+                        { !isEditForm && !selectedItem &&
+                          <span data-test-request-type-message>
                             <KeyValue
                               label={<FormattedMessage id="ui-requests.requestType" />}
-                              value={request.requestType}
+                              value={<FormattedMessage id="ui-requests.requestType.message" />}
                             />
-                          }
-                        </Col>
-                        <Col xs={3}>
-                          {isEditForm &&
-                            <KeyValue
-                              label={<FormattedMessage id="ui-requests.status" />}
-                              value={request.status}
-                            />
-                          }
-                        </Col>
+                          </span>
+                        }
+                        { !isEditForm && selectedItem &&
+                          <Field
+                            label={<FormattedMessage id="ui-requests.requestType" />}
+                            name="requestType"
+                            component={Select}
+                            fullWidth
+                            disabled={isEditForm}
+                          >
+                            {requestTypeOptions.map(({ labelTranslationPath, value, selected }) => (
+                              <FormattedMessage id={labelTranslationPath}>
+                                {translatedLabel => (
+                                  <option
+                                    value={value}
+                                    selected={selected}
+                                  >
+                                    {translatedLabel}
+                                  </option>
+                                )}
+                              </FormattedMessage>
+                            ))}
+                          </Field>
+                        }
+                        {isEditForm &&
+                          <KeyValue
+                            label={<FormattedMessage id="ui-requests.requestType" />}
+                            value={request.requestType}
+                          />
+                        }
+                      </Col>
+                      <Col xs={3}>
+                        {isEditForm &&
+                          <KeyValue
+                            label={<FormattedMessage id="ui-requests.status" />}
+                            value={request.status}
+                          />
+                        }
+                      </Col>
+                      <Col xs={3}>
+                        <Field
+                          name="requestExpirationDate"
+                          label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
+                          aria-label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
+                          backendDateStandard="YYYY-MM-DD"
+                          component={Datepicker}
+                          dateFormat="YYYY-MM-DD"
+                        />
+                      </Col>
+                      { isEditForm && request.status === 'Open - Awaiting pickup' &&
                         <Col xs={3}>
                           <Field
-                            name="requestExpirationDate"
-                            label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
-                            aria-label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
+                            name="holdShelfExpirationDate"
+                            label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
+                            aria-label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
                             backendDateStandard="YYYY-MM-DD"
                             component={Datepicker}
                             dateFormat="YYYY-MM-DD"
                           />
                         </Col>
-                        { isEditForm && request.status === 'Open - Awaiting pickup' &&
-                          <Col xs={3}>
-                            <Field
-                              name="holdShelfExpirationDate"
-                              label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
-                              aria-label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
-                              backendDateStandard="YYYY-MM-DD"
-                              component={Datepicker}
-                              dateFormat="YYYY-MM-DD"
-                            />
-                          </Col>
-                        }
-                        { isEditForm && request.status !== 'Open - Awaiting pickup' &&
-                          <Col xs={3}>
-                            <KeyValue
-                              label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
-                              value={holdShelfExpireDate}
-                            />
-                          </Col>
-                        }
-                      </Row>
-                      { isEditForm &&
-                        <Row>
-                          <Col xs={3}>
-                            <KeyValue
-                              label={<FormattedMessage id="ui-requests.position" />}
-                              value={positionLink}
-                            />
-                          </Col>
-                        </Row>
                       }
-                    </Col>
-                  </Row>
-                </div>
+                      { isEditForm && request.status !== 'Open - Awaiting pickup' &&
+                        <Col xs={3}>
+                          <KeyValue
+                            label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
+                            value={holdShelfExpireDate}
+                          />
+                        </Col>
+                      }
+                    </Row>
+                    { isEditForm &&
+                      <Row>
+                        <Col xs={3}>
+                          <KeyValue
+                            label={<FormattedMessage id="ui-requests.position" />}
+                            value={positionLink}
+                          />
+                        </Col>
+                      </Row>
+                    }
+                  </Col>
+                </Row>
               </Accordion>
               <Accordion
                 id="requester-info"
