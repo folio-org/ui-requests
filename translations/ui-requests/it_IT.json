@@ -105,5 +105,6 @@
     "blockedLabel": "Reason for block:",
     "blockModal": "Patron blocked from requesting",
     "detailsButton": "Block details",
-    "enter": "Enter"
+    "enter": "Enter",
+    "requestType.message": "Select item to view available request types"
 }
