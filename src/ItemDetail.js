@@ -13,7 +13,7 @@ const ItemDetail = ({ item, loan, requestCount }) => {
   const recordLink = item.barcode ? <Link to={`/inventory/view/${item.instanceId}/${item.holdingsRecordId}/${item.id}`}>{item.barcode}</Link> : '';
   const status = get(item, ['status', 'name'], '');
   const contributor = get(item, ['contributorNames', '0', 'name'], '-');
-  const positionLink = item ? <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${item.barcode}&sort=Request%20Date`}>{requestCount}</Link> : '-';
+  const positionLink = item ? <Link to={`/requests?filters=requestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit%2CrequestStatus.Open%20-%20Not%20yet%20filled&query=${item.barcode}&sort=Request%20Date`}>{requestCount}</Link> : '-';
 
   return (
     <div>
