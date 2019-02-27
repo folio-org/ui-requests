@@ -344,6 +344,21 @@ class ViewRequest extends React.Component {
         <TitleManager record={get(request, ['item', 'title'])} />
         <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
           <Accordion
+            id="item-info"
+            label={
+              <FormattedMessage
+                id="ui-requests.item.information"
+                values={{ required: '' }}
+              />
+            }
+          >
+            <ItemDetail
+              item={request.item}
+              loan={request.loan}
+              requestCount={request.requestCount}
+            />
+          </Accordion>
+          <Accordion
             id="request-info"
             label={<FormattedMessage id="ui-requests.requestMeta.information" />}
           >
@@ -386,21 +401,6 @@ class ViewRequest extends React.Component {
                 />
               </Col>
             </Row>
-          </Accordion>
-          <Accordion
-            id="item-info"
-            label={
-              <FormattedMessage
-                id="ui-requests.item.information"
-                values={{ required: '' }}
-              />
-            }
-          >
-            <ItemDetail
-              item={request.item}
-              loan={request.loan}
-              requestCount={request.requestCount}
-            />
           </Accordion>
           <Accordion
             id="requester-info"
