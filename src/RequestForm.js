@@ -583,25 +583,35 @@ class RequestForm extends React.Component {
             }}
           >
             <Icon icon="times-circle">
-              <FormattedMessage id="ui-requests.actions.cancelNewRequest" />
+              <FormattedMessage id="ui-requests.newRequest.cancel" />
             </Icon>
           </Button>
         );
       }
 
       return (
-        <Button
-          buttonStyle="dropdownItem"
-          id="clickable-cancel-request"
-          onClick={() => {
-            this.setState({ isCancellingRequest: true });
-            onToggle();
-          }}
-        >
-          <Icon icon="times-circle">
-            <FormattedMessage id="ui-requests.cancel.cancelRequest" />
-          </Icon>
-        </Button>
+        <React.Fragment>
+          <Button
+            onClick={onCancel}
+            buttonStyle="dropdownItem"
+          >
+            <Icon icon="times-circle">
+              <FormattedMessage id="ui-requests.edit.cancelEditing" />
+            </Icon>
+          </Button>
+          <Button
+            buttonStyle="dropdownItem"
+            id="clickable-cancel-request"
+            onClick={() => {
+              this.setState({ isCancellingRequest: true });
+              onToggle();
+            }}
+          >
+            <Icon icon="trash">
+              <FormattedMessage id="ui-requests.edit.deleteRequest" />
+            </Icon>
+          </Button>
+        </React.Fragment>
       );
     };
 
