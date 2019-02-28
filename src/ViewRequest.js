@@ -245,7 +245,7 @@ class ViewRequest extends React.Component {
       <PaneMenu>
         {
           tagsEnabled &&
-          <FormattedMessage id="ui-users.showTags">
+          <FormattedMessage id="ui-requests.showTags">
             {ariaLabel => (
               <IconButton
                 icon="tag"
