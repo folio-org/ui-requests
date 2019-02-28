@@ -1,3 +1,15 @@
+import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { Field } from 'redux-form';
+import {
+  FormattedMessage,
+  FormattedDate,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
+
+import moment from 'moment-timezone';
 import {
   sortBy,
   find,
@@ -9,16 +21,7 @@ import {
   defer,
   unset,
 } from 'lodash';
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
-import {
-  FormattedMessage,
-  FormattedDate,
-  injectIntl,
-  intlShape,
-} from 'react-intl';
-import { Link } from 'react-router-dom';
+
 import { Pluggable } from '@folio/stripes/core';
 import {
   Accordion,
@@ -36,14 +39,18 @@ import {
   Select,
   TextField
 } from '@folio/stripes/components';
+
 import stripesForm from '@folio/stripes/form';
-import moment from 'moment-timezone';
 
 import CancelRequestDialog from './CancelRequestDialog';
 import UserForm from './UserForm';
 import ItemDetail from './ItemDetail';
 import PatronBlockModal from './PatronBlockModal';
-import { toUserAddress } from './constants';
+import {
+  toUserAddress,
+  requestStatuses,
+  iconTypes,
+} from './constants';
 
 import css from './requests.css';
 
@@ -405,6 +412,21 @@ class RequestForm extends React.Component {
     return patronBlocks;
   }
 
+  isEditForm() {
+    const { request } = this.props;
+
+    return !!get(request, 'item.barcode');
+  }
+
+  isSubmittingButtonDisabled() {
+    const {
+      pristine,
+      submitting,
+    } = this.props;
+
+    return pristine || submitting;
+  }
+
   onSave = (data) => {
     const { intl: { timeZone } } = this.props;
     const { requestExpirationDate, holdShelfExpirationDate } = data;
@@ -425,11 +447,111 @@ class RequestForm extends React.Component {
     this.props.onSubmit(data);
   }
 
+  renderActionMenu = ({ onToggle }) => {
+    const { onCancel } = this.props;
+
+    if (!this.isEditForm()) {
+      return (
+        <Button
+          buttonStyle="dropdownItem"
+          id="clickable-cancel-new-request"
+          data-test-cancel-new-request-action
+          onClick={() => {
+            onCancel();
+            onToggle();
+          }}
+        >
+          <Icon icon={iconTypes.timesCircle}>
+            <FormattedMessage id="ui-requests.newRequest.cancel" />
+          </Icon>
+        </Button>
+      );
+    }
+
+    return (
+      <Fragment>
+        <Button
+          onClick={onCancel}
+          buttonStyle="dropdownItem"
+          data-test-cancel-editing
+        >
+          <Icon icon={iconTypes.timesCircle}>
+            <FormattedMessage id="ui-requests.edit.cancelEditing" />
+          </Icon>
+        </Button>
+        <Button
+          buttonStyle="dropdownItem"
+          id="clickable-cancel-request"
+          data-test-delete-request
+          onClick={() => {
+            this.setState({ isCancellingRequest: true });
+            onToggle();
+          }}
+        >
+          <Icon icon={iconTypes.trash}>
+            <FormattedMessage id="ui-requests.edit.deleteRequest" />
+          </Icon>
+        </Button>
+      </Fragment>
+    );
+  };
+
+  renderLastMenu() {
+    return this.isEditForm()
+      ? this.renderEditRequestLastMenu()
+      : this.renderAddRequestLastMenu();
+  }
+
+  renderAddRequestFirstMenu = () => (
+    <PaneMenu>
+      <FormattedMessage id="ui-requests.actions.closeNewRequest">
+        {title => (
+          <IconButton
+            onClick={this.props.onCancel}
+            ariaLabel={title}
+            icon={iconTypes.times}
+          />
+        )}
+      </FormattedMessage>
+    </PaneMenu>
+  );
+
+  renderAddRequestLastMenu = () => {
+    return (
+      <PaneMenu>
+        <Button
+          id="clickable-create-request"
+          type="submit"
+          disabled={this.isSubmittingButtonDisabled()}
+          marginBottom0
+          buttonStyle="primary paneHeaderNewButton"
+        >
+          <FormattedMessage id="ui-requests.actions.newRequest" />
+        </Button>
+      </PaneMenu>
+    );
+  }
+
+  renderEditRequestLastMenu = () => {
+    return (
+      <PaneMenu>
+        <Button
+          id="clickable-update-request"
+          type="submit"
+          disabled={this.isSubmittingButtonDisabled()}
+          marginBottom0
+          buttonStyle="primary paneHeaderNewButton"
+        >
+          <FormattedMessage id="ui-requests.actions.updateRequest" />
+        </Button>
+      </PaneMenu>
+    );
+  }
+
   render() {
     const {
       handleSubmit,
       request,
-      onCancel,
       optionLists: {
         servicePoints,
         addressTypes,
@@ -438,7 +560,6 @@ class RequestForm extends React.Component {
       },
       patronGroups,
       parentResources,
-      pristine,
       submitting,
       intl: {
         formatMessage,
@@ -458,49 +579,12 @@ class RequestForm extends React.Component {
     } = this.state;
 
     const patronBlocks = this.getPatronBlocks(parentResources);
-    const { item, requestType, fulfilmentPreference } = (request || {});
-    const isEditForm = (item && item.barcode);
-    const submittingButtonIsDisabled = pristine || submitting;
-    const addRequestFirstMenu = (
-      <PaneMenu>
-        <FormattedMessage id="ui-requests.actions.closeNewRequest">
-          {title => (
-            <IconButton
-              onClick={onCancel}
-              ariaLabel={title}
-              icon="times"
-            />
-          )}
-        </FormattedMessage>
-      </PaneMenu>
-    );
-    const addRequestLastMenu = (
-      <PaneMenu>
-        <Button
-          id="clickable-create-request"
-          type="submit"
-          disabled={submittingButtonIsDisabled}
+    const {
+      requestType,
+      fulfilmentPreference
+    } = request || {};
 
-          marginBottom0
-          buttonStyle="primary paneHeaderNewButton"
-        >
-          <FormattedMessage id="ui-requests.actions.newRequest" />
-        </Button>
-      </PaneMenu>
-    );
-    const editRequestLastMenu = (
-      <PaneMenu>
-        <Button
-          id="clickable-update-request"
-          type="submit"
-          disabled={submittingButtonIsDisabled}
-          marginBottom0
-          buttonStyle="primary paneHeaderNewButton"
-        >
-          <FormattedMessage id="ui-requests.actions.updateRequest" />
-        </Button>
-      </PaneMenu>
-    );
+    const isEditForm = this.isEditForm();
     const sortedRequestTypes = sortBy(requestTypes, ['label']);
     const sortedFulfilmentTypes = sortBy(fulfilmentTypes, ['label']);
 
@@ -516,7 +600,10 @@ class RequestForm extends React.Component {
       selected: id === fulfilmentPreference
     }));
 
-    const labelAsterisk = isEditForm ? '' : ' *';
+    const labelAsterisk = isEditForm
+      ? ''
+      : ' *';
+
     const disableRecordCreation = true;
 
     let deliveryLocations;
@@ -545,7 +632,7 @@ class RequestForm extends React.Component {
       }
     }
 
-    const holdShelfExpireDate = (get(request, ['status'], '') === 'Open - Awaiting pickup')
+    const holdShelfExpireDate = get(request, ['status'], '') === requestStatuses.awaitingPickup
       ? <FormattedDate value={get(request, ['holdShelfExpirationDate'], '')} />
       : '-';
 
@@ -570,41 +657,6 @@ class RequestForm extends React.Component {
         </Link>
       </div> : '-';
 
-    const renderActionMenu = ({ onToggle }) => {
-      if (!isEditForm) {
-        return (
-          <Button
-            data-test-cancel-new-request-action
-            buttonStyle="dropdownItem"
-            id="clickable-cancel-new-request"
-            onClick={() => {
-              onCancel();
-              onToggle();
-            }}
-          >
-            <Icon icon="times-circle">
-              <FormattedMessage id="ui-requests.actions.cancelNewRequest" />
-            </Icon>
-          </Button>
-        );
-      }
-
-      return (
-        <Button
-          buttonStyle="dropdownItem"
-          id="clickable-cancel-request"
-          onClick={() => {
-            this.setState({ isCancellingRequest: true });
-            onToggle();
-          }}
-        >
-          <Icon icon="times-circle">
-            <FormattedMessage id="ui-requests.cancel.cancelRequest" />
-          </Icon>
-        </Button>
-      );
-    };
-
     return (
       <form
         id="form-requests"
@@ -616,9 +668,9 @@ class RequestForm extends React.Component {
           <Pane
             defaultWidth="100%"
             height="100%"
-            firstMenu={addRequestFirstMenu}
-            lastMenu={isEditForm ? editRequestLastMenu : addRequestLastMenu}
-            actionMenu={renderActionMenu}
+            firstMenu={this.renderAddRequestFirstMenu()}
+            lastMenu={this.renderLastMenu()}
+            actionMenu={this.renderActionMenu}
             paneTitle={
               isEditForm
                 ? <FormattedMessage id="ui-requests.actions.editRequest" />
@@ -747,9 +799,10 @@ class RequestForm extends React.Component {
                           backendDateStandard="YYYY-MM-DD"
                           component={Datepicker}
                           dateFormat="YYYY-MM-DD"
+                          id="requestExpirationDate"
                         />
                       </Col>
-                      { isEditForm && request.status === 'Open - Awaiting pickup' &&
+                      {isEditForm && request.status === requestStatuses.awaitingPickup &&
                         <Col xs={3}>
                           <Field
                             name="holdShelfExpirationDate"
@@ -761,7 +814,7 @@ class RequestForm extends React.Component {
                           />
                         </Col>
                       }
-                      { isEditForm && request.status !== 'Open - Awaiting pickup' &&
+                      {isEditForm && request.status !== requestStatuses.awaitingPickup &&
                         <Col xs={3}>
                           <KeyValue
                             label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
@@ -770,7 +823,7 @@ class RequestForm extends React.Component {
                         </Col>
                       }
                     </Row>
-                    { isEditForm &&
+                    {isEditForm &&
                       <Row>
                         <Col xs={3}>
                           <KeyValue
@@ -841,7 +894,7 @@ class RequestForm extends React.Component {
                           </Col>
                         </Row>
                       }
-                      { selectedUser &&
+                      {selectedUser &&
                         <UserForm
                           user={request ? request.requester : selectedUser}
                           stripes={this.props.stripes}

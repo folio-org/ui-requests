@@ -28,3 +28,9 @@ export const toUserAddress = addr => (
     <div>{(addr && addr.postalCode) || ''}</div>
   </div>
 );
+
+export const iconTypes = {
+  times: 'times',
+  timesCircle: 'times-circle',
+  trash: 'trash',
+};

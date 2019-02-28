@@ -104,5 +104,10 @@
   "cancel.notifyLabel": "Notify patron",
   "cancel.additionalInfoLabel": "Additional information{required}",
   "cancel.additionalInfoPlaceholderRequired": "Enter more information about the cancellation (required)",
-  "cancel.additionalInfoPlaceholderOptional": "Enter more information about the cancellation (optional)"
+  "cancel.additionalInfoPlaceholderOptional": "Enter more information about the cancellation (optional)",
+
+  "edit.deleteRequest": "Delete request",
+  "edit.cancelEditing": "Cancel editing",
+  
+  "newRequest.cancel": "Cancel editing"
 }
