@@ -49,6 +49,7 @@ import PatronBlockModal from './PatronBlockModal';
 import {
   toUserAddress,
   requestStatuses,
+  iconTypes,
 } from './constants';
 
 import css from './requests.css';
@@ -460,7 +461,7 @@ class RequestForm extends React.Component {
             onToggle();
           }}
         >
-          <Icon icon="times-circle">
+          <Icon icon={iconTypes.timesCircle}>
             <FormattedMessage id="ui-requests.newRequest.cancel" />
           </Icon>
         </Button>
@@ -474,7 +475,7 @@ class RequestForm extends React.Component {
           buttonStyle="dropdownItem"
           data-test-cancel-editing
         >
-          <Icon icon="times-circle">
+          <Icon icon={iconTypes.timesCircle}>
             <FormattedMessage id="ui-requests.edit.cancelEditing" />
           </Icon>
         </Button>
@@ -487,7 +488,7 @@ class RequestForm extends React.Component {
             onToggle();
           }}
         >
-          <Icon icon="trash">
+          <Icon icon={iconTypes.trash}>
             <FormattedMessage id="ui-requests.edit.deleteRequest" />
           </Icon>
         </Button>
@@ -508,7 +509,7 @@ class RequestForm extends React.Component {
           <IconButton
             onClick={this.props.onCancel}
             ariaLabel={title}
-            icon="times"
+            icon={iconTypes.times}
           />
         )}
       </FormattedMessage>
