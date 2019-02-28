@@ -1,3 +1,15 @@
+import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { Field } from 'redux-form';
+import {
+  FormattedMessage,
+  FormattedDate,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
+
+import moment from 'moment-timezone';
 import {
   sortBy,
   find,
@@ -10,17 +22,6 @@ import {
   unset,
 } from 'lodash';
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
-import {
-  FormattedMessage,
-  FormattedDate,
-  injectIntl,
-  intlShape,
-} from 'react-intl';
-
-import { Link } from 'react-router-dom';
 import { Pluggable } from '@folio/stripes/core';
 import {
   Accordion,
@@ -40,13 +41,15 @@ import {
 } from '@folio/stripes/components';
 
 import stripesForm from '@folio/stripes/form';
-import moment from 'moment-timezone';
 
 import CancelRequestDialog from './CancelRequestDialog';
 import UserForm from './UserForm';
 import ItemDetail from './ItemDetail';
 import PatronBlockModal from './PatronBlockModal';
-import { toUserAddress } from './constants';
+import {
+  toUserAddress,
+  requestStatuses,
+} from './constants';
 
 import css from './requests.css';
 
@@ -465,7 +468,7 @@ class RequestForm extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <Fragment>
         <Button
           onClick={onCancel}
           buttonStyle="dropdownItem"
@@ -488,7 +491,7 @@ class RequestForm extends React.Component {
             <FormattedMessage id="ui-requests.edit.deleteRequest" />
           </Icon>
         </Button>
-      </React.Fragment>
+      </Fragment>
     );
   };
 
@@ -578,7 +581,7 @@ class RequestForm extends React.Component {
     const {
       requestType,
       fulfilmentPreference
-    } = (request || {});
+    } = request || {};
 
     const isEditForm = this.isEditForm();
     const sortedRequestTypes = sortBy(requestTypes, ['label']);
@@ -628,7 +631,7 @@ class RequestForm extends React.Component {
       }
     }
 
-    const holdShelfExpireDate = (get(request, ['status'], '') === 'Open - Awaiting pickup')
+    const holdShelfExpireDate = (get(request, ['status'], '') === requestStatuses.awaitingPickup)
       ? <FormattedDate value={get(request, ['holdShelfExpirationDate'], '')} />
       : '-';
 
@@ -798,7 +801,7 @@ class RequestForm extends React.Component {
                           id="requestExpirationDate"
                         />
                       </Col>
-                      {isEditForm && request.status === 'Open - Awaiting pickup' &&
+                      {isEditForm && request.status === requestStatuses.awaitingPickup &&
                         <Col xs={3}>
                           <Field
                             name="holdShelfExpirationDate"
@@ -810,7 +813,7 @@ class RequestForm extends React.Component {
                           />
                         </Col>
                       }
-                      {isEditForm && request.status !== 'Open - Awaiting pickup' &&
+                      {isEditForm && request.status !== requestStatuses.awaitingPickup &&
                         <Col xs={3}>
                           <KeyValue
                             label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
