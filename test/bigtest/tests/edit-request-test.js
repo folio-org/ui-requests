@@ -9,7 +9,7 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import EditRequestInteractor from '../interactors/edit-request';
 
-describe.only('Edit Request page', () => {
+describe('Edit Request page', () => {
   setupApplication();
 
   const editRequestInteractor = new EditRequestInteractor('[data-test-requests-form]');
