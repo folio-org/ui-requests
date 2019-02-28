@@ -632,7 +632,7 @@ class RequestForm extends React.Component {
       }
     }
 
-    const holdShelfExpireDate = (get(request, ['status'], '') === requestStatuses.awaitingPickup)
+    const holdShelfExpireDate = get(request, ['status'], '') === requestStatuses.awaitingPickup
       ? <FormattedDate value={get(request, ['holdShelfExpirationDate'], '')} />
       : '-';
 
