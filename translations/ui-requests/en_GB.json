@@ -106,5 +106,8 @@
     "blockModal": "Patron blocked from requesting",
     "detailsButton": "Block details",
     "enter": "Enter",
-    "requestType.message": "Select item to view available request types"
+    "requestType.message": "Select item to view available request types",
+    "edit.deleteRequest": "Delete request",
+    "edit.cancelEditing": "Cancel editing",
+    "newRequest.cancel": "Cancel editing"
 }
