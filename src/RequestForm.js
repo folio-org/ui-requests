@@ -47,7 +47,7 @@ import UserForm from './UserForm';
 import ItemDetail from './ItemDetail';
 import PatronBlockModal from './PatronBlockModal';
 
-import asyncValidate from './validation';
+import asyncValidate from './asyncValidate';
 import {
   toUserAddress,
   requestStatuses,
