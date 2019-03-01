@@ -97,6 +97,7 @@
   "requester.pickupLocation": "Pickup location",
   "requester.pickupServicePoint": "Pickup service point",
   "requester.patronGroup.group": "Requester patron group",
+  "tags.tagList": "Tags",
 
   "cancel.cancelRequest": "Cancel request",
   "cancel.modalLabel": "Confirm request cancellation",
@@ -109,6 +110,6 @@
 
   "edit.deleteRequest": "Delete request",
   "edit.cancelEditing": "Cancel editing",
-  
+
   "newRequest.cancel": "Cancel editing"
 }
