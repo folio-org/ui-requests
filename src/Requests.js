@@ -343,6 +343,8 @@ class Requests extends React.Component {
     });
   }
 
+  getHelperResourcePath = (helper, id) => `circulation/requests/${id}`;
+
   massageNewRecord = (requestData) => {
     const { intl: { timeZone } } = this.props;
     const isoDate = moment.tz(timeZone).format();
@@ -446,6 +448,7 @@ class Requests extends React.Component {
           resultCountIncrement={RESULT_COUNT_INCREMENT}
           viewRecordComponent={ViewRequest}
           editRecordComponent={RequestForm}
+          getHelperResourcePath={this.getHelperResourcePath}
           visibleColumns={[
             requestDate,
             title,

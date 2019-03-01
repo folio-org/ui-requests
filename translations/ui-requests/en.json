@@ -44,6 +44,7 @@
   "requestMeta.holdShelfExpirationDate": "Hold shelf expiration date",
   "requestMeta.queuePosition": "Position in queue",
 
+  "showTags": "Show Tags",
   "errors.itemBarcodeDoesNotExist": "Item with this barcode does not exist",
   "errors.userBarcodeDoesNotExist": "User with this barcode does not exist",
   "errors.onlyCheckedOutForRecall": "Only checked out items can be recalled",

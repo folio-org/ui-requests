@@ -6,6 +6,7 @@ import {
   keyBy
 } from 'lodash';
 import React, { Fragment } from 'react';
+import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import {
@@ -28,7 +29,7 @@ import {
   PaneMenu,
   Row
 } from '@folio/stripes/components';
-import { ViewMetaData } from '@folio/stripes/smart-components';
+import { ViewMetaData, withTags } from '@folio/stripes/smart-components';
 
 import CancelRequestDialog from './CancelRequestDialog';
 import ItemDetail from './ItemDetail';
@@ -41,6 +42,10 @@ class ViewRequest extends React.Component {
     selectedRequest: {
       type: 'okapi',
       path: 'circulation/requests/:{id}',
+      shouldRefresh: (resource, action, refresh) => {
+        const { path } = action.meta;
+        return refresh || (path && path.match(/link/));
+      },
     },
   };
 
@@ -62,6 +67,7 @@ class ViewRequest extends React.Component {
     onEdit: PropTypes.func,
     onDuplicate: PropTypes.func,
     optionLists: PropTypes.object,
+    tagsToggle: PropTypes.func,
     paneWidth: PropTypes.string,
     patronGroups: PropTypes.arrayOf(PropTypes.object),
     resources: PropTypes.shape({
@@ -80,6 +86,7 @@ class ViewRequest extends React.Component {
         log: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
+    tagsEnabled: PropTypes.bool,
     match: PropTypes.object,
   };
 
@@ -209,10 +216,13 @@ class ViewRequest extends React.Component {
       onEdit,
       onCloseEdit,
       findResource,
+      tagsEnabled,
+      tagsToggle,
     } = this.props;
 
     const query = location.search ? queryString.parse(location.search) : {};
     const request = this.getRequest();
+    const tags = ((request && request.tags) || {}).tagList || [];
     const patronGroupName = this.getPatronGroupName(request);
     const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');
@@ -233,6 +243,20 @@ class ViewRequest extends React.Component {
 
     const detailMenu = (
       <PaneMenu>
+        {
+          tagsEnabled &&
+          <FormattedMessage id="ui-requests.showTags">
+            {ariaLabel => (
+              <IconButton
+                icon="tag"
+                id="clickable-show-tags"
+                onClick={tagsToggle}
+                badgeCount={tags.length}
+                ariaLabel={ariaLabel}
+              />
+            )}
+          </FormattedMessage>
+        }
         {!isRequestClosed &&
           <IconButton
             icon="edit"
@@ -453,4 +477,6 @@ class ViewRequest extends React.Component {
   }
 }
 
-export default ViewRequest;
+export default compose(
+  withTags,
+)(ViewRequest);
