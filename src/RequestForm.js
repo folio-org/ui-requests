@@ -50,6 +50,8 @@ import {
   toUserAddress,
   requestStatuses,
   iconTypes,
+  requestTypesMap,
+  requestTypesByItemStatus,
 } from './constants';
 
 import css from './requests.css';
@@ -132,7 +134,6 @@ class RequestForm extends React.Component {
     //  okapi: PropTypes.object,
     optionLists: PropTypes.shape({
       addressTypes: PropTypes.arrayOf(PropTypes.object),
-      requestTypes: PropTypes.arrayOf(PropTypes.object),
       fulfilmentTypes: PropTypes.arrayOf(PropTypes.object),
       servicePoints: PropTypes.arrayOf(PropTypes.object),
     }),
@@ -333,8 +334,13 @@ class RequestForm extends React.Component {
         if (!result || result.totalRecords === 0) return result;
 
         const item = result.items[0];
+        const options = this.getRequestTypeOptions(item);
+
         this.props.change('itemId', item.id);
         this.props.change('item.barcode', barcode);
+        if (options.length === 1) {
+          this.props.change('requestType', options[0].value);
+        }
 
         // Setting state here is redundant with what follows, but it lets us
         // display the matched item as quickly as possible, without waiting for
@@ -395,7 +401,6 @@ class RequestForm extends React.Component {
   requireItem = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectItem" />);
   requireUser = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectUser" />);
 
-
   getProxy() {
     const { request } = this.props;
     const { proxy } = this.state;
@@ -445,6 +450,15 @@ class RequestForm extends React.Component {
     }
 
     this.props.onSubmit(data);
+  }
+
+  getRequestTypeOptions(item) {
+    const itemStatus = get(item, 'status.name');
+    const requestTypes = requestTypesByItemStatus[itemStatus] || [];
+    return requestTypes.map(type => ({
+      id: requestTypesMap[type],
+      value: type,
+    }));
   }
 
   renderActionMenu = ({ onToggle }) => {
@@ -555,7 +569,6 @@ class RequestForm extends React.Component {
       optionLists: {
         servicePoints,
         addressTypes,
-        requestTypes = [],
         fulfilmentTypes = [],
       },
       patronGroups,
@@ -580,20 +593,12 @@ class RequestForm extends React.Component {
 
     const patronBlocks = this.getPatronBlocks(parentResources);
     const {
-      requestType,
       fulfilmentPreference
     } = request || {};
 
     const isEditForm = this.isEditForm();
-    const sortedRequestTypes = sortBy(requestTypes, ['label']);
+    const requestTypeOptions = this.getRequestTypeOptions(selectedItem);
     const sortedFulfilmentTypes = sortBy(fulfilmentTypes, ['label']);
-
-    const requestTypeOptions = sortedRequestTypes.map(({ label, id }) => ({
-      labelTranslationPath: label,
-      value: id,
-      selected: requestType === id
-    }));
-
     const fulfilmentTypeOptions = sortedFulfilmentTypes.map(({ label, id }) => ({
       labelTranslationPath: label,
       value: id,
@@ -754,7 +759,8 @@ class RequestForm extends React.Component {
                             />
                           </span>
                         }
-                        { !isEditForm && selectedItem &&
+
+                        { !isEditForm && selectedItem && requestTypeOptions.length > 1 &&
                           <Field
                             label={<FormattedMessage id="ui-requests.requestType" />}
                             name="requestType"
@@ -762,12 +768,11 @@ class RequestForm extends React.Component {
                             fullWidth
                             disabled={isEditForm}
                           >
-                            {requestTypeOptions.map(({ labelTranslationPath, value, selected }) => (
-                              <FormattedMessage id={labelTranslationPath}>
+                            {requestTypeOptions.map(({ id, value }) => (
+                              <FormattedMessage id={id}>
                                 {translatedLabel => (
                                   <option
                                     value={value}
-                                    selected={selected}
                                   >
                                     {translatedLabel}
                                   </option>
@@ -775,6 +780,16 @@ class RequestForm extends React.Component {
                               </FormattedMessage>
                             ))}
                           </Field>
+                        }
+                        { !isEditForm && selectedItem && requestTypeOptions.length === 1 &&
+                          <KeyValue
+                            label={<FormattedMessage id="ui-requests.requestType" />}
+                            value={
+                              <span data-test-request-type-text>
+                                <FormattedMessage id={requestTypeOptions[0].id} />
+                              </span>
+                            }
+                          />
                         }
                         {isEditForm &&
                           <KeyValue

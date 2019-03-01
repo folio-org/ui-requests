@@ -34,3 +34,18 @@ export const iconTypes = {
   timesCircle: 'times-circle',
   trash: 'trash',
 };
+
+export const requestTypesMap = {
+  'Recall': 'ui-requests.requestMeta.type.recall',
+  'Hold': 'ui-requests.requestMeta.type.hold',
+  'Page': 'ui-requests.requestMeta.type.page',
+};
+
+export const requestTypesByItemStatus = {
+  'Checked out': ['Hold', 'Recall'],
+  'Available': ['Page'],
+  'Awaiting pickup': ['Hold', 'Recall'],
+  'In transit': ['Hold', 'Recall'],
+  'Missing': ['Hold'],
+  'Paged': ['Hold'],
+};
