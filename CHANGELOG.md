@@ -13,6 +13,7 @@
 * Extract static strings for translation. Fixes UIREQ-219.
 * Reorganize fields on request record to support conditional display of fequest types. Part of UIREQ-208.
 * Pre-filter request types based on whitelist. Part of UIREQ-209.
+* Fix item status. Fixes UIREQ-222.
 
 ## [1.7.0](https://github.com/folio-org/ui-requests/tree/v1.7.0) (2019-01-25)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.6.0...v1.7.0)
