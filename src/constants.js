@@ -14,8 +14,10 @@ export const fulfilmentTypes = [
 // used to perform queries with the backend
 // not used for data display
 export const requestStatuses = {
-  checkedOut: 'Checked out',
-  awaitingPickup: 'Open - Awaiting pickup',
+  CHECKED_OUT: 'Checked out',
+  AWAITING_PICKUP: 'Open - Awaiting pickup',
+  RECALL: 'Recall',
+  HOLD: 'Hold',
 };
 
 export const toUserAddress = addr => (

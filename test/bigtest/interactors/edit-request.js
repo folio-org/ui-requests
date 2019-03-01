@@ -2,7 +2,6 @@ import {
   interactor,
   clickable,
   fillable,
-  isPresent
 } from '@bigtest/interactor';
 
 @interactor class HeaderDropdown {

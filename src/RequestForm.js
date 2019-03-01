@@ -46,6 +46,8 @@ import CancelRequestDialog from './CancelRequestDialog';
 import UserForm from './UserForm';
 import ItemDetail from './ItemDetail';
 import PatronBlockModal from './PatronBlockModal';
+
+import asyncValidate from './asyncValidate';
 import {
   toUserAddress,
   requestStatuses,
@@ -56,59 +58,6 @@ import {
 
 import css from './requests.css';
 
-/**
- * on-blur validation checks that the requested item is checked out
- * and that the requesting user exists.
- *
- * redux-form requires that the rejected Promises have the form
- * { field: "error message" }
- * hence the eslint-disable-next-line comments since ESLint is picky
- * about the format of rejected promises.
- *
- * @see https://redux-form.com/7.3.0/examples/asyncchangevalidation/
- */
-function asyncValidate(values, dispatch, props, blurredField) {
-  if (blurredField === 'item.barcode' && values.item.barcode !== undefined) {
-    return new Promise((resolve, reject) => {
-      const uv = props.uniquenessValidator.itemUniquenessValidator;
-      const query = `(barcode="${values.item.barcode}")`;
-      uv.reset();
-      uv.GET({ params: { query } }).then((items) => {
-        if (items.length < 1) {
-          // eslint-disable-next-line prefer-promise-reject-errors
-          reject({ item: { barcode: <FormattedMessage id="ui-requests.errors.itemBarcodeDoesNotExist" /> } });
-        } else if (items[0].status.name !== 'Checked out') {
-          if (values.requestType === 'Recall') {
-            // eslint-disable-next-line prefer-promise-reject-errors
-            reject({ item: { barcode: <FormattedMessage id="ui-requests.errors.onlyCheckedOutForRecall" /> } });
-          } else if (values.requestType === 'Hold') {
-            // eslint-disable-next-line prefer-promise-reject-errors
-            reject({ item: { barcode: <FormattedMessage id="ui-requests.errors.onlyCheckedOutForHold" /> } });
-          }
-        } else {
-          resolve();
-        }
-      });
-    });
-  } else if (blurredField === 'requester.barcode' && values.requester.barcode !== undefined) {
-    return new Promise((resolve, reject) => {
-      const uv = props.uniquenessValidator.userUniquenessValidator;
-      const query = `(barcode="${values.requester.barcode}")`;
-      uv.reset();
-      uv.GET({ params: { query } }).then((users) => {
-        if (users.length < 1) {
-          // eslint-disable-next-line prefer-promise-reject-errors
-          reject({ requester: { barcode: <FormattedMessage id="ui-requests.errors.userBarcodeDoesNotExist" /> } });
-        } else {
-          resolve();
-        }
-      });
-    });
-  }
-
-  return new Promise(resolve => resolve());
-}
-
 class RequestForm extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
@@ -116,6 +65,7 @@ class RequestForm extends React.Component {
     }).isRequired,
     change: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
+    asyncValidate: PropTypes.func.isRequired,
     findResource: PropTypes.func.isRequired,
     request: PropTypes.object,
     metadataDisplay: PropTypes.func,
@@ -307,6 +257,7 @@ class RequestForm extends React.Component {
 
   findLoan(item) {
     const { findResource } = this.props;
+    if (!item) return null;
 
     return Promise.all(
       [
@@ -329,9 +280,9 @@ class RequestForm extends React.Component {
 
   findItem(barcode) {
     const { findResource } = this.props;
-    findResource('item', barcode, 'barcode')
+    return findResource('item', barcode, 'barcode')
       .then((result) => {
-        if (!result || result.totalRecords === 0) return result;
+        if (!result || result.totalRecords === 0) return null;
 
         const item = result.items[0];
         const options = this.getRequestTypeOptions(item);
@@ -351,18 +302,21 @@ class RequestForm extends React.Component {
 
         return item;
       })
-      .then(item => this.findLoan(item));
+      .then(item => this.findLoan(item))
+      .then(_ => this.props.asyncValidate());
   }
 
   onItemClick() {
-    const blocks = this.getPatronBlocks(this.props.parentResources);
+    const { parentResources } = this.props;
+
+    const blocks = this.getPatronBlocks(parentResources);
     if (blocks.length > 0 && this.state.selectedUser) {
       this.setState({ blocked: true });
     }
 
     this.setState({ selectedItem: null });
     const barcode = this.itemBarcodeRef.current.value;
-    this.findItem(barcode);
+    return this.findItem(barcode);
   }
 
   // This function only exists to enable 'do lookup on enter' for item and
@@ -637,7 +591,7 @@ class RequestForm extends React.Component {
       }
     }
 
-    const holdShelfExpireDate = get(request, ['status'], '') === requestStatuses.awaitingPickup
+    const holdShelfExpireDate = get(request, ['status'], '') === requestStatuses.AWAITING_PICKUP
       ? <FormattedDate value={get(request, ['holdShelfExpirationDate'], '')} />
       : '-';
 
@@ -820,7 +774,7 @@ class RequestForm extends React.Component {
                           id="requestExpirationDate"
                         />
                       </Col>
-                      {isEditForm && request.status === requestStatuses.awaitingPickup &&
+                      {isEditForm && request.status === requestStatuses.AWAITING_PICKUP &&
                         <Col xs={3}>
                           <Field
                             name="holdShelfExpirationDate"
@@ -832,7 +786,7 @@ class RequestForm extends React.Component {
                           />
                         </Col>
                       }
-                      {isEditForm && request.status !== requestStatuses.awaitingPickup &&
+                      {isEditForm && request.status !== requestStatuses.AWAITING_PICKUP &&
                         <Col xs={3}>
                           <KeyValue
                             label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
