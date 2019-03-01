@@ -99,7 +99,6 @@ describe('New Request page', () => {
       });
 
       it('should show page option', () => {
-        console.log(NewRequestInteractor.requestTypeText);
         expect(NewRequestInteractor.requestTypeText).to.equal('Page');
       });
     });
