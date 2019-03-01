@@ -17,7 +17,7 @@ import { exportCsv } from '@folio/stripes/util';
 
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
-import { requestTypes, fulfilmentTypes } from './constants';
+import { fulfilmentTypes } from './constants';
 import { getFullName } from './utils';
 import packageInfo from '../package';
 
@@ -477,7 +477,6 @@ class Requests extends React.Component {
             joinRequest: this.addRequestFields,
             optionLists: {
               addressTypes,
-              requestTypes,
               fulfilmentTypes,
               servicePoints
             },
