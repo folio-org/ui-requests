@@ -649,6 +649,9 @@ class RequestForm extends React.Component {
       barcode: formatMessage({ id: 'ui-requests.barcode' }),
     };
 
+    const multiRequestTypesVisible = !isEditForm && selectedItem && requestTypeOptions.length > 1;
+    const singleRequestTypeVisible = !isEditForm && selectedItem && requestTypeOptions.length === 1;
+
     const queuePosition = get(request, ['position'], '');
     const positionLink = request ?
       <div>
@@ -760,7 +763,7 @@ class RequestForm extends React.Component {
                           </span>
                         }
 
-                        { !isEditForm && selectedItem && requestTypeOptions.length > 1 &&
+                        { multiRequestTypesVisible &&
                           <Field
                             label={<FormattedMessage id="ui-requests.requestType" />}
                             name="requestType"
@@ -781,7 +784,7 @@ class RequestForm extends React.Component {
                             ))}
                           </Field>
                         }
-                        { !isEditForm && selectedItem && requestTypeOptions.length === 1 &&
+                        { singleRequestTypeVisible &&
                           <KeyValue
                             label={<FormattedMessage id="ui-requests.requestType" />}
                             value={
