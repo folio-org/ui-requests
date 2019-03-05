@@ -46,7 +46,7 @@
     "actions.editRequest": "Edit request",
     "actions.selectAddressType": "Select address type",
     "actions.selectPickupLoc": "Select pickup location",
-    "actions.loading": "Loading...",
+    "actions.loading": "Caricamento in corso...",
     "cancel.cancelRequest": "Cancel request",
     "cancel.modalLabel": "Confirm request cancellation",
     "cancel.requestWillBeCancelled": "<b>{title}</b> will be <b>cancelled</b>",
@@ -99,10 +99,15 @@
     "proxy.name": "Nome del delegato del richiedente",
     "deliveryAddress": "Indirizzo di consegna",
     "requester.patronGroup.group": "Gruppo di utenti del richiedente",
-    "actions.duplicateRequest": "Duplicate",
+    "actions.duplicateRequest": "Duplica ",
     "actions.cancelNewRequest": "Cancel",
-    "close": "Close",
+    "close": "Chiudi",
     "blockedLabel": "Reason for block:",
     "blockModal": "Patron blocked from requesting",
-    "detailsButton": "Block details"
+    "detailsButton": "Block details",
+    "enter": "Enter",
+    "requestType.message": "Select item to view available request types",
+    "edit.deleteRequest": "Delete request",
+    "edit.cancelEditing": "Cancel editing",
+    "newRequest.cancel": "Cancel editing"
 }

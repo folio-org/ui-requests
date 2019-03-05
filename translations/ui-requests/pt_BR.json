@@ -104,5 +104,10 @@
     "close": "Fechar",
     "blockedLabel": "Razão para suspensão:",
     "blockModal": "Usuário suspenso de solicitação de compra",
-    "detailsButton": "Detalhes da suspensão"
+    "detailsButton": "Detalhes da suspensão",
+    "enter": "Entrar",
+    "requestType.message": "Selecione o item para visualizar os tipos de solicitação disponíveis",
+    "edit.deleteRequest": "Delete request",
+    "edit.cancelEditing": "Cancel editing",
+    "newRequest.cancel": "Cancel editing"
 }

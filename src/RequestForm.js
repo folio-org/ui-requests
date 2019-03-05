@@ -1,3 +1,15 @@
+import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { Field } from 'redux-form';
+import {
+  FormattedMessage,
+  FormattedDate,
+  injectIntl,
+  intlShape,
+} from 'react-intl';
+
+import moment from 'moment-timezone';
 import {
   sortBy,
   find,
@@ -7,17 +19,9 @@ import {
   cloneDeep,
   debounce,
   defer,
+  unset,
 } from 'lodash';
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
-import {
-  FormattedMessage,
-  FormattedDate,
-  injectIntl,
-  intlShape,
-} from 'react-intl';
-import { Link } from 'react-router-dom';
+
 import { Pluggable } from '@folio/stripes/core';
 import {
   Accordion,
@@ -35,69 +39,24 @@ import {
   Select,
   TextField
 } from '@folio/stripes/components';
+
 import stripesForm from '@folio/stripes/form';
-import moment from 'moment-timezone';
 
 import CancelRequestDialog from './CancelRequestDialog';
 import UserForm from './UserForm';
 import ItemDetail from './ItemDetail';
 import PatronBlockModal from './PatronBlockModal';
-import { toUserAddress } from './constants';
+
+import asyncValidate from './asyncValidate';
+import {
+  toUserAddress,
+  requestStatuses,
+  iconTypes,
+  requestTypesMap,
+  requestTypesByItemStatus,
+} from './constants';
 
 import css from './requests.css';
-
-/**
- * on-blur validation checks that the requested item is checked out
- * and that the requesting user exists.
- *
- * redux-form requires that the rejected Promises have the form
- * { field: "error message" }
- * hence the eslint-disable-next-line comments since ESLint is picky
- * about the format of rejected promises.
- *
- * @see https://redux-form.com/7.3.0/examples/asyncchangevalidation/
- */
-function asyncValidate(values, dispatch, props, blurredField) {
-  if (blurredField === 'item.barcode' && values.item.barcode !== undefined) {
-    return new Promise((resolve, reject) => {
-      const uv = props.uniquenessValidator.itemUniquenessValidator;
-      const query = `(barcode="${values.item.barcode}")`;
-      uv.reset();
-      uv.GET({ params: { query } }).then((items) => {
-        if (items.length < 1) {
-          // eslint-disable-next-line prefer-promise-reject-errors
-          reject({ item: { barcode: <FormattedMessage id="ui-requests.errors.itemBarcodeDoesNotExist" /> } });
-        } else if (items[0].status.name !== 'Checked out') {
-          if (values.requestType === 'Recall') {
-            // eslint-disable-next-line prefer-promise-reject-errors
-            reject({ item: { barcode: <FormattedMessage id="ui-requests.errors.onlyCheckedOutForRecall" /> } });
-          } else if (values.requestType === 'Hold') {
-            // eslint-disable-next-line prefer-promise-reject-errors
-            reject({ item: { barcode: <FormattedMessage id="ui-requests.errors.onlyCheckedOutForHold" /> } });
-          }
-        } else {
-          resolve();
-        }
-      });
-    });
-  } else if (blurredField === 'requester.barcode' && values.requester.barcode !== undefined) {
-    return new Promise((resolve, reject) => {
-      const uv = props.uniquenessValidator.userUniquenessValidator;
-      const query = `(barcode="${values.requester.barcode}")`;
-      uv.reset();
-      uv.GET({ params: { query } }).then((users) => {
-        if (users.length < 1) {
-          // eslint-disable-next-line prefer-promise-reject-errors
-          reject({ requester: { barcode: <FormattedMessage id="ui-requests.errors.userBarcodeDoesNotExist" /> } });
-        } else {
-          resolve();
-        }
-      });
-    });
-  }
-
-  return new Promise(resolve => resolve());
-}
 
 class RequestForm extends React.Component {
   static propTypes = {
@@ -106,6 +65,7 @@ class RequestForm extends React.Component {
     }).isRequired,
     change: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
+    asyncValidate: PropTypes.func.isRequired,
     findResource: PropTypes.func.isRequired,
     request: PropTypes.object,
     metadataDisplay: PropTypes.func,
@@ -124,7 +84,6 @@ class RequestForm extends React.Component {
     //  okapi: PropTypes.object,
     optionLists: PropTypes.shape({
       addressTypes: PropTypes.arrayOf(PropTypes.object),
-      requestTypes: PropTypes.arrayOf(PropTypes.object),
       fulfilmentTypes: PropTypes.arrayOf(PropTypes.object),
       servicePoints: PropTypes.arrayOf(PropTypes.object),
     }),
@@ -298,6 +257,7 @@ class RequestForm extends React.Component {
 
   findLoan(item) {
     const { findResource } = this.props;
+    if (!item) return null;
 
     return Promise.all(
       [
@@ -320,13 +280,18 @@ class RequestForm extends React.Component {
 
   findItem(barcode) {
     const { findResource } = this.props;
-    findResource('item', barcode, 'barcode')
+    return findResource('item', barcode, 'barcode')
       .then((result) => {
-        if (!result || result.totalRecords === 0) return result;
+        if (!result || result.totalRecords === 0) return null;
 
         const item = result.items[0];
+        const options = this.getRequestTypeOptions(item);
+
         this.props.change('itemId', item.id);
         this.props.change('item.barcode', barcode);
+        if (options.length === 1) {
+          this.props.change('requestType', options[0].value);
+        }
 
         // Setting state here is redundant with what follows, but it lets us
         // display the matched item as quickly as possible, without waiting for
@@ -337,18 +302,21 @@ class RequestForm extends React.Component {
 
         return item;
       })
-      .then(item => this.findLoan(item));
+      .then(item => this.findLoan(item))
+      .then(_ => this.props.asyncValidate());
   }
 
   onItemClick() {
-    const blocks = this.getPatronBlocks(this.props.parentResources);
+    const { parentResources } = this.props;
+
+    const blocks = this.getPatronBlocks(parentResources);
     if (blocks.length > 0 && this.state.selectedUser) {
       this.setState({ blocked: true });
     }
 
     this.setState({ selectedItem: null });
     const barcode = this.itemBarcodeRef.current.value;
-    this.findItem(barcode);
+    return this.findItem(barcode);
   }
 
   // This function only exists to enable 'do lookup on enter' for item and
@@ -387,7 +355,6 @@ class RequestForm extends React.Component {
   requireItem = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectItem" />);
   requireUser = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectUser" />);
 
-
   getProxy() {
     const { request } = this.props;
     const { proxy } = this.state;
@@ -404,20 +371,162 @@ class RequestForm extends React.Component {
     return patronBlocks;
   }
 
+  isEditForm() {
+    const { request } = this.props;
+
+    return !!get(request, 'item.barcode');
+  }
+
+  isSubmittingButtonDisabled() {
+    const {
+      pristine,
+      submitting,
+    } = this.props;
+
+    return pristine || submitting;
+  }
+
+  onSave = (data) => {
+    const { intl: { timeZone } } = this.props;
+    const { requestExpirationDate, holdShelfExpirationDate } = data;
+
+    if (requestExpirationDate) {
+      data.requestExpirationDate = moment(requestExpirationDate).utc().format();
+    } else {
+      unset(data, 'requestExpirationDate');
+    }
+
+    if (holdShelfExpirationDate && !holdShelfExpirationDate.match('T')) {
+      const time = moment.tz(timeZone).format('HH:mm:ss');
+      data.holdShelfExpirationDate = moment.tz(`${holdShelfExpirationDate} ${time}`, timeZone).utc().format();
+    } else {
+      unset(data, 'holdShelfExpirationDate');
+    }
+
+    this.props.onSubmit(data);
+  }
+
+  getRequestTypeOptions(item) {
+    const itemStatus = get(item, 'status.name');
+    const requestTypes = requestTypesByItemStatus[itemStatus] || [];
+    return requestTypes.map(type => ({
+      id: requestTypesMap[type],
+      value: type,
+    }));
+  }
+
+  renderActionMenu = ({ onToggle }) => {
+    const { onCancel } = this.props;
+
+    if (!this.isEditForm()) {
+      return (
+        <Button
+          buttonStyle="dropdownItem"
+          id="clickable-cancel-new-request"
+          data-test-cancel-new-request-action
+          onClick={() => {
+            onCancel();
+            onToggle();
+          }}
+        >
+          <Icon icon={iconTypes.timesCircle}>
+            <FormattedMessage id="ui-requests.newRequest.cancel" />
+          </Icon>
+        </Button>
+      );
+    }
+
+    return (
+      <Fragment>
+        <Button
+          onClick={onCancel}
+          buttonStyle="dropdownItem"
+          data-test-cancel-editing
+        >
+          <Icon icon={iconTypes.timesCircle}>
+            <FormattedMessage id="ui-requests.edit.cancelEditing" />
+          </Icon>
+        </Button>
+        <Button
+          buttonStyle="dropdownItem"
+          id="clickable-cancel-request"
+          data-test-delete-request
+          onClick={() => {
+            this.setState({ isCancellingRequest: true });
+            onToggle();
+          }}
+        >
+          <Icon icon={iconTypes.trash}>
+            <FormattedMessage id="ui-requests.edit.deleteRequest" />
+          </Icon>
+        </Button>
+      </Fragment>
+    );
+  };
+
+  renderLastMenu() {
+    return this.isEditForm()
+      ? this.renderEditRequestLastMenu()
+      : this.renderAddRequestLastMenu();
+  }
+
+  renderAddRequestFirstMenu = () => (
+    <PaneMenu>
+      <FormattedMessage id="ui-requests.actions.closeNewRequest">
+        {title => (
+          <PaneHeaderIconButton
+            onClick={this.props.onCancel}
+            ariaLabel={title}
+            icon={iconTypes.times}
+          />
+        )}
+      </FormattedMessage>
+    </PaneMenu>
+  );
+
+  renderAddRequestLastMenu = () => {
+    return (
+      <PaneMenu>
+        <Button
+          id="clickable-create-request"
+          type="submit"
+          disabled={this.isSubmittingButtonDisabled()}
+          marginBottom0
+          buttonStyle="primary paneHeaderNewButton"
+        >
+          <FormattedMessage id="ui-requests.actions.newRequest" />
+        </Button>
+      </PaneMenu>
+    );
+  }
+
+  renderEditRequestLastMenu = () => {
+    return (
+      <PaneMenu>
+        <Button
+          id="clickable-update-request"
+          type="submit"
+          disabled={this.isSubmittingButtonDisabled()}
+          marginBottom0
+          buttonStyle="primary paneHeaderNewButton"
+        >
+          <FormattedMessage id="ui-requests.actions.updateRequest" />
+        </Button>
+      </PaneMenu>
+    );
+  }
+
   render() {
     const {
       handleSubmit,
       request,
-      onCancel,
       optionLists: {
         servicePoints,
         addressTypes,
-        requestTypes = [],
         fulfilmentTypes = [],
       },
       patronGroups,
       parentResources,
-      pristine,
       submitting,
       intl: {
         formatMessage,
@@ -437,66 +546,23 @@ class RequestForm extends React.Component {
     } = this.state;
 
     const patronBlocks = this.getPatronBlocks(parentResources);
-    const { item, requestType, fulfilmentPreference } = (request || {});
-    const isEditForm = (item && item.barcode);
-    const submittingButtonIsDisabled = pristine || submitting;
-    const addRequestFirstMenu = (
-      <PaneMenu>
-        <FormattedMessage id="ui-requests.actions.closeNewRequest">
-          {title => (
-            <PaneHeaderIconButton
-              onClick={onCancel}
-              ariaLabel={title}
-              icon="times"
-            />
-          )}
-        </FormattedMessage>
-      </PaneMenu>
-    );
-    const addRequestLastMenu = (
-      <PaneMenu>
-        <Button
-          id="clickable-create-request"
-          type="button"
-          disabled={submittingButtonIsDisabled}
-          onClick={handleSubmit}
-          marginBottom0
-          buttonStyle="primary paneHeaderNewButton"
-        >
-          <FormattedMessage id="ui-requests.actions.newRequest" />
-        </Button>
-      </PaneMenu>
-    );
-    const editRequestLastMenu = (
-      <PaneMenu>
-        <Button
-          id="clickable-update-request"
-          type="button"
-          disabled={submittingButtonIsDisabled}
-          onClick={handleSubmit}
-          marginBottom0
-          buttonStyle="primary paneHeaderNewButton"
-        >
-          <FormattedMessage id="ui-requests.actions.updateRequest" />
-        </Button>
-      </PaneMenu>
-    );
-    const sortedRequestTypes = sortBy(requestTypes, ['label']);
+    const {
+      fulfilmentPreference
+    } = request || {};
+
+    const isEditForm = this.isEditForm();
+    const requestTypeOptions = this.getRequestTypeOptions(selectedItem);
     const sortedFulfilmentTypes = sortBy(fulfilmentTypes, ['label']);
-
-    const requestTypeOptions = sortedRequestTypes.map(({ label, id }) => ({
-      labelTranslationPath: label,
-      value: id,
-      selected: requestType === id
-    }));
-
     const fulfilmentTypeOptions = sortedFulfilmentTypes.map(({ label, id }) => ({
       labelTranslationPath: label,
       value: id,
       selected: id === fulfilmentPreference
     }));
 
-    const labelAsterisk = isEditForm ? '' : ' *';
+    const labelAsterisk = isEditForm
+      ? ''
+      : ' *';
+
     const disableRecordCreation = true;
 
     let deliveryLocations;
@@ -525,7 +591,7 @@ class RequestForm extends React.Component {
       }
     }
 
-    const holdShelfExpireDate = (get(request, ['status'], '') === 'Open - Awaiting pickup')
+    const holdShelfExpireDate = get(request, ['status'], '') === requestStatuses.AWAITING_PICKUP
       ? <FormattedDate value={get(request, ['holdShelfExpirationDate'], '')} />
       : '-';
 
@@ -537,6 +603,9 @@ class RequestForm extends React.Component {
       barcode: formatMessage({ id: 'ui-requests.barcode' }),
     };
 
+    const multiRequestTypesVisible = !isEditForm && selectedItem && requestTypeOptions.length > 1;
+    const singleRequestTypeVisible = !isEditForm && selectedItem && requestTypeOptions.length === 1;
+
     const queuePosition = get(request, ['position'], '');
     const positionLink = request ?
       <div>
@@ -545,59 +614,25 @@ class RequestForm extends React.Component {
           &nbsp;
           &nbsp;
         </span>
-        <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${request.item.barcode}&sort=Request%20Date`}>
+        <Link to={`/requests?filters=requestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit%2CrequestStatus.Open%20-%20Not%20yet%20filled&query=${request.item.barcode}&sort=Request%20Date`}>
           <FormattedMessage id="ui-requests.actions.viewRequestsInQueue" />
         </Link>
       </div> : '-';
-
-    const renderActionMenu = ({ onToggle }) => {
-      if (!isEditForm) {
-        return (
-          <Button
-            data-test-cancel-new-request-action
-            buttonStyle="dropdownItem"
-            id="clickable-cancel-new-request"
-            onClick={() => {
-              onCancel();
-              onToggle();
-            }}
-          >
-            <Icon icon="times-circle">
-              <FormattedMessage id="ui-requests.actions.cancelNewRequest" />
-            </Icon>
-          </Button>
-        );
-      }
-
-      return (
-        <Button
-          buttonStyle="dropdownItem"
-          id="clickable-cancel-request"
-          onClick={() => {
-            this.setState({ isCancellingRequest: true });
-            onToggle();
-          }}
-        >
-          <Icon icon="times-circle">
-            <FormattedMessage id="ui-requests.cancel.cancelRequest" />
-          </Icon>
-        </Button>
-      );
-    };
 
     return (
       <form
         id="form-requests"
         className={css.requestForm}
+        onSubmit={handleSubmit(this.onSave)}
         data-test-requests-form
       >
         <Paneset isRoot>
           <Pane
             defaultWidth="100%"
             height="100%"
-            firstMenu={addRequestFirstMenu}
-            lastMenu={isEditForm ? editRequestLastMenu : addRequestLastMenu}
-            actionMenu={renderActionMenu}
+            firstMenu={this.renderAddRequestFirstMenu()}
+            lastMenu={this.renderLastMenu()}
+            actionMenu={this.renderActionMenu}
             paneTitle={
               isEditForm
                 ? <FormattedMessage id="ui-requests.actions.editRequest" />
@@ -605,100 +640,6 @@ class RequestForm extends React.Component {
             }
           >
             <AccordionSet accordionStatus={accordions} onToggle={this.onToggleSection}>
-              <Accordion
-                id="request-info"
-                label={<FormattedMessage id="ui-requests.requestMeta.information" />}
-              >
-                { isEditForm && request && request.metadata &&
-                  <Col xs={12}>
-                    <this.props.metadataDisplay metadata={request.metadata} />
-                  </Col>
-                }
-                <Row>
-                  <Col xs={8}>
-                    <Row>
-                      <Col xs={3}>
-                        { !isEditForm &&
-                          <Field
-                            label={<FormattedMessage id="ui-requests.requestType" />}
-                            name="requestType"
-                            component={Select}
-                            fullWidth
-                            disabled={isEditForm}
-                          >
-                            {requestTypeOptions.map(({ labelTranslationPath, value, selected }) => (
-                              <FormattedMessage id={labelTranslationPath}>
-                                {translatedLabel => (
-                                  <option
-                                    value={value}
-                                    selected={selected}
-                                  >
-                                    {translatedLabel}
-                                  </option>
-                                )}
-                              </FormattedMessage>
-                            ))}
-                          </Field>
-                        }
-                        {isEditForm &&
-                          <KeyValue
-                            label={<FormattedMessage id="ui-requests.requestType" />}
-                            value={request.requestType}
-                          />
-                        }
-                      </Col>
-                      <Col xs={3}>
-                        {isEditForm &&
-                          <KeyValue
-                            label={<FormattedMessage id="ui-requests.status" />}
-                            value={request.status}
-                          />
-                        }
-                      </Col>
-                      <Col xs={3}>
-                        <Field
-                          name="requestExpirationDate"
-                          label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
-                          aria-label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
-                          backendDateStandard="YYYY-MM-DD"
-                          component={Datepicker}
-                          dateFormat="YYYY-MM-DD"
-                        />
-                      </Col>
-                      { isEditForm && request.status === 'Open - Awaiting pickup' &&
-                        <Col xs={3}>
-                          <Field
-                            name="holdShelfExpirationDate"
-                            label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
-                            aria-label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
-                            backendDateStandard="YYYY-MM-DD"
-                            component={Datepicker}
-                            dateFormat="YYYY-MM-DD"
-                          />
-                        </Col>
-                      }
-                      { isEditForm && request.status !== 'Open - Awaiting pickup' &&
-                        <Col xs={3}>
-                          <KeyValue
-                            label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
-                            value={holdShelfExpireDate}
-                          />
-                        </Col>
-                      }
-                    </Row>
-                    { isEditForm &&
-                      <Row>
-                        <Col xs={3}>
-                          <KeyValue
-                            label={<FormattedMessage id="ui-requests.position" />}
-                            value={positionLink}
-                          />
-                        </Col>
-                      </Row>
-                    }
-                  </Col>
-                </Row>
-              </Accordion>
               <Accordion
                 id="item-info"
                 label={
@@ -738,7 +679,7 @@ class RequestForm extends React.Component {
                               onClick={this.onItemClick}
                               disabled={submitting}
                             >
-                              Enter
+                              <FormattedMessage id="ui-requests.enter" />
                             </Button>
                           </Col>
                         </Row>
@@ -753,6 +694,119 @@ class RequestForm extends React.Component {
                     </Col>
                   </Row>
                 </div>
+              </Accordion>
+              <Accordion
+                id="request-info"
+                label={<FormattedMessage id="ui-requests.requestMeta.information" />}
+              >
+                { isEditForm && request && request.metadata &&
+                  <Col xs={12}>
+                    <this.props.metadataDisplay metadata={request.metadata} />
+                  </Col>
+                }
+                <Row>
+                  <Col xs={8}>
+                    <Row>
+                      <Col xs={4}>
+                        { !isEditForm && !selectedItem &&
+                          <span data-test-request-type-message>
+                            <KeyValue
+                              label={<FormattedMessage id="ui-requests.requestType" />}
+                              value={<FormattedMessage id="ui-requests.requestType.message" />}
+                            />
+                          </span>
+                        }
+
+                        { multiRequestTypesVisible &&
+                          <Field
+                            label={<FormattedMessage id="ui-requests.requestType" />}
+                            name="requestType"
+                            component={Select}
+                            fullWidth
+                            disabled={isEditForm}
+                          >
+                            {requestTypeOptions.map(({ id, value }) => (
+                              <FormattedMessage id={id}>
+                                {translatedLabel => (
+                                  <option
+                                    value={value}
+                                  >
+                                    {translatedLabel}
+                                  </option>
+                                )}
+                              </FormattedMessage>
+                            ))}
+                          </Field>
+                        }
+                        { singleRequestTypeVisible &&
+                          <KeyValue
+                            label={<FormattedMessage id="ui-requests.requestType" />}
+                            value={
+                              <span data-test-request-type-text>
+                                <FormattedMessage id={requestTypeOptions[0].id} />
+                              </span>
+                            }
+                          />
+                        }
+                        {isEditForm &&
+                          <KeyValue
+                            label={<FormattedMessage id="ui-requests.requestType" />}
+                            value={request.requestType}
+                          />
+                        }
+                      </Col>
+                      <Col xs={3}>
+                        {isEditForm &&
+                          <KeyValue
+                            label={<FormattedMessage id="ui-requests.status" />}
+                            value={request.status}
+                          />
+                        }
+                      </Col>
+                      <Col xs={3}>
+                        <Field
+                          name="requestExpirationDate"
+                          label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
+                          aria-label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
+                          backendDateStandard="YYYY-MM-DD"
+                          component={Datepicker}
+                          dateFormat="YYYY-MM-DD"
+                          id="requestExpirationDate"
+                        />
+                      </Col>
+                      {isEditForm && request.status === requestStatuses.AWAITING_PICKUP &&
+                        <Col xs={3}>
+                          <Field
+                            name="holdShelfExpirationDate"
+                            label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
+                            aria-label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
+                            backendDateStandard="YYYY-MM-DD"
+                            component={Datepicker}
+                            dateFormat="YYYY-MM-DD"
+                          />
+                        </Col>
+                      }
+                      {isEditForm && request.status !== requestStatuses.AWAITING_PICKUP &&
+                        <Col xs={3}>
+                          <KeyValue
+                            label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
+                            value={holdShelfExpireDate}
+                          />
+                        </Col>
+                      }
+                    </Row>
+                    {isEditForm &&
+                      <Row>
+                        <Col xs={3}>
+                          <KeyValue
+                            label={<FormattedMessage id="ui-requests.position" />}
+                            value={positionLink}
+                          />
+                        </Col>
+                      </Row>
+                    }
+                  </Col>
+                </Row>
               </Accordion>
               <Accordion
                 id="requester-info"
@@ -807,12 +861,12 @@ class RequestForm extends React.Component {
                               onClick={this.onUserClick}
                               disabled={submitting}
                             >
-                              Enter
+                              <FormattedMessage id="ui-requests.enter" />
                             </Button>
                           </Col>
                         </Row>
                       }
-                      { selectedUser &&
+                      {selectedUser &&
                         <UserForm
                           user={request ? request.requester : selectedUser}
                           stripes={this.props.stripes}

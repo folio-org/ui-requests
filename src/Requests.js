@@ -1,6 +1,7 @@
 import { omit, get } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { stringify } from 'query-string';
 import fetch from 'isomorphic-fetch';
 import moment from 'moment-timezone';
 import {
@@ -16,7 +17,7 @@ import { exportCsv } from '@folio/stripes/util';
 
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
-import { requestTypes, fulfilmentTypes } from './constants';
+import { fulfilmentTypes } from './constants';
 import { getFullName } from './utils';
 import packageInfo from '../package';
 
@@ -40,13 +41,37 @@ const filterConfig = [
     name: 'requestStatus',
     cql: 'status',
     values: [
-      { name: 'closed - cancelled', cql: 'Closed - Cancelled' },
-      { name: 'closed - filled', cql: 'Closed - Filled' },
-      { name: 'open - awaiting pickup', cql: 'Open - Awaiting pickup' },
-      { name: 'open - not yet filled', cql: 'Open - Not yet filled' },
+      { name: 'Closed - Cancelled', cql: 'Closed - Cancelled' },
+      { name: 'Closed - Filled', cql: 'Closed - Filled' },
+      { name: 'Closed - Pickup expired', cql: 'Closed - Pickup expired' },
+      { name: 'Closed - Unfilled', cql: 'Closed - Unfilled' },
+      { name: 'Open - Awaiting pickup', cql: 'Open - Awaiting pickup' },
+      { name: 'Open - In transit', cql: 'Open - In transit' },
+      { name: 'Open - Not yet filled', cql: 'Open - Not yet filled' },
     ],
   },
 ];
+
+const urls = {
+  user: (value, idType) => {
+    const query = stringify({ query: `(${idType}=="${value}")` });
+    return `users?${query}`;
+  },
+  item: (value, idType) => {
+    const query = stringify({ query: `(${idType}=="${value}")` });
+    return `inventory/items?${query}`;
+  },
+  holding: value => `holdings-storage/holdings/${value}`,
+  instance: value => `inventory/instances/${value}`,
+  loan: (value) => {
+    const query = stringify({ query: `(itemId=="${value}")` });
+    return `circulation/loans?${query}`;
+  },
+  requestsForItem: (value) => {
+    const query = stringify({ query: `(itemId=="${value}")` });
+    return `request-storage/requests?${query}`;
+  },
+};
 
 class Requests extends React.Component {
   static manifest = {
@@ -205,7 +230,7 @@ class Requests extends React.Component {
       'position', 'item.barcode', 'item.title', 'item.contributorNames', 'item.location.name',
       'item.callNumber', 'item.enumeration', 'item.status', 'loan.dueDate', 'requester.name',
       'requester.barcode', 'requester.patronGroup.group', 'fulfilmentPreference', 'requester.pickupServicePoint',
-      'deliveryAddress', 'proxy.name', 'proxy.barcode'];
+      'deliveryAddress', 'proxy.name', 'proxy.barcode', 'tags.tagList'];
 
     // Map to pass into exportCsv
     this.columnHeadersMap = this.headers.map(item => {
@@ -252,8 +277,7 @@ class Requests extends React.Component {
       const recordsLoaded = this.props.resources.records.records;
       const numTotalRecords = this.props.resources.records.other.totalRecords;
       if (recordsLoaded.length === numTotalRecords) {
-        const columnHeadersMap = this.columnHeadersMap;
-        const onlyFields = columnHeadersMap;
+        const onlyFields = this.columnHeadersMap;
         const clonedRequests = JSON.parse(JSON.stringify(recordsLoaded)); // Do not mutate the actual resource
         const recordsToCSV = this.buildRecords(clonedRequests);
         exportCsv(recordsToCSV, {
@@ -269,9 +293,15 @@ class Requests extends React.Component {
     const { formatDate, formatTime } = this.props.intl;
     recordsLoaded.forEach(record => {
       const contributorNamesMap = [];
+      const tagListMap = [];
       if (record.item.contributorNames.length > 0) {
         record.item.contributorNames.forEach(item => {
           contributorNamesMap.push(item.name);
+        });
+      }
+      if (record.tags && record.tags.tagList.length > 0) {
+        record.tags.tagList.forEach(item => {
+          tagListMap.push(item);
         });
       }
       if (record.requester) {
@@ -291,22 +321,16 @@ class Requests extends React.Component {
         record.deliveryAddress = `${addressLine1 || ''} ${city || ''} ${region || ''} ${countryId || ''} ${postalCode || ''}`;
       }
       record.item.contributorNames = contributorNamesMap.join('; ');
+      if (record.tags) record.tags.tagList = tagListMap.join('; ');
     });
     return recordsLoaded;
   }
 
   // idType can be 'id', 'barcode', etc.
   findResource(resource, value, idType = 'id') {
-    const urls = {
-      user: `users?query=(${idType}="${value}")`,
-      item: `inventory/items?query=(${idType}="${value}")`,
-      holding: `holdings-storage/holdings/${value}`,
-      instance: `inventory/instances/${value}`,
-      loan: `circulation/loans?query=(itemId="${value}")`,
-      requestsForItem: `request-storage/requests?query=(itemId="${value}")`,
-    };
-
-    return fetch(`${this.okapiUrl}/${urls[resource]}`, { headers: this.httpHeaders }).then(response => response.json());
+    const query = urls[resource](value, idType);
+    const options = { headers: this.httpHeaders };
+    return fetch(`${this.okapiUrl}/${query}`, options).then(response => response.json());
   }
 
   // Called as a map function
@@ -324,6 +348,8 @@ class Requests extends React.Component {
       return Object.assign({}, r, { requester, requestCount });
     });
   }
+
+  getHelperResourcePath = (helper, id) => `circulation/requests/${id}`;
 
   massageNewRecord = (requestData) => {
     const { intl: { timeZone } } = this.props;
@@ -428,6 +454,7 @@ class Requests extends React.Component {
           resultCountIncrement={RESULT_COUNT_INCREMENT}
           viewRecordComponent={ViewRequest}
           editRecordComponent={RequestForm}
+          getHelperResourcePath={this.getHelperResourcePath}
           visibleColumns={[
             requestDate,
             title,
@@ -456,7 +483,6 @@ class Requests extends React.Component {
             joinRequest: this.addRequestFields,
             optionLists: {
               addressTypes,
-              requestTypes,
               fulfilmentTypes,
               servicePoints
             },

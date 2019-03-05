@@ -1,12 +1,13 @@
 {
   "routingErrorOops": "Uh-oh!",
-  "routingError":"How did you get to {pathname}?",
+  "routingError": "How did you get to {pathname}?",
 
   "meta.title": "Requests",
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
   "barcode": "Barcode",
   "fulfilmentPreference": "Request fulfilment preference",
   "requestType": "Request type",
+  "requestType.message": "Select item to view available request types",
   "status": "Request status",
   "requestExpirationDate": "Request expiration date",
   "holdShelfExpirationDate": "Hold shelf expiration date",
@@ -15,6 +16,7 @@
   "blockedLabel": "Reason for block:",
   "blockModal": "Patron blocked from requesting",
   "detailsButton": "Block details",
+  "enter": "Enter",
 
   "requests.title": "Title",
   "requests.type": "Type",
@@ -42,6 +44,7 @@
   "requestMeta.holdShelfExpirationDate": "Hold shelf expiration date",
   "requestMeta.queuePosition": "Position in queue",
 
+  "showTags": "Show Tags",
   "errors.itemBarcodeDoesNotExist": "Item with this barcode does not exist",
   "errors.userBarcodeDoesNotExist": "User with this barcode does not exist",
   "errors.onlyCheckedOutForRecall": "Only checked out items can be recalled",
@@ -94,6 +97,7 @@
   "requester.pickupLocation": "Pickup location",
   "requester.pickupServicePoint": "Pickup service point",
   "requester.patronGroup.group": "Requester patron group",
+  "tags.tagList": "Tags",
 
   "cancel.cancelRequest": "Cancel request",
   "cancel.modalLabel": "Confirm request cancellation",
@@ -102,5 +106,10 @@
   "cancel.notifyLabel": "Notify patron",
   "cancel.additionalInfoLabel": "Additional information{required}",
   "cancel.additionalInfoPlaceholderRequired": "Enter more information about the cancellation (required)",
-  "cancel.additionalInfoPlaceholderOptional": "Enter more information about the cancellation (optional)"
+  "cancel.additionalInfoPlaceholderOptional": "Enter more information about the cancellation (optional)",
+
+  "edit.deleteRequest": "Delete request",
+  "edit.cancelEditing": "Cancel editing",
+
+  "newRequest.cancel": "Cancel editing"
 }

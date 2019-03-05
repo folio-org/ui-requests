@@ -6,7 +6,7 @@ module.exports.test = function uiTest(uiTestCtx) {
     const nightmare = new Nightmare(config.nightmare);
 
     this.timeout(Number(config.test_timeout));
-    const requestTypes = ['Holds', 'Recalls'];
+    const requestTypes = ['holds', 'recalls'];
 
     describe('Login > Open module "Requests" > Get hit counts > Click filters > Logout', () => {
       before((done) => {
@@ -36,8 +36,8 @@ module.exports.test = function uiTest(uiTestCtx) {
             .type('#input-request-search', 0)
             .wait('#clickable-reset-all')
             .click('#clickable-reset-all')
-            .wait(`#clickable-filter-requestType-${filter}`)
-            .click(`#clickable-filter-requestType-${filter}`)
+            .wait(`#clickable-filter-request-type-${filter}`)
+            .click(`#clickable-filter-request-type-${filter}`)
             .wait('#list-requests:not([data-total-count^="0"])')
             .click('#clickable-reset-all')
             .wait('div[class^="mclEmptyMessage"]')

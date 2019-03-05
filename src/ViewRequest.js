@@ -6,6 +6,7 @@ import {
   keyBy
 } from 'lodash';
 import React, { Fragment } from 'react';
+import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import {
@@ -28,19 +29,23 @@ import {
   PaneMenu,
   Row
 } from '@folio/stripes/components';
-import { ViewMetaData } from '@folio/stripes/smart-components';
+import { ViewMetaData, withTags } from '@folio/stripes/smart-components';
 
 import CancelRequestDialog from './CancelRequestDialog';
 import ItemDetail from './ItemDetail';
 import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
-import { toUserAddress } from './constants';
+import { toUserAddress, requestStatuses } from './constants';
 
 class ViewRequest extends React.Component {
   static manifest = {
     selectedRequest: {
       type: 'okapi',
       path: 'circulation/requests/:{id}',
+      shouldRefresh: (resource, action, refresh) => {
+        const { path } = action.meta;
+        return refresh || (path && path.match(/link/));
+      },
     },
   };
 
@@ -62,6 +67,7 @@ class ViewRequest extends React.Component {
     onEdit: PropTypes.func,
     onDuplicate: PropTypes.func,
     optionLists: PropTypes.object,
+    tagsToggle: PropTypes.func,
     paneWidth: PropTypes.string,
     patronGroups: PropTypes.arrayOf(PropTypes.object),
     resources: PropTypes.shape({
@@ -80,6 +86,7 @@ class ViewRequest extends React.Component {
         log: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
+    tagsEnabled: PropTypes.bool,
     match: PropTypes.object,
   };
 
@@ -209,10 +216,13 @@ class ViewRequest extends React.Component {
       onEdit,
       onCloseEdit,
       findResource,
+      tagsEnabled,
+      tagsToggle,
     } = this.props;
 
     const query = location.search ? queryString.parse(location.search) : {};
     const request = this.getRequest();
+    const tags = ((request && request.tags) || {}).tagList || [];
     const patronGroupName = this.getPatronGroupName(request);
     const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');
@@ -226,13 +236,27 @@ class ViewRequest extends React.Component {
           &nbsp;
           &nbsp;
         </span>
-        <Link to={`/requests?filters=requestStatus.open%20-%20not%20yet%20filled%2CrequestStatus.open%20-%20awaiting%20pickup&query=${request.item.barcode}&sort=Request%20Date`}>
+        <Link to={`/requests?filters=requestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit%2CrequestStatus.Open%20-%20Not%20yet%20filled&query=${request.item.barcode}&sort=Request%20Date`}>
           <FormattedMessage id="ui-requests.actions.viewRequestsInQueue" />
         </Link>
       </div> : '-';
 
     const detailMenu = (
       <PaneMenu>
+        {
+          tagsEnabled &&
+          <FormattedMessage id="ui-requests.showTags">
+            {ariaLabel => (
+              <PaneHeaderIconButton
+                icon="tag"
+                id="clickable-show-tags"
+                onClick={tagsToggle}
+                badgeCount={tags.length}
+                ariaLabel={ariaLabel}
+              />
+            )}
+          </FormattedMessage>
+        }
         {!isRequestClosed &&
           <PaneHeaderIconButton
             icon="edit"
@@ -258,11 +282,12 @@ class ViewRequest extends React.Component {
       }
     }
 
-    const holdShelfExpireDate = (get(request, ['status'], '') === 'Open - Awaiting pickup')
-      ? <FormattedDate value={get(request, ['holdShelfExpirationDate'], '')} />
+    const holdShelfExpireDate = (get(request, 'holdShelfExpirationDate', '') &&
+      get(request, ['status'], '') === requestStatuses.AWAITING_PICKUP)
+      ? <FormattedDate value={request.holdShelfExpirationDate} />
       : '-';
 
-    const expirationDate = (get(request, ['requestExpirationDate', '']))
+    const expirationDate = (get(request, 'requestExpirationDate', ''))
       ? <FormattedDate value={request.requestExpirationDate} />
       : '-';
 
@@ -343,6 +368,21 @@ class ViewRequest extends React.Component {
         <TitleManager record={get(request, ['item', 'title'])} />
         <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
           <Accordion
+            id="item-info"
+            label={
+              <FormattedMessage
+                id="ui-requests.item.information"
+                values={{ required: '' }}
+              />
+            }
+          >
+            <ItemDetail
+              item={request.item}
+              loan={request.loan}
+              requestCount={request.requestCount}
+            />
+          </Accordion>
+          <Accordion
             id="request-info"
             label={<FormattedMessage id="ui-requests.requestMeta.information" />}
           >
@@ -385,21 +425,6 @@ class ViewRequest extends React.Component {
                 />
               </Col>
             </Row>
-          </Accordion>
-          <Accordion
-            id="item-info"
-            label={
-              <FormattedMessage
-                id="ui-requests.item.information"
-                values={{ required: '' }}
-              />
-            }
-          >
-            <ItemDetail
-              item={request.item}
-              loan={request.loan}
-              requestCount={request.requestCount}
-            />
           </Accordion>
           <Accordion
             id="requester-info"
@@ -452,4 +477,6 @@ class ViewRequest extends React.Component {
   }
 }
 
-export default ViewRequest;
+export default compose(
+  withTags,
+)(ViewRequest);

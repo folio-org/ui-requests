@@ -40,4 +40,137 @@ describe('New Request page', () => {
       });
     });
   });
+
+  describe('showing request type message', () => {
+    it('should show request type message', () => {
+      expect(NewRequestInteractor.requestTypeMessageIsPresent).to.be.true;
+    });
+  });
+
+  describe('hiding request type message', () => {
+    beforeEach(async function () {
+      this.server.create('item', {
+        barcode: '9676761472500',
+        title: 'Best Book Ever',
+        materialType: {
+          name: 'book'
+        }
+      });
+
+      await NewRequestInteractor
+        .fillItemBarcode('9676761472500')
+        .pressEnter();
+    });
+
+    it('should hide request type message', () => {
+      expect(NewRequestInteractor.requestTypeMessageIsPresent).to.be.false;
+    });
+  });
+
+  describe('showing correct request types', () => {
+    describe('item with "Checked out" status', () => {
+      beforeEach(async function () {
+        this.server.create('item', {
+          barcode: '9676761472501',
+          status: { name: 'Checked out' },
+        });
+
+        await NewRequestInteractor
+          .fillItemBarcode('9676761472501')
+          .pressEnter();
+      });
+
+      it('should show hold and recall options', () => {
+        expect(NewRequestInteractor.requestTypeOptions).to.eql(['Hold', 'Recall']);
+      });
+    });
+
+    describe('item with "Available" status', () => {
+      beforeEach(async function () {
+        this.server.create('item', {
+          barcode: '9676761472501',
+          status: { name: 'Available' },
+        });
+
+        await NewRequestInteractor
+          .fillItemBarcode('9676761472501')
+          .pressEnter()
+          .whenRequestTypeIsPresent();
+      });
+
+      it('should show page option', () => {
+        expect(NewRequestInteractor.requestTypeText).to.equal('Page');
+      });
+    });
+
+    describe('item with "Awaiting pickup" status', () => {
+      beforeEach(async function () {
+        this.server.create('item', {
+          barcode: '9676761472501',
+          status: { name: 'Awaiting pickup' },
+        });
+
+        await NewRequestInteractor
+          .fillItemBarcode('9676761472501')
+          .pressEnter();
+      });
+
+      it('should show hold and recall options', () => {
+        expect(NewRequestInteractor.requestTypeOptions).to.eql(['Hold', 'Recall']);
+      });
+    });
+
+    describe('item with "In transit" status', () => {
+      beforeEach(async function () {
+        this.server.create('item', {
+          barcode: '9676761472501',
+          status: { name: 'In transit' },
+        });
+
+        await NewRequestInteractor
+          .fillItemBarcode('9676761472501')
+          .pressEnter();
+      });
+
+      it('should show hold and recall options', () => {
+        expect(NewRequestInteractor.requestTypeOptions).to.eql(['Hold', 'Recall']);
+      });
+    });
+
+    describe('item with "Missing" status', () => {
+      beforeEach(async function () {
+        this.server.create('item', {
+          barcode: '9676761472501',
+          status: { name: 'Missing' },
+        });
+
+        await NewRequestInteractor
+          .fillItemBarcode('9676761472501')
+          .pressEnter()
+          .whenRequestTypeIsPresent();
+      });
+
+      it('should show hold option', () => {
+        expect(NewRequestInteractor.requestTypeText).to.equal('Hold');
+      });
+    });
+
+    describe('item with "Paged" status', () => {
+      beforeEach(async function () {
+        this.server.create('item', {
+          barcode: '9676761472501',
+          status: { name: 'Paged' },
+        });
+
+        await NewRequestInteractor
+          .fillItemBarcode('9676761472501')
+          .pressEnter()
+          .whenRequestTypeIsPresent();
+      });
+
+      it('should show hold option', () => {
+        expect(NewRequestInteractor.requestTypeText).to.equal('Hold');
+      });
+    });
+  });
 });
