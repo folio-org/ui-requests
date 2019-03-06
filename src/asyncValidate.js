@@ -53,7 +53,7 @@ function asyncValidateUser(values, props) {
 }
 
 export default function asyncValidate(values, dispatch, props, blurredField) {
-  if ((!blurredField || blurredField === 'item.barcode') && values.item.barcode !== undefined) {
+  if (blurredField === 'item.barcode' && values.item.barcode !== undefined) {
     return asyncValidateItem(values, props);
   } else if (blurredField === 'requester.barcode' && values.requester.barcode !== undefined) {
     return asyncValidateUser(values, props);
