@@ -227,7 +227,7 @@ class Requests extends React.Component {
     this.findResource = this.findResource.bind(this);
     this.buildRecords = this.buildRecords.bind(this);
     this.headers = ['requestType', 'status', 'requestExpirationDate', 'holdShelfExpirationDate',
-      'position', 'item.barcode', 'item.title', 'item.contributorNames', 'item.location.name',
+      'position', 'item.barcode', 'item.title', 'item.copyNumbers', 'item.contributorNames', 'item.location.name',
       'item.callNumber', 'item.enumeration', 'item.status', 'loan.dueDate', 'requester.name',
       'requester.barcode', 'requester.patronGroup.group', 'fulfilmentPreference', 'requester.pickupServicePoint',
       'deliveryAddress', 'proxy.name', 'proxy.barcode', 'tags.tagList'];
@@ -293,10 +293,16 @@ class Requests extends React.Component {
     const { formatDate, formatTime } = this.props.intl;
     recordsLoaded.forEach(record => {
       const contributorNamesMap = [];
+      const copyNumbersMap = [];
       const tagListMap = [];
-      if (record.item.contributorNames.length > 0) {
+      if (record.item.contributorNames && record.item.contributorNames.length > 0) {
         record.item.contributorNames.forEach(item => {
           contributorNamesMap.push(item.name);
+        });
+      }
+      if (record.item.copyNumbers && record.item.copyNumbers.length > 0) {
+        record.item.copyNumbers.forEach(item => {
+          copyNumbersMap.push(item);
         });
       }
       if (record.tags && record.tags.tagList.length > 0) {
@@ -321,6 +327,7 @@ class Requests extends React.Component {
         record.deliveryAddress = `${addressLine1 || ''} ${city || ''} ${region || ''} ${countryId || ''} ${postalCode || ''}`;
       }
       record.item.contributorNames = contributorNamesMap.join('; ');
+      record.item.copyNumbers = copyNumbersMap.join('; ');
       if (record.tags) record.tags.tagList = tagListMap.join('; ');
     });
     return recordsLoaded;

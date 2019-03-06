@@ -71,6 +71,7 @@
   "item.barcode": "Item barcode",
   "item.scanOrEnterBarcode": "Scan or enter item barcode",
   "item.title": "Title",
+  "item.copyNumbers": "Copy number",
   "item.contributorNames": "Contributor",
   "item.location.name": "Shelving location",
   "item.callNumber": "Call number",
