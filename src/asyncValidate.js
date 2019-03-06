@@ -20,10 +20,9 @@ function getItemErrors(item, values) {
 }
 
 function asyncValidateItem(values, props) {
-  const uv = props.uniquenessValidator.itemUniquenessValidator;
-  const query = `(barcode="${values.item.barcode}")`;
-
   return new Promise((resolve, reject) => {
+    const uv = props.uniquenessValidator.itemUniquenessValidator;
+    const query = `(barcode="${values.item.barcode}")`;
     uv.reset();
     uv.GET({ params: { query } }).then((items) => {
       const errors = getItemErrors(items[0], values);
