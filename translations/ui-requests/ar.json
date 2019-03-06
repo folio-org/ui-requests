@@ -107,7 +107,9 @@
     "detailsButton": "تفاصيل الحظر",
     "enter": "إدخال",
     "requestType.message": "حدد مادة لعرض أنواع الطلب المتاحة",
-    "edit.deleteRequest": "Delete request",
-    "edit.cancelEditing": "Cancel editing",
-    "newRequest.cancel": "Cancel editing"
+    "edit.deleteRequest": "حذف الطلب",
+    "edit.cancelEditing": "إلغاء التحرير",
+    "newRequest.cancel": "إلغاء التحرير",
+    "showTags": "عرض الوسوم",
+    "tags.tagList": "الوسوم"
 }
