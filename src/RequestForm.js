@@ -390,12 +390,7 @@ class RequestForm extends React.Component {
     const { intl: { timeZone } } = this.props;
     const { requestExpirationDate, holdShelfExpirationDate } = data;
 
-    if (requestExpirationDate) {
-      data.requestExpirationDate = moment(requestExpirationDate).utc().format();
-    } else {
-      unset(data, 'requestExpirationDate');
-    }
-
+    if (!requestExpirationDate) unset(data, 'requestExpirationDate');
     if (holdShelfExpirationDate && !holdShelfExpirationDate.match('T')) {
       const time = moment.tz(timeZone).format('HH:mm:ss');
       data.holdShelfExpirationDate = moment.tz(`${holdShelfExpirationDate} ${time}`, timeZone).utc().format();
@@ -768,7 +763,6 @@ class RequestForm extends React.Component {
                           name="requestExpirationDate"
                           label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
                           aria-label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
-                          backendDateStandard="YYYY-MM-DD"
                           component={Datepicker}
                           dateFormat="YYYY-MM-DD"
                           id="requestExpirationDate"
