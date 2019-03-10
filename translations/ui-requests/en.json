@@ -16,6 +16,7 @@
   "blockedLabel": "Reason for block:",
   "blockModal": "Patron blocked from requesting",
   "detailsButton": "Block details",
+  "additionalReasons": "View block details to see additional reasons for block...",
   "enter": "Enter",
 
   "requests.title": "Title",

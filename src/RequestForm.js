@@ -895,7 +895,7 @@ class RequestForm extends React.Component {
             open={blocked}
             onClose={this.onCloseBlockedModal}
             viewUserPath={() => this.onViewUserPath(selectedUser, patronGroupGroup)}
-            patronBlocks={patronBlocks[0] || {}}
+            patronBlocks={patronBlocks || []}
           />
           <br />
           <br />
