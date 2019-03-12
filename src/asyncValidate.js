@@ -5,10 +5,11 @@ import { requestStatuses } from './constants';
 
 function getItemErrors(item, values) {
   let error = null;
-
   if (!item) {
     error = { item: { barcode: <FormattedMessage id="ui-requests.errors.itemBarcodeDoesNotExist" /> } };
-  } else if (item.status.name !== requestStatuses.CHECKED_OUT) {
+  } else if (item.status.name !== requestStatuses.CHECKED_OUT
+             && !requestStatuses.IN_TRANSIT.endsWith(item.status.name)
+             && !requestStatuses.AWAITING_PICKUP.endsWith(item.status.name)) {
     if (values.requestType === requestStatuses.RECALL) {
       error = { item: { barcode: <FormattedMessage id="ui-requests.errors.onlyCheckedOutForRecall" /> } };
     } else if (values.requestType === requestStatuses.HOLD) {
