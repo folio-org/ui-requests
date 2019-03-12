@@ -111,5 +111,6 @@
     "edit.cancelEditing": "إلغاء التحرير",
     "newRequest.cancel": "إلغاء التحرير",
     "showTags": "عرض الوسوم",
-    "tags.tagList": "الوسوم"
+    "tags.tagList": "الوسوم",
+    "item.copyNumbers": "رقم النسخة"
 }
