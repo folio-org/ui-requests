@@ -111,5 +111,6 @@
     "edit.cancelEditing": "Cancelar edição",
     "newRequest.cancel": "Cancelar edição",
     "showTags": "Mostrar tags",
-    "tags.tagList": "Tags"
+    "tags.tagList": "Tags",
+    "item.copyNumbers": "Número do exemplar"
 }
