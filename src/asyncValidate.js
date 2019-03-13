@@ -1,19 +1,10 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { requestStatuses } from './constants';
-
-function getItemErrors(item, values) {
+function getItemErrors(item) {
   let error = null;
-
   if (!item) {
     error = { item: { barcode: <FormattedMessage id="ui-requests.errors.itemBarcodeDoesNotExist" /> } };
-  } else if (item.status.name !== requestStatuses.CHECKED_OUT) {
-    if (values.requestType === requestStatuses.RECALL) {
-      error = { item: { barcode: <FormattedMessage id="ui-requests.errors.onlyCheckedOutForRecall" /> } };
-    } else if (values.requestType === requestStatuses.HOLD) {
-      error = { item: { barcode: <FormattedMessage id="ui-requests.errors.onlyCheckedOutForHold" /> } };
-    }
   }
 
   return error;
@@ -25,7 +16,7 @@ function asyncValidateItem(values, props) {
     const query = `(barcode="${values.item.barcode}")`;
     uv.reset();
     uv.GET({ params: { query } }).then((items) => {
-      const errors = getItemErrors(items[0], values);
+      const errors = getItemErrors(items[0]);
       if (errors) {
         reject(errors);
       } else {
