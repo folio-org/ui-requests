@@ -16,7 +16,6 @@ export const fulfilmentTypes = [
 export const requestStatuses = {
   CHECKED_OUT: 'Checked out',
   AWAITING_PICKUP: 'Open - Awaiting pickup',
-  IN_TRANSIT: 'Open - In transit',
   RECALL: 'Recall',
   HOLD: 'Hold',
 };
