@@ -42,6 +42,9 @@ class UserForm extends React.Component {
     this.connectedProxyManager = props.stripes.connect(ProxyManager);
   }
 
+  requireServicePoint = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectItem" />);
+  requireDeliveryAddress = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectItem" />);
+
   renderDeliveryAddressSelect() {
     const {
       onChangeAddress,
@@ -55,6 +58,8 @@ class UserForm extends React.Component {
         component={Select}
         fullWidth
         onChange={onChangeAddress}
+        required
+        validate={this.requireDeliveryAddress}
       >
         <FormattedMessage id="ui-requests.actions.selectAddressType">
           {(optionLabel) => <option value="">{optionLabel}</option>}
@@ -75,6 +80,8 @@ class UserForm extends React.Component {
         label={<FormattedMessage id="ui-requests.requester.pickupServicePoint" />}
         component={Select}
         fullWidth
+        required
+        validate={this.requireServicePoint}
       >
         <FormattedMessage id="ui-requests.actions.selectPickupSp">
           {optionLabel => <option value="">{optionLabel}</option>}
