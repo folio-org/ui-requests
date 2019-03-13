@@ -1,5 +1,5 @@
 {
-    "requester.name": "Requester name",
+    "requester.name": "Nome del richiedente",
     "requester.username": "Username",
     "requester.patronGroup": "Patron group",
     "actions.showNotes": "Show Notes",
@@ -69,8 +69,8 @@
     "requestExpirationDate": "Request expiration date",
     "holdShelfExpirationDate": "Hold shelf expiration date",
     "position": "Position in queue",
-    "item.contributorNames": "Contributor",
-    "loan.dueDate": "Current due date",
+    "item.contributorNames": "Collaboratore",
+    "loan.dueDate": "Attuale data di scadenza",
     "proxy.firstName": "Requester's proxy name",
     "proxy.barcode": "Requester's proxy barcode",
     "requester.firstName": "Requester First Name",
