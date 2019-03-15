@@ -17,7 +17,7 @@
   "blockModal": "Patron blocked from requesting",
   "detailsButton": "Block details",
   "enter": "Enter",
-
+  "requestNotAllowed": "Request not allowed",
   "requests.title": "Title",
   "requests.type": "Type",
   "requests.status": "Request status",
