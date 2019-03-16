@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 1.8.0 (IN PROGRESS)
+## [1.8.0](https://github.com/folio-org/ui-requests/tree/v1.8.0) (2019-03-15)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.7.0...v1.8.0)
 
 * Update BigTest interactors to reflect MCL aria changes. Refs STRIPES-597.
 * Move AppIcon import to `@folio/stripes/core`. Refs STCOM-411.
