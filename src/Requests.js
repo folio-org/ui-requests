@@ -10,6 +10,7 @@ import {
   injectIntl,
   intlShape,
 } from 'react-intl';
+import { SubmissionError } from 'redux-form';
 import { AppIcon } from '@folio/stripes/core';
 import { Button } from '@folio/stripes/components';
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
@@ -90,6 +91,7 @@ class Requests extends React.Component {
       records: 'requests',
       recordsRequired: '%{resultCount}',
       perRequest: 30,
+      throwErrors: false,
       GET: {
         params: {
           query: makeQueryFunction(
@@ -223,8 +225,10 @@ class Requests extends React.Component {
     };
 
     this.addRequestFields = this.addRequestFields.bind(this);
+    this.processError = this.processError.bind(this);
     this.create = this.create.bind(this);
     this.findResource = this.findResource.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
     this.buildRecords = this.buildRecords.bind(this);
     this.headers = ['requestType', 'status', 'requestExpirationDate', 'holdShelfExpirationDate',
       'position', 'item.barcode', 'item.title', 'item.copyNumbers', 'item.contributorNames', 'item.location.name',
@@ -240,7 +244,8 @@ class Requests extends React.Component {
       };
     });
 
-    this.state = { submitting: false };
+    this.state = { submitting: false,
+      errorMessage: '' };
   }
 
   static getDerivedStateFromProps(props) {
@@ -340,6 +345,10 @@ class Requests extends React.Component {
     return fetch(`${this.okapiUrl}/${query}`, options).then(response => response.json());
   }
 
+  toggleModal() {
+    this.setState({ errorMessage: '' });
+  }
+
   // Called as a map function
   addRequestFields(r) {
     return Promise.all(
@@ -368,7 +377,28 @@ class Requests extends React.Component {
     this.props.mutator.activeRecord.update({ patronId: patron.id });
   }
 
-  create = data => this.props.mutator.records.POST(data).then(() => this.props.mutator.query.update({ layer: null }));
+  create = data => this.props.mutator.records.POST(data)
+    .then(() => this.props.mutator.query.update({ layer: null }))
+    .catch(resp => this.processError(resp))
+
+  processError(resp) {
+    const contentType = resp.headers.get('Content-Type') || '';
+    if (contentType.startsWith('application/json')) {
+      return resp.json().then(error => this.handleJsonError(error));
+    } else {
+      return resp.text().then(error => this.handleTextError(error));
+    }
+  }
+
+  handleTextError(error) {
+    const item = { barcode: error };
+    throw new SubmissionError({ item });
+  }
+
+  handleJsonError(error) {
+    const errorMessage = error.errors[0].message;
+    this.setState({ errorMessage });
+  }
 
   onDuplicate = (request) => {
     const dupRequest = omit(request, [
@@ -409,7 +439,8 @@ class Requests extends React.Component {
     } = this.columnLabels;
 
     const {
-      dupRequest
+      dupRequest,
+      errorMessage
     } = this.state;
 
     const patronGroups = (resources.patronGroups || {}).records || [];
@@ -486,7 +517,9 @@ class Requests extends React.Component {
             onChangePatron: this.onChangePatron,
             stripes,
             history,
+            errorMessage,
             findResource: this.findResource,
+            toggleModal: this.toggleModal,
             joinRequest: this.addRequestFields,
             optionLists: {
               addressTypes,

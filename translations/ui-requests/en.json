@@ -18,7 +18,7 @@
   "detailsButton": "View block details",
   "additionalReasons": "View block details to see additional reasons for block...",
   "enter": "Enter",
-
+  "requestNotAllowed": "Request not allowed",
   "requests.title": "Title",
   "requests.type": "Type",
   "requests.status": "Request status",
