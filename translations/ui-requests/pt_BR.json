@@ -107,7 +107,10 @@
     "detailsButton": "Detalhes da suspensão",
     "enter": "Entrar",
     "requestType.message": "Selecione o item para visualizar os tipos de solicitação disponíveis",
-    "edit.deleteRequest": "Delete request",
-    "edit.cancelEditing": "Cancel editing",
-    "newRequest.cancel": "Cancel editing"
+    "edit.deleteRequest": "Apagar solicitação",
+    "edit.cancelEditing": "Cancelar edição",
+    "newRequest.cancel": "Cancelar edição",
+    "showTags": "Mostrar tags",
+    "tags.tagList": "Tags",
+    "item.copyNumbers": "Número do exemplar"
 }

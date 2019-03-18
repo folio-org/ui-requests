@@ -10,6 +10,7 @@ import {
   injectIntl,
   intlShape,
 } from 'react-intl';
+import { SubmissionError } from 'redux-form';
 import { AppIcon } from '@folio/stripes/core';
 import { Button } from '@folio/stripes/components';
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
@@ -90,6 +91,7 @@ class Requests extends React.Component {
       records: 'requests',
       recordsRequired: '%{resultCount}',
       perRequest: 30,
+      throwErrors: false,
       GET: {
         params: {
           query: makeQueryFunction(
@@ -223,11 +225,13 @@ class Requests extends React.Component {
     };
 
     this.addRequestFields = this.addRequestFields.bind(this);
+    this.processError = this.processError.bind(this);
     this.create = this.create.bind(this);
     this.findResource = this.findResource.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
     this.buildRecords = this.buildRecords.bind(this);
     this.headers = ['requestType', 'status', 'requestExpirationDate', 'holdShelfExpirationDate',
-      'position', 'item.barcode', 'item.title', 'item.contributorNames', 'item.location.name',
+      'position', 'item.barcode', 'item.title', 'item.copyNumbers', 'item.contributorNames', 'item.location.name',
       'item.callNumber', 'item.enumeration', 'item.status', 'loan.dueDate', 'requester.name',
       'requester.barcode', 'requester.patronGroup.group', 'fulfilmentPreference', 'requester.pickupServicePoint',
       'deliveryAddress', 'proxy.name', 'proxy.barcode', 'tags.tagList'];
@@ -240,7 +244,8 @@ class Requests extends React.Component {
       };
     });
 
-    this.state = { submitting: false };
+    this.state = { submitting: false,
+      errorMessage: '' };
   }
 
   static getDerivedStateFromProps(props) {
@@ -293,10 +298,16 @@ class Requests extends React.Component {
     const { formatDate, formatTime } = this.props.intl;
     recordsLoaded.forEach(record => {
       const contributorNamesMap = [];
+      const copyNumbersMap = [];
       const tagListMap = [];
-      if (record.item.contributorNames.length > 0) {
+      if (record.item.contributorNames && record.item.contributorNames.length > 0) {
         record.item.contributorNames.forEach(item => {
           contributorNamesMap.push(item.name);
+        });
+      }
+      if (record.item.copyNumbers && record.item.copyNumbers.length > 0) {
+        record.item.copyNumbers.forEach(item => {
+          copyNumbersMap.push(item);
         });
       }
       if (record.tags && record.tags.tagList.length > 0) {
@@ -321,6 +332,7 @@ class Requests extends React.Component {
         record.deliveryAddress = `${addressLine1 || ''} ${city || ''} ${region || ''} ${countryId || ''} ${postalCode || ''}`;
       }
       record.item.contributorNames = contributorNamesMap.join('; ');
+      record.item.copyNumbers = copyNumbersMap.join('; ');
       if (record.tags) record.tags.tagList = tagListMap.join('; ');
     });
     return recordsLoaded;
@@ -331,6 +343,10 @@ class Requests extends React.Component {
     const query = urls[resource](value, idType);
     const options = { headers: this.httpHeaders };
     return fetch(`${this.okapiUrl}/${query}`, options).then(response => response.json());
+  }
+
+  toggleModal() {
+    this.setState({ errorMessage: '' });
   }
 
   // Called as a map function
@@ -361,7 +377,28 @@ class Requests extends React.Component {
     this.props.mutator.activeRecord.update({ patronId: patron.id });
   }
 
-  create = data => this.props.mutator.records.POST(data).then(() => this.props.mutator.query.update({ layer: null }));
+  create = data => this.props.mutator.records.POST(data)
+    .then(() => this.props.mutator.query.update({ layer: null }))
+    .catch(resp => this.processError(resp))
+
+  processError(resp) {
+    const contentType = resp.headers.get('Content-Type') || '';
+    if (contentType.startsWith('application/json')) {
+      return resp.json().then(error => this.handleJsonError(error));
+    } else {
+      return resp.text().then(error => this.handleTextError(error));
+    }
+  }
+
+  handleTextError(error) {
+    const item = { barcode: error };
+    throw new SubmissionError({ item });
+  }
+
+  handleJsonError(error) {
+    const errorMessage = error.errors[0].message;
+    this.setState({ errorMessage });
+  }
 
   onDuplicate = (request) => {
     const dupRequest = omit(request, [
@@ -402,7 +439,8 @@ class Requests extends React.Component {
     } = this.columnLabels;
 
     const {
-      dupRequest
+      dupRequest,
+      errorMessage
     } = this.state;
 
     const patronGroups = (resources.patronGroups || {}).records || [];
@@ -479,7 +517,9 @@ class Requests extends React.Component {
             onChangePatron: this.onChangePatron,
             stripes,
             history,
+            errorMessage,
             findResource: this.findResource,
+            toggleModal: this.toggleModal,
             joinRequest: this.addRequestFields,
             optionLists: {
               addressTypes,

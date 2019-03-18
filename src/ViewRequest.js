@@ -12,6 +12,7 @@ import queryString from 'query-string';
 import {
   FormattedMessage,
   FormattedDate,
+  FormattedTime,
 } from 'react-intl';
 
 import { TitleManager } from '@folio/stripes/core';
@@ -284,7 +285,7 @@ class ViewRequest extends React.Component {
 
     const holdShelfExpireDate = (get(request, 'holdShelfExpirationDate', '') &&
       get(request, ['status'], '') === requestStatuses.AWAITING_PICKUP)
-      ? <FormattedDate value={request.holdShelfExpirationDate} />
+      ? <FormattedTime value={request.holdShelfExpirationDate} day="numeric" month="numeric" year="numeric" />
       : '-';
 
     const expirationDate = (get(request, 'requestExpirationDate', ''))

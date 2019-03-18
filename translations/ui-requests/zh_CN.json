@@ -109,5 +109,8 @@
     "requestType.message": "Select item to view available request types",
     "edit.deleteRequest": "Delete request",
     "edit.cancelEditing": "Cancel editing",
-    "newRequest.cancel": "Cancel editing"
+    "newRequest.cancel": "Cancel editing",
+    "showTags": "Show Tags",
+    "tags.tagList": "Tags",
+    "item.copyNumbers": "Copy number"
 }
