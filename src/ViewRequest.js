@@ -94,7 +94,7 @@ class ViewRequest extends React.Component {
   static defaultProps = {
     editLink: '',
     paneWidth: '50%',
-    onEdit: () => {}
+    onEdit: () => { }
   };
 
   constructor(props) {
@@ -380,6 +380,7 @@ class ViewRequest extends React.Component {
             <ItemDetail
               item={request.item}
               loan={request.loan}
+              itemId={request.itemId}
               requestCount={request.requestCount}
             />
           </Accordion>
