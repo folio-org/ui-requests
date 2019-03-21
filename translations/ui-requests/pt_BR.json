@@ -102,9 +102,9 @@
     "actions.duplicateRequest": "Duplicar",
     "actions.cancelNewRequest": "Cancelar",
     "close": "Fechar",
-    "blockedLabel": "Razão para suspensão:",
+    "blockedLabel": "Razão para suspensão",
     "blockModal": "Usuário suspenso de solicitação de compra",
-    "detailsButton": "Detalhes da suspensão",
+    "detailsButton": "Ver detalhes da suspensão",
     "enter": "Entrar",
     "requestType.message": "Selecione o item para visualizar os tipos de solicitação disponíveis",
     "edit.deleteRequest": "Apagar solicitação",
@@ -112,5 +112,7 @@
     "newRequest.cancel": "Cancelar edição",
     "showTags": "Mostrar tags",
     "tags.tagList": "Tags",
-    "item.copyNumbers": "Número do exemplar"
+    "item.copyNumbers": "Número do exemplar",
+    "requestNotAllowed": "Pedido de compra não permitido",
+    "additionalReasons": "Exibir detalhes da suspensão para ver as razões adicionais para a suspensão..."
 }
