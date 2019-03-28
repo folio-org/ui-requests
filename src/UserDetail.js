@@ -75,7 +75,7 @@ class UserDetail extends React.Component {
                 value={deliveryAddress || '-'}
               /> :
               <KeyValue
-                label={<FormattedMessage id="ui-requests.requester.pickupServicePoint" />}
+                label={<FormattedMessage id="ui-requests.pickupServicePoint.name" />}
                 value={pickupServicePoint || '-'}
               />
             }
