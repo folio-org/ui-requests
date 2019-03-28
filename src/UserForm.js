@@ -77,7 +77,7 @@ class UserForm extends React.Component {
     return (
       <Field
         name="pickupServicePointId"
-        label={<FormattedMessage id="ui-requests.requester.pickupServicePoint" />}
+        label={<FormattedMessage id="ui-requests.pickupServicePoint.name" />}
         component={Select}
         fullWidth
         required

@@ -233,7 +233,7 @@ class Requests extends React.Component {
     this.headers = ['requestType', 'status', 'requestExpirationDate', 'holdShelfExpirationDate',
       'position', 'item.barcode', 'item.title', 'item.copyNumbers', 'item.contributorNames', 'item.location.name',
       'item.callNumber', 'item.enumeration', 'item.status', 'loan.dueDate', 'requester.name',
-      'requester.barcode', 'requester.patronGroup.group', 'fulfilmentPreference', 'requester.pickupServicePoint',
+      'requester.barcode', 'requester.patronGroup.group', 'fulfilmentPreference', 'pickupServicePoint.name',
       'deliveryAddress', 'proxy.name', 'proxy.barcode', 'tags.tagList'];
 
     // Map to pass into exportCsv
