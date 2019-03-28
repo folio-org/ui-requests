@@ -97,7 +97,7 @@
   "requester.requester": "Requester",
   "deliveryAddress": "Delivery address",
   "requester.pickupLocation": "Pickup location",
-  "requester.pickupServicePoint": "Pickup service point",
+  "pickupServicePoint.name": "Pickup service point",
   "requester.patronGroup.group": "Requester patron group",
   "tags.tagList": "Tags",
 
