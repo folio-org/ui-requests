@@ -114,5 +114,6 @@
     "tags.tagList": "الوسوم",
     "item.copyNumbers": "رقم النسخة",
     "requestNotAllowed": "غير مسموح بالطلب",
-    "additionalReasons": "عرض تفاصيل الحظر لمعرفة المزيد من أسباب الحظر"
+    "additionalReasons": "عرض تفاصيل الحظر لمعرفة المزيد من أسباب الحظر",
+    "pickupServicePoint.name": "نقطة خدمة الالتقاط"
 }

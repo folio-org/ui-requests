@@ -114,5 +114,6 @@
     "tags.tagList": "Tags",
     "item.copyNumbers": "Copy number",
     "requestNotAllowed": "Request not allowed",
-    "additionalReasons": "View block details to see additional reasons for block..."
+    "additionalReasons": "View block details to see additional reasons for block...",
+    "pickupServicePoint.name": "Pickup service point"
 }

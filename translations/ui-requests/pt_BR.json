@@ -114,5 +114,6 @@
     "tags.tagList": "Tags",
     "item.copyNumbers": "Número do exemplar",
     "requestNotAllowed": "Pedido de compra não permitido",
-    "additionalReasons": "Exibir detalhes da suspensão para ver as razões adicionais para a suspensão..."
+    "additionalReasons": "Exibir detalhes da suspensão para ver as razões adicionais para a suspensão...",
+    "pickupServicePoint.name": "Ponto de serviço para retirada"
 }
