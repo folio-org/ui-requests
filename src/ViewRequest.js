@@ -36,6 +36,7 @@ import CancelRequestDialog from './CancelRequestDialog';
 import ItemDetail from './ItemDetail';
 import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
+import PositionLink from './PositionLink';
 import { toUserAddress, requestStatuses } from './constants';
 
 class ViewRequest extends React.Component {
@@ -297,20 +298,6 @@ class ViewRequest extends React.Component {
     const requestStatus = get(request, ['status'], '-');
     // TODO: Internationalize this
     const isRequestClosed = requestStatus.startsWith('Closed');
-    const queuePosition = get(request, ['position'], '-');
-    const positionLink = request ?
-      <div>
-        <span>
-          {queuePosition}
-          &nbsp;
-          &nbsp;
-        </span>
-        <Link to={`/requests?filters=requestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit%2CrequestStatus.Open%20-%20Not%20yet%20filled&query=${request.item.barcode}&sort=Request%20Date`}>
-          <FormattedMessage id="ui-requests.actions.viewRequestsInQueue" />
-        </Link>
-      </div> : '-';
-
-
     let deliveryAddressDetail;
     let selectedDelivery = false;
 
@@ -448,7 +435,7 @@ class ViewRequest extends React.Component {
               <Col xs={5}>
                 <KeyValue
                   label={<FormattedMessage id="ui-requests.position" />}
-                  value={positionLink}
+                  value={<PositionLink request={request} />}
                 />
               </Col>
             </Row>
