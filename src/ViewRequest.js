@@ -207,42 +207,60 @@ class ViewRequest extends React.Component {
     return get(servicePoint, ['name'], '');
   }
 
-  render() {
+  renderLayer(request) {
     const {
       patronGroups,
       optionLists,
       location,
       stripes,
-      editLink,
-      onEdit,
       onCloseEdit,
       findResource,
+    } = this.props;
+
+    const query = location.search ? queryString.parse(location.search) : {};
+
+    if (query.layer === 'edit') {
+      return (
+        <Layer
+          isOpen
+          label={<FormattedMessage id="ui-requests.actions.editRequestLink" />}
+        >
+          <RequestForm
+            stripes={stripes}
+            initialValues={request}
+            request={request}
+            metadataDisplay={this.cViewMetaData}
+            onSubmit={(record) => { this.update(record); }}
+            onCancel={onCloseEdit}
+            onCancelRequest={this.cancelRequest}
+            optionLists={optionLists}
+            patronGroups={patronGroups}
+            query={this.props.query}
+            findResource={findResource}
+          />
+        </Layer>
+      );
+    }
+
+    return null;
+  }
+
+  renderDetailMenu(request) {
+    const {
+      editLink,
+      onEdit,
       tagsEnabled,
       tagsToggle,
     } = this.props;
 
-    const query = location.search ? queryString.parse(location.search) : {};
-    const request = this.getRequest();
     const tags = ((request && request.tags) || {}).tagList || [];
-    const patronGroupName = this.getPatronGroupName(request);
-    const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');
     // TODO: Internationalize this
     const isRequestClosed = requestStatus.startsWith('Closed');
-    const queuePosition = get(request, ['position'], '-');
-    const positionLink = request ?
-      <div>
-        <span>
-          {queuePosition}
-          &nbsp;
-          &nbsp;
-        </span>
-        <Link to={`/requests?filters=requestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit%2CrequestStatus.Open%20-%20Not%20yet%20filled&query=${request.item.barcode}&sort=Request%20Date`}>
-          <FormattedMessage id="ui-requests.actions.viewRequestsInQueue" />
-        </Link>
-      </div> : '-';
 
-    const detailMenu = (
+    console.log('isRequestClosed', isRequestClosed);
+
+    return (
       <PaneMenu>
         {
           tagsEnabled &&
@@ -269,6 +287,31 @@ class ViewRequest extends React.Component {
         }
       </PaneMenu>
     );
+  }
+
+  renderRequest(request) {
+    const {
+      stripes,
+    } = this.props;
+
+    const patronGroupName = this.getPatronGroupName(request);
+    const getPickupServicePointName = this.getPickupServicePointName(request);
+    const requestStatus = get(request, ['status'], '-');
+    // TODO: Internationalize this
+    const isRequestClosed = requestStatus.startsWith('Closed');
+    const queuePosition = get(request, ['position'], '-');
+    const positionLink = request ?
+      <div>
+        <span>
+          {queuePosition}
+          &nbsp;
+          &nbsp;
+        </span>
+        <Link to={`/requests?filters=requestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit%2CrequestStatus.Open%20-%20Not%20yet%20filled&query=${request.item.barcode}&sort=Request%20Date`}>
+          <FormattedMessage id="ui-requests.actions.viewRequestsInQueue" />
+        </Link>
+      </div> : '-';
+
 
     let deliveryAddressDetail;
     let selectedDelivery = false;
@@ -291,22 +334,6 @@ class ViewRequest extends React.Component {
     const expirationDate = (get(request, 'requestExpirationDate', ''))
       ? <FormattedDate value={request.requestExpirationDate} />
       : '-';
-
-    if (!request) {
-      return (
-        <Pane
-          defaultWidth={this.props.paneWidth}
-          paneTitle={<FormattedMessage id="ui-requests.requestMeta.detailLabel" />}
-          lastMenu={detailMenu}
-          dismissible
-          onClose={this.props.onClose}
-        >
-          <div style={{ paddingTop: '1rem' }}>
-            <Icon icon="spinner-ellipsis" width="100px" />
-          </div>
-        </Pane>
-      );
-    }
 
     const actionMenu = ({ onToggle }) => {
       if (isRequestClosed) {
@@ -361,7 +388,7 @@ class ViewRequest extends React.Component {
         data-test-instance-details
         defaultWidth={this.props.paneWidth}
         paneTitle={<FormattedMessage id="ui-requests.requestMeta.detailLabel" />}
-        lastMenu={detailMenu}
+        lastMenu={this.renderDetailMenu(request)}
         actionMenu={actionMenu}
         dismissible
         onClose={this.props.onClose}
@@ -449,24 +476,6 @@ class ViewRequest extends React.Component {
           </Accordion>
         </AccordionSet>
 
-        <Layer
-          isOpen={query.layer ? query.layer === 'edit' : false}
-          label={<FormattedMessage id="ui-requests.actions.editRequestLink" />}
-        >
-          <RequestForm
-            stripes={stripes}
-            initialValues={request}
-            request={request}
-            metadataDisplay={this.cViewMetaData}
-            onSubmit={(record) => { this.update(record); }}
-            onCancel={onCloseEdit}
-            onCancelRequest={this.cancelRequest}
-            optionLists={optionLists}
-            patronGroups={patronGroups}
-            query={this.props.query}
-            findResource={findResource}
-          />
-        </Layer>
         <this.connectedCancelRequestDialog
           open={this.state.isCancellingRequest}
           onCancelRequest={this.cancelRequest}
@@ -476,6 +485,32 @@ class ViewRequest extends React.Component {
         />
       </Pane>
     );
+  }
+
+  renderSpinner() {
+    return (
+      <Pane
+        defaultWidth={this.props.paneWidth}
+        paneTitle={<FormattedMessage id="ui-requests.requestMeta.detailLabel" />}
+        lastMenu={this.renderDetailMenu()}
+        dismissible
+        onClose={this.props.onClose}
+      >
+        <div style={{ paddingTop: '1rem' }}>
+          <Icon icon="spinner-ellipsis" width="100px" />
+        </div>
+      </Pane>
+    );
+  }
+
+  render() {
+    const request = this.getRequest();
+
+    if (!request) {
+      return this.renderSpinner();
+    }
+
+    return this.renderLayer(request) || this.renderRequest(request);
   }
 }
 
