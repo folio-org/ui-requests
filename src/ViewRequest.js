@@ -258,8 +258,6 @@ class ViewRequest extends React.Component {
     // TODO: Internationalize this
     const isRequestClosed = requestStatus.startsWith('Closed');
 
-    console.log('isRequestClosed', isRequestClosed);
-
     return (
       <PaneMenu>
         {
