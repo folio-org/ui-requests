@@ -360,7 +360,9 @@ class Requests extends React.Component {
       // Each element of the promises array returns an array of results, but in
       // this case, there should only ever be one result for each.
       const requester = resultArray[0].users[0];
-      const requestCount = resultArray[1].requests.length;
+      const openRequests = resultArray[1].requests.filter(request => request.status.startsWith('Open'));
+      const requestCount = openRequests.length;
+
       return Object.assign({}, r, { requester, requestCount });
     });
   }
