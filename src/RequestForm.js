@@ -48,6 +48,7 @@ import CancelRequestDialog from './CancelRequestDialog';
 import UserForm from './UserForm';
 import ItemDetail from './ItemDetail';
 import PatronBlockModal from './PatronBlockModal';
+import PositionLink from './PositionLink';
 
 import asyncValidate from './asyncValidate';
 import {
@@ -638,19 +639,6 @@ class RequestForm extends React.Component {
     const multiRequestTypesVisible = !isEditForm && selectedItem && requestTypeOptions.length > 1;
     const singleRequestTypeVisible = !isEditForm && selectedItem && requestTypeOptions.length === 1;
 
-    const queuePosition = get(request, ['position'], '');
-    const positionLink = request ?
-      <div>
-        <span>
-          {queuePosition}
-          &nbsp;
-          &nbsp;
-        </span>
-        <Link to={`/requests?filters=requestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit%2CrequestStatus.Open%20-%20Not%20yet%20filled&query=${request.item.barcode}&sort=Request%20Date`}>
-          <FormattedMessage id="ui-requests.actions.viewRequestsInQueue" />
-        </Link>
-      </div> : '-';
-
     return (
       <div>
         {errorMessage && this.renderErrorModal(errorMessage)}
@@ -833,7 +821,7 @@ class RequestForm extends React.Component {
                           <Col xs={3}>
                             <KeyValue
                               label={<FormattedMessage id="ui-requests.position" />}
-                              value={positionLink}
+                              value={<PositionLink request={request} />}
                             />
                           </Col>
                         </Row>
