@@ -52,12 +52,13 @@ import PositionLink from './PositionLink';
 
 import asyncValidate from './asyncValidate';
 import {
-  toUserAddress,
   requestStatuses,
   iconTypes,
   requestTypesMap,
   requestTypesByItemStatus,
 } from './constants';
+
+import { toUserAddress } from './utils';
 
 import css from './requests.css';
 
@@ -92,7 +93,7 @@ class RequestForm extends React.Component {
       fulfilmentTypes: PropTypes.arrayOf(PropTypes.object),
       servicePoints: PropTypes.arrayOf(PropTypes.object),
     }),
-    patronGroups: PropTypes.arrayOf(PropTypes.object),
+    patronGroup: PropTypes.object,
     parentResources: PropTypes.object,
     history: PropTypes.shape({
       push: PropTypes.func,
@@ -104,7 +105,6 @@ class RequestForm extends React.Component {
 
   static defaultProps = {
     request: null,
-    initialValues: {},
     metadataDisplay: () => {},
     optionLists: {},
     pristine: true,
@@ -162,21 +162,21 @@ class RequestForm extends React.Component {
   componentDidUpdate(prevProps) {
     const initials = this.props.initialValues;
     const request = this.props.request;
+    const prevRequest = prevProps.request;
     const oldInitials = prevProps.initialValues;
-    const oldRecord = prevProps.request;
     const prevBlocks = this.getPatronBlocks(prevProps.parentResources);
     const blocks = this.getPatronBlocks(this.props.parentResources);
 
     if ((initials && initials.fulfilmentPreference &&
         oldInitials && !oldInitials.fulfilmentPreference) ||
-        (request && !oldRecord)) {
+        (!isEqual(request, prevRequest))) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         selectedAddressTypeId: initials.deliveryAddressTypeId,
         selectedDelivery: initials.fulfilmentPreference === 'Delivery',
         selectedItem: request.item,
         selectedLoan: request.loan,
-        selectedUser: request.user,
+        selectedUser: request.requester,
       });
     }
 
@@ -357,7 +357,7 @@ class RequestForm extends React.Component {
     // wait for the form to be reinitialized
     defer(() => {
       this.setState({ isCancellingRequest: false });
-      const viewUserPath = `/users/view/${(selectedUser || {}).id}?filters=pg.${patronGroup}`;
+      const viewUserPath = `/users/view/${(selectedUser || {}).id}?filters=pg.${patronGroup.group}`;
       this.props.history.push(viewUserPath);
     });
   }
@@ -557,7 +557,7 @@ class RequestForm extends React.Component {
         addressTypes,
         fulfilmentTypes = [],
       },
-      patronGroups,
+      patronGroup = {},
       parentResources,
       submitting,
       intl: {
@@ -589,7 +589,6 @@ class RequestForm extends React.Component {
     const fulfilmentTypeOptions = sortedFulfilmentTypes.map(({ label, id }) => ({
       labelTranslationPath: label,
       value: id,
-      selected: id === fulfilmentPreference
     }));
 
     const labelAsterisk = isEditForm
@@ -612,16 +611,6 @@ class RequestForm extends React.Component {
 
     if (selectedAddressTypeId) {
       addressDetail = toUserAddress(deliveryLocationsDetail[selectedAddressTypeId]);
-    }
-
-    let patronGroupName;
-    let patronGroupGroup;
-    if (patronGroups && selectedUser) {
-      const group = patronGroups.find(g => g.id === selectedUser.patronGroup);
-      if (group) {
-        patronGroupName = group.desc;
-        patronGroupGroup = group.group;
-      }
     }
 
     const holdShelfExpireDate = get(request, ['status'], '') === requestStatuses.AWAITING_PICKUP
@@ -892,8 +881,9 @@ class RequestForm extends React.Component {
                             user={request ? request.requester : selectedUser}
                             stripes={this.props.stripes}
                             request={request}
-                            patronGroup={patronGroupName}
+                            patronGroup={patronGroup.desc}
                             selectedDelivery={selectedDelivery}
+                            fulfilmentPreference={fulfilmentPreference}
                             deliveryAddress={addressDetail}
                             deliveryLocations={deliveryLocations}
                             fulfilmentTypeOptions={fulfilmentTypeOptions}
@@ -921,7 +911,7 @@ class RequestForm extends React.Component {
             <PatronBlockModal
               open={blocked}
               onClose={this.onCloseBlockedModal}
-              viewUserPath={() => this.onViewUserPath(selectedUser, patronGroupGroup)}
+              viewUserPath={() => this.onViewUserPath(selectedUser, patronGroup)}
               patronBlocks={patronBlocks[0] || {}}
             />
             <br />
@@ -942,5 +932,4 @@ export default stripesForm({
   asyncBlurFields: ['item.barcode', 'requester.barcode'],
   navigationCheck: true,
   enableReinitialize: true,
-  keepDirtyOnReinitialize: true,
 })(injectIntl(RequestForm));

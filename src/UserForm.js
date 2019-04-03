@@ -11,9 +11,10 @@ import { getFullName, userHighlightBox } from './utils';
 
 class UserForm extends React.Component {
   static propTypes = {
-    deliveryAddress: PropTypes.string,
+    deliveryAddress: PropTypes.node,
     deliveryLocations: PropTypes.arrayOf(PropTypes.object),
     fulfilmentTypeOptions: PropTypes.arrayOf(PropTypes.object),
+    fulfilmentPreference: PropTypes.string,
     onChangeAddress: PropTypes.func,
     onChangeFulfilment: PropTypes.func,
     onCloseProxy: PropTypes.func.isRequired,
@@ -99,6 +100,7 @@ class UserForm extends React.Component {
       deliveryAddress,
       deliveryLocations,
       selectedDelivery,
+      fulfilmentPreference,
       fulfilmentTypeOptions,
       onChangeFulfilment,
     } = this.props;
@@ -133,14 +135,15 @@ class UserForm extends React.Component {
               label={<FormattedMessage id="ui-requests.requester.fulfilmentPref" />}
               component={Select}
               fullWidth
+              value={fulfilmentPreference}
               onChange={onChangeFulfilment}
             >
-              {fulfilmentTypeOptions.map(({ labelTranslationPath, value, selected }) => (
+              {fulfilmentTypeOptions.map(({ labelTranslationPath, value }) => (
                 <FormattedMessage key={value} id={labelTranslationPath}>
                   {translatedLabel => (
                     <option
                       value={value}
-                      selected={selected}
+
                     >
                       {translatedLabel}
                     </option>

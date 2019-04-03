@@ -20,17 +20,6 @@ export const requestStatuses = {
   HOLD: 'Hold',
 };
 
-export const toUserAddress = addr => (
-  // const countryId = (addr.country) ? countriesByName[addr.country].alpha2 : '';
-  <div>
-    <div>{(addr && addr.addressLine1) || ''}</div>
-    <div>{(addr && addr.addressLine2) || ''}</div>
-    <div>{(addr && addr.city) || ''}</div>
-    <div>{(addr && addr.region) || ''}</div>
-    <div>{(addr && addr.postalCode) || ''}</div>
-  </div>
-);
-
 export const iconTypes = {
   times: 'times',
   timesCircle: 'times-circle',

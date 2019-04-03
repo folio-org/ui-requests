@@ -60,7 +60,7 @@ PatronBlockModal.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   patronBlocks: PropTypes.object,
-  viewUserPath: PropTypes.string
+  viewUserPath: PropTypes.func,
 };
 
 export default PatronBlockModal;

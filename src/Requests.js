@@ -184,7 +184,6 @@ class Requests extends React.Component {
     }).isRequired,
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
-      formatDate: PropTypes.func.isRequired,
       logger: PropTypes.shape({
         log: PropTypes.func.isRequired,
       }).isRequired,
