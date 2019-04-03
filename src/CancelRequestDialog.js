@@ -8,6 +8,7 @@ import {
   ModalFooter,
   Select,
   TextArea,
+  Button,
 } from '@folio/stripes/components';
 
 class CancelRequestDialog extends React.Component {
@@ -127,17 +128,18 @@ class CancelRequestDialog extends React.Component {
     if (!request) return null;
 
     const footer = (
-      <ModalFooter
-        primaryButton={{
-          label: <FormattedMessage id="stripes-core.button.confirm" />,
-          disabled: reason.requiresAdditionalInformation && !additionalInfo,
-          onClick: this.onCancelRequestHandler,
-        }}
-        secondaryButton={{
-          label: <FormattedMessage id="stripes-core.button.back" />,
-          onClick: onClose,
-        }}
-      />
+      <ModalFooter>
+        <Button
+          buttonStyle="primary"
+          onClick={onClose}
+          disabled={reason.requiresAdditionalInformation && !additionalInfo}
+        >
+          <FormattedMessage id="stripes-core.button.confirm" />
+        </Button>
+        <Button onClick={onClose}>
+          <FormattedMessage id="stripes-core.button.back" />
+        </Button>
+      </ModalFooter>
     );
 
     return (

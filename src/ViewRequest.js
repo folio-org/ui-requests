@@ -16,7 +16,6 @@ import {
 } from 'react-intl';
 
 import { TitleManager } from '@folio/stripes/core';
-import { Link } from 'react-router-dom';
 import {
   Button,
   Accordion,
@@ -37,7 +36,9 @@ import ItemDetail from './ItemDetail';
 import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
 import PositionLink from './PositionLink';
-import { toUserAddress, requestStatuses } from './constants';
+import { requestStatuses } from './constants';
+
+import { toUserAddress } from './utils';
 
 class ViewRequest extends React.Component {
   static manifest = {
@@ -118,20 +119,30 @@ class ViewRequest extends React.Component {
     this.update = this.update.bind(this);
   }
 
+  componentDidMount() {
+    const requests = this.props.resources.selectedRequest;
+    if (requests && requests.hasLoaded) {
+      this.loadFullRequest(requests.records[0]);
+    }
+  }
+
   // Use componentDidUpdate to pull in metadata from the related user and item records
   componentDidUpdate(prevProps) {
     const prevRQ = prevProps.resources.selectedRequest;
     const currentRQ = this.props.resources.selectedRequest;
+
     // Only update if actually needed (otherwise, this gets called way too often)
     if (prevRQ && currentRQ && currentRQ.hasLoaded) {
-      const requestId = get(this.state, ['request', 'id'], '');
-      if ((prevRQ.records[0] && !isEqual(prevRQ.records[0], currentRQ.records[0])) || !requestId) {
-        const basicRequest = currentRQ.records[0];
-        this.props.joinRequest(basicRequest).then(request => {
-          this.setState({ request });
-        });
+      if ((!isEqual(prevRQ.records[0], currentRQ.records[0]))) {
+        this.loadFullRequest(currentRQ.records[0]);
       }
     }
+  }
+
+  loadFullRequest(basicRequest) {
+    this.props.joinRequest(basicRequest).then(request => {
+      this.setState({ request });
+    });
   }
 
   update(record) {
@@ -187,30 +198,30 @@ class ViewRequest extends React.Component {
     const selRequest = (resources.selectedRequest || {}).records || [];
     if (!id || selRequest.length === 0) return null;
     const curRequest = selRequest.find(r => r.id === id);
+
     if (!curRequest) return null;
 
     return (curRequest.id === this.state.request.id) ? this.state.request : curRequest;
   }
 
-  getPatronGroupName(request) {
+  getPatronGroup(request) {
     if (!request) return '';
     const { patronGroups } = this.props;
     if (!patronGroups.length) return '';
     const pgId = request.requester.patronGroup;
-    const patronGroup = patronGroups.find(g => (g.id === pgId));
-    return get(patronGroup, ['desc'], '');
+    return patronGroups.find(g => (g.id === pgId));
   }
 
   getPickupServicePointName(request) {
     if (!request) return '';
     const { optionLists: { servicePoints } } = this.props;
     const servicePoint = servicePoints.find(sp => (sp.id === request.pickupServicePointId));
+
     return get(servicePoint, ['name'], '');
   }
 
-  renderLayer(request) {
+  renderLayer(request, patronGroup) {
     const {
-      patronGroups,
       optionLists,
       location,
       stripes,
@@ -228,14 +239,14 @@ class ViewRequest extends React.Component {
         >
           <RequestForm
             stripes={stripes}
-            initialValues={request}
+            initialValues={{ requestExpirationDate: null, ...request }}
             request={request}
             metadataDisplay={this.cViewMetaData}
             onSubmit={(record) => { this.update(record); }}
             onCancel={onCloseEdit}
             onCancelRequest={this.cancelRequest}
             optionLists={optionLists}
-            patronGroups={patronGroups}
+            patronGroup={patronGroup}
             query={this.props.query}
             findResource={findResource}
           />
@@ -288,12 +299,8 @@ class ViewRequest extends React.Component {
     );
   }
 
-  renderRequest(request) {
-    const {
-      stripes,
-    } = this.props;
-
-    const patronGroupName = this.getPatronGroupName(request);
+  renderRequest(request, patronGroup) {
+    const { stripes } = this.props;
     const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');
     // TODO: Internationalize this
@@ -402,7 +409,7 @@ class ViewRequest extends React.Component {
           >
             <Row>
               <Col xs={12}>
-                <this.cViewMetaData metadata={request.metadata} />
+                {request.metadata && <this.cViewMetaData metadata={request.metadata} /> }
               </Col>
             </Row>
             <Row>
@@ -452,7 +459,7 @@ class ViewRequest extends React.Component {
               user={request.requester}
               proxy={request.proxy}
               stripes={stripes}
-              patronGroup={patronGroupName}
+              patronGroup={patronGroup}
               request={request}
               selectedDelivery={selectedDelivery}
               deliveryAddress={deliveryAddressDetail}
@@ -495,7 +502,10 @@ class ViewRequest extends React.Component {
       return this.renderSpinner();
     }
 
-    return this.renderLayer(request) || this.renderRequest(request);
+    const patronGroup = this.getPatronGroup(request);
+
+    return this.renderLayer(request, patronGroup) ||
+      this.renderRequest(request, patronGroup);
   }
 }
 

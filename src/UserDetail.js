@@ -7,8 +7,8 @@ import { getFullName, userHighlightBox } from './utils';
 
 class UserDetail extends React.Component {
   static propTypes = {
-    deliveryAddress: PropTypes.string,
-    patronGroup: PropTypes.string,
+    deliveryAddress: PropTypes.node,
+    patronGroup: PropTypes.object,
     pickupServicePoint: PropTypes.string,
     proxy: PropTypes.object,
     request: PropTypes.object.isRequired,
@@ -17,8 +17,7 @@ class UserDetail extends React.Component {
   };
 
   static defaultProps = {
-    deliveryAddress: '',
-    patronGroup: '',
+    patronGroup: {},
     pickupServicePoint: '',
     proxy: {},
     selectedDelivery: false,
@@ -59,7 +58,7 @@ class UserDetail extends React.Component {
           <Col xs={4}>
             <KeyValue
               label={<FormattedMessage id="ui-requests.requester.patronGroup.group" />}
-              value={patronGroup || '-'}
+              value={patronGroup.desc || '-'}
             />
           </Col>
           <Col xs={4}>

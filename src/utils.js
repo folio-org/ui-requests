@@ -37,3 +37,15 @@ export function userHighlightBox(title, name, id, barcode) {
     </Row>
   );
 }
+
+export function toUserAddress(addr) {
+  return (
+    <div>
+      <div>{(addr && addr.addressLine1) || ''}</div>
+      <div>{(addr && addr.addressLine2) || ''}</div>
+      <div>{(addr && addr.city) || ''}</div>
+      <div>{(addr && addr.region) || ''}</div>
+      <div>{(addr && addr.postalCode) || ''}</div>
+    </div>
+  );
+}
