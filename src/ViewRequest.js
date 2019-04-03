@@ -231,7 +231,7 @@ class ViewRequest extends React.Component {
 
     const query = location.search ? queryString.parse(location.search) : {};
 
-    if (query.layer === 'edit' && request) {
+    if (query.layer === 'edit') {
       return (
         <Layer
           isOpen
@@ -300,11 +300,7 @@ class ViewRequest extends React.Component {
   }
 
   renderRequest(request, patronGroup) {
-    const {
-      stripes,
-    } = this.props;
-
-
+    const { stripes } = this.props;
     const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');
     // TODO: Internationalize this
