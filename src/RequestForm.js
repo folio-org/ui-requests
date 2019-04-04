@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { Field } from 'redux-form';
 import {
   FormattedMessage,
@@ -160,32 +159,41 @@ class RequestForm extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const initials = this.props.initialValues;
-    const request = this.props.request;
-    const prevRequest = prevProps.request;
-    const oldInitials = prevProps.initialValues;
-    const prevBlocks = this.getPatronBlocks(prevProps.parentResources);
-    const blocks = this.getPatronBlocks(this.props.parentResources);
+    const { initialValues, request, parentResources, query } = this.props;
 
-    if ((initials && initials.fulfilmentPreference &&
-        oldInitials && !oldInitials.fulfilmentPreference) ||
-        (!isEqual(request, prevRequest))) {
+    const {
+      initialValues: prevInitialValues,
+      request: prevRequest,
+      parentResource: prevParentResources,
+      query: prevQuery,
+    } = prevProps;
+
+    const prevBlocks = this.getPatronBlocks(prevParentResources);
+    const blocks = this.getPatronBlocks(parentResources);
+
+    if (
+      (initialValues &&
+        initialValues.fulfilmentPreference &&
+        prevInitialValues &&
+        !prevInitialValues.fulfilmentPreference) ||
+      !isEqual(request, prevRequest)
+    ) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
-        selectedAddressTypeId: initials.deliveryAddressTypeId,
-        selectedDelivery: initials.fulfilmentPreference === 'Delivery',
+        selectedAddressTypeId: initialValues.deliveryAddressTypeId,
+        selectedDelivery: initialValues.fulfilmentPreference === 'Delivery',
         selectedItem: request.item,
         selectedLoan: request.loan,
         selectedUser: request.requester,
       });
     }
 
-    if (prevProps.query.userBarcode !== this.props.query.userBarcode) {
-      this.findUser(this.props.query.userBarcode);
+    if (prevQuery.userBarcode !== query.userBarcode) {
+      this.findUser(query.userBarcode);
     }
 
-    if (prevProps.query.itemBarcode !== this.props.query.itemBarcode) {
-      this.findItem(this.props.query.itemBarcode);
+    if (prevQuery.itemBarcode !== query.itemBarcode) {
+      this.findItem(query.itemBarcode);
     }
 
     if (!isEqual(blocks, prevBlocks) && blocks.length > 0) {
