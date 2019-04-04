@@ -267,7 +267,6 @@ class ViewRequest extends React.Component {
 
     const tags = ((request && request.tags) || {}).tagList || [];
     const requestStatus = get(request, ['status'], '-');
-    // TODO: Internationalize this
     const isRequestClosed = requestStatus.startsWith('Closed');
 
     return (
@@ -303,7 +302,6 @@ class ViewRequest extends React.Component {
     const { stripes } = this.props;
     const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');
-    // TODO: Internationalize this
     const isRequestClosed = requestStatus.startsWith('Closed');
     let deliveryAddressDetail;
     let selectedDelivery = false;
