@@ -131,7 +131,7 @@ class CancelRequestDialog extends React.Component {
       <ModalFooter>
         <Button
           buttonStyle="primary"
-          onClick={onClose}
+          onClick={this.onCancelRequestHandler}
           disabled={reason.requiresAdditionalInformation && !additionalInfo}
         >
           <FormattedMessage id="stripes-core.button.confirm" />
