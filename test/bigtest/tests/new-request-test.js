@@ -172,5 +172,39 @@ describe('New Request page', () => {
         expect(NewRequestInteractor.requestTypeText).to.equal('Hold');
       });
     });
+
+    describe('item with "On order" status', () => {
+      beforeEach(async function () {
+        this.server.create('item', {
+          barcode: '9676761472501',
+          status: { name: 'On order' },
+        });
+
+        await NewRequestInteractor
+          .fillItemBarcode('9676761472501')
+          .pressEnter();
+      });
+
+      it('should show hold and recall options', () => {
+        expect(NewRequestInteractor.requestTypeOptions).to.eql(['Hold', 'Recall']);
+      });
+    });
+
+    describe('item with "In process" status', () => {
+      beforeEach(async function () {
+        this.server.create('item', {
+          barcode: '9676761472501',
+          status: { name: 'In process' },
+        });
+
+        await NewRequestInteractor
+          .fillItemBarcode('9676761472501')
+          .pressEnter();
+      });
+
+      it('should show hold and recall options', () => {
+        expect(NewRequestInteractor.requestTypeOptions).to.eql(['Hold', 'Recall']);
+      });
+    });
   });
 });
