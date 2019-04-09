@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const requestTypes = [
   { id: 'Recall', label: 'ui-requests.requestMeta.type.recall' },
   { id: 'Hold', label: 'ui-requests.requestMeta.type.hold' },
@@ -39,4 +37,6 @@ export const requestTypesByItemStatus = {
   'In transit': ['Hold', 'Recall'],
   'Missing': ['Hold'],
   'Paged': ['Hold'],
+  'On order': ['Hold', 'Recall'],
+  'In process': ['Hold', 'Recall'],
 };
