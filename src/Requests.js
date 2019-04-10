@@ -25,10 +25,9 @@ import packageInfo from '../package';
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
 
-// TODO: Translate these filter labels
 const filterConfig = [
   {
-    label: <FormattedMessage id="ui-requests.requestMeta.type" />,
+    label: 'ui-requests.requestMeta.type',
     name: 'requestType',
     cql: 'requestType',
     values: [
@@ -38,7 +37,7 @@ const filterConfig = [
     ],
   },
   {
-    label: <FormattedMessage id="ui-requests.requestMeta.status" />,
+    label: 'ui-requests.requestMeta.status',
     name: 'requestStatus',
     cql: 'status',
     values: [
@@ -200,6 +199,7 @@ class Requests extends React.Component {
 
   constructor(props) {
     super(props);
+
     const {
       intl: { formatMessage }
     } = props;
@@ -242,6 +242,9 @@ class Requests extends React.Component {
         value: item
       };
     });
+
+    this.filterConfigWithTranslatedLabels = filterConfig
+      .map(filter => ({ ...filter, label: formatMessage({ id: filter.label }) }));
 
     this.state = { submitting: false,
       errorMessage: '' };
@@ -488,7 +491,7 @@ class Requests extends React.Component {
           actionMenu={actionMenu}
           packageInfo={packageInfo}
           objectName="request"
-          filterConfig={filterConfig}
+          filterConfig={this.filterConfigWithTranslatedLabels}
           initialResultCount={INITIAL_RESULT_COUNT}
           resultCountIncrement={RESULT_COUNT_INCREMENT}
           viewRecordComponent={ViewRequest}
