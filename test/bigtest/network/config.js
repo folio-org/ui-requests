@@ -111,7 +111,10 @@ export default function config() {
       userId: cqlParser.tree.term
     });
   });
-  this.get('/service-points');
+
+  this.get('/service-points', ({ servicePoints }) => {
+    return servicePoints.all();
+  });
 
   this.get('/circulation/loans', {
     loans: [],
@@ -186,10 +189,20 @@ export default function config() {
     totalRecords: 0,
   });
 
-  this.get('/circulation/requests');
-  this.get('/circulation/requests/:id', (schema, request) => {
-    return schema.requests.find(request.params.id).attrs;
+  this.get('/circulation/requests', ({ requests }) => {
+    return requests.all();
   });
+
+  this.get('/circulation/requests/:id', ({ requests }, request) => {
+    return requests.find(request.params.id);
+  });
+
+  this.post('/circulation/requests', ({ requests }, request) => {
+    const body = JSON.parse(request.requestBody);
+    const defaultReq = this.build('request');
+    return requests.create({ ...defaultReq, ...body });
+  });
+
   this.get('/request-storage/requests', ({ requests }, request) => {
     const url = new URL(request.url);
     const cqlQuery = url.searchParams.get('query');
@@ -199,6 +212,7 @@ export default function config() {
       itemId: cqlParser.tree.term
     });
   });
+
   this.get('/request-storage/requests/:id', (schema, request) => {
     return schema.requests.find(request.params.id).attrs;
   });

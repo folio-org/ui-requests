@@ -12,9 +12,8 @@ export default ApplicationSerializer.extend({
       return assign({}, json, {
         totalRecords: json.requests.length,
       });
+    } else {
+      return json.request;
     }
-
-    return json.requests;
   }
-
 });

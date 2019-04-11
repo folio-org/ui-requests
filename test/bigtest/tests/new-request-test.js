@@ -9,6 +9,7 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import NewRequestInteractor from '../interactors/new-request';
 import RequestsInteractor from '../interactors/requests';
+import ViewRequestInteractor from '../interactors/view-request';
 
 describe('New Request page', () => {
   setupApplication();
@@ -38,6 +39,42 @@ describe('New Request page', () => {
           expect(requests.$root).to.exist;
         });
       });
+    });
+  });
+
+  describe('creating new request type', () => {
+    beforeEach(async function () {
+      this.server.create('item', {
+        barcode: '9676761472500',
+        title: 'Best Book Ever',
+        materialType: {
+          name: 'book'
+        },
+      });
+
+      this.server.create('user', {
+        barcode: '9676761472501',
+      });
+
+      this.server.create('servicePoint', {
+        name: 'service point 1',
+      });
+
+      await NewRequestInteractor
+        .fillItemBarcode('9676761472500')
+        .pressEnter();
+
+      await NewRequestInteractor
+        .fillUserBarcode('9676761472501')
+        .pressEnter();
+
+      await NewRequestInteractor.chooseServicePoint('service point 1');
+      await NewRequestInteractor.clickNewRequest();
+    });
+
+    it('should create a new request and open view request pane', () => {
+      expect(ViewRequestInteractor.requestSectionPresent).to.be.true;
+      expect(ViewRequestInteractor.requesterSectionPresent).to.be.true;
     });
   });
 

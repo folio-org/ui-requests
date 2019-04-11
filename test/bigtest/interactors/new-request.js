@@ -6,6 +6,7 @@ import {
   fillable,
   triggerable,
   computed,
+  selectable,
 } from '@bigtest/interactor';
 
 function getSelectValues(selector) {
@@ -36,10 +37,16 @@ function getSelectValues(selector) {
   requestTypeMessageIsPresent = isPresent('[data-test-request-type-message]');
   itemBarcodeIsPresent = isPresent('[name="item.barcode"]');
   fillItemBarcode = fillable('[name="item.barcode"]');
+
+  userBarcodeIsPresent = isPresent('[name="item.barcode"]');
+  fillUserBarcode = fillable('[name="requester.barcode"]');
+  chooseServicePoint = selectable('[name="pickupServicePointId"]');
+
   requestTypes = isPresent('[name="requestType"]');
   requestTypeOptions = getSelectValues('[name="requestType"] option');
   requestTypeText = text('[data-test-request-type-text]');
   requestTypeIsPresent = isPresent('[data-test-request-type-text]');
+  clickNewRequest = clickable('#clickable-create-request');
 
   whenRequestTypeIsPresent() {
     return this.when(() => this.requestTypeIsPresent);
