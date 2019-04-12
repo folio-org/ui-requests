@@ -97,9 +97,9 @@ class CancelRequestDialog extends React.Component {
     onCancelRequest(cancellationInfo);
   }
 
-  onChangeAdditionalInfo = (e) => this.setState({ additionalInfo: e.target.value })
-
-  // onChangeNotify = () => this.setState(prevState => ({ notify: !prevState.notify }))
+  onChangeAdditionalInfo = (e) => {
+    this.setState({ additionalInfo: e.target.value });
+  }
 
   onChangeReason = (e) => {
     const value = e.target.value;
@@ -130,6 +130,7 @@ class CancelRequestDialog extends React.Component {
     const footer = (
       <ModalFooter>
         <Button
+          data-test-confirm-cancel-request
           buttonStyle="primary"
           onClick={this.onCancelRequestHandler}
           disabled={reason.requiresAdditionalInformation && !additionalInfo}
@@ -144,6 +145,7 @@ class CancelRequestDialog extends React.Component {
 
     return (
       <Modal
+        data-test-cancel-request-modal
         label={<FormattedMessage id="ui-requests.cancel.modalLabel" />}
         open={open}
         onClose={onClose}
@@ -156,6 +158,7 @@ class CancelRequestDialog extends React.Component {
           />
         </p>
         <Select
+          data-test-select-cancelation-reason
           label={<FormattedMessage id="ui-requests.cancel.reasonLabel" />}
           dataOptions={reasons}
           value={reason.value}
