@@ -2,6 +2,7 @@ import {
   interactor,
   clickable,
   fillable,
+  selectable,
 } from '@bigtest/interactor';
 
 @interactor class HeaderDropdown {
@@ -17,6 +18,8 @@ import {
   fillRequestExpirationDateField = fillable('#requestExpirationDate');
   headerDropdown = new HeaderDropdown('[class*=paneHeaderCenterInner---] [class*=dropdown---]');
   headerDropdownMenu = new HeaderDropdownMenu();
+  chooseServicePoint = selectable('[name="pickupServicePointId"]');
+  clickUpdate = clickable('#clickable-update-request');
 }
 
-export default EditRequestsInteractor;
+export default new EditRequestsInteractor('[data-test-requests-form]');

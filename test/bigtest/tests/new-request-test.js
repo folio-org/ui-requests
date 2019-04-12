@@ -56,10 +56,6 @@ describe('New Request page', () => {
         barcode: '9676761472501',
       });
 
-      this.server.create('servicePoint', {
-        name: 'service point 1',
-      });
-
       await NewRequestInteractor
         .fillItemBarcode('9676761472500')
         .pressEnter();
@@ -68,7 +64,7 @@ describe('New Request page', () => {
         .fillUserBarcode('9676761472501')
         .pressEnter();
 
-      await NewRequestInteractor.chooseServicePoint('service point 1');
+      await NewRequestInteractor.chooseServicePoint('Circ Desk 2');
       await NewRequestInteractor.clickNewRequest();
     });
 

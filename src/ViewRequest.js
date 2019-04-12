@@ -3,7 +3,8 @@ import {
   isEqual,
   cloneDeep,
   includes,
-  keyBy
+  keyBy,
+  isObject,
 } from 'lodash';
 import React, { Fragment } from 'react';
 import { compose } from 'redux';
@@ -205,11 +206,14 @@ class ViewRequest extends React.Component {
   }
 
   getPatronGroup(request) {
-    if (!request) return '';
     const { patronGroups } = this.props;
-    if (!patronGroups.length) return '';
-    const pgId = request.requester.patronGroup;
-    return patronGroups.find(g => (g.id === pgId));
+    const group = get(request, 'requester.patronGroup');
+
+    if (!group || !patronGroups.length) return undefined;
+
+    const id = isObject(group) ? group.id : group;
+
+    return patronGroups.find(g => (g.id === id));
   }
 
   getPickupServicePointName(request) {
@@ -298,7 +302,7 @@ class ViewRequest extends React.Component {
     );
   }
 
-  renderRequest(request, patronGroup) {
+  renderRequest(request, patronGroup = {}) {
     const { stripes } = this.props;
     const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');

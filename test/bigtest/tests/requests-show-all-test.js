@@ -23,7 +23,7 @@ describe('Requests', () => {
   });
 
   it('renders each request instance', () => {
-    expect(requests.instances().length).to.be.equal(1);
+    expect(requests.instances().length).to.be.equal(21);
   });
 
   describe('clicking on the first request item', function () {
