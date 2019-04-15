@@ -15,6 +15,7 @@ import { contains } from './helpers';
 @interactor class HeaderDropdownMenu {
   clickCancel = clickable('#clickable-cancel-request');
   clickEdit = clickable('#clickable-edit-request');
+  clickDuplicate = clickable('#duplicate-request');
 }
 
 @interactor class CancelRequestDialog {

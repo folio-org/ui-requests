@@ -36,8 +36,19 @@ describe('View request page', () => {
         await ViewRequestInteractor.headerDropdownMenu.clickEdit();
       });
 
-      it('opens edit form', function () {
+      it('opens request form in edit mode', function () {
         expect(this.location.search).to.include('layer=edit');
+      });
+    });
+
+    describe('duplicate request', function () {
+      beforeEach(async () => {
+        await ViewRequestInteractor.headerDropdown.click();
+        await ViewRequestInteractor.headerDropdownMenu.clickDuplicate();
+      });
+
+      it('opens request form', function () {
+        expect(this.location.search).to.include('layer=create');
       });
     });
 
