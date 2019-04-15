@@ -3,18 +3,13 @@ import {
   clickable,
   isPresent,
   text,
+  value,
   fillable,
   triggerable,
-  computed,
   selectable,
 } from '@bigtest/interactor';
 
-function getSelectValues(selector) {
-  return computed(function () {
-    return Array.from(document.querySelectorAll(selector))
-      .map(option => option.value);
-  });
-}
+import { getSelectValues } from './helpers';
 
 @interactor class HeaderDropdown {
   click = clickable('button');
@@ -47,6 +42,8 @@ function getSelectValues(selector) {
   requestTypeText = text('[data-test-request-type-text]');
   requestTypeIsPresent = isPresent('[data-test-request-type-text]');
   clickNewRequest = clickable('#clickable-create-request');
+  containsUserBarcode = value('[name="requester.barcode"');
+  containsItemBarcode = value('[name="item.barcode"');
 
   whenRequestTypeIsPresent() {
     return this.when(() => this.requestTypeIsPresent);

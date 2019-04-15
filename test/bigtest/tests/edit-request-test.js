@@ -36,7 +36,7 @@ describe('Edit Request page', () => {
 
     it('should update existing request and open a view request pane', () => {
       expect(ViewRequestInteractor.requestSectionPresent).to.be.true;
-      expect(ViewRequestInteractor.containsServicePoint).to.be.true;
+      expect(ViewRequestInteractor.containsServicePoint('Circ Desk 2')).to.be.true;
     });
   });
 });

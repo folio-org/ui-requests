@@ -26,8 +26,8 @@ import { contains } from './helpers';
   cancelRequestDialog = new CancelRequestDialog('[data-test-cancel-request-modal]');
   requestSectionPresent = isPresent('#request-info');
   requesterSectionPresent = isPresent('#requester-info');
-  containsServicePoint = contains('#requester-info', 'Circ Desk 2');
-  containsClosedRequest = contains('#request-info', 'Closed - Cancelled');
+  containsServicePoint = contains('#requester-info');
+  containsClosedRequest = contains('#request-info');
 }
 
 export default new ViewRequestInteractor();
