@@ -30,18 +30,20 @@ export default Factory.extend({
   },
   afterCreate(request, server) {
     const user = server.create('user');
-    request.update('requesterId', user.id);
-    request.update('requester', {
-      lastName: user.personal.lastName,
-      firstName: user.personal.firstName,
-      barcode: user.barcode,
-      patronGroup: {
-        id: user.patronGroup,
-        group: 'test',
-        desc: 'test'
+    request.update({
+      requesterId: user.id,
+      requester: {
+        lastName: user.personal.lastName,
+        firstName: user.personal.firstName,
+        barcode: user.barcode,
+        patronGroup: {
+          id: user.patronGroup,
+          group: 'test',
+          desc: 'test'
+        },
+        patronGroupId: user.patronGroup,
       },
-      patronGroupId: user.patronGroup,
+      deliveryAddressTypeId: user.personal.addresses[0].addressTypeId
     });
-    request.save();
   }
 });

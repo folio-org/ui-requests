@@ -2,7 +2,6 @@ import {
   get,
   isEqual,
   cloneDeep,
-  includes,
   keyBy,
   isObject,
 } from 'lodash';
@@ -304,11 +303,12 @@ class ViewRequest extends React.Component {
     let deliveryAddressDetail;
     let selectedDelivery = false;
 
-    if (get(request, ['fulfilmentPreference'], '') === 'Delivery') {
+    if (get(request, 'fulfilmentPreference') === 'Delivery') {
       selectedDelivery = true;
-      const deliveryAddressType = get(request, ['deliveryAddressTypeId'], null);
+      const deliveryAddressType = get(request, 'deliveryAddressTypeId', null);
+
       if (deliveryAddressType) {
-        const addresses = get(request, ['requester', 'personal', 'addresses'], []);
+        const addresses = get(request, 'requester.personal.addresses', []);
         const deliveryLocations = keyBy(addresses, 'addressTypeId');
         deliveryAddressDetail = toUserAddress(deliveryLocations[deliveryAddressType]);
       }

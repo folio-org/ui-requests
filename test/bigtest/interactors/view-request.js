@@ -32,8 +32,9 @@ import { contains } from './helpers';
   cancelRequestDialog = new CancelRequestDialog('[data-test-cancel-request-modal]');
   requestSectionPresent = isPresent('#request-info');
   requesterSectionPresent = isPresent('#requester-info');
-  containsServicePoint = contains('#requester-info');
-  containsClosedRequest = contains('#request-info');
+  requesterInfoContains = contains('#requester-info');
+  requestInfoContains = contains('#request-info');
+
   itemAccordionClick = clickable('#accordion-toggle-button-item-info');
 }
 
