@@ -88,7 +88,8 @@ describe('View request page', () => {
     });
 
     it('shows delivery address', () => {
-      expect(ViewRequestInteractor.requesterInfoContains(requester.attrs.personal.addresses[0].addressLine1)).to.be.true;
+      const address = requester.attrs.personal.addresses[0].addressLine1;
+      expect(ViewRequestInteractor.requesterInfoContains(address)).to.be.true;
     });
   });
 });
