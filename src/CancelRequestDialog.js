@@ -137,7 +137,10 @@ class CancelRequestDialog extends React.Component {
         >
           <FormattedMessage id="stripes-core.button.confirm" />
         </Button>
-        <Button onClick={onClose}>
+        <Button
+          data-test-cancel-cancel-request
+          onClick={onClose}
+        >
           <FormattedMessage id="stripes-core.button.back" />
         </Button>
       </ModalFooter>
@@ -164,14 +167,6 @@ class CancelRequestDialog extends React.Component {
           value={reason.value}
           onChange={this.onChangeReason}
         />
-        {/*
-        <Checkbox
-          id="notify-patron-checkbox"
-          label={formatMessage({ id: 'ui-requests.cancel.notifyLabel' })}
-          checked={notify}
-          onChange={this.onChangeNotify}
-        />
-        */}
         <FormattedMessage id={additionalInfoPlaceholder}>
           {placeholder => (
             <TextArea

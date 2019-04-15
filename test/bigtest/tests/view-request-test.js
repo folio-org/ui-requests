@@ -18,15 +18,28 @@ describe('View request page', () => {
     });
 
     describe('cancel request', function () {
-      beforeEach(async () => {
-        await ViewRequestInteractor.headerDropdown.click();
-        await ViewRequestInteractor.headerDropdownMenu.clickCancel();
-        await ViewRequestInteractor.cancelRequestDialog.chooseReason('Patron Cancelled');
-        await ViewRequestInteractor.cancelRequestDialog.clickConfirm();
+      describe('confirm cancel request', function () {
+        beforeEach(async () => {
+          await ViewRequestInteractor.headerDropdown.click();
+          await ViewRequestInteractor.headerDropdownMenu.clickCancel();
+          await ViewRequestInteractor.cancelRequestDialog.chooseReason('Patron Cancelled');
+          await ViewRequestInteractor.cancelRequestDialog.clickConfirm();
+        });
+
+        it('closes request view', function () {
+          expect(ViewRequestInteractor.requestInfoContains('Closed - Cancelled')).to.be.true;
+        });
+      });
+
+      describe('cancelling cancel request', function () {
+        beforeEach(async () => {
+          await ViewRequestInteractor.headerDropdown.click();
+          await ViewRequestInteractor.headerDropdownMenu.clickCancel();
+        });
       });
 
       it('closes request view', function () {
-        expect(ViewRequestInteractor.requestInfoContains('Closed - Cancelled')).to.be.true;
+        expect(ViewRequestInteractor.cancelRequestDialog.isPresent).to.be.false;
       });
     });
 
