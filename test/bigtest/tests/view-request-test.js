@@ -30,6 +30,17 @@ describe('View request page', () => {
       });
     });
 
+    describe('edit request', function () {
+      beforeEach(async () => {
+        await ViewRequestInteractor.headerDropdown.click();
+        await ViewRequestInteractor.headerDropdownMenu.clickEdit();
+      });
+
+      it('opens edit form', function () {
+        expect(this.location.search).to.include('layer=edit');
+      });
+    });
+
     describe('toggle section', function () {
       beforeEach(async function () {
         await ViewRequestInteractor.itemAccordionClick();
