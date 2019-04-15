@@ -5,6 +5,7 @@ export function contains(selector) {
     const result = [].filter.call(this.$$(selector), (element) => {
       return RegExp(text).test(element.textContent);
     });
+
     return !!result.length;
   });
 }

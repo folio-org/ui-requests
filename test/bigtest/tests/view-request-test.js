@@ -8,7 +8,7 @@ import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
 import ViewRequestInteractor from '../interactors/view-request';
-/*
+
 describe('View request page', () => {
   setupApplication();
 
@@ -28,5 +28,14 @@ describe('View request page', () => {
       expect(ViewRequestInteractor.containsClosedRequest('Closed - Cancelled')).to.be.true;
     });
   });
+
+  describe('toggle section', function () {
+    beforeEach(async function () {
+      await ViewRequestInteractor.itemAccordionClick();
+    });
+
+    it('toggles item section', function () {
+      expect(ViewRequestInteractor.itemAccordion.isExpanded).to.be.false;
+    });
+  });
 });
-*/

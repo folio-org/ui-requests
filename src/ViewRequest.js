@@ -115,7 +115,6 @@ class ViewRequest extends React.Component {
     this.cViewMetaData = props.stripes.connect(ViewMetaData);
     this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
     this.onToggleSection = this.onToggleSection.bind(this);
-    this.craftLayerUrl = this.craftLayerUrl.bind(this);
     this.cancelRequest = this.cancelRequest.bind(this);
     this.update = this.update.bind(this);
   }
@@ -187,11 +186,6 @@ class ViewRequest extends React.Component {
       newState.accordions[id] = !curState.accordions[id];
       return newState;
     });
-  }
-
-  craftLayerUrl(mode) {
-    const url = this.props.location.pathname + this.props.location.search;
-    return includes(url, '?') ? `${url}&layer=${mode}` : `${url}?layer=${mode}`;
   }
 
   getRequest() {
