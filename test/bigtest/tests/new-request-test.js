@@ -25,7 +25,6 @@ describe('New Request page', () => {
       beforeEach(async function () {
         await NewRequestInteractor.itemField.fillAndBlur('123');
         await NewRequestInteractor.clickNewRequest();
-        await NewRequestInteractor.whenItemErrorIsPresent();
       });
 
       it('triggers item not found error', () => {
@@ -37,7 +36,6 @@ describe('New Request page', () => {
       beforeEach(async function () {
         await NewRequestInteractor.userField.fillAndBlur('123');
         await NewRequestInteractor.clickNewRequest();
-        await NewRequestInteractor.whenRequesterErrorIsPresent();
       });
 
       it('triggers requester not found error', () => {

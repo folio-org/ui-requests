@@ -2,7 +2,8 @@ import {
   interactor,
   scoped,
   collection,
-  clickable
+  clickable,
+  isVisible
 } from '@bigtest/interactor';
 
 @interactor class HeaderDropdown {
@@ -11,6 +12,7 @@ import {
 
 @interactor class HeaderDropdownMenu {
   clickExportToCSV = clickable('#exportToCsvPaneHeaderBtn');
+  exportBtnIsVisible = isVisible('#exportToCsvPaneHeaderBtn');
 }
 
 @interactor class RequestsInteractor {

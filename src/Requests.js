@@ -474,11 +474,11 @@ class Requests extends React.Component {
         buttonStyle="dropdownItem"
         id="exportToCsvPaneHeaderBtn"
         onClick={() => {
+          onToggle();
           if (!this.csvExportPending) {
             mutator.resultCount.replace(resources.records.other.totalRecords);
             this.csvExportPending = true;
           }
-          onToggle();
         }}
       >
         <FormattedMessage id="stripes-components.exportToCsv" />

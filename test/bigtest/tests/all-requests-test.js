@@ -42,7 +42,7 @@ describe('Requests', () => {
     });
 
     it('exports data to csv', () => {
-      expect(true).to.be.true;
+      expect(requests.headerDropdownMenu.exportBtnIsVisible).to.be.false;
     });
   });
 });
