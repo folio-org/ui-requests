@@ -7,7 +7,7 @@ import {
   fillable,
   triggerable,
   selectable,
-
+  blurrable,
 } from '@bigtest/interactor';
 
 import { getSelectValues } from './helpers';
@@ -20,11 +20,33 @@ import { getSelectValues } from './helpers';
   clickCancel = clickable('[data-test-cancel-new-request-action]');
 }
 
+@interactor class InputFieldInteractor {
+  clickInput = clickable();
+  fillInput = fillable();
+  blurInput = blurrable();
+
+  pressEnter = triggerable('keydown', {
+    bubbles: true,
+    cancelable: true,
+    keyCode: 13,
+    key: 'Enter',
+  });
+
+  fillAndBlur(val) {
+    return this
+      .clickInput()
+      .fillInput(val)
+      .pressEnter()
+      .blurInput();
+  }
+}
+
 @interactor class NewRequestsInteractor {
   pressEnter = triggerable('keydown', {
     bubbles: true,
     cancelable: true,
-    keyCode: 13
+    keyCode: 13,
+    key: 'Enter',
   });
 
   title = text('[class*=paneTitleLabel---]');
@@ -34,10 +56,13 @@ import { getSelectValues } from './helpers';
   itemBarcodeIsPresent = isPresent('[name="item.barcode"]');
   fillItemBarcode = fillable('[name="item.barcode"]');
 
+  itemField = new InputFieldInteractor('[name="item.barcode"]');
+
   userBarcodeIsPresent = isPresent('[name="item.barcode"]');
   fillUserBarcode = fillable('[name="requester.barcode"]');
-  chooseServicePoint = selectable('[name="pickupServicePointId"]');
+  userField = new InputFieldInteractor('[name="requester.barcode"]');
 
+  chooseServicePoint = selectable('[name="pickupServicePointId"]');
   requestTypes = isPresent('[name="requestType"]');
   requestTypeOptions = getSelectValues('[name="requestType"] option');
   requestTypeText = text('[data-test-request-type-text]');

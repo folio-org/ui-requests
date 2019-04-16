@@ -23,7 +23,7 @@ describe('New Request page', () => {
 
     describe('entering invalid item barcode', function () {
       beforeEach(async function () {
-        await NewRequestInteractor.fillItemBarcode('123');
+        await NewRequestInteractor.itemField.fillAndBlur('123');
         await NewRequestInteractor.clickNewRequest();
         await NewRequestInteractor.whenItemErrorIsPresent();
       });
@@ -35,7 +35,7 @@ describe('New Request page', () => {
 
     describe('entering invalid requestor barcode', function () {
       beforeEach(async function () {
-        await NewRequestInteractor.fillUserBarcode('123');
+        await NewRequestInteractor.userField.fillAndBlur('123');
         await NewRequestInteractor.clickNewRequest();
         await NewRequestInteractor.whenRequesterErrorIsPresent();
       });
@@ -44,6 +44,7 @@ describe('New Request page', () => {
         expect(NewRequestInteractor.requesterErrorIsPresent).to.be.true;
       });
     });
+
 
     describe('visiting the create request page', () => {
       it('displays the title in the pane header', () => {

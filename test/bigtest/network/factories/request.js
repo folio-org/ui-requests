@@ -9,7 +9,7 @@ export default Factory.extend({
   fulfilmentPreference: 'Hold Shelf',
   holdShelfExpirationDate: '2017-01-20',
   loan: {
-    dueDate: '2017-09-19T12:42:21.000Z'
+    dueDate: '2017-09-19T12:42:21.000Z',
   },
   afterCreate(request, server) {
     const user = server.create('user');

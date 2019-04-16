@@ -79,7 +79,7 @@ class RequestForm extends React.Component {
       search: PropTypes.string,
     }).isRequired,
     onCancel: PropTypes.func.isRequired,
-    onCancelRequest: PropTypes.func.isRequired,
+    onCancelRequest: PropTypes.func,
     pristine: PropTypes.bool,
     resources: PropTypes.shape({
       query: PropTypes.object,
@@ -341,7 +341,7 @@ class RequestForm extends React.Component {
   // This function only exists to enable 'do lookup on enter' for item and
   // user search
   onKeyDown(e, element) {
-    if (e.key === 'Enter' && e.shiftKey === false) {
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       if (element === 'item') {
         this.onItemClick();
