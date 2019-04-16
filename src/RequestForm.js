@@ -250,6 +250,7 @@ class RequestForm extends React.Component {
 
   onUserClick() {
     const barcode = this.requesterBarcodeRef.current.value;
+
     if (!barcode) return;
     this.findUser(barcode);
   }
@@ -270,7 +271,7 @@ class RequestForm extends React.Component {
         this.setState({ selectedUser });
         this.props.change('requesterId', selectedUser.id);
       }
-    });
+    }).then(_ => this.props.asyncValidate());
   }
 
   findLoan(item) {

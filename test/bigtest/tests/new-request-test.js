@@ -21,6 +21,30 @@ describe('New Request page', () => {
       this.visit('/requests?layer=create');
     });
 
+    describe('entering invalid item barcode', function () {
+      beforeEach(async function () {
+        await NewRequestInteractor.fillItemBarcode('123');
+        await NewRequestInteractor.clickNewRequest();
+        await NewRequestInteractor.whenItemErrorIsPresent();
+      });
+
+      it('triggers item not found error', () => {
+        expect(NewRequestInteractor.itemErrorIsPresent).to.be.true;
+      });
+    });
+
+    describe('entering invalid requestor barcode', function () {
+      beforeEach(async function () {
+        await NewRequestInteractor.fillUserBarcode('123');
+        await NewRequestInteractor.clickNewRequest();
+        await NewRequestInteractor.whenRequesterErrorIsPresent();
+      });
+
+      it('triggers requester not found error', () => {
+        expect(NewRequestInteractor.requesterErrorIsPresent).to.be.true;
+      });
+    });
+
     describe('visiting the create request page', () => {
       it('displays the title in the pane header', () => {
         expect(NewRequestInteractor.title).to.equal('New request');

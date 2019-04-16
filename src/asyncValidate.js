@@ -1,3 +1,4 @@
+import { get } from 'lodash';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -42,11 +43,15 @@ function asyncValidateUser(values, props) {
   });
 }
 
-export default function asyncValidate(values, dispatch, props, blurredField) {
-  if (blurredField === 'item.barcode' && values.item.barcode !== undefined) {
+export default function asyncValidate(values, dispatch, props) {
+  const previousErrors = props.asyncErrors;
+
+  if (get(values, 'item.barcode') && !get(previousErrors, 'item.barcode')) {
     return asyncValidateItem(values, props);
-  } else if (blurredField === 'requester.barcode' && values.requester.barcode !== undefined) {
+  } else if (get(values, 'requester.barcode') && !get(previousErrors, 'requester.barcode')) {
     return asyncValidateUser(values, props);
+  } else if (previousErrors) {
+    return new Promise((_, reject) => reject(previousErrors));
   }
 
   return new Promise(resolve => resolve());

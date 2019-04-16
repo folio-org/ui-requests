@@ -7,6 +7,7 @@ import {
   fillable,
   triggerable,
   selectable,
+
 } from '@bigtest/interactor';
 
 import { getSelectValues } from './helpers';
@@ -42,15 +43,27 @@ import { getSelectValues } from './helpers';
   requestTypeText = text('[data-test-request-type-text]');
   requestTypeIsPresent = isPresent('[data-test-request-type-text]');
   clickNewRequest = clickable('#clickable-create-request');
-  containsUserBarcode = value('[name="requester.barcode"');
-  containsItemBarcode = value('[name="item.barcode"');
+  containsUserBarcode = value('[name="requester.barcode"]');
+  containsItemBarcode = value('[name="item.barcode"]');
+
+  itemErrorIsPresent = isPresent('#section-item-info [class*=feedbackError---]');
+
+  requesterErrorIsPresent = isPresent('#section-requester-info [class*=feedbackError---]');
 
   whenRequestTypeIsPresent() {
     return this.when(() => this.requestTypeIsPresent);
   }
-
+  
   whenRequestTypesArePresent() {
     return this.when(() => this.requestTypes);
+  }
+
+  whenItemErrorIsPresent() {
+    return this.when(() => this.itemErrorIsPresent);
+  }
+
+  whenRequesterErrorIsPresent() {
+    return this.when(() => this.requesterErrorIsPresent);
   }
 }
 

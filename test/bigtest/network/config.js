@@ -265,9 +265,10 @@ export default function config() {
     if (request.queryParams.query) {
       const cqlParser = new CQLParser();
       cqlParser.parse(request.queryParams.query);
-      return items.where({
+      const item = items.where({
         barcode: cqlParser.tree.term
       });
+      return item;
     } else {
       return items.all();
     }

@@ -61,8 +61,6 @@ const urls = {
     const query = stringify({ query: `(${idType}=="${value}")` });
     return `inventory/items?${query}`;
   },
-  holding: value => `holdings-storage/holdings/${value}`,
-  instance: value => `inventory/instances/${value}`,
   loan: (value) => {
     const query = stringify({ query: `(itemId=="${value}")` });
     return `circulation/loans?${query}`;
@@ -246,8 +244,10 @@ class Requests extends React.Component {
     this.filterConfigWithTranslatedLabels = filterConfig
       .map(filter => ({ ...filter, label: formatMessage({ id: filter.label }) }));
 
-    this.state = { submitting: false,
-      errorMessage: '' };
+    this.state = {
+      submitting: false,
+      errorMessage: '',
+    };
   }
 
   static getDerivedStateFromProps(props) {
