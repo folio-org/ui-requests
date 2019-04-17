@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Route from 'react-router-dom/Route';
 import Switch from 'react-router-dom/Switch';
 import { hot } from 'react-hot-loader';
-import { FormattedMessage } from 'react-intl';
 import Requests from './Requests';
 
 class RequestsRouting extends React.Component {
