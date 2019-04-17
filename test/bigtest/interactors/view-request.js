@@ -2,10 +2,10 @@ import {
   interactor,
   isPresent,
   clickable,
-  selectable,
   attribute,
 } from '@bigtest/interactor';
 
+import CancelRequestDialog from './cancel-request-dialog';
 import { contains } from './helpers';
 
 @interactor class HeaderDropdown {
@@ -16,12 +16,6 @@ import { contains } from './helpers';
   clickCancel = clickable('#clickable-cancel-request');
   clickEdit = clickable('#clickable-edit-request');
   clickDuplicate = clickable('#duplicate-request');
-}
-
-@interactor class CancelRequestDialog {
-  clickConfirm = clickable('[data-test-confirm-cancel-request]');
-  clickCancel = clickable('[data-test-cancel-cancel-request]');
-  chooseReason = selectable('[data-test-select-cancelation-reason]');
 }
 
 @interactor class ItemAccordion {

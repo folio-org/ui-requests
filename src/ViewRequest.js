@@ -120,6 +120,7 @@ class ViewRequest extends React.Component {
 
   componentDidMount() {
     const requests = this.props.resources.selectedRequest;
+    this._isMounted = true;
     if (requests && requests.hasLoaded) {
       this.loadFullRequest(requests.records[0]);
     }
@@ -138,9 +139,15 @@ class ViewRequest extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   loadFullRequest(basicRequest) {
     this.props.joinRequest(basicRequest).then(request => {
-      this.setState({ request });
+      if (this._isMounted) {
+        this.setState({ request });
+      }
     });
   }
 

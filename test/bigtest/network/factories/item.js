@@ -19,6 +19,8 @@ export default Factory.extend({
     return { name: faker.random.word() };
   },
 
+  contributorNames: () => [{ name : faker.internet.userName() }],
+  copyNumbers: () => [Math.floor(Math.random() * 90000000) + 10000000],
   withLoan: trait({
     afterCreate(item, server) {
       server.create('loan', 'withUser', {

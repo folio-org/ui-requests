@@ -20,20 +20,6 @@ class RequestsRouting extends React.Component {
     this.connectedApp = props.stripes.connect(Requests);
   }
 
-  NoMatch() {
-    return (
-      <div>
-        <h2><FormattedMessage id="ui-requests.routingErrorOops" /></h2>
-        <p>
-          <FormattedMessage
-            id="ui-requests.routingError"
-            values={{ pathname: <tt>{this.props.location.pathname}</tt> }}
-          />
-        </p>
-      </div>
-    );
-  }
-
   render() {
     return (
       <Switch>
@@ -41,7 +27,6 @@ class RequestsRouting extends React.Component {
           path={this.props.match.path}
           render={() => <this.connectedApp {...this.props} />}
         />
-        <Route component={() => { this.NoMatch(); }} />
       </Switch>
     );
   }

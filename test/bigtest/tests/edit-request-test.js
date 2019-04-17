@@ -28,6 +28,21 @@ describe('Edit Request page', () => {
     });
   });
 
+  describe('cancel request', function () {
+    describe('confirm cancel request', function () {
+      beforeEach(async () => {
+        await ViewRequestInteractor.headerDropdown.click();
+        await EditRequestInteractor.headerDropdownMenu.clickDelete();
+        await EditRequestInteractor.cancelRequestDialog.chooseReason('Patron Cancelled');
+        await EditRequestInteractor.cancelRequestDialog.clickConfirm();
+      });
+
+      it('closes request view', function () {
+        expect(ViewRequestInteractor.requestInfoContains('Closed - Cancelled')).to.be.true;
+      });
+    });
+  });
+
   describe('updating existing request', function () {
     beforeEach(async function () {
       await EditRequestInteractor.chooseServicePoint('Circ Desk 2');
