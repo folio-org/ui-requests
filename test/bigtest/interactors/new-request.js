@@ -44,6 +44,10 @@ function getSelectValues(selector) {
   whenRequestTypeIsPresent() {
     return this.when(() => this.requestTypeIsPresent);
   }
+
+  whenRequestTypesArePresent() {
+    return this.when(() => this.requestTypes);
+  }
 }
 
 export default new NewRequestsInteractor('[data-test-requests-form]');

@@ -77,7 +77,8 @@ describe('New Request page', () => {
 
         await NewRequestInteractor
           .fillItemBarcode('9676761472501')
-          .pressEnter();
+          .pressEnter()
+          .whenRequestTypesArePresent();
       });
 
       it('should show hold and recall options', () => {
@@ -112,7 +113,8 @@ describe('New Request page', () => {
 
         await NewRequestInteractor
           .fillItemBarcode('9676761472501')
-          .pressEnter();
+          .pressEnter()
+          .whenRequestTypesArePresent();
       });
 
       it('should show hold and recall options', () => {
@@ -129,7 +131,8 @@ describe('New Request page', () => {
 
         await NewRequestInteractor
           .fillItemBarcode('9676761472501')
-          .pressEnter();
+          .pressEnter()
+          .whenRequestTypesArePresent();
       });
 
       it('should show hold and recall options', () => {
@@ -165,11 +168,11 @@ describe('New Request page', () => {
         await NewRequestInteractor
           .fillItemBarcode('9676761472501')
           .pressEnter()
-          .whenRequestTypeIsPresent();
+          .whenRequestTypesArePresent();
       });
 
-      it('should show hold option', () => {
-        expect(NewRequestInteractor.requestTypeText).to.equal('Hold');
+      it('should show hold and recall options', () => {
+        expect(NewRequestInteractor.requestTypeOptions).to.eql(['Hold', 'Recall']);
       });
     });
 
@@ -182,7 +185,8 @@ describe('New Request page', () => {
 
         await NewRequestInteractor
           .fillItemBarcode('9676761472501')
-          .pressEnter();
+          .pressEnter()
+          .whenRequestTypesArePresent();
       });
 
       it('should show hold and recall options', () => {
