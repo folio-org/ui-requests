@@ -2,8 +2,8 @@ import {
   get,
   isEqual,
   cloneDeep,
-  includes,
-  keyBy
+  keyBy,
+  isObject,
 } from 'lodash';
 import React, { Fragment } from 'react';
 import { compose } from 'redux';
@@ -114,7 +114,6 @@ class ViewRequest extends React.Component {
     this.cViewMetaData = props.stripes.connect(ViewMetaData);
     this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
     this.onToggleSection = this.onToggleSection.bind(this);
-    this.craftLayerUrl = this.craftLayerUrl.bind(this);
     this.cancelRequest = this.cancelRequest.bind(this);
     this.update = this.update.bind(this);
   }
@@ -188,11 +187,6 @@ class ViewRequest extends React.Component {
     });
   }
 
-  craftLayerUrl(mode) {
-    const url = this.props.location.pathname + this.props.location.search;
-    return includes(url, '?') ? `${url}&layer=${mode}` : `${url}?layer=${mode}`;
-  }
-
   getRequest() {
     const { resources, match: { params: { id } } } = this.props;
     const selRequest = (resources.selectedRequest || {}).records || [];
@@ -205,11 +199,14 @@ class ViewRequest extends React.Component {
   }
 
   getPatronGroup(request) {
-    if (!request) return '';
     const { patronGroups } = this.props;
-    if (!patronGroups.length) return '';
-    const pgId = request.requester.patronGroup;
-    return patronGroups.find(g => (g.id === pgId));
+    const group = get(request, 'requester.patronGroup');
+
+    if (!group || !patronGroups.length) return undefined;
+
+    const id = isObject(group) ? group.id : group;
+
+    return patronGroups.find(g => (g.id === id));
   }
 
   getPickupServicePointName(request) {
@@ -298,7 +295,7 @@ class ViewRequest extends React.Component {
     );
   }
 
-  renderRequest(request, patronGroup) {
+  renderRequest(request, patronGroup = {}) {
     const { stripes } = this.props;
     const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');
@@ -306,11 +303,12 @@ class ViewRequest extends React.Component {
     let deliveryAddressDetail;
     let selectedDelivery = false;
 
-    if (get(request, ['fulfilmentPreference'], '') === 'Delivery') {
+    if (get(request, 'fulfilmentPreference') === 'Delivery') {
       selectedDelivery = true;
-      const deliveryAddressType = get(request, ['deliveryAddressTypeId'], null);
+      const deliveryAddressType = get(request, 'deliveryAddressTypeId', null);
+
       if (deliveryAddressType) {
-        const addresses = get(request, ['requester', 'personal', 'addresses'], []);
+        const addresses = get(request, 'requester.personal.addresses', []);
         const deliveryLocations = keyBy(addresses, 'addressTypeId');
         deliveryAddressDetail = toUserAddress(deliveryLocations[deliveryAddressType]);
       }

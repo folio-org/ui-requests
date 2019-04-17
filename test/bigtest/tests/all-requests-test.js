@@ -10,7 +10,6 @@ describe('Requests', () => {
   const requests = new RequestsInteractor();
 
   beforeEach(async function () {
-    this.server.create('request');
     this.visit('/requests');
 
     await requests.clickHoldsCheckbox();
@@ -23,7 +22,7 @@ describe('Requests', () => {
   });
 
   it('renders each request instance', () => {
-    expect(requests.instances().length).to.be.equal(1);
+    expect(requests.instances().length).to.be.equal(20);
   });
 
   describe('clicking on the first request item', function () {
@@ -33,6 +32,17 @@ describe('Requests', () => {
 
     it('loads the request instance details', function () {
       expect(requests.instance.isVisible).to.equal(true);
+    });
+  });
+
+  describe('Export to CSV', function () {
+    beforeEach(async function () {
+      await requests.headerDropdown.click();
+      await requests.headerDropdownMenu.clickExportToCSV();
+    });
+
+    it('exports data to csv', () => {
+      expect(requests.headerDropdownMenu.exportBtnIsVisible).to.be.false;
     });
   });
 });

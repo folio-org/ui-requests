@@ -79,7 +79,7 @@ class RequestForm extends React.Component {
       search: PropTypes.string,
     }).isRequired,
     onCancel: PropTypes.func.isRequired,
-    onCancelRequest: PropTypes.func.isRequired,
+    onCancelRequest: PropTypes.func,
     pristine: PropTypes.bool,
     resources: PropTypes.shape({
       query: PropTypes.object,
@@ -250,6 +250,7 @@ class RequestForm extends React.Component {
 
   onUserClick() {
     const barcode = this.requesterBarcodeRef.current.value;
+
     if (!barcode) return;
     this.findUser(barcode);
   }
@@ -270,7 +271,7 @@ class RequestForm extends React.Component {
         this.setState({ selectedUser });
         this.props.change('requesterId', selectedUser.id);
       }
-    });
+    }).then(_ => this.props.asyncValidate());
   }
 
   findLoan(item) {
@@ -340,7 +341,7 @@ class RequestForm extends React.Component {
   // This function only exists to enable 'do lookup on enter' for item and
   // user search
   onKeyDown(e, element) {
-    if (e.key === 'Enter' && e.shiftKey === false) {
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       if (element === 'item') {
         this.onItemClick();

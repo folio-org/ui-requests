@@ -94,7 +94,19 @@ export default function config() {
     }],
     'totalRecords': 6
   });
-  this.get('/users');
+
+  this.get('/users', ({ users }, request) => {
+    if (request.queryParams.query) {
+      const cqlParser = new CQLParser();
+      cqlParser.parse(request.queryParams.query);
+      const { field, term } = cqlParser.tree;
+
+      return users.where({ [field]: term });
+    } else {
+      return users.all();
+    }
+  });
+
   this.get('/users/:id', (schema, request) => {
     return schema.users.find(request.params.id).attrs;
   });
@@ -111,7 +123,10 @@ export default function config() {
       userId: cqlParser.tree.term
     });
   });
-  this.get('/service-points');
+
+  this.get('/service-points', ({ servicePoints }) => {
+    return servicePoints.all();
+  });
 
   this.get('/circulation/loans', {
     loans: [],
@@ -186,10 +201,27 @@ export default function config() {
     totalRecords: 0,
   });
 
-  this.get('/circulation/requests');
-  this.get('/circulation/requests/:id', (schema, request) => {
-    return schema.requests.find(request.params.id).attrs;
+  this.get('/circulation/requests', ({ requests }) => {
+    return requests.all();
   });
+
+  this.get('/circulation/requests/:id', ({ requests }, request) => {
+    return requests.find(request.params.id);
+  });
+
+  this.post('/circulation/requests', ({ requests }, request) => {
+    const body = JSON.parse(request.requestBody);
+    const defaultReq = this.build('request');
+    return requests.create({ ...defaultReq, ...body });
+  });
+
+  this.put('/circulation/requests/:id', ({ requests }, request) => {
+    const body = JSON.parse(request.requestBody);
+    const reqModel = requests.find(body.id);
+    const defaultReq = this.build('request');
+    return reqModel.update({ ...defaultReq, ...body });
+  });
+
   this.get('/request-storage/requests', ({ requests }, request) => {
     const url = new URL(request.url);
     const cqlQuery = url.searchParams.get('query');
@@ -199,6 +231,7 @@ export default function config() {
       itemId: cqlParser.tree.term
     });
   });
+
   this.get('/request-storage/requests/:id', (schema, request) => {
     return schema.requests.find(request.params.id).attrs;
   });
@@ -232,9 +265,10 @@ export default function config() {
     if (request.queryParams.query) {
       const cqlParser = new CQLParser();
       cqlParser.parse(request.queryParams.query);
-      return items.where({
+      const item = items.where({
         barcode: cqlParser.tree.term
       });
+      return item;
     } else {
       return items.all();
     }
