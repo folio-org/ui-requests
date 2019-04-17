@@ -80,7 +80,7 @@ import { getSelectValues } from './helpers';
   whenRequestTypeIsPresent() {
     return this.when(() => this.requestTypeIsPresent);
   }
-    
+
   whenRequestTypesArePresent() {
     return this.when(() => this.requestTypes);
   }
