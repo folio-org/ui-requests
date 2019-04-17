@@ -15,6 +15,7 @@ describe('Requests', () => {
     await requests.clickHoldsCheckbox();
     await requests.clickPagesCheckbox();
     await requests.clickRecallsCheckbox();
+    await requests.whenInstancesArePresent(20);
   });
 
   it('shows the list of requests items', () => {
@@ -22,7 +23,7 @@ describe('Requests', () => {
   });
 
   it('renders each request instance', () => {
-    expect(requests.instances().length).to.be.equal(20);
+    expect(requests.instanceList.size).to.be.equal(20);
   });
 
   describe('clicking on the first request item', function () {

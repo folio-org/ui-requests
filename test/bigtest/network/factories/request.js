@@ -11,6 +11,7 @@ export default Factory.extend({
   loan: {
     dueDate: '2017-09-19T12:42:21.000Z',
   },
+  tags: { tagList: ['tag1'] },
   afterCreate(request, server) {
     const user = server.create('user');
     const item = server.create('item');

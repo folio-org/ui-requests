@@ -5,6 +5,8 @@ import {
   selectable,
 } from '@bigtest/interactor';
 
+import CancelRequestDialog from './cancel-request-dialog';
+
 @interactor class HeaderDropdown {
   click = clickable('button');
 }
@@ -20,6 +22,7 @@ import {
   headerDropdownMenu = new HeaderDropdownMenu();
   chooseServicePoint = selectable('[name="pickupServicePointId"]');
   clickUpdate = clickable('#clickable-update-request');
+  cancelRequestDialog = new CancelRequestDialog('[data-test-cancel-request-modal]');
 }
 
-export default new EditRequestsInteractor('[data-test-requests-form]');
+export default new EditRequestsInteractor();

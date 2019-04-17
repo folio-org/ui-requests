@@ -249,7 +249,7 @@ class RequestForm extends React.Component {
   }
 
   onUserClick() {
-    const barcode = this.requesterBarcodeRef.current.value;
+    const barcode = get(this.requesterBarcodeRef, 'current.value');
 
     if (!barcode) return;
     this.findUser(barcode);
@@ -333,9 +333,12 @@ class RequestForm extends React.Component {
       this.setState({ blocked: true });
     }
 
-    this.setState({ selectedItem: null });
-    const barcode = this.itemBarcodeRef.current.value;
-    return this.findItem(barcode);
+    const barcode = get(this.itemBarcodeRef, 'current.value');
+
+    if (barcode) {
+      this.setState({ selectedItem: null });
+      this.findItem(barcode);
+    }
   }
 
   // This function only exists to enable 'do lookup on enter' for item and
@@ -746,7 +749,7 @@ class RequestForm extends React.Component {
                               disabled={isEditForm}
                             >
                               {requestTypeOptions.map(({ id, value }) => (
-                                <FormattedMessage id={id}>
+                                <FormattedMessage id={id} key={id}>
                                   {translatedLabel => (
                                     <option
                                       value={value}
