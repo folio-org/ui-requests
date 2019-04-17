@@ -43,7 +43,6 @@ describe('New Request page', () => {
       });
     });
 
-
     describe('visiting the create request page', () => {
       it('displays the title in the pane header', () => {
         expect(NewRequestInteractor.title).to.equal('New request');
@@ -89,6 +88,41 @@ describe('New Request page', () => {
           .pressEnter();
 
         await NewRequestInteractor.chooseServicePoint('Circ Desk 2');
+        await NewRequestInteractor.clickNewRequest();
+      });
+
+      it('should create a new request and open view request pane', () => {
+        expect(ViewRequestInteractor.requestSectionPresent).to.be.true;
+        expect(ViewRequestInteractor.requesterSectionPresent).to.be.true;
+      });
+    });
+
+    describe('creating new request type with delivery', () => {
+      beforeEach(async function () {
+        this.server.create('item', {
+          barcode: '9676761472500',
+          title: 'Best Book Ever',
+          materialType: {
+            name: 'book'
+          },
+        });
+
+        const user = this.server.create('user', { barcode: '9676761472501' });
+        const address = this.server.create('address', { addressTypeId: 'Type1' });
+        const personal = this.server.create('user-personal');
+        personal.update('addresses', [address.toJSON()]);
+        user.update('personal', personal.toJSON());
+
+        await NewRequestInteractor
+          .fillItemBarcode('9676761472500')
+          .pressEnter();
+
+        await NewRequestInteractor
+          .fillUserBarcode('9676761472501')
+          .pressEnter();
+
+        await NewRequestInteractor.chooseFulfillmentPreference('Delivery');
+        await NewRequestInteractor.chooseDeliveryAddress('Claim');
         await NewRequestInteractor.clickNewRequest();
       });
 

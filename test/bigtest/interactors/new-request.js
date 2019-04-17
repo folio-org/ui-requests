@@ -71,8 +71,10 @@ import { getSelectValues } from './helpers';
   containsUserBarcode = value('[name="requester.barcode"]');
   containsItemBarcode = value('[name="item.barcode"]');
 
-  itemErrorIsPresent = isPresent('#section-item-info [class*=feedbackError---]');
+  chooseFulfillmentPreference = selectable('[name="fulfilmentPreference"]');
+  chooseDeliveryAddress = selectable('[name="deliveryAddressTypeId"]');
 
+  itemErrorIsPresent = isPresent('#section-item-info [class*=feedbackError---]');
   requesterErrorIsPresent = isPresent('#section-requester-info [class*=feedbackError---]');
 
   whenRequestTypeIsPresent() {
