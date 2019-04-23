@@ -382,7 +382,6 @@ class RequestForm extends React.Component {
     });
   }
 
-  requireItem = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectItem" />);
   requireUser = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectUser" />);
 
   getProxy() {

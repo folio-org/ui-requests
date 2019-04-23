@@ -14,7 +14,7 @@ const ItemDetail = ({ item, loan, itemId, requestCount }) => {
   const status = get(item, 'status.name') || get(item, 'status');
   const contributor = get(item, ['contributorNames', '0', 'name'], '-');
   const positionLink = item.barcode ? <Link to={`/requests?filters=requestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit%2CrequestStatus.Open%20-%20Not%20yet%20filled&query=${item.barcode}&sort=Request%20Date`}>{requestCount}</Link> : '-';
-  const itemLabel = item.barcode ? 'ui-requests.item.id' : 'ui-requests.item.barcode';
+  const itemLabel = item.barcode ? 'ui-requests.item.barcode' : 'ui-requests.item.id';
 
   return (
     <React.Fragment>
