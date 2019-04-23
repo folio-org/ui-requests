@@ -154,7 +154,11 @@ class RequestForm extends React.Component {
     }
 
     if (this.props.query.itemBarcode) {
-      this.findItem(this.props.query.itemBarcode);
+      this.findItem('barcode', this.props.query.itemBarcode);
+    }
+
+    if (this.props.query.itemId) {
+      this.findItem('id', this.props.query.itemId);
     }
   }
 
@@ -193,7 +197,11 @@ class RequestForm extends React.Component {
     }
 
     if (prevQuery.itemBarcode !== query.itemBarcode) {
-      this.findItem(query.itemBarcode);
+      this.findItem('barcode', query.itemBarcode);
+    }
+
+    if (prevQuery.itemId !== query.itemId) {
+      this.findItem('id', query.itemId);
     }
 
     if (!isEqual(blocks, prevBlocks) && blocks.length > 0) {
@@ -297,9 +305,9 @@ class RequestForm extends React.Component {
     });
   }
 
-  findItem(barcode) {
+  findItem(key, value) {
     const { findResource } = this.props;
-    return findResource('item', barcode, 'barcode')
+    return findResource('item', value, key)
       .then((result) => {
         if (!result || result.totalRecords === 0) return null;
 
@@ -307,7 +315,7 @@ class RequestForm extends React.Component {
         const options = this.getRequestTypeOptions(item);
 
         this.props.change('itemId', item.id);
-        this.props.change('item.barcode', barcode);
+        this.props.change('item.barcode', item.barcode);
         if (options.length === 1) {
           this.props.change('requestType', options[0].value);
         }
@@ -337,7 +345,7 @@ class RequestForm extends React.Component {
 
     if (barcode) {
       this.setState({ selectedItem: null });
-      this.findItem(barcode);
+      this.findItem('barcode', barcode);
     }
   }
 
@@ -689,7 +697,7 @@ class RequestForm extends React.Component {
                                     ref={this.itemBarcodeRef}
                                     onInput={this.onItemClickDebounce}
                                     onKeyDown={e => this.onKeyDown(e, 'item')}
-                                    validate={this.requireItem}
+
                                   />
                                 )}
                               </FormattedMessage>
