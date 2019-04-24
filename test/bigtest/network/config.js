@@ -209,10 +209,9 @@ export default function config() {
     return requests.find(request.params.id);
   });
 
-  this.post('/circulation/requests', ({ requests }, request) => {
+  this.post('/circulation/requests', (_, request) => {
     const body = JSON.parse(request.requestBody);
-    const defaultReq = this.build('request');
-    return requests.create({ ...defaultReq, ...body });
+    return this.create('request', body);
   });
 
   this.put('/circulation/requests/:id', ({ requests }, request) => {
@@ -227,6 +226,7 @@ export default function config() {
     const cqlQuery = url.searchParams.get('query');
     const cqlParser = new CQLParser();
     cqlParser.parse(cqlQuery);
+
     return requests.where({
       itemId: cqlParser.tree.term
     });
@@ -265,10 +265,8 @@ export default function config() {
     if (request.queryParams.query) {
       const cqlParser = new CQLParser();
       cqlParser.parse(request.queryParams.query);
-      const item = items.where({
-        barcode: cqlParser.tree.term
-      });
-      return item;
+      const { field, term } = cqlParser.tree;
+      return items.where({ [field]: term });
     } else {
       return items.all();
     }

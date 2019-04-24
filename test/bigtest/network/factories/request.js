@@ -14,7 +14,8 @@ export default Factory.extend({
   tags: { tagList: ['tag1'] },
   afterCreate(request, server) {
     const user = server.create('user');
-    const item = server.create('item');
+    const options = (request.itemId) ? { id: request.itemId } : null;
+    const item = server.create('item', options);
 
     request.update({
       item: item.attrs,

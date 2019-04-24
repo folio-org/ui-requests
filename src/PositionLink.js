@@ -6,7 +6,9 @@ import { FormattedMessage } from 'react-intl';
 
 export default function PositionLink({ request }) {
   const queuePosition = get(request, 'position');
-  return (request ?
+  const barcode = get(request, 'item.barcode');
+
+  return (request && barcode ?
     <div>
       <span>
         {queuePosition}
