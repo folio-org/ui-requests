@@ -6,7 +6,6 @@ import { FormattedDate, FormattedMessage } from 'react-intl';
 import { Col, KeyValue, Row } from '@folio/stripes/components';
 
 const ItemDetail = ({ item, loan, itemId, requestCount }) => {
-
   if (!item.id && !item.barcode) {
     return <FormattedMessage id="ui-requests.actions.loading" />;
   }
