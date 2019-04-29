@@ -6,11 +6,11 @@ import { FormattedDate, FormattedMessage } from 'react-intl';
 import { Col, KeyValue, Row } from '@folio/stripes/components';
 
 const ItemDetail = ({ item, loan, itemId, requestCount }) => {
-  if (!item.id) {
+  if (!item.id && !item.barcode) {
     return <FormattedMessage id="ui-requests.actions.loading" />;
   }
 
-  const recordLink = item ? <Link to={`/inventory/view/${item.instanceId}/${item.holdingsRecordId}/${itemId}`}>{item.barcode || item.id}</Link> : '-';
+  const recordLink = item ? <Link to={`/inventory/view/${item.instanceId}/${item.holdingsRecordId}/${itemId}`}>{item.barcode || itemId}</Link> : '-';
   const status = get(item, 'status.name') || get(item, 'status');
   const contributor = get(item, ['contributorNames', '0', 'name'], '-');
   const positionLink = item.barcode ? <Link to={`/requests?filters=requestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit%2CrequestStatus.Open%20-%20Not%20yet%20filled&query=${item.barcode}&sort=Request%20Date`}>{requestCount}</Link> : '-';
