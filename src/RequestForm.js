@@ -57,7 +57,7 @@ import {
   requestTypesByItemStatus,
 } from './constants';
 
-import { toUserAddress } from './utils';
+import { toUserAddress, getPatronGroup } from './utils';
 
 import css from './requests.css';
 
@@ -92,7 +92,7 @@ class RequestForm extends React.Component {
       fulfilmentTypes: PropTypes.arrayOf(PropTypes.object),
       servicePoints: PropTypes.arrayOf(PropTypes.object),
     }),
-    patronGroup: PropTypes.object,
+    patronGroups: PropTypes.arrayOf(PropTypes.object),
     parentResources: PropTypes.object,
     history: PropTypes.shape({
       push: PropTypes.func,
@@ -576,7 +576,7 @@ class RequestForm extends React.Component {
         addressTypes,
         fulfilmentTypes = [],
       },
-      patronGroup = {},
+      patronGroups,
       parentResources,
       submitting,
       intl: {
@@ -646,6 +646,7 @@ class RequestForm extends React.Component {
 
     const multiRequestTypesVisible = !isEditForm && selectedItem && requestTypeOptions.length > 1;
     const singleRequestTypeVisible = !isEditForm && selectedItem && requestTypeOptions.length === 1;
+    const patronGroup = getPatronGroup(selectedUser, patronGroups);
 
     return (
       <div>
@@ -900,7 +901,7 @@ class RequestForm extends React.Component {
                             user={request ? request.requester : selectedUser}
                             stripes={this.props.stripes}
                             request={request}
-                            patronGroup={patronGroup.desc}
+                            patronGroup={get(patronGroup, 'desc')}
                             selectedDelivery={selectedDelivery}
                             fulfilmentPreference={fulfilmentPreference}
                             deliveryAddress={addressDetail}

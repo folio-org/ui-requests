@@ -3,7 +3,6 @@ import {
   isEqual,
   cloneDeep,
   keyBy,
-  isObject,
 } from 'lodash';
 import React, { Fragment } from 'react';
 import { compose } from 'redux';
@@ -205,17 +204,6 @@ class ViewRequest extends React.Component {
     return (curRequest.id === this.state.request.id) ? this.state.request : curRequest;
   }
 
-  getPatronGroup(request) {
-    const { patronGroups } = this.props;
-    const group = get(request, 'requester.patronGroup');
-
-    if (!group || !patronGroups.length) return undefined;
-
-    const id = isObject(group) ? group.id : group;
-
-    return patronGroups.find(g => (g.id === id));
-  }
-
   getPickupServicePointName(request) {
     if (!request) return '';
     const { optionLists: { servicePoints } } = this.props;
@@ -224,13 +212,14 @@ class ViewRequest extends React.Component {
     return get(servicePoint, ['name'], '');
   }
 
-  renderLayer(request, patronGroup) {
+  renderLayer(request) {
     const {
       optionLists,
       location,
       stripes,
       onCloseEdit,
       findResource,
+      patronGroups,
     } = this.props;
 
     const query = location.search ? queryString.parse(location.search) : {};
@@ -250,7 +239,7 @@ class ViewRequest extends React.Component {
             onCancel={onCloseEdit}
             onCancelRequest={this.cancelRequest}
             optionLists={optionLists}
-            patronGroup={patronGroup}
+            patronGroups={patronGroups}
             query={this.props.query}
             findResource={findResource}
           />
@@ -302,8 +291,8 @@ class ViewRequest extends React.Component {
     );
   }
 
-  renderRequest(request, patronGroup = {}) {
-    const { stripes } = this.props;
+  renderRequest(request) {
+    const { stripes, patronGroups } = this.props;
     const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');
     const isRequestClosed = requestStatus.startsWith('Closed');
@@ -462,7 +451,7 @@ class ViewRequest extends React.Component {
               user={request.requester}
               proxy={request.proxy}
               stripes={stripes}
-              patronGroup={patronGroup}
+              patronGroups={patronGroups}
               request={request}
               selectedDelivery={selectedDelivery}
               deliveryAddress={deliveryAddressDetail}
@@ -505,10 +494,7 @@ class ViewRequest extends React.Component {
       return this.renderSpinner();
     }
 
-    const patronGroup = this.getPatronGroup(request);
-
-    return this.renderLayer(request, patronGroup) ||
-      this.renderRequest(request, patronGroup);
+    return this.renderLayer(request) || this.renderRequest(request);
   }
 }
 
