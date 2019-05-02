@@ -25,6 +25,8 @@ describe('Edit Request page', () => {
 
     it('closes the edit request form', function () {
       expect(this.location.search).not.to.include('layer=edit');
+      expect(this.location.search).not.to.include('userBarcode=');
+      expect(this.location.search).not.to.include('itemBarcode=');
     });
   });
 
