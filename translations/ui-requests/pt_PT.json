@@ -102,7 +102,7 @@
     "actions.duplicateRequest": "Duplicate",
     "actions.cancelNewRequest": "Cancelar",
     "close": "Fechar",
-    "blockedLabel": "Razão para o bloqueio:",
+    "blockedLabel": "Razão para o bloqueio",
     "blockModal": "Pedidos bloqueados ao utilizador",
     "detailsButton": "Detalhes do bloqueio",
     "enter": "Enter",
