@@ -404,6 +404,18 @@ class Requests extends React.Component {
     this.setState({ errorMessage });
   }
 
+  handleCloseNewRecord = (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+
+    this.props.mutator.query.update({
+      layer: null,
+      itemBarcode: null,
+      userBarcode: null,
+    });
+  }
+
   onDuplicate = (request) => {
     const dupRequest = omit(request, [
       'id',
@@ -515,6 +527,7 @@ class Requests extends React.Component {
           newRecordInitialValues={InitialValues}
           massageNewRecord={this.massageNewRecord}
           onCreate={this.create}
+          onCloseNewRecord={this.handleCloseNewRecord}
           parentResources={resources}
           parentMutator={mutator}
           detailProps={{

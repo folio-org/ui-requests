@@ -60,6 +60,11 @@ describe('New Request page', () => {
 
           it('should redirect to view requests page after click', () => {
             expect(requests.$root).to.exist;
+            if (this.location && this.location.search) {
+              expect(this.location.search).not.to.include('layer=edit');
+              expect(this.location.search).not.to.include('userBarcode=');
+              expect(this.location.search).not.to.include('itemBarcode=');
+            }
           });
         });
       });
