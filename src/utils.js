@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import { get, isObject } from 'lodash';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Col, Headline, Row } from '@folio/stripes/components';
@@ -48,4 +48,14 @@ export function toUserAddress(addr) {
       <div>{(addr && addr.postalCode) || ''}</div>
     </div>
   );
+}
+
+export function getPatronGroup(patron, patronGroups) {
+  const group = get(patron, 'patronGroup');
+
+  if (!group || !patronGroups.length) return undefined;
+
+  const id = isObject(group) ? group.id : group;
+
+  return patronGroups.find(g => (g.id === id));
 }

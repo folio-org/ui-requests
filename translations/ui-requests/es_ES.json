@@ -102,9 +102,9 @@
     "actions.duplicateRequest": "Duplicate",
     "actions.cancelNewRequest": "Cancel",
     "close": "Close",
-    "blockedLabel": "Reason for block",
+    "blockedLabel": "Motivo del bloqueo",
     "blockModal": "Patron blocked from requesting",
-    "detailsButton": "View block details",
+    "detailsButton": "Ver detalles del bloqueo",
     "enter": "Enter",
     "requestType.message": "Select item to view available request types",
     "edit.deleteRequest": "Delete request",
@@ -113,8 +113,8 @@
     "showTags": "Show Tags",
     "tags.tagList": "Tags",
     "item.copyNumbers": "Copy number",
-    "requestNotAllowed": "Request not allowed",
-    "additionalReasons": "View block details to see additional reasons for block...",
+    "requestNotAllowed": "Solicitud no permitida",
+    "additionalReasons": "Ver detalles de bloqueo para ver las razones adicionales para bloquear...",
     "pickupServicePoint.name": "Punto de servicio de recogida",
-    "item.id": "Item id"
+    "item.id": "ID de ítem"
 }

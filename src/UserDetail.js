@@ -3,12 +3,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Col, KeyValue, Row } from '@folio/stripes/components';
-import { getFullName, userHighlightBox } from './utils';
+import { getFullName, userHighlightBox, getPatronGroup } from './utils';
 
 class UserDetail extends React.Component {
   static propTypes = {
     deliveryAddress: PropTypes.node,
-    patronGroup: PropTypes.object,
+    patronGroups: PropTypes.arrayOf(PropTypes.object),
     pickupServicePoint: PropTypes.string,
     proxy: PropTypes.object,
     request: PropTypes.object.isRequired,
@@ -17,7 +17,6 @@ class UserDetail extends React.Component {
   };
 
   static defaultProps = {
-    patronGroup: {},
     pickupServicePoint: '',
     proxy: {},
     selectedDelivery: false,
@@ -28,7 +27,7 @@ class UserDetail extends React.Component {
       user,
       proxy,
       request,
-      patronGroup,
+      patronGroups,
       deliveryAddress,
       pickupServicePoint,
       selectedDelivery,
@@ -37,6 +36,7 @@ class UserDetail extends React.Component {
     const id = user.id;
     const name = getFullName(user);
     const barcode = user.barcode;
+    const patronGroup = getPatronGroup(user, patronGroups);
 
     let proxyName;
     let proxyBarcode;
