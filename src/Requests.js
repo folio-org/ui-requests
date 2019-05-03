@@ -93,7 +93,7 @@ class Requests extends React.Component {
         params: {
           query: makeQueryFunction(
             'cql.allRecords=1',
-            '(requester.barcode="%{query.query}*" or item.title="%{query.query}*" or item.barcode="%{query.query}*")',
+            '(requester.barcode="%{query.query}*" or item.title="%{query.query}*" or itemId=="%{query.query}")',
             {
               'Title': 'item.title',
               'Item barcode': 'item.barcode',
