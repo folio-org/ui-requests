@@ -389,9 +389,8 @@ class ViewRequest extends React.Component {
             }
           >
             <ItemDetail
-              item={request.item}
+              item={{ ...request.item, id: request.itemId }}
               loan={request.loan}
-              itemId={request.itemId}
               requestCount={request.requestCount}
             />
           </Accordion>
