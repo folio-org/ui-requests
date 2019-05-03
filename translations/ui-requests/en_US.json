@@ -104,7 +104,7 @@
     "close": "Close",
     "blockedLabel": "Reason for block",
     "blockModal": "Patron blocked from requesting",
-    "detailsButton": "Block details",
+    "detailsButton": "View block details",
     "enter": "Enter",
     "requestType.message": "Select item to view available request types",
     "edit.deleteRequest": "Delete request",
