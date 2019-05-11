@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 1.9.0 (In Progress)
+## [1.9.0](https://github.com/folio-org/ui-requests/tree/v1.9.0) (2019-05-10)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.8.0...v1.9.0)
 
 * Allow requests for On order and In process items. Part of UIREQ-247.
 * Add ability to create a request without an item barcode. Part of UIREQ-253.
