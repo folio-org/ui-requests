@@ -2,7 +2,7 @@
 
 ## 1.10.0 (In Progress)
 
-* Fix creating hold request via duplicate. Part of UIREQ-275.
+* Fix creating hold request via duplicate option. Part of UIREQ-275.
 
 ## [1.9.0](https://github.com/folio-org/ui-requests/tree/v1.9.0) (2019-05-10)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.8.0...v1.9.0)
