@@ -413,6 +413,7 @@ class Requests extends React.Component {
       layer: null,
       itemBarcode: null,
       userBarcode: null,
+      itemId: null,
     });
   }
 
@@ -432,6 +433,7 @@ class Requests extends React.Component {
     this.props.mutator.query.update({
       layer: 'create',
       itemBarcode: request.item.barcode,
+      itemId: request.itemId,
       userBarcode: request.requester.barcode,
     });
   }
