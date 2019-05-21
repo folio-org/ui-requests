@@ -424,6 +424,8 @@ class Requests extends React.Component {
       'requestCount',
       'position',
       'requester',
+      'item',
+      'pickupServicePoint',
     ]);
 
     this.setState({ dupRequest });
