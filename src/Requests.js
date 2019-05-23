@@ -18,7 +18,7 @@ import { exportCsv } from '@folio/stripes/util';
 
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
-import { fulfilmentTypes, requestTypesByItemStatus } from './constants';
+import { fulfilmentTypes } from './constants';
 import { getFullName, duplicateRequest } from './utils';
 import packageInfo from '../package';
 
