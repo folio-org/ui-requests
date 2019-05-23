@@ -4,8 +4,21 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import RequestsInteractor from '../interactors/requests';
 
+const servicePoint = {
+  id: 'servicepointId2',
+  name: 'Circ Desk 2',
+  code: 'cd2',
+  discoveryDisplayName: 'Circulation Desk -- Back Entrance',
+  pickupLocation: true,
+};
+
 describe('Requests', () => {
-  setupApplication();
+  setupApplication({
+    currentUser: {
+      servicePoints: [servicePoint],
+      curServicePoint: servicePoint,
+    },
+  });
 
   const requests = new RequestsInteractor();
 

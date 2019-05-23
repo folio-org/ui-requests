@@ -263,11 +263,6 @@ class Requests extends React.Component {
     return null;
   }
 
-  getColumnHeaders = (headers) => headers.map(item => ({
-    label: this.props.intl.formatMessage({ id: `ui-requests.${item}` }),
-    value: item
-  }));
-
   componentDidUpdate(prevProps) {
     const patronBlocks = get(this.props.resources, ['patronBlocks', 'records'], []);
     const prevBlocks = get(prevProps.resources, ['patronBlocks', 'records'], []);
@@ -305,6 +300,11 @@ class Requests extends React.Component {
       }
     }
   }
+
+  getColumnHeaders = (headers) => headers.map(item => ({
+    label: this.props.intl.formatMessage({ id: `ui-requests.${item}` }),
+    value: item
+  }));
 
   buildRecords(recordsLoaded) {
     const result = JSON.parse(JSON.stringify(recordsLoaded)); // Do not mutate the actual resource
@@ -458,13 +458,16 @@ class Requests extends React.Component {
         expiredHolds: {
           reset,
           GET,
-        }
-      }
+        },
+      },
+      stripes: { user },
     } = this.props;
 
     reset();
 
-    const { requests } = await GET();
+    const servicePointId = get(user, 'user.curServicePoint.id', '');
+    const params = { query: `(servicePointId=="${servicePointId}")` };
+    const { requests } = await GET({ params });
     const recordsToCSV = this.buildRecords(requests);
 
     exportCsv(recordsToCSV, {
