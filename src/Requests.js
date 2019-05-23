@@ -1,4 +1,4 @@
-import { omit, get } from 'lodash';
+import { get } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { stringify } from 'query-string';
@@ -19,7 +19,7 @@ import { exportCsv } from '@folio/stripes/util';
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
 import { fulfilmentTypes } from './constants';
-import { getFullName } from './utils';
+import { getFullName, duplicateRequest } from './utils';
 import packageInfo from '../package';
 
 const INITIAL_RESULT_COUNT = 30;
@@ -381,9 +381,11 @@ class Requests extends React.Component {
     this.props.mutator.activeRecord.update({ patronId: patron.id });
   }
 
-  create = data => this.props.mutator.records.POST(data)
-    .then(() => this.props.mutator.query.update({ layer: null }))
-    .catch(resp => this.processError(resp))
+  create = (data) => {
+    return this.props.mutator.records.POST(data)
+      .then(() => this.props.mutator.query.update({ layer: null }))
+      .catch(resp => this.processError(resp));
+  }
 
   processError(resp) {
     const contentType = resp.headers.get('Content-Type') || '';
@@ -418,16 +420,7 @@ class Requests extends React.Component {
   }
 
   onDuplicate = (request) => {
-    const dupRequest = omit(request, [
-      'id',
-      'metadata',
-      'status',
-      'requestCount',
-      'position',
-      'requester',
-      'item',
-      'pickupServicePoint',
-    ]);
+    const dupRequest = duplicateRequest(request);
 
     this.setState({ dupRequest });
     this.props.mutator.query.update({
