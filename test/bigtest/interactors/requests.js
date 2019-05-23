@@ -13,7 +13,9 @@ import {
 
 @interactor class HeaderDropdownMenu {
   clickExportToCSV = clickable('#exportToCsvPaneHeaderBtn');
+  clickExportExpiredHoldsToCSV = clickable('#exportExpiredHoldsToCsvPaneHeaderBtn');
   exportBtnIsVisible = isVisible('#exportToCsvPaneHeaderBtn');
+  exportExpiredHoldsBtnIsVisible = isVisible('#exportExpiredHoldsToCsvPaneHeaderBtn');
 }
 
 @interactor class InstanceList {

@@ -205,6 +205,10 @@ export default function config() {
     return requests.all();
   });
 
+  this.get('/circulation/requests-report/expired-holds', ({ requests }) => {
+    return requests.all();
+  });
+
   this.get('/circulation/requests/:id', ({ requests }, request) => {
     return requests.find(request.params.id);
   });
