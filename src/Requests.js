@@ -301,10 +301,19 @@ class Requests extends React.Component {
     }
   }
 
-  getColumnHeaders = (headers) => headers.map(item => ({
-    label: this.props.intl.formatMessage({ id: `ui-requests.${item}` }),
-    value: item
-  }));
+  getColumnHeaders = (headers) => {
+    const { intl: { formatMessage } } = this.props;
+
+    return headers.map(item => {
+      const translationKey = item.translationKey || item;
+      const value = item.value || item;
+
+      return {
+        label: formatMessage({ id: `ui-requests.${translationKey}` }),
+        value
+      };
+    });
+  };
 
   buildRecords(recordsLoaded) {
     const result = JSON.parse(JSON.stringify(recordsLoaded)); // Do not mutate the actual resource
@@ -466,11 +475,10 @@ class Requests extends React.Component {
     reset();
 
     const servicePointId = get(user, 'user.curServicePoint.id', '');
-    const params = { query: `(servicePointId=="${servicePointId}")` };
-    const { requests } = await GET({ params });
-    const recordsToCSV = this.buildRecords(requests);
+    const path = `circulation/requests-report/expired-holds/${servicePointId}`;
+    const { requests } = await GET({ path });
 
-    exportCsv(recordsToCSV, {
+    exportCsv(requests, {
       onlyFields: this.expiredHoldsReportColumnHeaders,
       excludeFields: ['id'],
     });

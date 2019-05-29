@@ -68,11 +68,32 @@ export const reportHeaders = [
 ];
 
 export const expiredHoldsReportHeaders = [
-  'requester.name',
-  'requester.barcode',
-  'item.title',
-  'item.barcode',
-  'item.callNumber',
-  'status',
-  'holdShelfExpirationDate',
+  {
+    translationKey: 'requester.name',
+    value:'requesterName',
+  },
+  {
+    translationKey: 'requester.barcode',
+    value:'requesterBarcode',
+  },
+  {
+    translationKey: 'item.title',
+    value:'itemTitle',
+  },
+  {
+    translationKey: 'item.barcode',
+    value:'itemBarcode',
+  },
+  {
+    translationKey: 'item.callNumber',
+    value:'callNumber',
+  },
+  {
+    translationKey: 'status',
+    value:'requestStatus',
+  },
+  {
+    translationKey: 'holdShelfExpirationDate',
+    value:'holdShelfExpirationDate',
+  },
 ];

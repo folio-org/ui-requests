@@ -205,8 +205,19 @@ export default function config() {
     return requests.all();
   });
 
-  this.get('/circulation/requests-report/expired-holds', ({ requests }) => {
-    return requests.all();
+  this.get('/circulation/requests-report/expired-holds/:id', {
+    requests: [
+      {
+        requesterName: 'requesterName',
+        requesterBarcode: 'requesterBarcode',
+        itemTitle: 'itemTitle',
+        itemBarcode: 'itemBarcode',
+        callNumber: 'callNumber',
+        requestStatus: 'requestStatus',
+        holdShelfExpirationDate: 'holdShelfExpirationDate',
+      },
+    ],
+    totalRecords: 1,
   });
 
   this.get('/circulation/requests/:id', ({ requests }, request) => {
