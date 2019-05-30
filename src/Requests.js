@@ -18,8 +18,15 @@ import { exportCsv } from '@folio/stripes/util';
 
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
-import { fulfilmentTypes } from './constants';
-import { getFullName, duplicateRequest } from './utils';
+import {
+  reportHeaders,
+  fulfilmentTypes,
+  expiredHoldsReportHeaders,
+} from './constants';
+import {
+  getFullName,
+  duplicateRequest,
+} from './utils';
 import packageInfo from '../package';
 
 const INITIAL_RESULT_COUNT = 30;
@@ -142,6 +149,12 @@ class Requests extends React.Component {
       },
     },
     activeRecord: {},
+    expiredHolds: {
+      accumulate: 'true',
+      type: 'okapi',
+      path: 'circulation/requests-report/expired-holds',
+      fetch: false,
+    },
   };
 
   static propTypes = {
@@ -160,6 +173,10 @@ class Requests extends React.Component {
       }),
       activeRecord: PropTypes.shape({
         update: PropTypes.func,
+      }),
+      expiredHolds: PropTypes.shape({
+        GET: PropTypes.func,
+        reset: PropTypes.func,
       }),
       patronBlocks: PropTypes.shape({
         DELETE: PropTypes.func,
@@ -227,19 +244,9 @@ class Requests extends React.Component {
     this.findResource = this.findResource.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.buildRecords = this.buildRecords.bind(this);
-    this.headers = ['requestType', 'status', 'requestExpirationDate', 'holdShelfExpirationDate',
-      'position', 'item.barcode', 'item.title', 'item.copyNumbers', 'item.contributorNames', 'item.location.name',
-      'item.callNumber', 'item.enumeration', 'item.status', 'loan.dueDate', 'requester.name',
-      'requester.barcode', 'requester.patronGroup.group', 'fulfilmentPreference', 'pickupServicePoint.name',
-      'deliveryAddress', 'proxy.name', 'proxy.barcode', 'tags.tagList'];
-
     // Map to pass into exportCsv
-    this.columnHeadersMap = this.headers.map(item => {
-      return {
-        label: this.props.intl.formatMessage({ id: `ui-requests.${item}` }),
-        value: item
-      };
-    });
+    this.columnHeadersMap = this.getColumnHeaders(reportHeaders);
+    this.expiredHoldsReportColumnHeaders = this.getColumnHeaders(expiredHoldsReportHeaders);
 
     this.filterConfigWithTranslatedLabels = filterConfig
       .map(filter => ({ ...filter, label: formatMessage({ id: filter.label }) }));
@@ -283,25 +290,43 @@ class Requests extends React.Component {
     if (this.csvExportPending) {
       const recordsLoaded = this.props.resources.records.records;
       const numTotalRecords = this.props.resources.records.other.totalRecords;
+
       if (recordsLoaded.length === numTotalRecords) {
-        const onlyFields = this.columnHeadersMap;
-        const clonedRequests = JSON.parse(JSON.stringify(recordsLoaded)); // Do not mutate the actual resource
-        const recordsToCSV = this.buildRecords(clonedRequests);
+        const recordsToCSV = this.buildRecords(recordsLoaded);
+
         exportCsv(recordsToCSV, {
-          onlyFields,
+          onlyFields: this.columnHeadersMap,
           excludeFields: ['id'],
         });
+
         this.csvExportPending = false;
       }
     }
   }
 
+  getColumnHeaders = (headers) => {
+    const { intl: { formatMessage } } = this.props;
+
+    return headers.map(item => {
+      const translationKey = item.translationKey || item;
+      const value = item.value || item;
+
+      return {
+        label: formatMessage({ id: `ui-requests.${translationKey}` }),
+        value
+      };
+    });
+  };
+
   buildRecords(recordsLoaded) {
+    const result = JSON.parse(JSON.stringify(recordsLoaded)); // Do not mutate the actual resource
     const { formatDate, formatTime } = this.props.intl;
-    recordsLoaded.forEach(record => {
+
+    result.forEach(record => {
       const contributorNamesMap = [];
       const copyNumbersMap = [];
       const tagListMap = [];
+
       if (record.item.contributorNames && record.item.contributorNames.length > 0) {
         record.item.contributorNames.forEach(item => {
           contributorNamesMap.push(item.name);
@@ -337,7 +362,8 @@ class Requests extends React.Component {
       record.item.copyNumbers = copyNumbersMap.join('; ');
       if (record.tags) record.tags.tagList = tagListMap.join('; ');
     });
-    return recordsLoaded;
+
+    return result;
   }
 
   // idType can be 'id', 'barcode', etc.
@@ -375,17 +401,17 @@ class Requests extends React.Component {
     const { intl: { timeZone } } = this.props;
     const isoDate = moment.tz(timeZone).format();
     Object.assign(requestData, { requestDate: isoDate });
-  }
+  };
 
   onChangePatron = (patron) => {
     this.props.mutator.activeRecord.update({ patronId: patron.id });
-  }
+  };
 
   create = (data) => {
     return this.props.mutator.records.POST(data)
       .then(() => this.props.mutator.query.update({ layer: null }))
       .catch(resp => this.processError(resp));
-  }
+  };
 
   processError(resp) {
     const contentType = resp.headers.get('Content-Type') || '';
@@ -417,7 +443,7 @@ class Requests extends React.Component {
       userBarcode: null,
       itemId: null,
     });
-  }
+  };
 
   onDuplicate = (request) => {
     const dupRequest = duplicateRequest(request);
@@ -429,7 +455,30 @@ class Requests extends React.Component {
       itemId: request.itemId,
       userBarcode: request.requester.barcode,
     });
-  }
+  };
+
+  exportExpiredHoldsToSCV = async () => {
+    const {
+      mutator: {
+        expiredHolds: {
+          reset,
+          GET,
+        },
+      },
+      stripes: { user },
+    } = this.props;
+
+    reset();
+
+    const servicePointId = get(user, 'user.curServicePoint.id', '');
+    const path = `circulation/requests-report/expired-holds/${servicePointId}`;
+    const { requests } = await GET({ path });
+
+    exportCsv(requests, {
+      onlyFields: this.expiredHoldsReportColumnHeaders,
+      excludeFields: ['id'],
+    });
+  };
 
   render() {
     const {
@@ -479,19 +528,31 @@ class Requests extends React.Component {
     };
 
     const actionMenu = ({ onToggle }) => (
-      <Button
-        buttonStyle="dropdownItem"
-        id="exportToCsvPaneHeaderBtn"
-        onClick={() => {
-          onToggle();
-          if (!this.csvExportPending) {
-            mutator.resultCount.replace(resources.records.other.totalRecords);
-            this.csvExportPending = true;
-          }
-        }}
-      >
-        <FormattedMessage id="stripes-components.exportToCsv" />
-      </Button>
+      <React.Fragment>
+        <Button
+          buttonStyle="dropdownItem"
+          id="exportToCsvPaneHeaderBtn"
+          onClick={() => {
+            onToggle();
+            if (!this.csvExportPending) {
+              mutator.resultCount.replace(resources.records.other.totalRecords);
+              this.csvExportPending = true;
+            }
+          }}
+        >
+          <FormattedMessage id="stripes-components.exportToCsv" />
+        </Button>
+        <Button
+          buttonStyle="dropdownItem"
+          id="exportExpiredHoldsToCsvPaneHeaderBtn"
+          onClick={() => {
+            onToggle();
+            this.exportExpiredHoldsToSCV();
+          }}
+        >
+          <FormattedMessage id="ui-requests.exportExpiredHoldsToCsv" />
+        </Button>
+      </React.Fragment>
     );
 
     return (
