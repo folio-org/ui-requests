@@ -5,7 +5,6 @@ import { FormattedMessage } from 'react-intl';
 import {
   Modal,
   ModalFooter,
-
   Button,
 } from '@folio/stripes/components';
 
