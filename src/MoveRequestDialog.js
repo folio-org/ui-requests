@@ -63,7 +63,6 @@ class MoveRequestDialog extends React.Component {
         reset: PropTypes.func.isRequired,
       }),
     }),
-
   };
 
   constructor(props) {
@@ -79,11 +78,16 @@ class MoveRequestDialog extends React.Component {
       request: { item: { instanceId } }
     } = this.props;
 
-    let query = `instanceId==${instanceId}`;
     mutator.holdings.reset();
+    mutator.items.reset();
+    mutator.requests.reset();
+
+    let query = `instanceId==${instanceId}`;
     const holdings = await mutator.holdings.GET({ params: { query } });
+
     query = holdings.map(h => `holdingsRecordId==${h.id}`).join(' or ');
     const items = await mutator.items.GET({ params: { query } });
+
     query = items.map(i => `itemId==${i.id}`).join(' or ');
     query = `(${query}) and (status="Open")`;
     const requests = await mutator.requests.GET({ params: { query } });
