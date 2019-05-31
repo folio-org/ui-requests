@@ -39,7 +39,13 @@ class MoveRequestDialog extends React.Component {
     open: PropTypes.bool,
     request: PropTypes.object,
     resources: PropTypes.shape({
-      holdingss: PropTypes.shape({
+      holdings: PropTypes.shape({
+        records: PropTypes.array,
+      }),
+      items: PropTypes.shape({
+        records: PropTypes.array,
+      }),
+      requests: PropTypes.shape({
         records: PropTypes.array,
       }),
     }),
