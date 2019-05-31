@@ -38,6 +38,8 @@ import ItemDetail from './ItemDetail';
 import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
 import PositionLink from './PositionLink';
+import MoveRequestDialog from './MoveRequestDialog';
+
 import { requestStatuses } from './constants';
 
 import { toUserAddress } from './utils';
@@ -112,10 +114,14 @@ class ViewRequest extends React.Component {
         'item-info': true,
         'requester-info': true,
       },
+      moveRequest: false,
     };
 
-    this.cViewMetaData = props.stripes.connect(ViewMetaData);
-    this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
+    const { stripes: { connect } } = props;
+
+    this.cViewMetaData = connect(ViewMetaData);
+    this.connectedCancelRequestDialog = connect(CancelRequestDialog);
+    this.cMoveRequestDialog = connect(MoveRequestDialog);
     this.onToggleSection = this.onToggleSection.bind(this);
     this.cancelRequest = this.cancelRequest.bind(this);
     this.update = this.update.bind(this);
@@ -216,6 +222,10 @@ class ViewRequest extends React.Component {
     return get(servicePoint, ['name'], '');
   }
 
+  hideMoveRequestDialog() {
+    this.setState({ moveRequest: false });
+  }
+
   renderLayer(request) {
     const {
       optionLists,
@@ -307,6 +317,8 @@ class ViewRequest extends React.Component {
     const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');
     const isRequestClosed = requestStatus.startsWith('Closed');
+    const isRequestNotFilled = requestStatus === requestStatuses.NOT_YET_FILLED;
+
     let deliveryAddressDetail;
     let selectedDelivery = false;
 
@@ -374,6 +386,20 @@ class ViewRequest extends React.Component {
               <FormattedMessage id="ui-requests.actions.duplicateRequest" />
             </Icon>
           </Button>
+          {isRequestNotFilled &&
+            <Button
+              id="move-request"
+              onClick={() => {
+                onToggle();
+                this.setState({ moveRequest: true });
+              }}
+              buttonStyle="dropdownItem"
+            >
+              <Icon icon="copy">
+                <FormattedMessage id="ui-requests.actions.moveRequest" />
+              </Icon>
+            </Button>
+          }
         </Fragment>
       );
     };
@@ -477,6 +503,15 @@ class ViewRequest extends React.Component {
           request={request}
           stripes={stripes}
         />
+
+        {this.state.moveRequest &&
+          <this.cMoveRequestDialog
+            open={this.state.moveRequest}
+            onClose={() => this.hideMoveRequestDialog()}
+            request={request}
+            stripes={stripes}
+          />
+        }
       </Pane>
     );
   }
