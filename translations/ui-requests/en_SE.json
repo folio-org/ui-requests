@@ -116,5 +116,6 @@
     "requestNotAllowed": "Request not allowed",
     "additionalReasons": "View block details to see additional reasons for block...",
     "pickupServicePoint.name": "Pickup service point",
-    "item.id": "Item id"
+    "item.id": "Item id",
+    "exportExpiredHoldsToCsv": "Expired holds report (CSV)"
 }
