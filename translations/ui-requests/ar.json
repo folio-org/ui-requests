@@ -116,5 +116,6 @@
     "requestNotAllowed": "غير مسموح بالطلب",
     "additionalReasons": "عرض تفاصيل الحظر لمعرفة المزيد من أسباب الحظر",
     "pickupServicePoint.name": "نقطة خدمة الالتقاط",
-    "item.id": "معرّف المادة"
+    "item.id": "معرّف المادة",
+    "exportExpiredHoldsToCsv": "تقرير الحجوزات المنتهية (CSV)"
 }
