@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Col, Headline, Row } from '@folio/stripes/components';
 
-import { requestTypesByItemStatus } from './constants';
+import { requestTypesByItemStatus, requestTypesMap } from './constants';
 
 import css from './requests.css';
 
@@ -83,4 +83,13 @@ export function duplicateRequest(request) {
     'item',
     'pickupServicePoint',
   ]);
+}
+
+export function getRequestTypeOptions(item) {
+  const itemStatus = get(item, 'status.name');
+  const requestTypes = requestTypesByItemStatus[itemStatus] || [];
+  return requestTypes.map(type => ({
+    id: requestTypesMap[type],
+    value: type,
+  }));
 }

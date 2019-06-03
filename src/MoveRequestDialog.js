@@ -74,7 +74,7 @@ class MoveRequestDialog extends React.Component {
 
   static propTypes = {
     onClose: PropTypes.func,
-    open: PropTypes.bool,
+    onItemSelected: PropTypes.func,
     request: PropTypes.object,
     resources: PropTypes.shape({
       holdings: PropTypes.shape({
@@ -152,16 +152,14 @@ class MoveRequestDialog extends React.Component {
     return requests.GET({ params: { query } });
   }
 
-  onItemSelected = (item) => {
-
-  }
-
   render() {
-    const { open, onClose } = this.props;
-    const { items, isLoading } = this.state;
+    const { onClose } = this.props;
+    const {
+      items,
+      isLoading,
+    } = this.state;
     const contentData = orderBy(items, 'requestQueue');
     const count = items.length;
-
     const footer = (
       <ModalFooter>
         <Button
@@ -178,7 +176,7 @@ class MoveRequestDialog extends React.Component {
       <Modal
         data-test-move-request-modal
         label={<FormattedMessage id="ui-requests.moveRequest.selectItem" />}
-        open={open}
+        open
         contentClass={css.content}
         onClose={onClose}
         footer={footer}
@@ -202,9 +200,9 @@ class MoveRequestDialog extends React.Component {
               columnWidths={COLUMN_WIDTHS}
               formatter={formatter}
               isEmptyMessage={<FormattedMessage id="ui-requests.moveRequest.instanceItems.notFound" />}
-              onRowClick={(_, item) => this.onItemSelected(item)}
+              onRowClick={(_, item) => this.props.onItemSelected(item)}
             />
-          }
+            }
         </Pane>
       </Modal>
     );

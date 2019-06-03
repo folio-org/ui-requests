@@ -38,7 +38,7 @@ import ItemDetail from './ItemDetail';
 import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
 import PositionLink from './PositionLink';
-import MoveRequestDialog from './MoveRequestDialog';
+import MoveRequestManager from './MoveRequestManager';
 
 import { requestStatuses } from './constants';
 
@@ -121,7 +121,6 @@ class ViewRequest extends React.Component {
 
     this.cViewMetaData = connect(ViewMetaData);
     this.connectedCancelRequestDialog = connect(CancelRequestDialog);
-    this.cMoveRequestDialog = connect(MoveRequestDialog);
     this.onToggleSection = this.onToggleSection.bind(this);
     this.cancelRequest = this.cancelRequest.bind(this);
     this.update = this.update.bind(this);
@@ -222,7 +221,7 @@ class ViewRequest extends React.Component {
     return get(servicePoint, ['name'], '');
   }
 
-  hideMoveRequestDialog() {
+  hideMoveRequest() {
     this.setState({ moveRequest: false });
   }
 
@@ -505,9 +504,8 @@ class ViewRequest extends React.Component {
         />
 
         {this.state.moveRequest &&
-          <this.cMoveRequestDialog
-            open={this.state.moveRequest}
-            onClose={() => this.hideMoveRequestDialog()}
+          <MoveRequestManager
+            onClose={() => this.hideMoveRequest()}
             request={request}
             stripes={stripes}
           />

@@ -119,6 +119,10 @@
   "moveRequest.selectItem": "Select item",
   "moveRequest.instanceItems": "Other items in instance",
   "moveRequest.instanceItems.notFound": "No items found",
+  "moveRequest.requestTypeChangeHeading": "Request type will be changed",
+  "moveRequest.requestTypeChangeMessage": "Request type will be changed to <strong>{requestType}</strong>.",
+  "moveRequest.chooseRequestTypeHeading": "Choose request type",
+  "moveRequest.confirm": "Confirm",
   "edit.deleteRequest": "Delete request",
   "edit.cancelEditing": "Cancel editing",
 
