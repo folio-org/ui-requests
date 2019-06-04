@@ -15,7 +15,7 @@
     "actions.editRequestLink": "Editar caixa de diálogo de solicitações de compra",
     "errors.itemBarcodeDoesNotExist": "Item com este código de barras não existe",
     "errors.userBarcodeDoesNotExist": "Usuário com este código de barras não existe",
-    "errors.onlyCheckedOutForRecall": "Somente itens emprestados podem ser recuperados",
+    "errors.onlyCheckedOutForRecall": "Somente itens emprestados podem ter recall",
     "errors.onlyCheckedOutForHold": "Somente itens emprestados podem ser mantidos",
     "errors.selectItem": "Por favor selecione um item",
     "errors.selectUser": "Por favor, selecione um solicitante",
@@ -85,10 +85,10 @@
     "requests.proxy": "Proxy",
     "requests.position": "Posição",
     "requests.itemBarcode": "Código de barras do item",
-    "requestMeta.type.recall": "Devolução",
+    "requestMeta.type.recall": "Recall",
     "requestMeta.type.hold": "Acervo",
     "requestMeta.type.page": "Página",
-    "requestMeta.type.recalls": "Devoluções",
+    "requestMeta.type.recalls": "Recalls",
     "requestMeta.type.holds": "Acervos",
     "requestMeta.type.pages": "Páginas",
     "requestMeta.fulfilment.holdShelf": "Prateleira de espera",
@@ -116,5 +116,6 @@
     "requestNotAllowed": "Pedido de compra não permitido",
     "additionalReasons": "Exibir detalhes da suspensão para ver as razões adicionais para a suspensão...",
     "pickupServicePoint.name": "Ponto de serviço para retirada",
-    "item.id": "ID do item"
+    "item.id": "ID do item",
+    "exportExpiredHoldsToCsv": "Relatório de reservas expiradas (CSV)"
 }

@@ -4,8 +4,21 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import RequestsInteractor from '../interactors/requests';
 
+const servicePoint = {
+  id: 'servicepointId2',
+  name: 'Circ Desk 2',
+  code: 'cd2',
+  discoveryDisplayName: 'Circulation Desk -- Back Entrance',
+  pickupLocation: true,
+};
+
 describe('Requests', () => {
-  setupApplication();
+  setupApplication({
+    currentUser: {
+      servicePoints: [servicePoint],
+      curServicePoint: servicePoint,
+    },
+  });
 
   const requests = new RequestsInteractor();
 
@@ -44,6 +57,17 @@ describe('Requests', () => {
 
     it('exports data to csv', () => {
       expect(requests.headerDropdownMenu.exportBtnIsVisible).to.be.false;
+    });
+  });
+
+  describe('Export expired holds to CSV', function () {
+    beforeEach(async function () {
+      await requests.headerDropdown.click();
+      await requests.headerDropdownMenu.clickExportExpiredHoldsToCSV();
+    });
+
+    it('exports data to csv', () => {
+      expect(requests.headerDropdownMenu.exportExpiredHoldsBtnIsVisible).to.be.false;
     });
   });
 });

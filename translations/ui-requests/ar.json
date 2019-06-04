@@ -34,7 +34,7 @@
     "item.copyNumber": "نسخ",
     "item.status": "حالة المادة",
     "item.dueDate": "تاريخ الاستحقاق الحالي",
-    "item.numRequests": "الطلبات",
+    "item.numRequests": "طلبات",
     "requester.barcode": "باركود مقدم الطلب",
     "requester.scanOrEnterBarcode": "قم بمسح باركود مقدم الطلب ضوئيًا أو إدخاله يدويًا",
     "requester.findUserPluginLabel": "بحث مقدم الطلب",
@@ -116,5 +116,6 @@
     "requestNotAllowed": "غير مسموح بالطلب",
     "additionalReasons": "عرض تفاصيل الحظر لمعرفة المزيد من أسباب الحظر",
     "pickupServicePoint.name": "نقطة خدمة الالتقاط",
-    "item.id": "معرّف المادة"
+    "item.id": "معرّف المادة",
+    "exportExpiredHoldsToCsv": "تقرير الحجوزات المنتهية (CSV)"
 }

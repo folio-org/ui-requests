@@ -40,3 +40,60 @@ export const requestTypesByItemStatus = {
   'On order': ['Hold', 'Recall'],
   'In process': ['Hold', 'Recall'],
 };
+
+export const reportHeaders = [
+  'requestType',
+  'status',
+  'requestExpirationDate',
+  'holdShelfExpirationDate',
+  'position',
+  'item.barcode',
+  'item.title',
+  'item.copyNumbers',
+  'item.contributorNames',
+  'item.location.name',
+  'item.callNumber',
+  'item.enumeration',
+  'item.status',
+  'loan.dueDate',
+  'requester.name',
+  'requester.barcode',
+  'requester.patronGroup.group',
+  'fulfilmentPreference',
+  'pickupServicePoint.name',
+  'deliveryAddress',
+  'proxy.name',
+  'proxy.barcode',
+  'tags.tagList',
+];
+
+export const expiredHoldsReportHeaders = [
+  {
+    translationKey: 'requester.name',
+    value:'requesterName',
+  },
+  {
+    translationKey: 'requester.barcode',
+    value:'requesterBarcode',
+  },
+  {
+    translationKey: 'item.title',
+    value:'itemTitle',
+  },
+  {
+    translationKey: 'item.barcode',
+    value:'itemBarcode',
+  },
+  {
+    translationKey: 'item.callNumber',
+    value:'callNumber',
+  },
+  {
+    translationKey: 'status',
+    value:'requestStatus',
+  },
+  {
+    translationKey: 'holdShelfExpirationDate',
+    value:'holdShelfExpirationDate',
+  },
+];

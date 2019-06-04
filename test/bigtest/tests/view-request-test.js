@@ -8,6 +8,7 @@ import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
 import ViewRequestInteractor from '../interactors/view-request';
+import NewRequestInteractor from '../interactors/new-request';
 
 describe('View request page', () => {
   setupApplication();
@@ -58,6 +59,7 @@ describe('View request page', () => {
       beforeEach(async () => {
         await ViewRequestInteractor.headerDropdown.click();
         await ViewRequestInteractor.headerDropdownMenu.clickDuplicate();
+        await NewRequestInteractor.whenRequestTypeIsPresent();
       });
 
       it('opens request form', function () {
