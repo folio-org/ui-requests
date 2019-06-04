@@ -104,7 +104,7 @@ class RequestForm extends React.Component {
 
   static defaultProps = {
     request: null,
-    metadataDisplay: () => {},
+    metadataDisplay: () => { },
     optionLists: {},
     pristine: true,
     submitting: false,
@@ -168,7 +168,7 @@ class RequestForm extends React.Component {
     const {
       initialValues: prevInitialValues,
       request: prevRequest,
-      parentResource: prevParentResources,
+      parentResources: prevParentResources,
       query: prevQuery,
     } = prevProps;
 
@@ -205,8 +205,11 @@ class RequestForm extends React.Component {
     }
 
     if (!isEqual(blocks, prevBlocks) && blocks.length > 0) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ blocked: true });
+      const user = this.state.selectedUser || {};
+      if (user.id === blocks[0].userId) {
+        // eslint-disable-next-line react/no-did-update-set-state
+        this.setState({ blocked: true });
+      }
     }
   }
 
@@ -715,7 +718,7 @@ class RequestForm extends React.Component {
                             </Col>
                           </Row>
                         }
-                        { selectedItem &&
+                        {selectedItem &&
                           <ItemDetail
                             item={{ id: get(request, 'itemId'), ...selectedItem }}
                             loan={selectedLoan}
@@ -730,7 +733,7 @@ class RequestForm extends React.Component {
                   id="request-info"
                   label={<FormattedMessage id="ui-requests.requestMeta.information" />}
                 >
-                  { isEditForm && request && request.metadata &&
+                  {isEditForm && request && request.metadata &&
                     <Col xs={12}>
                       <this.props.metadataDisplay metadata={request.metadata} />
                     </Col>
@@ -739,7 +742,7 @@ class RequestForm extends React.Component {
                     <Col xs={8}>
                       <Row>
                         <Col xs={4}>
-                          { !isEditForm && !selectedItem &&
+                          {!isEditForm && !selectedItem &&
                             <span data-test-request-type-message>
                               <KeyValue
                                 label={<FormattedMessage id="ui-requests.requestType" />}
@@ -748,7 +751,7 @@ class RequestForm extends React.Component {
                             </span>
                           }
 
-                          { multiRequestTypesVisible &&
+                          {multiRequestTypesVisible &&
                             <Field
                               label={<FormattedMessage id="ui-requests.requestType" />}
                               name="requestType"
@@ -769,7 +772,7 @@ class RequestForm extends React.Component {
                               ))}
                             </Field>
                           }
-                          { singleRequestTypeVisible &&
+                          {singleRequestTypeVisible &&
                             <KeyValue
                               label={<FormattedMessage id="ui-requests.requestType" />}
                               value={
@@ -932,7 +935,7 @@ class RequestForm extends React.Component {
               open={blocked}
               onClose={this.onCloseBlockedModal}
               viewUserPath={() => this.onViewUserPath(selectedUser, patronGroup)}
-              patronBlocks={patronBlocks[0] || {}}
+              patronBlocks={patronBlocks || []}
             />
             <br />
             <br />

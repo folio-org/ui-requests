@@ -5,6 +5,7 @@
 * Fix creating hold request via duplicate option. Part of UIREQ-275.
 * Fix opening correct request item during duplication. Part of UIREQ-274.
 * Disable integration test based on flaky built-in data. Refs CIRCSTORE-129.
+* Fix system error caused patron with a block. Fix UIU-1063.
 
 ## [1.9.0](https://github.com/folio-org/ui-requests/tree/v1.9.0) (2019-05-10)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.8.0...v1.9.0)
