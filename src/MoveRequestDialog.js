@@ -8,8 +8,8 @@ import {
   Button,
   MultiColumnList,
   Pane,
-  Icon,
 } from '@folio/stripes/components';
+import { withStripes } from '@folio/stripes/core';
 
 import css from './MoveRequestDialog.css';
 
@@ -188,9 +188,8 @@ class MoveRequestDialog extends React.Component {
           paneSub={<FormattedMessage id="ui-requests.resultCount" values={{ count }} />}
           noOverflow
         >
-          {isLoading
-            ? <Icon icon="spinner-ellipsis" />
-            : <MultiColumnList
+          {!isLoading &&
+            <MultiColumnList
               id="instance-items-list"
               interactive
               ariaLabel={<FormattedMessage id="ui-requests.moveRequest.instanceItems" />}
@@ -202,11 +201,11 @@ class MoveRequestDialog extends React.Component {
               isEmptyMessage={<FormattedMessage id="ui-requests.moveRequest.instanceItems.notFound" />}
               onRowClick={(_, item) => this.props.onItemSelected(item)}
             />
-            }
+          }
         </Pane>
       </Modal>
     );
   }
 }
 
-export default MoveRequestDialog;
+export default withStripes(MoveRequestDialog);

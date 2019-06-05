@@ -152,7 +152,7 @@ class ViewRequest extends React.Component {
   }
 
   loadFullRequest(basicRequest) {
-    this.props.joinRequest(basicRequest).then(request => {
+    return this.props.joinRequest(basicRequest).then(request => {
       if (this._isMounted) {
         this.setState({ request });
       }
@@ -194,6 +194,18 @@ class ViewRequest extends React.Component {
     });
   }
 
+  moveRequest = (requestType, item) => {
+    const request = this.getRequest();
+    // TODO: actually move request
+    this.loadFullRequest(request).then(() => {
+      this.setState({ moveRequest: false });
+    });
+  }
+
+  cancelMoveRequest = () => {
+    this.setState({ moveRequest: false });
+  }
+
   onToggleSection({ id }) {
     this.setState((curState) => {
       const newState = cloneDeep(curState);
@@ -219,10 +231,6 @@ class ViewRequest extends React.Component {
     const servicePoint = servicePoints.find(sp => (sp.id === request.pickupServicePointId));
 
     return get(servicePoint, ['name'], '');
-  }
-
-  hideMoveRequest() {
-    this.setState({ moveRequest: false });
   }
 
   renderLayer(request) {
@@ -505,9 +513,9 @@ class ViewRequest extends React.Component {
 
         {this.state.moveRequest &&
           <MoveRequestManager
-            onClose={() => this.hideMoveRequest()}
+            onMove={this.moveRequest}
+            onCancelMove={this.cancelMoveRequest}
             request={request}
-            stripes={stripes}
           />
         }
       </Pane>

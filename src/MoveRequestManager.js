@@ -1,21 +1,17 @@
+import { get, includes } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
-import {
-  ConfirmationModal,
-} from '@folio/stripes/components';
-
-import {
-  getRequestTypeOptions,
-} from './utils';
+import { withStripes } from '@folio/stripes/core';
 
 import MoveRequestDialog from './MoveRequestDialog';
 import ChooseRequestTypeDialog from './ChooseRequestTypeDialog';
 
+import { requestTypesByItemStatus } from './constants';
+
 class MoveRequestManager extends React.Component {
   static propTypes = {
-    onClose: PropTypes.func,
+    onCancelMove: PropTypes.func,
+    onMove: PropTypes.func,
     request: PropTypes.object,
     stripes: PropTypes.object,
   };
@@ -28,44 +24,39 @@ class MoveRequestManager extends React.Component {
     this.cMoveRequestDialog = connect(MoveRequestDialog);
   }
 
-  moveRequest = () => {
-    const { selectedItem } = this.state;
-    this.props.onClose();
-    // TODO: perform move
+  moveRequest = (requestType, item) => {
+    this.props.onMove(requestType, item);
   }
 
   onItemSelected = (selectedItem) => {
-    this.setState({ selectedItem });
+    const { request: { requestType } } = this.props;
+    const itemStatus = get(selectedItem, 'status.name');
+    const requestTypes = requestTypesByItemStatus[itemStatus] || [];
 
-    const requestTypes = getRequestTypeOptions(selectedItem);
-
-    if (requestTypes.length === 1) {
-      this.setState({
-        changeRequestType: true,
-        requestType: requestTypes[0].value,
-      });
-    } else {
-      this.setState({
-        chooseRequestType: true,
-        requestTypes,
-      });
+    if (includes(requestTypes, requestType)) {
+      return this.moveRequest(requestType, selectedItem);
     }
+
+    return this.setState({
+      chooseRequestType: true,
+      selectedItem,
+    });
   }
 
   cancelMoveRequest = () => {
     this.setState({
-      changeRequestType: false,
       chooseRequestType: false,
     });
   }
 
   render() {
-    const { onClose, request, stripes } = this.props;
     const {
-      changeRequestType,
+      onCancelMove,
+      request,
+    } = this.props;
+    const {
       chooseRequestType,
-      requestTypes,
-      requestType,
+      selectedItem,
     } = this.state;
 
     return (
@@ -73,26 +64,14 @@ class MoveRequestManager extends React.Component {
         <this.cMoveRequestDialog
           open
           request={request}
-          onClose={onClose}
-          stripes={stripes}
+          onClose={onCancelMove}
           onItemSelected={this.onItemSelected}
         />
-        { changeRequestType &&
-          <ConfirmationModal
-            open={changeRequestType}
-            data-test-confirm-request-type-change-modal
-            heading={<FormattedMessage id="ui-requests.moveRequest.requestTypeChangeHeading" />}
-            message={<SafeHTMLMessage id="ui-requests.moveRequest.requestTypeChangeMessage" values={{ requestType }} />}
-            onConfirm={this.moveRequest}
-            onCancel={this.cancelMoveRequest}
-            confirmLabel={<FormattedMessage id="ui-requests.moveRequest.confirm" />}
-          />
-        }
         { chooseRequestType &&
           <ChooseRequestTypeDialog
             open={chooseRequestType}
             data-test-choose-request-type-modal
-            requestTypes={requestTypes}
+            item={selectedItem}
             onConfirm={this.moveRequest}
             onCancel={this.cancelMoveRequest}
           />
@@ -102,4 +81,4 @@ class MoveRequestManager extends React.Component {
   }
 }
 
-export default MoveRequestManager;
+export default withStripes(MoveRequestManager);

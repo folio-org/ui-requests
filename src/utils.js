@@ -88,6 +88,7 @@ export function duplicateRequest(request) {
 export function getRequestTypeOptions(item) {
   const itemStatus = get(item, 'status.name');
   const requestTypes = requestTypesByItemStatus[itemStatus] || [];
+
   return requestTypes.map(type => ({
     id: requestTypesMap[type],
     value: type,
