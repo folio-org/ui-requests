@@ -1,8 +1,6 @@
 import { get, includes } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStripes } from '@folio/stripes/core';
-
 import MoveRequestDialog from './MoveRequestDialog';
 import ChooseRequestTypeDialog from './ChooseRequestTypeDialog';
 
@@ -13,15 +11,11 @@ class MoveRequestManager extends React.Component {
     onCancelMove: PropTypes.func,
     onMove: PropTypes.func,
     request: PropTypes.object,
-    stripes: PropTypes.object,
   };
 
   constructor(props) {
     super(props);
-    const { stripes: { connect } } = props;
-
     this.state = {};
-    this.cMoveRequestDialog = connect(MoveRequestDialog);
   }
 
   moveRequest = (requestType, item) => {
@@ -61,7 +55,7 @@ class MoveRequestManager extends React.Component {
 
     return (
       <React.Fragment>
-        <this.cMoveRequestDialog
+        <MoveRequestDialog
           open
           request={request}
           onClose={onCancelMove}
@@ -81,4 +75,4 @@ class MoveRequestManager extends React.Component {
   }
 }
 
-export default withStripes(MoveRequestManager);
+export default MoveRequestManager;

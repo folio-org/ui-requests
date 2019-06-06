@@ -52,7 +52,6 @@ class ChooseRequestTypeDialog extends React.Component {
       onCancel,
     } = this.props;
     const { requestType } = this.state;
-
     const footer = (
       <ModalFooter>
         <Button

@@ -9,7 +9,7 @@ import {
   MultiColumnList,
   Pane,
 } from '@folio/stripes/components';
-import { withStripes } from '@folio/stripes/core';
+import { stripesConnect } from '@folio/stripes/core';
 
 import css from './MoveRequestDialog.css';
 
@@ -208,4 +208,4 @@ class MoveRequestDialog extends React.Component {
   }
 }
 
-export default withStripes(MoveRequestDialog);
+export default stripesConnect(MoveRequestDialog);
