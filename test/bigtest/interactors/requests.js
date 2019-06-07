@@ -7,6 +7,13 @@ import {
   count,
 } from '@bigtest/interactor';
 
+@interactor class ErrorModal {
+  defaultScope = '[data-test-error-modal]';
+
+  content = scoped('[data-test-error-modal-content]');
+  closeButton = scoped('[data-test-error-modal-close-button]');
+}
+
 @interactor class HeaderDropdown {
   click = clickable('button');
 }
@@ -35,6 +42,7 @@ import {
   clickHoldsCheckbox = clickable('#clickable-filter-request-type-holds');
   clickPagesCheckbox = clickable('#clickable-filter-request-type-pages');
   clickRecallsCheckbox = clickable('#clickable-filter-request-type-recalls');
+  errorModal = new ErrorModal();
 
   whenInstancesArePresent(size) {
     return this.when(() => {

@@ -1,4 +1,7 @@
-import { get } from 'lodash';
+import {
+  get,
+  isEmpty,
+} from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { stringify } from 'query-string';
@@ -28,6 +31,7 @@ import {
   duplicateRequest,
 } from './utils';
 import packageInfo from '../package';
+import ErrorModal from './components/ErrorModal';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -254,6 +258,7 @@ class Requests extends React.Component {
     this.state = {
       submitting: false,
       errorMessage: '',
+      isErrorModalShown: false,
     };
   }
 
@@ -307,15 +312,10 @@ class Requests extends React.Component {
   getColumnHeaders = (headers) => {
     const { intl: { formatMessage } } = this.props;
 
-    return headers.map(item => {
-      const translationKey = item.translationKey || item;
-      const value = item.value || item;
-
-      return {
-        label: formatMessage({ id: `ui-requests.${translationKey}` }),
-        value
-      };
-    });
+    return headers.map(item => ({
+      label: formatMessage({ id: `ui-requests.${item}` }),
+      value: item
+    }));
   };
 
   buildRecords(recordsLoaded) {
@@ -471,13 +471,34 @@ class Requests extends React.Component {
     reset();
 
     const servicePointId = get(user, 'user.curServicePoint.id', '');
-    const path = `circulation/requests-report/expired-holds/${servicePointId}`;
+    const path = `circulation/requests-reports/hold-shelf-clearance/${servicePointId}`;
     const { requests } = await GET({ path });
 
-    exportCsv(requests, {
-      onlyFields: this.expiredHoldsReportColumnHeaders,
-      excludeFields: ['id'],
+    if (isEmpty(requests)) {
+      this.setState({ isErrorModalShown: true });
+    } else {
+      const recordsToCSV = this.buildHoldRecords(requests);
+      exportCsv(recordsToCSV, {
+        onlyFields: this.expiredHoldsReportColumnHeaders,
+        excludeFields: ['id'],
+      });
+    }
+  };
+
+  buildHoldRecords = (records) => {
+    return records.map(record => {
+      if (record.requester) {
+        const { firstName, lastName } = record.requester;
+
+        record.requester.name = [firstName, lastName].filter(e => e).join(',');
+      }
+
+      return record;
     });
+  };
+
+  errorModalClose = () => {
+    this.setState({ isErrorModalShown: false });
   };
 
   render() {
@@ -502,7 +523,8 @@ class Requests extends React.Component {
 
     const {
       dupRequest,
-      errorMessage
+      errorMessage,
+      isErrorModalShown,
     } = this.state;
 
     const patronGroups = (resources.patronGroups || {}).records || [];
@@ -556,60 +578,71 @@ class Requests extends React.Component {
     );
 
     return (
-      <div data-test-request-instances>
-        <SearchAndSort
-          actionMenu={actionMenu}
-          packageInfo={packageInfo}
-          objectName="request"
-          filterConfig={this.filterConfigWithTranslatedLabels}
-          initialResultCount={INITIAL_RESULT_COUNT}
-          resultCountIncrement={RESULT_COUNT_INCREMENT}
-          viewRecordComponent={ViewRequest}
-          editRecordComponent={RequestForm}
-          getHelperResourcePath={this.getHelperResourcePath}
-          visibleColumns={[
-            requestDate,
-            title,
-            itemBarcode,
-            type,
-            requestStatus,
-            position,
-            requester,
-            requesterBarcode,
-            proxy,
-          ]}
-          columnWidths={{
-            [requestDate]: '220px'
-          }}
-          resultsFormatter={resultsFormatter}
-          newRecordInitialValues={InitialValues}
-          massageNewRecord={this.massageNewRecord}
-          onCreate={this.create}
-          onCloseNewRecord={this.handleCloseNewRecord}
-          parentResources={resources}
-          parentMutator={mutator}
-          detailProps={{
-            onChangePatron: this.onChangePatron,
-            stripes,
-            history,
-            errorMessage,
-            findResource: this.findResource,
-            toggleModal: this.toggleModal,
-            joinRequest: this.addRequestFields,
-            optionLists: {
-              addressTypes,
-              fulfilmentTypes,
-              servicePoints
-            },
-            patronGroups,
-            query: resources.query,
-            uniquenessValidator: mutator,
-            onDuplicate: this.onDuplicate,
-          }}
-          viewRecordPerms="module.requests.enabled"
-          newRecordPerms="module.requests.enabled"
-        />
-      </div>);
+      <React.Fragment>
+        {
+          isErrorModalShown &&
+            <ErrorModal
+              onClose={this.errorModalClose}
+              label={<FormattedMessage id="ui-requests.nothingToClear" />}
+              errorMessage={<FormattedMessage id="ui-requests.noExpiredRequests" />}
+            />
+        }
+        <div data-test-request-instances>
+          <SearchAndSort
+            actionMenu={actionMenu}
+            packageInfo={packageInfo}
+            objectName="request"
+            filterConfig={this.filterConfigWithTranslatedLabels}
+            initialResultCount={INITIAL_RESULT_COUNT}
+            resultCountIncrement={RESULT_COUNT_INCREMENT}
+            viewRecordComponent={ViewRequest}
+            editRecordComponent={RequestForm}
+            getHelperResourcePath={this.getHelperResourcePath}
+            visibleColumns={[
+              requestDate,
+              title,
+              itemBarcode,
+              type,
+              requestStatus,
+              position,
+              requester,
+              requesterBarcode,
+              proxy,
+            ]}
+            columnWidths={{
+              [requestDate]: '220px'
+            }}
+            resultsFormatter={resultsFormatter}
+            newRecordInitialValues={InitialValues}
+            massageNewRecord={this.massageNewRecord}
+            onCreate={this.create}
+            onCloseNewRecord={this.handleCloseNewRecord}
+            parentResources={resources}
+            parentMutator={mutator}
+            detailProps={{
+              onChangePatron: this.onChangePatron,
+              stripes,
+              history,
+              errorMessage,
+              findResource: this.findResource,
+              toggleModal: this.toggleModal,
+              joinRequest: this.addRequestFields,
+              optionLists: {
+                addressTypes,
+                fulfilmentTypes,
+                servicePoints
+              },
+              patronGroups,
+              query: resources.query,
+              uniquenessValidator: mutator,
+              onDuplicate: this.onDuplicate,
+            }}
+            viewRecordPerms="module.requests.enabled"
+            newRecordPerms="module.requests.enabled"
+          />
+        </div>
+      </React.Fragment>
+    );
   }
 }
 

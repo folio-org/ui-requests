@@ -37,8 +37,6 @@ import {
   Row,
   Select,
   TextField,
-  Modal,
-  ModalFooter
 } from '@folio/stripes/components';
 
 import stripesForm from '@folio/stripes/form';
@@ -56,8 +54,11 @@ import {
   requestTypesMap,
   requestTypesByItemStatus,
 } from './constants';
-
-import { toUserAddress, getPatronGroup } from './utils';
+import ErrorModal from './components/ErrorModal';
+import {
+  toUserAddress,
+  getPatronGroup
+} from './utils';
 
 import css from './requests.css';
 
@@ -428,34 +429,7 @@ class RequestForm extends React.Component {
     }
 
     this.props.onSubmit(data);
-  }
-
-  renderErrorModal(errorMessage) {
-    const message = errorMessage;
-    const footer = (
-      <ModalFooter>
-        <Button onClick={this.onClose}>
-          <FormattedMessage id="ui-requests.close" />
-        </Button>
-      </ModalFooter>
-    );
-
-    return (
-      <Modal
-        open
-        size="small"
-        label={
-          <FormattedMessage
-            id="ui-requests.requestNotAllowed"
-          />}
-        footer={footer}
-        dismissible
-        onClose={this.onClose}
-      >
-        {message}
-      </Modal>
-    );
-  }
+  };
 
   getRequestTypeOptions(item) {
     const itemStatus = get(item, 'status.name');
@@ -650,7 +624,14 @@ class RequestForm extends React.Component {
 
     return (
       <div>
-        {errorMessage && this.renderErrorModal(errorMessage)}
+        {
+          errorMessage &&
+          <ErrorModal
+            onClose={this.onClose}
+            label={<FormattedMessage id="ui-requests.requestNotAllowed" />}
+            errorMessage={errorMessage}
+          />
+        }
         <form
           id="form-requests"
           className={css.requestForm}
