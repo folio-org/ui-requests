@@ -52,7 +52,7 @@
     "cancel.requestWillBeCancelled": "<b>{title}</b> será <b>cancelado</b>",
     "cancel.reasonLabel": "Razão para o cancelamento",
     "cancel.notifyLabel": "Notificar usuário",
-    "cancel.additionalInfoLabel": "Informações adicionais {required}",
+    "cancel.additionalInfoLabel": "Informações adicionais para o usuário {required}",
     "cancel.additionalInfoPlaceholderRequired": "Informe mais informações sobre o cancelamento (obrigatório)",
     "cancel.additionalInfoPlaceholderOptional": "Digite mais informações sobre o cancelamento (opcional)",
     "meta.title": "Solicitações de compra",
