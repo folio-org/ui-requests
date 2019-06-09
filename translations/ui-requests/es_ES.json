@@ -117,5 +117,5 @@
     "additionalReasons": "Ver detalles de bloqueo para ver las razones adicionales para bloquear...",
     "pickupServicePoint.name": "Punto de servicio de recogida",
     "item.id": "ID de ítem",
-    "exportExpiredHoldsToCsv": "Expired holds report (CSV)"
+    "exportExpiredHoldsToCsv": "Informe de reservas expiradas (CSV) "
 }
