@@ -488,7 +488,10 @@ class Requests extends React.Component {
   buildHoldRecords = (records) => {
     return records.map(record => {
       if (record.requester) {
-        const { firstName, lastName } = record.requester;
+        const {
+          firstName,
+          lastName,
+        } = record.requester;
 
         record.requester.name = [firstName, lastName].filter(e => e).join(',');
       }

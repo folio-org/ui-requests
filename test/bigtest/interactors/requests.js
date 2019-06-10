@@ -14,10 +14,6 @@ import {
   closeButton = scoped('[data-test-error-modal-close-button]');
 }
 
-@interactor class HeaderDropdown {
-  click = clickable('button');
-}
-
 @interactor class HeaderDropdownMenu {
   clickExportToCSV = clickable('#exportToCsvPaneHeaderBtn');
   clickExportExpiredHoldsToCSV = clickable('#exportExpiredHoldsToCsvPaneHeaderBtn');
@@ -35,7 +31,7 @@ import {
   static defaultScope = '[data-test-request-instances]';
 
   headerDropdownMenu = new HeaderDropdownMenu();
-  headerDropdown = new HeaderDropdown('[class*=paneHeaderCenterInner---] [class*=dropdown---]');
+  headerDropdown = scoped('[class*=paneHeaderCenterInner---] [class*=dropdown---] button');
   instanceList = new InstanceList();
   instances = collection('[role=row] a');
   instance = scoped('[data-test-instance-details]');

@@ -2,7 +2,7 @@
 
 // default scenario is used during `yarn start --mirage`
 export default function defaultScenario(server) {
-  const servicePoint = server.create('servicePoint', {
+  server.create('servicePoint', {
     id: 'servicepointId1',
     name: 'Circ Desk 1',
     code: 'cd1',
@@ -10,7 +10,7 @@ export default function defaultScenario(server) {
     pickupLocation: true,
   });
 
-  server.create('servicePoint', {
+  const servicePoint = server.create('servicePoint', {
     id: 'servicepointId2',
     name: 'Circ Desk 2',
     code: 'cd2',

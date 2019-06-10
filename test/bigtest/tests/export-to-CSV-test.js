@@ -35,7 +35,7 @@ describe('Export to CSV', () => {
     });
 
     describe('Export to CSV', function () {
-      beforeEach(async function () {
+      beforeEach(async () => {
         await requests.headerDropdown.click();
         await requests.headerDropdownMenu.clickExportToCSV();
       });
@@ -51,7 +51,7 @@ describe('Export to CSV', () => {
         await requests.headerDropdownMenu.clickExportExpiredHoldsToCSV();
       });
 
-      it('exports data to csv', () => {
+      it('exports expired holds to csv', () => {
         expect(requests.headerDropdownMenu.exportExpiredHoldsBtnIsVisible).to.be.false;
       });
     });
@@ -59,7 +59,7 @@ describe('Export to CSV', () => {
 
   describe('zero expired holds records ', () => {
     setupApplication({
-      scenarios: ['zeroExpiredHoldsRecords'],
+      scenarios: ['default', 'zeroExpiredHoldsRecords'],
       currentUser: {
         servicePoints: [servicePoint],
         curServicePoint: servicePoint,
