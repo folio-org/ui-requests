@@ -52,7 +52,7 @@
     "cancel.requestWillBeCancelled": "<b>{title}</b> will be <b>cancelled</b>",
     "cancel.reasonLabel": "Reason for cancellation",
     "cancel.notifyLabel": "Notify patron",
-    "cancel.additionalInfoLabel": "Additional information for patron {required}",
+    "cancel.additionalInfoLabel": "Información adicional para el usuario {required}",
     "cancel.additionalInfoPlaceholderRequired": "Enter more information about the cancellation (required)",
     "cancel.additionalInfoPlaceholderOptional": "Enter more information about the cancellation (optional)",
     "meta.title": "Requests",
@@ -117,5 +117,5 @@
     "additionalReasons": "View block details to see additional reasons for block...",
     "pickupServicePoint.name": "Pickup service point",
     "item.id": "Item id",
-    "exportExpiredHoldsToCsv": "Expired holds report (CSV)"
+    "exportExpiredHoldsToCsv": "Informe de reservas expiradas (CSV) "
 }
