@@ -52,7 +52,7 @@
     "cancel.requestWillBeCancelled": "<b>{title}</b> will be <b>cancelled</b>",
     "cancel.reasonLabel": "Reason for cancellation",
     "cancel.notifyLabel": "Notify patron",
-    "cancel.additionalInfoLabel": "Additional information{required}",
+    "cancel.additionalInfoLabel": "Additional information for patron {required}",
     "cancel.additionalInfoPlaceholderRequired": "Enter more information about the cancellation (required)",
     "cancel.additionalInfoPlaceholderOptional": "Enter more information about the cancellation (optional)",
     "meta.title": "Vormerkungen",
@@ -102,9 +102,9 @@
     "actions.duplicateRequest": "Duplicate",
     "actions.cancelNewRequest": "Cancel",
     "close": "Close",
-    "blockedLabel": "Reason for block:",
+    "blockedLabel": "Reason for block",
     "blockModal": "Patron blocked from requesting",
-    "detailsButton": "Block details",
+    "detailsButton": "View block details",
     "enter": "Enter",
     "requestType.message": "Select item to view available request types",
     "edit.deleteRequest": "Delete request",
@@ -112,5 +112,10 @@
     "newRequest.cancel": "Cancel editing",
     "showTags": "Show Tags",
     "tags.tagList": "Tags",
-    "item.copyNumbers": "Copy number"
+    "item.copyNumbers": "Copy number",
+    "requestNotAllowed": "Request not allowed",
+    "additionalReasons": "View block details to see additional reasons for block...",
+    "pickupServicePoint.name": "Pickup service point",
+    "item.id": "Item id",
+    "exportExpiredHoldsToCsv": "Expired holds report (CSV)"
 }

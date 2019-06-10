@@ -8,7 +8,7 @@
     "requestMeta.type": "Tipo de pedido",
     "requestMeta.status": "Status do pedido",
     "requestMeta.expirationDate": "Data de vencimento do pedido",
-    "requestMeta.holdShelfExpirationDate": "Hold shelf expiration date",
+    "requestMeta.holdShelfExpirationDate": "Data de vencimento da estante de reservas",
     "requestMeta.queuePosition": "Posição na fila",
     "item.information": "Informações do item",
     "requester.information": "Informações do requerente",
@@ -102,7 +102,7 @@
     "actions.duplicateRequest": "Duplicate",
     "actions.cancelNewRequest": "Cancelar",
     "close": "Fechar",
-    "blockedLabel": "Razão para o bloqueio:",
+    "blockedLabel": "Razão para o bloqueio",
     "blockModal": "Pedidos bloqueados ao utilizador",
     "detailsButton": "Detalhes do bloqueio",
     "enter": "Enter",
@@ -112,5 +112,10 @@
     "newRequest.cancel": "Cancel editing",
     "showTags": "Show Tags",
     "tags.tagList": "Tags",
-    "item.copyNumbers": "Copy number"
+    "item.copyNumbers": "Copy number",
+    "requestNotAllowed": "Request not allowed",
+    "additionalReasons": "View block details to see additional reasons for block...",
+    "pickupServicePoint.name": "Pickup service point",
+    "item.id": "Item id",
+    "exportExpiredHoldsToCsv": "Expired holds report (CSV)"
 }

@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const requestTypes = [
   { id: 'Recall', label: 'ui-requests.requestMeta.type.recall' },
   { id: 'Hold', label: 'ui-requests.requestMeta.type.hold' },
@@ -20,17 +18,6 @@ export const requestStatuses = {
   HOLD: 'Hold',
 };
 
-export const toUserAddress = addr => (
-  // const countryId = (addr.country) ? countriesByName[addr.country].alpha2 : '';
-  <div>
-    <div>{(addr && addr.addressLine1) || ''}</div>
-    <div>{(addr && addr.addressLine2) || ''}</div>
-    <div>{(addr && addr.city) || ''}</div>
-    <div>{(addr && addr.region) || ''}</div>
-    <div>{(addr && addr.postalCode) || ''}</div>
-  </div>
-);
-
 export const iconTypes = {
   times: 'times',
   timesCircle: 'times-circle',
@@ -49,5 +36,64 @@ export const requestTypesByItemStatus = {
   'Awaiting pickup': ['Hold', 'Recall'],
   'In transit': ['Hold', 'Recall'],
   'Missing': ['Hold'],
-  'Paged': ['Hold'],
+  'Paged': ['Hold', 'Recall'],
+  'On order': ['Hold', 'Recall'],
+  'In process': ['Hold', 'Recall'],
 };
+
+export const reportHeaders = [
+  'requestType',
+  'status',
+  'requestExpirationDate',
+  'holdShelfExpirationDate',
+  'position',
+  'item.barcode',
+  'item.title',
+  'item.copyNumbers',
+  'item.contributorNames',
+  'item.location.name',
+  'item.callNumber',
+  'item.enumeration',
+  'item.status',
+  'loan.dueDate',
+  'requester.name',
+  'requester.barcode',
+  'requester.patronGroup.group',
+  'fulfilmentPreference',
+  'pickupServicePoint.name',
+  'deliveryAddress',
+  'proxy.name',
+  'proxy.barcode',
+  'tags.tagList',
+];
+
+export const expiredHoldsReportHeaders = [
+  {
+    translationKey: 'requester.name',
+    value:'requesterName',
+  },
+  {
+    translationKey: 'requester.barcode',
+    value:'requesterBarcode',
+  },
+  {
+    translationKey: 'item.title',
+    value:'itemTitle',
+  },
+  {
+    translationKey: 'item.barcode',
+    value:'itemBarcode',
+  },
+  {
+    translationKey: 'item.callNumber',
+    value:'callNumber',
+  },
+  {
+    translationKey: 'status',
+    value:'requestStatus',
+  },
+  {
+    translationKey: 'holdShelfExpirationDate',
+    value:'holdShelfExpirationDate',
+  },
+];

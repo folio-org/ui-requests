@@ -70,6 +70,7 @@
 
   "item.information": "Item information",
   "item.barcode": "Item barcode",
+  "item.id": "Item id",
   "item.scanOrEnterBarcode": "Scan or enter item barcode",
   "item.title": "Title",
   "item.copyNumbers": "Copy number",
@@ -97,7 +98,7 @@
   "requester.requester": "Requester",
   "deliveryAddress": "Delivery address",
   "requester.pickupLocation": "Pickup location",
-  "requester.pickupServicePoint": "Pickup service point",
+  "pickupServicePoint.name": "Pickup service point",
   "requester.patronGroup.group": "Requester patron group",
   "tags.tagList": "Tags",
 
@@ -106,12 +107,13 @@
   "cancel.requestWillBeCancelled": "<b>{title}</b> will be <b>cancelled</b>",
   "cancel.reasonLabel": "Reason for cancellation",
   "cancel.notifyLabel": "Notify patron",
-  "cancel.additionalInfoLabel": "Additional information{required}",
+  "cancel.additionalInfoLabel": "Additional information for patron {required}",
   "cancel.additionalInfoPlaceholderRequired": "Enter more information about the cancellation (required)",
   "cancel.additionalInfoPlaceholderOptional": "Enter more information about the cancellation (optional)",
 
   "edit.deleteRequest": "Delete request",
   "edit.cancelEditing": "Cancel editing",
 
-  "newRequest.cancel": "Cancel editing"
+  "newRequest.cancel": "Cancel editing",
+  "exportExpiredHoldsToCsv": "Expired holds report (CSV)"
 }

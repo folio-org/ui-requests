@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { Field } from 'redux-form';
 import {
   FormattedMessage,
@@ -48,15 +47,17 @@ import CancelRequestDialog from './CancelRequestDialog';
 import UserForm from './UserForm';
 import ItemDetail from './ItemDetail';
 import PatronBlockModal from './PatronBlockModal';
+import PositionLink from './PositionLink';
 
 import asyncValidate from './asyncValidate';
 import {
-  toUserAddress,
   requestStatuses,
   iconTypes,
   requestTypesMap,
   requestTypesByItemStatus,
 } from './constants';
+
+import { toUserAddress, getPatronGroup } from './utils';
 
 import css from './requests.css';
 
@@ -78,7 +79,7 @@ class RequestForm extends React.Component {
       search: PropTypes.string,
     }).isRequired,
     onCancel: PropTypes.func.isRequired,
-    onCancelRequest: PropTypes.func.isRequired,
+    onCancelRequest: PropTypes.func,
     pristine: PropTypes.bool,
     resources: PropTypes.shape({
       query: PropTypes.object,
@@ -103,8 +104,7 @@ class RequestForm extends React.Component {
 
   static defaultProps = {
     request: null,
-    initialValues: {},
-    metadataDisplay: () => {},
+    metadataDisplay: () => { },
     optionLists: {},
     pristine: true,
     submitting: false,
@@ -154,42 +154,62 @@ class RequestForm extends React.Component {
     }
 
     if (this.props.query.itemBarcode) {
-      this.findItem(this.props.query.itemBarcode);
+      this.findItem('barcode', this.props.query.itemBarcode);
+    }
+
+    if (this.props.query.itemId) {
+      this.findItem('id', this.props.query.itemId);
     }
   }
 
   componentDidUpdate(prevProps) {
-    const initials = this.props.initialValues;
-    const request = this.props.request;
-    const oldInitials = prevProps.initialValues;
-    const oldRecord = prevProps.request;
-    const prevBlocks = this.getPatronBlocks(prevProps.parentResources);
-    const blocks = this.getPatronBlocks(this.props.parentResources);
+    const { initialValues, request, parentResources, query } = this.props;
 
-    if ((initials && initials.fulfilmentPreference &&
-        oldInitials && !oldInitials.fulfilmentPreference) ||
-        (request && !oldRecord)) {
+    const {
+      initialValues: prevInitialValues,
+      request: prevRequest,
+      parentResources: prevParentResources,
+      query: prevQuery,
+    } = prevProps;
+
+    const prevBlocks = this.getPatronBlocks(prevParentResources);
+    const blocks = this.getPatronBlocks(parentResources);
+
+    if (
+      (initialValues &&
+        initialValues.fulfilmentPreference &&
+        prevInitialValues &&
+        !prevInitialValues.fulfilmentPreference) ||
+      !isEqual(request, prevRequest)
+    ) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
-        selectedAddressTypeId: initials.deliveryAddressTypeId,
-        selectedDelivery: initials.fulfilmentPreference === 'Delivery',
+        selectedAddressTypeId: initialValues.deliveryAddressTypeId,
+        selectedDelivery: initialValues.fulfilmentPreference === 'Delivery',
         selectedItem: request.item,
         selectedLoan: request.loan,
-        selectedUser: request.user,
+        selectedUser: request.requester,
       });
     }
 
-    if (prevProps.query.userBarcode !== this.props.query.userBarcode) {
-      this.findUser(this.props.query.userBarcode);
+    if (prevQuery.userBarcode !== query.userBarcode) {
+      this.findUser(query.userBarcode);
     }
 
-    if (prevProps.query.itemBarcode !== this.props.query.itemBarcode) {
-      this.findItem(this.props.query.itemBarcode);
+    if (prevQuery.itemBarcode !== query.itemBarcode) {
+      this.findItem('barcode', query.itemBarcode);
+    }
+
+    if (prevQuery.itemId !== query.itemId) {
+      this.findItem('id', query.itemId);
     }
 
     if (!isEqual(blocks, prevBlocks) && blocks.length > 0) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ blocked: true });
+      const user = this.state.selectedUser || {};
+      if (user.id === blocks[0].userId) {
+        // eslint-disable-next-line react/no-did-update-set-state
+        this.setState({ blocked: true });
+      }
     }
   }
 
@@ -240,7 +260,8 @@ class RequestForm extends React.Component {
   }
 
   onUserClick() {
-    const barcode = this.requesterBarcodeRef.current.value;
+    const barcode = get(this.requesterBarcodeRef, 'current.value');
+
     if (!barcode) return;
     this.findUser(barcode);
   }
@@ -261,7 +282,7 @@ class RequestForm extends React.Component {
         this.setState({ selectedUser });
         this.props.change('requesterId', selectedUser.id);
       }
-    });
+    }).then(_ => this.props.asyncValidate());
   }
 
   findLoan(item) {
@@ -287,9 +308,9 @@ class RequestForm extends React.Component {
     });
   }
 
-  findItem(barcode) {
+  findItem(key, value) {
     const { findResource } = this.props;
-    return findResource('item', barcode, 'barcode')
+    return findResource('item', value, key)
       .then((result) => {
         if (!result || result.totalRecords === 0) return null;
 
@@ -297,7 +318,7 @@ class RequestForm extends React.Component {
         const options = this.getRequestTypeOptions(item);
 
         this.props.change('itemId', item.id);
-        this.props.change('item.barcode', barcode);
+        this.props.change('item.barcode', item.barcode);
         if (options.length === 1) {
           this.props.change('requestType', options[0].value);
         }
@@ -323,15 +344,18 @@ class RequestForm extends React.Component {
       this.setState({ blocked: true });
     }
 
-    this.setState({ selectedItem: null });
-    const barcode = this.itemBarcodeRef.current.value;
-    return this.findItem(barcode);
+    const barcode = get(this.itemBarcodeRef, 'current.value');
+
+    if (barcode) {
+      this.setState({ selectedItem: null });
+      this.findItem('barcode', barcode);
+    }
   }
 
   // This function only exists to enable 'do lookup on enter' for item and
   // user search
   onKeyDown(e, element) {
-    if (e.key === 'Enter' && e.shiftKey === false) {
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       if (element === 'item') {
         this.onItemClick();
@@ -356,12 +380,11 @@ class RequestForm extends React.Component {
     // wait for the form to be reinitialized
     defer(() => {
       this.setState({ isCancellingRequest: false });
-      const viewUserPath = `/users/view/${(selectedUser || {}).id}?filters=pg.${patronGroup}`;
+      const viewUserPath = `/users/view/${(selectedUser || {}).id}?filters=pg.${patronGroup.group}`;
       this.props.history.push(viewUserPath);
     });
   }
 
-  requireItem = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectItem" />);
   requireUser = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectUser" />);
 
   getProxy() {
@@ -588,7 +611,6 @@ class RequestForm extends React.Component {
     const fulfilmentTypeOptions = sortedFulfilmentTypes.map(({ label, id }) => ({
       labelTranslationPath: label,
       value: id,
-      selected: id === fulfilmentPreference
     }));
 
     const labelAsterisk = isEditForm
@@ -613,16 +635,6 @@ class RequestForm extends React.Component {
       addressDetail = toUserAddress(deliveryLocationsDetail[selectedAddressTypeId]);
     }
 
-    let patronGroupName;
-    let patronGroupGroup;
-    if (patronGroups && selectedUser) {
-      const group = patronGroups.find(g => g.id === selectedUser.patronGroup);
-      if (group) {
-        patronGroupName = group.desc;
-        patronGroupGroup = group.group;
-      }
-    }
-
     const holdShelfExpireDate = get(request, ['status'], '') === requestStatuses.AWAITING_PICKUP
       ? <FormattedDate value={get(request, ['holdShelfExpirationDate'], '')} />
       : '-';
@@ -637,19 +649,7 @@ class RequestForm extends React.Component {
 
     const multiRequestTypesVisible = !isEditForm && selectedItem && requestTypeOptions.length > 1;
     const singleRequestTypeVisible = !isEditForm && selectedItem && requestTypeOptions.length === 1;
-
-    const queuePosition = get(request, ['position'], '');
-    const positionLink = request ?
-      <div>
-        <span>
-          {queuePosition}
-          &nbsp;
-          &nbsp;
-        </span>
-        <Link to={`/requests?filters=requestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit%2CrequestStatus.Open%20-%20Not%20yet%20filled&query=${request.item.barcode}&sort=Request%20Date`}>
-          <FormattedMessage id="ui-requests.actions.viewRequestsInQueue" />
-        </Link>
-      </div> : '-';
+    const patronGroup = getPatronGroup(selectedUser, patronGroups);
 
     return (
       <div>
@@ -700,7 +700,7 @@ class RequestForm extends React.Component {
                                     ref={this.itemBarcodeRef}
                                     onInput={this.onItemClickDebounce}
                                     onKeyDown={e => this.onKeyDown(e, 'item')}
-                                    validate={this.requireItem}
+
                                   />
                                 )}
                               </FormattedMessage>
@@ -718,10 +718,10 @@ class RequestForm extends React.Component {
                             </Col>
                           </Row>
                         }
-                        { selectedItem &&
+                        {selectedItem &&
                           <ItemDetail
-                            item={request ? request.item : selectedItem}
-                            loan={request ? request.loan : selectedLoan}
+                            item={{ id: get(request, 'itemId'), ...selectedItem }}
+                            loan={selectedLoan}
                             requestCount={request ? request.requestCount : requestCount}
                           />
                         }
@@ -733,7 +733,7 @@ class RequestForm extends React.Component {
                   id="request-info"
                   label={<FormattedMessage id="ui-requests.requestMeta.information" />}
                 >
-                  { isEditForm && request && request.metadata &&
+                  {isEditForm && request && request.metadata &&
                     <Col xs={12}>
                       <this.props.metadataDisplay metadata={request.metadata} />
                     </Col>
@@ -742,7 +742,7 @@ class RequestForm extends React.Component {
                     <Col xs={8}>
                       <Row>
                         <Col xs={4}>
-                          { !isEditForm && !selectedItem &&
+                          {!isEditForm && !selectedItem &&
                             <span data-test-request-type-message>
                               <KeyValue
                                 label={<FormattedMessage id="ui-requests.requestType" />}
@@ -751,7 +751,7 @@ class RequestForm extends React.Component {
                             </span>
                           }
 
-                          { multiRequestTypesVisible &&
+                          {multiRequestTypesVisible &&
                             <Field
                               label={<FormattedMessage id="ui-requests.requestType" />}
                               name="requestType"
@@ -760,7 +760,7 @@ class RequestForm extends React.Component {
                               disabled={isEditForm}
                             >
                               {requestTypeOptions.map(({ id, value }) => (
-                                <FormattedMessage id={id}>
+                                <FormattedMessage id={id} key={id}>
                                   {translatedLabel => (
                                     <option
                                       value={value}
@@ -772,7 +772,7 @@ class RequestForm extends React.Component {
                               ))}
                             </Field>
                           }
-                          { singleRequestTypeVisible &&
+                          {singleRequestTypeVisible &&
                             <KeyValue
                               label={<FormattedMessage id="ui-requests.requestType" />}
                               value={
@@ -833,7 +833,7 @@ class RequestForm extends React.Component {
                           <Col xs={3}>
                             <KeyValue
                               label={<FormattedMessage id="ui-requests.position" />}
-                              value={positionLink}
+                              value={<PositionLink request={request} />}
                             />
                           </Col>
                         </Row>
@@ -904,8 +904,9 @@ class RequestForm extends React.Component {
                             user={request ? request.requester : selectedUser}
                             stripes={this.props.stripes}
                             request={request}
-                            patronGroup={patronGroupName}
+                            patronGroup={get(patronGroup, 'desc')}
                             selectedDelivery={selectedDelivery}
+                            fulfilmentPreference={fulfilmentPreference}
                             deliveryAddress={addressDetail}
                             deliveryLocations={deliveryLocations}
                             fulfilmentTypeOptions={fulfilmentTypeOptions}
@@ -933,8 +934,8 @@ class RequestForm extends React.Component {
             <PatronBlockModal
               open={blocked}
               onClose={this.onCloseBlockedModal}
-              viewUserPath={() => this.onViewUserPath(selectedUser, patronGroupGroup)}
-              patronBlocks={patronBlocks[0] || {}}
+              viewUserPath={() => this.onViewUserPath(selectedUser, patronGroup)}
+              patronBlocks={patronBlocks || []}
             />
             <br />
             <br />
@@ -954,5 +955,4 @@ export default stripesForm({
   asyncBlurFields: ['item.barcode', 'requester.barcode'],
   navigationCheck: true,
   enableReinitialize: true,
-  keepDirtyOnReinitialize: true,
 })(injectIntl(RequestForm));

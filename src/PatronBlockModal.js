@@ -11,6 +11,7 @@ import {
 
 const PatronBlockModal = ({ open, onClose, patronBlocks, viewUserPath }) => {
   const blocks = take(orderBy(patronBlocks, ['metadata.updatedDate'], ['desc']), 3);
+  const openModal = open && blocks.length > 0;
   const renderBlocks = blocks.map(block => {
     return (
       <Row>
@@ -23,7 +24,7 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, viewUserPath }) => {
 
   return (
     <Modal
-      open={open}
+      open={openModal}
       dismissible
       onClose={onClose}
       label={
@@ -36,7 +37,7 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, viewUserPath }) => {
       <Row>
         <Col xs>
           <FormattedMessage id="ui-requests.blockedLabel" />
-          :
+          {':'}
         </Col>
       </Row>
       {renderBlocks}
@@ -60,7 +61,7 @@ PatronBlockModal.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   patronBlocks: PropTypes.object,
-  viewUserPath: PropTypes.string
+  viewUserPath: PropTypes.func,
 };
 
 export default PatronBlockModal;
