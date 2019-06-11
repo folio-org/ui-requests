@@ -21,7 +21,7 @@ import {
   AccordionSet,
   Col,
   Icon,
-  IconButton,
+  PaneHeaderIconButton,
   KeyValue,
   Layer,
   Pane,
@@ -268,7 +268,7 @@ class ViewRequest extends React.Component {
           tagsEnabled &&
           <FormattedMessage id="ui-requests.showTags">
             {ariaLabel => (
-              <IconButton
+              <PaneHeaderIconButton
                 icon="tag"
                 id="clickable-show-tags"
                 onClick={tagsToggle}
@@ -279,7 +279,7 @@ class ViewRequest extends React.Component {
           </FormattedMessage>
         }
         {!isRequestClosed &&
-          <IconButton
+          <PaneHeaderIconButton
             icon="edit"
             id="clickable-edit-request"
             style={{ visibility: !request ? 'hidden' : 'visible' }}
