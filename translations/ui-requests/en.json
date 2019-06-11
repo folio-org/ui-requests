@@ -115,5 +115,7 @@
   "edit.cancelEditing": "Cancel editing",
 
   "newRequest.cancel": "Cancel editing",
-  "exportExpiredHoldsToCsv": "Expired holds report (CSV)"
+  "exportExpiredHoldsToCsv": "Expired holds report (CSV)",
+  "nothingToClear": "Nothing to clear",
+  "noExpiredRequests": "There are currently no expired or cancelled requests on the hold shelf."
 }

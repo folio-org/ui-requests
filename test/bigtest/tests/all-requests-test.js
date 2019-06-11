@@ -48,26 +48,4 @@ describe('Requests', () => {
       expect(requests.instance.isVisible).to.equal(true);
     });
   });
-
-  describe('Export to CSV', function () {
-    beforeEach(async function () {
-      await requests.headerDropdown.click();
-      await requests.headerDropdownMenu.clickExportToCSV();
-    });
-
-    it('exports data to csv', () => {
-      expect(requests.headerDropdownMenu.exportBtnIsVisible).to.be.false;
-    });
-  });
-
-  describe('Export expired holds to CSV', function () {
-    beforeEach(async function () {
-      await requests.headerDropdown.click();
-      await requests.headerDropdownMenu.clickExportExpiredHoldsToCSV();
-    });
-
-    it('exports data to csv', () => {
-      expect(requests.headerDropdownMenu.exportExpiredHoldsBtnIsVisible).to.be.false;
-    });
-  });
 });
