@@ -14,7 +14,10 @@ import {
   FormattedTime,
 } from 'react-intl';
 
-import { TitleManager } from '@folio/stripes/core';
+import {
+  IntlConsumer,
+  TitleManager
+} from '@folio/stripes/core';
 import {
   Button,
   Accordion,
@@ -226,24 +229,29 @@ class ViewRequest extends React.Component {
 
     if (query.layer === 'edit') {
       return (
-        <Layer
-          isOpen
-          label={<FormattedMessage id="ui-requests.actions.editRequestLink" />}
-        >
-          <RequestForm
-            stripes={stripes}
-            initialValues={{ requestExpirationDate: null, ...request }}
-            request={request}
-            metadataDisplay={this.cViewMetaData}
-            onSubmit={(record) => { this.update(record); }}
-            onCancel={onCloseEdit}
-            onCancelRequest={this.cancelRequest}
-            optionLists={optionLists}
-            patronGroups={patronGroups}
-            query={this.props.query}
-            findResource={findResource}
-          />
-        </Layer>
+        <IntlConsumer>
+          {intl => (
+            <Layer
+              isOpen
+              contentLabel={intl.formatMessage({ id: 'ui-requests.actions.editRequestLink' })}
+            >
+              <RequestForm
+                stripes={stripes}
+                initialValues={{ requestExpirationDate: null, ...request }}
+                request={request}
+                metadataDisplay={this.cViewMetaData}
+                onSubmit={(record) => { this.update(record); }}
+                onCancel={onCloseEdit}
+                onCancelRequest={this.cancelRequest}
+                optionLists={optionLists}
+                patronGroups={patronGroups}
+                query={this.props.query}
+                findResource={findResource}
+              />
+            </Layer>
+          )
+        }
+        </IntlConsumer>
       );
     }
 
