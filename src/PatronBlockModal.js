@@ -60,7 +60,7 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, viewUserPath }) => {
 PatronBlockModal.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
-  patronBlocks: PropTypes.object,
+  patronBlocks: PropTypes.arrayOf(PropTypes.object),
   viewUserPath: PropTypes.func,
 };
 
