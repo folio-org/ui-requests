@@ -17,6 +17,13 @@ describe('Edit Request page', () => {
     this.visit('/requests/view/requestId0?layer=edit');
   });
 
+  describe('Request edit layer', function () {
+    it('layer exists', function () {
+      expect(EditRequestInteractor.isLayerPresent).to.be.true;
+    });
+  });
+
+
   describe('clicking cancel editing button', function () {
     beforeEach(async () => {
       await EditRequestInteractor.headerDropdown.click();
