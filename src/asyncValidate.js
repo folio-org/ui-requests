@@ -13,10 +13,11 @@ function getItemErrors(item) {
 
 function asyncValidateItem(values, props) {
   return new Promise((resolve, reject) => {
-    const uv = props.uniquenessValidator.itemUniquenessValidator;
+    const uv = props.parentMutator.itemUniquenessValidator;
     const query = `(barcode="${values.item.barcode}")`;
+
     uv.reset();
-    uv.GET({ params: { query } }).then((items) => {
+    return uv.GET({ params: { query } }).then((items) => {
       const errors = getItemErrors(items[0]);
       if (errors) {
         reject(errors);
@@ -29,10 +30,10 @@ function asyncValidateItem(values, props) {
 
 function asyncValidateUser(values, props) {
   return new Promise((resolve, reject) => {
-    const uv = props.uniquenessValidator.userUniquenessValidator;
+    const uv = props.parentMutator.userUniquenessValidator;
     const query = `(barcode="${values.requester.barcode}")`;
     uv.reset();
-    uv.GET({ params: { query } }).then((users) => {
+    return uv.GET({ params: { query } }).then((users) => {
       if (users.length < 1) {
         const error = { requester: { barcode: <FormattedMessage id="ui-requests.errors.userBarcodeDoesNotExist" /> } };
         reject(error);

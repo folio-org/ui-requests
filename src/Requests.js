@@ -637,7 +637,6 @@ class Requests extends React.Component {
               },
               patronGroups,
               query: resources.query,
-              uniquenessValidator: mutator,
               onDuplicate: this.onDuplicate,
             }}
             viewRecordPerms="module.requests.enabled"
