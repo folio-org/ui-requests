@@ -24,7 +24,7 @@ import CancelRequestDialog from './cancel-request-dialog';
   chooseServicePoint = selectable('[name="pickupServicePointId"]');
   clickUpdate = clickable('#clickable-update-request');
   cancelRequestDialog = new CancelRequestDialog('[data-test-cancel-request-modal]');
-  isLayerPresent = isPresent('[aria-label="Edit Request Dialog"]');
+  isLayerPresent = isPresent('[class*=LayerRoot][role=dialog]');
 }
 
 export default new EditRequestsInteractor();
