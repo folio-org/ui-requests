@@ -275,18 +275,18 @@ class Requests extends React.Component {
     const patronBlocks = get(this.props.resources, ['patronBlocks', 'records'], []);
     const prevBlocks = get(prevProps.resources, ['patronBlocks', 'records'], []);
     const { submitting } = this.state;
-    const prevExpirated = prevBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
-    const expirated = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
+    const prevExpired = prevBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
+    const expired = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
 
-    if (prevExpirated.length > 0 && expirated.length === 0) {
+    if (prevExpired.length > 0 && expired.length === 0) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ submitting: false });
     }
 
-    if (expirated.length > 0 && !submitting) {
+    if (expired.length > 0 && !submitting) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ submitting: true });
-      expirated.forEach(p => {
+      expired.forEach(p => {
         this.props.mutator.activeRecord.update({ blockId: p.id });
         this.props.mutator.patronBlocks.DELETE({ id: p.id });
       });
