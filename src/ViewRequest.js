@@ -75,6 +75,7 @@ class ViewRequest extends React.Component {
     tagsToggle: PropTypes.func,
     paneWidth: PropTypes.string,
     patronGroups: PropTypes.arrayOf(PropTypes.object),
+    parentMutator: PropTypes.object,
     resources: PropTypes.shape({
       selectedRequest: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
@@ -223,6 +224,7 @@ class ViewRequest extends React.Component {
       onCloseEdit,
       findResource,
       patronGroups,
+      parentMutator,
     } = this.props;
 
     const query = location.search ? queryString.parse(location.search) : {};
@@ -246,6 +248,7 @@ class ViewRequest extends React.Component {
                 optionLists={optionLists}
                 patronGroups={patronGroups}
                 query={this.props.query}
+                parentMutator={parentMutator}
                 findResource={findResource}
               />
             </Layer>
