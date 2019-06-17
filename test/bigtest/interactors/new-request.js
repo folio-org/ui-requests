@@ -49,6 +49,9 @@ import { getSelectValues } from './helpers';
     key: 'Enter',
   });
 
+  clickItemEnterBtn = clickable('#clickable-select-item');
+  clickUserEnterBtn = clickable('#clickable-select-requester');
+
   title = text('[class*=paneTitleLabel---]');
   headerDropdown = new HeaderDropdown('[class*=paneHeaderCenterInner---] [class*=dropdown---]');
   headerDropdownMenu = new HeaderDropdownMenu();
