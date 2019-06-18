@@ -1,5 +1,9 @@
 # Change history for ui-requests
 
+## IN PROGRESS
+
+* Refactor async validation. Part of UIREQ-280.
+
 ## [1.10.0](https://github.com/folio-org/ui-requests/tree/v1.10.0) (2019-06-12)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.9.0...v1.10.0)
 

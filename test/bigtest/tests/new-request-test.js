@@ -86,11 +86,11 @@ describe('New Request page', () => {
 
         await NewRequestInteractor
           .fillItemBarcode('9676761472500')
-          .pressEnter();
+          .clickItemEnterBtn();
 
         await NewRequestInteractor
           .fillUserBarcode('9676761472501')
-          .pressEnter();
+          .clickUserEnterBtn();
 
         await NewRequestInteractor.chooseServicePoint('Circ Desk 2');
         await NewRequestInteractor.clickNewRequest();
@@ -120,11 +120,11 @@ describe('New Request page', () => {
 
         await NewRequestInteractor
           .fillItemBarcode('9676761472500')
-          .pressEnter();
+          .clickItemEnterBtn();
 
         await NewRequestInteractor
           .fillUserBarcode('9676761472501')
-          .pressEnter();
+          .clickUserEnterBtn();
 
         await NewRequestInteractor.chooseFulfillmentPreference('Delivery');
         await NewRequestInteractor.chooseDeliveryAddress('Claim');
@@ -155,7 +155,7 @@ describe('New Request page', () => {
 
         await NewRequestInteractor
           .fillItemBarcode('9676761472500')
-          .pressEnter();
+          .clickItemEnterBtn();
       });
 
       it('should hide request type message', () => {
@@ -173,7 +173,7 @@ describe('New Request page', () => {
 
           await NewRequestInteractor
             .fillItemBarcode('9676761472501')
-            .pressEnter()
+            .clickItemEnterBtn()
             .whenRequestTypesArePresent();
         });
 
@@ -191,7 +191,7 @@ describe('New Request page', () => {
 
           await NewRequestInteractor
             .fillItemBarcode('9676761472501')
-            .pressEnter()
+            .clickItemEnterBtn()
             .whenRequestTypeIsPresent();
         });
 
@@ -209,7 +209,7 @@ describe('New Request page', () => {
 
           await NewRequestInteractor
             .fillItemBarcode('9676761472501')
-            .pressEnter()
+            .clickItemEnterBtn()
             .whenRequestTypesArePresent();
         });
 
@@ -227,7 +227,7 @@ describe('New Request page', () => {
 
           await NewRequestInteractor
             .fillItemBarcode('9676761472501')
-            .pressEnter()
+            .clickItemEnterBtn()
             .whenRequestTypesArePresent();
         });
 
@@ -245,7 +245,7 @@ describe('New Request page', () => {
 
           await NewRequestInteractor
             .fillItemBarcode('9676761472501')
-            .pressEnter()
+            .clickItemEnterBtn()
             .whenRequestTypeIsPresent();
         });
 
@@ -263,7 +263,7 @@ describe('New Request page', () => {
 
           await NewRequestInteractor
             .fillItemBarcode('9676761472501')
-            .pressEnter()
+            .clickItemEnterBtn()
             .whenRequestTypesArePresent();
         });
 
@@ -281,7 +281,7 @@ describe('New Request page', () => {
 
           await NewRequestInteractor
             .fillItemBarcode('9676761472501')
-            .pressEnter()
+            .clickItemEnterBtn()
             .whenRequestTypesArePresent();
         });
 
@@ -299,7 +299,7 @@ describe('New Request page', () => {
 
           await NewRequestInteractor
             .fillItemBarcode('9676761472501')
-            .pressEnter()
+            .clickItemEnterBtn()
             .whenRequestTypesArePresent();
         });
 
@@ -308,43 +308,43 @@ describe('New Request page', () => {
         });
       });
     });
-  });
 
-  describe('New request with prefilled user barcode and item barcode', function () {
-    beforeEach(async function () {
-      this.server.create('item', {
-        barcode: '9676761472503',
+    describe('New request with prefilled user barcode and item barcode', function () {
+      beforeEach(async function () {
+        this.server.create('item', {
+          barcode: '9676761472503',
+        });
+        this.server.create('user', {
+          barcode: '9676761472504',
+        });
+        this.visit('/requests/view/?layer=create&userBarcode=9676761472504&itemBarcode=9676761472503');
       });
-      this.server.create('user', {
-        barcode: '9676761472504',
+
+      it('should update prefill user and item', () => {
+        expect(NewRequestInteractor.containsUserBarcode).to.equal('9676761472504');
+        expect(NewRequestInteractor.containsItemBarcode).to.equal('9676761472503');
       });
-      this.visit('/requests/view/?layer=create&userBarcode=9676761472504&itemBarcode=9676761472503');
     });
 
-    it('should update prefill user and item', () => {
-      expect(NewRequestInteractor.containsUserBarcode).to.equal('9676761472504');
-      expect(NewRequestInteractor.containsItemBarcode).to.equal('9676761472503');
-    });
-  });
+    describe('New request with prefilled user barcode and item id', function () {
+      beforeEach(async function () {
+        this.server.create('item', {
+          id: '123',
+          barcode: '',
+        });
+        this.server.create('user', {
+          barcode: '9676761472504',
+        });
+        this.visit('/requests/view/?layer=create&userBarcode=9676761472504&itemId=123');
 
-  describe('New request with prefilled user barcode and item id', function () {
-    beforeEach(async function () {
-      this.server.create('item', {
-        id: '123',
-        barcode: '',
+        await NewRequestInteractor.chooseServicePoint('Circ Desk 2');
+        await NewRequestInteractor.clickNewRequest();
       });
-      this.server.create('user', {
-        barcode: '9676761472504',
+
+      it('should update prefill user and item', () => {
+        expect(ViewRequestInteractor.requestSectionPresent).to.be.true;
+        expect(ViewRequestInteractor.requesterSectionPresent).to.be.true;
       });
-      this.visit('/requests/view/?layer=create&userBarcode=9676761472504&itemId=123');
-
-      await NewRequestInteractor.chooseServicePoint('Circ Desk 2');
-      await NewRequestInteractor.clickNewRequest();
-    });
-
-    it('should update prefill user and item', () => {
-      expect(ViewRequestInteractor.requestSectionPresent).to.be.true;
-      expect(ViewRequestInteractor.requesterSectionPresent).to.be.true;
     });
   });
 });
