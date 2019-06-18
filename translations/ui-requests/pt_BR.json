@@ -117,7 +117,7 @@
     "additionalReasons": "Exibir detalhes da suspensão para ver as razões adicionais para a suspensão...",
     "pickupServicePoint.name": "Ponto de serviço para retirada",
     "item.id": "ID do item",
-    "exportExpiredHoldsToCsv": "Relatório de reservas expiradas (CSV)",
+    "exportExpiredHoldsToCsv": "Relatório de liberação de prateleira de reservas em CSV",
     "nothingToClear": "Nada para limpar",
     "noExpiredRequests": "Atualmente, não há requisições expiradas ou canceladas na prateleira de espera."
 }
