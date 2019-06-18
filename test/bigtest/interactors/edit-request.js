@@ -3,6 +3,7 @@ import {
   clickable,
   fillable,
   selectable,
+  isPresent,
 } from '@bigtest/interactor';
 
 import CancelRequestDialog from './cancel-request-dialog';
@@ -23,6 +24,7 @@ import CancelRequestDialog from './cancel-request-dialog';
   chooseServicePoint = selectable('[name="pickupServicePointId"]');
   clickUpdate = clickable('#clickable-update-request');
   cancelRequestDialog = new CancelRequestDialog('[data-test-cancel-request-modal]');
+  isLayerPresent = isPresent('[class*=LayerRoot][role=dialog]');
 }
 
 export default new EditRequestsInteractor();

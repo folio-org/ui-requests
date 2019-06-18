@@ -14,14 +14,17 @@ import {
   FormattedTime,
 } from 'react-intl';
 
-import { TitleManager } from '@folio/stripes/core';
+import {
+  IntlConsumer,
+  TitleManager
+} from '@folio/stripes/core';
 import {
   Button,
   Accordion,
   AccordionSet,
   Col,
   Icon,
-  IconButton,
+  PaneHeaderIconButton,
   KeyValue,
   Layer,
   Pane,
@@ -72,6 +75,7 @@ class ViewRequest extends React.Component {
     tagsToggle: PropTypes.func,
     paneWidth: PropTypes.string,
     patronGroups: PropTypes.arrayOf(PropTypes.object),
+    parentMutator: PropTypes.object,
     resources: PropTypes.shape({
       selectedRequest: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
@@ -220,30 +224,37 @@ class ViewRequest extends React.Component {
       onCloseEdit,
       findResource,
       patronGroups,
+      parentMutator,
     } = this.props;
 
     const query = location.search ? queryString.parse(location.search) : {};
 
     if (query.layer === 'edit') {
       return (
-        <Layer
-          isOpen
-          label={<FormattedMessage id="ui-requests.actions.editRequestLink" />}
-        >
-          <RequestForm
-            stripes={stripes}
-            initialValues={{ requestExpirationDate: null, ...request }}
-            request={request}
-            metadataDisplay={this.cViewMetaData}
-            onSubmit={(record) => { this.update(record); }}
-            onCancel={onCloseEdit}
-            onCancelRequest={this.cancelRequest}
-            optionLists={optionLists}
-            patronGroups={patronGroups}
-            query={this.props.query}
-            findResource={findResource}
-          />
-        </Layer>
+        <IntlConsumer>
+          {intl => (
+            <Layer
+              isOpen
+              contentLabel={intl.formatMessage({ id: 'ui-requests.actions.editRequestLink' })}
+            >
+              <RequestForm
+                stripes={stripes}
+                initialValues={{ requestExpirationDate: null, ...request }}
+                request={request}
+                metadataDisplay={this.cViewMetaData}
+                onSubmit={(record) => { this.update(record); }}
+                onCancel={onCloseEdit}
+                onCancelRequest={this.cancelRequest}
+                optionLists={optionLists}
+                patronGroups={patronGroups}
+                query={this.props.query}
+                parentMutator={parentMutator}
+                findResource={findResource}
+              />
+            </Layer>
+          )
+        }
+        </IntlConsumer>
       );
     }
 
@@ -268,7 +279,7 @@ class ViewRequest extends React.Component {
           tagsEnabled &&
           <FormattedMessage id="ui-requests.showTags">
             {ariaLabel => (
-              <IconButton
+              <PaneHeaderIconButton
                 icon="tag"
                 id="clickable-show-tags"
                 onClick={tagsToggle}
@@ -279,7 +290,7 @@ class ViewRequest extends React.Component {
           </FormattedMessage>
         }
         {!isRequestClosed &&
-          <IconButton
+          <PaneHeaderIconButton
             icon="edit"
             id="clickable-edit-request"
             style={{ visibility: !request ? 'hidden' : 'visible' }}

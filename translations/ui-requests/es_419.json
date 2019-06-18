@@ -117,5 +117,7 @@
     "additionalReasons": "View block details to see additional reasons for block...",
     "pickupServicePoint.name": "Pickup service point",
     "item.id": "Item id",
-    "exportExpiredHoldsToCsv": "Informe de reservas expiradas (CSV) "
+    "exportExpiredHoldsToCsv": "Informe de reservas expiradas (CSV) ",
+    "nothingToClear": "Nothing to clear",
+    "noExpiredRequests": "There are currently no expired or cancelled requests on the hold shelf."
 }

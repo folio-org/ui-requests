@@ -29,7 +29,7 @@ import {
   Col,
   Datepicker,
   Icon,
-  IconButton,
+  PaneHeaderIconButton,
   KeyValue,
   Pane,
   PaneMenu,
@@ -143,8 +143,6 @@ class RequestForm extends React.Component {
     this.onSelectProxy = this.onSelectProxy.bind(this);
     this.onUserClick = this.onUserClick.bind(this);
     this.onClose = this.onClose.bind(this);
-    this.onUserClickDebounce = debounce(this.onUserClick, 300, { leading: false, trailing: true });
-    this.onItemClickDebounce = debounce(this.onItemClick, 300, { leading: false, trailing: true });
     this.itemBarcodeRef = React.createRef();
     this.requesterBarcodeRef = React.createRef();
   }
@@ -502,7 +500,7 @@ class RequestForm extends React.Component {
     <PaneMenu>
       <FormattedMessage id="ui-requests.actions.closeNewRequest">
         {title => (
-          <IconButton
+          <PaneHeaderIconButton
             onClick={this.props.onCancel}
             ariaLabel={title}
             icon={iconTypes.times}
@@ -679,7 +677,6 @@ class RequestForm extends React.Component {
                                     component={TextField}
                                     withRef
                                     ref={this.itemBarcodeRef}
-                                    onInput={this.onItemClickDebounce}
                                     onKeyDown={e => this.onKeyDown(e, 'item')}
 
                                   />
@@ -846,7 +843,6 @@ class RequestForm extends React.Component {
                                     component={TextField}
                                     withRef
                                     ref={this.requesterBarcodeRef}
-                                    onInput={this.onUserClickDebounce}
                                     onKeyDown={e => this.onKeyDown(e, 'requester')}
                                     validate={this.requireUser}
                                   />
