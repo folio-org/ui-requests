@@ -409,7 +409,7 @@ class Requests extends React.Component {
 
   create = (data) => {
     return this.props.mutator.records.POST(data)
-      .then(() => this.props.mutator.query.update({ layer: null }))
+      .then(() => this.closeLayer())
       .catch(resp => this.processError(resp));
   };
 
@@ -437,13 +437,17 @@ class Requests extends React.Component {
       e.preventDefault();
     }
 
+    this.closeLayer();
+  };
+
+  closeLayer() {
     this.props.mutator.query.update({
       layer: null,
       itemBarcode: null,
       userBarcode: null,
       itemId: null,
     });
-  };
+  }
 
   onDuplicate = (request) => {
     const dupRequest = duplicateRequest(request);

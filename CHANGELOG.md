@@ -3,6 +3,7 @@
 ## IN PROGRESS
 
 * Refactor async validation. Part of UIREQ-280.
+* Cleanup item lookup values when layer is closed. Fixes UIREQ-285 and UIREQ-287.
 
 ## [1.10.0](https://github.com/folio-org/ui-requests/tree/v1.10.0) (2019-06-12)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.9.0...v1.10.0)
