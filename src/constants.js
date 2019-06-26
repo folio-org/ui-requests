@@ -52,6 +52,7 @@ export const reportHeaders = [
   'item.copyNumbers',
   'item.contributorNames',
   'item.location.name',
+  'item.location.code',
   'item.callNumber',
   'item.enumeration',
   'item.status',
