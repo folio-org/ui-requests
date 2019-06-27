@@ -119,5 +119,7 @@
     "item.id": "معرّف المادة",
     "exportExpiredHoldsToCsv": "تقرير الحجوزات المنتهية (CSV)",
     "nothingToClear": "لا يوجد شيء لمسحه",
-    "noExpiredRequests": "لا توجد حاليًا أي طلبات منتهية أو ملغية على رف الحجز."
+    "noExpiredRequests": "لا توجد حاليًا أي طلبات منتهية أو ملغية على رف الحجز.",
+    "item.location.libraryName": "المكتبة",
+    "item.location.code": "رمز موقع الترفيف"
 }

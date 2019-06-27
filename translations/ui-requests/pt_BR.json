@@ -119,5 +119,7 @@
     "item.id": "ID do item",
     "exportExpiredHoldsToCsv": "Relatório de liberação de prateleira de reservas em CSV",
     "nothingToClear": "Nada para limpar",
-    "noExpiredRequests": "Atualmente, não há requisições expiradas ou canceladas na prateleira de espera."
+    "noExpiredRequests": "Atualmente, não há requisições expiradas ou canceladas na prateleira de espera.",
+    "item.location.libraryName": "Biblioteca",
+    "item.location.code": "Código de localização das estantes"
 }
