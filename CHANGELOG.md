@@ -3,6 +3,7 @@
 ## 1.10.2 (In Progress)
 
 * Add Location Code Column to Request CSV. Refs UIREQ-263.
+* Add library column to Request CSV. Refs UIREQ-262.
 
 ## [1.10.1](https://github.com/folio-org/ui-requests/tree/v1.10.1) (2019-06-24)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.10.0...v1.10.1)
