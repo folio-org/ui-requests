@@ -77,6 +77,7 @@
   "item.contributorNames": "Contributor",
   "item.location.libraryName": "Library",
   "item.location.name": "Shelving location",
+  "item.location.code": "Shelving location code",
   "item.callNumber": "Call number",
   "item.enumeration": "Enumeration",
   "item.copyNumber": "Copy",

@@ -53,6 +53,7 @@ export const reportHeaders = [
   'item.contributorNames',
   'item.location.libraryName',
   'item.location.name',
+  'item.location.code',
   'item.callNumber',
   'item.enumeration',
   'item.status',
