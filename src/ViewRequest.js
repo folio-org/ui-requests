@@ -194,7 +194,7 @@ class ViewRequest extends React.Component {
     });
   }
 
-  moveRequest = (requestType, item) => {
+  moveRequest = async (requestType, item) => {
     const request = this.getRequest();
     // TODO: actually move request
     this.loadFullRequest(request).then(() => {

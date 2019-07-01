@@ -53,21 +53,21 @@ class MoveRequestDialog extends React.Component {
       type: 'okapi',
       records: 'holdingsRecords',
       path: 'holdings-storage/holdings',
-      accumulate: 'true',
+      accumulate: true,
       fetch: false,
     },
     items: {
       type: 'okapi',
       records: 'items',
       path: 'inventory/items',
-      accumulate: 'true',
+      accumulate: true,
       fetch: false,
     },
     requests: {
       type: 'okapi',
       path: 'circulation/requests',
       records: 'requests',
-      accumulate: 'true',
+      accumulate: true,
       fetch: false,
     },
   };
@@ -113,18 +113,19 @@ class MoveRequestDialog extends React.Component {
 
   async componentDidMount() {
     const holdings = await this.fetchHoldings();
-    const items = await this.fetchItems(holdings);
+    let items = await this.fetchItems(holdings);
     const requests = await this.fetchRequests(items);
     const requestMap = countBy(requests, 'itemId');
+    const { request } = this.props;
 
-    items.forEach(item => {
-      item.requestQueue = requestMap[item.id] || 0;
-    });
+    items = items
+      .filter(item => item.id !== request.itemId)
+      .map(item => ({ ...item, requestQueue: requestMap[item.id] || 0 }));
 
     this.setState({ items, isLoading: false });
   }
 
-  async fetchHoldings() {
+  fetchHoldings() {
     const {
       mutator:  { holdings },
       request: { item: { instanceId } }
@@ -135,7 +136,7 @@ class MoveRequestDialog extends React.Component {
     return holdings.GET({ params: { query } });
   }
 
-  async fetchItems(holdings) {
+  fetchItems(holdings) {
     const { mutator: { items } } = this.props;
     const query = holdings.map(h => `holdingsRecordId==${h.id}`).join(' or ');
     items.reset();
@@ -143,7 +144,7 @@ class MoveRequestDialog extends React.Component {
     return items.GET({ params: { query } });
   }
 
-  async fetchRequests(items) {
+  fetchRequests(items) {
     const { mutator: { requests } } = this.props;
     let query = items.map(i => `itemId==${i.id}`).join(' or ');
     query = `(${query}) and (status="Open")`;

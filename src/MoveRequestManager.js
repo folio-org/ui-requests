@@ -1,9 +1,12 @@
 import { get, includes } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { stripesConnect } from '@folio/stripes/core';
+import { FormattedMessage } from 'react-intl';
+
 import MoveRequestDialog from './MoveRequestDialog';
 import ChooseRequestTypeDialog from './ChooseRequestTypeDialog';
-
+import ErrorModal from './components/ErrorModal';
 import { requestTypesByItemStatus } from './constants';
 
 class MoveRequestManager extends React.Component {
@@ -11,6 +14,22 @@ class MoveRequestManager extends React.Component {
     onCancelMove: PropTypes.func,
     onMove: PropTypes.func,
     request: PropTypes.object,
+    mutator: PropTypes.shape({
+      move: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
+    }).isRequired,
+  };
+
+  static manifest = {
+    moveRequest: {
+      type: 'okapi',
+      POST: {
+        path: 'circulation/requests/!{request.id}/move',
+      },
+      fetch: false,
+      throwErrors: false,
+    }
   };
 
   constructor(props) {
@@ -18,8 +37,37 @@ class MoveRequestManager extends React.Component {
     this.state = {};
   }
 
-  moveRequest = (requestType, item) => {
-    this.props.onMove(requestType, item);
+  moveRequest = async (requestType, item) => {
+    const {
+      mutator: {
+        moveRequest: { POST },
+      },
+    } = this.props;
+
+    const data = {
+      destinationItemId: item.id,
+      requestType,
+    };
+
+    try {
+      await POST(data);
+      this.props.onMove(requestType, item);
+    } catch (resp) {
+      this.processError(resp);
+    }
+  }
+
+  processError(resp) {
+    const contentType = resp.headers.get('Content-Type') || '';
+    if (contentType.startsWith('application/json')) {
+      return resp.json().then(error => this.handleError(get(error, 'errors[0].message')));
+    } else {
+      return resp.text().then(error => this.handleError(error));
+    }
+  }
+
+  handleError(errorMessage) {
+    this.setState({ errorMessage });
   }
 
   onItemSelected = (selectedItem) => {
@@ -43,6 +91,12 @@ class MoveRequestManager extends React.Component {
     });
   }
 
+  closeErrorMessage = () => {
+    this.setState({
+      errorMessage: null
+    });
+  }
+
   render() {
     const {
       onCancelMove,
@@ -51,6 +105,7 @@ class MoveRequestManager extends React.Component {
     const {
       chooseRequestType,
       selectedItem,
+      errorMessage,
     } = this.state;
 
     return (
@@ -70,9 +125,17 @@ class MoveRequestManager extends React.Component {
             onCancel={this.cancelMoveRequest}
           />
         }
+        {
+          errorMessage &&
+          <ErrorModal
+            onClose={this.closeErrorMessage}
+            label={<FormattedMessage id="ui-requests.requestNotAllowed" />}
+            errorMessage={errorMessage}
+          />
+        }
       </React.Fragment>
     );
   }
 }
 
-export default MoveRequestManager;
+export default stripesConnect(MoveRequestManager);
