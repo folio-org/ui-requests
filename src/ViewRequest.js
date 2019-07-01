@@ -194,15 +194,13 @@ class ViewRequest extends React.Component {
     });
   }
 
-  moveRequest = async (requestType, item) => {
+  moveRequest = async () => {
     const request = this.getRequest();
-    // TODO: actually move request
-    this.loadFullRequest(request).then(() => {
-      this.setState({ moveRequest: false });
-    });
+    await this.loadFullRequest(request);
+    this.closeMoveRequest();
   }
 
-  cancelMoveRequest = () => {
+  closeMoveRequest = () => {
     this.setState({ moveRequest: false });
   }
 
@@ -402,7 +400,7 @@ class ViewRequest extends React.Component {
               }}
               buttonStyle="dropdownItem"
             >
-              <Icon icon="copy">
+              <Icon icon="replace">
                 <FormattedMessage id="ui-requests.actions.moveRequest" />
               </Icon>
             </Button>
@@ -514,7 +512,7 @@ class ViewRequest extends React.Component {
         {this.state.moveRequest &&
           <MoveRequestManager
             onMove={this.moveRequest}
-            onCancelMove={this.cancelMoveRequest}
+            onCancelMove={this.closeMoveRequest}
             request={request}
           />
         }
