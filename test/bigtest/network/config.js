@@ -274,6 +274,7 @@ export default function config() {
       const cqlParser = new CQLParser();
       cqlParser.parse(request.queryParams.query);
       const { field, term } = cqlParser.tree;
+
       return items.where({ [field]: term });
     } else {
       return items.all();
@@ -296,5 +297,9 @@ export default function config() {
     } else {
       return loans.all();
     }
+  });
+
+  this.get('/holdings-storage/holdings', ({ holdings }, request) => {
+    return holdings.all();
   });
 }

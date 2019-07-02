@@ -18,6 +18,17 @@ describe('View request page', () => {
       this.visit('/requests/view/requestId0');
     });
 
+    describe('open move request dialog', function () {
+      beforeEach(async () => {
+        await ViewRequestInteractor.headerDropdown.click();
+        await ViewRequestInteractor.headerDropdownMenu.clickMove();
+      });
+
+      it('opens move request dialog', function () {
+        expect(ViewRequestInteractor.moveRequestDialog.isVisible).to.equal(true);
+      });
+    });
+
     describe('cancel request', function () {
       describe('confirm cancel request', function () {
         beforeEach(async () => {

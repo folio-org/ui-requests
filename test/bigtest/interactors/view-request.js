@@ -6,6 +6,7 @@ import {
 } from '@bigtest/interactor';
 
 import CancelRequestDialog from './cancel-request-dialog';
+import MoveRequestDialog from './move-request-dialog';
 import { contains } from './helpers';
 
 @interactor class HeaderDropdown {
@@ -28,6 +29,7 @@ import { contains } from './helpers';
   headerDropdownMenu = new HeaderDropdownMenu();
   itemAccordion = new ItemAccordion('#item-info');
   cancelRequestDialog = new CancelRequestDialog('[data-test-cancel-request-modal]');
+  moveRequestDialog = new MoveRequestDialog('[data-test-move-request-modal]');
   requestSectionPresent = isPresent('#request-info');
   requesterSectionPresent = isPresent('#requester-info');
   requesterInfoContains = contains('#requester-info');

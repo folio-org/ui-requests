@@ -1,4 +1,4 @@
-import { faker, trait } from '@bigtest/mirage';
+import { faker, trait, association } from '@bigtest/mirage';
 
 import Factory from './application';
 
@@ -14,6 +14,7 @@ export default Factory.extend({
   holdingsStatementsForSupplements: [],
   notes: [],
   statisticalCodeIds: [],
+  instance: association(),
 
   withItem: trait({
     afterCreate(holding, server) {
