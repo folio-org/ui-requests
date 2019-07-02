@@ -16,6 +16,7 @@ import { contains } from './helpers';
   clickCancel = clickable('#clickable-cancel-request');
   clickEdit = clickable('#clickable-edit-request');
   clickDuplicate = clickable('#duplicate-request');
+  clickMove = clickable('#move-request');
 }
 
 @interactor class ItemAccordion {

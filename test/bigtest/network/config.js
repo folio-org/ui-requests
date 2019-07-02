@@ -214,6 +214,14 @@ export default function config() {
     return this.create('request', body);
   });
 
+  this.post('/circulation/requests/:id/move', (_, request) => {
+    const body = JSON.parse(request.requestBody);
+    return this.create('request', {
+      id: body.id,
+      itemId: body.destinationItemId
+    });
+  });
+
   this.put('/circulation/requests/:id', ({ requests }, request) => {
     const body = JSON.parse(request.requestBody);
     const reqModel = requests.find(body.id);
