@@ -23,6 +23,7 @@ import {
   Accordion,
   AccordionSet,
   Col,
+  Callout,
   Icon,
   PaneHeaderIconButton,
   KeyValue,
@@ -124,6 +125,7 @@ class ViewRequest extends React.Component {
     this.onToggleSection = this.onToggleSection.bind(this);
     this.cancelRequest = this.cancelRequest.bind(this);
     this.update = this.update.bind(this);
+    this.callout = React.createRef();
   }
 
   componentDidMount() {
@@ -194,10 +196,14 @@ class ViewRequest extends React.Component {
     });
   }
 
-  moveRequest = async () => {
+  onMove = async () => {
     const request = this.getRequest();
     await this.loadFullRequest(request);
     this.closeMoveRequest();
+    this.callout.current.sendCallout({
+      type: 'success',
+      message: <FormattedMessage id="ui-requests.moveRequest.success" />,
+    });
   }
 
   closeMoveRequest = () => {
@@ -511,11 +517,12 @@ class ViewRequest extends React.Component {
 
         {this.state.moveRequest &&
           <MoveRequestManager
-            onMove={this.moveRequest}
+            onMove={this.onMove}
             onCancelMove={this.closeMoveRequest}
             request={request}
           />
         }
+        <Callout ref={this.callout} />
       </Pane>
     );
   }

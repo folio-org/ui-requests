@@ -123,6 +123,7 @@
   "moveRequest.requestTypeChangeMessage": "Request will be converted to <strong>{requestType}</strong>.",
   "moveRequest.chooseRequestMessage": "Please select allowed type",
   "moveRequest.confirm": "Confirm",
+  "moveRequest.success": "Request has been moved successfully",
   "edit.deleteRequest": "Delete request",
   "edit.cancelEditing": "Cancel editing",
 
