@@ -7,6 +7,8 @@ import {
 
 import CancelRequestDialog from './cancel-request-dialog';
 import MoveRequestDialog from './move-request-dialog';
+import ChooseRequestTypeDialog from './choose-request-type-dialog';
+
 import { contains } from './helpers';
 
 @interactor class HeaderDropdown {
@@ -30,6 +32,7 @@ import { contains } from './helpers';
   itemAccordion = new ItemAccordion('#item-info');
   cancelRequestDialog = new CancelRequestDialog('[data-test-cancel-request-modal]');
   moveRequestDialog = new MoveRequestDialog('[data-test-move-request-modal]');
+  chooseRequestTypeDialog = new ChooseRequestTypeDialog('[data-test-choose-request-type-modal]');
   requestSectionPresent = isPresent('#request-info');
   requesterSectionPresent = isPresent('#requester-info');
   requesterInfoContains = contains('#requester-info');

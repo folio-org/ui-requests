@@ -216,6 +216,7 @@ export default function config() {
 
   this.post('/circulation/requests/:id/move', (_, request) => {
     const body = JSON.parse(request.requestBody);
+
     return this.create('request', {
       id: body.id,
       itemId: body.destinationItemId
@@ -274,7 +275,6 @@ export default function config() {
       const cqlParser = new CQLParser();
       cqlParser.parse(request.queryParams.query);
       const { field, term } = cqlParser.tree;
-
       return items.where({ [field]: term });
     } else {
       return items.all();
@@ -299,7 +299,7 @@ export default function config() {
     }
   });
 
-  this.get('/holdings-storage/holdings', ({ holdings }, request) => {
+  this.get('/holdings-storage/holdings', ({ holdings }) => {
     return holdings.all();
   });
 }

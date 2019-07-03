@@ -5,7 +5,7 @@ import {
 
 @interactor class MoveRequestDialog {
   clickClose = clickable('[data-test-cancel-move-request]');
-  chooseItem = clickable('[data-test-select-cancelation-reason]');
+  chooseItem = clickable('#instance-items-list [class^="mclRow---"]:first-of-type');
 }
 
 export default MoveRequestDialog;
