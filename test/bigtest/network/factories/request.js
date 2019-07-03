@@ -15,7 +15,6 @@ export default Factory.extend({
   afterCreate(request, server) {
     const user = server.create('user');
     const instance = server.create('instance', 'withHoldingAndItems');
-    // const options = (request.itemId) ? { id: request.itemId } : null;
     const item = instance.holdings.models[0].items.models[0].attrs;
 
     request.update({
