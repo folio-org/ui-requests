@@ -1,9 +1,8 @@
-import { faker, trait, association } from '@bigtest/mirage';
+import { trait, association } from '@bigtest/mirage';
 
 import Factory from './application';
 
 export default Factory.extend({
-  id: faker.random.uuid(),
   permanentLocationId: 'fcd64ce1-6995-48f0-840e-89ffa2288371',
   hrid: () => Math.floor(Math.random() * 90000000) + 10000000,
   electronicAccess: [],

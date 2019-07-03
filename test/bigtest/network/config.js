@@ -299,7 +299,14 @@ export default function config() {
     }
   });
 
-  this.get('/holdings-storage/holdings', ({ holdings }) => {
-    return holdings.all();
+  this.get('/holdings-storage/holdings', ({ holdings }, request) => {
+    if (request.queryParams.query) {
+      const cqlParser = new CQLParser();
+      cqlParser.parse(request.queryParams.query);
+      const { field, term } = cqlParser.tree;
+      return holdings.where({ [field]: term });
+    } else {
+      return holdings.all();
+    }
   });
 }
