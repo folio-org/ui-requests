@@ -5,7 +5,6 @@ export default Factory.extend({
   barcode: () => Math.floor(Math.random() * 9000000000000) + 1000000000000,
   instanceId: () => faker.random.uuid(),
   callNumber: () => Math.floor(Math.random() * 90000000) + 10000000,
-  holdingsRecordId: () => faker.random.uuid(),
 
   materialType: () => {
     return { name: faker.random.word() };
@@ -21,6 +20,7 @@ export default Factory.extend({
 
   contributorNames: () => [{ name : faker.internet.userName() }],
   copyNumbers: () => [Math.floor(Math.random() * 90000000) + 10000000],
+
   withLoan: trait({
     afterCreate(item, server) {
       server.create('loan', 'withUser', {

@@ -214,6 +214,15 @@ export default function config() {
     return this.create('request', body);
   });
 
+  this.post('/circulation/requests/:id/move', (_, request) => {
+    const body = JSON.parse(request.requestBody);
+
+    return this.create('request', {
+      id: body.id,
+      itemId: body.destinationItemId
+    });
+  });
+
   this.put('/circulation/requests/:id', ({ requests }, request) => {
     const body = JSON.parse(request.requestBody);
     const reqModel = requests.find(body.id);
@@ -287,6 +296,17 @@ export default function config() {
       }
     } else {
       return loans.all();
+    }
+  });
+
+  this.get('/holdings-storage/holdings', ({ holdings }, request) => {
+    if (request.queryParams.query) {
+      const cqlParser = new CQLParser();
+      cqlParser.parse(request.queryParams.query);
+      const { field, term } = cqlParser.tree;
+      return holdings.where({ [field]: term });
+    } else {
+      return holdings.all();
     }
   });
 }

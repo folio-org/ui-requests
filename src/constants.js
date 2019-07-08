@@ -16,6 +16,7 @@ export const requestStatuses = {
   AWAITING_PICKUP: 'Open - Awaiting pickup',
   RECALL: 'Recall',
   HOLD: 'Hold',
+  NOT_YET_FILLED: 'Open - Not yet filled',
 };
 
 export const iconTypes = {

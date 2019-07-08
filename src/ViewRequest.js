@@ -23,6 +23,7 @@ import {
   Accordion,
   AccordionSet,
   Col,
+  Callout,
   Icon,
   PaneHeaderIconButton,
   KeyValue,
@@ -38,6 +39,8 @@ import ItemDetail from './ItemDetail';
 import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
 import PositionLink from './PositionLink';
+import MoveRequestManager from './MoveRequestManager';
+
 import { requestStatuses } from './constants';
 
 import { toUserAddress } from './utils';
@@ -112,13 +115,17 @@ class ViewRequest extends React.Component {
         'item-info': true,
         'requester-info': true,
       },
+      moveRequest: false,
     };
 
-    this.cViewMetaData = props.stripes.connect(ViewMetaData);
-    this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
+    const { stripes: { connect } } = props;
+
+    this.cViewMetaData = connect(ViewMetaData);
+    this.connectedCancelRequestDialog = connect(CancelRequestDialog);
     this.onToggleSection = this.onToggleSection.bind(this);
     this.cancelRequest = this.cancelRequest.bind(this);
     this.update = this.update.bind(this);
+    this.callout = React.createRef();
   }
 
   componentDidMount() {
@@ -147,7 +154,7 @@ class ViewRequest extends React.Component {
   }
 
   loadFullRequest(basicRequest) {
-    this.props.joinRequest(basicRequest).then(request => {
+    return this.props.joinRequest(basicRequest).then(request => {
       if (this._isMounted) {
         this.setState({ request });
       }
@@ -187,6 +194,20 @@ class ViewRequest extends React.Component {
       this.setState({ isCancellingRequest: false });
       this.props.onCloseEdit();
     });
+  }
+
+  onMove = async () => {
+    const request = this.getRequest();
+    await this.loadFullRequest(request);
+    this.closeMoveRequest();
+    this.callout.current.sendCallout({
+      type: 'success',
+      message: <FormattedMessage id="ui-requests.moveRequest.success" />,
+    });
+  }
+
+  closeMoveRequest = () => {
+    this.setState({ moveRequest: false });
   }
 
   onToggleSection({ id }) {
@@ -307,6 +328,8 @@ class ViewRequest extends React.Component {
     const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');
     const isRequestClosed = requestStatus.startsWith('Closed');
+    const isRequestNotFilled = requestStatus === requestStatuses.NOT_YET_FILLED;
+
     let deliveryAddressDetail;
     let selectedDelivery = false;
 
@@ -374,6 +397,20 @@ class ViewRequest extends React.Component {
               <FormattedMessage id="ui-requests.actions.duplicateRequest" />
             </Icon>
           </Button>
+          {isRequestNotFilled &&
+            <Button
+              id="move-request"
+              onClick={() => {
+                onToggle();
+                this.setState({ moveRequest: true });
+              }}
+              buttonStyle="dropdownItem"
+            >
+              <Icon icon="replace">
+                <FormattedMessage id="ui-requests.actions.moveRequest" />
+              </Icon>
+            </Button>
+          }
         </Fragment>
       );
     };
@@ -477,6 +514,15 @@ class ViewRequest extends React.Component {
           request={request}
           stripes={stripes}
         />
+
+        {this.state.moveRequest &&
+          <MoveRequestManager
+            onMove={this.onMove}
+            onCancelMove={this.closeMoveRequest}
+            request={request}
+          />
+        }
+        <Callout ref={this.callout} />
       </Pane>
     );
   }

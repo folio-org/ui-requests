@@ -16,7 +16,6 @@ import {
   isEqual,
   keyBy,
   cloneDeep,
-  debounce,
   defer,
   unset,
 } from 'lodash';
@@ -51,13 +50,12 @@ import asyncValidate from './asyncValidate';
 import {
   requestStatuses,
   iconTypes,
-  requestTypesMap,
-  requestTypesByItemStatus,
 } from './constants';
 import ErrorModal from './components/ErrorModal';
 import {
   toUserAddress,
-  getPatronGroup
+  getPatronGroup,
+  getRequestTypeOptions,
 } from './utils';
 
 import css from './requests.css';
@@ -314,7 +312,7 @@ class RequestForm extends React.Component {
         if (!result || result.totalRecords === 0) return null;
 
         const item = result.items[0];
-        const options = this.getRequestTypeOptions(item);
+        const options = getRequestTypeOptions(item);
 
         this.props.change('itemId', item.id);
         this.props.change('item.barcode', item.barcode);
@@ -431,15 +429,6 @@ class RequestForm extends React.Component {
 
     this.props.onSubmit(data);
   };
-
-  getRequestTypeOptions(item) {
-    const itemStatus = get(item, 'status.name');
-    const requestTypes = requestTypesByItemStatus[itemStatus] || [];
-    return requestTypes.map(type => ({
-      id: requestTypesMap[type],
-      value: type,
-    }));
-  }
 
   renderActionMenu = ({ onToggle }) => {
     const { onCancel } = this.props;
@@ -578,7 +567,7 @@ class RequestForm extends React.Component {
     } = request || {};
 
     const isEditForm = this.isEditForm();
-    const requestTypeOptions = this.getRequestTypeOptions(selectedItem);
+    const requestTypeOptions = getRequestTypeOptions(selectedItem);
     const sortedFulfilmentTypes = sortBy(fulfilmentTypes, ['label']);
     const fulfilmentTypeOptions = sortedFulfilmentTypes.map(({ label, id }) => ({
       labelTranslationPath: label,

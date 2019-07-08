@@ -14,11 +14,11 @@ export default Factory.extend({
   tags: { tagList: ['tag1'] },
   afterCreate(request, server) {
     const user = server.create('user');
-    const options = (request.itemId) ? { id: request.itemId } : null;
-    const item = server.create('item', options);
+    const instance = server.create('instance', 'withHoldingAndItems');
+    const item = instance.holdings.models[0].items.models[0].attrs;
 
     request.update({
-      item: item.attrs,
+      item,
       itemId: item.id,
       requesterId: user.id,
       requester: {
