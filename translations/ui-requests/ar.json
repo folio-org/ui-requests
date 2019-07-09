@@ -121,5 +121,18 @@
     "nothingToClear": "لا يوجد شيء لمسحه",
     "noExpiredRequests": "لا توجد حاليًا أي طلبات منتهية أو ملغية على رف الحجز.",
     "item.location.libraryName": "المكتبة",
-    "item.location.code": "رمز موقع الترفيف"
+    "item.location.code": "رمز موقع الترفيف",
+    "requestQueue": "صف الطلبات",
+    "location": "الموقع",
+    "materialType": "نوع المادة",
+    "loanType": "نوع الإعارة",
+    "actions.moveRequest": "نقل الطلب",
+    "moveRequest.selectItem": "تحديد مادة",
+    "moveRequest.instanceItems": "مواد أخرى في الوعاء",
+    "moveRequest.instanceItems.notFound": "لم يتم العثور على مواد",
+    "moveRequest.requestTypeChangeHeading": "نوع الطلبات الحالي غير مسموح به للمادة المحددة",
+    "moveRequest.requestTypeChangeMessage": "سيتم تحويل الطلب إلى <strong>{requestType}</strong>",
+    "moveRequest.chooseRequestMessage": "يرجى تحديد النوع المسموح به",
+    "moveRequest.confirm": "تأكيد",
+    "moveRequest.success": "تم نقل الطلب بنجاح"
 }
