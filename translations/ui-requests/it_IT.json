@@ -121,5 +121,18 @@
     "nothingToClear": "Nothing to clear",
     "noExpiredRequests": "There are currently no expired or cancelled requests on the hold shelf.",
     "item.location.libraryName": "Library",
-    "item.location.code": "Shelving location code"
+    "item.location.code": "Shelving location code",
+    "requestQueue": "Request queue",
+    "location": "Location",
+    "materialType": "Material type",
+    "loanType": "Loan type",
+    "actions.moveRequest": "Move request",
+    "moveRequest.selectItem": "Select item",
+    "moveRequest.instanceItems": "Other items in instance",
+    "moveRequest.instanceItems.notFound": "No items found",
+    "moveRequest.requestTypeChangeHeading": "Current requests type not allowed for selected item",
+    "moveRequest.requestTypeChangeMessage": "Request will be converted to <strong>{requestType}</strong>.",
+    "moveRequest.chooseRequestMessage": "Please select allowed type",
+    "moveRequest.confirm": "Confirm",
+    "moveRequest.success": "Request has been moved successfully"
 }
