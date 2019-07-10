@@ -24,7 +24,8 @@ class UserForm extends React.Component {
     stripes: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     selectedDelivery: PropTypes.bool,
-    servicePoints: PropTypes.arrayOf(PropTypes.object)
+    servicePoints: PropTypes.arrayOf(PropTypes.object),
+    request: PropTypes.object,
   };
 
   static defaultProps = {
@@ -103,11 +104,14 @@ class UserForm extends React.Component {
       fulfilmentPreference,
       fulfilmentTypeOptions,
       onChangeFulfilment,
+      request,
     } = this.props;
+
 
     const id = user.id;
     const name = getFullName(user);
     const barcode = user.barcode;
+    const editMode = get(request, 'id');
 
     let proxyName;
     let proxyBarcode;
@@ -141,10 +145,7 @@ class UserForm extends React.Component {
               {fulfilmentTypeOptions.map(({ labelTranslationPath, value }) => (
                 <FormattedMessage key={value} id={labelTranslationPath}>
                   {translatedLabel => (
-                    <option
-                      value={value}
-
-                    >
+                    <option value={value}>
                       {translatedLabel}
                     </option>
                   )}
@@ -170,7 +171,7 @@ class UserForm extends React.Component {
 
         {proxySection}
 
-        {
+        { !editMode &&
           <this.connectedProxyManager
             patron={user}
             proxy={proxy}
@@ -178,6 +179,7 @@ class UserForm extends React.Component {
             onClose={this.props.onCloseProxy}
           />
         }
+
       </div>
     );
   }
