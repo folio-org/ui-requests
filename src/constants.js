@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const requestTypes = [
   { id: 'Recall', label: 'ui-requests.requestMeta.type.recall' },
   { id: 'Hold', label: 'ui-requests.requestMeta.type.hold' },
@@ -18,18 +16,8 @@ export const requestStatuses = {
   AWAITING_PICKUP: 'Open - Awaiting pickup',
   RECALL: 'Recall',
   HOLD: 'Hold',
+  NOT_YET_FILLED: 'Open - Not yet filled',
 };
-
-export const toUserAddress = addr => (
-  // const countryId = (addr.country) ? countriesByName[addr.country].alpha2 : '';
-  <div>
-    <div>{(addr && addr.addressLine1) || ''}</div>
-    <div>{(addr && addr.addressLine2) || ''}</div>
-    <div>{(addr && addr.city) || ''}</div>
-    <div>{(addr && addr.region) || ''}</div>
-    <div>{(addr && addr.postalCode) || ''}</div>
-  </div>
-);
 
 export const iconTypes = {
   times: 'times',
@@ -49,5 +37,45 @@ export const requestTypesByItemStatus = {
   'Awaiting pickup': ['Hold', 'Recall'],
   'In transit': ['Hold', 'Recall'],
   'Missing': ['Hold'],
-  'Paged': ['Hold'],
+  'Paged': ['Hold', 'Recall'],
+  'On order': ['Hold', 'Recall'],
+  'In process': ['Hold', 'Recall'],
 };
+
+export const reportHeaders = [
+  'requestType',
+  'status',
+  'requestExpirationDate',
+  'holdShelfExpirationDate',
+  'position',
+  'item.barcode',
+  'item.title',
+  'item.copyNumbers',
+  'item.contributorNames',
+  'item.location.libraryName',
+  'item.location.name',
+  'item.location.code',
+  'item.callNumber',
+  'item.enumeration',
+  'item.status',
+  'loan.dueDate',
+  'requester.name',
+  'requester.barcode',
+  'requester.patronGroup.group',
+  'fulfilmentPreference',
+  'pickupServicePoint.name',
+  'deliveryAddress',
+  'proxy.name',
+  'proxy.barcode',
+  'tags.tagList',
+];
+
+export const expiredHoldsReportHeaders = [
+  'requester.name',
+  'requester.barcode',
+  'item.title',
+  'item.barcode',
+  'item.callNumber',
+  'status',
+  'holdShelfExpirationDate',
+];

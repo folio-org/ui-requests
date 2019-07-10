@@ -11,9 +11,10 @@ import { getFullName, userHighlightBox } from './utils';
 
 class UserForm extends React.Component {
   static propTypes = {
-    deliveryAddress: PropTypes.string,
+    deliveryAddress: PropTypes.node,
     deliveryLocations: PropTypes.arrayOf(PropTypes.object),
     fulfilmentTypeOptions: PropTypes.arrayOf(PropTypes.object),
+    fulfilmentPreference: PropTypes.string,
     onChangeAddress: PropTypes.func,
     onChangeFulfilment: PropTypes.func,
     onCloseProxy: PropTypes.func.isRequired,
@@ -23,7 +24,8 @@ class UserForm extends React.Component {
     stripes: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     selectedDelivery: PropTypes.bool,
-    servicePoints: PropTypes.arrayOf(PropTypes.object)
+    servicePoints: PropTypes.arrayOf(PropTypes.object),
+    request: PropTypes.object,
   };
 
   static defaultProps = {
@@ -42,6 +44,9 @@ class UserForm extends React.Component {
     this.connectedProxyManager = props.stripes.connect(ProxyManager);
   }
 
+  requireServicePoint = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectItem" />);
+  requireDeliveryAddress = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectItem" />);
+
   renderDeliveryAddressSelect() {
     const {
       onChangeAddress,
@@ -55,6 +60,8 @@ class UserForm extends React.Component {
         component={Select}
         fullWidth
         onChange={onChangeAddress}
+        required
+        validate={this.requireDeliveryAddress}
       >
         <FormattedMessage id="ui-requests.actions.selectAddressType">
           {(optionLabel) => <option value="">{optionLabel}</option>}
@@ -72,9 +79,11 @@ class UserForm extends React.Component {
     return (
       <Field
         name="pickupServicePointId"
-        label={<FormattedMessage id="ui-requests.requester.pickupServicePoint" />}
+        label={<FormattedMessage id="ui-requests.pickupServicePoint.name" />}
         component={Select}
         fullWidth
+        required
+        validate={this.requireServicePoint}
       >
         <FormattedMessage id="ui-requests.actions.selectPickupSp">
           {optionLabel => <option value="">{optionLabel}</option>}
@@ -92,13 +101,17 @@ class UserForm extends React.Component {
       deliveryAddress,
       deliveryLocations,
       selectedDelivery,
+      fulfilmentPreference,
       fulfilmentTypeOptions,
       onChangeFulfilment,
+      request,
     } = this.props;
+
 
     const id = user.id;
     const name = getFullName(user);
     const barcode = user.barcode;
+    const editMode = get(request, 'id');
 
     let proxyName;
     let proxyBarcode;
@@ -126,15 +139,13 @@ class UserForm extends React.Component {
               label={<FormattedMessage id="ui-requests.requester.fulfilmentPref" />}
               component={Select}
               fullWidth
+              value={fulfilmentPreference}
               onChange={onChangeFulfilment}
             >
-              {fulfilmentTypeOptions.map(({ labelTranslationPath, value, selected }) => (
+              {fulfilmentTypeOptions.map(({ labelTranslationPath, value }) => (
                 <FormattedMessage key={value} id={labelTranslationPath}>
                   {translatedLabel => (
-                    <option
-                      value={value}
-                      selected={selected}
-                    >
+                    <option value={value}>
                       {translatedLabel}
                     </option>
                   )}
@@ -160,7 +171,7 @@ class UserForm extends React.Component {
 
         {proxySection}
 
-        {
+        { !editMode &&
           <this.connectedProxyManager
             patron={user}
             proxy={proxy}
@@ -168,6 +179,7 @@ class UserForm extends React.Component {
             onClose={this.props.onCloseProxy}
           />
         }
+
       </div>
     );
   }

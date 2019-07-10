@@ -4,18 +4,31 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import RequestsInteractor from '../interactors/requests';
 
+const servicePoint = {
+  id: 'servicepointId2',
+  name: 'Circ Desk 2',
+  code: 'cd2',
+  discoveryDisplayName: 'Circulation Desk -- Back Entrance',
+  pickupLocation: true,
+};
+
 describe('Requests', () => {
-  setupApplication();
+  setupApplication({
+    currentUser: {
+      servicePoints: [servicePoint],
+      curServicePoint: servicePoint,
+    },
+  });
 
   const requests = new RequestsInteractor();
 
   beforeEach(async function () {
-    this.server.create('request');
     this.visit('/requests');
 
     await requests.clickHoldsCheckbox();
     await requests.clickPagesCheckbox();
     await requests.clickRecallsCheckbox();
+    await requests.whenInstancesArePresent(20);
   });
 
   it('shows the list of requests items', () => {
@@ -23,7 +36,7 @@ describe('Requests', () => {
   });
 
   it('renders each request instance', () => {
-    expect(requests.instances().length).to.be.equal(1);
+    expect(requests.instanceList.size).to.be.equal(20);
   });
 
   describe('clicking on the first request item', function () {

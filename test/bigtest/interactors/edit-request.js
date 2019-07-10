@@ -2,7 +2,11 @@ import {
   interactor,
   clickable,
   fillable,
+  selectable,
+  isPresent,
 } from '@bigtest/interactor';
+
+import CancelRequestDialog from './cancel-request-dialog';
 
 @interactor class HeaderDropdown {
   click = clickable('button');
@@ -17,6 +21,10 @@ import {
   fillRequestExpirationDateField = fillable('#requestExpirationDate');
   headerDropdown = new HeaderDropdown('[class*=paneHeaderCenterInner---] [class*=dropdown---]');
   headerDropdownMenu = new HeaderDropdownMenu();
+  chooseServicePoint = selectable('[name="pickupServicePointId"]');
+  clickUpdate = clickable('#clickable-update-request');
+  cancelRequestDialog = new CancelRequestDialog('[data-test-cancel-request-modal]');
+  isLayerPresent = isPresent('[class*=LayerRoot][role=dialog]');
 }
 
-export default EditRequestsInteractor;
+export default new EditRequestsInteractor();

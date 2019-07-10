@@ -6,20 +6,21 @@ import { FormattedDate, FormattedMessage } from 'react-intl';
 import { Col, KeyValue, Row } from '@folio/stripes/components';
 
 const ItemDetail = ({ item, loan, requestCount }) => {
-  if (!item.barcode) {
+  if (!item.id && !item.barcode) {
     return <FormattedMessage id="ui-requests.actions.loading" />;
   }
 
-  const recordLink = item.barcode ? <Link to={`/inventory/view/${item.instanceId}/${item.holdingsRecordId}/${item.id}`}>{item.barcode}</Link> : '';
+  const recordLink = item ? <Link to={`/inventory/view/${item.instanceId}/${item.holdingsRecordId}/${item.id}`}>{item.barcode || item.id}</Link> : '-';
   const status = get(item, 'status.name') || get(item, 'status');
   const contributor = get(item, ['contributorNames', '0', 'name'], '-');
-  const positionLink = item ? <Link to={`/requests?filters=requestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit%2CrequestStatus.Open%20-%20Not%20yet%20filled&query=${item.barcode}&sort=Request%20Date`}>{requestCount}</Link> : '-';
+  const positionLink = <Link to={`/requests?filters=requestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit%2CrequestStatus.Open%20-%20Not%20yet%20filled&query=${item.barcode || item.id}&sort=Request%20Date`}>{requestCount}</Link>;
+  const itemLabel = item.barcode ? 'ui-requests.item.barcode' : 'ui-requests.item.id';
 
   return (
-    <div>
+    <React.Fragment>
       <Row>
         <Col xs={3}>
-          <KeyValue label={<FormattedMessage id="ui-requests.item.barcode" />}>
+          <KeyValue label={<FormattedMessage id={itemLabel} />}>
             {recordLink}
           </KeyValue>
         </Col>
@@ -73,7 +74,7 @@ const ItemDetail = ({ item, loan, requestCount }) => {
           </KeyValue>
         </Col>
       </Row>
-    </div>
+    </React.Fragment>
   );
 };
 

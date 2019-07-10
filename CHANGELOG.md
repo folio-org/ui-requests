@@ -1,6 +1,33 @@
 # Change history for ui-requests
 
-## 1.8.0 (IN PROGRESS)
+## 1.11.0 (IN PROGRESS)
+
+* Add Location Code Column to Request CSV. Refs UIREQ-263.
+* Add library column to Request CSV. Refs UIREQ-262.
+* Do not show proxy popup during edit. Fixes UIREQ-291.
+
+## [1.10.1](https://github.com/folio-org/ui-requests/tree/v1.10.1) (2019-06-24)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.10.0...v1.10.1)
+
+* Refactor async validation. Part of UIREQ-280.
+* Cleanup item lookup values when layer is closed. Fixes UIREQ-285 and UIREQ-287.
+
+## [1.10.0](https://github.com/folio-org/ui-requests/tree/v1.10.0) (2019-06-12)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.9.0...v1.10.0)
+
+* Fix creating hold request via duplicate option. Part of UIREQ-275.
+* Fix opening correct request item during duplication. Part of UIREQ-274.
+* Disable integration test based on flaky built-in data. Refs CIRCSTORE-129.
+* Fix system error caused patron with a block. Fix UIU-1063.
+
+## [1.9.0](https://github.com/folio-org/ui-requests/tree/v1.9.0) (2019-05-10)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.8.0...v1.9.0)
+
+* Allow requests for On order and In process items. Part of UIREQ-247.
+* Add ability to create a request without an item barcode. Part of UIREQ-253.
+
+## [1.8.0](https://github.com/folio-org/ui-requests/tree/v1.8.0) (2019-03-15)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.7.0...v1.8.0)
 
 * Update BigTest interactors to reflect MCL aria changes. Refs STRIPES-597.
 * Move AppIcon import to `@folio/stripes/core`. Refs STCOM-411.
@@ -14,6 +41,8 @@
 * Reorganize fields on request record to support conditional display of fequest types. Part of UIREQ-208.
 * Pre-filter request types based on whitelist. Part of UIREQ-209.
 * Fix item status. Fixes UIREQ-222.
+* Fix reasons when the patron has more than one block. Fix UIU-804.
+* Fix UX Consistency Fixes for Patron Blocks. Ref UIU-902.
 
 ## [1.7.0](https://github.com/folio-org/ui-requests/tree/v1.7.0) (2019-01-25)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.6.0...v1.7.0)
@@ -46,19 +75,19 @@
 * Removed deprecated actionMenuItems-prop. Fixes UIREQ-170.
 * Read user and item barcodes from the query string for new requests. Fixes UIREQ-146.
 
-## 1.4.1 (https://github.com/folio-org/ui-requests/tree/v1.4.1) (2018-10-05)
+## [1.4.1](https://github.com/folio-org/ui-requests/tree/v1.4.1) (2018-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.4.0...v1.4.1)
 
 * Fix `exportCsv` import
 
-## 1.4.0 (https://github.com/folio-org/ui-requests/tree/v1.4.0) (2018-10-05)
+## [1.4.0](https://github.com/folio-org/ui-requests/tree/v1.4.0) (2018-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.3.0...v1.4.0)
 
 * Link to request queue from detailed view, refs UIREQ-122
 * Fix filters2cql import
 * Fix bug where patron details display as "[object Object]". Fixes UIREQ-120.
 
-## 1.3.0 (https://github.com/folio-org/ui-requests/tree/v1.3.0) (2018-10-03)
+## [1.3.0](https://github.com/folio-org/ui-requests/tree/v1.3.0) (2018-10-03)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.2.0...v1.3.0)
 
 * Add alternate dependency `inventory` 7.0. Completes UIREQ-115
@@ -68,7 +97,7 @@
 * Copy `craftLayerUrl()` from `stripes-components`
 * Use `stripes` 1.0 framework
 
-## 1.2.0 (https://github.com/folio-org/ui-requests/tree/v1.2.0) (2018-09-10)
+## [1.2.0](https://github.com/folio-org/ui-requests/tree/v1.2.0) (2018-09-10)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.1.0...v1.2.0)
 
 * Refactor code to use `<SearchAndSort>` component. Completes UIREQ-49.

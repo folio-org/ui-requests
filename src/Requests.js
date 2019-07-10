@@ -1,4 +1,7 @@
-import { omit, get } from 'lodash';
+import {
+  get,
+  isEmpty,
+} from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { stringify } from 'query-string';
@@ -10,6 +13,7 @@ import {
   injectIntl,
   intlShape,
 } from 'react-intl';
+import { SubmissionError } from 'redux-form';
 import { AppIcon } from '@folio/stripes/core';
 import { Button } from '@folio/stripes/components';
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
@@ -17,17 +21,24 @@ import { exportCsv } from '@folio/stripes/util';
 
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
-import { fulfilmentTypes } from './constants';
-import { getFullName } from './utils';
+import {
+  reportHeaders,
+  fulfilmentTypes,
+  expiredHoldsReportHeaders,
+} from './constants';
+import {
+  getFullName,
+  duplicateRequest,
+} from './utils';
 import packageInfo from '../package';
+import ErrorModal from './components/ErrorModal';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
 
-// TODO: Translate these filter labels
 const filterConfig = [
   {
-    label: <FormattedMessage id="ui-requests.requestMeta.type" />,
+    label: 'ui-requests.requestMeta.type',
     name: 'requestType',
     cql: 'requestType',
     values: [
@@ -37,7 +48,7 @@ const filterConfig = [
     ],
   },
   {
-    label: <FormattedMessage id="ui-requests.requestMeta.status" />,
+    label: 'ui-requests.requestMeta.status',
     name: 'requestStatus',
     cql: 'status',
     values: [
@@ -61,8 +72,6 @@ const urls = {
     const query = stringify({ query: `(${idType}=="${value}")` });
     return `inventory/items?${query}`;
   },
-  holding: value => `holdings-storage/holdings/${value}`,
-  instance: value => `inventory/instances/${value}`,
   loan: (value) => {
     const query = stringify({ query: `(itemId=="${value}")` });
     return `circulation/loans?${query}`;
@@ -90,11 +99,12 @@ class Requests extends React.Component {
       records: 'requests',
       recordsRequired: '%{resultCount}',
       perRequest: 30,
+      throwErrors: false,
       GET: {
         params: {
           query: makeQueryFunction(
             'cql.allRecords=1',
-            '(requester.barcode="%{query.query}*" or item.title="%{query.query}*" or item.barcode="%{query.query}*")',
+            '(requester.barcode="%{query.query}*" or item.title="%{query.query}*" or item.barcode="%{query.query}*" or itemId=="%{query.query}")',
             {
               'Title': 'item.title',
               'Item barcode': 'item.barcode',
@@ -143,6 +153,12 @@ class Requests extends React.Component {
       },
     },
     activeRecord: {},
+    expiredHolds: {
+      accumulate: 'true',
+      type: 'okapi',
+      path: 'circulation/requests-report/expired-holds',
+      fetch: false,
+    },
   };
 
   static propTypes = {
@@ -161,6 +177,10 @@ class Requests extends React.Component {
       }),
       activeRecord: PropTypes.shape({
         update: PropTypes.func,
+      }),
+      expiredHolds: PropTypes.shape({
+        GET: PropTypes.func,
+        reset: PropTypes.func,
       }),
       patronBlocks: PropTypes.shape({
         DELETE: PropTypes.func,
@@ -182,7 +202,6 @@ class Requests extends React.Component {
     }).isRequired,
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
-      formatDate: PropTypes.func.isRequired,
       logger: PropTypes.shape({
         log: PropTypes.func.isRequired,
       }).isRequired,
@@ -199,6 +218,7 @@ class Requests extends React.Component {
 
   constructor(props) {
     super(props);
+
     const {
       intl: { formatMessage }
     } = props;
@@ -223,24 +243,23 @@ class Requests extends React.Component {
     };
 
     this.addRequestFields = this.addRequestFields.bind(this);
+    this.processError = this.processError.bind(this);
     this.create = this.create.bind(this);
     this.findResource = this.findResource.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
     this.buildRecords = this.buildRecords.bind(this);
-    this.headers = ['requestType', 'status', 'requestExpirationDate', 'holdShelfExpirationDate',
-      'position', 'item.barcode', 'item.title', 'item.copyNumbers', 'item.contributorNames', 'item.location.name',
-      'item.callNumber', 'item.enumeration', 'item.status', 'loan.dueDate', 'requester.name',
-      'requester.barcode', 'requester.patronGroup.group', 'fulfilmentPreference', 'requester.pickupServicePoint',
-      'deliveryAddress', 'proxy.name', 'proxy.barcode', 'tags.tagList'];
-
     // Map to pass into exportCsv
-    this.columnHeadersMap = this.headers.map(item => {
-      return {
-        label: this.props.intl.formatMessage({ id: `ui-requests.${item}` }),
-        value: item
-      };
-    });
+    this.columnHeadersMap = this.getColumnHeaders(reportHeaders);
+    this.expiredHoldsReportColumnHeaders = this.getColumnHeaders(expiredHoldsReportHeaders);
 
-    this.state = { submitting: false };
+    this.filterConfigWithTranslatedLabels = filterConfig
+      .map(filter => ({ ...filter, label: formatMessage({ id: filter.label }) }));
+
+    this.state = {
+      submitting: false,
+      errorMessage: '',
+      isErrorModalShown: false,
+    };
   }
 
   static getDerivedStateFromProps(props) {
@@ -256,18 +275,18 @@ class Requests extends React.Component {
     const patronBlocks = get(this.props.resources, ['patronBlocks', 'records'], []);
     const prevBlocks = get(prevProps.resources, ['patronBlocks', 'records'], []);
     const { submitting } = this.state;
-    const prevExpirated = prevBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
-    const expirated = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
+    const prevExpired = prevBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
+    const expired = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
 
-    if (prevExpirated.length > 0 && expirated.length === 0) {
+    if (prevExpired.length > 0 && expired.length === 0) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ submitting: false });
     }
 
-    if (expirated.length > 0 && !submitting) {
+    if (expired.length > 0 && !submitting) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ submitting: true });
-      expirated.forEach(p => {
+      expired.forEach(p => {
         this.props.mutator.activeRecord.update({ blockId: p.id });
         this.props.mutator.patronBlocks.DELETE({ id: p.id });
       });
@@ -276,25 +295,38 @@ class Requests extends React.Component {
     if (this.csvExportPending) {
       const recordsLoaded = this.props.resources.records.records;
       const numTotalRecords = this.props.resources.records.other.totalRecords;
+
       if (recordsLoaded.length === numTotalRecords) {
-        const onlyFields = this.columnHeadersMap;
-        const clonedRequests = JSON.parse(JSON.stringify(recordsLoaded)); // Do not mutate the actual resource
-        const recordsToCSV = this.buildRecords(clonedRequests);
+        const recordsToCSV = this.buildRecords(recordsLoaded);
+
         exportCsv(recordsToCSV, {
-          onlyFields,
+          onlyFields: this.columnHeadersMap,
           excludeFields: ['id'],
         });
+
         this.csvExportPending = false;
       }
     }
   }
 
+  getColumnHeaders = (headers) => {
+    const { intl: { formatMessage } } = this.props;
+
+    return headers.map(item => ({
+      label: formatMessage({ id: `ui-requests.${item}` }),
+      value: item
+    }));
+  };
+
   buildRecords(recordsLoaded) {
+    const result = JSON.parse(JSON.stringify(recordsLoaded)); // Do not mutate the actual resource
     const { formatDate, formatTime } = this.props.intl;
-    recordsLoaded.forEach(record => {
+
+    result.forEach(record => {
       const contributorNamesMap = [];
       const copyNumbersMap = [];
       const tagListMap = [];
+
       if (record.item.contributorNames && record.item.contributorNames.length > 0) {
         record.item.contributorNames.forEach(item => {
           contributorNamesMap.push(item.name);
@@ -330,7 +362,8 @@ class Requests extends React.Component {
       record.item.copyNumbers = copyNumbersMap.join('; ');
       if (record.tags) record.tags.tagList = tagListMap.join('; ');
     });
-    return recordsLoaded;
+
+    return result;
   }
 
   // idType can be 'id', 'barcode', etc.
@@ -338,6 +371,10 @@ class Requests extends React.Component {
     const query = urls[resource](value, idType);
     const options = { headers: this.httpHeaders };
     return fetch(`${this.okapiUrl}/${query}`, options).then(response => response.json());
+  }
+
+  toggleModal() {
+    this.setState({ errorMessage: '' });
   }
 
   // Called as a map function
@@ -351,7 +388,9 @@ class Requests extends React.Component {
       // Each element of the promises array returns an array of results, but in
       // this case, there should only ever be one result for each.
       const requester = resultArray[0].users[0];
-      const requestCount = resultArray[1].requests.length;
+      const openRequests = resultArray[1].requests.filter(request => request.status.startsWith('Open'));
+      const requestCount = openRequests.length;
+
       return Object.assign({}, r, { requester, requestCount });
     });
   }
@@ -362,31 +401,112 @@ class Requests extends React.Component {
     const { intl: { timeZone } } = this.props;
     const isoDate = moment.tz(timeZone).format();
     Object.assign(requestData, { requestDate: isoDate });
-  }
+  };
 
   onChangePatron = (patron) => {
     this.props.mutator.activeRecord.update({ patronId: patron.id });
+  };
+
+  create = (data) => {
+    return this.props.mutator.records.POST(data)
+      .then(() => this.closeLayer())
+      .catch(resp => this.processError(resp));
+  };
+
+  processError(resp) {
+    const contentType = resp.headers.get('Content-Type') || '';
+    if (contentType.startsWith('application/json')) {
+      return resp.json().then(error => this.handleJsonError(error));
+    } else {
+      return resp.text().then(error => this.handleTextError(error));
+    }
   }
 
-  create = data => this.props.mutator.records.POST(data).then(() => this.props.mutator.query.update({ layer: null }));
+  handleTextError(error) {
+    const item = { barcode: error };
+    throw new SubmissionError({ item });
+  }
+
+  handleJsonError(error) {
+    const errorMessage = error.errors[0].message;
+    this.setState({ errorMessage });
+  }
+
+  handleCloseNewRecord = (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+
+    this.closeLayer();
+  };
+
+  closeLayer() {
+    this.props.mutator.query.update({
+      layer: null,
+      itemBarcode: null,
+      userBarcode: null,
+      itemId: null,
+    });
+  }
 
   onDuplicate = (request) => {
-    const dupRequest = omit(request, [
-      'id',
-      'metadata',
-      'status',
-      'requestCount',
-      'position',
-      'requester',
-    ]);
+    const dupRequest = duplicateRequest(request);
 
     this.setState({ dupRequest });
     this.props.mutator.query.update({
       layer: 'create',
       itemBarcode: request.item.barcode,
+      itemId: request.itemId,
       userBarcode: request.requester.barcode,
     });
-  }
+  };
+
+  exportExpiredHoldsToSCV = async () => {
+    const {
+      mutator: {
+        expiredHolds: {
+          reset,
+          GET,
+        },
+      },
+      stripes: { user },
+    } = this.props;
+
+    reset();
+
+    const servicePointId = get(user, 'user.curServicePoint.id', '');
+    const path = `circulation/requests-reports/hold-shelf-clearance/${servicePointId}`;
+    const { requests } = await GET({ path });
+
+    if (isEmpty(requests)) {
+      this.setState({ isErrorModalShown: true });
+    } else {
+      const recordsToCSV = this.buildHoldRecords(requests);
+      exportCsv(recordsToCSV, {
+        onlyFields: this.expiredHoldsReportColumnHeaders,
+        excludeFields: ['id'],
+      });
+    }
+  };
+
+  buildHoldRecords = (records) => {
+    return records.map(record => {
+      if (record.requester) {
+        const {
+          firstName,
+          lastName,
+        } = record.requester;
+
+        record.requester.name = [firstName, lastName].filter(e => e).join(',');
+      }
+
+      return record;
+    });
+  };
+
+  errorModalClose = () => {
+    this.setState({ isErrorModalShown: false });
+  };
 
   render() {
     const {
@@ -409,7 +529,9 @@ class Requests extends React.Component {
     } = this.columnLabels;
 
     const {
-      dupRequest
+      dupRequest,
+      errorMessage,
+      isErrorModalShown,
     } = this.state;
 
     const patronGroups = (resources.patronGroups || {}).records || [];
@@ -435,73 +557,98 @@ class Requests extends React.Component {
     };
 
     const actionMenu = ({ onToggle }) => (
-      <Button
-        buttonStyle="dropdownItem"
-        id="exportToCsvPaneHeaderBtn"
-        onClick={() => {
-          if (!this.csvExportPending) {
-            mutator.resultCount.replace(resources.records.other.totalRecords);
-            this.csvExportPending = true;
-          }
-          onToggle();
-        }}
-      >
-        <FormattedMessage id="stripes-components.exportToCsv" />
-      </Button>
+      <React.Fragment>
+        <Button
+          buttonStyle="dropdownItem"
+          id="exportToCsvPaneHeaderBtn"
+          onClick={() => {
+            onToggle();
+            if (!this.csvExportPending) {
+              mutator.resultCount.replace(resources.records.other.totalRecords);
+              this.csvExportPending = true;
+            }
+          }}
+        >
+          <FormattedMessage id="stripes-components.exportToCsv" />
+        </Button>
+        <Button
+          buttonStyle="dropdownItem"
+          id="exportExpiredHoldsToCsvPaneHeaderBtn"
+          onClick={() => {
+            onToggle();
+            this.exportExpiredHoldsToSCV();
+          }}
+        >
+          <FormattedMessage id="ui-requests.exportExpiredHoldsToCsv" />
+        </Button>
+      </React.Fragment>
     );
 
     return (
-      <div data-test-request-instances>
-        <SearchAndSort
-          actionMenu={actionMenu}
-          packageInfo={packageInfo}
-          objectName="request"
-          filterConfig={filterConfig}
-          initialResultCount={INITIAL_RESULT_COUNT}
-          resultCountIncrement={RESULT_COUNT_INCREMENT}
-          viewRecordComponent={ViewRequest}
-          editRecordComponent={RequestForm}
-          getHelperResourcePath={this.getHelperResourcePath}
-          visibleColumns={[
-            requestDate,
-            title,
-            itemBarcode,
-            type,
-            requestStatus,
-            position,
-            requester,
-            requesterBarcode,
-            proxy,
-          ]}
-          columnWidths={{
-            [requestDate]: '220px'
-          }}
-          resultsFormatter={resultsFormatter}
-          newRecordInitialValues={InitialValues}
-          massageNewRecord={this.massageNewRecord}
-          onCreate={this.create}
-          parentResources={resources}
-          parentMutator={mutator}
-          detailProps={{
-            onChangePatron: this.onChangePatron,
-            stripes,
-            history,
-            findResource: this.findResource,
-            joinRequest: this.addRequestFields,
-            optionLists: {
-              addressTypes,
-              fulfilmentTypes,
-              servicePoints
-            },
-            patronGroups,
-            query: resources.query,
-            uniquenessValidator: mutator,
-            onDuplicate: this.onDuplicate,
-          }}
-          viewRecordPerms="module.requests.enabled"
-          newRecordPerms="module.requests.enabled"
-        />
-      </div>);
+      <React.Fragment>
+        {
+          isErrorModalShown &&
+            <ErrorModal
+              onClose={this.errorModalClose}
+              label={<FormattedMessage id="ui-requests.nothingToClear" />}
+              errorMessage={<FormattedMessage id="ui-requests.noExpiredRequests" />}
+            />
+        }
+        <div data-test-request-instances>
+          <SearchAndSort
+            actionMenu={actionMenu}
+            packageInfo={packageInfo}
+            objectName="request"
+            filterConfig={this.filterConfigWithTranslatedLabels}
+            initialResultCount={INITIAL_RESULT_COUNT}
+            resultCountIncrement={RESULT_COUNT_INCREMENT}
+            viewRecordComponent={ViewRequest}
+            editRecordComponent={RequestForm}
+            getHelperResourcePath={this.getHelperResourcePath}
+            visibleColumns={[
+              requestDate,
+              title,
+              itemBarcode,
+              type,
+              requestStatus,
+              position,
+              requester,
+              requesterBarcode,
+              proxy,
+            ]}
+            columnWidths={{
+              [requestDate]: '220px'
+            }}
+            resultsFormatter={resultsFormatter}
+            newRecordInitialValues={InitialValues}
+            massageNewRecord={this.massageNewRecord}
+            onCreate={this.create}
+            onCloseNewRecord={this.handleCloseNewRecord}
+            parentResources={resources}
+            parentMutator={mutator}
+            detailProps={{
+              onChangePatron: this.onChangePatron,
+              stripes,
+              history,
+              errorMessage,
+              findResource: this.findResource,
+              toggleModal: this.toggleModal,
+              joinRequest: this.addRequestFields,
+              optionLists: {
+                addressTypes,
+                fulfilmentTypes,
+                servicePoints
+              },
+              patronGroups,
+              query: resources.query,
+              onDuplicate: this.onDuplicate,
+            }}
+            viewRecordPerms="module.requests.enabled"
+            newRecordPerms="module.requests.enabled"
+          />
+        </div>
+      </React.Fragment>
+    );
   }
 }
 

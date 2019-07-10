@@ -1,3 +1,5 @@
-import { Model } from '@bigtest/mirage';
+import { Model, belongsTo } from '@bigtest/mirage';
 
-export default Model.extend();
+export default Model.extend({
+  holdingsRecord: belongsTo('holding'),
+});

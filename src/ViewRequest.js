@@ -2,8 +2,7 @@ import {
   get,
   isEqual,
   cloneDeep,
-  includes,
-  keyBy
+  keyBy,
 } from 'lodash';
 import React, { Fragment } from 'react';
 import { compose } from 'redux';
@@ -15,15 +14,18 @@ import {
   FormattedTime,
 } from 'react-intl';
 
-import { TitleManager } from '@folio/stripes/core';
-import { Link } from 'react-router-dom';
+import {
+  IntlConsumer,
+  TitleManager
+} from '@folio/stripes/core';
 import {
   Button,
   Accordion,
   AccordionSet,
   Col,
+  Callout,
   Icon,
-  IconButton,
+  PaneHeaderIconButton,
   KeyValue,
   Layer,
   Pane,
@@ -36,7 +38,12 @@ import CancelRequestDialog from './CancelRequestDialog';
 import ItemDetail from './ItemDetail';
 import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
-import { toUserAddress, requestStatuses } from './constants';
+import PositionLink from './PositionLink';
+import MoveRequestManager from './MoveRequestManager';
+
+import { requestStatuses } from './constants';
+
+import { toUserAddress } from './utils';
 
 class ViewRequest extends React.Component {
   static manifest = {
@@ -71,6 +78,7 @@ class ViewRequest extends React.Component {
     tagsToggle: PropTypes.func,
     paneWidth: PropTypes.string,
     patronGroups: PropTypes.arrayOf(PropTypes.object),
+    parentMutator: PropTypes.object,
     resources: PropTypes.shape({
       selectedRequest: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
@@ -94,7 +102,7 @@ class ViewRequest extends React.Component {
   static defaultProps = {
     editLink: '',
     paneWidth: '50%',
-    onEdit: () => {}
+    onEdit: () => { }
   };
 
   constructor(props) {
@@ -107,30 +115,50 @@ class ViewRequest extends React.Component {
         'item-info': true,
         'requester-info': true,
       },
+      moveRequest: false,
     };
 
-    this.cViewMetaData = props.stripes.connect(ViewMetaData);
-    this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
+    const { stripes: { connect } } = props;
+
+    this.cViewMetaData = connect(ViewMetaData);
+    this.connectedCancelRequestDialog = connect(CancelRequestDialog);
     this.onToggleSection = this.onToggleSection.bind(this);
-    this.craftLayerUrl = this.craftLayerUrl.bind(this);
     this.cancelRequest = this.cancelRequest.bind(this);
     this.update = this.update.bind(this);
+    this.callout = React.createRef();
+  }
+
+  componentDidMount() {
+    const requests = this.props.resources.selectedRequest;
+    this._isMounted = true;
+    if (requests && requests.hasLoaded) {
+      this.loadFullRequest(requests.records[0]);
+    }
   }
 
   // Use componentDidUpdate to pull in metadata from the related user and item records
   componentDidUpdate(prevProps) {
     const prevRQ = prevProps.resources.selectedRequest;
     const currentRQ = this.props.resources.selectedRequest;
+
     // Only update if actually needed (otherwise, this gets called way too often)
     if (prevRQ && currentRQ && currentRQ.hasLoaded) {
-      const requestId = get(this.state, ['request', 'id'], '');
-      if ((prevRQ.records[0] && !isEqual(prevRQ.records[0], currentRQ.records[0])) || !requestId) {
-        const basicRequest = currentRQ.records[0];
-        this.props.joinRequest(basicRequest).then(request => {
-          this.setState({ request });
-        });
+      if ((!isEqual(prevRQ.records[0], currentRQ.records[0]))) {
+        this.loadFullRequest(currentRQ.records[0]);
       }
     }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  loadFullRequest(basicRequest) {
+    return this.props.joinRequest(basicRequest).then(request => {
+      if (this._isMounted) {
+        this.setState({ request });
+      }
+    });
   }
 
   update(record) {
@@ -168,6 +196,20 @@ class ViewRequest extends React.Component {
     });
   }
 
+  onMove = async () => {
+    const request = this.getRequest();
+    await this.loadFullRequest(request);
+    this.closeMoveRequest();
+    this.callout.current.sendCallout({
+      type: 'success',
+      message: <FormattedMessage id="ui-requests.moveRequest.success" />,
+    });
+  }
+
+  closeMoveRequest = () => {
+    this.setState({ moveRequest: false });
+  }
+
   onToggleSection({ id }) {
     this.setState((curState) => {
       const newState = cloneDeep(curState);
@@ -176,79 +218,89 @@ class ViewRequest extends React.Component {
     });
   }
 
-  craftLayerUrl(mode) {
-    const url = this.props.location.pathname + this.props.location.search;
-    return includes(url, '?') ? `${url}&layer=${mode}` : `${url}?layer=${mode}`;
-  }
-
   getRequest() {
     const { resources, match: { params: { id } } } = this.props;
     const selRequest = (resources.selectedRequest || {}).records || [];
     if (!id || selRequest.length === 0) return null;
     const curRequest = selRequest.find(r => r.id === id);
+
     if (!curRequest) return null;
 
     return (curRequest.id === this.state.request.id) ? this.state.request : curRequest;
-  }
-
-  getPatronGroupName(request) {
-    if (!request) return '';
-    const { patronGroups } = this.props;
-    if (!patronGroups.length) return '';
-    const pgId = request.requester.patronGroup;
-    const patronGroup = patronGroups.find(g => (g.id === pgId));
-    return get(patronGroup, ['desc'], '');
   }
 
   getPickupServicePointName(request) {
     if (!request) return '';
     const { optionLists: { servicePoints } } = this.props;
     const servicePoint = servicePoints.find(sp => (sp.id === request.pickupServicePointId));
+
     return get(servicePoint, ['name'], '');
   }
 
-  render() {
+  renderLayer(request) {
     const {
-      patronGroups,
       optionLists,
       location,
       stripes,
-      editLink,
-      onEdit,
       onCloseEdit,
       findResource,
+      patronGroups,
+      parentMutator,
+    } = this.props;
+
+    const query = location.search ? queryString.parse(location.search) : {};
+
+    if (query.layer === 'edit') {
+      return (
+        <IntlConsumer>
+          {intl => (
+            <Layer
+              isOpen
+              contentLabel={intl.formatMessage({ id: 'ui-requests.actions.editRequestLink' })}
+            >
+              <RequestForm
+                stripes={stripes}
+                initialValues={{ requestExpirationDate: null, ...request }}
+                request={request}
+                metadataDisplay={this.cViewMetaData}
+                onSubmit={(record) => { this.update(record); }}
+                onCancel={onCloseEdit}
+                onCancelRequest={this.cancelRequest}
+                optionLists={optionLists}
+                patronGroups={patronGroups}
+                query={this.props.query}
+                parentMutator={parentMutator}
+                findResource={findResource}
+              />
+            </Layer>
+          )
+        }
+        </IntlConsumer>
+      );
+    }
+
+    return null;
+  }
+
+  renderDetailMenu(request) {
+    const {
+      editLink,
+      onEdit,
       tagsEnabled,
       tagsToggle,
     } = this.props;
 
-    const query = location.search ? queryString.parse(location.search) : {};
-    const request = this.getRequest();
     const tags = ((request && request.tags) || {}).tagList || [];
-    const patronGroupName = this.getPatronGroupName(request);
-    const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');
-    // TODO: Internationalize this
     const isRequestClosed = requestStatus.startsWith('Closed');
-    const queuePosition = get(request, ['position'], '-');
-    const positionLink = request ?
-      <div>
-        <span>
-          {queuePosition}
-          &nbsp;
-          &nbsp;
-        </span>
-        <Link to={`/requests?filters=requestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit%2CrequestStatus.Open%20-%20Not%20yet%20filled&query=${request.item.barcode}&sort=Request%20Date`}>
-          <FormattedMessage id="ui-requests.actions.viewRequestsInQueue" />
-        </Link>
-      </div> : '-';
 
-    const detailMenu = (
+    return (
       <PaneMenu>
         {
           tagsEnabled &&
           <FormattedMessage id="ui-requests.showTags">
             {ariaLabel => (
-              <IconButton
+              <PaneHeaderIconButton
                 icon="tag"
                 id="clickable-show-tags"
                 onClick={tagsToggle}
@@ -259,7 +311,7 @@ class ViewRequest extends React.Component {
           </FormattedMessage>
         }
         {!isRequestClosed &&
-          <IconButton
+          <PaneHeaderIconButton
             icon="edit"
             id="clickable-edit-request"
             style={{ visibility: !request ? 'hidden' : 'visible' }}
@@ -269,15 +321,24 @@ class ViewRequest extends React.Component {
         }
       </PaneMenu>
     );
+  }
+
+  renderRequest(request) {
+    const { stripes, patronGroups } = this.props;
+    const getPickupServicePointName = this.getPickupServicePointName(request);
+    const requestStatus = get(request, ['status'], '-');
+    const isRequestClosed = requestStatus.startsWith('Closed');
+    const isRequestNotFilled = requestStatus === requestStatuses.NOT_YET_FILLED;
 
     let deliveryAddressDetail;
     let selectedDelivery = false;
 
-    if (get(request, ['fulfilmentPreference'], '') === 'Delivery') {
+    if (get(request, 'fulfilmentPreference') === 'Delivery') {
       selectedDelivery = true;
-      const deliveryAddressType = get(request, ['deliveryAddressTypeId'], null);
+      const deliveryAddressType = get(request, 'deliveryAddressTypeId', null);
+
       if (deliveryAddressType) {
-        const addresses = get(request, ['requester', 'personal', 'addresses'], []);
+        const addresses = get(request, 'requester.personal.addresses', []);
         const deliveryLocations = keyBy(addresses, 'addressTypeId');
         deliveryAddressDetail = toUserAddress(deliveryLocations[deliveryAddressType]);
       }
@@ -291,22 +352,6 @@ class ViewRequest extends React.Component {
     const expirationDate = (get(request, 'requestExpirationDate', ''))
       ? <FormattedDate value={request.requestExpirationDate} />
       : '-';
-
-    if (!request) {
-      return (
-        <Pane
-          defaultWidth={this.props.paneWidth}
-          paneTitle={<FormattedMessage id="ui-requests.requestMeta.detailLabel" />}
-          lastMenu={detailMenu}
-          dismissible
-          onClose={this.props.onClose}
-        >
-          <div style={{ paddingTop: '1rem' }}>
-            <Icon icon="spinner-ellipsis" width="100px" />
-          </div>
-        </Pane>
-      );
-    }
 
     const actionMenu = ({ onToggle }) => {
       if (isRequestClosed) {
@@ -352,6 +397,20 @@ class ViewRequest extends React.Component {
               <FormattedMessage id="ui-requests.actions.duplicateRequest" />
             </Icon>
           </Button>
+          {isRequestNotFilled &&
+            <Button
+              id="move-request"
+              onClick={() => {
+                onToggle();
+                this.setState({ moveRequest: true });
+              }}
+              buttonStyle="dropdownItem"
+            >
+              <Icon icon="replace">
+                <FormattedMessage id="ui-requests.actions.moveRequest" />
+              </Icon>
+            </Button>
+          }
         </Fragment>
       );
     };
@@ -361,7 +420,7 @@ class ViewRequest extends React.Component {
         data-test-instance-details
         defaultWidth={this.props.paneWidth}
         paneTitle={<FormattedMessage id="ui-requests.requestMeta.detailLabel" />}
-        lastMenu={detailMenu}
+        lastMenu={this.renderDetailMenu(request)}
         actionMenu={actionMenu}
         dismissible
         onClose={this.props.onClose}
@@ -378,7 +437,7 @@ class ViewRequest extends React.Component {
             }
           >
             <ItemDetail
-              item={request.item}
+              item={{ ...request.item, id: request.itemId }}
               loan={request.loan}
               requestCount={request.requestCount}
             />
@@ -389,7 +448,7 @@ class ViewRequest extends React.Component {
           >
             <Row>
               <Col xs={12}>
-                <this.cViewMetaData metadata={request.metadata} />
+                {request.metadata && <this.cViewMetaData metadata={request.metadata} /> }
               </Col>
             </Row>
             <Row>
@@ -422,7 +481,7 @@ class ViewRequest extends React.Component {
               <Col xs={5}>
                 <KeyValue
                   label={<FormattedMessage id="ui-requests.position" />}
-                  value={positionLink}
+                  value={<PositionLink request={request} />}
                 />
               </Col>
             </Row>
@@ -439,7 +498,7 @@ class ViewRequest extends React.Component {
               user={request.requester}
               proxy={request.proxy}
               stripes={stripes}
-              patronGroup={patronGroupName}
+              patronGroups={patronGroups}
               request={request}
               selectedDelivery={selectedDelivery}
               deliveryAddress={deliveryAddressDetail}
@@ -448,24 +507,6 @@ class ViewRequest extends React.Component {
           </Accordion>
         </AccordionSet>
 
-        <Layer
-          isOpen={query.layer ? query.layer === 'edit' : false}
-          label={<FormattedMessage id="ui-requests.actions.editRequestLink" />}
-        >
-          <RequestForm
-            stripes={stripes}
-            initialValues={request}
-            request={request}
-            metadataDisplay={this.cViewMetaData}
-            onSubmit={(record) => { this.update(record); }}
-            onCancel={onCloseEdit}
-            onCancelRequest={this.cancelRequest}
-            optionLists={optionLists}
-            patronGroups={patronGroups}
-            query={this.props.query}
-            findResource={findResource}
-          />
-        </Layer>
         <this.connectedCancelRequestDialog
           open={this.state.isCancellingRequest}
           onCancelRequest={this.cancelRequest}
@@ -473,8 +514,43 @@ class ViewRequest extends React.Component {
           request={request}
           stripes={stripes}
         />
+
+        {this.state.moveRequest &&
+          <MoveRequestManager
+            onMove={this.onMove}
+            onCancelMove={this.closeMoveRequest}
+            request={request}
+          />
+        }
+        <Callout ref={this.callout} />
       </Pane>
     );
+  }
+
+  renderSpinner() {
+    return (
+      <Pane
+        defaultWidth={this.props.paneWidth}
+        paneTitle={<FormattedMessage id="ui-requests.requestMeta.detailLabel" />}
+        lastMenu={this.renderDetailMenu()}
+        dismissible
+        onClose={this.props.onClose}
+      >
+        <div style={{ paddingTop: '1rem' }}>
+          <Icon icon="spinner-ellipsis" width="100px" />
+        </div>
+      </Pane>
+    );
+  }
+
+  render() {
+    const request = this.getRequest();
+
+    if (!request) {
+      return this.renderSpinner();
+    }
+
+    return this.renderLayer(request) || this.renderRequest(request);
   }
 }
 

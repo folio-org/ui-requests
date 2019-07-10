@@ -8,6 +8,7 @@ import {
   ModalFooter,
   Select,
   TextArea,
+  Button,
 } from '@folio/stripes/components';
 
 class CancelRequestDialog extends React.Component {
@@ -96,9 +97,9 @@ class CancelRequestDialog extends React.Component {
     onCancelRequest(cancellationInfo);
   }
 
-  onChangeAdditionalInfo = (e) => this.setState({ additionalInfo: e.target.value })
-
-  // onChangeNotify = () => this.setState(prevState => ({ notify: !prevState.notify }))
+  onChangeAdditionalInfo = (e) => {
+    this.setState({ additionalInfo: e.target.value });
+  }
 
   onChangeReason = (e) => {
     const value = e.target.value;
@@ -127,21 +128,27 @@ class CancelRequestDialog extends React.Component {
     if (!request) return null;
 
     const footer = (
-      <ModalFooter
-        primaryButton={{
-          label: <FormattedMessage id="stripes-core.button.confirm" />,
-          disabled: reason.requiresAdditionalInformation && !additionalInfo,
-          onClick: this.onCancelRequestHandler,
-        }}
-        secondaryButton={{
-          label: <FormattedMessage id="stripes-core.button.back" />,
-          onClick: onClose,
-        }}
-      />
+      <ModalFooter>
+        <Button
+          data-test-confirm-cancel-request
+          buttonStyle="primary"
+          onClick={this.onCancelRequestHandler}
+          disabled={reason.requiresAdditionalInformation && !additionalInfo}
+        >
+          <FormattedMessage id="stripes-core.button.confirm" />
+        </Button>
+        <Button
+          data-test-cancel-cancel-request
+          onClick={onClose}
+        >
+          <FormattedMessage id="stripes-core.button.back" />
+        </Button>
+      </ModalFooter>
     );
 
     return (
       <Modal
+        data-test-cancel-request-modal
         label={<FormattedMessage id="ui-requests.cancel.modalLabel" />}
         open={open}
         onClose={onClose}
@@ -154,19 +161,12 @@ class CancelRequestDialog extends React.Component {
           />
         </p>
         <Select
+          data-test-select-cancelation-reason
           label={<FormattedMessage id="ui-requests.cancel.reasonLabel" />}
           dataOptions={reasons}
           value={reason.value}
           onChange={this.onChangeReason}
         />
-        {/*
-        <Checkbox
-          id="notify-patron-checkbox"
-          label={formatMessage({ id: 'ui-requests.cancel.notifyLabel' })}
-          checked={notify}
-          onChange={this.onChangeNotify}
-        />
-        */}
         <FormattedMessage id={additionalInfoPlaceholder}>
           {placeholder => (
             <TextArea
