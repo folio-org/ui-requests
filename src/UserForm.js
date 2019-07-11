@@ -122,7 +122,7 @@ class UserForm extends React.Component {
       proxyId = proxy.id;
     }
 
-    const proxySection = proxyId
+    const proxySection = proxyId && proxyId !== id
       ? userHighlightBox(<FormattedMessage id="ui-requests.requester.proxy" />, proxyName, proxyId, proxyBarcode)
       : null;
 
