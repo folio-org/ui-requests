@@ -1,10 +1,12 @@
 # Change history for ui-requests
 
-## 1.11.0 (IN PROGRESS)
+## [1.11.0](https://github.com/folio-org/ui-requests/tree/v1.11.0) (2019-07-24)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.10.1...v1.11.0)
 
 * Add Location Code Column to Request CSV. Refs UIREQ-263.
 * Add library column to Request CSV. Refs UIREQ-262.
 * Do not show proxy popup during edit. Fixes UIREQ-291.
+* Move requests between items. Fixes UIREQ-269
 * Hide requester's proxy section when requesting as self. Fixes UIREQ-290.
 
 ## [1.10.1](https://github.com/folio-org/ui-requests/tree/v1.10.1) (2019-06-24)
