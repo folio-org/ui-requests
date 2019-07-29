@@ -122,7 +122,7 @@
     "noExpiredRequests": "There are currently no expired or cancelled requests on the hold shelf.",
     "item.location.libraryName": "Library",
     "item.location.code": "Shelving location code",
-    "requestQueue": "Request queue",
+    "requestQueue": "Cola de petición",
     "location": "Location",
     "materialType": "Material type",
     "loanType": "Loan type",
