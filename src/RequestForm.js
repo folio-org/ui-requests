@@ -423,7 +423,7 @@ class RequestForm extends React.Component {
     if (holdShelfExpirationDate && !holdShelfExpirationDate.match('T')) {
       const time = moment.tz(timeZone).format('HH:mm:ss');
       data.holdShelfExpirationDate = moment.tz(`${holdShelfExpirationDate} ${time}`, timeZone).utc().format();
-    } else {
+    } else if (!holdShelfExpirationDate) {
       unset(data, 'holdShelfExpirationDate');
     }
 
