@@ -76,6 +76,62 @@
           "inventory-storage.instances.collection.get"
         ],
         "visible": true
+      },
+      {
+        "permissionName": "ui-requests.view",
+        "displayName": "Requests: View",
+        "subPermissions": [
+          "module.requests.enabled",
+          "circulation.loans.collection.get",
+          "circulation.requests.collection.get",
+          "circulation.requests.item.get",
+          "circulation-storage.cancellation-reasons.collection.get",
+          "circulation-storage.loans.collection.get",
+          "circulation-storage.loans.item.get",
+          "circulation-storage.requests.collection.get",
+          "circulation-storage.requests.item.get",
+          "users.collection.get",
+          "users.item.get",
+          "proxiesfor.collection.get",
+          "inventory-storage.service-points.collection.get",
+          "inventory-storage.service-points.item.get",
+          "addresstypes.collection.get",
+          "usergroups.collection.get",
+          "configuration.entries.collection.get",
+          "inventory.items.collection.get",
+          "inventory.items.item.get",
+          "inventory.instances.item.get",
+          "inventory.instances.collection.get",
+          "inventory-storage.items.collection.get",
+          "inventory-storage.items.item.get",
+          "inventory-storage.holdings.collection.get",
+          "inventory-storage.holdings.item.get",
+          "inventory-storage.instances.item.get",
+          "inventory-storage.instances.collection.get"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-requests.edit",
+        "displayName": "Requests: View, edit",
+        "subPermissions": [
+          "ui-requests.view",
+          "circulation.requests.item.put",
+          "circulation-storage.requests.collection.delete",
+          "circulation-storage.requests.item.put",
+          "circulation-storage.requests.item.delete"
+        ],
+        "visible": true
+      },
+      {
+        "permissionName": "ui-requests.create",
+        "displayName": "Requests: View, edit, create",
+        "subPermissions": [
+          "ui-requests.edit",
+          "circulation.requests.item.post",
+          "circulation-storage.requests.item.post"
+        ],
+        "visible": true
       }
     ]
   },
