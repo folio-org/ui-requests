@@ -113,7 +113,7 @@
       },
       {
         "permissionName": "ui-requests.edit",
-        "displayName": "Requests: View, edit",
+        "displayName": "Requests: View, edit, cancel",
         "subPermissions": [
           "ui-requests.view",
           "circulation.requests.item.put",
