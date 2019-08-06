@@ -112,6 +112,16 @@
         "visible": true
       },
       {
+        "permissionName": "ui-requests.create",
+        "displayName": "Requests: View, create",
+        "subPermissions": [
+          "ui-requests.view",
+          "circulation.requests.item.post",
+          "circulation-storage.requests.item.post"
+        ],
+        "visible": true
+      },
+      {
         "permissionName": "ui-requests.edit",
         "displayName": "Requests: View, edit, cancel",
         "subPermissions": [
@@ -120,16 +130,6 @@
           "circulation-storage.requests.collection.delete",
           "circulation-storage.requests.item.put",
           "circulation-storage.requests.item.delete"
-        ],
-        "visible": true
-      },
-      {
-        "permissionName": "ui-requests.create",
-        "displayName": "Requests: View, edit, create",
-        "subPermissions": [
-          "ui-requests.edit",
-          "circulation.requests.item.post",
-          "circulation-storage.requests.item.post"
         ],
         "visible": true
       }
