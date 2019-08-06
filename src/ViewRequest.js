@@ -33,6 +33,7 @@ import {
   Row
 } from '@folio/stripes/components';
 import { ViewMetaData, withTags } from '@folio/stripes/smart-components';
+import { IfPermission } from '@folio/stripes-core';
 
 import CancelRequestDialog from './CancelRequestDialog';
 import ItemDetail from './ItemDetail';
@@ -311,13 +312,15 @@ class ViewRequest extends React.Component {
           </FormattedMessage>
         }
         {!isRequestClosed &&
-          <PaneHeaderIconButton
-            icon="edit"
-            id="clickable-edit-request"
-            style={{ visibility: !request ? 'hidden' : 'visible' }}
-            href={editLink}
-            onClick={onEdit}
-          />
+          <IfPermission perm="ui-requests.edit">
+            <PaneHeaderIconButton
+              icon="edit"
+              id="clickable-edit-request"
+              style={{ visibility: !request ? 'hidden' : 'visible' }}
+              href={editLink}
+              onClick={onEdit}
+            />
+          </IfPermission>
         }
       </PaneMenu>
     );
@@ -360,56 +363,62 @@ class ViewRequest extends React.Component {
 
       return (
         <Fragment>
-          <Button
-            buttonStyle="dropdownItem"
-            id="clickable-edit-request"
-            href={this.props.editLink}
-            onClick={() => {
-              this.props.onEdit();
-              onToggle();
-            }}
-          >
-            <Icon icon="edit">
-              <FormattedMessage id="ui-requests.actions.edit" />
-            </Icon>
-          </Button>
-          <Button
-            buttonStyle="dropdownItem"
-            id="clickable-cancel-request"
-            onClick={() => {
-              this.setState({ isCancellingRequest: true });
-              onToggle();
-            }}
-          >
-            <Icon icon="times-circle">
-              <FormattedMessage id="ui-requests.cancel.cancelRequest" />
-            </Icon>
-          </Button>
-          <Button
-            id="duplicate-request"
-            onClick={() => {
-              onToggle();
-              this.props.onDuplicate(request);
-            }}
-            buttonStyle="dropdownItem"
-          >
-            <Icon icon="duplicate">
-              <FormattedMessage id="ui-requests.actions.duplicateRequest" />
-            </Icon>
-          </Button>
-          {isRequestNotFilled &&
+          <IfPermission perm="ui-requests.edit">
             <Button
-              id="move-request"
+              buttonStyle="dropdownItem"
+              id="clickable-edit-request"
+              href={this.props.editLink}
+              onClick={() => {
+                this.props.onEdit();
+                onToggle();
+              }}
+            >
+              <Icon icon="edit">
+                <FormattedMessage id="ui-requests.actions.edit" />
+              </Icon>
+            </Button>
+            <Button
+              buttonStyle="dropdownItem"
+              id="clickable-cancel-request"
+              onClick={() => {
+                this.setState({ isCancellingRequest: true });
+                onToggle();
+              }}
+            >
+              <Icon icon="times-circle">
+                <FormattedMessage id="ui-requests.cancel.cancelRequest" />
+              </Icon>
+            </Button>
+          </IfPermission>
+          <IfPermission perm="ui-requests.create">
+            <Button
+              id="duplicate-request"
               onClick={() => {
                 onToggle();
-                this.setState({ moveRequest: true });
+                this.props.onDuplicate(request);
               }}
               buttonStyle="dropdownItem"
             >
-              <Icon icon="replace">
-                <FormattedMessage id="ui-requests.actions.moveRequest" />
+              <Icon icon="duplicate">
+                <FormattedMessage id="ui-requests.actions.duplicateRequest" />
               </Icon>
             </Button>
+          </IfPermission>
+          {isRequestNotFilled &&
+            <IfPermission perm="ui-requests.edit">
+              <Button
+                id="move-request"
+                onClick={() => {
+                  onToggle();
+                  this.setState({ moveRequest: true });
+                }}
+                buttonStyle="dropdownItem"
+              >
+                <Icon icon="replace">
+                  <FormattedMessage id="ui-requests.actions.moveRequest" />
+                </Icon>
+              </Button>
+            </IfPermission>
           }
         </Fragment>
       );
@@ -421,8 +430,8 @@ class ViewRequest extends React.Component {
         defaultWidth={this.props.paneWidth}
         paneTitle={<FormattedMessage id="ui-requests.requestMeta.detailLabel" />}
         lastMenu={this.renderDetailMenu(request)}
-        actionMenu={actionMenu}
         dismissible
+        actionMenu={actionMenu}
         onClose={this.props.onClose}
       >
         <TitleManager record={get(request, ['item', 'title'])} />

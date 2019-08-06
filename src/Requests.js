@@ -643,8 +643,8 @@ class Requests extends React.Component {
               query: resources.query,
               onDuplicate: this.onDuplicate,
             }}
-            viewRecordPerms="module.requests.enabled"
-            newRecordPerms="module.requests.enabled"
+            viewRecordPerms="ui-requests.view"
+            newRecordPerms="ui-requests.create"
           />
         </div>
       </React.Fragment>
