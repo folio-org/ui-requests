@@ -56,7 +56,7 @@
     "cancel.additionalInfoPlaceholderRequired": "قم بإدخال المزيد من المعلومات حول الإلغاء (مطلوب)",
     "cancel.additionalInfoPlaceholderOptional": "قم بإدخال المزيد من المعلومات حول الإلغاء (اختياري)",
     "meta.title": "طلبات",
-    "resultCount": "تم العثور على {count, number} {count, plural, one { تسجيلة } other { تسجيلات }}",
+    "resultCount": "تم العثور على {count, number} {count, plural, one { تسجيلة } other { تسجيلة }}",
     "barcode": "الباركود",
     "actions.viewQueuePosition": "عرض الموضع في الصف",
     "item.requestsOnItem": "طلبات على المادة",
