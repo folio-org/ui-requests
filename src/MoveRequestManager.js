@@ -70,18 +70,23 @@ class MoveRequestManager extends React.Component {
     this.setState({ errorMessage });
   }
 
+  getPossibleRequestTypes(item) {
+    const itemStatus = get(item, 'status.name');
+    return requestTypesByItemStatus[itemStatus] || [];
+  }
+
   onItemSelected = (selectedItem) => {
     const { request: { requestType } } = this.props;
-    const itemStatus = get(selectedItem, 'status.name');
-    const requestTypes = requestTypesByItemStatus[itemStatus] || [];
+    const requestTypes = this.getPossibleRequestTypes(selectedItem);
 
     if (includes(requestTypes, requestType)) {
-      return this.moveRequest(requestType, selectedItem);
+      this.moveRequest(requestType, selectedItem);
+      return this.setState({ selectedItem });
     }
 
     return this.setState({
       chooseRequestType: true,
-      selectedItem,
+      selectedItem
     });
   }
 
@@ -92,9 +97,15 @@ class MoveRequestManager extends React.Component {
   }
 
   closeErrorMessage = () => {
-    this.setState({
-      errorMessage: null
-    });
+    const { selectedItem } = this.state;
+    const requestTypes = this.getPossibleRequestTypes(selectedItem);
+    const state = { errorMessage: null };
+
+    if (requestTypes && requestTypes.length) {
+      state.chooseRequestType = true;
+    }
+
+    this.setState(state);
   }
 
   render() {
