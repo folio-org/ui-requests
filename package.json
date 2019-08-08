@@ -73,7 +73,8 @@
           "inventory-storage.holdings.collection.get",
           "inventory-storage.holdings.item.get",
           "inventory-storage.instances.item.get",
-          "inventory-storage.instances.collection.get"
+          "inventory-storage.instances.collection.get",
+          "manualblocks.collection.get"
         ],
         "visible": true
       },
@@ -107,7 +108,8 @@
           "inventory-storage.holdings.collection.get",
           "inventory-storage.holdings.item.get",
           "inventory-storage.instances.item.get",
-          "inventory-storage.instances.collection.get"
+          "inventory-storage.instances.collection.get",
+          "manualblocks.collection.get"
         ],
         "visible": true
       },
