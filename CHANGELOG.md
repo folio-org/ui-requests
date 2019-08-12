@@ -12,6 +12,7 @@
 * Do not show proxy popup during edit. Fixes UIREQ-291.
 * Move requests between items. Fixes UIREQ-269
 * Hide requester's proxy section when requesting as self. Fixes UIREQ-290.
+* Prevent move above page. Part of UIREQ-303.
 
 ## [1.10.1](https://github.com/folio-org/ui-requests/tree/v1.10.1) (2019-06-24)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.10.0...v1.10.1)
