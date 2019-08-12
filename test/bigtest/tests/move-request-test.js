@@ -13,7 +13,7 @@ describe('Move request', () => {
   setupApplication();
 
   beforeEach(async function () {
-    const request = this.server.create('request', { requestType: 'Hold' });
+    const request = this.server.create('request', 'withPagedItems', { requestType: 'Page' });
     this.visit(`/requests/view/${request.id}`);
   });
 
@@ -33,6 +33,7 @@ describe('Move request', () => {
       await ViewRequestInteractor.headerDropdown.click();
       await ViewRequestInteractor.headerDropdownMenu.clickMove();
       await ViewRequestInteractor.moveRequestDialog.chooseItem();
+      await ViewRequestInteractor.moveToSecondPositionDialog.clickConfirm();
     });
 
     it('opens choose request type dialog', function () {
@@ -45,6 +46,7 @@ describe('Move request', () => {
       await ViewRequestInteractor.headerDropdown.click();
       await ViewRequestInteractor.headerDropdownMenu.clickMove();
       await ViewRequestInteractor.moveRequestDialog.chooseItem();
+      await ViewRequestInteractor.moveToSecondPositionDialog.clickConfirm();
       await ViewRequestInteractor.chooseRequestTypeDialog.clickConfirm();
     });
 
