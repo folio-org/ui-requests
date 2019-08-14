@@ -36,7 +36,7 @@ const ItemDetail = ({ item, loan, requestCount }) => {
         </Col>
         <Col xs={3}>
           <KeyValue label={<FormattedMessage id="ui-requests.item.location.name" />}>
-            {get(item, ['effectiveLocation', 'name']) || '-'}
+            {get(item, 'effectiveLocation.name') || get(item, 'location.name') || ''}
           </KeyValue>
         </Col>
       </Row>
