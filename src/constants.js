@@ -19,6 +19,10 @@ export const requestStatuses = {
   NOT_YET_FILLED: 'Open - Not yet filled',
 };
 
+export const itemStatuses = {
+  PAGED: 'Paged',
+};
+
 export const iconTypes = {
   times: 'times',
   timesCircle: 'times-circle',

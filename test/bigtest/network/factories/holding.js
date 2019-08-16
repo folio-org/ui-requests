@@ -33,10 +33,13 @@ export default Factory.extend({
     }
   }),
 
-  withPagedItem: trait({
+  withPagedItems: trait({
     afterCreate(holding, server) {
-      const item = server.create('item', { status: { name: 'Paged' } });
-      holding.items = [item];
+      const items = server.createList('item', 3, {
+        instanceId: holding.instanceId,
+        status: { name: 'Paged' },
+      });
+      holding.items = items;
       holding.save();
     }
   })

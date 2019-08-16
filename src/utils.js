@@ -3,7 +3,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Col, Headline, Row } from '@folio/stripes/components';
 
-import { requestTypesByItemStatus, requestTypesMap } from './constants';
+import {
+  requestTypesByItemStatus,
+  requestTypesMap,
+  itemStatuses,
+} from './constants';
 
 import css from './requests.css';
 
@@ -93,4 +97,8 @@ export function getRequestTypeOptions(item) {
     id: requestTypesMap[type],
     value: type,
   }));
+}
+
+export function isPagedItem(item) {
+  return (get(item, 'status.name') === itemStatuses.PAGED);
 }

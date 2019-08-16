@@ -1,4 +1,4 @@
-import { Factory, faker } from '@bigtest/mirage';
+import { Factory, faker, trait } from '@bigtest/mirage';
 
 export default Factory.extend({
   id: (i) => 'requestId' + i,
@@ -34,5 +34,31 @@ export default Factory.extend({
       },
       deliveryAddressTypeId: user.personal.addresses[0].addressTypeId
     });
-  }
+  },
+
+  withPagedItems: trait({
+    afterCreate(request, server) {
+      const user = server.create('user');
+      const instance = server.create('instance', 'withHoldingAndPagedItems');
+      const item = instance.holdings.models[0].items.models[0].attrs;
+
+      request.update({
+        item,
+        itemId: item.id,
+        requesterId: user.id,
+        requester: {
+          lastName: user.personal.lastName,
+          firstName: user.personal.firstName,
+          barcode: user.barcode,
+          patronGroup: {
+            id: user.patronGroup,
+            group: 'test',
+            desc: 'test'
+          },
+          patronGroupId: user.patronGroup,
+        },
+        deliveryAddressTypeId: user.personal.addresses[0].addressTypeId
+      });
+    }
+  })
 });

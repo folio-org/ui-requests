@@ -26,12 +26,18 @@ import { contains } from './helpers';
   isExpanded = attribute('#accordion-toggle-button-item-info', 'aria-expanded') === 'true';
 }
 
+@interactor class MoveToSecondPositionDialog {
+  clickClose = clickable('[data-test-confirmation-modal-cancel-button]');
+  clickConfirm = clickable('[data-test-confirmation-modal-confirm-button]');
+}
+
 @interactor class ViewRequestInteractor {
   headerDropdown = new HeaderDropdown('[class*=paneHeaderCenterInner---] [class*=dropdown---]');
   headerDropdownMenu = new HeaderDropdownMenu();
   itemAccordion = new ItemAccordion('#item-info');
   cancelRequestDialog = new CancelRequestDialog('[data-test-cancel-request-modal]');
   moveRequestDialog = new MoveRequestDialog('[data-test-move-request-modal]');
+  moveToSecondPositionDialog = new MoveToSecondPositionDialog('#move-to-second-position-modal');
   chooseRequestTypeDialog = new ChooseRequestTypeDialog('[data-test-choose-request-type-modal]');
   requestSectionPresent = isPresent('#request-info');
   requesterSectionPresent = isPresent('#requester-info');

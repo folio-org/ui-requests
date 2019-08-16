@@ -40,10 +40,10 @@ class ChooseRequestTypeDialog extends React.Component {
   }
 
   onConfirm = () => {
-    const { item, onConfirm } = this.props;
+    const { onConfirm } = this.props;
     const { requestType } = this.state;
 
-    onConfirm(requestType, item);
+    onConfirm(requestType);
   }
 
   render() {
