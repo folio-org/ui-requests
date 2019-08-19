@@ -134,5 +134,7 @@
     "moveRequest.requestTypeChangeMessage": "A requisição será convertida em <strong>{requestType}</strong>.",
     "moveRequest.chooseRequestMessage": "Por favor, selecione o tipo permitido",
     "moveRequest.confirm": "Confirmar",
-    "moveRequest.success": "Requisição foi movida com sucesso"
+    "moveRequest.success": "Requisição foi movida com sucesso",
+    "moveRequest.secondPositionTitle": "A requisição foi movida para a posição 2 da fila",
+    "moveRequest.secondPositionMessage": "As requisições não podem ser movidas acima das requisições da página, mesmo quando a conclusão não foi iniciada. Essa requisição será movida para a posição 2 na fila de requisições."
 }
