@@ -134,5 +134,7 @@
     "moveRequest.requestTypeChangeMessage": "请求将转换为<strong> {requestType} </strong> 。",
     "moveRequest.chooseRequestMessage": "请选择允许的类型",
     "moveRequest.confirm": "确认",
-    "moveRequest.success": "请求已成功移动"
+    "moveRequest.success": "请求已成功移动",
+    "moveRequest.secondPositionTitle": "Request moved to position 2 of the queue",
+    "moveRequest.secondPositionMessage": "Requests cannot be moved above page requests, even when fulfillment has not begun. This request will be moved to position 2 in the request queue."
 }

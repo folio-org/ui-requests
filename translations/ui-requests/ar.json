@@ -134,5 +134,7 @@
     "moveRequest.requestTypeChangeMessage": "سيتم تحويل الطلب إلى <strong>{requestType}</strong>",
     "moveRequest.chooseRequestMessage": "يرجى تحديد النوع المسموح به",
     "moveRequest.confirm": "تأكيد",
-    "moveRequest.success": "تم نقل الطلب بنجاح"
+    "moveRequest.success": "تم نقل الطلب بنجاح",
+    "moveRequest.secondPositionTitle": "تم نقل الطلب إلى الموضع 2 في الصف",
+    "moveRequest.secondPositionMessage": "لا يمكن نقل الطلبات أعلى طلبات الصفحة، حتى في حالة عدم بدء استيفائها. سيتم نقل هذا الطلب إلى الموضع 2 في صف الطلبات."
 }
