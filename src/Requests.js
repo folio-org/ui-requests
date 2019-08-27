@@ -219,9 +219,7 @@ class Requests extends React.Component {
   constructor(props) {
     super(props);
 
-    const {
-      intl: { formatMessage }
-    } = props;
+    const { intl: { formatMessage } } = props;
 
     this.okapiUrl = props.stripes.okapi.url;
     this.httpHeaders = Object.assign({}, {
@@ -258,7 +256,7 @@ class Requests extends React.Component {
     this.state = {
       submitting: false,
       errorMessage: '',
-      isErrorModalShown: false,
+      errorModalData: {},
     };
   }
 
@@ -475,11 +473,30 @@ class Requests extends React.Component {
     reset();
 
     const servicePointId = get(user, 'user.curServicePoint.id', '');
+    if (!servicePointId) {
+      this.setState(
+        {
+          errorModalData: {
+            errorMessage: <FormattedMessage id="ui-requests.noServicePoint.errorMessage" />,
+            label: <FormattedMessage id="ui-requests.noServicePoint.label" />,
+          }
+        }
+      );
+
+      return;
+    }
     const path = `circulation/requests-reports/hold-shelf-clearance/${servicePointId}`;
     const { requests } = await GET({ path });
 
     if (isEmpty(requests)) {
-      this.setState({ isErrorModalShown: true });
+      this.setState(
+        {
+          errorModalData: {
+            errorMessage: <FormattedMessage id="ui-requests.noExpiredRequests" />,
+            label: <FormattedMessage id="ui-requests.nothingToClear" />,
+          }
+        }
+      );
     } else {
       const recordsToCSV = this.buildHoldRecords(requests);
       exportCsv(recordsToCSV, {
@@ -505,7 +522,7 @@ class Requests extends React.Component {
   };
 
   errorModalClose = () => {
-    this.setState({ isErrorModalShown: false });
+    this.setState({ errorModalData: {} });
   };
 
   render() {
@@ -531,7 +548,7 @@ class Requests extends React.Component {
     const {
       dupRequest,
       errorMessage,
-      isErrorModalShown,
+      errorModalData,
     } = this.state;
 
     const patronGroups = (resources.patronGroups || {}).records || [];
@@ -587,11 +604,11 @@ class Requests extends React.Component {
     return (
       <React.Fragment>
         {
-          isErrorModalShown &&
+          isEmpty(errorModalData) ||
             <ErrorModal
               onClose={this.errorModalClose}
-              label={<FormattedMessage id="ui-requests.nothingToClear" />}
-              errorMessage={<FormattedMessage id="ui-requests.noExpiredRequests" />}
+              label={errorModalData.label}
+              errorMessage={errorModalData.errorMessage}
             />
         }
         <div data-test-request-instances>

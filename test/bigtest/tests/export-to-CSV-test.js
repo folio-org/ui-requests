@@ -112,4 +112,56 @@ describe('Export to CSV', () => {
       });
     });
   });
+
+  describe('user without service point', () => {
+    setupApplication({
+      scenarios: ['default', 'zeroExpiredHoldsRecords'],
+    });
+
+    const requests = new RequestsInteractor();
+
+    beforeEach(async function () {
+      this.visit('/requests');
+
+      await requests.clickHoldsCheckbox();
+      await requests.clickPagesCheckbox();
+      await requests.clickRecallsCheckbox();
+      await requests.whenInstancesArePresent(20);
+    });
+
+    describe('Export expired holds to CSV', function () {
+      beforeEach(async function () {
+        await requests.headerDropdown.click();
+        await requests.headerDropdownMenu.clickExportExpiredHoldsToCSV();
+      });
+
+      it('exports data to csv', () => {
+        expect(requests.headerDropdownMenu.exportExpiredHoldsBtnIsVisible).to.be.false;
+      });
+
+      describe('error modal ', () => {
+        it('should be displayed', () => {
+          expect(requests.errorModal.isPresent).to.be.true;
+        });
+
+        it('should have proper text', () => {
+          expect(requests.errorModal.content.text).to.equal(translations['noServicePoint.errorMessage']);
+        });
+
+        it('should have close button', () => {
+          expect(requests.errorModal.closeButton.isPresent).to.be.true;
+        });
+
+        describe('close button click', () => {
+          beforeEach(async function () {
+            await requests.errorModal.closeButton.click();
+          });
+
+          it('error modal should not be displayed', () => {
+            expect(requests.errorModal.isPresent).to.be.true;
+          });
+        });
+      });
+    });
+  });
 });
