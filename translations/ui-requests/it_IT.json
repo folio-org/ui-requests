@@ -100,7 +100,7 @@
     "deliveryAddress": "Indirizzo di consegna",
     "requester.patronGroup.group": "Requester patron group",
     "actions.duplicateRequest": "Duplica ",
-    "actions.cancelNewRequest": "Cancel",
+    "actions.cancelNewRequest": "Annulla",
     "close": "Chiudi",
     "blockedLabel": "Motivo del blocco",
     "blockModal": "Patron blocked from requesting",
@@ -136,5 +136,7 @@
     "moveRequest.confirm": "Confirm",
     "moveRequest.success": "Request has been moved successfully",
     "moveRequest.secondPositionTitle": "Request moved to position 2 of the queue",
-    "moveRequest.secondPositionMessage": "Requests cannot be moved above page requests, even when fulfillment has not begun. This request will be moved to position 2 in the request queue."
+    "moveRequest.secondPositionMessage": "Requests cannot be moved above page requests, even when fulfillment has not begun. This request will be moved to position 2 in the request queue.",
+    "noServicePoint.errorMessage": "You must be logged into a service point to access the Hold shelf clearance report. Please add one or more service points to your user record in the Users app. Contact an administrator if you do not have the ability to add service points to your record.",
+    "noServicePoint.label": "No service point selected"
 }
