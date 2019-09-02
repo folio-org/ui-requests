@@ -356,6 +356,8 @@ class ViewRequest extends React.Component {
       ? <FormattedDate value={request.requestExpirationDate} />
       : '-';
 
+    const showActionMenu = stripes.hasPerm('ui-requests.create') || stripes.hasPerm('ui-requests.edit');
+
     const actionMenu = ({ onToggle }) => {
       if (isRequestClosed) {
         return undefined;
@@ -431,7 +433,7 @@ class ViewRequest extends React.Component {
         paneTitle={<FormattedMessage id="ui-requests.requestMeta.detailLabel" />}
         lastMenu={this.renderDetailMenu(request)}
         dismissible
-        actionMenu={actionMenu}
+        {... (showActionMenu ? { actionMenu } : {})}
         onClose={this.props.onClose}
       >
         <TitleManager record={get(request, ['item', 'title'])} />
