@@ -4,6 +4,7 @@
 
 * Populate shelving location on request view and edit form. Fixes UIREQ-311.
 * Show copy number from item record. Fixes UIREQ-313.
+* Only show the 'move to second position' comfirmation dialog when appropriate. Fixes UIREQ-320.
 
 ## [1.11.0](https://github.com/folio-org/ui-requests/tree/v1.11.0) (2019-07-24)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.10.1...v1.11.0)
