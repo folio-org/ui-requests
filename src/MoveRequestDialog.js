@@ -193,6 +193,7 @@ class MoveRequestDialog extends React.Component {
           padContent={false}
           paneTitle={<FormattedMessage id="ui-requests.moveRequest.instanceItems" />}
           paneSub={<FormattedMessage id="ui-requests.resultCount" values={{ count }} />}
+          defaultWidth="fill"
           noOverflow
         >
           {!isLoading &&
