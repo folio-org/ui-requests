@@ -112,6 +112,7 @@ class Requests extends React.Component {
               'Requester': 'requester.lastName requester.firstName',
               'Requester Barcode': 'requester.barcode',
               'Request Date': 'requestDate',
+              'Position': 'position',
             },
             filterConfig,
             2, // do not fetch unless we have a query or a filter
