@@ -1,6 +1,8 @@
-import { get, includes } from 'lodash';
+import { find, get, includes } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment-timezone';
+
 import { stripesConnect } from '@folio/stripes/core';
 import { FormattedMessage } from 'react-intl';
 import { ConfirmationModal } from '@folio/stripes/components';
@@ -61,7 +63,15 @@ class MoveRequestManager extends React.Component {
   }
 
   shouldMoveToSecondPositionDialogBeShown = () => {
-    return isPagedItem(this.state.selectedItem);
+    const {
+      selectedItem,
+      selectedItemPageRequest,
+    } = this.state;
+    const { request } = this.props;
+    const pageRequestIsLater = selectedItemPageRequest != null &&
+      moment(selectedItemPageRequest.requestDate).isAfter(moment(request.requestDate));
+
+    return isPagedItem(selectedItem) && pageRequestIsLater;
   }
 
   shouldChooseRequestTypeDialogBeShown = () => {
@@ -127,8 +137,9 @@ class MoveRequestManager extends React.Component {
     return requestTypesByItemStatus[itemStatus] || [];
   }
 
-  onItemSelected = (selectedItem) => {
-    this.setState({ selectedItem }, () => this.execSteps(0));
+  onItemSelected = (selectedItem, requests) => {
+    const selectedItemPageRequest = find(requests, { requestType: 'Page' });
+    this.setState({ selectedItem, selectedItemPageRequest }, () => this.execSteps(0));
   }
 
   cancelMoveRequest = () => {

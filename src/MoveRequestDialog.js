@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { countBy, get, orderBy } from 'lodash';
 import { FormattedMessage } from 'react-intl';
+
 import {
   Modal,
   ModalFooter,
@@ -153,6 +154,11 @@ class MoveRequestDialog extends React.Component {
     return requests.GET({ params: { query } });
   }
 
+  async onRowClick(item) {
+    const requests = await this.fetchRequests([item]);
+    this.props.onItemSelected(item, requests);
+  }
+
   render() {
     const { onClose } = this.props;
     const {
@@ -187,6 +193,7 @@ class MoveRequestDialog extends React.Component {
           padContent={false}
           paneTitle={<FormattedMessage id="ui-requests.moveRequest.instanceItems" />}
           paneSub={<FormattedMessage id="ui-requests.resultCount" values={{ count }} />}
+          defaultWidth="fill"
           noOverflow
         >
           {!isLoading &&
@@ -200,7 +207,7 @@ class MoveRequestDialog extends React.Component {
               columnWidths={COLUMN_WIDTHS}
               formatter={formatter}
               isEmptyMessage={<FormattedMessage id="ui-requests.moveRequest.instanceItems.notFound" />}
-              onRowClick={(_, item) => this.props.onItemSelected(item)}
+              onRowClick={(_, item) => this.onRowClick(item)}
             />
           }
         </Pane>

@@ -33,7 +33,6 @@ describe('Move request', () => {
       await ViewRequestInteractor.headerDropdown.click();
       await ViewRequestInteractor.headerDropdownMenu.clickMove();
       await ViewRequestInteractor.moveRequestDialog.chooseItem();
-      await ViewRequestInteractor.moveToSecondPositionDialog.clickConfirm();
     });
 
     it('opens choose request type dialog', function () {
@@ -46,7 +45,6 @@ describe('Move request', () => {
       await ViewRequestInteractor.headerDropdown.click();
       await ViewRequestInteractor.headerDropdownMenu.clickMove();
       await ViewRequestInteractor.moveRequestDialog.chooseItem();
-      await ViewRequestInteractor.moveToSecondPositionDialog.clickConfirm();
       await ViewRequestInteractor.chooseRequestTypeDialog.clickConfirm();
     });
 
