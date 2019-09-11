@@ -1,7 +1,13 @@
 # Change history for ui-requests
 
-## 1.12.0 (IN PROGRESS)
+## [1.12.0](https://github.com/folio-org/ui-requests/tree/v1.12.0) (2019-09-11)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.11.0...v1.12.0)
 
+* Correctly preserve hold shelf expiration date. Refs UIREQ-297.
+* More granular permissions. Refs UIREQ-107, UIREQ-108, UIREQ-109.
+* Allow the request type to be changed when moving it. Refs UIREQ-294.
+* Prevent a request from being moved above a page request. UIREQ-303.
+* Add "No service point selected" modal and error handling. Refs UIREQ-317.
 * Populate shelving location on request view and edit form. Fixes UIREQ-311.
 * Show copy number from item record. Fixes UIREQ-313.
 * Only show the 'move to second position' comfirmation dialog when appropriate. Fixes UIREQ-320.
@@ -14,7 +20,6 @@
 * Do not show proxy popup during edit. Fixes UIREQ-291.
 * Move requests between items. Fixes UIREQ-269
 * Hide requester's proxy section when requesting as self. Fixes UIREQ-290.
-* Prevent move above page. Part of UIREQ-303.
 
 ## [1.10.1](https://github.com/folio-org/ui-requests/tree/v1.10.1) (2019-06-24)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.10.0...v1.10.1)
