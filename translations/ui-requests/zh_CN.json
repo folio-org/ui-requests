@@ -87,10 +87,10 @@
     "requests.itemBarcode": "单件条码",
     "requestMeta.type.recall": "召回",
     "requestMeta.type.hold": "馆藏",
-    "requestMeta.type.page": "页数",
+    "requestMeta.type.page": "处理",
     "requestMeta.type.recalls": "召回",
     "requestMeta.type.holds": "馆藏",
-    "requestMeta.type.pages": "页数",
+    "requestMeta.type.pages": "处理",
     "requestMeta.fulfilment.holdShelf": "预约书架",
     "requestMeta.fulfilment.delivery": "送货",
     "actions.edit": "编辑",
@@ -136,7 +136,7 @@
     "moveRequest.confirm": "确认",
     "moveRequest.success": "请求已成功移动",
     "moveRequest.secondPositionTitle": "请求已移至队列的第2位",
-    "moveRequest.secondPositionMessage": "即使尚未开始执行，也无法将请求移至页面请求之上。此请求将移至请求队列中的位置2。",
+    "moveRequest.secondPositionMessage": "即使尚未开始执行，也无法将请求移至处理请求之上。此请求将移至请求队列中的位置2。",
     "noServicePoint.errorMessage": "您必须登录服务点才能访问保留架清关报告。请在“用户”应用中为您的用户记录添加一个或多个服务点。如果无法在记录中添加服务点，请与管理员联系。",
     "noServicePoint.label": "未选择服务点"
 }
