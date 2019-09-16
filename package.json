@@ -37,13 +37,23 @@
         "displayName": "UI: Requests module is enabled"
       },
       {
+        "permissionName": "ui-requests.moveRequest",
+        "displayName": "Requests: Move to new item",
+        "visible": true,
+        "subPermissions": [
+          "circulation.requests.item.move.post",
+          "circulation.rules.request-policy.get"
+        ]
+      },
+      {
         "permissionName": "ui-requests.all",
         "displayName": "Requests: All permissions",
         "description": "All permissions for the Requests app",
         "subPermissions": [
           "ui-requests.view",
           "ui-requests.create",
-          "ui-requests.edit"
+          "ui-requests.edit",
+          "ui-requests.moveRequest"
         ],
         "visible": true
       },
