@@ -356,7 +356,9 @@ class ViewRequest extends React.Component {
       ? <FormattedDate value={request.requestExpirationDate} />
       : '-';
 
-    const showActionMenu = stripes.hasPerm('ui-requests.create') || stripes.hasPerm('ui-requests.edit');
+    const showActionMenu = stripes.hasPerm('ui-requests.create')
+      || stripes.hasPerm('ui-requests.edit')
+      || stripes.hasPerm('ui-requests.moveRequest');
 
     const actionMenu = ({ onToggle }) => {
       if (isRequestClosed) {
@@ -407,7 +409,7 @@ class ViewRequest extends React.Component {
             </Button>
           </IfPermission>
           {isRequestNotFilled &&
-            <IfPermission perm="ui-requests.edit">
+            <IfPermission perm="ui-requests.moveRequest">
               <Button
                 id="move-request"
                 onClick={() => {
