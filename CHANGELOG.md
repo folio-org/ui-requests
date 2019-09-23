@@ -1,5 +1,10 @@
 # Change history for ui-requests
 
+## [1.13.0](https://github.com/folio-org/ui-requests/tree/v1.13.0) (2019-09-23)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.12.0...v1.13.0)
+
+* Provide move-request permission. Refs UIREQ-315.
+
 ## [1.12.0](https://github.com/folio-org/ui-requests/tree/v1.12.0) (2019-09-11)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.11.0...v1.12.0)
 
