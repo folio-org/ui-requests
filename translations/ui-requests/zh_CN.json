@@ -56,7 +56,7 @@
     "cancel.additionalInfoPlaceholderRequired": "输入关于取消(必填)的更多信息",
     "cancel.additionalInfoPlaceholderOptional": "输入关于取消(可选)的更多信息",
     "meta.title": "请求",
-    "resultCount": "{count, number} {count, plural, one {已找到记录} other {已找到记录}}",
+    "resultCount": "{count, number} {count, plural, one {记录找到} other {记录找到}}",
     "barcode": "条码",
     "actions.viewQueuePosition": "查看队列中的位置",
     "item.requestsOnItem": "请求单件",
