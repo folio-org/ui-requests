@@ -99,7 +99,8 @@
         "subPermissions": [
           "ui-requests.view",
           "circulation.requests.item.post",
-          "circulation-storage.requests.item.post"
+          "circulation-storage.requests.item.post",
+          "inventory-storage.locations.item.get"
         ],
         "visible": true
       },
