@@ -25,6 +25,7 @@ class RequestQueueRoute extends React.Component {
       path: 'inventory/items',
       params: (_q, _p, _r, _l, props) => {
         const request = RequestQueueRoute.getRequest(props);
+
         return (request) ? { query: `id==${request.itemId}` } : null;
       },
     },

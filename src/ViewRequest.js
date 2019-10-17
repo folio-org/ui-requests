@@ -43,6 +43,7 @@ import PositionLink from './PositionLink';
 import MoveRequestManager from './MoveRequestManager';
 import { requestStatuses } from './constants';
 import { toUserAddress } from './utils';
+import urls from './routes/urls';
 
 class ViewRequest extends React.Component {
   static manifest = {
@@ -212,18 +213,6 @@ class ViewRequest extends React.Component {
     this.setState({ moveRequest: false });
   }
 
-  openRequestQueue = () => {
-    this.props.parentMutator.query.update({
-      layer: 'reorderQueue',
-    });
-  }
-
-  closeRequestQueue = () => {
-    this.props.parentMutator.query.update({
-      layer: null,
-    });
-  }
-
   onToggleSection({ id }) {
     this.setState((curState) => {
       const newState = cloneDeep(curState);
@@ -263,9 +252,8 @@ class ViewRequest extends React.Component {
     } = this.props;
 
     const query = location.search ? queryString.parse(location.search) : {};
-    const { layer } = query;
 
-    if (layer === 'edit') {
+    if (query.layer === 'edit') {
       return (
         <IntlConsumer>
           {intl => (
@@ -455,7 +443,7 @@ class ViewRequest extends React.Component {
               id="reorder-queue"
               onClick={() => {
                 onToggle();
-                history.push(`${pathname}/reorder${search}`, { request });
+                history.push(`${urls.requestQueueView(request.id)}${search}`, { request });
               }}
               buttonStyle="dropdownItem"
             >
