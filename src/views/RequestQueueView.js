@@ -60,10 +60,10 @@ const COLUMN_MAP = {
 };
 
 const formatter = {
-  pickupServicePoint: request => get(request, 'pickupServicePoint.name'),
+  pickupServicePoint: request => get(request, 'pickupServicePoint.name', '-'),
   requester: request => getFullName(request.requester),
-  requesterBarcode: request => get(request, 'requester.barcode'),
-  patronGroup: request => get(request, 'requester.patronGroup.desc'),
+  requesterBarcode: request => get(request, 'requester.barcode', '-'),
+  patronGroup: request => get(request, 'requester.patronGroup.desc', '-'),
   requestDate: request => (<FormattedDate value={request.requestDate} />),
   requestExpirationDate: request => (request.requestExpirationDate ? <FormattedDate value={request.requestExpirationDate} /> : '-'),
   holdShelfExpireDate: request => (request.holdShelfExpirationDate ? <FormattedDate value={request.holdShelfExpirationDate} /> : '-'),
