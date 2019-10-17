@@ -13,24 +13,27 @@ import {
   intlShape,
 } from 'react-intl';
 import { SubmissionError } from 'redux-form';
-import { AppIcon } from '@folio/stripes/core';
+import {
+  AppIcon,
+  stripesConnect,
+} from '@folio/stripes/core';
 import { Button } from '@folio/stripes/components';
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
 import { exportCsv } from '@folio/stripes/util';
 
-import ViewRequest from './ViewRequest';
-import RequestForm from './RequestForm';
+import ViewRequest from '../ViewRequest';
+import RequestForm from '../RequestForm';
 import {
   reportHeaders,
   fulfilmentTypes,
   expiredHoldsReportHeaders,
-} from './constants';
+} from '../constants';
 import {
   getFullName,
   duplicateRequest,
-} from './utils';
-import packageInfo from '../package';
-import ErrorModal from './components/ErrorModal';
+} from '../utils';
+import packageInfo from '../../package';
+import ErrorModal from '../components/ErrorModal';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -81,7 +84,7 @@ const urls = {
   },
 };
 
-class Requests extends React.Component {
+class RequestsRoute extends React.Component {
   static manifest = {
     addressTypes: {
       type: 'okapi',
@@ -669,4 +672,4 @@ class Requests extends React.Component {
   }
 }
 
-export default injectIntl(Requests);
+export default stripesConnect(injectIntl(RequestsRoute));

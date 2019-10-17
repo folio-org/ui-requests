@@ -1,34 +1,31 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Route from 'react-router-dom/Route';
 import Switch from 'react-router-dom/Switch';
 import { hot } from 'react-hot-loader';
-import Requests from './Requests';
+import ReactRouterPropTypes from 'react-router-prop-types';
 
-class RequestsRouting extends React.Component {
-  static propTypes = {
-    stripes: PropTypes.shape({
-      connect: PropTypes.func.isRequired,
-    }).isRequired,
-    location: PropTypes.object.isRequired,
-    match: PropTypes.object.isRequired,
-  }
+import RequestsRoute from './routes/RequestsRoute';
+import RequestQueueRoute from './routes/RequestQueueRoute';
 
-  constructor(props) {
-    super(props);
-    this.connectedApp = props.stripes.connect(Requests);
-  }
+const RequestsRouting = (props) => {
+  const { match: { path } } = props;
 
-  render() {
-    return (
-      <Switch>
-        <Route
-          path={this.props.match.path}
-          render={() => <this.connectedApp {...this.props} />}
-        />
-      </Switch>
-    );
-  }
-}
+  return (
+    <Switch>
+      <Route
+        path={`${path}/view/:id/reorder`}
+        component={RequestQueueRoute}
+      />
+      <Route
+        path={path}
+        render={() => <RequestsRoute {...props} />}
+      />
+    </Switch>
+  );
+};
+
+RequestsRouting.propTypes = {
+  match: ReactRouterPropTypes.match,
+};
 
 export default hot(module)(RequestsRouting);
