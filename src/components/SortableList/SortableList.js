@@ -14,6 +14,8 @@ export default function SortableList(props) {
     droppableId,
     onDragEnd,
     rowFormatter,
+    isRowDraggable,
+    rowProps,
   } = props;
 
   return (
@@ -27,6 +29,10 @@ export default function SortableList(props) {
             <MultiColumnList
               {...props}
               rowFormatter={rowFormatter}
+              rowProps={{
+                ...rowProps,
+                isRowDraggable,
+              }}
             />
             {provided.placeholder}
           </div>
@@ -39,10 +45,12 @@ export default function SortableList(props) {
 SortableList.defaultProps = {
   droppableId: uniqueId('droppable'),
   rowFormatter: draggableRowFormatter,
+  isRowDraggable: () => true,
 };
 
 SortableList.propTypes = {
   droppableId: PropTypes.string,
   onDragEnd: PropTypes.func,
   rowFormatter: PropTypes.func,
+  isRowDraggable: PropTypes.func,
 };

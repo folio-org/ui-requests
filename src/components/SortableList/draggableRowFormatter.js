@@ -6,13 +6,20 @@ import {
 import DraggableRow from './DraggableRow';
 
 export default function draggableRowFormatter(props) {
-  const { rowIndex } = props;
+  const {
+    rowIndex,
+    rowData,
+    rowProps: {
+      isRowDraggable,
+    },
+  } = props;
 
   return (
     <Draggable
       key={`row-${rowIndex}`}
       draggableId={`draggable-${rowIndex}`}
       index={rowIndex}
+      isDragDisabled={!isRowDraggable(rowData)}
     >
       {(provided, snapshot) => (
         <DraggableRow

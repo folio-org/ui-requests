@@ -1,12 +1,9 @@
 .DraggableRow {
-  background-color: lightgreen;
 
   &::after {
     position: absolute;
-    background-color: lightgreen;
-    padding: 8px;
     bottom: 0;
     right: 0;
-    content: "in portal";
+    content: '';
   }
 }
