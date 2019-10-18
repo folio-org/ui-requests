@@ -90,7 +90,7 @@ class RequestQueueRoute extends React.Component {
   isLoading = () => {
     const { resources } = this.props;
 
-    return get(resources, 'items.isPending', true);
+    return get(resources, 'requests.isPending', true);
   }
 
   render() {

@@ -32,13 +32,16 @@ export default function DraggableRow(props) {
     <div
       data-row-index={`row-${rowIndex}`}
       ref={provided.innerRef}
-      className={classNames}
-      role="row"
-      tabIndex="0"
-      style={getItemStyle(provided.draggableProps.style)}
       {...provided.draggableProps}
       {...provided.dragHandleProps}
+      key={`row-${rowIndex}`}
+      className={classNames}
+      role="row"
       {...rowProps}
+      tabIndex="0"
+      style={getItemStyle(
+        provided.draggableProps.style
+      )}
     >
       {cells}
     </div>

@@ -15,9 +15,9 @@ import {
   Paneset,
 } from '@folio/stripes/components';
 
-import SortableList from '../components/SortableList';
 import { iconTypes } from '../constants';
 import { getFullName } from '../utils';
+import SortableList from '../components/SortableList';
 
 const COLUMN_NAMES = [
   'position',
