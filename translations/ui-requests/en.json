@@ -137,5 +137,16 @@
   "noServicePoint.errorMessage": "You must be logged into a service point to access the Hold shelf clearance report. Please add one or more service points to your user record in the Users app. Contact an administrator if you do not have the ability to add service points to your record.",
   "noServicePoint.label": "No service point selected",
 
-  "requestQueue.title": "Request queue: {title}"
+  "requestQueue.title": "Request queue: {title}",
+  "requestQueue.position": "Position",
+  "requestQueue.requestStatus": "Request status",
+  "requestQueue.pickup": "Pickup/Delivery",
+  "requestQueue.requesterName": "Requester",
+  "requestQueue.requesterBarcode": "Requester barcode",
+  "requestQueue.patronGroup": "Patron group",
+  "requestQueue.requestDate": "Request date",
+  "requestQueue.requestType": "Type",
+  "requestQueue.requestExpirationDate": "Request expiration",
+  "requestQueue.holdShelfExpirationDate": "Hold shelf expiration"
+
 }

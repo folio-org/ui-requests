@@ -13,11 +13,16 @@ import {
   Pane,
   PaneMenu,
   Paneset,
+  Row,
+  Col,
+  KeyValue,
 } from '@folio/stripes/components';
 
 import { iconTypes } from '../constants';
 import { getFullName } from '../utils';
 import SortableList from '../components/SortableList';
+
+import css from './RequestQueueView.css';
 
 const COLUMN_NAMES = [
   'position',
@@ -35,27 +40,27 @@ const COLUMN_NAMES = [
 const COLUMN_WIDTHS = {
   position: '5%',
   status: '12%',
-  pickupServicePoint: '12%',
-  requester: '12%',
+  pickupServicePoint: '8%',
+  requester: '15%',
   requesterBarcode: '12%',
-  patronGroup: '12%',
+  patronGroup: '13%',
   requestDate: '8%',
-  requestType: '10%',
+  requestType: '5%',
   requestExpirationDate: '8%',
-  holdShelfExpireDate: '8%',
+  holdShelfExpireDate: '13%',
 };
 
 const COLUMN_MAP = {
-  position: <FormattedMessage id="ui-requests.position" />,
-  status: <FormattedMessage id="ui-requests.status" />,
-  pickupServicePoint: <FormattedMessage id="ui-requests.pickup" />,
-  requester: <FormattedMessage id="ui-requests.requester.name" />,
-  requesterBarcode: <FormattedMessage id="ui-requests.requests.requesterBarcode" />,
-  patronGroup: <FormattedMessage id="ui-requests.requester.patronGroup.group" />,
-  requestDate: <FormattedMessage id="ui-requests.requests.requestDate" />,
-  requestType: <FormattedMessage id="ui-requests.requestType" />,
-  requestExpirationDate: <FormattedMessage id="ui-requests.requestExpirationDate" />,
-  holdShelfExpireDate: <FormattedMessage id="ui-requests.holdShelfExpirationDate" />,
+  position: <FormattedMessage id="ui-requests.requestQueue.position" />,
+  status: <FormattedMessage id="ui-requests.requestQueue.requestStatus" />,
+  pickupServicePoint: <FormattedMessage id="ui-requests.requestQueue.pickup" />,
+  requester: <FormattedMessage id="ui-requests.requestQueue.requesterName" />,
+  requesterBarcode: <FormattedMessage id="ui-requests.requestQueue.requesterBarcode" />,
+  patronGroup: <FormattedMessage id="ui-requests.requestQueue.patronGroup" />,
+  requestDate: <FormattedMessage id="ui-requests.requestQueue.requestDate" />,
+  requestType: <FormattedMessage id="ui-requests.requestQueue.requestType" />,
+  requestExpirationDate: <FormattedMessage id="ui-requests.requestQueue.requestExpirationDate" />,
+  holdShelfExpireDate: <FormattedMessage id="ui-requests.requestQueue.holdShelfExpirationDate" />,
 };
 
 const formatter = {
@@ -81,6 +86,7 @@ class RequestQueueView extends React.Component {
     data: PropTypes.shape({
       requests: PropTypes.arrayOf(PropTypes.object),
       item: PropTypes.object,
+      request: PropTypes.object,
     }),
     onClose: PropTypes.func,
     isLoading: PropTypes.func,
@@ -121,7 +127,10 @@ class RequestQueueView extends React.Component {
     const {
       isLoading,
       onClose,
-      data: { item },
+      data: {
+        item,
+        request,
+      },
     } = this.props;
 
     const { requests } = this.state;
@@ -149,6 +158,52 @@ class RequestQueueView extends React.Component {
           paneTitle={<FormattedMessage id="ui-requests.requestQueue.title" values={{ title }} />}
           paneSub={<FormattedMessage id="ui-requests.resultCount" values={{ count }} />}
         >
+          <div className={css.section}>
+            <Row>
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.item.barcode" />}
+                  value={get(item, 'barcode', '-')}
+                />
+              </Col>
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.item.dueDate" />}
+                  value={get(request, 'loan.dueDate') ? <FormattedDate value={request.loan.dueDate} /> : '-'}
+                />
+              </Col>
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.item.location.name" />}
+                  value={get(item, 'effectiveLocation.name', '-')}
+                />
+              </Col>
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.item.callNumber" />}
+                  value={get(item, 'callNumber', '-')}
+                />
+              </Col>
+              <Col xs={1}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.item.volume" />}
+                  value="-"
+                />
+              </Col>
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.item.enumeration" />}
+                  value={get(item, 'enumeration', '-')}
+                />
+              </Col>
+              <Col xs={1}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.item.copyNumber" />}
+                  value={get(item, 'copyNumbers[0]', '-')}
+                />
+              </Col>
+            </Row>
+          </div>
           {!isLoading &&
             <SortableList
               id="requests-list"

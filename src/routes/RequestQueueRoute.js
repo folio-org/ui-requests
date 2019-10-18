@@ -95,12 +95,14 @@ class RequestQueueRoute extends React.Component {
 
   render() {
     const { resources } = this.props;
+    const request = this.getRequest();
 
     return (
       <RequestQueueView
         data={{
           requests:  get(resources, 'requests.records', []),
           item: get(resources, 'items.records[0]', {}),
+          request,
         }}
         onClose={this.handleClose}
         isLoading={this.isLoading()}
