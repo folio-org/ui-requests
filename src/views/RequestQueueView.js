@@ -16,6 +16,7 @@ import {
   Row,
   Col,
   KeyValue,
+  AppIcon,
 } from '@folio/stripes/components';
 
 import { iconTypes } from '../constants';
@@ -38,7 +39,7 @@ const COLUMN_NAMES = [
 ];
 
 const COLUMN_WIDTHS = {
-  position: '5%',
+  position: '4%',
   status: '12%',
   pickupServicePoint: '8%',
   requester: '15%',
@@ -64,6 +65,7 @@ const COLUMN_MAP = {
 };
 
 const formatter = {
+  position: request => (<AppIcon size="small" app="requests">{request.position}</AppIcon>),
   pickupServicePoint: request => get(request, 'pickupServicePoint.name', '-'),
   requester: request => getFullName(request.requester),
   requesterBarcode: request => get(request, 'requester.barcode', '-'),

@@ -1,8 +1,8 @@
 @import "@folio/stripes-components/lib/variables.css";
 
 .section {
-  padding: 10px 10px 2px 10px;
+  padding: 10px;
   border-radius: 6px;
   background-color: var( --color-fill);
-  margin-bottom: 20px;
+  margin: 5px 10px 20px 10px;
 }
