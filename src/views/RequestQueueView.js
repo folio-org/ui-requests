@@ -2,21 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   get,
-  orderBy,
+  isEmpty,
 } from 'lodash';
 import {
   FormattedMessage,
-  FormattedTime,
   FormattedDate,
 } from 'react-intl';
 import {
   PaneHeaderIconButton,
-  MultiColumnList,
   Pane,
   PaneMenu,
   Paneset,
 } from '@folio/stripes/components';
 
+import SortableList from '../components/SortableList';
 import { iconTypes } from '../constants';
 import { getFullName } from '../utils';
 
@@ -69,6 +68,14 @@ const formatter = {
   holdShelfExpireDate: request => (request.holdShelfExpirationDate ? <FormattedDate value={request.holdShelfExpirationDate} /> : '-'),
 };
 
+const reorder = (list, startIndex, endIndex) => {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+
+  return result;
+};
+
 class RequestQueueView extends React.Component {
   static propTypes = {
     data: PropTypes.shape({
@@ -82,14 +89,42 @@ class RequestQueueView extends React.Component {
     }).isRequired,
   };
 
+  state = {};
+
+  static getDerivedStateFromProps(props, state) {
+    const { data: { requests } } = props;
+
+    if (isEmpty(state.requests)) {
+      return { requests };
+    }
+
+    return null;
+  }
+
+  // TODO: connect to backend
+  onDragEnd = (result) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const data = this.state.requests;
+    const requests = reorder(
+      data,
+      result.source.index,
+      result.destination.index
+    );
+
+    this.setState({ requests });
+  }
+
   render() {
     const {
       isLoading,
       onClose,
-      data: { item, requests },
+      data: { item },
     } = this.props;
 
-    const contentData = orderBy(requests, 'position');
+    const { requests } = this.state;
     const count = requests.length;
     const title = item.title;
 
@@ -114,17 +149,18 @@ class RequestQueueView extends React.Component {
           paneTitle={<FormattedMessage id="ui-requests.requestQueue.title" values={{ title }} />}
           paneSub={<FormattedMessage id="ui-requests.resultCount" values={{ count }} />}
         >
-          <MultiColumnList
-            id="instance-items-list"
-            interactive={false}
-            loading={isLoading}
-            contentData={contentData}
-            visibleColumns={COLUMN_NAMES}
-            columnMapping={COLUMN_MAP}
-            columnWidths={COLUMN_WIDTHS}
-            formatter={formatter}
-            isEmptyMessage={<FormattedMessage id="ui-requests.requestQueue.requests.notFound" />}
-          />
+          {!isLoading &&
+            <SortableList
+              id="requests-list"
+              onDragEnd={this.onDragEnd}
+              contentData={requests}
+              visibleColumns={COLUMN_NAMES}
+              columnMapping={COLUMN_MAP}
+              columnWidths={COLUMN_WIDTHS}
+              formatter={formatter}
+              isEmptyMessage={<FormattedMessage id="ui-requests.requestQueue.requests.notFound" />}
+            />
+          }
         </Pane>
       </Paneset>
     );
