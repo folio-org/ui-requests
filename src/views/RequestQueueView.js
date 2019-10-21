@@ -45,8 +45,8 @@ const COLUMN_NAMES = [
 ];
 
 const COLUMN_WIDTHS = {
-  position: '4%',
-  status: '12%',
+  position: '5%',
+  status: '11%',
   pickup: '9%',
   requester: '15%',
   requesterBarcode: '12%',
@@ -166,7 +166,7 @@ class RequestQueueView extends React.Component {
 
     const { requests } = this.state;
     const count = requests.length;
-    const title = item.title;
+    const { title } = item;
 
     return (
       <Paneset isRoot>
@@ -246,7 +246,9 @@ class RequestQueueView extends React.Component {
               columnWidths={COLUMN_WIDTHS}
               formatter={formatter}
               height="70vh"
-              isEmptyMessage={<FormattedMessage id="ui-requests.requestQueue.requests.notFound" />}
+              isEmptyMessage={
+                <FormattedMessage id="ui-requests.requestQueue.requests.notFound" />
+              }
             />
           }
         </Pane>
