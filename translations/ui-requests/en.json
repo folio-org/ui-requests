@@ -141,6 +141,7 @@
   "requestQueue.position": "Position",
   "requestQueue.requestStatus": "Request status",
   "requestQueue.pickup": "Pickup/Delivery",
+  "requestQueue.deliveryType": "Delivery: {type}",
   "requestQueue.requesterName": "Requester",
   "requestQueue.requesterBarcode": "Requester barcode",
   "requestQueue.patronGroup": "Patron group",

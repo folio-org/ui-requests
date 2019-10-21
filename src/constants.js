@@ -29,13 +29,19 @@ export const itemStatuses = {
   PAGED: 'Paged',
 };
 
+export const requestTypesMap = {
+  HOLD: 'Hold',
+  RECALL: 'Recall',
+  PAGE: 'Page',
+};
+
 export const iconTypes = {
   times: 'times',
   timesCircle: 'times-circle',
   trash: 'trash',
 };
 
-export const requestTypesMap = {
+export const requestTypeOptionMap = {
   'Recall': 'ui-requests.requestMeta.type.recall',
   'Hold': 'ui-requests.requestMeta.type.hold',
   'Page': 'ui-requests.requestMeta.type.page',

@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { get } from 'lodash';
+import {
+  get,
+  keyBy,
+} from 'lodash';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { stripesConnect } from '@folio/stripes/core';
 
@@ -109,15 +112,27 @@ class RequestQueueRoute extends React.Component {
     return get(resources, 'requests.isPending', true);
   }
 
+  getRequestsWithDeliveryTypes() {
+    const { resources } = this.props;
+    const requests = get(resources, 'requests.records', []);
+    const addressTypes = get(resources, 'addressTypes.records', []);
+    const addressTypeMap = keyBy(addressTypes, 'id');
+
+    return requests.map(r => ({
+      ...r,
+      deliveryType: get(addressTypeMap[r.deliveryAddressTypeId], 'addressType'),
+    }));
+  }
+
   render() {
     const { resources } = this.props;
     const request = this.getRequest();
+    const requests = this.getRequestsWithDeliveryTypes();
 
     return (
       <RequestQueueView
         data={{
-          addressTypes: get(resources, 'addressTypes.records', []),
-          requests: get(resources, 'requests.records', []),
+          requests,
           item: get(resources, 'items.records[0]', {}),
           holding: get(resources, 'holdings.records[0]', {}),
           request,

@@ -3,7 +3,6 @@ import {
   isObject,
   omit,
   cloneDeep,
-  find,
 } from 'lodash';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -11,9 +10,11 @@ import { Col, Headline, Row } from '@folio/stripes/components';
 
 import {
   requestTypesByItemStatus,
-  requestTypesMap,
+  requestTypeOptionMap,
   itemStatuses,
   fulfilmentTypeMap,
+  requestStatuses,
+  requestTypesMap,
 } from './constants';
 
 import css from './requests.css';
@@ -101,7 +102,7 @@ export function getRequestTypeOptions(item) {
   const requestTypes = requestTypesByItemStatus[itemStatus] || [];
 
   return requestTypes.map(type => ({
-    id: requestTypesMap[type],
+    id: requestTypeOptionMap[type],
     value: type,
   }));
 }
@@ -110,10 +111,14 @@ export function isPagedItem(item) {
   return (get(item, 'status.name') === itemStatuses.PAGED);
 }
 
-export function getDeliveryAddressType(addressTypes, id) {
-  return get(find(addressTypes, { id }), 'addressType', '');
-}
-
 export function isDelivery(request) {
   return get(request, 'fulfilmentPreference') === fulfilmentTypeMap.DELIVERY;
+}
+
+export function isNotYetFilled(request) {
+  return request.status === requestStatuses.NOT_YET_FILLED;
+}
+
+export function isPageRequest(request) {
+  return requestTypesMap.PAGE === request.requestType;
 }

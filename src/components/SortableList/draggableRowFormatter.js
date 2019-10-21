@@ -19,7 +19,7 @@ export default function draggableRowFormatter(props) {
       key={`row-${rowIndex}`}
       draggableId={`draggable-${rowIndex}`}
       index={rowIndex}
-      isDragDisabled={!isRowDraggable(rowData)}
+      isDragDisabled={!isRowDraggable(rowData, rowIndex)}
     >
       {(provided, snapshot) => (
         <DraggableRow

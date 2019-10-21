@@ -2,11 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   get,
-  isEmpty,
+  isEqual,
+  keyBy
 } from 'lodash';
 import {
   FormattedMessage,
   FormattedDate,
+  FormattedTime,
 } from 'react-intl';
 import {
   PaneHeaderIconButton,
@@ -20,7 +22,11 @@ import {
 import { AppIcon } from '@folio/stripes/core';
 
 import { iconTypes } from '../constants';
-import { getFullName } from '../utils';
+import {
+  getFullName,
+  isNotYetFilled,
+  isPageRequest,
+} from '../utils';
 import SortableList from '../components/SortableList';
 
 import css from './RequestQueueView.css';
@@ -28,7 +34,7 @@ import css from './RequestQueueView.css';
 const COLUMN_NAMES = [
   'position',
   'status',
-  'pickupServicePoint',
+  'pickup',
   'requester',
   'requesterBarcode',
   'patronGroup',
@@ -41,11 +47,11 @@ const COLUMN_NAMES = [
 const COLUMN_WIDTHS = {
   position: '4%',
   status: '12%',
-  pickupServicePoint: '8%',
+  pickup: '9%',
   requester: '15%',
   requesterBarcode: '12%',
   patronGroup: '13%',
-  requestDate: '8%',
+  requestDate: '11%',
   requestType: '5%',
   requestExpirationDate: '8%',
   holdShelfExpireDate: '13%',
@@ -54,7 +60,7 @@ const COLUMN_WIDTHS = {
 const COLUMN_MAP = {
   position: <FormattedMessage id="ui-requests.requestQueue.position" />,
   status: <FormattedMessage id="ui-requests.requestQueue.requestStatus" />,
-  pickupServicePoint: <FormattedMessage id="ui-requests.requestQueue.pickup" />,
+  pickup: <FormattedMessage id="ui-requests.requestQueue.pickup" />,
   requester: <FormattedMessage id="ui-requests.requestQueue.requesterName" />,
   requesterBarcode: <FormattedMessage id="ui-requests.requestQueue.requesterBarcode" />,
   patronGroup: <FormattedMessage id="ui-requests.requestQueue.patronGroup" />,
@@ -65,14 +71,15 @@ const COLUMN_MAP = {
 };
 
 const formatter = {
-  position: request => (<AppIcon size="small" app="requests">{request.position}</AppIcon>),
-  pickupServicePoint: request => get(request, 'pickupServicePoint.name', '-'),
-  requester: request => getFullName(request.requester),
-  requesterBarcode: request => get(request, 'requester.barcode', '-'),
-  patronGroup: request => get(request, 'requester.patronGroup.desc', '-'),
-  requestDate: request => (<FormattedDate value={request.requestDate} />),
-  requestExpirationDate: request => (request.requestExpirationDate ? <FormattedDate value={request.requestExpirationDate} /> : '-'),
-  holdShelfExpireDate: request => (request.holdShelfExpirationDate ? <FormattedDate value={request.holdShelfExpirationDate} /> : '-'),
+  position: r => (<AppIcon size="small" app="requests">{r.position}</AppIcon>),
+  pickup: r => get(r, 'pickupServicePoint.name') ||
+    ((r.deliveryType) ? <FormattedMessage id="ui-requests.requestQueue.deliveryType" values={{ type: r.deliveryType }} /> : '-'),
+  requester: r => getFullName(r.requester),
+  requesterBarcode: r => get(r, 'requester.barcode', '-'),
+  patronGroup: r => get(r, 'requester.patronGroup.desc', '-'),
+  requestDate: r => (<FormattedTime value={r.requestDate} day="numeric" month="numeric" year="numeric" />),
+  requestExpirationDate: r => (r.requestExpirationDate ? <FormattedDate value={r.requestExpirationDate} /> : '-'),
+  holdShelfExpireDate: r => (r.holdShelfExpirationDate ? <FormattedDate value={r.holdShelfExpirationDate} /> : '-'),
 };
 
 const reorder = (list, startIndex, endIndex) => {
@@ -95,12 +102,12 @@ class RequestQueueView extends React.Component {
     isLoading: PropTypes.bool,
   };
 
-  state = {};
+  state = { requests: [] };
 
   static getDerivedStateFromProps(props, state) {
     const { data: { requests } } = props;
 
-    if (isEmpty(state.requests)) {
+    if (!isEqual(keyBy(state.requests, 'id'), keyBy(requests, 'id'))) {
       return { requests };
     }
 
@@ -118,15 +125,32 @@ class RequestQueueView extends React.Component {
     }
 
     const data = this.state.requests;
+    let destIndex = destination.index;
+    const destRequest = data[destIndex];
 
-    // TODO: connect to backend and remove this
+    if (destIndex === 0 && !isNotYetFilled(destRequest)) {
+      // TODO: show modal from scenario 6 in UIREQ-112
+      destIndex = 1;
+    }
+
+    if (destIndex === 0 && isPageRequest(destRequest)) {
+      // TODO: show modal from scenario 7 in UIREQ-112
+      destIndex = 1;
+    }
+
+    // TODO: connect to backend
     const requests = reorder(
       data,
       source.index,
-      destination.index
+      destIndex
     );
 
     this.setState({ requests });
+  }
+
+  isRowDraggable = (request, index) => {
+    return index !== 0 ||
+      (isNotYetFilled(request) && !isPageRequest(request));
   }
 
   render() {
@@ -215,6 +239,7 @@ class RequestQueueView extends React.Component {
             <SortableList
               id="requests-list"
               onDragEnd={this.onDragEnd}
+              isRowDraggable={this.isRowDraggable}
               contentData={requests}
               visibleColumns={COLUMN_NAMES}
               columnMapping={COLUMN_MAP}
