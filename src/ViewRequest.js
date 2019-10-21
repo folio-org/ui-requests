@@ -42,7 +42,10 @@ import RequestForm from './RequestForm';
 import PositionLink from './PositionLink';
 import MoveRequestManager from './MoveRequestManager';
 import { requestStatuses } from './constants';
-import { toUserAddress } from './utils';
+import {
+  toUserAddress,
+  isDelivery,
+} from './utils';
 import urls from './routes/urls';
 
 class ViewRequest extends React.Component {
@@ -333,7 +336,7 @@ class ViewRequest extends React.Component {
       stripes,
       patronGroups,
       history,
-      location: { pathname, search },
+      location: { search },
     } = this.props;
     const {
       accordions,
@@ -350,7 +353,7 @@ class ViewRequest extends React.Component {
     let deliveryAddressDetail;
     let selectedDelivery = false;
 
-    if (get(request, 'fulfilmentPreference') === 'Delivery') {
+    if (isDelivery(request)) {
       selectedDelivery = true;
       const deliveryAddressType = get(request, 'deliveryAddressTypeId', null);
 

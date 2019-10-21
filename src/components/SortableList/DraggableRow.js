@@ -18,7 +18,6 @@ export default function DraggableRow(props) {
     rowIndex,
     rowClass,
     cells,
-    rowProps,
   } = props;
 
   const usePortal = snapshot.isDragging;
@@ -37,7 +36,6 @@ export default function DraggableRow(props) {
       key={`row-${rowIndex}`}
       className={classNames}
       role="row"
-      {...rowProps}
       tabIndex="0"
       style={getItemStyle(
         provided.draggableProps.style

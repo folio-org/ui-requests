@@ -1,4 +1,10 @@
-import { get, isObject, omit, cloneDeep } from 'lodash';
+import {
+  get,
+  isObject,
+  omit,
+  cloneDeep,
+  find,
+} from 'lodash';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Col, Headline, Row } from '@folio/stripes/components';
@@ -7,6 +13,7 @@ import {
   requestTypesByItemStatus,
   requestTypesMap,
   itemStatuses,
+  fulfilmentTypeMap,
 } from './constants';
 
 import css from './requests.css';
@@ -101,4 +108,12 @@ export function getRequestTypeOptions(item) {
 
 export function isPagedItem(item) {
   return (get(item, 'status.name') === itemStatuses.PAGED);
+}
+
+export function getDeliveryAddressType(addressTypes, id) {
+  return get(find(addressTypes, { id }), 'addressType', '');
+}
+
+export function isDelivery(request) {
+  return get(request, 'fulfilmentPreference') === fulfilmentTypeMap.DELIVERY;
 }

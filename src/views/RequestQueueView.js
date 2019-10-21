@@ -16,8 +16,8 @@ import {
   Row,
   Col,
   KeyValue,
-  AppIcon,
 } from '@folio/stripes/components';
+import { AppIcon } from '@folio/stripes/core';
 
 import { iconTypes } from '../constants';
 import { getFullName } from '../utils';
@@ -88,13 +88,11 @@ class RequestQueueView extends React.Component {
     data: PropTypes.shape({
       requests: PropTypes.arrayOf(PropTypes.object),
       item: PropTypes.object,
+      holding: PropTypes.object,
       request: PropTypes.object,
     }),
     onClose: PropTypes.func,
-    isLoading: PropTypes.func,
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-    }).isRequired,
+    isLoading: PropTypes.bool,
   };
 
   state = {};
@@ -109,17 +107,23 @@ class RequestQueueView extends React.Component {
     return null;
   }
 
-  // TODO: connect to backend
   onDragEnd = (result) => {
-    if (!result.destination) {
+    const {
+      destination,
+      source,
+    } = result;
+
+    if (!destination) {
       return;
     }
 
     const data = this.state.requests;
+
+    // TODO: connect to backend and remove this
     const requests = reorder(
       data,
-      result.source.index,
-      result.destination.index
+      source.index,
+      destination.index
     );
 
     this.setState({ requests });
@@ -132,6 +136,7 @@ class RequestQueueView extends React.Component {
       data: {
         item,
         request,
+        holding,
       },
     } = this.props;
 
@@ -183,13 +188,13 @@ class RequestQueueView extends React.Component {
               <Col xs={2}>
                 <KeyValue
                   label={<FormattedMessage id="ui-requests.item.callNumber" />}
-                  value={get(item, 'callNumber', '-')}
+                  value={item.callNumber || holding.callNumber || '-'}
                 />
               </Col>
               <Col xs={1}>
                 <KeyValue
                   label={<FormattedMessage id="ui-requests.item.volume" />}
-                  value="-"
+                  value={get(item, 'volume', '-')}
                 />
               </Col>
               <Col xs={2}>
@@ -201,7 +206,7 @@ class RequestQueueView extends React.Component {
               <Col xs={1}>
                 <KeyValue
                   label={<FormattedMessage id="ui-requests.item.copyNumber" />}
-                  value={get(item, 'copyNumbers[0]', '-')}
+                  value={get(item, 'copyNumbers[0]') || holding.copyNumber || ''}
                 />
               </Col>
             </Row>
@@ -215,6 +220,7 @@ class RequestQueueView extends React.Component {
               columnMapping={COLUMN_MAP}
               columnWidths={COLUMN_WIDTHS}
               formatter={formatter}
+              height="70vh"
               isEmptyMessage={<FormattedMessage id="ui-requests.requestQueue.requests.notFound" />}
             />
           }

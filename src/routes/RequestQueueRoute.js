@@ -9,6 +9,11 @@ import urls from './urls';
 
 class RequestQueueRoute extends React.Component {
   static manifest = {
+    addressTypes: {
+      type: 'okapi',
+      path: 'addresstypes',
+      records: 'addressTypes',
+    },
     request: {
       type: 'okapi',
       path: 'circulation/requests',
@@ -17,6 +22,17 @@ class RequestQueueRoute extends React.Component {
         const request = RequestQueueRoute.getRequest(props);
 
         return (!request) ? { query: `id==${props.match.params.id}` } : null;
+      },
+    },
+    holdings: {
+      type: 'okapi',
+      records: 'holdingsRecords',
+      path: 'holdings-storage/holdings',
+      params: (_q, _p, _r, _l, props) => {
+        const request = RequestQueueRoute.getRequest(props);
+        const holdingsRecordId = get(request, 'item.holdingsRecordId');
+
+        return (holdingsRecordId) ? { query: `id==${holdingsRecordId}` } : null;
       },
     },
     items: {
@@ -100,8 +116,10 @@ class RequestQueueRoute extends React.Component {
     return (
       <RequestQueueView
         data={{
-          requests:  get(resources, 'requests.records', []),
+          addressTypes: get(resources, 'addressTypes.records', []),
+          requests: get(resources, 'requests.records', []),
           item: get(resources, 'items.records[0]', {}),
+          holding: get(resources, 'holdings.records[0]', {}),
           request,
         }}
         onClose={this.handleClose}

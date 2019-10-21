@@ -9,6 +9,11 @@ export const fulfilmentTypes = [
   { id: 'Delivery', label: 'ui-requests.requestMeta.fulfilment.delivery' },
 ];
 
+export const fulfilmentTypeMap = {
+  DELIVERY: 'Delivery',
+  HOLD_SHELF: 'Hold Shelf',
+};
+
 // used to perform queries with the backend
 // not used for data display
 export const requestStatuses = {
