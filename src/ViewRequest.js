@@ -435,7 +435,7 @@ class ViewRequest extends React.Component {
                 }}
                 buttonStyle="dropdownItem"
               >
-                <Icon icon="replace">
+                <Icon icon="arrow-right">
                   <FormattedMessage id="ui-requests.actions.moveRequest" />
                 </Icon>
               </Button>

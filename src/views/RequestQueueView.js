@@ -10,14 +10,15 @@ import {
   FormattedTime,
 } from 'react-intl';
 import {
-  PaneHeaderIconButton,
+  Col,
+  Callout,
+  ConfirmationModal,
+  KeyValue,
   Pane,
+  PaneHeaderIconButton,
   PaneMenu,
   Paneset,
   Row,
-  Col,
-  KeyValue,
-  Callout,
 } from '@folio/stripes/components';
 import { AppIcon } from '@folio/stripes/core';
 
@@ -129,28 +130,56 @@ class RequestQueueView extends React.Component {
       return;
     }
 
-    const data = this.state.requests;
-    let destIndex = destination.index;
-    const destRequest = data[destIndex];
+    const { requests } = this.state;
+    const destIndex = destination.index;
+    const sourceIndex = source.index;
+    const destRequest = requests[destIndex];
+    let confirmMessage;
 
     if (destIndex === 0 && !isNotYetFilled(destRequest)) {
-      // TODO: show modal from scenario 6 in UIREQ-112
-      destIndex = 1;
+      confirmMessage = 'ui-requests.requestQueue.confirmReorder.message1';
     }
 
     if (destIndex === 0 && isPageRequest(destRequest)) {
-      // TODO: show modal from scenario 7 in UIREQ-112
-      destIndex = 1;
+      confirmMessage = 'ui-requests.requestQueue.confirmReorder.message2';
     }
 
+    if (confirmMessage) {
+      this.setState({
+        confirmMessage,
+        sourceIndex,
+        destIndex: 1,
+      });
+    } else {
+      this.reorderRequests(sourceIndex, destIndex);
+    }
+  }
+
+  reorderRequests = (sourceIndex, destIndex) => {
+    const data = this.state.requests;
     const requests = reorder(
       data,
-      source.index,
+      sourceIndex,
       destIndex
     ).map((r, index) => ({ ...r, position: index + 1 }));
 
-    // TODO: connect to backend
-    this.setState({ requests }, this.showCallout);
+    this.setState({
+      confirmMessage: null,
+      requests,
+    }, this.showCallout);
+  }
+
+  confirmReorder = () => {
+    const {
+      sourceIndex,
+      destIndex,
+    } = this.state;
+
+    this.reorderRequests(sourceIndex, destIndex);
+  }
+
+  cancelReorder = () => {
+    this.setState({ confirmMessage: null });
   }
 
   showCallout = () => {
@@ -175,8 +204,10 @@ class RequestQueueView extends React.Component {
         holding,
       },
     } = this.props;
-
-    const { requests } = this.state;
+    const {
+      requests,
+      confirmMessage,
+    } = this.state;
     const count = requests.length;
     const { title } = item;
 
@@ -265,6 +296,15 @@ class RequestQueueView extends React.Component {
           }
         </Pane>
         <Callout ref={this.callout} />
+        <ConfirmationModal
+          id="confirm-reorder"
+          open={!!confirmMessage}
+          heading={<FormattedMessage id="ui-requests.requestQueue.confirmReorder.title" />}
+          message={<FormattedMessage id={`${confirmMessage}`} />}
+          confirmLabel={<FormattedMessage id="ui-requests.requestQueue.confirmReorder.confirm" />}
+          onConfirm={this.confirmReorder}
+          onCancel={this.cancelReorder}
+        />
       </Paneset>
     );
   }
