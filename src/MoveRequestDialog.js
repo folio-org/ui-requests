@@ -75,6 +75,7 @@ class MoveRequestDialog extends React.Component {
 
   static propTypes = {
     onClose: PropTypes.func,
+    open: PropTypes.bool,
     onItemSelected: PropTypes.func,
     request: PropTypes.object,
     resources: PropTypes.shape({
@@ -160,7 +161,10 @@ class MoveRequestDialog extends React.Component {
   }
 
   render() {
-    const { onClose } = this.props;
+    const {
+      onClose,
+      open,
+    } = this.props;
     const {
       items,
       isLoading,
@@ -183,7 +187,7 @@ class MoveRequestDialog extends React.Component {
       <Modal
         data-test-move-request-modal
         label={<FormattedMessage id="ui-requests.moveRequest.selectItem" />}
-        open
+        open={open}
         contentClass={css.content}
         onClose={onClose}
         footer={footer}

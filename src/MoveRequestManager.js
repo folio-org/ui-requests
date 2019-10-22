@@ -38,7 +38,7 @@ class MoveRequestManager extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { moveRequest: true };
     this.steps = [
       {
         validate: this.shouldMoveToSecondPositionDialogBeShown,
@@ -139,11 +139,17 @@ class MoveRequestManager extends React.Component {
 
   onItemSelected = (selectedItem, requests) => {
     const selectedItemPageRequest = find(requests, { requestType: 'Page' });
-    this.setState({ selectedItem, selectedItemPageRequest }, () => this.execSteps(0));
+
+    this.setState({
+      moveRequest: false,
+      selectedItem,
+      selectedItemPageRequest,
+    }, () => this.execSteps(0));
   }
 
   cancelMoveRequest = () => {
     this.setState({
+      moveRequest: true,
       chooseRequestType: false,
       moveToSecondPosition: false,
     });
@@ -172,12 +178,13 @@ class MoveRequestManager extends React.Component {
       moveToSecondPosition,
       selectedItem,
       errorMessage,
+      moveRequest,
     } = this.state;
 
     return (
       <React.Fragment>
         <MoveRequestDialog
-          open
+          open={moveRequest}
           request={request}
           onClose={onCancelMove}
           onItemSelected={this.onItemSelected}

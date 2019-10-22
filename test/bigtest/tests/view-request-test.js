@@ -59,7 +59,7 @@ describe('View request page', () => {
       beforeEach(async () => {
         await ViewRequestInteractor.headerDropdown.click();
         await ViewRequestInteractor.headerDropdownMenu.clickDuplicate();
-        await NewRequestInteractor.whenRequestTypeIsPresent();
+        await NewRequestInteractor.isPresent;
       });
 
       it('opens request form', function () {
