@@ -17,7 +17,7 @@ export const requestStatuses = {
   RECALL: 'Recall',
   HOLD: 'Hold',
   NOT_YET_FILLED: 'Open - Not yet filled',
-  PICKUP_EXPIRED: 'Closed - Pickup expired',
+  PICKUP_EXPIRED: 'Closed - Pickup expired',
 };
 
 export const itemStatuses = {
