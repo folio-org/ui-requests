@@ -10,7 +10,7 @@ import setupApplication from '../helpers/setup-application';
 import ViewRequestInteractor from '../interactors/view-request';
 import NewRequestInteractor from '../interactors/new-request';
 
-describe.only('View request page', () => {
+describe('View request page', () => {
   setupApplication();
 
   describe('View default request', () => {

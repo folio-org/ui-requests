@@ -5,7 +5,6 @@ import {
 import React from 'react';
 import PropTypes from 'prop-types';
 import { stringify } from 'query-string';
-import fetch from 'isomorphic-fetch';
 import moment from 'moment-timezone';
 import {
   FormattedTime,
