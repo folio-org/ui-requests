@@ -148,6 +148,6 @@
   "requestQueue.requestDate": "Request date",
   "requestQueue.requestType": "Type",
   "requestQueue.requestExpirationDate": "Request expiration",
-  "requestQueue.holdShelfExpirationDate": "Hold shelf expiration"
-
+  "requestQueue.holdShelfExpirationDate": "Hold shelf expiration",
+  "requestQueue.reorderSuccess": "Queue was successfully updated"
 }

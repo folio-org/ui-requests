@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {
   get,
   isEqual,
-  keyBy
 } from 'lodash';
 import {
   FormattedMessage,
@@ -18,6 +17,7 @@ import {
   Row,
   Col,
   KeyValue,
+  Callout,
 } from '@folio/stripes/components';
 import { AppIcon } from '@folio/stripes/core';
 
@@ -107,12 +107,17 @@ class RequestQueueView extends React.Component {
   static getDerivedStateFromProps(props, state) {
     const { data: { requests } } = props;
 
-    if (!isEqual(keyBy(state.requests, 'id'), keyBy(requests, 'id'))) {
+    if (!isEqual(
+      requests.map(r => r.id).sort(),
+      state.requests.map(r => r.id).sort()
+    )) {
       return { requests };
     }
 
     return null;
   }
+
+  callout = React.createRef();
 
   onDragEnd = (result) => {
     const {
@@ -138,14 +143,21 @@ class RequestQueueView extends React.Component {
       destIndex = 1;
     }
 
-    // TODO: connect to backend
     const requests = reorder(
       data,
       source.index,
       destIndex
-    );
+    ).map((r, index) => ({ ...r, position: index + 1 }));
 
-    this.setState({ requests });
+    // TODO: connect to backend
+    this.setState({ requests }, this.showCallout);
+  }
+
+  showCallout = () => {
+    this.callout.current.sendCallout({
+      type: 'success',
+      message: <FormattedMessage id="ui-requests.requestQueue.reorderSuccess" />,
+    });
   }
 
   isRowDraggable = (request, index) => {
@@ -252,6 +264,7 @@ class RequestQueueView extends React.Component {
             />
           }
         </Pane>
+        <Callout ref={this.callout} />
       </Paneset>
     );
   }
