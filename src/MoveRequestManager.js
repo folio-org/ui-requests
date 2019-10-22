@@ -140,7 +140,6 @@ class MoveRequestManager extends React.Component {
   onItemSelected = (selectedItem, requests) => {
     const selectedItemPageRequest = find(requests, { requestType: 'Page' });
 
-    console.log('move request set on false');
     this.setState({
       moveRequest: false,
       selectedItem,
