@@ -155,8 +155,8 @@ class RequestQueueView extends React.Component {
 
   showCallout = () => {
     this.callout.current.sendCallout({
-      type: 'success',
       message: <FormattedMessage id="ui-requests.requestQueue.reorderSuccess" />,
+      timeout: 2000,
     });
   }
 
