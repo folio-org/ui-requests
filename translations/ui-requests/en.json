@@ -90,6 +90,7 @@
   "item.dueDate": "Current due date",
   "item.numRequests": "Requests",
   "item.requestsOnItem": "Requests on item",
+  "item.volume": "Volume",
   "loan.dueDate": "Current due date",
   "proxy.name": "Requester's proxy name",
   "proxy.barcode": "Requester's proxy barcode",
@@ -153,5 +154,6 @@
   "requestQueue.confirmReorder.confirm": "Confirm",
   "requestQueue.confirmReorder.title": "Request moved to position 2 of the queue",
   "requestQueue.confirmReorder.message1": "Requests cannot be displaced from position 1 when fullfillment has begun. This request will be moved to position 2 in the request queue",
-  "requestQueue.confirmReorder.message2": "Requests cannot be moved above page requests, even when fullfillment hasn't begun. This request will be moved to position 2 in the request queue"
+  "requestQueue.confirmReorder.message2": "Requests cannot be moved above page requests, even when fullfillment hasn't begun. This request will be moved to position 2 in the request queue",
+  "ui-requests.requestQueue.requests.notFound": "No requests found"
 }

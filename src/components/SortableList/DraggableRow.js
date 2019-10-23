@@ -29,7 +29,8 @@ export default function DraggableRow(props) {
 
   const Row = (
     <div
-      data-row-index={`row-${rowIndex}`}
+      id={`draggable-${rowIndex}`}
+      data-test-is-dragging={snapshot.isDragging}
       ref={provided.innerRef}
       {...provided.draggableProps}
       {...provided.dragHandleProps}
