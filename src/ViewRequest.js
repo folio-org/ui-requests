@@ -347,10 +347,10 @@ class ViewRequest extends React.Component {
       }
     }
 
-    const holdShelfExpireDate = (get(request, 'holdShelfExpirationDate', '') &&
-      get(request, ['status'], '') === requestStatuses.AWAITING_PICKUP)
-      ? <FormattedTime value={request.holdShelfExpirationDate} day="numeric" month="numeric" year="numeric" />
-      : '-';
+    const holdShelfExpireDate = get(request, 'holdShelfExpirationDate', '') &&
+      [requestStatuses.AWAITING_PICKUP, requestStatuses.PICKUP_EXPIRED].includes(get(request, ['status'], ''))
+      ? <FormattedTime value={request.holdShelfExpirationDate} day="numeric" month="numeric" year="numeric" />
+      : '-';
 
     const expirationDate = (get(request, 'requestExpirationDate', ''))
       ? <FormattedDate value={request.requestExpirationDate} />
