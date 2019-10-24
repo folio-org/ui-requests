@@ -11,16 +11,19 @@ import requestQueue from '../interactors/request-queue';
 import urls from '../../../src/routes/urls';
 
 describe.only('RequestQueue', () => {
-  setupApplication();
-
-  beforeEach(async function () {
-    const request = this.server.create('request', 'withPagedItems', { requestType: 'Page' });
-    this.visit(urls.requestQueueView(request.id));
+  setupApplication({
+    scenarios: ['requestQueueScenario'],
   });
 
-  describe('Move request up', () => {
+  beforeEach(async function () {
+    const requests = this.server.createList('request', 3, { requestType: 'Page' }, 'withPagedItems');
+
+    this.visit(urls.requestQueueView(requests.id));
+  });
+
+  describe('Move third request up', () => {
     beforeEach(async function () {
-      await requestQueue.sortableList.secondRow.moveUp();
+      await requestQueue.sortableList.thirdRow.moveUp();
     });
 
     it('success', () => {

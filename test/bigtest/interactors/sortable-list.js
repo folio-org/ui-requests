@@ -3,10 +3,11 @@ import {
   focusable,
   triggerable,
   attribute,
+  collection,
 } from '@bigtest/interactor';
 
 @interactor class DraggableRowInteractor {
-  focusRow = focusable();
+  focus = focusable();
 
   pressSpace = triggerable('keydown', {
     bubbles: true,
@@ -45,7 +46,7 @@ import {
 
   moveUp() {
     return this
-      .focusRow()
+      .focus()
       .pressSpace()
       .whenDragStart()
       .pressArrowUp()
@@ -55,7 +56,7 @@ import {
 
   moveDown() {
     return this
-      .focusRow()
+      .focus()
       .pressSpace()
       .whenDragStart()
       .pressArrowDown()
@@ -67,6 +68,9 @@ import {
 @interactor class SortableListInteractor {
   firstRow = new DraggableRowInteractor('#draggable-0');
   secondRow = new DraggableRowInteractor('#draggable-1');
+  thirdRow = new DraggableRowInteractor('#draggable-2');
+
+  rows = collection('[data-test-is-dragging]', DraggableRowInteractor);
 }
 
 export default SortableListInteractor;

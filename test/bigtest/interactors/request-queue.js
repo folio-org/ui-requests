@@ -5,7 +5,7 @@ import {
 import SortableListInteractor from './sortable-list';
 
 @interactor class RequestQueue {
-  sortableList = new SortableListInteractor('[data-react-beautiful-dnd-droppable="1"]');
+  sortableList = new SortableListInteractor('[data-react-beautiful-dnd-droppable]');
 }
 
 export default new RequestQueue();
