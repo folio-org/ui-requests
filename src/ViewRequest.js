@@ -347,8 +347,8 @@ class ViewRequest extends React.Component {
       }
     }
 
-    const holdShelfExpireDate = (get(request, 'holdShelfExpirationDate', '') &&
-      get(request, ['status'], '') === requestStatuses.AWAITING_PICKUP)
+    const holdShelfExpireDate = get(request, 'holdShelfExpirationDate', '') &&
+      [requestStatuses.AWAITING_PICKUP, requestStatuses.PICKUP_EXPIRED].includes(get(request, ['status'], ''))
       ? <FormattedTime value={request.holdShelfExpirationDate} day="numeric" month="numeric" year="numeric" />
       : '-';
 
