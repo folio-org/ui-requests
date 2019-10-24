@@ -171,21 +171,23 @@ class RequestForm extends React.Component {
 
     const prevBlocks = this.getPatronBlocks(prevParentResources);
     const blocks = this.getPatronBlocks(parentResources);
+    const initialFulfilment = get(initialValues, 'fulfilmentPreference');
+    const prevInitialFulfilment = get(prevInitialValues, 'fulfilmentPreference');
 
-    if (
-      (initialValues &&
-        initialValues.fulfilmentPreference &&
-        prevInitialValues &&
-        !prevInitialValues.fulfilmentPreference) ||
-      !isEqual(request, prevRequest)
-    ) {
-      // eslint-disable-next-line react/no-did-update-set-state
+    if (initialFulfilment !== prevInitialFulfilment) {
       this.setState({
         selectedAddressTypeId: initialValues.deliveryAddressTypeId,
         selectedDelivery: initialValues.fulfilmentPreference === 'Delivery',
+      }); 
+    }
+    if (!isEqual(request, prevRequest)) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
         selectedItem: request.item,
         selectedLoan: request.loan,
         selectedUser: request.requester,
+        selectedAddressTypeId: initialValues.deliveryAddressTypeId,
+        selectedDelivery: initialValues.fulfilmentPreference === 'Delivery',
       });
     }
 
@@ -430,6 +432,22 @@ class RequestForm extends React.Component {
     this.props.onSubmit(data);
   };
 
+  getFulfilmentTypeOptions = () => {
+    const {
+      fulfilmentTypes = [],
+    } = this.props.optionLists;
+    const delivery = get(this.props.parentResources,'requestPreferences.records[0].delivery');
+    const sortedFulfilmentTypes = sortBy(fulfilmentTypes, ['label']);
+    const fulfilmentTypeOptions = sortedFulfilmentTypes.map(({ label, id }) => ({
+      labelTranslationPath: label,
+      value: id,
+    }));
+
+    return delivery !== false
+      ? fulfilmentTypeOptions
+      : fulfilmentTypeOptions.filter(option => option.value !== 'Delivery');
+  }
+
   renderActionMenu = ({ onToggle }) => {
     const { onCancel } = this.props;
 
@@ -538,11 +556,11 @@ class RequestForm extends React.Component {
       optionLists: {
         servicePoints,
         addressTypes,
-        fulfilmentTypes = [],
       },
       patronGroups,
       parentResources,
       submitting,
+      initialValues,
       intl: {
         formatMessage,
       },
@@ -564,15 +582,11 @@ class RequestForm extends React.Component {
     const patronBlocks = this.getPatronBlocks(parentResources);
     const {
       fulfilmentPreference
-    } = request || {};
-
+    } = request || initialValues;
+    
     const isEditForm = this.isEditForm();
     const requestTypeOptions = getRequestTypeOptions(selectedItem);
-    const sortedFulfilmentTypes = sortBy(fulfilmentTypes, ['label']);
-    const fulfilmentTypeOptions = sortedFulfilmentTypes.map(({ label, id }) => ({
-      labelTranslationPath: label,
-      value: id,
-    }));
+    const fulfilmentTypeOptions = this.getFulfilmentTypeOptions();
 
     const labelAsterisk = isEditForm
       ? ''
