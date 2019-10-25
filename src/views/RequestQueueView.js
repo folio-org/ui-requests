@@ -226,6 +226,7 @@ class RequestQueueView extends React.Component {
                 {label => (
                   <PaneHeaderIconButton
                     onClick={onClose}
+                    data-test-close-request-queue-view
                     ariaLabel={label}
                     icon={iconTypes.times}
                   />

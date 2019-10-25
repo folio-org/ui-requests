@@ -44,7 +44,7 @@ describe('RequestQueue', () => {
     });
   });
 
-  describe('Keep item on position 2 after confirmation', () => {
+  describe('Keep item on position 2 after reorder confirmation', () => {
     beforeEach(async function () {
       await requestQueue.sortableList.moveRowUp();
       await requestQueue.confirmReorderModalPresent();
@@ -54,6 +54,29 @@ describe('RequestQueue', () => {
     it('closes confirm dialog and keeps request on second position', () => {
       expect(requestQueue.confirmReorderModalIsPresent).to.equal(false);
       expect(requestQueue.sortableList.rows(1).cols(4).text).to.equal(requests[1].requester.barcode);
+    });
+  });
+
+  describe('Cancel reorder', () => {
+    beforeEach(async function () {
+      await requestQueue.sortableList.moveRowUp();
+      await requestQueue.confirmReorderModalPresent();
+      await requestQueue.confirmReorderModal.clickCancel();
+    });
+
+    it('closes confirm dialog and keeps requests unchanged', () => {
+      expect(requestQueue.confirmReorderModalIsPresent).to.equal(false);
+      expect(requestQueue.sortableList.rows(1).cols(4).text).to.equal(requests[1].requester.barcode);
+    });
+  });
+
+  describe('Close reorder screen', () => {
+    beforeEach(async function () {
+      await requestQueue.close();
+    });
+
+    it('closes confirm dialog and keeps requests unchanged', () => {
+      expect(requestQueue.sortableListPresent).to.equal(false);
     });
   });
 });
