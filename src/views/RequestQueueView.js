@@ -136,6 +136,10 @@ class RequestQueueView extends React.Component {
     const destRequest = requests[destIndex];
     let confirmMessage;
 
+    if (sourceIndex === destIndex) {
+      return;
+    }
+
     if (destIndex === 0 && !isNotYetFilled(destRequest)) {
       confirmMessage = 'ui-requests.requestQueue.confirmReorder.message1';
     }

@@ -6,7 +6,7 @@ import {
 import SortableListInteractor from './sortable-list';
 
 @interactor class RequestQueue {
-  sortableList = new SortableListInteractor('body');
+  sortableList = new SortableListInteractor();
   sortableListPresent = isPresent('[class^="mclScrollable---"]');
 
   whenSortableListPresent() {
