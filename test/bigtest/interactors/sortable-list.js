@@ -2,12 +2,15 @@ import {
   interactor,
   focusable,
   triggerable,
-  attribute,
   collection,
+  text,
+  isPresent,
+  scoped,
 } from '@bigtest/interactor';
 
 @interactor class DraggableRowInteractor {
   focus = focusable();
+  cols = collection('[role="gridcell"]');
 
   pressSpace = triggerable('keydown', {
     bubbles: true,
@@ -29,48 +32,43 @@ import {
     keyCode: 40,
     key: 'ArrowDown',
   });
-
-  isDragging = attribute('data-test-is-dragging');
-
-  whenDragStart() {
-    return this.when(() => this.isDragging === 'true');
-  }
-
-  // there is no easy way to detect if the row
-  // has been dropped already so just wait
-  wait(ms = 1000) {
-    let ready;
-    setTimeout(() => { ready = true; }, ms);
-    return this.when(() => ready === true);
-  }
-
-  moveUp() {
-    return this
-      .focus()
-      .pressSpace()
-      .whenDragStart()
-      .pressArrowUp()
-      .wait()
-      .pressSpace();
-  }
-
-  moveDown() {
-    return this
-      .focus()
-      .pressSpace()
-      .whenDragStart()
-      .pressArrowDown()
-      .wait()
-      .pressSpace();
-  }
 }
 
 @interactor class SortableListInteractor {
-  firstRow = new DraggableRowInteractor('#draggable-0');
-  secondRow = new DraggableRowInteractor('#draggable-1');
-  thirdRow = new DraggableRowInteractor('#draggable-2');
+  log = text('#react-beautiful-dnd-announcement-1');
+  logPresent = isPresent('#react-beautiful-dnd-announcement-1');
+  rows = collection('[data-test-draggable-row]', DraggableRowInteractor);
 
-  rows = collection('[data-test-is-dragging]', DraggableRowInteractor);
+  row = scoped('#row-2', DraggableRowInteractor);
+
+  moveRowUp() {
+    return this
+      .row.focus()
+      .row.pressSpace()
+      .whenRowLifted()
+      .row
+      .pressArrowUp()
+      .whenRowMoved()
+      .row
+      .pressSpace()
+      .whenRowDropped();
+  }
+
+  whenRowLifted() {
+    return this.when(() => !!this.log.match(/You have lifted an item/i));
+  }
+
+  whenRowMoved() {
+    return this.when(() => !!this.log.match(/You have moved the item/i));
+  }
+
+  whenRowDropped() {
+    return this.when(() => !!this.log.match(/You have dropped the item/i));
+  }
+
+  whenLogIsPresent() {
+    return this.when(() => this.logPresent);
+  }
 }
 
 export default SortableListInteractor;
