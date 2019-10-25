@@ -35,8 +35,8 @@ import {
 }
 
 @interactor class SortableListInteractor {
-  log = text('#react-beautiful-dnd-announcement-1');
-  logPresent = isPresent('#react-beautiful-dnd-announcement-1');
+  log = text('[role="log"]');
+  logPresent = isPresent('[role="log"]');
   rows = collection('[data-test-draggable-row]', DraggableRowInteractor);
 
   row = scoped('#row-2', DraggableRowInteractor);
