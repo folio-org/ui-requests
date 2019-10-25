@@ -39,32 +39,30 @@ import {
   logPresent = isPresent('[role="log"]');
   rows = collection('[data-test-draggable-row]', DraggableRowInteractor);
 
-  row1 = scoped('#row-0', DraggableRowInteractor);
-  row2 = scoped('#row-1', DraggableRowInteractor);
-  row3 = scoped('#row-2', DraggableRowInteractor);
+  row = scoped('#row-1', DraggableRowInteractor);
 
   moveRowUp() {
     return this
-      .row3.focus()
-      .row3.pressSpace()
+      .row.focus()
+      .row.pressSpace()
       .whenRowLifted()
-      .row3
+      .row
       .pressArrowUp()
       .whenRowMoved()
-      .row3
+      .row
       .pressSpace()
       .whenRowDropped();
   }
 
   moveRowDown() {
     return this
-      .row2.focus()
-      .row2.pressSpace()
+      .row.focus()
+      .row.pressSpace()
       .whenRowLifted()
-      .row2
+      .row
       .pressArrowDown()
       .whenRowMoved()
-      .row2
+      .row
       .pressSpace()
       .whenRowDropped();
   }
