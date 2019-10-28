@@ -41,10 +41,12 @@ import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
 import PositionLink from './PositionLink';
 import MoveRequestManager from './MoveRequestManager';
-
 import { requestStatuses } from './constants';
-
-import { toUserAddress } from './utils';
+import {
+  toUserAddress,
+  isDelivery,
+} from './utils';
+import urls from './routes/urls';
 
 class ViewRequest extends React.Component {
   static manifest = {
@@ -63,6 +65,9 @@ class ViewRequest extends React.Component {
     location: PropTypes.shape({
       pathname: PropTypes.string.isRequired,
       search: PropTypes.string,
+    }).isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
     }).isRequired,
     joinRequest: PropTypes.func.isRequired,
     findResource: PropTypes.func.isRequired,
@@ -327,16 +332,28 @@ class ViewRequest extends React.Component {
   }
 
   renderRequest(request) {
-    const { stripes, patronGroups } = this.props;
+    const {
+      stripes,
+      patronGroups,
+      history,
+      location: { search },
+    } = this.props;
+    const {
+      accordions,
+      isCancellingRequest,
+      moveRequest,
+    } = this.state;
+
     const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');
     const isRequestClosed = requestStatus.startsWith('Closed');
     const isRequestNotFilled = requestStatus === requestStatuses.NOT_YET_FILLED;
+    const isRequestOpen = requestStatus.startsWith('Open');
 
     let deliveryAddressDetail;
     let selectedDelivery = false;
 
-    if (get(request, 'fulfilmentPreference') === 'Delivery') {
+    if (isDelivery(request)) {
       selectedDelivery = true;
       const deliveryAddressType = get(request, 'deliveryAddressTypeId', null);
 
@@ -418,11 +435,25 @@ class ViewRequest extends React.Component {
                 }}
                 buttonStyle="dropdownItem"
               >
-                <Icon icon="replace">
+                <Icon icon="arrow-right">
                   <FormattedMessage id="ui-requests.actions.moveRequest" />
                 </Icon>
               </Button>
             </IfPermission>
+          }
+          {isRequestOpen &&
+            <Button
+              id="reorder-queue"
+              onClick={() => {
+                onToggle();
+                history.push(`${urls.requestQueueView(request.id)}${search}`, { request });
+              }}
+              buttonStyle="dropdownItem"
+            >
+              <Icon icon="replace">
+                <FormattedMessage id="ui-requests.actions.reorderQueue" />
+              </Icon>
+            </Button>
           }
         </Fragment>
       );
@@ -439,7 +470,7 @@ class ViewRequest extends React.Component {
         onClose={this.props.onClose}
       >
         <TitleManager record={get(request, ['item', 'title'])} />
-        <AccordionSet accordionStatus={this.state.accordions} onToggle={this.onToggleSection}>
+        <AccordionSet accordionStatus={accordions} onToggle={this.onToggleSection}>
           <Accordion
             id="item-info"
             label={
@@ -521,14 +552,14 @@ class ViewRequest extends React.Component {
         </AccordionSet>
 
         <this.connectedCancelRequestDialog
-          open={this.state.isCancellingRequest}
+          open={isCancellingRequest}
           onCancelRequest={this.cancelRequest}
           onClose={() => this.setState({ isCancellingRequest: false })}
           request={request}
           stripes={stripes}
         />
 
-        {this.state.moveRequest &&
+        {moveRequest &&
           <MoveRequestManager
             onMove={this.onMove}
             onCancelMove={this.closeMoveRequest}

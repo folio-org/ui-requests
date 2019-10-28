@@ -9,6 +9,11 @@ export const fulfilmentTypes = [
   { id: 'Delivery', label: 'ui-requests.requestMeta.fulfilment.delivery' },
 ];
 
+export const fulfilmentTypeMap = {
+  DELIVERY: 'Delivery',
+  HOLD_SHELF: 'Hold Shelf',
+};
+
 // used to perform queries with the backend
 // not used for data display
 export const requestStatuses = {
@@ -24,13 +29,19 @@ export const itemStatuses = {
   PAGED: 'Paged',
 };
 
+export const requestTypesMap = {
+  HOLD: 'Hold',
+  RECALL: 'Recall',
+  PAGE: 'Page',
+};
+
 export const iconTypes = {
   times: 'times',
   timesCircle: 'times-circle',
   trash: 'trash',
 };
 
-export const requestTypesMap = {
+export const requestTypeOptionMap = {
   'Recall': 'ui-requests.requestMeta.type.recall',
   'Hold': 'ui-requests.requestMeta.type.hold',
   'Page': 'ui-requests.requestMeta.type.page',

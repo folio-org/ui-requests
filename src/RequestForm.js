@@ -56,6 +56,7 @@ import {
   toUserAddress,
   getPatronGroup,
   getRequestTypeOptions,
+  isDelivery
 } from './utils';
 
 import css from './requests.css';
@@ -114,7 +115,7 @@ class RequestForm extends React.Component {
 
     const { request, initialValues } = props;
     const { requester, item, loan } = (request || {});
-    const { fulfilmentPreference, deliveryAddressTypeId } = initialValues;
+    const { deliveryAddressTypeId } = initialValues;
 
     this.state = {
       accordions: {
@@ -123,7 +124,7 @@ class RequestForm extends React.Component {
         'requester-info': true,
       },
       proxy: {},
-      selectedDelivery: fulfilmentPreference === 'Delivery',
+      selectedDelivery: isDelivery(initialValues),
       selectedAddressTypeId: deliveryAddressTypeId,
       selectedItem: item,
       selectedUser: requester,
@@ -182,7 +183,7 @@ class RequestForm extends React.Component {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         selectedAddressTypeId: initialValues.deliveryAddressTypeId,
-        selectedDelivery: initialValues.fulfilmentPreference === 'Delivery',
+        selectedDelivery: isDelivery(initialValues),
         selectedItem: request.item,
         selectedLoan: request.loan,
         selectedUser: request.requester,
