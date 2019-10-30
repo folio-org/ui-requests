@@ -4,10 +4,14 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
+import { openRequestStatusFilters } from './utils';
+
 export default function PositionLink({ request }) {
   const queuePosition = get(request, 'position');
   const barcode = get(request, 'item.barcode');
 
+  const openRequestsPath = `/requests?filters=${openRequestStatusFilters}&query=${request.item.barcode}&sort=Request Date`;
+  
   return (request && barcode ?
     <div>
       <span>
@@ -15,7 +19,7 @@ export default function PositionLink({ request }) {
         &nbsp;
         &nbsp;
       </span>
-      <Link to={`/requests?filters=requestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit%2CrequestStatus.Open%20-%20Not%20yet%20filled&query=${request.item.barcode}&sort=Request%20Date`}>
+      <Link to={openRequestsPath}>
         <FormattedMessage id="ui-requests.actions.viewRequestsInQueue" />
       </Link>
     </div> : '-'
