@@ -18,7 +18,7 @@ export const fulfilmentTypeMap = {
 // not used for data display
 export const requestStatuses = {
   CHECKED_OUT: 'Checked out',
-  AWAITING_PICKUP: 'Open - Awaiting pickup',
+  AWAITING_PICKUP: 'Open - Awaiting pickup',
   AWAITING_DELIVERY: 'Open - Awaiting delivery',
   IN_TRANSIT: 'Open - In transit',
   RECALL: 'Recall',
