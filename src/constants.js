@@ -19,10 +19,15 @@ export const fulfilmentTypeMap = {
 export const requestStatuses = {
   CHECKED_OUT: 'Checked out',
   AWAITING_PICKUP: 'Open - Awaiting pickup',
+  AWAITING_DELIVERY: 'Open - Awaiting delivery',
+  IN_TRANSIT: 'Open - In transit',
   RECALL: 'Recall',
   HOLD: 'Hold',
   NOT_YET_FILLED: 'Open - Not yet filled',
   PICKUP_EXPIRED: 'Closed - Pickup expired',
+  CANCELLED: 'Closed - Cancelled',
+  FILLED: 'Closed - Filled',
+  UNFILLED: 'Closed - Unfilled',
 };
 
 export const itemStatuses = {

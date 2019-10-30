@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 import { Col, KeyValue, Row } from '@folio/stripes/components';
 
+import { openRequestStatusFilters } from './utils';
+
 const ItemDetail = ({ item, loan, requestCount }) => {
   if (!item.id && !item.barcode) {
     return <FormattedMessage id="ui-requests.actions.loading" />;
@@ -13,7 +15,12 @@ const ItemDetail = ({ item, loan, requestCount }) => {
   const recordLink = item ? <Link to={`/inventory/view/${item.instanceId}/${item.holdingsRecordId}/${item.id}`}>{item.barcode || item.id}</Link> : '-';
   const status = get(item, 'status.name') || get(item, 'status');
   const contributor = get(item, ['contributorNames', '0', 'name'], '-');
-  const positionLink = <Link to={`/requests?filters=requestStatus.Open%20-%20Awaiting%20pickup%2CrequestStatus.Open%20-%20In%20transit%2CrequestStatus.Open%20-%20Not%20yet%20filled&query=${item.barcode || item.id}&sort=Request%20Date`}>{requestCount}</Link>;
+
+  const positionLink = (
+    <Link to={`/requests?filters=${openRequestStatusFilters}&query=${item.barcode || item.id}&sort=Request Date`}>
+      {requestCount}
+    </Link>
+  );
   const itemLabel = item.barcode ? 'ui-requests.item.barcode' : 'ui-requests.item.id';
 
   return (

@@ -27,6 +27,7 @@ import {
   reportHeaders,
   fulfilmentTypes,
   expiredHoldsReportHeaders,
+  requestStatuses
 } from '../constants';
 import {
   getFullName,
@@ -54,13 +55,14 @@ const filterConfig = [
     name: 'requestStatus',
     cql: 'status',
     values: [
-      { name: 'Closed - Cancelled', cql: 'Closed - Cancelled' },
-      { name: 'Closed - Filled', cql: 'Closed - Filled' },
-      { name: 'Closed - Pickup expired', cql: 'Closed - Pickup expired' },
-      { name: 'Closed - Unfilled', cql: 'Closed - Unfilled' },
-      { name: 'Open - Awaiting pickup', cql: 'Open - Awaiting pickup' },
-      { name: 'Open - In transit', cql: 'Open - In transit' },
-      { name: 'Open - Not yet filled', cql: 'Open - Not yet filled' },
+      { name: requestStatuses.CANCELLED, cql: requestStatuses.CANCELLED },
+      { name: requestStatuses.FILLED, cql: requestStatuses.FILLED },
+      { name: requestStatuses.PICKUP_EXPIRED, cql: requestStatuses.PICKUP_EXPIRED },
+      { name: requestStatuses.UNFILLED, cql: requestStatuses.UNFILLED },
+      { name: requestStatuses.AWAITING_DELIVERY, cql: requestStatuses.AWAITING_DELIVERY },
+      { name: requestStatuses.AWAITING_PICKUP, cql: requestStatuses.AWAITING_PICKUP },
+      { name: requestStatuses.IN_TRANSIT, cql: requestStatuses.IN_TRANSIT },
+      { name: requestStatuses.NOT_YET_FILLED, cql: requestStatuses.NOT_YET_FILLED },
     ],
   },
 ];
