@@ -27,6 +27,7 @@ import {
   reportHeaders,
   fulfilmentTypes,
   expiredHoldsReportHeaders,
+  requestStatuses
 } from '../constants';
 import {
   getFullName,
@@ -34,8 +35,6 @@ import {
 } from '../utils';
 import packageInfo from '../../package';
 import ErrorModal from '../components/ErrorModal';
-
-import { requestStatuses } from '../constants';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -56,14 +55,14 @@ const filterConfig = [
     name: 'requestStatus',
     cql: 'status',
     values: [
-      { name: requestStatuses.CANCELLED, cql: requestStatuses.CANCELLED },
-      { name: requestStatuses.FILLED, cql: requestStatuses.FILLED },
-      { name: requestStatuses.PICKUP_EXPIRED, cql: requestStatuses.PICKUP_EXPIRED },
-      { name: requestStatuses.UNFILLED, cql: requestStatuses.UNFILLED },
-      { name: requestStatuses.AWAITING_DELIVERY, cql: requestStatuses.AWAITING_DELIVERY },
-      { name: requestStatuses.AWAITING_PICKUP, cql: requestStatuses.AWAITING_PICKUP },
-      { name: requestStatuses.IN_TRANSIT, cql: requestStatuses.IN_TRANSIT },
-      { name: requestStatuses.NOT_YET_FILLED, cql: requestStatuses.NOT_YET_FILLED },
+      { name: requestStatuses.CANCELLED, cql: requestStatuses.CANCELLED },
+      { name: requestStatuses.FILLED, cql: requestStatuses.FILLED },
+      { name: requestStatuses.PICKUP_EXPIRED, cql: requestStatuses.PICKUP_EXPIRED },
+      { name: requestStatuses.UNFILLED, cql: requestStatuses.UNFILLED },
+      { name: requestStatuses.AWAITING_DELIVERY, cql: requestStatuses.AWAITING_DELIVERY },
+      { name: requestStatuses.AWAITING_PICKUP, cql: requestStatuses.AWAITING_PICKUP },
+      { name: requestStatuses.IN_TRANSIT, cql: requestStatuses.IN_TRANSIT },
+      { name: requestStatuses.NOT_YET_FILLED, cql: requestStatuses.NOT_YET_FILLED },
     ],
   },
 ];

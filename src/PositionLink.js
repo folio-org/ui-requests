@@ -10,8 +10,8 @@ export default function PositionLink({ request }) {
   const queuePosition = get(request, 'position');
   const barcode = get(request, 'item.barcode');
 
-  const openRequestsPath = `/requests?filters=${openRequestStatusFilters}&query=${request.item.barcode}&sort=Request Date`;
-  
+  const openRequestsPath = `/requests?filters=${openRequestStatusFilters}&query=${request.item.barcode}&sort=Request Date`;
+
   return (request && barcode ?
     <div>
       <span>
@@ -19,7 +19,7 @@ export default function PositionLink({ request }) {
         &nbsp;
         &nbsp;
       </span>
-      <Link to={openRequestsPath}>
+      <Link to={openRequestsPath}>
         <FormattedMessage id="ui-requests.actions.viewRequestsInQueue" />
       </Link>
     </div> : '-'

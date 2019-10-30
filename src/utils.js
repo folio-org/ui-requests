@@ -123,11 +123,11 @@ export function isPageRequest(request) {
   return requestTypesMap.PAGE === request.requestType;
 }
 
-export const openRequestStatusFilters = [
+export const openRequestStatusFilters = [
   requestStatuses.NOT_YET_FILLED,
   requestStatuses.AWAITING_PICKUP,
   requestStatuses.AWAITING_DELIVERY,
   requestStatuses.IN_TRANSIT,
 ]
-  .map(status => `requestStatus.${status}`)
+  .map(status => `requestStatus.${status}`)
   .join(',');
