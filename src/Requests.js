@@ -79,6 +79,10 @@ const urls = {
     const query = stringify({ query: `(itemId=="${value}")` });
     return `request-storage/requests?${query}`;
   },
+  requestPreferences: (value) => {
+    const query = stringify({ query: `(userId=="${value}")` });
+    return `request-preference-storage/request-preference?${query}`;
+  },
 };
 
 class Requests extends React.Component {
@@ -152,11 +156,6 @@ class Requests extends React.Component {
         path: 'manualblocks/%{activeRecord.blockId}',
       },
     },
-    requestPreferences: {
-      type: 'okapi',
-      records: 'requestPreferences',
-      path: 'request-preference-storage/request-preference?query=userId=%{activeRecord.patronId}'
-    },
     activeRecord: {},
     expiredHolds: {
       accumulate: 'true',
@@ -193,10 +192,6 @@ class Requests extends React.Component {
     }).isRequired,
     resources: PropTypes.shape({
       addressTypes: PropTypes.shape({
-        hasLoaded: PropTypes.bool.isRequired,
-        records: PropTypes.arrayOf(PropTypes.object),
-      }),
-      requestPreferences: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         records: PropTypes.arrayOf(PropTypes.object),
       }),
@@ -563,14 +558,9 @@ class Requests extends React.Component {
     const patronGroups = (resources.patronGroups || {}).records || [];
     const addressTypes = (resources.addressTypes || {}).records || [];
     const servicePoints = (resources.servicePoints || {}).records || [];
-    const defaultFulfilmentPreference = get(resources, 'requestPreferences.records[0].fulfillment', "Hold Shelf");
-    const defaultDeliveryAddressTypeId = get(resources, 'requestPreferences.records[0].defaultDeliveryAddressTypeId');
-    const defaultServicePointId = get(resources, 'requestPreferences.records[0].defaultServicePointId');
     const requestPreferencesDefaults = {
       requestType: 'Hold',
-      fulfilmentPreference: defaultFulfilmentPreference,
-      deliveryAddressTypeId: defaultDeliveryAddressTypeId,
-      pickupServicePointId: defaultServicePointId,
+      fulfilmentPreference: 'Hold Shelf',
     };
     const InitialValues = dupRequest || requestPreferencesDefaults;
 

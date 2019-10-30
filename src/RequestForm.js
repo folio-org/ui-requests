@@ -114,7 +114,7 @@ class RequestForm extends React.Component {
 
     const { request, initialValues } = props;
     const { requester, item, loan } = (request || {});
-    const { fulfilmentPreference, deliveryAddressTypeId } = initialValues;
+    const { fulfilmentPreference } = initialValues;
 
     this.state = {
       accordions: {
@@ -124,7 +124,6 @@ class RequestForm extends React.Component {
       },
       proxy: {},
       selectedDelivery: fulfilmentPreference === 'Delivery',
-      selectedAddressTypeId: deliveryAddressTypeId,
       selectedItem: item,
       selectedUser: requester,
       selectedLoan: loan,
@@ -171,22 +170,13 @@ class RequestForm extends React.Component {
 
     const prevBlocks = this.getPatronBlocks(prevParentResources);
     const blocks = this.getPatronBlocks(parentResources);
-    const initialFulfilment = get(initialValues, 'fulfilmentPreference');
-    const prevInitialFulfilment = get(prevInitialValues, 'fulfilmentPreference');
 
-    if (initialFulfilment !== prevInitialFulfilment) {
-      this.setState({
-        selectedAddressTypeId: initialValues.deliveryAddressTypeId,
-        selectedDelivery: initialValues.fulfilmentPreference === 'Delivery',
-      }); 
-    }
     if (!isEqual(request, prevRequest)) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         selectedItem: request.item,
         selectedLoan: request.loan,
         selectedUser: request.requester,
-        selectedAddressTypeId: initialValues.deliveryAddressTypeId,
         selectedDelivery: initialValues.fulfilmentPreference === 'Delivery',
       });
     }
@@ -277,9 +267,23 @@ class RequestForm extends React.Component {
         if (blocks.length > 0 && blocks[0].userId === selectedUser.id) {
           this.setState({ blocked: true });
         }
-        this.props.onChangePatron(selectedUser);
-        this.setState({ selectedUser });
-        this.props.change('requesterId', selectedUser.id);
+        this.props.findResource('requestPreferences', selectedUser.id, 'userId').then((preferences) => {
+          const preference = preferences.requestPreferences[0] || {};
+          const fulfillment = preference.fulfillment || "Hold Shelf";
+
+          this.props.change('fulfilmentPreference', fulfillment);
+          if (fulfillment === "Delivery") {
+            this.setState({ selectedDelivery: true})
+            this.props.change('deliveryAddressTypeId',  preference.defaultDeliveryAddressTypeId || "");
+          }
+          if (fulfillment === "Hold Shelf") {
+            this.setState({ selectedDelivery: false})
+            this.props.change('pickupServicePointId', preference.defaultServicePointId || "");
+          }
+          this.props.onChangePatron(selectedUser);
+          this.setState({ selectedUser });
+          this.props.change('requesterId', selectedUser.id);
+        });
       }
     }).then(_ => this.props.asyncValidate());
   }
