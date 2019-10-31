@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   get,
-  isEqual,
+  sortBy,
 } from 'lodash';
 import {
   FormattedMessage,
@@ -100,18 +100,19 @@ class RequestQueueView extends React.Component {
       request: PropTypes.object,
     }),
     onClose: PropTypes.func,
+    onReorder: PropTypes.func,
     isLoading: PropTypes.bool,
   };
 
-  state = { requests: [] };
+  state = {
+    requests: [],
+    reorder: false, // eslint-disable-line react/no-unused-state
+  };
 
   static getDerivedStateFromProps(props, state) {
     const { data: { requests } } = props;
 
-    if (!isEqual(
-      requests.map(r => r.id).sort(),
-      state.requests.map(r => r.id).sort()
-    )) {
+    if (!state.reorder) {
       return { requests };
     }
 
@@ -169,8 +170,13 @@ class RequestQueueView extends React.Component {
 
     this.setState({
       confirmMessage: null,
+      reorder: true, // eslint-disable-line react/no-unused-state
       requests,
-    }, this.showCallout);
+    }, () => this.finishReorder(requests));
+  }
+
+  finishReorder = (requests) => {
+    this.props.onReorder(requests).then(this.showCallout());
   }
 
   confirmReorder = () => {

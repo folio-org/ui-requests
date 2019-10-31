@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {
   get,
   keyBy,
+  sortBy,
 } from 'lodash';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { stripesConnect } from '@folio/stripes/core';
@@ -24,7 +25,7 @@ class RequestQueueRoute extends React.Component {
       params: (_q, _p, _r, _l, props) => {
         const request = RequestQueueRoute.getRequest(props);
 
-        return (!request) ? { query: `id==${props.match.params.id}` } : null;
+        return (!request) ? { query: `id==${props.match.params.requestId}` } : null;
       },
     },
     holdings: {
@@ -42,21 +43,27 @@ class RequestQueueRoute extends React.Component {
       type: 'okapi',
       records: 'items',
       path: 'inventory/items',
-      params: (_q, _p, _r, _l, props) => {
-        const request = RequestQueueRoute.getRequest(props);
-
-        return (request) ? { query: `id==${request.itemId}` } : null;
+      params: {
+        query: 'id==:{itemId}',
       },
     },
     requests: {
       type: 'okapi',
       path: 'circulation/requests',
       records: 'requests',
-      params: (_q, _p, _r, _l, props) => {
-        const request = RequestQueueRoute.getRequest(props);
-
-        return (request) ? { query: `itemId==${request.itemId}` } : null;
+      params: {
+        query: 'itemId==:{itemId} and status="Open"',
+        limit: '1000',
       },
+      shouldRefresh: () => false,
+    },
+    reorder: {
+      type: 'okapi',
+      POST: {
+        path: 'circulation/requests/queue/:{itemId}/reorder',
+      },
+      fetch: false,
+      clientGeneratePk: false,
     },
   };
 
@@ -72,6 +79,9 @@ class RequestQueueRoute extends React.Component {
       requests: PropTypes.shape({
         records: PropTypes.array,
       }),
+    }),
+    mutator: PropTypes.shape({
+      reorder: PropTypes.object,
     }),
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
@@ -106,6 +116,16 @@ class RequestQueueRoute extends React.Component {
     }
   }
 
+  reorder = (requests) => {
+    const { mutator: { reorder } } = this.props;
+    const reorderedQueue = requests.map(({ id, position: newPosition }) => ({
+      id,
+      newPosition,
+    }));
+
+    return reorder.POST({ reorderedQueue });
+  }
+
   isLoading = () => {
     const { resources } = this.props;
 
@@ -132,13 +152,14 @@ class RequestQueueRoute extends React.Component {
     return (
       <RequestQueueView
         data={{
-          requests,
+          requests: sortBy(requests, r => r.position),
           item: get(resources, 'items.records[0]', {}),
           holding: get(resources, 'holdings.records[0]', {}),
           request,
         }}
         onClose={this.handleClose}
         isLoading={this.isLoading()}
+        onReorder={this.reorder}
       />
     );
   }

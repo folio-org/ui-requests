@@ -1,7 +1,7 @@
 const urls = {
   requests: () => '/requests',
   requestView: id => `/requests/view/${id}`,
-  requestQueueView: id => `/requests/view/${id}/reorder`,
+  requestQueueView: (requestId, itemId) => `/requests/view/${requestId}/${itemId}/reorder`,
 };
 
 export default urls;

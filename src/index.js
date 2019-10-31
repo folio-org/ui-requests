@@ -13,7 +13,7 @@ const RequestsRouting = (props) => {
   return (
     <Switch>
       <Route
-        path={`${path}/view/:id/reorder`}
+        path={`${path}/view/:requestId/:itemId/reorder`}
         component={RequestQueueRoute}
       />
       <Route
