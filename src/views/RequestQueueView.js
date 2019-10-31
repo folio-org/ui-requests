@@ -100,6 +100,7 @@ class RequestQueueView extends React.Component {
       request: PropTypes.object,
     }),
     onClose: PropTypes.func,
+    onReorder: PropTypes.func,
     isLoading: PropTypes.bool,
   };
 
@@ -170,7 +171,11 @@ class RequestQueueView extends React.Component {
     this.setState({
       confirmMessage: null,
       requests,
-    }, this.showCallout);
+    }, () => this.finishReorder(requests));
+  }
+
+  finishReorder = (requests) => {
+    this.props.onReorder(requests).then(this.showCallout());
   }
 
   confirmReorder = () => {

@@ -280,7 +280,7 @@ class ViewRequest extends React.Component {
               />
             </Layer>
           )
-        }
+          }
         </IntlConsumer>
       );
     }
@@ -446,7 +446,7 @@ class ViewRequest extends React.Component {
               id="reorder-queue"
               onClick={() => {
                 onToggle();
-                history.push(`${urls.requestQueueView(request.id)}${search}`, { request });
+                history.push(`${urls.requestQueueView(request.id, request.itemId)}${search}`, { request });
               }}
               buttonStyle="dropdownItem"
             >
@@ -492,7 +492,7 @@ class ViewRequest extends React.Component {
           >
             <Row>
               <Col xs={12}>
-                {request.metadata && <this.cViewMetaData metadata={request.metadata} /> }
+                {request.metadata && <this.cViewMetaData metadata={request.metadata} />}
               </Col>
             </Row>
             <Row>
