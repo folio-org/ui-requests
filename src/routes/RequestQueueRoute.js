@@ -152,7 +152,7 @@ class RequestQueueRoute extends React.Component {
     return (
       <RequestQueueView
         data={{
-          requests: sortBy(requests, 'position'),
+          requests: sortBy(requests, r => r.position),
           item: get(resources, 'items.records[0]', {}),
           holding: get(resources, 'holdings.records[0]', {}),
           request,
