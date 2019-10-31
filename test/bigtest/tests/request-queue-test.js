@@ -18,7 +18,7 @@ describe('RequestQueue', () => {
 
   beforeEach(async function () {
     requests = this.server.db.requests;
-    this.visit(urls.requestQueueView(requests[0].id));
+    this.visit(urls.requestQueueView(requests[0].id, requests[0].itemId));
 
     await requestQueue.whenSortableListPresent();
     await requestQueue.sortableList.whenLogIsPresent();

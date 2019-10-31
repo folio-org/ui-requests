@@ -2,6 +2,8 @@
 
 ## 1.14.0 (IN PROGRESS)
 
+* Add request queue page with reorder capabilities. Part of UIREQ-112.
+
 ## [1.13.0](https://github.com/folio-org/ui-requests/tree/v1.13.0) (2019-09-23)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.12.0...v1.13.0)
 

@@ -248,7 +248,7 @@ export default function config() {
     cancellationReasons: [{
       id: '75187e8d-e25a-47a7-89ad-23ba612338de',
       name: 'Patron Cancelled',
-      description : 'Cancelled at patron’s request',
+      description: 'Cancelled at patron’s request',
       requiresAdditionalInformation: false,
     }, {
       id: 'b548b182-55c2-4741-b169-616d9cd995a8',
@@ -267,7 +267,7 @@ export default function config() {
       description: 'Item is no longer available',
       requiresAdditionalInformation: false,
     }],
-    totalRecords : 4,
+    totalRecords: 4,
   });
 
   this.get('/inventory/items', ({ items }, request) => {
@@ -280,6 +280,8 @@ export default function config() {
       return items.all();
     }
   });
+
+  this.post('/circulation/requests/queue/:itemId/reorder', []);
 
   this.get('/circulation/loans', ({ loans }, request) => {
     if (request.queryParams.query) {
