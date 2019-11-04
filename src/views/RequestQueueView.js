@@ -255,7 +255,7 @@ class RequestQueueView extends React.Component {
               <Col xs={2}>
                 <KeyValue
                   label={<FormattedMessage id="ui-requests.item.status" />}
-                  value={get(request, 'item.status', '-')}
+                  value={get(item, 'status.name', '-')}
                 />
               </Col>
               <Col xs={2}>
