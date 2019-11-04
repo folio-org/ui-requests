@@ -50,6 +50,7 @@ import asyncValidate from './asyncValidate';
 import {
   requestStatuses,
   iconTypes,
+  fulfilmentTypeMap,
 } from './constants';
 import ErrorModal from './components/ErrorModal';
 import {
@@ -124,6 +125,10 @@ class RequestForm extends React.Component {
         'requester-info': true,
       },
       proxy: {},
+      hasDelivery: false,
+      requestPreferencesLoaded: false,
+      defaultDeliveryAddressTypeId: "",
+      defaultServicePointId: "",
       selectedDelivery: isDelivery(initialValues),
       selectedAddressTypeId: deliveryAddressTypeId,
       selectedItem: item,
@@ -211,6 +216,24 @@ class RequestForm extends React.Component {
     }
   }
 
+  getFulfilmentTypeOptions() {
+    const { hasDelivery } = this.state;
+    const {
+      fulfilmentTypes = [],
+    } = this.props.optionLists;
+
+    const sortedFulfilmentTypes = sortBy(fulfilmentTypes, ['label']);
+
+    const fulfilmentTypeOptions = sortedFulfilmentTypes.map(({ label, id }) => ({
+      labelTranslationPath: label,
+      value: id,
+    }));
+
+    return !hasDelivery && !this.isEditForm()
+      ? fulfilmentTypeOptions.filter(option => option.value !== fulfilmentTypeMap.DELIVERY)
+      : fulfilmentTypeOptions;
+  }
+
   onToggleSection({ id }) {
     this.setState((curState) => {
       const newState = cloneDeep(curState);
@@ -225,7 +248,7 @@ class RequestForm extends React.Component {
 
   onChangeFulfilment(e) {
     this.setState({
-      selectedDelivery: e.target.value === 'Delivery',
+      selectedDelivery: e.target.value === fulfilmentTypeMap.DELIVERY,
     });
   }
 
@@ -279,9 +302,56 @@ class RequestForm extends React.Component {
         this.props.onChangePatron(selectedUser);
         this.setState({ selectedUser });
         this.props.change('requesterId', selectedUser.id);
+        this.findRequestPreferences(selectedUser.id).then(this.setDefaultRequestPreferences);
       }
     }).then(_ => this.props.asyncValidate());
   }
+
+  findRequestPreferences(userId) {
+    return this.props.findResource('requestPreferences', userId, 'userId')
+      .then((preferences) => {
+        const preference = preferences.requestPreferences[0] || {};
+
+        this.setState({
+          hasDelivery: preference.delivery || false,
+          fulfillmentPreference: preference.fulfillment || fulfilmentTypeMap.HOLD_SHELF,
+          defaultServicePointId: preference.defaultServicePointId || "",
+          defaultDeliveryAddressTypeId: preference.defaultDeliveryAddressTypeId || "",
+          requestPreferencesLoaded: true,
+        });
+      })
+      .catch(() => {
+        this.setState({ requestPreferencesLoaded: true })
+      })
+  }
+
+  setDefaultRequestPreferences = () => {
+    const {
+      hasDelivery,
+      fulfillmentPreference,
+      defaultServicePointId,
+      defaultDeliveryAddressTypeId,
+    } = this.state;
+
+    this.props.change('fulfilmentPreference', fulfillmentPreference);
+
+    if (fulfillmentPreference === fulfilmentTypeMap.DELIVERY) {
+      this.setState({ 
+        selectedDelivery: true,
+        selectedAddressTypeId: defaultDeliveryAddressTypeId,
+      })
+
+      this.props.change('deliveryAddressTypeId', defaultDeliveryAddressTypeId);
+    }
+    if (fulfillmentPreference === fulfilmentTypeMap.HOLD_SHELF) {
+      this.setState({ selectedDelivery: false })
+      this.props.change('pickupServicePointId', defaultServicePointId);
+    }
+    this.setState({
+      hasDelivery,
+      requestPreferencesLoaded: true,
+    });
+  };
 
   findLoan(item) {
     const { findResource } = this.props;
@@ -418,7 +488,13 @@ class RequestForm extends React.Component {
 
   onSave = (data) => {
     const { intl: { timeZone } } = this.props;
-    const { requestExpirationDate, holdShelfExpirationDate } = data;
+    const { 
+      requestExpirationDate,
+      holdShelfExpirationDate,
+      fulfilmentPreference,
+      deliveryAddressTypeId,
+      pickupServicePointId,
+    } = data;
 
     if (!requestExpirationDate) unset(data, 'requestExpirationDate');
     if (holdShelfExpirationDate && !holdShelfExpirationDate.match('T')) {
@@ -426,6 +502,12 @@ class RequestForm extends React.Component {
       data.holdShelfExpirationDate = moment.tz(`${holdShelfExpirationDate} ${time}`, timeZone).utc().format();
     } else if (!holdShelfExpirationDate) {
       unset(data, 'holdShelfExpirationDate');
+    }
+    if(fulfilmentPreference === fulfilmentTypeMap.HOLD_SHELF && deliveryAddressTypeId) {
+      unset(data, 'deliveryAddressTypeId');
+    }
+    if(fulfilmentPreference === fulfilmentTypeMap.DELIVERY && pickupServicePointId) {
+      unset(data, 'pickupServicePointId');
     }
 
     this.props.onSubmit(data);
@@ -539,7 +621,6 @@ class RequestForm extends React.Component {
       optionLists: {
         servicePoints,
         addressTypes,
-        fulfilmentTypes = [],
       },
       patronGroups,
       parentResources,
@@ -560,6 +641,7 @@ class RequestForm extends React.Component {
       selectedAddressTypeId,
       selectedDelivery,
       isCancellingRequest,
+      requestPreferencesLoaded,
     } = this.state;
 
     const patronBlocks = this.getPatronBlocks(parentResources);
@@ -569,11 +651,6 @@ class RequestForm extends React.Component {
 
     const isEditForm = this.isEditForm();
     const requestTypeOptions = getRequestTypeOptions(selectedItem);
-    const sortedFulfilmentTypes = sortBy(fulfilmentTypes, ['label']);
-    const fulfilmentTypeOptions = sortedFulfilmentTypes.map(({ label, id }) => ({
-      labelTranslationPath: label,
-      value: id,
-    }));
 
     const labelAsterisk = isEditForm
       ? ''
@@ -866,7 +943,7 @@ class RequestForm extends React.Component {
                             </Col>
                           </Row>
                         }
-                        {selectedUser &&
+                        {selectedUser && (requestPreferencesLoaded || this.isEditForm()) &&
                           <UserForm
                             user={request ? request.requester : selectedUser}
                             stripes={this.props.stripes}
@@ -876,7 +953,7 @@ class RequestForm extends React.Component {
                             fulfilmentPreference={fulfilmentPreference}
                             deliveryAddress={addressDetail}
                             deliveryLocations={deliveryLocations}
-                            fulfilmentTypeOptions={fulfilmentTypeOptions}
+                            fulfilmentTypeOptions={this.getFulfilmentTypeOptions()}
                             onChangeAddress={this.onChangeAddress}
                             onChangeFulfilment={this.onChangeFulfilment}
                             proxy={this.getProxy()}

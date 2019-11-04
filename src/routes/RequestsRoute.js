@@ -84,6 +84,10 @@ const urls = {
     const query = stringify({ query: `(itemId=="${value}")` });
     return `request-storage/requests?${query}`;
   },
+  requestPreferences: (value) => {
+    const query = stringify({ query: `(userId=="${value}")` });
+    return `request-preference-storage/request-preference?${query}`;
+  },
 };
 
 class RequestsRoute extends React.Component {
