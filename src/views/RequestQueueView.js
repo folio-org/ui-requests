@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  get,
-} from 'lodash';
+import { Link } from 'react-router-dom';
+import { get } from 'lodash';
 import {
   FormattedMessage,
   FormattedDate,
@@ -46,26 +45,26 @@ const COLUMN_NAMES = [
 
 const COLUMN_WIDTHS = {
   position: '5%',
+  requestType: '5%',
   status: '11%',
   pickup: '9%',
   requester: '15%',
   requesterBarcode: '12%',
   patronGroup: '13%',
   requestDate: '11%',
-  requestType: '5%',
   requestExpirationDate: '8%',
   holdShelfExpireDate: '13%',
 };
 
 const COLUMN_MAP = {
   position: <FormattedMessage id="ui-requests.requestQueue.position" />,
+  requestType: <FormattedMessage id="ui-requests.requestQueue.requestType" />,
   status: <FormattedMessage id="ui-requests.requestQueue.requestStatus" />,
   pickup: <FormattedMessage id="ui-requests.requestQueue.pickup" />,
   requester: <FormattedMessage id="ui-requests.requestQueue.requesterName" />,
   requesterBarcode: <FormattedMessage id="ui-requests.requestQueue.requesterBarcode" />,
   patronGroup: <FormattedMessage id="ui-requests.requestQueue.patronGroup" />,
   requestDate: <FormattedMessage id="ui-requests.requestQueue.requestDate" />,
-  requestType: <FormattedMessage id="ui-requests.requestQueue.requestType" />,
   requestExpirationDate: <FormattedMessage id="ui-requests.requestQueue.requestExpirationDate" />,
   holdShelfExpireDate: <FormattedMessage id="ui-requests.requestQueue.holdShelfExpirationDate" />,
 };
@@ -219,6 +218,9 @@ class RequestQueueView extends React.Component {
     } = this.state;
     const count = requests.length;
     const { title } = item;
+    const itemLink = (item.barcode)
+      ? (<Link to={`/inventory/view/${get(request, 'item.instanceId')}/${get(request, 'item.holdingsRecordId')}/${item.id}`}>{item.barcode}</Link>)
+      : '-';
 
     return (
       <Paneset isRoot>
@@ -244,10 +246,16 @@ class RequestQueueView extends React.Component {
         >
           <div className={css.section}>
             <Row>
-              <Col xs={2}>
+              <Col xs={1}>
                 <KeyValue
                   label={<FormattedMessage id="ui-requests.item.barcode" />}
-                  value={get(item, 'barcode', '-')}
+                  value={itemLink}
+                />
+              </Col>
+              <Col xs={2}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.item.status" />}
+                  value={get(item, 'status.name', '-')}
                 />
               </Col>
               <Col xs={2}>
@@ -274,7 +282,7 @@ class RequestQueueView extends React.Component {
                   value={get(item, 'volume', '-')}
                 />
               </Col>
-              <Col xs={2}>
+              <Col xs={1}>
                 <KeyValue
                   label={<FormattedMessage id="ui-requests.item.enumeration" />}
                   value={get(item, 'enumeration', '-')}
@@ -283,7 +291,7 @@ class RequestQueueView extends React.Component {
               <Col xs={1}>
                 <KeyValue
                   label={<FormattedMessage id="ui-requests.item.copyNumber" />}
-                  value={get(item, 'copyNumbers[0]') || holding.copyNumber || ''}
+                  value={get(item, 'copyNumbers[0]') || holding.copyNumber || '-'}
                 />
               </Col>
             </Row>
@@ -312,6 +320,7 @@ class RequestQueueView extends React.Component {
           heading={<FormattedMessage id="ui-requests.requestQueue.confirmReorder.title" />}
           message={<FormattedMessage id={`${confirmMessage}`} />}
           confirmLabel={<FormattedMessage id="ui-requests.requestQueue.confirmReorder.confirm" />}
+          cancelLabel={<FormattedMessage id="ui-requests.requestQueue.confirmReorder.cancel" />}
           onConfirm={this.confirmReorder}
           onCancel={this.cancelReorder}
         />
