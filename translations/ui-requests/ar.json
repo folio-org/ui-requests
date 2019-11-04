@@ -157,5 +157,6 @@
     "requestQueue.confirmReorder.title": "تم نقل الطلب إلى الموضع 2 في الصف",
     "requestQueue.confirmReorder.message1": "لا يمكن نقل الطلبات من الموضع 1  في حالة  بدء استيفائها. سيتم نقل هذا الطلب إلى الموضع 2 في صف الطلبات.",
     "requestQueue.confirmReorder.message2": "لا يمكن نقل الطلبات أعلى طلبات الصفحة، حتى في حالة عدم بدء استيفائها. سيتم نقل هذا الطلب إلى الموضع 2 في صف الطلبات.",
-    "requestQueue.requests.notFound": "لم يتم العثور على طلبات"
+    "requestQueue.requests.notFound": "لم يتم العثور على طلبات",
+    "requestQueue.confirmReorder.cancel": "Leave in current position"
 }
