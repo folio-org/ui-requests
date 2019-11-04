@@ -128,6 +128,18 @@ export default function config() {
     return servicePoints.all();
   });
 
+  this.get('/request-preference-storage/request-preference', ({ requestPreferences }, request) => {
+    if (request.queryParams.query) {
+      const cqlParser = new CQLParser();
+      cqlParser.parse(request.queryParams.query);
+      return requestPreferences.where({
+        userId: cqlParser.tree.term
+      });
+    } else {
+      return [];
+    }
+  });
+
   this.get('/circulation/loans', {
     loans: [],
     totalRecords: 0,
