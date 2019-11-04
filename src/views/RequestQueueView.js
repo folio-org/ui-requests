@@ -32,13 +32,13 @@ import css from './RequestQueueView.css';
 
 const COLUMN_NAMES = [
   'position',
-  'requestType',
   'status',
   'pickup',
   'requester',
   'requesterBarcode',
   'patronGroup',
   'requestDate',
+  'requestType',
   'requestExpirationDate',
   'holdShelfExpireDate',
 ];
