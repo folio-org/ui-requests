@@ -6,7 +6,7 @@ export default Factory.extend({
   requestDate: () => faker.date.past().toISOString().substring(0, 10),
   holdShelf: () => true,
   delivery: () => faker.random.arrayElement([true, false]),
-  fulfillment: () => faker.random.arrayElement(["Delivery", "Hold Shelf"]),
-  defaultServicePointId: "",
-  defaultDeliveryAddressTypeId: "",
+  fulfillment: () => faker.random.arrayElement(['Delivery', 'Hold Shelf']),
+  defaultServicePointId: '',
+  defaultDeliveryAddressTypeId: '',
 });
