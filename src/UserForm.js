@@ -63,9 +63,6 @@ class UserForm extends React.Component {
         required
         validate={this.requireDeliveryAddress}
       >
-        <FormattedMessage id="ui-requests.actions.selectAddressType">
-          {(optionLabel) => <option value="">{optionLabel}</option>}
-        </FormattedMessage>
         {deliveryLocations.map(({ value, label }) => <option key={value} value={value}>{label}</option>)}
       </Field>
     );

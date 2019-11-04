@@ -113,6 +113,11 @@ describe('New Request page', () => {
         });
 
         const user = this.server.create('user', { barcode: '9676761472501' });
+        this.server.create('request-preference', {
+          userId: user.id,
+          delivery: true,
+          holdShelf: true,
+        });
         const address = this.server.create('address', { addressTypeId: 'Type1' });
         const personal = this.server.create('user-personal');
         personal.update('addresses', [address.toJSON()]);
