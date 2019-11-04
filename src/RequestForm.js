@@ -127,8 +127,8 @@ class RequestForm extends React.Component {
       proxy: {},
       hasDelivery: false,
       requestPreferencesLoaded: false,
-      defaultDeliveryAddressTypeId: "",
-      defaultServicePointId: "",
+      defaultDeliveryAddressTypeId: '',
+      defaultServicePointId: '',
       selectedDelivery: isDelivery(initialValues),
       selectedAddressTypeId: deliveryAddressTypeId,
       selectedItem: item,
@@ -315,14 +315,14 @@ class RequestForm extends React.Component {
         this.setState({
           hasDelivery: preference.delivery || false,
           fulfillmentPreference: preference.fulfillment || fulfilmentTypeMap.HOLD_SHELF,
-          defaultServicePointId: preference.defaultServicePointId || "",
-          defaultDeliveryAddressTypeId: preference.defaultDeliveryAddressTypeId || "",
+          defaultServicePointId: preference.defaultServicePointId || '',
+          defaultDeliveryAddressTypeId: preference.defaultDeliveryAddressTypeId || '',
           requestPreferencesLoaded: true,
         });
       })
       .catch(() => {
-        this.setState({ requestPreferencesLoaded: true })
-      })
+        this.setState({ requestPreferencesLoaded: true });
+      });
   }
 
   setDefaultRequestPreferences = () => {
@@ -336,15 +336,15 @@ class RequestForm extends React.Component {
     this.props.change('fulfilmentPreference', fulfillmentPreference);
 
     if (fulfillmentPreference === fulfilmentTypeMap.DELIVERY) {
-      this.setState({ 
+      this.setState({
         selectedDelivery: true,
         selectedAddressTypeId: defaultDeliveryAddressTypeId,
-      })
+      });
 
       this.props.change('deliveryAddressTypeId', defaultDeliveryAddressTypeId);
     }
     if (fulfillmentPreference === fulfilmentTypeMap.HOLD_SHELF) {
-      this.setState({ selectedDelivery: false })
+      this.setState({ selectedDelivery: false });
       this.props.change('pickupServicePointId', defaultServicePointId);
     }
     this.setState({
@@ -488,7 +488,7 @@ class RequestForm extends React.Component {
 
   onSave = (data) => {
     const { intl: { timeZone } } = this.props;
-    const { 
+    const {
       requestExpirationDate,
       holdShelfExpirationDate,
       fulfilmentPreference,
@@ -503,10 +503,10 @@ class RequestForm extends React.Component {
     } else if (!holdShelfExpirationDate) {
       unset(data, 'holdShelfExpirationDate');
     }
-    if(fulfilmentPreference === fulfilmentTypeMap.HOLD_SHELF && deliveryAddressTypeId) {
+    if (fulfilmentPreference === fulfilmentTypeMap.HOLD_SHELF && deliveryAddressTypeId) {
       unset(data, 'deliveryAddressTypeId');
     }
-    if(fulfilmentPreference === fulfilmentTypeMap.DELIVERY && pickupServicePointId) {
+    if (fulfilmentPreference === fulfilmentTypeMap.DELIVERY && pickupServicePointId) {
       unset(data, 'pickupServicePointId');
     }
 
