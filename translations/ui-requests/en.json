@@ -154,7 +154,7 @@
   "requestQueue.confirmReorder.confirm": "Move to position 2",
   "requestQueue.confirmReorder.cancel": "Leave in current position",
   "requestQueue.confirmReorder.title": "Request moved to position 2 of the queue",
-  "requestQueue.confirmReorder.message1": "Requests cannot be displaced from position 1 when fulfillment has begun. This request will be moved to position 2 in the request queue",
-  "requestQueue.confirmReorder.message2": "Requests cannot be moved above page requests, even when fulfillment hasn't begun. This request will be moved to position 2 in the request queue",
+  "requestQueue.confirmReorder.message1": "Requests cannot be displaced from position 1 when fulfillment has begun.",
+  "requestQueue.confirmReorder.message2": "Requests cannot be moved above page requests, even when fulfillment hasn't begun.",
   "requestQueue.requests.notFound": "No requests found"
 }
