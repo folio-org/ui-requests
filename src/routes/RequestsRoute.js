@@ -643,7 +643,8 @@ class RequestsRoute extends React.Component {
               proxy,
             ]}
             columnWidths={{
-              [requestDate]: '220px'
+              [requestDate]: '220px',
+              [title]: '40%'
             }}
             resultsFormatter={resultsFormatter}
             newRecordInitialValues={InitialValues}
