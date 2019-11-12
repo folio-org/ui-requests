@@ -49,7 +49,7 @@
     "actions.loading": "Caricamento in corso...",
     "cancel.cancelRequest": "Cancella richiesta",
     "cancel.modalLabel": "Confirm request cancellation",
-    "cancel.requestWillBeCancelled": "<b>{title}</b> will be <b>cancelled</b>",
+    "cancel.requestWillBeCancelled": "<b>{title}</b> sarà <b>cancellato</b>",
     "cancel.reasonLabel": "Reason for cancellation",
     "cancel.notifyLabel": "Notify patron",
     "cancel.additionalInfoLabel": "Informazioni aggiuntive per l'utente {required}",
