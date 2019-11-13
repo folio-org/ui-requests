@@ -338,7 +338,6 @@ class ViewRequest extends React.Component {
       history,
       optionLists: { cancellationReasons },
       location: { search },
-
     } = this.props;
     const {
       accordions,
