@@ -168,6 +168,11 @@ class RequestsRoute extends React.Component {
       path: 'circulation/requests-report/expired-holds',
       fetch: false,
     },
+    cancellationReasons: {
+      type: 'okapi',
+      path: 'cancellation-reason-storage/cancellation-reasons',
+      records: 'cancellationReasons',
+    },
   };
 
   static propTypes = {
@@ -563,6 +568,7 @@ class RequestsRoute extends React.Component {
     const patronGroups = (resources.patronGroups || {}).records || [];
     const addressTypes = (resources.addressTypes || {}).records || [];
     const servicePoints = (resources.servicePoints || {}).records || [];
+    const cancellationReasons = get(resources, 'cancellationReasons.records', []);
     const InitialValues = dupRequest ||
       { requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' };
 
@@ -614,11 +620,11 @@ class RequestsRoute extends React.Component {
       <React.Fragment>
         {
           isEmpty(errorModalData) ||
-            <ErrorModal
-              onClose={this.errorModalClose}
-              label={errorModalData.label}
-              errorMessage={errorModalData.errorMessage}
-            />
+          <ErrorModal
+            onClose={this.errorModalClose}
+            label={errorModalData.label}
+            errorMessage={errorModalData.errorMessage}
+          />
         }
         <div data-test-request-instances>
           <SearchAndSort
@@ -664,7 +670,8 @@ class RequestsRoute extends React.Component {
               optionLists: {
                 addressTypes,
                 fulfilmentTypes,
-                servicePoints
+                servicePoints,
+                cancellationReasons,
               },
               patronGroups,
               query: resources.query,

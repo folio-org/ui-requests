@@ -336,7 +336,9 @@ class ViewRequest extends React.Component {
       stripes,
       patronGroups,
       history,
+      optionLists: { cancellationReasons },
       location: { search },
+
     } = this.props;
     const {
       accordions,
@@ -349,6 +351,7 @@ class ViewRequest extends React.Component {
     const isRequestClosed = requestStatus.startsWith('Closed');
     const isRequestNotFilled = requestStatus === requestStatuses.NOT_YET_FILLED;
     const isRequestOpen = requestStatus.startsWith('Open');
+    const cancellationReasonMap = keyBy(cancellationReasons, 'id');
 
     let deliveryAddressDetail;
     let selectedDelivery = false;
@@ -522,12 +525,28 @@ class ViewRequest extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col xs={5}>
+              <Col xs={3}>
                 <KeyValue
                   label={<FormattedMessage id="ui-requests.position" />}
                   value={<PositionLink request={request} />}
                 />
               </Col>
+              {request.cancellationReasonId &&
+                <Col xs={3}>
+                  <KeyValue
+                    label={<FormattedMessage id="ui-requests.cancellationReason" />}
+                    value={get(cancellationReasonMap[request.cancellationReasonId], 'name', '-')}
+                  />
+                </Col>
+              }
+              {request.cancellationAdditionalInformation &&
+                <Col xs={3}>
+                  <KeyValue
+                    label={<FormattedMessage id="ui-requests.cancellationAdditionalInformation" />}
+                    value={request.cancellationAdditionalInformation}
+                  />
+                </Col>
+              }
             </Row>
           </Accordion>
           <Accordion

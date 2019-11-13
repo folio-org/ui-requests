@@ -18,7 +18,31 @@ export default function defaultScenario(server) {
     pickupLocation: true,
   });
 
-  server.createList('request', 20);
+  server.create('cancellationReason', {
+    name: 'Patron Cancelled',
+    description: 'Cancelled at patron’s request',
+    requiresAdditionalInformation: false,
+  });
+
+  server.create('cancellationReason', {
+    name: 'Other',
+    description: 'Other',
+    requiresAdditionalInformation: true,
+  });
+
+  server.create('cancellationReason', {
+    name: 'Needed For Course Reserves',
+    description: 'Item is needed for course reserves',
+    publicDescription: 'Item is no longer available for request',
+    requiresAdditionalInformation: false,
+  });
+
+  server.create('cancellationReason', {
+    id: 'ff474f60-d9ce-4bd8-8659-eb51af825a56',
+    name: 'Item Not Available',
+    description: 'Item is no longer available',
+    requiresAdditionalInformation: false,
+  });
 
   server.get('/circulation/requests-reports/hold-shelf-clearance/:id', {
     'requests': [
