@@ -10,6 +10,8 @@ export default function defaultScenario(server) {
     pickupLocation: true,
   });
 
+  server.createList('request', 20);
+
   const servicePoint = server.create('servicePoint', {
     id: 'servicepointId2',
     name: 'Circ Desk 2',
@@ -38,7 +40,6 @@ export default function defaultScenario(server) {
   });
 
   server.create('cancellationReason', {
-    id: 'ff474f60-d9ce-4bd8-8659-eb51af825a56',
     name: 'Item Not Available',
     description: 'Item is no longer available',
     requiresAdditionalInformation: false,
