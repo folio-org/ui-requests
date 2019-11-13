@@ -95,7 +95,7 @@ describe('View request page', () => {
     });
   });
 
-  describe.only('View cancelled request', () => {
+  describe('View cancelled request', () => {
     beforeEach(async function () {
       const cancellationReason = this.server.create('cancellationReason', {
         name: 'Item Not Available',
