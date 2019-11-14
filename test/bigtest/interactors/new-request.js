@@ -76,6 +76,9 @@ import { getSelectValues } from './helpers';
 
   chooseFulfillmentPreference = selectable('[name="fulfilmentPreference"]');
   chooseDeliveryAddress = selectable('[name="deliveryAddressTypeId"]');
+  fulfillmentPreferenceValue = value('[name="fulfilmentPreference"]');
+  deliveryAddressTypeIdValue = value('[name="deliveryAddressTypeId"]');
+  pickupServicePointIdValue = value('[name="pickupServicePointId"]');
 
   itemErrorIsPresent = isPresent('#section-item-info [class*=feedbackError---]');
   requesterErrorIsPresent = isPresent('#section-requester-info [class*=feedbackError---]');
