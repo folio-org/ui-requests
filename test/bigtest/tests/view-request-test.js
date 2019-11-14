@@ -94,4 +94,25 @@ describe('View request page', () => {
       expect(ViewRequestInteractor.requesterInfoContains(address)).to.be.true;
     });
   });
+
+  describe('View cancelled request', () => {
+    beforeEach(async function () {
+      const cancellationReason = this.server.create('cancellationReason', {
+        name: 'Item Not Available',
+      });
+
+      const request = this.server.create('request', {
+        fulfilmentPreference: 'Delivery',
+        cancellationReasonId: cancellationReason.id,
+        cancellationAdditionalInformation: 'Item not found',
+      });
+
+      this.visit('/requests/view/' + request.id);
+    });
+
+    it('shows cancellation reason', () => {
+      expect(ViewRequestInteractor.requestInfoContains('Item Not Available')).to.be.true;
+      expect(ViewRequestInteractor.requestInfoContains('Item not found')).to.be.true;
+    });
+  });
 });
