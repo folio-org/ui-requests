@@ -213,6 +213,8 @@ export default function config() {
     totalRecords: 0,
   });
 
+  this.get('/cancellation-reason-storage/cancellation-reasons');
+
   this.get('/circulation/requests', ({ requests }) => {
     return requests.all();
   });
@@ -255,31 +257,6 @@ export default function config() {
 
   this.get('/request-storage/requests/:id', (schema, request) => {
     return schema.requests.find(request.params.id).attrs;
-  });
-  this.get('/cancellation-reason-storage/cancellation-reasons', {
-    cancellationReasons: [{
-      id: '75187e8d-e25a-47a7-89ad-23ba612338de',
-      name: 'Patron Cancelled',
-      description: 'Cancelled at patron’s request',
-      requiresAdditionalInformation: false,
-    }, {
-      id: 'b548b182-55c2-4741-b169-616d9cd995a8',
-      name: 'Other',
-      description: 'Other',
-      requiresAdditionalInformation: true,
-    }, {
-      id: '1c0e9ba1-6a97-4bbc-94fc-83eecc32f5fd',
-      name: 'Needed For Course Reserves',
-      description: 'Item is needed for course reserves',
-      publicDescription: 'Item is no longer available for request',
-      requiresAdditionalInformation: false,
-    }, {
-      id: 'ff474f60-d9ce-4bd8-8659-eb51af825a56',
-      name: 'Item Not Available',
-      description: 'Item is no longer available',
-      requiresAdditionalInformation: false,
-    }],
-    totalRecords: 4,
   });
 
   this.get('/inventory/items', ({ items }, request) => {
