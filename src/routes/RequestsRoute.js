@@ -565,9 +565,9 @@ class RequestsRoute extends React.Component {
       errorModalData,
     } = this.state;
 
-    const patronGroups = (resources.patronGroups || {}).records || [];
-    const addressTypes = (resources.addressTypes || {}).records || [];
-    const servicePoints = (resources.servicePoints || {}).records || [];
+    const patronGroups = get(resources, 'patronGroups.records', []);
+    const addressTypes = get(resources, 'addressTypes.records', []);
+    const servicePoints = get(resources, 'servicePoints.records', []);
     const cancellationReasons = get(resources, 'cancellationReasons.records', []);
     const InitialValues = dupRequest ||
       { requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' };
