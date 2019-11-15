@@ -69,7 +69,7 @@ class MoveRequestManager extends React.Component {
     } = this.state;
     const { request } = this.props;
     const pageRequestIsLater = selectedItemPageRequest != null &&
-      moment(selectedItemPageRequest.requestDate).isAfter(moment(request.requestDate));
+      moment(selectedItemPageRequest.requestDate).isBefore(moment(request.requestDate));
 
     return isPagedItem(selectedItem) && pageRequestIsLater;
   }
@@ -201,7 +201,7 @@ class MoveRequestManager extends React.Component {
             onCancel={this.cancelMoveRequest}
           />
         }
-        { chooseRequestType &&
+        {chooseRequestType &&
           <ChooseRequestTypeDialog
             open={chooseRequestType}
             data-test-choose-request-type-modal
