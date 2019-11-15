@@ -4,6 +4,7 @@
 
 * Add request queue page with reorder capabilities. Part of UIREQ-112.
 * Display cancellation reason on cancelled request. Part of UIREQ-364.
+* Add requesterId to requests query. Part of UIU-1370.
 
 ## [1.13.0](https://github.com/folio-org/ui-requests/tree/v1.13.0) (2019-09-23)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.12.0...v1.13.0)
