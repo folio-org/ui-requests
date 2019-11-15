@@ -158,5 +158,7 @@
     "requestQueue.confirmReorder.message1": "フルフィルメントが開始されると、リクエストをポジション1から移動することはできません。このリクエストはリクエストキューの位置2に移動します",
     "requestQueue.confirmReorder.message2": "フルフィルメントが開始されていない場合でも、リクエストをページリクエストの上に移動することはできません。このリクエストはリクエストキューの位置2に移動します",
     "requestQueue.requests.notFound": "リクエストは見つかりませんでした",
-    "requestQueue.confirmReorder.cancel": "Leave in current position"
+    "requestQueue.confirmReorder.cancel": "Leave in current position",
+    "cancellationReason": "Cancellation reason",
+    "cancellationAdditionalInformation": "Additional information for patron"
 }
