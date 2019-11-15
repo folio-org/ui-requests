@@ -158,5 +158,7 @@
     "requestQueue.confirmReorder.message1": "Requests cannot be displaced from position 1 when fullfillment has begun. This request will be moved to position 2 in the request queue",
     "requestQueue.confirmReorder.message2": "Requests cannot be moved above page requests, even when fullfillment hasn't begun. This request will be moved to position 2 in the request queue",
     "requestQueue.requests.notFound": "No requests found",
-    "requestQueue.confirmReorder.cancel": "Leave in current position"
+    "requestQueue.confirmReorder.cancel": "Leave in current position",
+    "cancellationReason": "Cancellation reason",
+    "cancellationAdditionalInformation": "Additional information for patron"
 }

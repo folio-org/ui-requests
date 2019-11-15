@@ -158,5 +158,7 @@
     "requestQueue.confirmReorder.message1": "As requisições não podem ser deslocadas da posição 1 quando o preenchimento completo for iniciado. Essa requisição será movida para a posição 2 na fila de requisições",
     "requestQueue.confirmReorder.message2": "As requisições não podem ser movidas acima das requisições de página, mesmo quando o preenchimento não foi iniciado. Essa solicitação será movida para a posição 2 na fila de requisições",
     "requestQueue.requests.notFound": "Nenhuma solicitação encontrada",
-    "requestQueue.confirmReorder.cancel": "Deixar na posição atual"
+    "requestQueue.confirmReorder.cancel": "Deixar na posição atual",
+    "cancellationReason": "Motivo do cancelamento",
+    "cancellationAdditionalInformation": "Informações adicionais para o usuário"
 }

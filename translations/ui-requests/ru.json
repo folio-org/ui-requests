@@ -120,7 +120,7 @@
     "exportExpiredHoldsToCsv": "Hold shelf clearance report CSV",
     "nothingToClear": "Nothing to clear",
     "noExpiredRequests": "There are currently no expired or cancelled requests on the hold shelf.",
-    "item.location.libraryName": "Library",
+    "item.location.libraryName": "Библиотека",
     "item.location.code": "Shelving location code",
     "requestQueue": "Request queue",
     "location": "Location",
@@ -147,7 +147,7 @@
     "requestQueue.deliveryType": "Delivery: {type}",
     "requestQueue.requesterName": "Requester",
     "requestQueue.requesterBarcode": "Requester barcode",
-    "requestQueue.patronGroup": "Patron group",
+    "requestQueue.patronGroup": "Группа читателей",
     "requestQueue.requestDate": "Request date",
     "requestQueue.requestType": "Тип",
     "requestQueue.requestExpirationDate": "Request expiration",
@@ -158,5 +158,7 @@
     "requestQueue.confirmReorder.message1": "Requests cannot be displaced from position 1 when fullfillment has begun. This request will be moved to position 2 in the request queue",
     "requestQueue.confirmReorder.message2": "Requests cannot be moved above page requests, even when fullfillment hasn't begun. This request will be moved to position 2 in the request queue",
     "requestQueue.requests.notFound": "No requests found",
-    "requestQueue.confirmReorder.cancel": "Leave in current position"
+    "requestQueue.confirmReorder.cancel": "Leave in current position",
+    "cancellationReason": "Cancellation reason",
+    "cancellationAdditionalInformation": "Additional information for patron"
 }
