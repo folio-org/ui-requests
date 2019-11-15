@@ -351,5 +351,31 @@ describe('New Request page', () => {
         expect(ViewRequestInteractor.requesterSectionPresent).to.be.true;
       });
     });
+
+    describe('when a request is being created for a user that has request preferences', () => {
+      let requestPreferences;
+
+      beforeEach(async function () {
+        const item = this.server.create('item');
+        const user = this.server.create('user');
+
+        requestPreferences = this.server.create('request-preference', {
+          userId: user.id,
+          delivery: true,
+          fulfillment: 'Delivery',
+          defaultDeliveryAddressTypeId: user.personal.addresses[0].addressTypeId,
+        });
+
+        await NewRequestInteractor.fillItemBarcode(item.barcode);
+        await NewRequestInteractor.clickItemEnterBtn();
+        await NewRequestInteractor.fillUserBarcode(user.barcode);
+        await NewRequestInteractor.clickUserEnterBtn();
+      });
+
+      it('should populate the fulfillment preferences fields according to the user\'s request preferences', () => {
+        expect(NewRequestInteractor.fulfillmentPreferenceValue).to.equal(requestPreferences.fulfillment);
+        expect(NewRequestInteractor.deliveryAddressTypeIdValue).to.equal(requestPreferences.defaultDeliveryAddressTypeId);
+      });
+    });
   });
 });
