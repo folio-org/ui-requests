@@ -539,7 +539,7 @@ class ViewRequest extends React.Component {
                 </Col>
               }
               {request.cancellationAdditionalInformation &&
-                <Col xs={3}>
+                <Col xs={6}>
                   <KeyValue
                     label={<FormattedMessage id="ui-requests.cancellationAdditionalInformation" />}
                     value={request.cancellationAdditionalInformation}
