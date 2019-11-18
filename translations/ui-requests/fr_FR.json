@@ -1,5 +1,5 @@
 {
-    "requester.name": "Requester name",
+    "requester.name": "Nom du demandeur",
     "requester.username": "Username",
     "requester.patronGroup": "Patron group",
     "actions.showNotes": "Show Notes",
@@ -52,7 +52,7 @@
     "cancel.requestWillBeCancelled": "<b>{title}</b> will be <b>cancelled</b>",
     "cancel.reasonLabel": "Reason for cancellation",
     "cancel.notifyLabel": "Notify patron",
-    "cancel.additionalInfoLabel": "Additional information for patron {required}",
+    "cancel.additionalInfoLabel": "Informations supplémentaires pour l'utilisateur {required}",
     "cancel.additionalInfoPlaceholderRequired": "Enter more information about the cancellation (required)",
     "cancel.additionalInfoPlaceholderOptional": "Enter more information about the cancellation (optional)",
     "meta.title": "Requests",
@@ -102,7 +102,7 @@
     "actions.duplicateRequest": "Duplicate",
     "actions.cancelNewRequest": "Cancel",
     "close": "Close",
-    "blockedLabel": "Reason for block",
+    "blockedLabel": "Raison du blocage",
     "blockModal": "Patron blocked from requesting",
     "detailsButton": "View block details",
     "enter": "Enter",
@@ -129,7 +129,7 @@
     "actions.moveRequest": "Move request",
     "moveRequest.selectItem": "Select item",
     "moveRequest.instanceItems": "Other items in instance",
-    "moveRequest.instanceItems.notFound": "No items found",
+    "moveRequest.instanceItems.notFound": "Aucun élément trouvé",
     "moveRequest.requestTypeChangeHeading": "Current requests type not allowed for selected item",
     "moveRequest.requestTypeChangeMessage": "Request will be converted to <strong>{requestType}</strong>.",
     "moveRequest.chooseRequestMessage": "Please select allowed type",
@@ -159,6 +159,6 @@
     "requestQueue.confirmReorder.message2": "Requests cannot be moved above page requests, even when fullfillment hasn't begun. This request will be moved to position 2 in the request queue",
     "requestQueue.requests.notFound": "No requests found",
     "requestQueue.confirmReorder.cancel": "Leave in current position",
-    "cancellationReason": "Cancellation reason",
+    "cancellationReason": "Motif de l'annulation",
     "cancellationAdditionalInformation": "Additional information for patron"
 }
