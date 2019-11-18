@@ -11,7 +11,7 @@
     "requestMeta.holdShelfExpirationDate": "تاريخ انتهاء الحجز",
     "requestMeta.queuePosition": "الموضع في الصف",
     "item.information": "معلومات المادة",
-    "requester.information": "معلومات مقدم الطلب",
+    "requester.information": "بيانات مقدم الطلب",
     "actions.editRequestLink": "مربع حوار تحرير الطلب",
     "errors.itemBarcodeDoesNotExist": "لا توجد مادة بهذا الباركود",
     "errors.userBarcodeDoesNotExist": "لا يوجد مستخدم بهذا الباركود",
@@ -27,7 +27,7 @@
     "item.scanOrEnterBarcode": "قم بمسح باركود المادة ضوئيًا أو إدخاله يدويًا",
     "item.title": "العنوان",
     "item.contributor": "المساهم",
-    "item.shelfLocation": "موقع الرف",
+    "item.shelfLocation": "موقع الترفيف",
     "item.callNumber": "رقم الاستدعاء",
     "item.volume": "المجلد",
     "item.enumeration": "الترقيم",
@@ -95,7 +95,7 @@
     "requestMeta.fulfilment.delivery": "التوصيل",
     "actions.edit": "تحرير",
     "item.contributorNamesNames": "أسماء المساهمين",
-    "item.location.name": "موقع الرف",
+    "item.location.name": "موقع الترفيف",
     "proxy.name": "اسم نائب مقدم الطلب",
     "deliveryAddress": "عنوان التوصيل",
     "requester.patronGroup.group": "مجموعة المستفيد الخاصة بمقدم الطلب",
@@ -159,6 +159,6 @@
     "requestQueue.confirmReorder.message2": "لا يمكن نقل الطلبات أعلى طلبات الصفحة، حتى في حالة عدم بدء استيفائها. سيتم نقل هذا الطلب إلى الموضع 2 في صف الطلبات.",
     "requestQueue.requests.notFound": "لم يتم العثور على طلبات",
     "requestQueue.confirmReorder.cancel": "اتركه في الموضع الحالي",
-    "cancellationReason": "Cancellation reason",
-    "cancellationAdditionalInformation": "Additional information for patron"
+    "cancellationReason": "سبب الإلغاء",
+    "cancellationAdditionalInformation": "بيانات إضافية للمستفيد"
 }
