@@ -1,17 +1,17 @@
-import { find, get, includes } from 'lodash';
+import {
+  get,
+  includes,
+} from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
+import { FormattedMessage } from 'react-intl';
 
 import { stripesConnect } from '@folio/stripes/core';
-import { FormattedMessage } from 'react-intl';
-import { ConfirmationModal } from '@folio/stripes/components';
 
 import MoveRequestDialog from './MoveRequestDialog';
 import ChooseRequestTypeDialog from './ChooseRequestTypeDialog';
 import ErrorModal from './components/ErrorModal';
 import { requestTypesByItemStatus } from './constants';
-import { isPagedItem } from './utils';
 
 class MoveRequestManager extends React.Component {
   static propTypes = {
@@ -41,10 +41,6 @@ class MoveRequestManager extends React.Component {
     this.state = { moveRequest: true };
     this.steps = [
       {
-        validate: this.shouldMoveToSecondPositionDialogBeShown,
-        exec: () => this.setState({ moveToSecondPosition: true }),
-      },
-      {
         validate: this.shouldChooseRequestTypeDialogBeShown,
         exec: () => this.setState({ chooseRequestType: true }),
       },
@@ -62,18 +58,6 @@ class MoveRequestManager extends React.Component {
     return this.moveRequest();
   }
 
-  shouldMoveToSecondPositionDialogBeShown = () => {
-    const {
-      selectedItem,
-      selectedItemPageRequest,
-    } = this.state;
-    const { request } = this.props;
-    const pageRequestIsLater = selectedItemPageRequest != null &&
-      moment(selectedItemPageRequest.requestDate).isBefore(moment(request.requestDate));
-
-    return isPagedItem(selectedItem) && pageRequestIsLater;
-  }
-
   shouldChooseRequestTypeDialogBeShown = () => {
     const { selectedItem } = this.state;
     const { request: { requestType } } = this.props;
@@ -82,15 +66,11 @@ class MoveRequestManager extends React.Component {
     return !includes(requestTypes, requestType);
   }
 
-  confirmMoveToSecondPosition = () => {
-    this.setState({ moveToSecondPosition: false }, () => this.execSteps(1));
-  }
-
   confirmChoosingRequestType = (selectedRequestType) => {
     this.setState({
       selectedRequestType,
       chooseRequestType: false
-    }, () => this.execSteps(2));
+    }, () => this.execSteps(1));
   }
 
   moveRequest = async () => {
@@ -137,13 +117,10 @@ class MoveRequestManager extends React.Component {
     return requestTypesByItemStatus[itemStatus] || [];
   }
 
-  onItemSelected = (selectedItem, requests) => {
-    const selectedItemPageRequest = find(requests, { requestType: 'Page' });
-
+  onItemSelected = (selectedItem) => {
     this.setState({
       moveRequest: false,
       selectedItem,
-      selectedItemPageRequest,
     }, () => this.execSteps(0));
   }
 
@@ -151,7 +128,6 @@ class MoveRequestManager extends React.Component {
     this.setState({
       moveRequest: true,
       chooseRequestType: false,
-      moveToSecondPosition: false,
     });
   }
 
@@ -175,7 +151,6 @@ class MoveRequestManager extends React.Component {
     } = this.props;
     const {
       chooseRequestType,
-      moveToSecondPosition,
       selectedItem,
       errorMessage,
       moveRequest,
@@ -189,18 +164,6 @@ class MoveRequestManager extends React.Component {
           onClose={onCancelMove}
           onItemSelected={this.onItemSelected}
         />
-        {
-          moveToSecondPosition &&
-          <ConfirmationModal
-            id="move-to-second-position-modal"
-            open={moveToSecondPosition}
-            heading={<FormattedMessage id="ui-requests.moveRequest.secondPositionTitle" />}
-            message={<FormattedMessage id="ui-requests.moveRequest.secondPositionMessage" />}
-            confirmLabel={<FormattedMessage id="ui-requests.moveRequest.confirm" />}
-            onConfirm={this.confirmMoveToSecondPosition}
-            onCancel={this.cancelMoveRequest}
-          />
-        }
         {chooseRequestType &&
           <ChooseRequestTypeDialog
             open={chooseRequestType}
