@@ -27,7 +27,8 @@ import {
   reportHeaders,
   fulfilmentTypes,
   expiredHoldsReportHeaders,
-  requestStatuses
+  requestStatuses,
+  itemStatuses,
 } from '../constants';
 import {
   getFullName,
@@ -173,6 +174,12 @@ class RequestsRoute extends React.Component {
       path: 'cancellation-reason-storage/cancellation-reasons',
       records: 'cancellationReasons',
     },
+    staffSlips: {
+      type: 'okapi',
+      records: 'staffSlips',
+      path: 'staff-slips-storage/staff-slips?limit=100',
+      throwErrors: false,
+    },
   };
 
   static propTypes = {
@@ -199,6 +206,9 @@ class RequestsRoute extends React.Component {
       patronBlocks: PropTypes.shape({
         DELETE: PropTypes.func,
       }),
+      staffSlips: PropTypes.shape({
+        GET: PropTypes.func,
+      }),
     }).isRequired,
     resources: PropTypes.shape({
       addressTypes: PropTypes.shape({
@@ -211,6 +221,9 @@ class RequestsRoute extends React.Component {
         other: PropTypes.shape({
           totalRecords: PropTypes.number,
         }),
+        records: PropTypes.arrayOf(PropTypes.object),
+      }),
+      staffSlips: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }).isRequired,
@@ -539,6 +552,28 @@ class RequestsRoute extends React.Component {
     this.setState({ errorModalData: {} });
   };
 
+  getCurrentServicePoint = () => {
+    const currentState = this.props.stripes.store.getState();
+    return get(currentState, 'okapi.currentUser.curServicePoint', {});
+  };
+
+  getPickSlips = () => {
+    const requests = get(this.props.resources, 'records.records', []);
+    const { id } = this.getCurrentServicePoint();
+
+    return requests.filter(request => {
+      const isItemPaged = request.item.status === itemStatuses.PAGED;
+      const isRequestNotYetFilled = request.status === requestStatuses.NOT_YET_FILLED;
+      const currentServicePoint = request.pickupServicePointId === id;
+
+      return isItemPaged && isRequestNotYetFilled && currentServicePoint;
+    });
+  };
+
+  printPickSlips = () => {
+    debugger;
+  };
+
   render() {
     const {
       resources,
@@ -565,6 +600,7 @@ class RequestsRoute extends React.Component {
       errorModalData,
     } = this.state;
 
+    const currentServicePoint = get(this.getCurrentServicePoint(), 'name');
     const patronGroups = get(resources, 'patronGroups.records', []);
     const addressTypes = get(resources, 'addressTypes.records', []);
     const servicePoints = get(resources, 'servicePoints.records', []);
@@ -612,6 +648,20 @@ class RequestsRoute extends React.Component {
           }}
         >
           <FormattedMessage id="ui-requests.exportExpiredHoldsToCsv" />
+        </Button>
+        <Button
+          buttonStyle="dropdownItem"
+          id="printPickSlipsBtn"
+          disabled={isEmpty(this.getPickSlips())}
+          onClick={() => {
+            onToggle();
+            this.printPickSlips();
+          }}
+        >
+          <FormattedMessage
+            id="ui-requests.printPickSlips"
+            values={{ sp: currentServicePoint }}
+          />
         </Button>
       </React.Fragment>
     );

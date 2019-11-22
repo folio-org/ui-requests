@@ -158,5 +158,6 @@
   "requestQueue.confirmReorder.message2": "Requests cannot be moved above page requests, even when fulfillment hasn't begun.",
   "requestQueue.requests.notFound": "No requests found",
   "cancellationReason": "Cancellation reason",
-  "cancellationAdditionalInformation": "Additional information for patron"
+  "cancellationAdditionalInformation": "Additional information for patron",
+  "printPickSlips": "Print pick slips for {sp}"
 }
