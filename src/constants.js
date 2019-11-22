@@ -56,6 +56,7 @@ export const requestTypesByItemStatus = {
   'Checked out': ['Hold', 'Recall'],
   'Available': ['Page'],
   'Awaiting pickup': ['Hold', 'Recall'],
+  'Awaiting delivery': ['Hold', 'Recall'],
   'In transit': ['Hold', 'Recall'],
   'Missing': ['Hold'],
   'Paged': ['Hold', 'Recall'],

@@ -312,6 +312,23 @@ describe('New Request page', () => {
           expect(NewRequestInteractor.requestTypeOptions).to.eql(['Hold', 'Recall']);
         });
       });
+
+      describe('when item has "Awaiting delivery" status', () => {
+        beforeEach(async function () {
+          this.server.create('item', {
+            barcode: '9676761472501',
+            status: { name: 'Awaiting delivery' },
+          });
+
+          await NewRequestInteractor.fillItemBarcode('9676761472501');
+          await NewRequestInteractor.clickItemEnterBtn();
+          await NewRequestInteractor.whenRequestTypesArePresent();
+        });
+
+        it('should show hold and recall options', () => {
+          expect(NewRequestInteractor.requestTypeOptions).to.eql(['Hold', 'Recall']);
+        });
+      });
     });
 
     describe('New request with prefilled user barcode and item barcode', function () {
