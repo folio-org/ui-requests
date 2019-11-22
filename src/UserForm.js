@@ -113,8 +113,8 @@ class UserForm extends React.Component {
     const id = user.id;
     const name = getFullName(user);
     const barcode = user.barcode;
-    const editMode = !!request;
-    const shouldDisableFulfillmentPreferenceField = editMode && (request.status === AWAITING_PICKUP || request.status === AWAITING_DELIVERY);
+    const isEditable = !!request;
+    const shouldDisableFulfillmentPreferenceField = isEditable && (request.status === AWAITING_PICKUP || request.status === AWAITING_DELIVERY);
 
     let proxyName;
     let proxyBarcode;
@@ -176,7 +176,7 @@ class UserForm extends React.Component {
 
         {proxySection}
 
-        { !editMode &&
+        { !isEditable &&
           <this.connectedProxyManager
             patron={user}
             proxy={proxy}
