@@ -377,7 +377,8 @@ class ViewRequest extends React.Component {
 
     const showActionMenu = stripes.hasPerm('ui-requests.create')
       || stripes.hasPerm('ui-requests.edit')
-      || stripes.hasPerm('ui-requests.moveRequest');
+      || stripes.hasPerm('ui-requests.moveRequest')
+      || stripes.hasPerm('ui-requests.reorderQueue');
 
     const actionMenu = ({ onToggle }) => {
       if (isRequestClosed) {
@@ -444,18 +445,20 @@ class ViewRequest extends React.Component {
             </IfPermission>
           }
           {isRequestOpen &&
-            <Button
-              id="reorder-queue"
-              onClick={() => {
-                onToggle();
-                history.push(`${urls.requestQueueView(request.id, request.itemId)}${search}`, { request });
-              }}
-              buttonStyle="dropdownItem"
-            >
-              <Icon icon="replace">
-                <FormattedMessage id="ui-requests.actions.reorderQueue" />
-              </Icon>
-            </Button>
+            <IfPermission perm="ui-requests.reorderQueue">
+              <Button
+                id="reorder-queue"
+                onClick={() => {
+                  onToggle();
+                  history.push(`${urls.requestQueueView(request.id, request.itemId)}${search}`, { request });
+                }}
+                buttonStyle="dropdownItem"
+              >
+                <Icon icon="replace">
+                  <FormattedMessage id="ui-requests.actions.reorderQueue" />
+                </Icon>
+              </Button>
+            </IfPermission>
           }
         </Fragment>
       );
