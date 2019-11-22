@@ -4,6 +4,7 @@ import {
   fillable,
   selectable,
   isPresent,
+  is,
 } from '@bigtest/interactor';
 
 import CancelRequestDialog from './cancel-request-dialog';
@@ -25,6 +26,7 @@ import CancelRequestDialog from './cancel-request-dialog';
   clickUpdate = clickable('#clickable-update-request');
   cancelRequestDialog = new CancelRequestDialog('[data-test-cancel-request-modal]');
   isLayerPresent = isPresent('[class*=LayerRoot][role=dialog]');
+  fulfillmentPreferenceFieldDisabled = is('[data-test-fulfillment-preference-filed]', ':disabled');
 }
 
 export default new EditRequestsInteractor();

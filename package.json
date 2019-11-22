@@ -27,7 +27,7 @@
     "queryResource": "query",
     "okapiInterfaces": {
       "cancellation-reason-storage": "1.1",
-      "circulation": "7.3 8.0",
+      "circulation": "7.3 8.0 8.1",
       "inventory": "6.0 7.0 8.0 9.0",
       "request-storage": "3.0"
     },
@@ -46,6 +46,15 @@
         ]
       },
       {
+        "permissionName": "ui-requests.reorderQueue",
+        "displayName": "Requests: Reorder queue",
+        "visible": true,
+        "subPermissions": [
+          "circulation.requests.queue.reorder.collection.post",
+          "circulation.rules.request-policy.get"
+        ]
+      },
+      {
         "permissionName": "ui-requests.all",
         "displayName": "Requests: All permissions",
         "description": "All permissions for the Requests app",
@@ -53,7 +62,8 @@
           "ui-requests.view",
           "ui-requests.create",
           "ui-requests.edit",
-          "ui-requests.moveRequest"
+          "ui-requests.moveRequest",
+          "ui-requests.reorderQueue"
         ],
         "visible": true
       },
