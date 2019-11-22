@@ -8,6 +8,12 @@ import { Field } from 'redux-form';
 import { Col, KeyValue, Row, Select } from '@folio/stripes/components';
 import { ProxyManager } from '@folio/stripes/smart-components';
 import { getFullName, userHighlightBox } from './utils';
+import { requestStatuses } from './constants';
+
+const {
+  AWAITING_DELIVERY,
+  AWAITING_PICKUP,
+} = requestStatuses;
 
 class UserForm extends React.Component {
   static propTypes = {
@@ -104,11 +110,11 @@ class UserForm extends React.Component {
       request,
     } = this.props;
 
-
     const id = user.id;
     const name = getFullName(user);
     const barcode = user.barcode;
-    const editMode = get(request, 'id');
+    const isEditable = !!request;
+    const shouldDisableFulfillmentPreferenceField = isEditable && (request.status === AWAITING_PICKUP || request.status === AWAITING_DELIVERY);
 
     let proxyName;
     let proxyBarcode;
@@ -138,6 +144,8 @@ class UserForm extends React.Component {
               fullWidth
               value={fulfilmentPreference}
               onChange={onChangeFulfilment}
+              disabled={shouldDisableFulfillmentPreferenceField}
+              data-test-fulfillment-preference-filed
             >
               {fulfilmentTypeOptions.map(({ labelTranslationPath, value }) => (
                 <FormattedMessage key={value} id={labelTranslationPath}>
@@ -168,7 +176,7 @@ class UserForm extends React.Component {
 
         {proxySection}
 
-        { !editMode &&
+        { !isEditable &&
           <this.connectedProxyManager
             patron={user}
             proxy={proxy}
