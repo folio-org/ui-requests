@@ -136,6 +136,7 @@ class ViewRequest extends React.Component {
 
   componentDidMount() {
     const requests = this.props.resources.selectedRequest;
+
     this._isMounted = true;
     if (requests && requests.hasLoaded) {
       this.loadFullRequest(requests.records[0]);
@@ -202,18 +203,22 @@ class ViewRequest extends React.Component {
     });
   }
 
-  onMove = async () => {
-    const request = this.getRequest();
+  onMove = async (request) => {
+    const {
+      history,
+      location: { search },
+    } = this.props;
     await this.loadFullRequest(request);
-    this.closeMoveRequest();
-    this.callout.current.sendCallout({
-      type: 'success',
-      message: <FormattedMessage id="ui-requests.moveRequest.success" />,
-    });
+
+    history.push(`${urls.requestQueueView(request.id, request.itemId)}${search}`, { afterMove: true });
   }
 
   closeMoveRequest = () => {
     this.setState({ moveRequest: false });
+  }
+
+  openMoveRequest = () => {
+    this.setState({ moveRequest: true });
   }
 
   onToggleSection({ id }) {
@@ -434,7 +439,7 @@ class ViewRequest extends React.Component {
                 id="move-request"
                 onClick={() => {
                   onToggle();
-                  this.setState({ moveRequest: true });
+                  this.openMoveRequest();
                 }}
                 buttonStyle="dropdownItem"
               >

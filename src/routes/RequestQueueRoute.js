@@ -145,7 +145,7 @@ class RequestQueueRoute extends React.Component {
   }
 
   render() {
-    const { resources } = this.props;
+    const { resources, location } = this.props;
     const request = this.getRequest();
     const requests = this.getRequestsWithDeliveryTypes();
 
@@ -160,6 +160,7 @@ class RequestQueueRoute extends React.Component {
         onClose={this.handleClose}
         isLoading={this.isLoading()}
         onReorder={this.reorder}
+        location={location}
       />
     );
   }

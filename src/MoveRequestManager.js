@@ -92,8 +92,8 @@ class MoveRequestManager extends React.Component {
     };
 
     try {
-      await POST(data);
-      this.props.onMove(requestType, selectedItem);
+      const movedRequest = await POST(data);
+      this.props.onMove(movedRequest, requestType);
     } catch (resp) {
       this.processError(resp);
     }
