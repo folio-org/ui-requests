@@ -7,6 +7,8 @@ import {
   FormattedDate,
   FormattedTime,
 } from 'react-intl';
+import ReactRouterPropTypes from 'react-router-prop-types';
+
 import {
   Col,
   Callout,
@@ -100,6 +102,7 @@ class RequestQueueView extends React.Component {
     onClose: PropTypes.func,
     onReorder: PropTypes.func,
     isLoading: PropTypes.bool,
+    location: ReactRouterPropTypes.location,
   };
 
   state = {
@@ -115,6 +118,17 @@ class RequestQueueView extends React.Component {
     }
 
     return null;
+  }
+
+  componentDidMount() {
+    const { location } = this.props;
+    const afterMove = get(location, 'state.afterMove', false);
+
+    if (afterMove) {
+      this.showCallout(
+        'ui-requests.moveRequest.success',
+      );
+    }
   }
 
   callout = React.createRef();
@@ -174,7 +188,9 @@ class RequestQueueView extends React.Component {
   }
 
   finishReorder = (requests) => {
-    this.props.onReorder(requests).then(this.showCallout());
+    this.props.onReorder(requests).then(this.showCallout(
+      'ui-requests.requestQueue.reorderSuccess',
+    ));
   }
 
   confirmReorder = () => {
@@ -190,9 +206,9 @@ class RequestQueueView extends React.Component {
     this.setState({ confirmMessage: null });
   }
 
-  showCallout = () => {
+  showCallout = (message) => {
     this.callout.current.sendCallout({
-      message: <FormattedMessage id="ui-requests.requestQueue.reorderSuccess" />,
+      message: <FormattedMessage id={message} />,
       timeout: 2000,
     });
   }
