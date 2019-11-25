@@ -145,30 +145,31 @@ export const convertToSlipData = (requests = []) => {
   return requests.map(request => {
     const {
       item = {},
+      requester = {},
     } = request;
 
     return {
       'staffSlip.Name': 'Pick slip',
-      // 'requester.firstName': requester.firstName,
-      // 'requester.lastName': requester.lastName,
-      // 'requester.middleName': requester.middleName,
+      'requester.firstName': requester.firstName,
+      'requester.lastName': requester.lastName,
+      'requester.middleName': requester.middleName,
+      'requester.barcode': `<Barcode>${requester.barcode}</Barcode>`,
       // 'requester.addressLine1': requester.addressLine1,
       // 'requester.addressLine2': requester.addressLine2,
       // 'requester.city': requester.city,
       // 'requester.stateProvRegion': requester.region,
       // 'requester.zipPostalCode': requester.postalCode,
-      // 'requester.barcode': `<Barcode>${requester.barcode}</Barcode>`,
       'item.title': item.title,
-      // 'item.primaryContributor': item.primaryContributor,
-      // 'item.allContributors': item.allContributors,
       'item.barcode': `<Barcode>${item.barcode}</Barcode>`,
       'item.callNumber': item.callNumber,
+      'item.enumeration': item.enumeration,
+      'item.allContributors': item.contributorNames.map(({ name }) => name).join(';'),
+      'item.copy': item.copyNumbers.join(';'),
+      // 'item.primaryContributor': item.primaryContributor,
       // 'item.callNumberPrefix': item.callNumberPrefix,
       // 'item.callNumberSuffix': item.callNumberSuffix,
-      'item.enumeration': item.enumeration,
       // 'item.volume': item.volume,
       // 'item.chronology': item.chronology,
-      // 'item.copy': item.copy,
       /* 'item.yearCaption': item.yearCaption,
       'item.materialType': item.materialType,
       'item.loanType': item.loanType,
@@ -181,15 +182,15 @@ export const convertToSlipData = (requests = []) => {
       'item.effectiveLocationCampus': item.effectiveLocationCampus,
       'item.effectiveLocationLibrary': item.effectiveLocationLibrary,
       'item.effectiveLocationSpecific': item.effectiveLocationSpecific, */
-      /* 'request.servicePointPickup': request.servicePointPickup,
-      'request.deliveryAddressType': request.deliveryAddressType,
+      'request.servicePointPickup': request.pickupServicePoint.name,
+      /* 'request.deliveryAddressType': request.deliveryAddressType,
       'request.requestExpirationDate': request.requestExpirationDate
         ? intl.formatDate(request.requestExpirationDate, { timeZone, locale })
         : request.requestExpirationDate,
       'request.holdShelfExpirationDate': request.holdShelfExpirationDate
         ? intl.formatDate(request.holdShelfExpirationDate, { timeZone, locale })
-        : request.holdShelfExpirationDate,
-      'request.requestID': request.requestID, */
+        : request.holdShelfExpirationDate, */
+      'request.requestID': request.id
     };
   });
 };
