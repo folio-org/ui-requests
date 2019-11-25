@@ -29,13 +29,16 @@ import {
   expiredHoldsReportHeaders,
   requestStatuses,
   itemStatuses,
+  pickSlipType,
 } from '../constants';
 import {
   getFullName,
   duplicateRequest,
+  convertToSlipData,
 } from '../utils';
 import packageInfo from '../../package';
 import ErrorModal from '../components/ErrorModal';
+import PrintButton from '../components/PrintButton';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -570,9 +573,11 @@ class RequestsRoute extends React.Component {
     });
   };
 
-  printPickSlips = () => {
-    debugger;
-  };
+  getPrintTemplate() {
+    const staffSlips = get(this.props.resources, 'staffSlips.records', []);
+    const pickSlip = staffSlips.find(slip => slip.name.toLowerCase() === pickSlipType);
+    return get(pickSlip, 'template', '');
+  }
 
   render() {
     const {
@@ -624,6 +629,8 @@ class RequestsRoute extends React.Component {
       [title]: rq => (rq.item ? rq.item.title : ''),
     };
 
+    const pickSlips = this.getPickSlips();
+
     const actionMenu = ({ onToggle }) => (
       <React.Fragment>
         <Button
@@ -649,20 +656,19 @@ class RequestsRoute extends React.Component {
         >
           <FormattedMessage id="ui-requests.exportExpiredHoldsToCsv" />
         </Button>
-        <Button
+        <PrintButton
           buttonStyle="dropdownItem"
           id="printPickSlipsBtn"
-          disabled={isEmpty(this.getPickSlips())}
-          onClick={() => {
-            onToggle();
-            this.printPickSlips();
-          }}
+          disabled={isEmpty(pickSlips)}
+          template={this.getPrintTemplate()}
+          dataSource={convertToSlipData(pickSlips)}
+          onBeforePrint={onToggle}
         >
           <FormattedMessage
             id="ui-requests.printPickSlips"
             values={{ sp: currentServicePoint }}
           />
-        </Button>
+        </PrintButton>
       </React.Fragment>
     );
 

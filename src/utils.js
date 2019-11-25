@@ -131,3 +131,65 @@ export const openRequestStatusFilters = [
 ]
   .map(status => `requestStatus.${status}`)
   .join(',');
+
+export function buildTemplate(str = '') {
+  return o => {
+    return str.replace(/{{([^{}]*)}}/g, (a, b) => {
+      const r = o[b];
+      return typeof r === 'string' || typeof r === 'number' ? r : '';
+    });
+  };
+}
+
+export const convertToSlipData = (requests = []) => {
+  return requests.map(request => {
+    const {
+      item = {},
+    } = request;
+
+    return {
+      'staffSlip.Name': 'Pick slip',
+      // 'requester.firstName': requester.firstName,
+      // 'requester.lastName': requester.lastName,
+      // 'requester.middleName': requester.middleName,
+      // 'requester.addressLine1': requester.addressLine1,
+      // 'requester.addressLine2': requester.addressLine2,
+      // 'requester.city': requester.city,
+      // 'requester.stateProvRegion': requester.region,
+      // 'requester.zipPostalCode': requester.postalCode,
+      // 'requester.barcode': `<Barcode>${requester.barcode}</Barcode>`,
+      'item.title': item.title,
+      // 'item.primaryContributor': item.primaryContributor,
+      // 'item.allContributors': item.allContributors,
+      'item.barcode': `<Barcode>${item.barcode}</Barcode>`,
+      'item.callNumber': item.callNumber,
+      // 'item.callNumberPrefix': item.callNumberPrefix,
+      // 'item.callNumberSuffix': item.callNumberSuffix,
+      'item.enumeration': item.enumeration,
+      // 'item.volume': item.volume,
+      // 'item.chronology': item.chronology,
+      // 'item.copy': item.copy,
+      /* 'item.yearCaption': item.yearCaption,
+      'item.materialType': item.materialType,
+      'item.loanType': item.loanType,
+      'item.numberOfPieces': item.numberOfPieces,
+      'item.descriptionOfPieces': item.descriptionOfPieces,
+      'item.lastCheckedInDateTime': item.lastCheckedInDateTime,
+      'item.fromServicePoint': item.fromServicePoint,
+      'item.toServicePoint': item.toServicePoint,
+      'item.effectiveLocationInstitution': item.effectiveLocationInstitution,
+      'item.effectiveLocationCampus': item.effectiveLocationCampus,
+      'item.effectiveLocationLibrary': item.effectiveLocationLibrary,
+      'item.effectiveLocationSpecific': item.effectiveLocationSpecific, */
+      /* 'request.servicePointPickup': request.servicePointPickup,
+      'request.deliveryAddressType': request.deliveryAddressType,
+      'request.requestExpirationDate': request.requestExpirationDate
+        ? intl.formatDate(request.requestExpirationDate, { timeZone, locale })
+        : request.requestExpirationDate,
+      'request.holdShelfExpirationDate': request.holdShelfExpirationDate
+        ? intl.formatDate(request.holdShelfExpirationDate, { timeZone, locale })
+        : request.holdShelfExpirationDate,
+      'request.requestID': request.requestID, */
+    };
+  });
+};
