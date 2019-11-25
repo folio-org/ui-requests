@@ -93,7 +93,7 @@ class MoveRequestManager extends React.Component {
 
     try {
       const movedRequest = await POST(data);
-      this.props.onMove(movedRequest, requestType);
+      this.props.onMove(movedRequest);
     } catch (resp) {
       this.processError(resp);
     }
