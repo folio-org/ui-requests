@@ -581,6 +581,7 @@ class RequestsRoute extends React.Component {
 
   render() {
     const {
+      intl,
       resources,
       mutator,
       stripes,
@@ -661,7 +662,7 @@ class RequestsRoute extends React.Component {
           id="printPickSlipsBtn"
           disabled={isEmpty(pickSlips)}
           template={this.getPrintTemplate()}
-          dataSource={convertToSlipData(pickSlips)}
+          dataSource={convertToSlipData(pickSlips, intl, stripes.timezone, stripes.locale)}
           onBeforePrint={onToggle}
         >
           <FormattedMessage

@@ -132,20 +132,21 @@ export const openRequestStatusFilters = [
   .map(status => `requestStatus.${status}`)
   .join(',');
 
-export function buildTemplate(str = '') {
-  return o => {
-    return str.replace(/{{([^{}]*)}}/g, (a, b) => {
-      const r = o[b];
-      return typeof r === 'string' || typeof r === 'number' ? r : '';
+export function buildTemplate(template = '') {
+  return dataSource => {
+    return template.replace(/{{([^{}]*)}}/g, (token, tokenName) => {
+      const tokenValue = dataSource[tokenName];
+      return typeof tokenValue === 'string' || typeof r === 'number' ? tokenValue : '';
     });
   };
 }
 
-export const convertToSlipData = (requests = []) => {
+export const convertToSlipData = (requests = [], intl, timeZone, locale) => {
   return requests.map(request => {
     const {
       item = {},
       requester = {},
+      deliveryAddress = {},
     } = request;
 
     return {
@@ -154,42 +155,21 @@ export const convertToSlipData = (requests = []) => {
       'requester.lastName': requester.lastName,
       'requester.middleName': requester.middleName,
       'requester.barcode': `<Barcode>${requester.barcode}</Barcode>`,
-      // 'requester.addressLine1': requester.addressLine1,
-      // 'requester.addressLine2': requester.addressLine2,
-      // 'requester.city': requester.city,
-      // 'requester.stateProvRegion': requester.region,
-      // 'requester.zipPostalCode': requester.postalCode,
+      'requester.addressLine1': deliveryAddress.addressLine1,
+      'requester.addressLine2': deliveryAddress.addressLine2,
+      'requester.city': deliveryAddress.city,
+      'requester.stateProvRegion': deliveryAddress.region,
+      'requester.zipPostalCode': deliveryAddress.postalCode,
       'item.title': item.title,
       'item.barcode': `<Barcode>${item.barcode}</Barcode>`,
       'item.callNumber': item.callNumber,
       'item.enumeration': item.enumeration,
-      'item.allContributors': item.contributorNames.map(({ name }) => name).join(';'),
-      'item.copy': item.copyNumbers.join(';'),
-      // 'item.primaryContributor': item.primaryContributor,
-      // 'item.callNumberPrefix': item.callNumberPrefix,
-      // 'item.callNumberSuffix': item.callNumberSuffix,
-      // 'item.volume': item.volume,
-      // 'item.chronology': item.chronology,
-      /* 'item.yearCaption': item.yearCaption,
-      'item.materialType': item.materialType,
-      'item.loanType': item.loanType,
-      'item.numberOfPieces': item.numberOfPieces,
-      'item.descriptionOfPieces': item.descriptionOfPieces,
-      'item.lastCheckedInDateTime': item.lastCheckedInDateTime,
-      'item.fromServicePoint': item.fromServicePoint,
-      'item.toServicePoint': item.toServicePoint,
-      'item.effectiveLocationInstitution': item.effectiveLocationInstitution,
-      'item.effectiveLocationCampus': item.effectiveLocationCampus,
-      'item.effectiveLocationLibrary': item.effectiveLocationLibrary,
-      'item.effectiveLocationSpecific': item.effectiveLocationSpecific, */
-      'request.servicePointPickup': request.pickupServicePoint.name,
-      /* 'request.deliveryAddressType': request.deliveryAddressType,
+      'item.allContributors': get(item, 'contributorNames', []).map(({ name }) => name).join(';'),
+      'item.copy': get(item, 'copyNumbers', []).join(';'),
+      'request.servicePointPickup': get(request, 'pickupServicePoint.name'),
       'request.requestExpirationDate': request.requestExpirationDate
         ? intl.formatDate(request.requestExpirationDate, { timeZone, locale })
         : request.requestExpirationDate,
-      'request.holdShelfExpirationDate': request.holdShelfExpirationDate
-        ? intl.formatDate(request.holdShelfExpirationDate, { timeZone, locale })
-        : request.holdShelfExpirationDate, */
       'request.requestID': request.id
     };
   });

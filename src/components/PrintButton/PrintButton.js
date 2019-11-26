@@ -64,7 +64,10 @@ class PrintButton extends React.Component {
           <div ref={this.printContentRef}>
             {dataSource.map(source => {
               return (
-                <div style={{ 'page-break-before': 'always' }}>
+                <div
+                  key={source['request.requestID']}
+                  style={{ pageBreakBefore: 'always' }}
+                >
                   <ComponentToPrint
                     template={template}
                     dataSource={source}

@@ -8,7 +8,7 @@ import { buildTemplate } from '../../utils';
 class ComponentToPrint extends React.Component {
   static propTypes = {
     template: PropTypes.string.isRequired,
-    dataSource: PropTypes.arrayOf(PropTypes.object).isRequired,
+    dataSource: PropTypes.object.isRequired,
   };
 
   constructor(props) {
