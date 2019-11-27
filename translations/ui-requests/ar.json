@@ -160,5 +160,6 @@
     "requestQueue.requests.notFound": "لم يتم العثور على طلبات",
     "requestQueue.confirmReorder.cancel": "اتركه في الموضع الحالي",
     "cancellationReason": "سبب الإلغاء",
-    "cancellationAdditionalInformation": "بيانات إضافية للمستفيد"
+    "cancellationAdditionalInformation": "بيانات إضافية للمستفيد",
+    "printPickSlips": "Print pick slips for {sp}"
 }
