@@ -212,6 +212,15 @@ export default function config() {
     owners: [],
     totalRecords: 0,
   });
+  this.get('staff-slips-storage/staff-slips', {
+    staffSlips: [{
+      id: '8812bae1-2738-442c-bc20-fe4bb38a11f8',
+      name: 'Pick slip',
+      active: true,
+      template: '<p><strong>{{item.title}}</strong></p>',
+    }],
+    totalRecords: 1
+  });
 
   this.get('/cancellation-reason-storage/cancellation-reasons');
 

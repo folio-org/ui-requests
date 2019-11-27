@@ -131,3 +131,46 @@ export const openRequestStatusFilters = [
 ]
   .map(status => `requestStatus.${status}`)
   .join(',');
+
+export function buildTemplate(template = '') {
+  return dataSource => {
+    return template.replace(/{{([^{}]*)}}/g, (token, tokenName) => {
+      const tokenValue = dataSource[tokenName];
+      return typeof tokenValue === 'string' || typeof tokenValue === 'number' ? tokenValue : '';
+    });
+  };
+}
+
+export const convertToSlipData = (requests, intl, timeZone, locale) => {
+  return requests.map(request => {
+    const {
+      item = {},
+      requester = {},
+      deliveryAddress = {},
+    } = request;
+
+    return {
+      'staffSlip.Name': 'Pick slip',
+      'requester.firstName': requester.firstName,
+      'requester.lastName': requester.lastName,
+      'requester.middleName': requester.middleName,
+      'requester.barcode': `<Barcode>${requester.barcode}</Barcode>`,
+      'requester.addressLine1': deliveryAddress.addressLine1,
+      'requester.addressLine2': deliveryAddress.addressLine2,
+      'requester.city': deliveryAddress.city,
+      'requester.stateProvRegion': deliveryAddress.region,
+      'requester.zipPostalCode': deliveryAddress.postalCode,
+      'item.title': item.title,
+      'item.barcode': `<Barcode>${item.barcode}</Barcode>`,
+      'item.callNumber': item.callNumber,
+      'item.enumeration': item.enumeration,
+      'item.allContributors': get(item, 'contributorNames', []).map(({ name }) => name).join(';'),
+      'item.copy': get(item, 'copyNumbers', []).join(';'),
+      'request.servicePointPickup': get(request, 'pickupServicePoint.name'),
+      'request.requestExpirationDate': request.requestExpirationDate
+        ? intl.formatDate(request.requestExpirationDate, { timeZone, locale })
+        : request.requestExpirationDate,
+      'request.requestID': request.id
+    };
+  });
+};
