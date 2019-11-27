@@ -136,7 +136,7 @@ export function buildTemplate(template = '') {
   return dataSource => {
     return template.replace(/{{([^{}]*)}}/g, (token, tokenName) => {
       const tokenValue = dataSource[tokenName];
-      return typeof tokenValue === 'string' || typeof r === 'number' ? tokenValue : '';
+      return typeof tokenValue === 'string' || typeof tokenValue === 'number' ? tokenValue : '';
     });
   };
 }
