@@ -62,19 +62,17 @@ class PrintButton extends React.Component {
         />
         <div className={css.hiddenContent}>
           <div ref={this.printContentRef}>
-            {dataSource.map(source => {
-              return (
-                <div
-                  key={source['request.requestID']}
-                  style={{ pageBreakBefore: 'always' }}
-                >
-                  <ComponentToPrint
-                    dataSource={source}
-                    template={template}
-                  />
-                </div>
-              );
-            })}
+            {dataSource.map(source => (
+              <div
+                key={source['request.requestID']}
+                style={{ pageBreakBefore: 'always' }}
+              >
+                <ComponentToPrint
+                  dataSource={source}
+                  template={template}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </React.Fragment>
