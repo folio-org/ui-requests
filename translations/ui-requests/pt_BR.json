@@ -160,5 +160,6 @@
     "requestQueue.requests.notFound": "Nenhuma solicitação encontrada",
     "requestQueue.confirmReorder.cancel": "Deixar na posição atual",
     "cancellationReason": "Motivo do cancelamento",
-    "cancellationAdditionalInformation": "Informações adicionais para o usuário"
+    "cancellationAdditionalInformation": "Informações adicionais para o usuário",
+    "printPickSlips": "Print pick slips for {sp}"
 }
