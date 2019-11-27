@@ -14,9 +14,9 @@ import css from './PrintButton.css';
 
 class PrintButton extends React.Component {
   static propTypes = {
+    children: PropTypes.node.isRequired,
     dataSource: PropTypes.arrayOf(PropTypes.object).isRequired,
     template: PropTypes.string.isRequired,
-    children: PropTypes.node.isRequired,
     onAfterPrint: PropTypes.func,
     onBeforePrint: PropTypes.func,
   };
@@ -54,11 +54,11 @@ class PrintButton extends React.Component {
     return (
       <React.Fragment>
         <ReactToPrint
+          content={this.getContent}
           removeAfterPrint
           trigger={this.renderTriggerButton}
-          content={this.getContent}
-          onBeforePrint={onBeforePrint}
           onAfterPrint={onAfterPrint}
+          onBeforePrint={onBeforePrint}
         />
         <div className={css.hiddenContent}>
           <div ref={this.printContentRef}>
@@ -69,8 +69,8 @@ class PrintButton extends React.Component {
                   style={{ pageBreakBefore: 'always' }}
                 >
                   <ComponentToPrint
-                    template={template}
                     dataSource={source}
+                    template={template}
                   />
                 </div>
               );

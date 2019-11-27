@@ -5,6 +5,8 @@ import {
   clickable,
   isVisible,
   count,
+  property,
+  text,
 } from '@bigtest/interactor';
 
 @interactor class ErrorModal {
@@ -19,6 +21,10 @@ import {
   clickExportExpiredHoldsToCSV = clickable('#exportExpiredHoldsToCsvPaneHeaderBtn');
   exportBtnIsVisible = isVisible('#exportToCsvPaneHeaderBtn');
   exportExpiredHoldsBtnIsVisible = isVisible('#exportExpiredHoldsToCsvPaneHeaderBtn');
+  clickPrintPickSlipsBtn = clickable('#printPickSlipsBtn');
+  printPickSlipsIsVisible = isVisible('#printPickSlipsBtn');
+  printPickSlipsIsDisabled = property('#printPickSlipsBtn', 'disabled');
+  printPickSlipsBtnText = text('#printPickSlipsBtn');
 }
 
 @interactor class InstanceList {
@@ -38,6 +44,7 @@ import {
   clickHoldsCheckbox = clickable('#clickable-filter-request-type-holds');
   clickPagesCheckbox = clickable('#clickable-filter-request-type-pages');
   clickRecallsCheckbox = clickable('#clickable-filter-request-type-recalls');
+  clickOpenNotFilled = clickable('#clickable-filter-request-status-open-not-yet-filled');
   errorModal = new ErrorModal();
 
   whenInstancesArePresent(size) {

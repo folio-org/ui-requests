@@ -141,7 +141,7 @@ export function buildTemplate(template = '') {
   };
 }
 
-export const convertToSlipData = (requests = [], intl, timeZone, locale) => {
+export const convertToSlipData = (requests, intl, timeZone, locale) => {
   return requests.map(request => {
     const {
       item = {},
