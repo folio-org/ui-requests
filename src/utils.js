@@ -141,36 +141,14 @@ export function buildTemplate(template = '') {
   };
 }
 
-export const convertToSlipData = (requests, intl, timeZone, locale) => {
-  return requests.map(request => {
-    const {
-      item = {},
-      requester = {},
-      deliveryAddress = {},
-    } = request;
-
-    return {
-      'staffSlip.Name': 'Pick slip',
-      'requester.firstName': requester.firstName,
-      'requester.lastName': requester.lastName,
-      'requester.middleName': requester.middleName,
-      'requester.barcode': `<Barcode>${requester.barcode}</Barcode>`,
-      'requester.addressLine1': deliveryAddress.addressLine1,
-      'requester.addressLine2': deliveryAddress.addressLine2,
-      'requester.city': deliveryAddress.city,
-      'requester.stateProvRegion': deliveryAddress.region,
-      'requester.zipPostalCode': deliveryAddress.postalCode,
-      'item.title': item.title,
-      'item.barcode': `<Barcode>${item.barcode}</Barcode>`,
-      'item.callNumber': item.callNumber,
-      'item.enumeration': item.enumeration,
-      'item.allContributors': get(item, 'contributorNames', []).map(({ name }) => name).join(';'),
-      'item.copy': get(item, 'copyNumbers', []).join(';'),
-      'request.servicePointPickup': get(request, 'pickupServicePoint.name'),
-      'request.requestExpirationDate': request.requestExpirationDate
-        ? intl.formatDate(request.requestExpirationDate, { timeZone, locale })
-        : request.requestExpirationDate,
-      'request.requestID': request.id
-    };
-  });
+export const convertToSlipData = (requests) => {
+  return requests.map(request => ({
+    'staffSlip.Name': 'Pick slip',
+    'item.title': request.title,
+    'item.barcode': `<Barcode>${request.barcode}</Barcode>`,
+    'item.callNumber': request.callNumber,
+    'item.enumeration': request.enumeration,
+    'item.allContributors': get(request, 'contributors', []).map(({ name }) => name).join(';'),
+    'request.requestID': request.id
+  }));
 };
