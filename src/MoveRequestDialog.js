@@ -11,6 +11,7 @@ import {
   Pane,
 } from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
+import { Loading } from './components';
 
 import css from './MoveRequestDialog.css';
 
@@ -76,6 +77,7 @@ class MoveRequestDialog extends React.Component {
   static propTypes = {
     onClose: PropTypes.func,
     open: PropTypes.bool,
+    moveInProgress: PropTypes.bool,
     onItemSelected: PropTypes.func,
     request: PropTypes.object,
     resources: PropTypes.shape({
@@ -164,6 +166,7 @@ class MoveRequestDialog extends React.Component {
     const {
       onClose,
       open,
+      moveInProgress,
     } = this.props;
     const {
       items,
@@ -193,6 +196,7 @@ class MoveRequestDialog extends React.Component {
         footer={footer}
         dismissible
       >
+
         <Pane
           padContent={false}
           paneTitle={<FormattedMessage id="ui-requests.moveRequest.instanceItems" />}
@@ -200,7 +204,8 @@ class MoveRequestDialog extends React.Component {
           defaultWidth="fill"
           noOverflow
         >
-          {!isLoading &&
+          {(isLoading || moveInProgress) ?
+            <Loading /> :
             <MultiColumnList
               id="instance-items-list"
               interactive
