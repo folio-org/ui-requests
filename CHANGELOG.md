@@ -8,6 +8,7 @@
 * Remove 'Request can not be moved above page request' dialog. Part of UIREQ-379.
 * Provide reorder queue permission. Refs UIREQ-318.
 * Show reorder view after moving request from one item to another. Refs UIREQ-334.
+* Show effective call number in details pain. Refs UIREQ-366.
 
 ## [1.13.0](https://github.com/folio-org/ui-requests/tree/v1.13.0) (2019-09-23)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.12.0...v1.13.0)
