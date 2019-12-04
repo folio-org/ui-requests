@@ -38,11 +38,18 @@ class MoveRequestManager extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { moveRequest: true };
+    this.state = {
+      moveRequest: true,
+      moveInProgress: false,
+    };
+
     this.steps = [
       {
         validate: this.shouldChooseRequestTypeDialogBeShown,
-        exec: () => this.setState({ chooseRequestType: true }),
+        exec: () => this.setState({
+          chooseRequestType: true,
+          moveRequest: false
+        }),
       },
     ];
   }
@@ -91,11 +98,15 @@ class MoveRequestManager extends React.Component {
       requestType,
     };
 
+    this.setState({ moveInProgress: true });
+
     try {
       const movedRequest = await POST(data);
       this.props.onMove(movedRequest);
     } catch (resp) {
       this.processError(resp);
+    } finally {
+      this.setState({ moveInProgress: false });
     }
   }
 
@@ -119,7 +130,6 @@ class MoveRequestManager extends React.Component {
 
   onItemSelected = (selectedItem) => {
     this.setState({
-      moveRequest: false,
       selectedItem,
     }, () => this.execSteps(0));
   }
@@ -134,7 +144,6 @@ class MoveRequestManager extends React.Component {
   closeErrorMessage = () => {
     const { selectedItem } = this.state;
     const requestTypes = this.getPossibleRequestTypes(selectedItem);
-
     const state = { errorMessage: null };
 
     if (requestTypes && requestTypes.length) {
@@ -154,13 +163,15 @@ class MoveRequestManager extends React.Component {
       selectedItem,
       errorMessage,
       moveRequest,
+      moveInProgress,
     } = this.state;
 
     return (
       <React.Fragment>
         <MoveRequestDialog
-          open={moveRequest}
+          open={moveRequest || moveInProgress}
           request={request}
+          moveInProgress={moveInProgress}
           onClose={onCancelMove}
           onItemSelected={this.onItemSelected}
         />
