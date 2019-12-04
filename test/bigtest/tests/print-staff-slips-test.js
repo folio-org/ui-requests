@@ -4,7 +4,10 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import RequestsInteractor from '../interactors/requests';
 
-const servicePoint = { id: 'servicepointId1' };
+const servicePoint = {
+  id: 'servicepointId1',
+  name: 'Circ Desc 1',
+};
 
 const requests = new RequestsInteractor();
 
@@ -20,7 +23,6 @@ describe('Print pick slips', () => {
     describe('render print button', () => {
       beforeEach(async function () {
         this.visit('/requests');
-        await requests.clickOpenNotFilled();
         await requests.headerDropdown.click();
       });
 

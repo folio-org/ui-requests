@@ -28,7 +28,6 @@ import {
   fulfilmentTypes,
   expiredHoldsReportHeaders,
   requestStatuses,
-  itemStatuses,
   pickSlipType,
 } from '../constants';
 import {
@@ -183,6 +182,14 @@ class RequestsRoute extends React.Component {
       path: 'staff-slips-storage/staff-slips?limit=100',
       throwErrors: false,
     },
+    pickSlips: {
+      type: 'okapi',
+      records: 'pickSlips',
+      path: 'circulation/pick-slips/%{currentServicePoint.id}',
+      fetch: true,
+      throwErrors: false,
+    },
+    currentServicePoint: {}
   };
 
   static propTypes = {
@@ -212,6 +219,12 @@ class RequestsRoute extends React.Component {
       staffSlips: PropTypes.shape({
         GET: PropTypes.func,
       }),
+      pickSlips: PropTypes.shape({
+        GET: PropTypes.func.isRequired,
+      }).isRequired,
+      currentServicePoint: PropTypes.shape({
+        update: PropTypes.func.isRequired,
+      }).isRequired,
     }).isRequired,
     resources: PropTypes.shape({
       addressTypes: PropTypes.shape({
@@ -227,7 +240,10 @@ class RequestsRoute extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       staffSlips: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.object).isRequired,
+      }),
+      pickSlips: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object).isRequired,
       }),
     }).isRequired,
     stripes: PropTypes.shape({
@@ -299,12 +315,18 @@ class RequestsRoute extends React.Component {
     return null;
   }
 
+  componentDidMount() {
+    this.setCurrentServicePointId();
+  }
+
   componentDidUpdate(prevProps) {
     const patronBlocks = get(this.props.resources, ['patronBlocks', 'records'], []);
     const prevBlocks = get(prevProps.resources, ['patronBlocks', 'records'], []);
     const { submitting } = this.state;
     const prevExpired = prevBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
     const expired = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
+    const { id: currentServicePointId } = this.getCurrentServicePointInfo();
+    const prevStateServicePointId = get(prevProps.resources.currentServicePoint, 'id');
 
     if (prevExpired.length > 0 && expired.length === 0) {
       // eslint-disable-next-line react/no-did-update-set-state
@@ -335,7 +357,27 @@ class RequestsRoute extends React.Component {
         this.csvExportPending = false;
       }
     }
+
+    if (prevStateServicePointId !== currentServicePointId) {
+      this.setCurrentServicePointId();
+    }
   }
+
+  getCurrentServicePointInfo = () => {
+    const { stripes } = this.props;
+
+    const currentState = stripes.store.getState();
+    const id = get(currentState, 'okapi.currentUser.curServicePoint.id');
+    const name = get(currentState, 'okapi.currentUser.curServicePoint.name');
+
+    return { id, name };
+  };
+
+  setCurrentServicePointId = () => {
+    const { mutator } = this.props;
+    const { id } = this.getCurrentServicePointInfo();
+    mutator.currentServicePoint.update({ id });
+  };
 
   getColumnHeaders = (headers) => {
     const { intl: { formatMessage } } = this.props;
@@ -555,24 +597,6 @@ class RequestsRoute extends React.Component {
     this.setState({ errorModalData: {} });
   };
 
-  getCurrentServicePoint = () => {
-    const currentState = this.props.stripes.store.getState();
-    return get(currentState, 'okapi.currentUser.curServicePoint', {});
-  };
-
-  getPickSlips = () => {
-    const requests = get(this.props.resources, 'records.records', []);
-    const { id } = this.getCurrentServicePoint();
-
-    return requests.filter(request => {
-      const isItemPaged = request.item.status === itemStatuses.PAGED;
-      const isRequestNotYetFilled = request.status === requestStatuses.NOT_YET_FILLED;
-      const currentServicePoint = request.pickupServicePointId === id;
-
-      return isItemPaged && isRequestNotYetFilled && currentServicePoint;
-    });
-  };
-
   getPrintTemplate() {
     const staffSlips = get(this.props.resources, 'staffSlips.records', []);
     const pickSlip = staffSlips.find(slip => slip.name.toLowerCase() === pickSlipType);
@@ -581,7 +605,6 @@ class RequestsRoute extends React.Component {
 
   render() {
     const {
-      intl,
       resources,
       mutator,
       stripes,
@@ -606,7 +629,8 @@ class RequestsRoute extends React.Component {
       errorModalData,
     } = this.state;
 
-    const currentServicePoint = get(this.getCurrentServicePoint(), 'name');
+    const { name: servicePointName } = this.getCurrentServicePointInfo();
+    const pickSlips = get(resources, 'pickSlips.records', []);
     const patronGroups = get(resources, 'patronGroups.records', []);
     const addressTypes = get(resources, 'addressTypes.records', []);
     const servicePoints = get(resources, 'servicePoints.records', []);
@@ -629,8 +653,6 @@ class RequestsRoute extends React.Component {
       [type]: rq => rq.requestType,
       [title]: rq => (rq.item ? rq.item.title : ''),
     };
-
-    const pickSlips = this.getPickSlips();
 
     const actionMenu = ({ onToggle }) => (
       <React.Fragment>
@@ -662,12 +684,12 @@ class RequestsRoute extends React.Component {
           id="printPickSlipsBtn"
           disabled={isEmpty(pickSlips)}
           template={this.getPrintTemplate()}
-          dataSource={convertToSlipData(pickSlips, intl, stripes.timezone, stripes.locale)}
+          dataSource={convertToSlipData(pickSlips)}
           onBeforePrint={onToggle}
         >
           <FormattedMessage
             id="ui-requests.printPickSlips"
-            values={{ sp: currentServicePoint }}
+            values={{ sp: servicePointName }}
           />
         </PrintButton>
       </React.Fragment>

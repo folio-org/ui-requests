@@ -222,6 +222,27 @@ export default function config() {
     totalRecords: 1
   });
 
+  this.get('circulation/pick-slips/servicepointId1', {
+    pickSlips: [{
+      id : '7212ba6a-8dcf-45a1-be9a-ffaa847c4423',
+      holdingsRecordId : 'e3ff6133-b9a2-4d4c-a1c9-dc1867d4df19',
+      instanceId: '5bf370e0-8cca-4d9c-82e4-5170ab2a0a39',
+      title: 'A semantic web primer',
+      barcode: '10101',
+      callNumber: 'TK5105.88815 . A58 2004 FT MEADE',
+      status: 'Paged',
+      contributors: [
+        { name: 'Antoniou, Grigoris' },
+        { name: 'Van Harmelen, Frank' }
+      ],
+      location: {
+        name: 'Main Library',
+        code: 'KU/CC/DI/M'
+      }
+    }],
+    totalRecords: 1,
+  });
+
   this.get('/cancellation-reason-storage/cancellation-reasons');
 
   this.get('/circulation/requests', ({ requests }) => {
