@@ -4,7 +4,6 @@ import {
 } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { stringify } from 'query-string';
 import moment from 'moment-timezone';
 import {
@@ -261,8 +260,6 @@ class RequestsRoute extends React.Component {
       }),
     }).isRequired,
     history: PropTypes.object,
-    servicePointId: PropTypes.string.isRequired,
-    servicePointName: PropTypes.string.isRequired,
   };
 
   constructor(props) {
@@ -328,6 +325,8 @@ class RequestsRoute extends React.Component {
     const { submitting } = this.state;
     const prevExpired = prevBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
     const expired = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
+    const { id: currentServicePointId } = this.getCurrentServicePointInfo();
+    const prevStateServicePointId = get(prevProps.resources.currentServicePoint, 'id');
 
     if (prevExpired.length > 0 && expired.length === 0) {
       // eslint-disable-next-line react/no-did-update-set-state
@@ -359,18 +358,25 @@ class RequestsRoute extends React.Component {
       }
     }
 
-    if (prevProps.servicePointId !== this.props.servicePointId) {
+    if (prevStateServicePointId !== currentServicePointId) {
       this.setCurrentServicePointId();
     }
   }
 
-  setCurrentServicePointId = () => {
-    const {
-      mutator,
-      servicePointId,
-    } = this.props;
+  getCurrentServicePointInfo = () => {
+    const { stripes } = this.props;
 
-    mutator.currentServicePoint.update({ id: servicePointId });
+    const currentState = stripes.store.getState();
+    const id = get(currentState, 'okapi.currentUser.curServicePoint.id');
+    const name = get(currentState, 'okapi.currentUser.curServicePoint.name');
+
+    return { id, name };
+  };
+
+  setCurrentServicePointId = () => {
+    const { mutator } = this.props;
+    const { id } = this.getCurrentServicePointInfo();
+    mutator.currentServicePoint.update({ id });
   };
 
   getColumnHeaders = (headers) => {
@@ -603,7 +609,6 @@ class RequestsRoute extends React.Component {
       mutator,
       stripes,
       history,
-      servicePointName,
     } = this.props;
 
     const {
@@ -624,6 +629,7 @@ class RequestsRoute extends React.Component {
       errorModalData,
     } = this.state;
 
+    const { name: servicePointName } = this.getCurrentServicePointInfo();
     const pickSlips = get(resources, 'pickSlips.records', []);
     const patronGroups = get(resources, 'patronGroups.records', []);
     const addressTypes = get(resources, 'addressTypes.records', []);
@@ -759,11 +765,4 @@ class RequestsRoute extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    servicePointId: state.okapi.currentUser.curServicePoint.id,
-    servicePointName: state.okapi.currentUser.curServicePoint.name,
-  };
-};
-
-export default stripesConnect(injectIntl(connect(mapStateToProps)(RequestsRoute)));
+export default stripesConnect(injectIntl(RequestsRoute));
