@@ -220,10 +220,10 @@ class RequestsRoute extends React.Component {
         GET: PropTypes.func,
       }),
       pickSlips: PropTypes.shape({
-        GET: PropTypes.func,
+        GET: PropTypes.func.isRequired,
       }).isRequired,
       currentServicePoint: PropTypes.shape({
-        update: PropTypes.func,
+        update: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
     resources: PropTypes.shape({
@@ -240,10 +240,10 @@ class RequestsRoute extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object),
       }),
       staffSlips: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.object).isRequired,
       }),
       pickSlips: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.object).isRequired,
       }),
     }).isRequired,
     stripes: PropTypes.shape({
