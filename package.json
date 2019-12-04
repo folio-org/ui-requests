@@ -39,11 +39,12 @@
       },
       {
         "permissionName": "ui-requests.moveRequest",
-        "displayName": "Requests: Move to new item",
+        "displayName": "Requests: Move and reorder to new item",
         "visible": true,
         "subPermissions": [
           "circulation.requests.item.move.post",
-          "circulation.rules.request-policy.get"
+          "circulation.rules.request-policy.get",
+          "ui-requests.reorderQueue"
         ]
       },
       {
