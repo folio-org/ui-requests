@@ -474,7 +474,7 @@ class RequestForm extends React.Component {
   isEditForm() {
     const { request } = this.props;
 
-    return !!get(request, 'item.barcode');
+    return !!get(request, 'id');
   }
 
   isSubmittingButtonDisabled() {
