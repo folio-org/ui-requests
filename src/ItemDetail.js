@@ -50,7 +50,7 @@ const ItemDetail = ({ item, loan, requestCount }) => {
           </KeyValue>
         </Col>
         <Col xs={8}>
-          <KeyValue label={<FormattedMessage id="ui-requests.item.effectiveCallNumber" />}>
+          <KeyValue label={<FormattedMessage id="ui-requests.item.callNumber" />}>
             {effectiveCallNumber(item)}
           </KeyValue>
         </Col>
