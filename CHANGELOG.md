@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 1.14.0 (IN PROGRESS)
+## [1.14.0](https://github.com/folio-org/ui-requests/tree/v1.14.0) (2019-12-05)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.13.0...v1.14.0)
 
 * Add request queue page with reorder capabilities. Part of UIREQ-112.
 * Display cancellation reason on cancelled request. Part of UIREQ-364.
