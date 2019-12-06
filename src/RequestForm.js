@@ -247,9 +247,25 @@ class RequestForm extends React.Component {
   }
 
   onChangeFulfilment(e) {
+    const {
+      defaultDeliveryAddressTypeId,
+      defaultServicePointId,
+    } = this.state;
+    const { change } = this.props;
+
+    const deliverySelected = e.target.value === fulfilmentTypeMap.DELIVERY;
+
     this.setState({
-      selectedDelivery: e.target.value === fulfilmentTypeMap.DELIVERY,
+      selectedDelivery: deliverySelected,
     });
+
+    if (deliverySelected) {
+      change('deliveryAddressTypeId', defaultDeliveryAddressTypeId);
+      change('pickupServicePointId', '');
+    } else {
+      change('pickupServicePointId', defaultServicePointId);
+      change('deliveryAddressTypeId', '');
+    }
   }
 
   onChangeAddress(e) {
@@ -340,7 +356,6 @@ class RequestForm extends React.Component {
         selectedDelivery: true,
         selectedAddressTypeId: defaultDeliveryAddressTypeId,
       });
-
       this.props.change('deliveryAddressTypeId', defaultDeliveryAddressTypeId);
     }
     if (fulfillmentPreference === fulfilmentTypeMap.HOLD_SHELF) {
