@@ -22,6 +22,7 @@ class RequestQueueRoute extends React.Component {
       type: 'okapi',
       path: 'circulation/requests',
       records: 'requests',
+      resourceShouldRefresh: true,
       params: (_q, _p, _r, _l, props) => {
         const request = RequestQueueRoute.getRequest(props);
 
