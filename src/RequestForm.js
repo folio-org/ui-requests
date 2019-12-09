@@ -502,7 +502,13 @@ class RequestForm extends React.Component {
   }
 
   onSave = (data) => {
-    const { intl: { timeZone } } = this.props;
+    const {
+      intl: {
+        timeZone,
+      },
+      parentResources,
+    } = this.props;
+
     const {
       requestExpirationDate,
       holdShelfExpirationDate,
@@ -510,6 +516,12 @@ class RequestForm extends React.Component {
       deliveryAddressTypeId,
       pickupServicePointId,
     } = data;
+
+    const [block] = this.getPatronBlocks(parentResources);
+    if (block.userId === this.state.selectedUser.id) {
+      this.setState({ blocked: true });
+      return;
+    }
 
     if (!requestExpirationDate) unset(data, 'requestExpirationDate');
     if (holdShelfExpirationDate && !holdShelfExpirationDate.match('T')) {
