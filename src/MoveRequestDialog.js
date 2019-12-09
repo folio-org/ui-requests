@@ -174,17 +174,6 @@ class MoveRequestDialog extends React.Component {
     } = this.state;
     const contentData = orderBy(items, 'requestQueue');
     const count = items.length;
-    const footer = (
-      <ModalFooter>
-        <Button
-          data-test-cancel-move-request
-          buttonStyle="primary"
-          onClick={onClose}
-        >
-          <FormattedMessage id="stripes-core.button.close" />
-        </Button>
-      </ModalFooter>
-    );
 
     return (
       <Modal
@@ -193,12 +182,9 @@ class MoveRequestDialog extends React.Component {
         open={open}
         contentClass={css.content}
         onClose={onClose}
-        footer={footer}
         dismissible
       >
-
         <Pane
-          padContent={false}
           paneTitle={<FormattedMessage id="ui-requests.moveRequest.instanceItems" />}
           paneSub={<FormattedMessage id="ui-requests.resultCount" values={{ count }} />}
           defaultWidth="fill"
