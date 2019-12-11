@@ -3,6 +3,7 @@
 ## [1.15.0] IN PROGRESS
 
 * Disable confirm button when cancel is in progress. Fixes UIREQ-321
+* Blocked patron can successfully place a Request. Refs UIREQ-394.
 
 ## [1.14.0](https://github.com/folio-org/ui-requests/tree/v1.14.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.13.0...v1.14.0)
