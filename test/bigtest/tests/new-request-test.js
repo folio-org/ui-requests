@@ -11,7 +11,7 @@ import NewRequestInteractor from '../interactors/new-request';
 import RequestsInteractor from '../interactors/requests';
 import ViewRequestInteractor from '../interactors/view-request';
 
-describe('New Request page', () => {
+describe.only('New Request page', () => {
   setupApplication();
 
   const requests = new RequestsInteractor();
@@ -55,7 +55,7 @@ describe('New Request page', () => {
 
         describe('clicking on cancel', () => {
           beforeEach(async () => {
-            await NewRequestInteractor.headerDropdownMenu.clickCancel();
+            await NewRequestInteractor.clickCancel();
           });
 
           it('should redirect to view requests page after click', () => {

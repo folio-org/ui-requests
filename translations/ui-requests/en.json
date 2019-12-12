@@ -159,5 +159,8 @@
   "requestQueue.requests.notFound": "No requests found",
   "cancellationReason": "Cancellation reason",
   "cancellationAdditionalInformation": "Additional information for patron",
-  "printPickSlips": "Print pick slips for {sp}"
+  "printPickSlips": "Print pick slips for {sp}",
+
+  "common.cancel": "Cancel",
+  "common.saveAndClose": "Save & close"
 }

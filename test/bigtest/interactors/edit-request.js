@@ -14,7 +14,7 @@ import CancelRequestDialog from './cancel-request-dialog';
 }
 
 @interactor class HeaderDropdownMenu {
-  clickCancel = clickable('[data-test-cancel-editing]');
+  clickCancel = clickable('#clickable-cancel-request');
   clickDelete = clickable('[data-test-delete-request]');
 }
 
@@ -23,7 +23,7 @@ import CancelRequestDialog from './cancel-request-dialog';
   headerDropdown = new HeaderDropdown('[class*=paneHeaderCenterInner---] [class*=dropdown---]');
   headerDropdownMenu = new HeaderDropdownMenu();
   chooseServicePoint = selectable('[name="pickupServicePointId"]');
-  clickUpdate = clickable('#clickable-update-request');
+  clickUpdate = clickable('#clickable-save-request');
   cancelRequestDialog = new CancelRequestDialog('[data-test-cancel-request-modal]');
   isLayerPresent = isPresent('[class*=LayerRoot][role=dialog]');
   fulfillmentPreferenceFieldDisabled = is('[data-test-fulfillment-preference-filed]', ':disabled');

@@ -36,6 +36,7 @@ import {
   Row,
   Select,
   TextField,
+  PaneFooter,
 } from '@folio/stripes/components';
 
 import stripesForm from '@folio/stripes/form';
@@ -652,11 +653,13 @@ class RequestForm extends React.Component {
       },
       patronGroups,
       parentResources,
+      pristine,
       submitting,
       intl: {
         formatMessage,
       },
       errorMessage,
+      onCancel,
     } = this.props;
 
     const {
@@ -719,7 +722,47 @@ class RequestForm extends React.Component {
     const patronGroup = getPatronGroup(selectedUser, patronGroups);
 
     return (
-      <div>
+      <Paneset isRoot>
+         <form
+          id="form-requests"
+          className={css.requestForm}
+          onSubmit={handleSubmit(this.onSave)}
+          data-test-requests-form
+        >
+                    <Pane
+              defaultWidth="100%"
+              // height="100%"
+              firstMenu={this.renderAddRequestFirstMenu()}
+              // lastMenu={this.renderLastMenu()}
+              // actionMenu={this.renderActionMenu}
+              paneTitle={
+                isEditForm
+                  ? <FormattedMessage id="ui-requests.actions.editRequest" />
+                  : <FormattedMessage id="ui-requests.actions.newRequest" />
+              }
+              footer={
+                <PaneFooter>
+                  <div className={css.footerContent}>
+                    <Button
+                      id="clickable-cancel-request"
+                      marginBottom0
+                      onClick={onCancel}
+                    >
+                      <FormattedMessage id="ui-requests.common.cancel" />
+                    </Button>
+                    <Button
+                      id="clickable-save-request"
+                      type="submit"
+                      marginBottom0
+                      buttonStyle="primary"
+                      disabled={submitting}
+                    >
+                      <FormattedMessage id="ui-requests.common.saveAndClose" />
+                    </Button>
+                  </div>
+                </PaneFooter>
+              }
+            >
         {
           errorMessage &&
           <ErrorModal
@@ -728,25 +771,9 @@ class RequestForm extends React.Component {
             errorMessage={errorMessage}
           />
         }
-        <form
-          id="form-requests"
-          className={css.requestForm}
-          onSubmit={handleSubmit(this.onSave)}
-          data-test-requests-form
-        >
-          <Paneset isRoot>
-            <Pane
-              defaultWidth="100%"
-              height="100%"
-              firstMenu={this.renderAddRequestFirstMenu()}
-              lastMenu={this.renderLastMenu()}
-              actionMenu={this.renderActionMenu}
-              paneTitle={
-                isEditForm
-                  ? <FormattedMessage id="ui-requests.actions.editRequest" />
-                  : <FormattedMessage id="ui-requests.actions.newRequest" />
-              }
-            >
+        
+          
+
               <AccordionSet accordionStatus={accordions} onToggle={this.onToggleSection}>
                 <Accordion
                   id="item-info"
@@ -995,7 +1022,7 @@ class RequestForm extends React.Component {
                   </div>
                 </Accordion>
               </AccordionSet>
-            </Pane>
+            
             <this.connectedCancelRequestDialog
               open={isCancellingRequest}
               onCancelRequest={this.onCancelRequest}
@@ -1014,9 +1041,9 @@ class RequestForm extends React.Component {
             <br />
             <br />
             <br />
-          </Paneset>
+        </Pane>
         </form>
-      </div>
+      </Paneset>
     );
   }
 }
