@@ -11,7 +11,7 @@ import NewRequestInteractor from '../interactors/new-request';
 import RequestsInteractor from '../interactors/requests';
 import ViewRequestInteractor from '../interactors/view-request';
 
-describe.only('New Request page', () => {
+describe('New Request page', () => {
   setupApplication();
 
   const requests = new RequestsInteractor();
