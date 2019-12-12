@@ -498,6 +498,11 @@ class RequestForm extends React.Component {
     }
   }
 
+  onCancelRequest = (cancellationInfo) => {
+    this.setState({ isCancellingRequest: false });
+    this.props.onCancelRequest(cancellationInfo);
+  }
+
   onCloseBlockedModal = () => {
     this.setState({ blocked: false });
   }
