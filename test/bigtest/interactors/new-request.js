@@ -70,7 +70,8 @@ import { getSelectValues } from './helpers';
   requestTypeOptions = getSelectValues('[name="requestType"] option');
   requestTypeText = text('[data-test-request-type-text]');
   requestTypeIsPresent = isPresent('[data-test-request-type-text]');
-  clickNewRequest = clickable('#clickable-create-request');
+  clickNewRequest = clickable('#clickable-save-request');
+  clickCancel = clickable('#clickable-cancel-request');
   containsUserBarcode = value('[name="requester.barcode"]');
   containsItemBarcode = value('[name="item.barcode"]');
 
