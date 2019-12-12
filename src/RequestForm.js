@@ -518,7 +518,8 @@ class RequestForm extends React.Component {
     } = data;
 
     const [block] = this.getPatronBlocks(parentResources);
-    if (block.userId === this.state.selectedUser.id) {
+
+    if (get(block, 'userId') === this.state.selectedUser.id) {
       this.setState({ blocked: true });
       return;
     }
