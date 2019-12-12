@@ -16,10 +16,6 @@ import { getSelectValues } from './helpers';
   click = clickable('button');
 }
 
-@interactor class HeaderDropdownMenu {
-  clickCancel = clickable('[data-test-cancel-new-request-action]');
-}
-
 @interactor class InputFieldInteractor {
   clickInput = clickable();
   fillInput = fillable();
@@ -54,7 +50,6 @@ import { getSelectValues } from './helpers';
 
   title = text('[class*=paneTitleLabel---]');
   headerDropdown = new HeaderDropdown('[class*=paneHeaderCenterInner---] [class*=dropdown---]');
-  headerDropdownMenu = new HeaderDropdownMenu();
   requestTypeMessageIsPresent = isPresent('[data-test-request-type-message]');
   itemBarcodeIsPresent = isPresent('[name="item.barcode"]');
   fillItemBarcode = fillable('[name="item.barcode"]');
