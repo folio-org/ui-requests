@@ -55,7 +55,7 @@ describe('New Request page', () => {
 
         describe('clicking on cancel', () => {
           beforeEach(async () => {
-            await NewRequestInteractor.headerDropdownMenu.clickCancel();
+            await NewRequestInteractor.clickCancel();
           });
 
           it('should redirect to view requests page after click', () => {

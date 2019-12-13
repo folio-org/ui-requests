@@ -63,7 +63,6 @@
   "actions.cancelNewRequest": "Cancel",
   "actions.createNewRequest": "Create New Request",
   "actions.newRequest": "New request",
-  "actions.updateRequest": "Update request",
   "actions.editRequest": "Edit request",
   "actions.selectAddressType": "Select address type",
   "actions.selectPickupLoc": "Select pickup location",
@@ -128,10 +127,7 @@
   "moveRequest.success": "Request has been moved successfully",
   "moveRequest.secondPositionTitle": "Request moved to position 2 of the queue",
   "moveRequest.secondPositionMessage": "Requests cannot be moved above page requests, even when fulfillment has not begun. This request will be moved to position 2 in the request queue.",
-  "edit.deleteRequest": "Delete request",
-  "edit.cancelEditing": "Cancel editing",
 
-  "newRequest.cancel": "Cancel editing",
   "exportExpiredHoldsToCsv": "Hold shelf clearance report CSV",
   "nothingToClear": "Nothing to clear",
   "noExpiredRequests": "There are currently no expired or cancelled requests on the hold shelf.",
@@ -159,5 +155,8 @@
   "requestQueue.requests.notFound": "No requests found",
   "cancellationReason": "Cancellation reason",
   "cancellationAdditionalInformation": "Additional information for patron",
-  "printPickSlips": "Print pick slips for {sp}"
+  "printPickSlips": "Print pick slips for {sp}",
+
+  "common.cancel": "Cancel",
+  "common.saveAndClose": "Save & close"
 }
