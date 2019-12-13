@@ -18,6 +18,8 @@ import {
   cloneDeep,
   defer,
   unset,
+  pick,
+  isBoolean,
 } from 'lodash';
 
 import { Pluggable } from '@folio/stripes/core';
@@ -114,9 +116,8 @@ class RequestForm extends React.Component {
   constructor(props) {
     super(props);
 
-    const { request, initialValues } = props;
+    const { request } = props;
     const { requester, item, loan } = (request || {});
-    const { deliveryAddressTypeId } = initialValues;
 
     this.state = {
       accordions: {
@@ -125,16 +126,11 @@ class RequestForm extends React.Component {
         'requester-info': true,
       },
       proxy: {},
-      hasDelivery: false,
-      requestPreferencesLoaded: false,
-      defaultDeliveryAddressTypeId: '',
-      defaultServicePointId: '',
-      selectedDelivery: isDelivery(initialValues),
-      selectedAddressTypeId: deliveryAddressTypeId,
       selectedItem: item,
       selectedUser: requester,
       selectedLoan: loan,
       blocked: false,
+      ...this.getDefaultRequestPreferences(),
     };
 
     this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
@@ -188,7 +184,7 @@ class RequestForm extends React.Component {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         selectedAddressTypeId: initialValues.deliveryAddressTypeId,
-        selectedDelivery: isDelivery(initialValues),
+        deliverySelected: isDelivery(initialValues),
         selectedItem: request.item,
         selectedLoan: request.loan,
         selectedUser: request.requester,
@@ -247,25 +243,13 @@ class RequestForm extends React.Component {
   }
 
   onChangeFulfilment(e) {
-    const {
-      defaultDeliveryAddressTypeId,
-      defaultServicePointId,
-    } = this.state;
-    const { change } = this.props;
-
-    const deliverySelected = e.target.value === fulfilmentTypeMap.DELIVERY;
+    const selectedFullfillmentPreference = e.target.value;
 
     this.setState({
-      selectedDelivery: deliverySelected,
+      deliverySelected: this.isDeliverySelected(selectedFullfillmentPreference),
+    }, () => {
+      this.updateRequestPreferencesFields();
     });
-
-    if (deliverySelected) {
-      change('deliveryAddressTypeId', defaultDeliveryAddressTypeId);
-      change('pickupServicePointId', '');
-    } else {
-      change('pickupServicePointId', defaultServicePointId);
-      change('deliveryAddressTypeId', '');
-    }
   }
 
   onChangeAddress(e) {
@@ -318,55 +302,87 @@ class RequestForm extends React.Component {
         this.props.onChangePatron(selectedUser);
         this.setState({ selectedUser });
         this.props.change('requesterId', selectedUser.id);
-        this.findRequestPreferences(selectedUser.id).then(this.setDefaultRequestPreferences);
+        this.findRequestPreferences(selectedUser.id);
       }
     }).then(_ => this.props.asyncValidate());
   }
 
-  findRequestPreferences(userId) {
-    return this.props.findResource('requestPreferences', userId, 'userId')
-      .then((preferences) => {
-        const preference = preferences.requestPreferences[0] || {};
-
-        this.setState({
-          hasDelivery: preference.delivery || false,
-          fulfillmentPreference: preference.fulfillment || fulfilmentTypeMap.HOLD_SHELF,
-          defaultServicePointId: preference.defaultServicePointId || '',
-          defaultDeliveryAddressTypeId: preference.defaultDeliveryAddressTypeId || '',
-          requestPreferencesLoaded: true,
-        });
-      })
-      .catch(() => {
-        this.setState({ requestPreferencesLoaded: true });
-      });
+  getDefaultRequestPreferences() {
+    return {
+      hasDelivery: false,
+      requestPreferencesLoaded: false,
+      defaultDeliveryAddressTypeId: '',
+      defaultServicePointId: '',
+      deliverySelected: isDelivery(this.props.initialValues),
+      selectedAddressTypeId: this.props.initialValues.deliveryAddressTypeId || '',
+      fulfillmentPreference: fulfilmentTypeMap.HOLD_SHELF,
+    };
   }
 
-  setDefaultRequestPreferences = () => {
+  async findRequestPreferences(userId) {
     const {
-      hasDelivery,
-      fulfillmentPreference,
-      defaultServicePointId,
-      defaultDeliveryAddressTypeId,
-    } = this.state;
+      findResource,
+      change,
+    } = this.props;
 
-    this.props.change('fulfilmentPreference', fulfillmentPreference);
+    try {
+      const { requestPreferences } = await findResource('requestPreferences', userId, 'userId');
+      const preferences = requestPreferences[0];
 
-    if (fulfillmentPreference === fulfilmentTypeMap.DELIVERY) {
+      const requestPreference = {
+        ...this.getDefaultRequestPreferences(),
+        ...pick(preferences, ['defaultDeliveryAddressTypeId', 'defaultServicePointId']),
+        requestPreferencesLoaded: true,
+      };
+
+      const deliveryIsPredefined = get(preferences, 'delivery');
+
+      if (isBoolean(deliveryIsPredefined)) {
+        requestPreference.hasDelivery = isDelivery;
+      }
+
+      const fulfillmentPreference = get(preferences, 'fulfillment');
+      const deliverySelected = this.isDeliverySelected(fulfillmentPreference);
+
       this.setState({
-        selectedDelivery: true,
-        selectedAddressTypeId: defaultDeliveryAddressTypeId,
+        ...requestPreference,
+        deliverySelected,
+      }, () => {
+        change('fulfilmentPreference', fulfillmentPreference);
+
+        this.updateRequestPreferencesFields();
       });
-      this.props.change('deliveryAddressTypeId', defaultDeliveryAddressTypeId);
+    } catch (e) {
+      this.setState({
+        ...this.getDefaultRequestPreferences(),
+        requestPreferencesLoaded: true,
+        deliverySelected: false,
+      }, () => {
+        change('fulfilmentPreference', fulfilmentTypeMap.HOLD_SHELF);
+      });
     }
-    if (fulfillmentPreference === fulfilmentTypeMap.HOLD_SHELF) {
-      this.setState({ selectedDelivery: false });
-      this.props.change('pickupServicePointId', defaultServicePointId);
+  }
+
+  updateRequestPreferencesFields() {
+    const {
+      defaultDeliveryAddressTypeId,
+      defaultServicePointId,
+      deliverySelected,
+    } = this.state;
+    const { change } = this.props;
+
+    if (deliverySelected) {
+      change('deliveryAddressTypeId', defaultDeliveryAddressTypeId);
+      change('pickupServicePointId', '');
+    } else {
+      change('pickupServicePointId', defaultServicePointId);
+      change('deliveryAddressTypeId', '');
     }
-    this.setState({
-      hasDelivery,
-      requestPreferencesLoaded: true,
-    });
-  };
+  }
+
+  isDeliverySelected(fulfillmentPreference) {
+    return fulfillmentPreference === fulfilmentTypeMap.DELIVERY;
+  }
 
   findLoan(item) {
     const { findResource } = this.props;
@@ -581,7 +597,7 @@ class RequestForm extends React.Component {
       selectedLoan,
       requestCount,
       selectedAddressTypeId,
-      selectedDelivery,
+      deliverySelected,
       isCancellingRequest,
       requestPreferencesLoaded,
     } = this.state;
@@ -907,7 +923,7 @@ class RequestForm extends React.Component {
                           stripes={this.props.stripes}
                           request={request}
                           patronGroup={get(patronGroup, 'desc')}
-                          selectedDelivery={selectedDelivery}
+                          deliverySelected={deliverySelected}
                           fulfilmentPreference={fulfilmentPreference}
                           deliveryAddress={addressDetail}
                           deliveryLocations={deliveryLocations}
