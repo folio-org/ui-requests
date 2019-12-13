@@ -706,7 +706,6 @@ class RequestForm extends React.Component {
                                   withRef
                                   ref={this.itemBarcodeRef}
                                   onKeyDown={e => this.onKeyDown(e, 'item')}
-
                                 />
                               )}
                             </FormattedMessage>
@@ -756,7 +755,6 @@ class RequestForm extends React.Component {
                             />
                           </span>
                         }
-
                         {multiRequestTypesVisible &&
                           <Field
                             label={<FormattedMessage id="ui-requests.requestType" />}
@@ -889,7 +887,6 @@ class RequestForm extends React.Component {
                               visibleColumns={['active', 'name', 'patronGroup', 'username', 'barcode']}
                               columnMapping={columnMapping}
                             />
-
                           </Col>
                           <Col xs={3}>
                             <Button
