@@ -159,6 +159,10 @@ class RequestForm extends React.Component {
     if (this.props.query.itemId) {
       this.findItem('id', this.props.query.itemId);
     }
+
+    if (this.isEditForm()) {
+      this.findRequestPreferences(this.props.initialValues.requesterId);
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -244,9 +248,14 @@ class RequestForm extends React.Component {
 
   onChangeFulfilment(e) {
     const selectedFullfillmentPreference = e.target.value;
+    const { defaultDeliveryAddressTypeId } = this.state;
+
+    const deliverySelected = this.isDeliverySelected(selectedFullfillmentPreference);
+    const selectedAddressTypeId = this.getSelectedAddressTypeId(deliverySelected, defaultDeliveryAddressTypeId);
 
     this.setState({
-      deliverySelected: this.isDeliverySelected(selectedFullfillmentPreference),
+      deliverySelected,
+      selectedAddressTypeId,
     }, () => {
       this.updateRequestPreferencesFields();
     });
@@ -323,6 +332,7 @@ class RequestForm extends React.Component {
     const {
       findResource,
       change,
+      initialValues,
     } = this.props;
 
     try {
@@ -341,12 +351,16 @@ class RequestForm extends React.Component {
         requestPreference.hasDelivery = isDelivery;
       }
 
-      const fulfillmentPreference = get(preferences, 'fulfillment');
+      const fulfillmentPreference = this.getFullfillmentPreference(preferences);
       const deliverySelected = this.isDeliverySelected(fulfillmentPreference);
+
+      const selectedAddressTypeId = this.getSelectedAddressTypeId(deliverySelected, requestPreference.defaultDeliveryAddressTypeId);
 
       this.setState({
         ...requestPreference,
         deliverySelected,
+        selectedAddressTypeId,
+        ...pick(initialValues, ['fulfilmentPreference', 'deliveryAddressTypeId']),
       }, () => {
         change('fulfilmentPreference', fulfillmentPreference);
 
@@ -360,6 +374,16 @@ class RequestForm extends React.Component {
       }, () => {
         change('fulfilmentPreference', fulfilmentTypeMap.HOLD_SHELF);
       });
+    }
+  }
+
+  getFullfillmentPreference(preferences) {
+    const { initialValues } = this.props;
+
+    if (get(initialValues, 'requesterId')) {
+      return get(initialValues, 'fulfilmentPreference');
+    } else {
+      return get(preferences, 'fulfillment');
     }
   }
 
@@ -382,6 +406,10 @@ class RequestForm extends React.Component {
 
   isDeliverySelected(fulfillmentPreference) {
     return fulfillmentPreference === fulfilmentTypeMap.DELIVERY;
+  }
+
+  getSelectedAddressTypeId(deliverySelected, defaultDeliveryAddressTypeId) {
+    return deliverySelected ? defaultDeliveryAddressTypeId : '';
   }
 
   findLoan(item) {
