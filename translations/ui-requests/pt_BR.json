@@ -161,5 +161,6 @@
     "requestQueue.confirmReorder.cancel": "Deixar na posição atual",
     "cancellationReason": "Motivo do cancelamento",
     "cancellationAdditionalInformation": "Informações adicionais para o usuário",
-    "printPickSlips": "Imprimir ficha de encaminhamento para {sp}"
+    "printPickSlips": "Imprimir ficha de encaminhamento para {sp}",
+    "common.saveAndClose": "Salvar e fechar"
 }

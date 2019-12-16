@@ -161,5 +161,6 @@
     "requestQueue.confirmReorder.cancel": "Mantieni nella posizione corrente",
     "cancellationReason": "Motivo cancellazione",
     "cancellationAdditionalInformation": "Ulteriori informazioni per l'utente",
-    "printPickSlips": "Stampa ricevuta selezionata per {sp}"
+    "printPickSlips": "Stampa ricevuta selezionata per {sp}",
+    "common.saveAndClose": "Save & close"
 }
