@@ -38,7 +38,7 @@
     "requester.barcode": "Code-barres du demandeur",
     "requester.scanOrEnterBarcode": "Scanner ou saisir le code-barres du demandeur",
     "requester.findUserPluginLabel": "Recherche du demandeur",
-    "requester.proxy": "Requester's proxy",
+    "requester.proxy": "Procuration du demandeur",
     "requester.fulfilmentPref": "Préférence de distribution",
     "requester.requester": "Demandeur",
     "requester.deliveryAddress": "Adresse de livraison",
@@ -49,7 +49,7 @@
     "actions.loading": "Chargement...",
     "cancel.cancelRequest": "Annuler la demande",
     "cancel.modalLabel": "Confirmer l'annulation de la demande",
-    "cancel.requestWillBeCancelled": "<b>{title}</b> will be <b>cancelled</b>",
+    "cancel.requestWillBeCancelled": "<b> {title} </b> sera <b> annulé(e) </b>",
     "cancel.reasonLabel": "Raison de l'annulation",
     "cancel.notifyLabel": "Notifier l'utilisateur",
     "cancel.additionalInfoLabel": "Informations supplémentaires sur l'adhérent {required}",
@@ -102,7 +102,7 @@
     "actions.duplicateRequest": "Dupliquer",
     "actions.cancelNewRequest": "Annuler",
     "close": "Fermer",
-    "blockedLabel": "Raison du blocage",
+    "blockedLabel": "Raison de la suspension",
     "blockModal": "Adhérent bloqué",
     "detailsButton": "Voir les détails",
     "enter": "Valider",
@@ -124,7 +124,7 @@
     "item.location.code": "Shelving location code",
     "requestQueue": "File d'attente",
     "location": "Emplacement",
-    "materialType": "Type de matériel",
+    "materialType": "Type de ressource",
     "loanType": "Type de prêt",
     "actions.moveRequest": "Déplacer la demande",
     "moveRequest.selectItem": "Sélectionner l'article",
@@ -161,5 +161,6 @@
     "requestQueue.confirmReorder.cancel": "Laisser en position actuelle",
     "cancellationReason": "Motif de l'annulation",
     "cancellationAdditionalInformation": "Informations complémentaires sur l'utilisateur",
-    "printPickSlips": "Imprimer les bordereaux de prélèvement pour {sp}"
+    "printPickSlips": "Imprimer les bordereaux de prélèvement pour {sp}",
+    "common.saveAndClose": "Sauvegarder et fermer"
 }

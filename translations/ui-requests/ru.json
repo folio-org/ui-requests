@@ -26,7 +26,7 @@
     "item.barcode": "Штрих-код",
     "item.scanOrEnterBarcode": "Сканирование или ввод штрих-кода",
     "item.title": "Заголовок",
-    "item.contributor": "Участник",
+    "item.contributor": "Автор",
     "item.shelfLocation": "Местоположение на полке",
     "item.callNumber": "Телефонный номер",
     "item.volume": "Том",
@@ -69,7 +69,7 @@
     "requestExpirationDate": "Дата окончания запроса",
     "holdShelfExpirationDate": "Дата окончания нахождения на бронеполке",
     "position": "Позиция в очереди",
-    "item.contributorNames": "Участник",
+    "item.contributorNames": "Автор",
     "loan.dueDate": "Текущая дата платежа",
     "proxy.firstName": "Достоверное имя заявителя",
     "proxy.barcode": "Достоверный штрих-код заявителя",
@@ -94,7 +94,7 @@
     "requestMeta.fulfilment.holdShelf": "Бронеполка",
     "requestMeta.fulfilment.delivery": "Доставка",
     "actions.edit": "Редактировать",
-    "item.contributorNamesNames": "Имена участников",
+    "item.contributorNamesNames": "Имена автора",
     "item.location.name": "Местоположение на полке",
     "proxy.name": "Достоверное имя заявителя",
     "deliveryAddress": "Адрес доставки",
@@ -161,5 +161,6 @@
     "requestQueue.confirmReorder.cancel": "Оставить в текущей позиции",
     "cancellationReason": "Причина отмены",
     "cancellationAdditionalInformation": "Дополнительная информация для читателя",
-    "printPickSlips": "Распечатать квитанции для {sp}"
+    "printPickSlips": "Распечатать бланк выдачи для {sp}",
+    "common.saveAndClose": "Save & close"
 }

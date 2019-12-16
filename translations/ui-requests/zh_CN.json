@@ -161,5 +161,6 @@
     "requestQueue.confirmReorder.cancel": "留在当前位置",
     "cancellationReason": "取消原因",
     "cancellationAdditionalInformation": "读者附加信息",
-    "printPickSlips": "打印{sp}选取单"
+    "printPickSlips": "打印{sp}选取单",
+    "common.saveAndClose": "Save & close"
 }
