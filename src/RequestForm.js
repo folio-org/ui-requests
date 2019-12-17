@@ -20,6 +20,7 @@ import {
   unset,
   pick,
   isBoolean,
+  isString,
 } from 'lodash';
 
 import { Pluggable } from '@folio/stripes/core';
@@ -324,7 +325,6 @@ class RequestForm extends React.Component {
       defaultServicePointId: '',
       deliverySelected: isDelivery(this.props.initialValues),
       selectedAddressTypeId: this.props.initialValues.deliveryAddressTypeId || '',
-      fulfillmentPreference: fulfilmentTypeMap.HOLD_SHELF,
     };
   }
 
@@ -332,7 +332,6 @@ class RequestForm extends React.Component {
     const {
       findResource,
       change,
-      initialValues,
     } = this.props;
 
     try {
@@ -348,19 +347,20 @@ class RequestForm extends React.Component {
       const deliveryIsPredefined = get(preferences, 'delivery');
 
       if (isBoolean(deliveryIsPredefined)) {
-        requestPreference.hasDelivery = isDelivery;
+        requestPreference.hasDelivery = deliveryIsPredefined;
       }
 
       const fulfillmentPreference = this.getFullfillmentPreference(preferences);
       const deliverySelected = this.isDeliverySelected(fulfillmentPreference);
 
-      const selectedAddressTypeId = this.getSelectedAddressTypeId(deliverySelected, requestPreference.defaultDeliveryAddressTypeId);
+      const selectedAddress = requestPreference.selectedAddressTypeId || requestPreference.defaultDeliveryAddressTypeId;
+
+      const selectedAddressTypeId = this.getSelectedAddressTypeId(deliverySelected, selectedAddress);
 
       this.setState({
         ...requestPreference,
         deliverySelected,
         selectedAddressTypeId,
-        ...pick(initialValues, ['fulfilmentPreference', 'deliveryAddressTypeId']),
       }, () => {
         change('fulfilmentPreference', fulfillmentPreference);
 
@@ -380,10 +380,13 @@ class RequestForm extends React.Component {
   getFullfillmentPreference(preferences) {
     const { initialValues } = this.props;
 
-    if (get(initialValues, 'requesterId')) {
+    const requesterId = get(initialValues, 'requesterId');
+    const userId = get(preferences, 'userId');
+
+    if (requesterId === userId) {
       return get(initialValues, 'fulfilmentPreference');
     } else {
-      return get(preferences, 'fulfillment');
+      return get(preferences, 'fulfillment', fulfilmentTypeMap.HOLD_SHELF);
     }
   }
 
@@ -392,11 +395,14 @@ class RequestForm extends React.Component {
       defaultDeliveryAddressTypeId,
       defaultServicePointId,
       deliverySelected,
+      selectedAddressTypeId,
     } = this.state;
     const { change } = this.props;
 
     if (deliverySelected) {
-      change('deliveryAddressTypeId', defaultDeliveryAddressTypeId);
+      const deliveryAddressTypeId = selectedAddressTypeId || defaultDeliveryAddressTypeId;
+
+      change('deliveryAddressTypeId', deliveryAddressTypeId);
       change('pickupServicePointId', '');
     } else {
       change('pickupServicePointId', defaultServicePointId);
@@ -562,10 +568,10 @@ class RequestForm extends React.Component {
     } else if (!holdShelfExpirationDate) {
       unset(data, 'holdShelfExpirationDate');
     }
-    if (fulfilmentPreference === fulfilmentTypeMap.HOLD_SHELF && deliveryAddressTypeId) {
+    if (fulfilmentPreference === fulfilmentTypeMap.HOLD_SHELF && isString(deliveryAddressTypeId)) {
       unset(data, 'deliveryAddressTypeId');
     }
-    if (fulfilmentPreference === fulfilmentTypeMap.DELIVERY && pickupServicePointId) {
+    if (fulfilmentPreference === fulfilmentTypeMap.DELIVERY && isString(pickupServicePointId)) {
       unset(data, 'pickupServicePointId');
     }
 
