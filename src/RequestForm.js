@@ -705,6 +705,7 @@ class RequestForm extends React.Component {
                   <Button
                     id="clickable-cancel-request"
                     marginBottom0
+                    buttonStyle="default mega"
                     onClick={onCancel}
                   >
                     <FormattedMessage id="ui-requests.common.cancel" />
@@ -713,7 +714,7 @@ class RequestForm extends React.Component {
                     id="clickable-save-request"
                     type="submit"
                     marginBottom0
-                    buttonStyle="primary"
+                    buttonStyle="primary mega"
                     disabled={this.isSubmittingButtonDisabled()}
                   >
                     <FormattedMessage id="ui-requests.common.saveAndClose" />
