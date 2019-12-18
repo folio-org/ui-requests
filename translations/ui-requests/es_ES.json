@@ -69,7 +69,7 @@
     "requestExpirationDate": "Request expiration date",
     "holdShelfExpirationDate": "Hold shelf expiration date",
     "position": "Position in queue",
-    "item.contributorNames": "Contributor",
+    "item.contributorNames": "Colaborador",
     "loan.dueDate": "Current due date",
     "proxy.firstName": "Requester's proxy name",
     "proxy.barcode": "Requester's proxy barcode",
