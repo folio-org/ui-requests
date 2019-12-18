@@ -780,7 +780,7 @@ class RequestForm extends React.Component {
                       }
                       {selectedItem &&
                         <ItemDetail
-                          item={{ id: get(request, 'itemId'), instanceId: instanceId, ...selectedItem }}
+                          item={{ id: get(request, 'itemId'), instanceId, ...selectedItem }}
                           loan={selectedLoan}
                           requestCount={request ? request.requestCount : requestCount}
                         />
