@@ -91,6 +91,10 @@ const urls = {
     const query = stringify({ query: `(userId=="${value}")` });
     return `request-preference-storage/request-preference?${query}`;
   },
+  holding: (value, idType) => {
+    const query = stringify({ query: `(${idType}=="${value}")` });
+    return `holdings-storage/holdings?${query}`;
+  }
 };
 
 class RequestsRoute extends React.Component {

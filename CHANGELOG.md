@@ -8,6 +8,7 @@
 * Create/Edit a request | Move Save/Cancel buttons to the footer. Refs UIREQ-370.
 * Fix bug with wrong delivery address in request form. Refs UIREQ-380.
 * Fix menus displaying when duplicating request. Refs UIREQ-385.
+* Fix bug in new request linking back to inventory item record. Fixes UIREQ-349.
 
 ## [1.14.0](https://github.com/folio-org/ui-requests/tree/v1.14.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.13.0...v1.14.0)
