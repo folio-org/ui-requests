@@ -418,7 +418,7 @@ class RequestForm extends React.Component {
     return deliverySelected ? defaultDeliveryAddressTypeId : '';
   }
 
-  findLoan(item) {
+  findRelatedResources(item) {
     const { findResource } = this.props;
     if (!item) return null;
 
@@ -426,12 +426,15 @@ class RequestForm extends React.Component {
       [
         findResource('loan', item.id),
         findResource('requestsForItem', item.id),
+        findResource('holding', item.holdingsRecordId),
       ],
     ).then((results) => {
       const selectedLoan = results[0].loans[0];
       const requestCount = results[1].requests.length;
+      const holdingsRecord = results[2].holdingsRecords[0];
 
       this.setState({ requestCount });
+      this.setState({ instanceId: holdingsRecord && holdingsRecord.instanceId });
 
       if (selectedLoan) {
         this.setState({ selectedLoan });
@@ -465,7 +468,7 @@ class RequestForm extends React.Component {
 
         return item;
       })
-      .then(item => this.findLoan(item))
+      .then(item => this.findRelatedResources(item))
       .then(_ => this.props.asyncValidate());
   }
 
@@ -633,6 +636,7 @@ class RequestForm extends React.Component {
       selectedAddressTypeId,
       deliverySelected,
       isCancellingRequest,
+      instanceId,
       requestPreferencesLoaded,
     } = this.state;
 
@@ -776,7 +780,7 @@ class RequestForm extends React.Component {
                       }
                       {selectedItem &&
                         <ItemDetail
-                          item={{ id: get(request, 'itemId'), ...selectedItem }}
+                          item={{ id: get(request, 'itemId'), instanceId, ...selectedItem }}
                           loan={selectedLoan}
                           requestCount={request ? request.requestCount : requestCount}
                         />
