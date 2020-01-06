@@ -104,6 +104,8 @@ class RequestForm extends React.Component {
     intl: intlShape,
     onChangePatron: PropTypes.func,
     query: PropTypes.object,
+    onSubmit: PropTypes.func,
+    reset: PropTypes.func,
   };
 
   static defaultProps = {

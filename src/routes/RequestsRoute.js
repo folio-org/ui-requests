@@ -84,7 +84,7 @@ const urls = {
     return `circulation/loans?${query}`;
   },
   requestsForItem: (value) => {
-    const query = stringify({ query: `(itemId=="${value}")` });
+    const query = stringify({ query: `(itemId=="${value}" and status=Open)` });
     return `request-storage/requests?${query}`;
   },
   requestPreferences: (value) => {
@@ -458,13 +458,11 @@ class RequestsRoute extends React.Component {
         this.findResource('user', r.requesterId),
         this.findResource('requestsForItem', r.itemId),
       ],
-    ).then((resultArray) => {
+    ).then(([users, requests]) => {
       // Each element of the promises array returns an array of results, but in
       // this case, there should only ever be one result for each.
-      const requester = resultArray[0].users[0];
-      const openRequests = resultArray[1].requests.filter(request => request.status.startsWith('Open'));
-      const requestCount = openRequests.length;
-
+      const requester = get(users, 'users[0]', null);
+      const requestCount = get(requests, 'totalRecords', 0);
       return Object.assign({}, r, { requester, requestCount });
     });
   }
