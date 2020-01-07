@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 1.14.2 (IN PROGRESS)
+## [1.14.2](https://github.com/folio-org/ui-requests/tree/v1.14.2) (2020-01-07)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.14.1...v1.14.2)
 
 * Disable confirm button when cancel is in progress. Fixes UIREQ-321
 
