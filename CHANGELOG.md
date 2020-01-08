@@ -1,9 +1,14 @@
 # Change history for ui-requests
 
+## [1.14.3](https://github.com/folio-org/ui-requests/tree/v1.14.3) (2020-01-08)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.14.2...v1.14.3)
+
+* Do not duplicate requester block on new-request form. Fixes UIREQ-404.
+
 ## [1.14.2](https://github.com/folio-org/ui-requests/tree/v1.14.2) (2020-01-07)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.14.1...v1.14.2)
 
-* Disable confirm button when cancel is in progress. Fixes UIREQ-321
+* Disable confirm button when cancel is in progress. Fixes UIREQ-321.
 
 ## [1.14.1](https://github.com/folio-org/ui-requests/tree/v1.14.1) (2020-01-03)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.14.0...v1.14.1)
