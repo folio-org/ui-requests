@@ -948,25 +948,6 @@ class RequestForm extends React.Component {
                           </Col>
                         </Row>
                       }
-                      {selectedUser && (requestPreferencesLoaded || this.isEditForm()) &&
-                        <UserForm
-                          user={request ? request.requester : selectedUser}
-                          stripes={this.props.stripes}
-                          request={request}
-                          patronGroup={get(patronGroup, 'desc')}
-                          deliverySelected={deliverySelected}
-                          fulfilmentPreference={fulfilmentPreference}
-                          deliveryAddress={addressDetail}
-                          deliveryLocations={deliveryLocations}
-                          fulfilmentTypeOptions={this.getFulfilmentTypeOptions()}
-                          onChangeAddress={this.onChangeAddress}
-                          onChangeFulfilment={this.onChangeFulfilment}
-                          proxy={this.getProxy()}
-                          servicePoints={servicePoints}
-                          onSelectProxy={this.onSelectProxy}
-                          onCloseProxy={() => { this.setState({ selectedUser: null, proxy: null }); }}
-                        />
-                      }
                     </Col>
                   </Row>
                 </Accordion>
