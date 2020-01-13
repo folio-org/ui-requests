@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 import { Col, KeyValue, Row } from '@folio/stripes/components';
+import { effectiveCallNumber } from '@folio/stripes/util';
 
 import { openRequestStatusFilters } from './utils';
 
@@ -26,41 +27,31 @@ const ItemDetail = ({ item, loan, requestCount }) => {
   return (
     <React.Fragment>
       <Row>
-        <Col xs={3}>
+        <Col xs={4}>
           <KeyValue label={<FormattedMessage id={itemLabel} />}>
             {recordLink}
           </KeyValue>
         </Col>
-        <Col xs={3}>
+        <Col xs={4}>
           <KeyValue label={<FormattedMessage id="ui-requests.item.title" />}>
             {get(item, ['title'], '-')}
           </KeyValue>
         </Col>
-        <Col xs={3}>
+        <Col xs={4}>
           <KeyValue label={<FormattedMessage id="ui-requests.item.contributorNames" />}>
             {contributor}
           </KeyValue>
         </Col>
-        <Col xs={3}>
-          <KeyValue label={<FormattedMessage id="ui-requests.item.location.name" />}>
+      </Row>
+      <Row>
+        <Col xs={4}>
+          <KeyValue label={<FormattedMessage id="ui-requests.item.effectiveLocation" />}>
             {get(item, 'effectiveLocation.name') || get(item, 'location.name') || ''}
           </KeyValue>
         </Col>
-      </Row>
-      <Row>
-        <Col xs={3}>
+        <Col xs={8}>
           <KeyValue label={<FormattedMessage id="ui-requests.item.callNumber" />}>
-            {get(item, ['callNumber'], '-')}
-          </KeyValue>
-        </Col>
-        <Col xs={3}>
-          <KeyValue label={<FormattedMessage id="ui-requests.item.enumeration" />}>
-            {get(item, ['enumeration'], '-')}
-          </KeyValue>
-        </Col>
-        <Col xs={3}>
-          <KeyValue label={<FormattedMessage id="ui-requests.item.copyNumber" />}>
-            {get(item, ['copyNumbers'], '-')}
+            {effectiveCallNumber(item)}
           </KeyValue>
         </Col>
       </Row>

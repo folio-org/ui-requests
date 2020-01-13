@@ -10,6 +10,7 @@
 * Fix menus displaying when duplicating request. Refs UIREQ-385.
 * Fix bug in new request linking back to inventory item record. Fixes UIREQ-349.
 * Fix open request count on item when creating a new request. Fixes UIREQ-343.
+* Show effective call number in details pane. Refs UIREQ-366.
 
 ## [1.14.0](https://github.com/folio-org/ui-requests/tree/v1.14.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.13.0...v1.14.0)

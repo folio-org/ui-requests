@@ -172,7 +172,7 @@
     "react-barcode": "^1.3.2"
   },
   "peerDependencies": {
-    "@folio/stripes": "^2.9.0",
+    "@folio/stripes": "^2.12.0",
     "react": "*",
     "react-router": "*",
     "react-router-dom": "*"
