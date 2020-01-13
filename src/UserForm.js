@@ -29,7 +29,7 @@ class UserForm extends React.Component {
     proxy: PropTypes.object,
     stripes: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
-    selectedDelivery: PropTypes.bool,
+    deliverySelected: PropTypes.bool,
     servicePoints: PropTypes.arrayOf(PropTypes.object),
     request: PropTypes.object,
   };
@@ -42,7 +42,7 @@ class UserForm extends React.Component {
     onChangeFulfilment: () => {},
     patronGroup: '',
     proxy: {},
-    selectedDelivery: false,
+    deliverySelected: false,
   };
 
   constructor(props) {
@@ -103,7 +103,7 @@ class UserForm extends React.Component {
       patronGroup,
       deliveryAddress,
       deliveryLocations,
-      selectedDelivery,
+      deliverySelected,
       fulfilmentPreference,
       fulfilmentTypeOptions,
       onChangeFulfilment,
@@ -160,13 +160,13 @@ class UserForm extends React.Component {
           </Col>
           <Col xs={4}>
             {
-              (!selectedDelivery && this.renderPickupServicePointSelect()) ||
+              (!deliverySelected && this.renderPickupServicePointSelect()) ||
               (deliveryLocations && this.renderDeliveryAddressSelect())
             }
           </Col>
         </Row>
 
-        { selectedDelivery &&
+        { deliverySelected &&
           <Row>
             <Col xs={4} xsOffset={8}>
               {deliveryAddress}

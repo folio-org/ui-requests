@@ -1,6 +1,18 @@
 # Change history for ui-requests
 
-## 1.14.0 (IN PROGRESS)
+## [1.15.0] IN PROGRESS
+
+* Disable confirm button when cancel is in progress. Fixes UIREQ-321
+* Blocked patron can successfully place a Request. Refs UIREQ-394.
+* Fix reference to `userId` via block. Fixes UIREQ-396.
+* Create/Edit a request | Move Save/Cancel buttons to the footer. Refs UIREQ-370.
+* Fix bug with wrong delivery address in request form. Refs UIREQ-380.
+* Fix menus displaying when duplicating request. Refs UIREQ-385.
+* Fix bug in new request linking back to inventory item record. Fixes UIREQ-349.
+* Fix open request count on item when creating a new request. Fixes UIREQ-343.
+
+## [1.14.0](https://github.com/folio-org/ui-requests/tree/v1.14.0) (2019-12-05)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.13.0...v1.14.0)
 
 * Add request queue page with reorder capabilities. Part of UIREQ-112.
 * Display cancellation reason on cancelled request. Part of UIREQ-364.

@@ -1,0 +1,9 @@
+.hiddenContent {
+  display: none;
+}
+
+@media print {
+  body {
+    margin: 30px;
+  }
+}

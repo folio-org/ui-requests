@@ -28,7 +28,10 @@ import {
   isNotYetFilled,
   isPageRequest,
 } from '../utils';
-import SortableList from '../components/SortableList';
+import {
+  SortableList,
+  Loading,
+} from '../components';
 
 import css from './RequestQueueView.css';
 
@@ -312,7 +315,8 @@ class RequestQueueView extends React.Component {
               </Col>
             </Row>
           </div>
-          {!isLoading &&
+          {isLoading ?
+            <Loading /> :
             <SortableList
               id="requests-list"
               onDragEnd={this.onDragEnd}

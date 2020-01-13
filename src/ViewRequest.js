@@ -208,7 +208,8 @@ class ViewRequest extends React.Component {
       history,
       location: { search },
     } = this.props;
-    await this.loadFullRequest(request);
+
+    this.loadFullRequest(request);
 
     history.push(`${urls.requestQueueView(request.id, request.itemId)}${search}`, { afterMove: true });
   }

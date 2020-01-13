@@ -131,3 +131,24 @@ export const openRequestStatusFilters = [
 ]
   .map(status => `requestStatus.${status}`)
   .join(',');
+
+export function buildTemplate(template = '') {
+  return dataSource => {
+    return template.replace(/{{([^{}]*)}}/g, (token, tokenName) => {
+      const tokenValue = dataSource[tokenName];
+      return typeof tokenValue === 'string' || typeof tokenValue === 'number' ? tokenValue : '';
+    });
+  };
+}
+
+export const convertToSlipData = (requests) => {
+  return requests.map(request => ({
+    'staffSlip.Name': 'Pick slip',
+    'item.title': request.title,
+    'item.barcode': `<Barcode>${request.barcode}</Barcode>`,
+    'item.callNumber': request.callNumber,
+    'item.enumeration': request.enumeration,
+    'item.allContributors': get(request, 'contributors', []).map(({ name }) => name).join(';'),
+    'request.requestID': request.id
+  }));
+};

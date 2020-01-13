@@ -101,3 +101,5 @@ export const expiredHoldsReportHeaders = [
   'status',
   'holdShelfExpirationDate',
 ];
+
+export const pickSlipType = 'pick slip';

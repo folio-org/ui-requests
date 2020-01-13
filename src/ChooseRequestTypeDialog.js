@@ -10,7 +10,6 @@ import {
   Select
 } from '@folio/stripes/components';
 
-
 import {
   getRequestTypeOptions,
 } from './utils';

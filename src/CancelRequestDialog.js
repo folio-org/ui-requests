@@ -53,6 +53,7 @@ class CancelRequestDialog extends React.Component {
     this.state = {
       reasons: [],
       reason: { label: '', value: '' },
+      cancelInProgress: false,
       // notify: false,
     };
   }
@@ -85,6 +86,10 @@ class CancelRequestDialog extends React.Component {
       stripes,
       onCancelRequest,
     } = this.props;
+
+    this.setState({
+      cancelInProgress: true,
+    });
 
     const cancellationInfo = {
       cancelledByUserId: stripes.user.user.id,
@@ -119,6 +124,7 @@ class CancelRequestDialog extends React.Component {
       reason,
       reasons,
       additionalInfo,
+      cancelInProgress,
     } = this.state;
 
     const additionalInfoPlaceholder = reason.requiresAdditionalInformation
@@ -127,13 +133,16 @@ class CancelRequestDialog extends React.Component {
 
     if (!request) return null;
 
+    const isCancelBbnDisabled = cancelInProgress ||
+      (reason.requiresAdditionalInformation && !additionalInfo);
+
     const footer = (
       <ModalFooter>
         <Button
           data-test-confirm-cancel-request
           buttonStyle="primary"
           onClick={this.onCancelRequestHandler}
-          disabled={reason.requiresAdditionalInformation && !additionalInfo}
+          disabled={isCancelBbnDisabled}
         >
           <FormattedMessage id="stripes-core.button.confirm" />
         </Button>

@@ -160,5 +160,7 @@
     "requestQueue.requests.notFound": "لم يتم العثور على طلبات",
     "requestQueue.confirmReorder.cancel": "اتركه في الموضع الحالي",
     "cancellationReason": "سبب الإلغاء",
-    "cancellationAdditionalInformation": "بيانات إضافية للمستفيد"
+    "cancellationAdditionalInformation": "بيانات إضافية للمستفيد",
+    "printPickSlips": "طباعة كعوب الالتقاط لـ {sp}",
+    "common.saveAndClose": "حفظ وإغلاق"
 }
