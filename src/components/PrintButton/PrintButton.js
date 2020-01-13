@@ -65,7 +65,7 @@ class PrintButton extends React.Component {
             {dataSource.map(source => (
               <div
                 key={source['request.requestID']}
-                style={{ pageBreakBefore: 'always' }}
+                style={{ pageBreakAfter: 'always' }}
               >
                 <ComponentToPrint
                   dataSource={source}
