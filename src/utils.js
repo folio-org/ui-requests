@@ -145,10 +145,12 @@ export const convertToSlipData = (requests) => {
   return requests.map(request => ({
     'staffSlip.Name': 'Pick slip',
     'item.title': request.title,
-    'item.barcode': `<Barcode>${request.barcode}</Barcode>`,
+    'item.barcode': request.barcode,
+    'item.barcodeImage': `<Barcode>${request.barcode}</Barcode>`,
     'item.callNumber': request.callNumber,
     'item.enumeration': request.enumeration,
     'item.allContributors': get(request, 'contributors', []).map(({ name }) => name).join(';'),
-    'request.requestID': request.id
+    'request.requestID': request.id,
+    'item.effectiveLocationSpecific': get(request, 'location.name')
   }));
 };
