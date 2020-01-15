@@ -398,17 +398,11 @@ class RequestsRoute extends React.Component {
 
     result.forEach(record => {
       const contributorNamesMap = [];
-      const copyNumbersMap = [];
       const tagListMap = [];
 
       if (record.item.contributorNames && record.item.contributorNames.length > 0) {
         record.item.contributorNames.forEach(item => {
           contributorNamesMap.push(item.name);
-        });
-      }
-      if (record.item.copyNumbers && record.item.copyNumbers.length > 0) {
-        record.item.copyNumbers.forEach(item => {
-          copyNumbersMap.push(item);
         });
       }
       if (record.tags && record.tags.tagList.length > 0) {
@@ -433,7 +427,6 @@ class RequestsRoute extends React.Component {
         record.deliveryAddress = `${addressLine1 || ''} ${city || ''} ${region || ''} ${countryId || ''} ${postalCode || ''}`;
       }
       record.item.contributorNames = contributorNamesMap.join('; ');
-      record.item.copyNumbers = copyNumbersMap.join('; ');
       if (record.tags) record.tags.tagList = tagListMap.join('; ');
     });
 
