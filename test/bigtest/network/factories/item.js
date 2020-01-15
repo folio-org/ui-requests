@@ -11,7 +11,7 @@ export default Factory.extend({
   },
 
   status: () => {
-    return 'Paged';
+    return { name: 'Paged' };
   },
 
   location: () => {
