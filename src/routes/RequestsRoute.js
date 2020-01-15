@@ -105,7 +105,7 @@ class RequestsRoute extends React.Component {
       records: 'addressTypes',
     },
     query: {
-      initialValue: { sort: 'Request Date' },
+      initialValue: { sort: 'Request date' },
     },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
     records: {
@@ -125,8 +125,8 @@ class RequestsRoute extends React.Component {
               'Item barcode': 'item.barcode',
               'Type': 'requestType',
               'Requester': 'requester.lastName requester.firstName',
-              'Requester Barcode': 'requester.barcode',
-              'Request Date': 'requestDate',
+              'Requester barcode': 'requester.barcode',
+              'Request date': 'requestDate',
               'Position': 'position',
             },
             filterConfig,
