@@ -162,5 +162,6 @@
     "cancellationReason": "Motivo cancellazione",
     "cancellationAdditionalInformation": "Ulteriori informazioni per l'utente",
     "printPickSlips": "Stampa ricevuta selezionata per {sp}",
-    "common.saveAndClose": "Salva e chiudi"
+    "common.saveAndClose": "Salva e chiudi",
+    "item.effectiveLocation": "Effective location"
 }

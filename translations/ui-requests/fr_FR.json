@@ -150,7 +150,7 @@
     "requestQueue.patronGroup": "Groupe d'adhérents",
     "requestQueue.requestDate": "Date de la demande",
     "requestQueue.requestType": "Type",
-    "requestQueue.requestExpirationDate": "Request expiration",
+    "requestQueue.requestExpirationDate": "Expiration de la demande",
     "requestQueue.holdShelfExpirationDate": "Expiration rayon d'attente",
     "requestQueue.reorderSuccess": "La file d'attente a été mise à jour avec succès",
     "requestQueue.confirmReorder.confirm": "Confirmer",
@@ -162,5 +162,6 @@
     "cancellationReason": "Motif de l'annulation",
     "cancellationAdditionalInformation": "Informations complémentaires sur l'utilisateur",
     "printPickSlips": "Imprimer les bordereaux de prélèvement pour {sp}",
-    "common.saveAndClose": "Sauvegarder et fermer"
+    "common.saveAndClose": "Sauvegarder et fermer",
+    "item.effectiveLocation": "Emplacement effectif"
 }

@@ -162,5 +162,6 @@
     "cancellationReason": "سبب الإلغاء",
     "cancellationAdditionalInformation": "بيانات إضافية للمستفيد",
     "printPickSlips": "طباعة كعوب الالتقاط لـ {sp}",
-    "common.saveAndClose": "حفظ وإغلاق"
+    "common.saveAndClose": "حفظ وإغلاق",
+    "item.effectiveLocation": "الموقع النشط"
 }

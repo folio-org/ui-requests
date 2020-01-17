@@ -162,5 +162,6 @@
     "cancellationReason": "取消原因",
     "cancellationAdditionalInformation": "读者附加信息",
     "printPickSlips": "打印{sp}选取单",
-    "common.saveAndClose": "保存并关闭"
+    "common.saveAndClose": "保存并关闭",
+    "item.effectiveLocation": "Effective location"
 }

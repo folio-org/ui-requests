@@ -162,5 +162,6 @@
     "cancellationReason": "Cancellation reason",
     "cancellationAdditionalInformation": "Additional information for patron",
     "printPickSlips": "Print pick slips for {sp}",
-    "common.saveAndClose": "Save & close"
+    "common.saveAndClose": "Save & close",
+    "item.effectiveLocation": "Effective location"
 }
