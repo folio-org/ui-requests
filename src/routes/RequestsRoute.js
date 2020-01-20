@@ -128,6 +128,7 @@ class RequestsRoute extends React.Component {
               'Requester barcode': 'requester.barcode',
               'Request date': 'requestDate',
               'Position': 'position',
+              'Proxy': 'proxy',
             },
             filterConfig,
             2, // do not fetch unless we have a query or a filter
