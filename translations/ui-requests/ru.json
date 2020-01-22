@@ -162,5 +162,6 @@
     "cancellationReason": "Причина отмены",
     "cancellationAdditionalInformation": "Дополнительная информация для читателя",
     "printPickSlips": "Распечатать бланк выдачи для {sp}",
-    "common.saveAndClose": "Save & close"
+    "common.saveAndClose": "Save & close",
+    "item.effectiveLocation": "Effective location"
 }

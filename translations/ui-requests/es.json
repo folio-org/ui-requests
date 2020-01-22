@@ -162,5 +162,6 @@
     "cancellationReason": "Motivo de la cancelación",
     "cancellationAdditionalInformation": "Información adicional para el usuario",
     "printPickSlips": "Imprimir recibos para {sp}",
-    "common.saveAndClose": "Save & close"
+    "common.saveAndClose": "Save & close",
+    "item.effectiveLocation": "Effective location"
 }

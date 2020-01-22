@@ -162,5 +162,6 @@
     "cancellationReason": "Motivo do cancelamento",
     "cancellationAdditionalInformation": "Informações adicionais para o usuário",
     "printPickSlips": "Imprimir ficha de encaminhamento para {sp}",
-    "common.saveAndClose": "Salvar e fechar"
+    "common.saveAndClose": "Salvar e fechar",
+    "item.effectiveLocation": "Localização efetiva"
 }
