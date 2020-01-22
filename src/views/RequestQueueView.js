@@ -310,7 +310,7 @@ class RequestQueueView extends React.Component {
               <Col xs={1}>
                 <KeyValue
                   label={<FormattedMessage id="ui-requests.item.copyNumber" />}
-                  value={get(item, 'copyNumbers[0]') || holding.copyNumber || '-'}
+                  value={get(item.copyNumber) || holding.copyNumber || '-'}
                 />
               </Col>
             </Row>

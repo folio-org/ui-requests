@@ -72,7 +72,7 @@ export const reportHeaders = [
   'position',
   'item.barcode',
   'item.title',
-  'item.copyNumbers',
+  'item.copyNumber',
   'item.contributorNames',
   'item.location.libraryName',
   'item.location.name',

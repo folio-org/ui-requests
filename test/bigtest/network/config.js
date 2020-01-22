@@ -230,7 +230,7 @@ export default function config() {
       title: 'A semantic web primer',
       barcode: '10101',
       callNumber: 'TK5105.88815 . A58 2004 FT MEADE',
-      status: 'Paged',
+      status: { name: 'Paged' },
       contributors: [
         { name: 'Antoniou, Grigoris' },
         { name: 'Van Harmelen, Frank' }
