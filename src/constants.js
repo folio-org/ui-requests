@@ -102,4 +102,27 @@ export const expiredHoldsReportHeaders = [
   'holdShelfExpirationDate',
 ];
 
+export const requestFilterTypes = {
+  TAGS: 'tags',
+  REQUEST_TYPE: 'requestType',
+  REQUEST_STATUS: 'requestStatus'
+};
+
+export const requestTypeFilters = [
+  { label: 'ui-requests.filters.requestType.holds', value: requestTypesMap.HOLD },
+  { label: 'ui-requests.filters.requestType.pages', value: requestTypesMap.PAGE },
+  { label: 'ui-requests.filters.requestType.recalls', value: requestTypesMap.RECALL },
+];
+
+export const requestStatusFilters = [
+  { label: 'ui-requests.filters.requestStatus.cancelled', value: requestStatuses.CANCELLED },
+  { label: 'ui-requests.filters.requestStatus.filled', value: requestStatuses.FILLED },
+  { label: 'ui-requests.filters.requestStatus.pickupExpired', value: requestStatuses.PICKUP_EXPIRED },
+  { label: 'ui-requests.filters.requestStatus.unfilled', value: requestStatuses.UNFILLED },
+  { label: 'ui-requests.filters.requestStatus.awaitingDelivery', value: requestStatuses.AWAITING_DELIVERY },
+  { label: 'ui-requests.filters.requestStatus.awaitingPickup', value: requestStatuses.AWAITING_PICKUP },
+  { label: 'ui-requests.filters.requestStatus.inTransit', value: requestStatuses.IN_TRANSIT },
+  { label: 'ui-requests.filters.requestStatus.notYetFilled', value: requestStatuses.NOT_YET_FILLED },
+];
+
 export const pickSlipType = 'pick slip';

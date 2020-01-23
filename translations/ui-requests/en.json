@@ -48,6 +48,7 @@
   "requestMeta.expirationDate": "Request expiration date",
   "requestMeta.holdShelfExpirationDate": "Hold shelf expiration date",
   "requestMeta.queuePosition": "Position in queue",
+  "requestMeta.tags": "Tags",
 
   "showTags": "Show Tags",
   "errors.itemBarcodeDoesNotExist": "Item with this barcode does not exist",
@@ -158,5 +159,18 @@
   "printPickSlips": "Print pick slips for {sp}",
 
   "common.cancel": "Cancel",
-  "common.saveAndClose": "Save & close"
+  "common.saveAndClose": "Save & close",
+
+  "filters.requestType.holds": "Holds",
+  "filters.requestType.pages": "Pages",
+  "filters.requestType.recalls": "Recalls",
+
+  "filters.requestStatus.cancelled": "Closed - Cancelled",
+  "filters.requestStatus.filled": "Closed - Filled",
+  "filters.requestStatus.pickupExpired": "Closed - Pickup expired",
+  "filters.requestStatus.unfilled": "Closed - Unfilled",
+  "filters.requestStatus.awaitingDelivery": "Open - Awaiting delivery",
+  "filters.requestStatus.awaitingPickup": "Open - Awaiting pickup",
+  "filters.requestStatus.inTransit": "Open - In transit",
+  "filters.requestStatus.notYetFilled": "Open - Not yet filled"
 }
