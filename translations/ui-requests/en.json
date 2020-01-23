@@ -48,7 +48,6 @@
   "requestMeta.expirationDate": "Request expiration date",
   "requestMeta.holdShelfExpirationDate": "Hold shelf expiration date",
   "requestMeta.queuePosition": "Position in queue",
-  "requestMeta.tags": "Tags",
 
   "showTags": "Show Tags",
   "errors.itemBarcodeDoesNotExist": "Item with this barcode does not exist",
@@ -172,5 +171,9 @@
   "filters.requestStatus.awaitingDelivery": "Open - Awaiting delivery",
   "filters.requestStatus.awaitingPickup": "Open - Awaiting pickup",
   "filters.requestStatus.inTransit": "Open - In transit",
-  "filters.requestStatus.notYetFilled": "Open - Not yet filled"
+  "filters.requestStatus.notYetFilled": "Open - Not yet filled",
+
+  "noRequestTypesAvailable": "No request types available for selected item",
+  "declaredLost.title": "Item cannot be requested",
+  "declaredLost.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>Declared lost</strong> and cannot be requested."
 }

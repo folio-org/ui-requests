@@ -15,6 +15,7 @@
 * Support new versions of mod-inventory and mod-circulation. Refs UIREQ-405.
 * Filter Requests by Tags. Refs UIREQ-409.
 * Fix sorting by proxy. Fixes UIREQ-342.
+* Prevent all request types for declared lost item. Refs. UIREQ-392.
 
 ## [1.14.0](https://github.com/folio-org/ui-requests/tree/v1.14.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.13.0...v1.14.0)

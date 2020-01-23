@@ -10,6 +10,7 @@ import setupApplication from '../helpers/setup-application';
 import NewRequestInteractor from '../interactors/new-request';
 import RequestsInteractor from '../interactors/requests';
 import ViewRequestInteractor from '../interactors/view-request';
+import errorModalInteractor from '../interactors/error-modal';
 
 describe('New Request page', () => {
   setupApplication();
@@ -327,6 +328,48 @@ describe('New Request page', () => {
 
         it('should show hold and recall options', () => {
           expect(NewRequestInteractor.requestTypeOptions).to.eql(['Hold', 'Recall']);
+        });
+      });
+
+      describe('New request for declared lost item', function () {
+        beforeEach(async function () {
+          const item = this.server.create('item', {
+            status: { name: 'Declared lost' },
+          });
+
+          await NewRequestInteractor.itemField.fillAndBlur(item.barcode);
+          await errorModalInteractor.whenModalIsPresent();
+        });
+
+        it('shows declare lost error dialog', () => {
+          expect(errorModalInteractor.modalIsPresent).to.equal(true);
+        });
+
+        describe('Close declare lost error dialog', () => {
+          beforeEach(async function () {
+            await errorModalInteractor.whenModalIsPresent();
+            await errorModalInteractor.clickCloseBtn();
+          });
+
+          it('closes lost error dialog', () => {
+            expect(errorModalInteractor.modalIsPresent).to.equal(false);
+          });
+        });
+
+        describe('Show declare lost error dialog on submit', () => {
+          beforeEach(async function () {
+            const user = this.server.create('user');
+
+            await errorModalInteractor.whenModalIsPresent();
+            await errorModalInteractor.clickCloseBtn();
+            await NewRequestInteractor.userField.fillAndBlur(user.barcode);
+            await NewRequestInteractor.clickNewRequest();
+            await errorModalInteractor.whenModalIsPresent();
+          });
+
+          it('shows declare lost error dialog', () => {
+            expect(errorModalInteractor.modalIsPresent).to.equal(true);
+          });
         });
       });
     });

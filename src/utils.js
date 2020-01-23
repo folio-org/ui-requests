@@ -111,6 +111,10 @@ export function isPagedItem(item) {
   return (get(item, 'status.name') === itemStatuses.PAGED);
 }
 
+export function isDeclaredLostItem(item) {
+  return get(item, 'status.name') === itemStatuses.DECLARED_LOST;
+}
+
 export function isDelivery(request) {
   return get(request, 'fulfilmentPreference') === fulfilmentTypeMap.DELIVERY;
 }

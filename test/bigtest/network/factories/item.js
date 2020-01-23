@@ -19,7 +19,7 @@ export default Factory.extend({
   },
 
   contributorNames: () => [{ name : faker.internet.userName() }],
-  copyNumber: () =>  {
+  copyNumber: () => {
     return Math.floor(Math.random() * 90000000) + 10000000;
   },
 
