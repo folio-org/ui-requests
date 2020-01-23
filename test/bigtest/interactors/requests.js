@@ -41,10 +41,10 @@ import {
   instanceList = new InstanceList();
   instances = collection('[role=row] a');
   instance = scoped('[data-test-instance-details]');
-  clickHoldsCheckbox = clickable('#clickable-filter-request-type-holds');
-  clickPagesCheckbox = clickable('#clickable-filter-request-type-pages');
-  clickRecallsCheckbox = clickable('#clickable-filter-request-type-recalls');
-  clickOpenNotFilled = clickable('#clickable-filter-request-status-open-not-yet-filled');
+  clickHoldsCheckbox = clickable('#clickable-filter-requestType-hold');
+  clickPagesCheckbox = clickable('#clickable-filter-requestType-page');
+  clickRecallsCheckbox = clickable('#clickable-filter-requestType-recall');
+  clickOpenNotFilled = clickable('#clickable-filter-requestStatus-open-not-yet-filled');
   errorModal = new ErrorModal();
 
   whenInstancesArePresent(size) {
