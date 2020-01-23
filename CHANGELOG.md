@@ -13,6 +13,7 @@
 * Show effective call number in details pane. Refs UIREQ-366.
 * Fix sorting by request date. Fixes UIREQ-399.
 * Support new versions of mod-inventory and mod-circulation. Refs UIREQ-405.
+* Filter Requests by Tags. Refs UIREQ-409.
 * Fix sorting by proxy. Fixes UIREQ-342.
 
 ## [1.14.0](https://github.com/folio-org/ui-requests/tree/v1.14.0) (2019-12-05)

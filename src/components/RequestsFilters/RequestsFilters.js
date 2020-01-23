@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { get } from 'lodash';
 import { FormattedMessage } from 'react-intl';
+import {
+  get,
+  isEmpty,
+} from 'lodash';
 
 import {
   Accordion,
@@ -54,7 +57,7 @@ export default class RequestsFilters extends React.Component {
     return (
       <React.Fragment>
         <Accordion
-          displayClearButton={requestType.length > 0}
+          displayClearButton={!isEmpty(requestType)}
           id={requestFilterTypes.REQUEST_TYPE}
           header={FilterAccordionHeader}
           label={<FormattedMessage id="ui-requests.requestMeta.type" />}
@@ -70,7 +73,7 @@ export default class RequestsFilters extends React.Component {
           />
         </Accordion>
         <Accordion
-          displayClearButton={requestStatus.length > 0}
+          displayClearButton={!isEmpty(requestStatus)}
           id={requestFilterTypes.REQUEST_STATUS}
           header={FilterAccordionHeader}
           label={<FormattedMessage id="ui-requests.requestMeta.status" />}
@@ -86,7 +89,7 @@ export default class RequestsFilters extends React.Component {
           />
         </Accordion>
         <Accordion
-          displayClearButton={tags.length > 0}
+          displayClearButton={!isEmpty(tags)}
           id={requestFilterTypes.TAGS}
           header={FilterAccordionHeader}
           label={<FormattedMessage id="ui-requests.requestMeta.tags" />}
