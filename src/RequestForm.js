@@ -42,6 +42,7 @@ import {
 } from '@folio/stripes/components';
 
 import stripesForm from '@folio/stripes/form';
+import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import CancelRequestDialog from './CancelRequestDialog';
 import UserForm from './UserForm';
@@ -60,7 +61,8 @@ import {
   toUserAddress,
   getPatronGroup,
   getRequestTypeOptions,
-  isDelivery
+  isDelivery,
+  isDeclaredLostItem,
 } from './utils';
 
 import css from './requests.css';
@@ -464,9 +466,11 @@ class RequestForm extends React.Component {
         // Setting state here is redundant with what follows, but it lets us
         // display the matched item as quickly as possible, without waiting for
         // the slow loan and request lookups
-        this.setState({
-          selectedItem: item,
-        });
+        this.setState({ selectedItem: item });
+
+        if (isDeclaredLostItem(item)) {
+          this.showDeclaredLostModal();
+        }
 
         return item;
       })
@@ -506,6 +510,14 @@ class RequestForm extends React.Component {
   onCancelRequest = (cancellationInfo) => {
     this.setState({ isCancellingRequest: false });
     this.props.onCancelRequest(cancellationInfo);
+  }
+
+  hideDeclaredLostModal = () => {
+    this.setState({ showDeclaredLostError: false });
+  }
+
+  showDeclaredLostModal = () => {
+    this.setState({ showDeclaredLostError: true });
   }
 
   onCloseBlockedModal = () => {
@@ -572,11 +584,16 @@ class RequestForm extends React.Component {
       pickupServicePointId,
     } = data;
 
+    const { selectedItem } = this.state;
+
+    if (isDeclaredLostItem(selectedItem)) {
+      return this.showDeclaredLostModal();
+    }
+
     const [block = {}] = this.getPatronBlocks(parentResources);
 
     if (get(block, 'userId') === this.state.selectedUser.id) {
-      this.setState({ blocked: true });
-      return;
+      return this.setState({ blocked: true });
     }
 
     if (!requestExpirationDate) unset(data, 'requestExpirationDate');
@@ -593,7 +610,7 @@ class RequestForm extends React.Component {
       unset(data, 'pickupServicePointId');
     }
 
-    this.props.onSubmit(data);
+    return this.props.onSubmit(data);
   };
 
   renderAddRequestFirstMenu = () => (
@@ -640,6 +657,7 @@ class RequestForm extends React.Component {
       isCancellingRequest,
       instanceId,
       requestPreferencesLoaded,
+      showDeclaredLostError,
     } = this.state;
 
     const patronBlocks = this.getPatronBlocks(parentResources);
@@ -649,6 +667,7 @@ class RequestForm extends React.Component {
 
     const isEditForm = this.isEditForm();
     const requestTypeOptions = getRequestTypeOptions(selectedItem);
+
 
     const labelAsterisk = isEditForm
       ? ''
@@ -687,6 +706,7 @@ class RequestForm extends React.Component {
     const multiRequestTypesVisible = !isEditForm && selectedItem && requestTypeOptions.length > 1;
     const singleRequestTypeVisible = !isEditForm && selectedItem && requestTypeOptions.length === 1;
     const patronGroup = getPatronGroup(selectedUser, patronGroups);
+    const isDeclaredLost = isDeclaredLostItem(selectedItem);
 
     return (
       <Paneset isRoot>
@@ -849,6 +869,12 @@ class RequestForm extends React.Component {
                             value={request.requestType}
                           />
                         }
+                        {isDeclaredLost &&
+                          <KeyValue
+                            label={<FormattedMessage id="ui-requests.requestType" />}
+                            value={<FormattedMessage id="ui-requests.noRequestTypesAvailable" />}
+                          />
+                        }
                       </Col>
                       <Col xs={3}>
                         {isEditForm &&
@@ -995,6 +1021,24 @@ class RequestForm extends React.Component {
               viewUserPath={() => this.onViewUserPath(selectedUser, patronGroup)}
               patronBlocks={patronBlocks || []}
             />
+            {showDeclaredLostError &&
+              <ErrorModal
+                id="declared-lost-modal"
+                data-test-declared-lost-modal
+                onClose={this.hideDeclaredLostModal}
+                label={<FormattedMessage id="ui-requests.declaredLost.title" />}
+                errorMessage={
+                  <SafeHTMLMessage
+                    id="ui-requests.declaredLost.message"
+                    values={{
+                      title: selectedItem.title,
+                      barcode: selectedItem.barcode,
+                      materialType: get(selectedItem, 'materialType.name', ''),
+                    }}
+                  />
+                }
+              />
+            }
           </Pane>
         </form>
       </Paneset>
