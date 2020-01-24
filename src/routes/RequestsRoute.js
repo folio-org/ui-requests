@@ -27,7 +27,6 @@ import {
   reportHeaders,
   fulfilmentTypes,
   expiredHoldsReportHeaders,
-  requestStatuses,
   pickSlipType,
 } from '../constants';
 import {
@@ -38,37 +37,13 @@ import {
 import packageInfo from '../../package';
 import ErrorModal from '../components/ErrorModal';
 import PrintButton from '../components/PrintButton';
+import {
+  RequestsFilters,
+  RequestsFiltersConfig,
+} from '../components/RequestsFilters';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
-
-const filterConfig = [
-  {
-    label: 'ui-requests.requestMeta.type',
-    name: 'requestType',
-    cql: 'requestType',
-    values: [
-      { name: 'Holds', cql: 'Hold' },
-      { name: 'Pages', cql: 'Page' },
-      { name: 'Recalls', cql: 'Recall' },
-    ],
-  },
-  {
-    label: 'ui-requests.requestMeta.status',
-    name: 'requestStatus',
-    cql: 'status',
-    values: [
-      { name: requestStatuses.CANCELLED, cql: requestStatuses.CANCELLED },
-      { name: requestStatuses.FILLED, cql: requestStatuses.FILLED },
-      { name: requestStatuses.PICKUP_EXPIRED, cql: requestStatuses.PICKUP_EXPIRED },
-      { name: requestStatuses.UNFILLED, cql: requestStatuses.UNFILLED },
-      { name: requestStatuses.AWAITING_DELIVERY, cql: requestStatuses.AWAITING_DELIVERY },
-      { name: requestStatuses.AWAITING_PICKUP, cql: requestStatuses.AWAITING_PICKUP },
-      { name: requestStatuses.IN_TRANSIT, cql: requestStatuses.IN_TRANSIT },
-      { name: requestStatuses.NOT_YET_FILLED, cql: requestStatuses.NOT_YET_FILLED },
-    ],
-  },
-];
 
 const urls = {
   user: (value, idType) => {
@@ -130,7 +105,7 @@ class RequestsRoute extends React.Component {
               'Position': 'position',
               'Proxy': 'proxy',
             },
-            filterConfig,
+            RequestsFiltersConfig,
             2, // do not fetch unless we have a query or a filter
           ),
         },
@@ -194,7 +169,16 @@ class RequestsRoute extends React.Component {
       fetch: true,
       throwErrors: false,
     },
-    currentServicePoint: {}
+    currentServicePoint: {},
+    tags: {
+      throwErrors: false,
+      type: 'okapi',
+      path: 'tags',
+      params: {
+        query: 'cql.allRecords=1 sortby label',
+      },
+      records: 'tags',
+    },
   };
 
   static propTypes = {
@@ -300,9 +284,6 @@ class RequestsRoute extends React.Component {
     // Map to pass into exportCsv
     this.columnHeadersMap = this.getColumnHeaders(reportHeaders);
     this.expiredHoldsReportColumnHeaders = this.getColumnHeaders(expiredHoldsReportHeaders);
-
-    this.filterConfigWithTranslatedLabels = filterConfig
-      .map(filter => ({ ...filter, label: formatMessage({ id: filter.label }) }));
 
     this.state = {
       submitting: false,
@@ -599,6 +580,56 @@ class RequestsRoute extends React.Component {
     return get(pickSlip, 'template', '');
   }
 
+  handleFilterChange = ({ name, values }) => {
+    const { mutator } = this.props;
+    const newFilters = {
+      ...this.getActiveFilters(),
+      [name]: values,
+    };
+
+    const filters = Object.keys(newFilters)
+      .map((filterName) => {
+        return newFilters[filterName]
+          .map((filterValue) => `${filterName}.${filterValue}`)
+          .join(',');
+      })
+      .filter(filter => filter)
+      .join(',');
+
+    mutator.query.update({ filters });
+  };
+
+  getActiveFilters = () => {
+    const { query } = this.props.resources;
+
+    if (!query || !query.filters) return {};
+
+    return query.filters
+      .split(',')
+      .reduce((filterMap, currentFilter) => {
+        const [name, value] = currentFilter.split('.');
+
+        if (!Array.isArray(filterMap[name])) {
+          filterMap[name] = [];
+        }
+
+        filterMap[name].push(value);
+
+        return filterMap;
+      }, {});
+  }
+
+  renderFilters = (onChange) => {
+    return (
+      <RequestsFilters
+        activeFilters={this.getActiveFilters()}
+        resources={this.props.resources}
+        onChange={onChange}
+        onClear={(name) => onChange({ name, values: [] })}
+      />
+    );
+  };
+
   render() {
     const {
       resources,
@@ -706,7 +737,6 @@ class RequestsRoute extends React.Component {
             actionMenu={actionMenu}
             packageInfo={packageInfo}
             objectName="request"
-            filterConfig={this.filterConfigWithTranslatedLabels}
             initialResultCount={INITIAL_RESULT_COUNT}
             resultCountIncrement={RESULT_COUNT_INCREMENT}
             viewRecordComponent={ViewRequest}
@@ -754,6 +784,8 @@ class RequestsRoute extends React.Component {
             }}
             viewRecordPerms="ui-requests.view"
             newRecordPerms="ui-requests.create"
+            renderFilters={this.renderFilters}
+            onFilterChange={this.handleFilterChange}
           />
         </div>
       </React.Fragment>
