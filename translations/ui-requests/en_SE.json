@@ -163,5 +163,20 @@
     "cancellationAdditionalInformation": "Additional information for patron",
     "printPickSlips": "Print pick slips for {sp}",
     "common.saveAndClose": "Save & close",
-    "item.effectiveLocation": "Effective location"
+    "item.effectiveLocation": "Effective location",
+    "requestMeta.tags": "Tags",
+    "filters.requestType.holds": "Holds",
+    "filters.requestType.pages": "Pages",
+    "filters.requestType.recalls": "Recalls",
+    "filters.requestStatus.cancelled": "Closed - Cancelled",
+    "filters.requestStatus.filled": "Closed - Filled",
+    "filters.requestStatus.pickupExpired": "Closed - Pickup expired",
+    "filters.requestStatus.unfilled": "Closed - Unfilled",
+    "filters.requestStatus.awaitingDelivery": "Open - Awaiting delivery",
+    "filters.requestStatus.awaitingPickup": "Open - Awaiting pickup",
+    "filters.requestStatus.inTransit": "Open - In transit",
+    "filters.requestStatus.notYetFilled": "Open - Not yet filled",
+    "noRequestTypesAvailable": "No request types available for selected item",
+    "declaredLost.title": "Item cannot be requested",
+    "declaredLost.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>Declared lost</strong> and cannot be requested."
 }
