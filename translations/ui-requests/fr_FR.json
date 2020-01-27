@@ -163,5 +163,20 @@
     "cancellationAdditionalInformation": "Informations complémentaires sur l'utilisateur",
     "printPickSlips": "Imprimer les bordereaux de prélèvement pour {sp}",
     "common.saveAndClose": "Sauvegarder et fermer",
-    "item.effectiveLocation": "Emplacement effectif"
+    "item.effectiveLocation": "Emplacement effectif",
+    "requestMeta.tags": "Mots-clés",
+    "filters.requestType.holds": "Demandes/Réservations",
+    "filters.requestType.pages": "Pages",
+    "filters.requestType.recalls": "Rappels",
+    "filters.requestStatus.cancelled": "Fermé - Annulé",
+    "filters.requestStatus.filled": "Fermé - Fourni",
+    "filters.requestStatus.pickupExpired": "Fermé - Retrait expiré",
+    "filters.requestStatus.unfilled": "Fermé - Non fourni",
+    "filters.requestStatus.awaitingDelivery": "Ouvert - En attente de livraison",
+    "filters.requestStatus.awaitingPickup": "Ouvert - En attente de retrait",
+    "filters.requestStatus.inTransit": "Ouvert - En transit",
+    "filters.requestStatus.notYetFilled": "Ouvert - Pas encore servi/fourni",
+    "noRequestTypesAvailable": "No request types available for selected item",
+    "declaredLost.title": "Item cannot be requested",
+    "declaredLost.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>Declared lost</strong> and cannot be requested."
 }

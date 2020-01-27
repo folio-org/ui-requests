@@ -163,5 +163,20 @@
     "cancellationAdditionalInformation": "Informações adicionais para o usuário",
     "printPickSlips": "Imprimir ficha de encaminhamento para {sp}",
     "common.saveAndClose": "Salvar e fechar",
-    "item.effectiveLocation": "Localização efetiva"
+    "item.effectiveLocation": "Localização efetiva",
+    "requestMeta.tags": "Tags",
+    "filters.requestType.holds": "Acervos",
+    "filters.requestType.pages": "Páginas",
+    "filters.requestType.recalls": "Recalls",
+    "filters.requestStatus.cancelled": "Fechado - Cancelado",
+    "filters.requestStatus.filled": "Fechado - Cheio",
+    "filters.requestStatus.pickupExpired": "Fechado - a retirada expirou",
+    "filters.requestStatus.unfilled": "Fechado - Não preenchido",
+    "filters.requestStatus.awaitingDelivery": "Aberto - Aguardando entrega",
+    "filters.requestStatus.awaitingPickup": "Aberto - Aguardando retirada",
+    "filters.requestStatus.inTransit": "Aberto - Em trânsito",
+    "filters.requestStatus.notYetFilled": "Aberto - Ainda não preenchido",
+    "noRequestTypesAvailable": "Nenhum tipo de solicitação disponível para o item selecionado",
+    "declaredLost.title": "O item não pode ser solicitado",
+    "declaredLost.message": "{title} ({materialType}) (Código de barras: {barcode} ) tem o status do item <strong>Declarado como perdido</strong> e não pode ser solicitado."
 }

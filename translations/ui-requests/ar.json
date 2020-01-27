@@ -163,5 +163,20 @@
     "cancellationAdditionalInformation": "بيانات إضافية للمستفيد",
     "printPickSlips": "طباعة كعوب الالتقاط لـ {sp}",
     "common.saveAndClose": "حفظ وإغلاق",
-    "item.effectiveLocation": "الموقع النشط"
+    "item.effectiveLocation": "الموقع النشط",
+    "requestMeta.tags": "وسوم",
+    "filters.requestType.holds": "حجوزات",
+    "filters.requestType.pages": "صفحات",
+    "filters.requestType.recalls": "استدعاءات",
+    "filters.requestStatus.cancelled": "مغلق -ملغي",
+    "filters.requestStatus.filled": "مغلق - مملوء",
+    "filters.requestStatus.pickupExpired": "مغلق - انتهت صلاحية الالتقاط",
+    "filters.requestStatus.unfilled": "مغلق - غير مملوء",
+    "filters.requestStatus.awaitingDelivery": "مفتوح - في النتظار التوصيل",
+    "filters.requestStatus.awaitingPickup": "مفتوح - في انتظار الالتقاط",
+    "filters.requestStatus.inTransit": "مفتوح - في النقل",
+    "filters.requestStatus.notYetFilled": "مفتوح - غير مملوء بعد",
+    "noRequestTypesAvailable": "لا تتوافر أنواع طلب للمادة المحددة",
+    "declaredLost.title": "لا يمكن طلب المادة",
+    "declaredLost.message": "{title} ({materialType}) (باركود: {barcode}) لها حالة المادة <strong>معلن فقدانها</strong> ولا يمكن طلبها."
 }
