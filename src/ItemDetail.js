@@ -56,17 +56,17 @@ const ItemDetail = ({ item, loan, requestCount }) => {
         </Col>
       </Row>
       <Row>
-        <Col xs={3}>
+        <Col xs={4}>
           <KeyValue label={<FormattedMessage id="ui-requests.item.status" />}>
             {status || '-'}
           </KeyValue>
         </Col>
-        <Col xs={3}>
+        <Col xs={4}>
           <KeyValue label={<FormattedMessage id="ui-requests.item.dueDate" />}>
             {loan && loan.dueDate ? <FormattedDate value={loan.dueDate} /> : '-'}
           </KeyValue>
         </Col>
-        <Col xs={3}>
+        <Col xs={4}>
           <KeyValue label={<FormattedMessage id="ui-requests.item.requestsOnItem" />}>
             {positionLink}
           </KeyValue>
