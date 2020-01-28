@@ -4,8 +4,6 @@ import { FormattedMessage } from 'react-intl';
 import {
   get,
   isEmpty,
-  chain,
-  map,
   sortBy,
 } from 'lodash';
 
@@ -40,12 +38,10 @@ export default class RequestsFilters extends React.Component {
   };
 
   transformTagsOptions = () => {
-    const tags = get(this.props.resources, 'tags.records', []);
+    const tags = get(this.props.resources, 'tags.records', [])
+      .map(({ label }) => ({ label, value: label }));
 
-    return chain(tags)
-      .map(({ label }) => ({ label, value: label }))
-      .sortBy('label')
-      .value();
+    return sortBy(tags, 'label');
   };
 
   render() {
