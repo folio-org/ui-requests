@@ -82,7 +82,7 @@
   "item.location.libraryName": "Library",
   "item.effectiveLocation": "Effective location",
   "item.location.code": "Shelving location code",
-  "item.callNumber": "Effective call number",
+  "item.callNumber": "Effective call number string",
   "item.enumeration": "Enumeration",
   "item.copyNumber": "Copy",
   "item.status": "Item status",
