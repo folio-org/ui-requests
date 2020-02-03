@@ -177,6 +177,6 @@
     "filters.requestStatus.inTransit": "Ouvert - En transit",
     "filters.requestStatus.notYetFilled": "Ouvert - Pas encore servi/fourni",
     "noRequestTypesAvailable": "No request types available for selected item",
-    "declaredLost.title": "Item cannot be requested",
+    "declaredLost.title": "L'article ne peut pas être demandé",
     "declaredLost.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>Declared lost</strong> and cannot be requested."
 }
