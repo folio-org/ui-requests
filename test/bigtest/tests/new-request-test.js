@@ -10,12 +10,13 @@ import setupApplication from '../helpers/setup-application';
 import NewRequestInteractor from '../interactors/new-request';
 import RequestsInteractor from '../interactors/requests';
 import ViewRequestInteractor from '../interactors/view-request';
-import errorModalInteractor from '../interactors/error-modal';
+import ErrorModalInteractor from '../interactors/error-modal';
 
 describe('New Request page', () => {
   setupApplication();
 
   const requests = new RequestsInteractor();
+  const errorModalInteractor = new ErrorModalInteractor('#OverlayContainer');
 
   describe('New request without prefilled user and item', function () {
     beforeEach(function () {

@@ -3,35 +3,11 @@ import {
   scoped,
   collection,
   clickable,
-  isVisible,
-  count,
-  property,
-  text,
 } from '@bigtest/interactor';
 
-@interactor class ErrorModal {
-  defaultScope = '[data-test-error-modal]';
-
-  content = scoped('[data-test-error-modal-content]');
-  closeButton = scoped('[data-test-error-modal-close-button]');
-}
-
-@interactor class HeaderDropdownMenu {
-  clickExportToCSV = clickable('#exportToCsvPaneHeaderBtn');
-  clickExportExpiredHoldsToCSV = clickable('#exportExpiredHoldsToCsvPaneHeaderBtn');
-  exportBtnIsVisible = isVisible('#exportToCsvPaneHeaderBtn');
-  exportExpiredHoldsBtnIsVisible = isVisible('#exportExpiredHoldsToCsvPaneHeaderBtn');
-  clickPrintPickSlipsBtn = clickable('#printPickSlipsBtn');
-  printPickSlipsIsVisible = isVisible('#printPickSlipsBtn');
-  printPickSlipsIsDisabled = property('#printPickSlipsBtn', 'disabled');
-  printPickSlipsBtnText = text('#printPickSlipsBtn');
-}
-
-@interactor class InstanceList {
-  static defaultScope = '#list-requests';
-  size = count('[role=row] a');
-  items = collection('[role=row] a');
-}
+import HeaderDropdownMenu from './header-dropdown-menu';
+import ErrorModalInteractor from './error-modal';
+import InstanceList from './instance-list';
 
 @interactor class RequestsInteractor {
   static defaultScope = '[data-test-request-instances]';
@@ -44,8 +20,7 @@ import {
   clickHoldsCheckbox = clickable('#clickable-filter-requestType-hold');
   clickPagesCheckbox = clickable('#clickable-filter-requestType-page');
   clickRecallsCheckbox = clickable('#clickable-filter-requestType-recall');
-  clickOpenNotFilled = clickable('#clickable-filter-requestStatus-open-not-yet-filled');
-  errorModal = new ErrorModal();
+  errorModal = new ErrorModalInteractor('#OverlayContainer');
 
   whenInstancesArePresent(size) {
     return this.when(() => {

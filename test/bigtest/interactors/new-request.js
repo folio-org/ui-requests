@@ -7,35 +7,11 @@ import {
   fillable,
   triggerable,
   selectable,
-  blurrable,
 } from '@bigtest/interactor';
 
 import { getSelectValues } from './helpers';
-
-@interactor class HeaderDropdown {
-  click = clickable('button');
-}
-
-@interactor class InputFieldInteractor {
-  clickInput = clickable();
-  fillInput = fillable();
-  blurInput = blurrable();
-
-  pressEnter = triggerable('keydown', {
-    bubbles: true,
-    cancelable: true,
-    keyCode: 13,
-    key: 'Enter',
-  });
-
-  fillAndBlur(val) {
-    return this
-      .clickInput()
-      .fillInput(val)
-      .pressEnter()
-      .blurInput();
-  }
-}
+import HeaderDropdown from './header-dropdown';
+import InputFieldInteractor from './input-field';
 
 @interactor class NewRequestsInteractor {
   pressEnter = triggerable('keydown', {
@@ -51,12 +27,10 @@ import { getSelectValues } from './helpers';
   title = text('[class*=paneTitleLabel---]');
   headerDropdown = new HeaderDropdown('[class*=paneHeaderCenterInner---] [class*=dropdown---]');
   requestTypeMessageIsPresent = isPresent('[data-test-request-type-message]');
-  itemBarcodeIsPresent = isPresent('[name="item.barcode"]');
   fillItemBarcode = fillable('[name="item.barcode"]');
 
   itemField = new InputFieldInteractor('[name="item.barcode"]');
 
-  userBarcodeIsPresent = isPresent('[name="item.barcode"]');
   fillUserBarcode = fillable('[name="requester.barcode"]');
   userField = new InputFieldInteractor('[name="requester.barcode"]');
 
@@ -74,7 +48,6 @@ import { getSelectValues } from './helpers';
   chooseDeliveryAddress = selectable('[name="deliveryAddressTypeId"]');
   fulfillmentPreferenceValue = value('[name="fulfilmentPreference"]');
   deliveryAddressTypeIdValue = value('[name="deliveryAddressTypeId"]');
-  pickupServicePointIdValue = value('[name="pickupServicePointId"]');
 
   itemErrorIsPresent = isPresent('#section-item-info [class*=feedbackError---]');
   requesterErrorIsPresent = isPresent('#section-requester-info [class*=feedbackError---]');
