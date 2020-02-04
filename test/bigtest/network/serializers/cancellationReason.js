@@ -5,6 +5,6 @@ export default ApplicationSerializer.extend({
     const json = ApplicationSerializer.prototype.serialize.apply(this, args);
     const totalRecords = json.cancellationReasons.length;
 
-    return Object.assign({}, json, { totalRecords });
+    return { json, totalRecords };
   }
 });
