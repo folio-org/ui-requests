@@ -76,8 +76,7 @@ class UserDetail extends React.Component {
               <KeyValue
                 label={<FormattedMessage id="ui-requests.pickupServicePoint.name" />}
                 value={pickupServicePoint || '-'}
-              />
-            }
+              /> }
           </Col>
         </Row>
         {proxySection}

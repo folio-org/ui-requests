@@ -56,7 +56,7 @@ export default class RequestsFilters extends React.Component {
     } = this.props;
 
     return (
-      <React.Fragment>
+      <>
         <Accordion
           displayClearButton={!isEmpty(requestType)}
           id={requestFilterTypes.REQUEST_TYPE}
@@ -105,7 +105,7 @@ export default class RequestsFilters extends React.Component {
             onChange={onChange}
           />
         </Accordion>
-      </React.Fragment>
+      </>
     );
   }
 }

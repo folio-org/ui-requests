@@ -12,6 +12,16 @@ import RequestQueueView from '../views/RequestQueueView';
 import urls from './urls';
 
 class RequestQueueRoute extends React.Component {
+  static getRequest(props) {
+    const {
+      location,
+      resources,
+    } = props;
+
+    return get(location, 'state.request') ||
+        get(resources, 'request.records[0]');
+  }
+
   static manifest = {
     addressTypes: {
       type: 'okapi',
@@ -86,18 +96,9 @@ class RequestQueueRoute extends React.Component {
     }),
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
+      goBack: PropTypes.func.isRequired,
     }).isRequired,
   };
-
-  static getRequest(props) {
-    const {
-      location,
-      resources,
-    } = props;
-
-    return get(location, 'state.request') ||
-      get(resources, 'request.records[0]');
-  }
 
   getRequest = () => {
     return RequestQueueRoute.getRequest(this.props);

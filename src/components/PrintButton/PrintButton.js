@@ -52,7 +52,7 @@ class PrintButton extends React.Component {
     } = this.props;
 
     return (
-      <React.Fragment>
+      <>
         <ReactToPrint
           content={this.getContent}
           removeAfterPrint
@@ -75,7 +75,7 @@ class PrintButton extends React.Component {
             ))}
           </div>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }
