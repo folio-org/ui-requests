@@ -552,7 +552,13 @@ class RequestForm extends React.Component {
   }
 
   onSave = (data) => {
-    const { intl: { timeZone } } = this.props;
+    const {
+      intl: {
+        timeZone,
+      },
+      parentResources,
+    } = this.props;
+
     const {
       requestExpirationDate,
       holdShelfExpirationDate,
