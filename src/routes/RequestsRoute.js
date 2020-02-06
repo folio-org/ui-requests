@@ -662,6 +662,7 @@ class RequestsRoute extends React.Component {
     const addressTypes = get(resources, 'addressTypes.records', []);
     const servicePoints = get(resources, 'servicePoints.records', []);
     const cancellationReasons = get(resources, 'cancellationReasons.records', []);
+    const requestCount = get(resources, 'records.other.totalRecords', 0);
     const InitialValues = dupRequest ||
       { requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' };
 
@@ -686,6 +687,7 @@ class RequestsRoute extends React.Component {
         <Button
           buttonStyle="dropdownItem"
           id="exportToCsvPaneHeaderBtn"
+          disabled={!requestCount}
           onClick={() => {
             onToggle();
             if (!this.csvExportPending) {
@@ -699,6 +701,7 @@ class RequestsRoute extends React.Component {
         <Button
           buttonStyle="dropdownItem"
           id="exportExpiredHoldsToCsvPaneHeaderBtn"
+          disabled={!requestCount}
           onClick={() => {
             onToggle();
             this.exportExpiredHoldsToSCV();
