@@ -161,5 +161,8 @@
     "requestQueue.confirmReorder.cancel": "Leave in current position",
     "cancellationReason": "Cancellation reason",
     "cancellationAdditionalInformation": "Additional information for patron",
-    "printPickSlips": "Print pick slips for {sp}"
+    "printPickSlips": "Print pick slips for {sp}",
+
+    "common.cancel": "Cancel",
+    "common.saveAndClose": "Save & close"
 }
