@@ -1,38 +1,21 @@
 import {
+  clickable,
   interactor,
   isPresent,
-  clickable,
-  attribute,
 } from '@bigtest/interactor';
 
 import CancelRequestDialog from './cancel-request-dialog';
 import MoveRequestDialog from './move-request-dialog';
 import ChooseRequestTypeDialog from './choose-request-type-dialog';
+import HeaderDropdown from './header-dropdown';
+import HeaderDropdownMenu from './header-dropdown-menu';
+import ItemAccordion from './item-accordion';
+import MoveToSecondPositionDialog from './move-to-second-position-dialog';
 
 import { contains } from './helpers';
 
-@interactor class HeaderDropdown {
-  click = clickable('button');
-}
-
-@interactor class HeaderDropdownMenu {
-  clickCancel = clickable('#clickable-cancel-request');
-  clickEdit = clickable('#clickable-edit-request');
-  clickDuplicate = clickable('#duplicate-request');
-  clickMove = clickable('#move-request');
-}
-
-@interactor class ItemAccordion {
-  isExpanded = attribute('#accordion-toggle-button-item-info', 'aria-expanded') === 'true';
-}
-
-@interactor class MoveToSecondPositionDialog {
-  clickClose = clickable('[data-test-confirmation-modal-cancel-button]');
-  clickConfirm = clickable('[data-test-confirmation-modal-confirm-button]');
-}
-
 @interactor class ViewRequestInteractor {
-  headerDropdown = new HeaderDropdown('[class*=paneHeaderCenterInner---] [class*=dropdown---]');
+  headerDropdown = new HeaderDropdown();
   headerDropdownMenu = new HeaderDropdownMenu();
   itemAccordion = new ItemAccordion('#item-info');
   cancelRequestDialog = new CancelRequestDialog('[data-test-cancel-request-modal]');
@@ -47,4 +30,4 @@ import { contains } from './helpers';
   itemAccordionClick = clickable('#accordion-toggle-button-item-info');
 }
 
-export default new ViewRequestInteractor();
+export default ViewRequestInteractor;

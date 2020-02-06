@@ -8,19 +8,12 @@ import {
 } from '@bigtest/interactor';
 
 import CancelRequestDialog from './cancel-request-dialog';
+import HeaderDropdownMenu from './header-dropdown-menu';
+import HeaderDropdown from './header-dropdown';
 
-@interactor class HeaderDropdown {
-  click = clickable('button');
-}
-
-@interactor class HeaderDropdownMenu {
-  clickCancel = clickable('#clickable-cancel-request');
-  clickDelete = clickable('[data-test-delete-request]');
-}
-
-@interactor class EditRequestsInteractor {
+@interactor class EditRequests {
   fillRequestExpirationDateField = fillable('#requestExpirationDate');
-  headerDropdown = new HeaderDropdown('[class*=paneHeaderCenterInner---] [class*=dropdown---]');
+  headerDropdown = new HeaderDropdown();
   headerDropdownMenu = new HeaderDropdownMenu();
   chooseServicePoint = selectable('[name="pickupServicePointId"]');
   clickUpdate = clickable('#clickable-save-request');
@@ -29,4 +22,4 @@ import CancelRequestDialog from './cancel-request-dialog';
   fulfillmentPreferenceFieldDisabled = is('[data-test-fulfillment-preference-filed]', ':disabled');
 }
 
-export default new EditRequestsInteractor();
+export default EditRequests;
