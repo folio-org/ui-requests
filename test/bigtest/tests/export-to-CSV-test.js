@@ -2,7 +2,7 @@ import { beforeEach, describe, it } from '@bigtest/mocha';
 import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
-import RequestsInteractor from '../interactors/requests';
+import RequestsInteractor from '../interactors/requests-interactor';
 
 import translations from '../../../translations/ui-requests/en';
 

@@ -1,45 +1,19 @@
 import {
-  interactor,
-  focusable,
-  triggerable,
   collection,
-  text,
+  interactor,
   isPresent,
   scoped,
+  text,
 } from '@bigtest/interactor';
 
-@interactor class DraggableRowInteractor {
-  focus = focusable();
-  cols = collection('[role="gridcell"]');
-
-  pressSpace = triggerable('keydown', {
-    bubbles: true,
-    cancelable: true,
-    keyCode: 32,
-    which: 32,
-  });
-
-  pressArrowUp = triggerable('keydown', {
-    bubbles: true,
-    cancelable: true,
-    keyCode: 38,
-    key: 'ArrowUp',
-  });
-
-  pressArrowDown = triggerable('keydown', {
-    bubbles: true,
-    cancelable: true,
-    keyCode: 40,
-    key: 'ArrowDown',
-  });
-}
+import DraggableRow from './draggable-row';
 
 @interactor class SortableListInteractor {
   log = text('[role="log"]');
   logPresent = isPresent('[role="log"]');
-  rows = collection('[data-test-draggable-row]', DraggableRowInteractor);
+  rows = collection('[data-test-draggable-row]', DraggableRow);
 
-  row = scoped('#row-1', DraggableRowInteractor);
+  row = scoped('#row-1', DraggableRow);
 
   moveRowUp() {
     return this
