@@ -694,7 +694,7 @@ class RequestsRoute extends React.Component {
             }
           }}
         >
-          <FormattedMessage id="stripes-components.exportToCsv" />
+          <FormattedMessage id="ui-requests.exportSearchResultsToCsv" />
         </Button>
         <Button
           buttonStyle="dropdownItem"
@@ -704,7 +704,10 @@ class RequestsRoute extends React.Component {
             this.exportExpiredHoldsToSCV();
           }}
         >
-          <FormattedMessage id="ui-requests.exportExpiredHoldsToCsv" />
+          <FormattedMessage
+            id="ui-requests.exportExpiredHoldShelfToCsv"
+            values={{ currentServicePoint: servicePointName }}
+          />
         </Button>
         <PrintButton
           buttonStyle="dropdownItem"
