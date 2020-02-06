@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 1.14.4 (IN PROGRESS)
+## [1.14.4](https://github.com/folio-org/ui-requests/tree/v1.14.4) (2020-02-05)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.14.3...v1.14.4)
 
 * Create/Edit a request | Move Save/Cancel buttons to the footer. Refs UIREQ-370.
 
