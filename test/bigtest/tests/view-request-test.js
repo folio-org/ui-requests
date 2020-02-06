@@ -13,6 +13,9 @@ import NewRequestInteractor from '../interactors/new-request';
 describe('View request page', () => {
   setupApplication();
 
+  const viewRequest = new ViewRequestInteractor();
+  const newRequest = new NewRequestInteractor();
+
   describe('View default request', () => {
     beforeEach(async function () {
       this.visit('/requests/view/requestId0');
@@ -21,33 +24,33 @@ describe('View request page', () => {
     describe('cancel request', function () {
       describe('confirm cancel request', function () {
         beforeEach(async () => {
-          await ViewRequestInteractor.headerDropdown.click();
-          await ViewRequestInteractor.headerDropdownMenu.clickCancel();
-          await ViewRequestInteractor.cancelRequestDialog.chooseReason('Patron Cancelled');
-          await ViewRequestInteractor.cancelRequestDialog.clickConfirm();
+          await viewRequest.headerDropdown.click();
+          await viewRequest.headerDropdownMenu.clickCancel();
+          await viewRequest.cancelRequestDialog.chooseReason('Patron Cancelled');
+          await viewRequest.cancelRequestDialog.clickConfirm();
         });
 
         it('closes request view', function () {
-          expect(ViewRequestInteractor.requestInfoContains('Closed - Cancelled')).to.be.true;
+          expect(viewRequest.requestInfoContains('Closed - Cancelled')).to.be.true;
         });
       });
 
       describe('cancelling cancel request', function () {
         beforeEach(async () => {
-          await ViewRequestInteractor.headerDropdown.click();
-          await ViewRequestInteractor.headerDropdownMenu.clickCancel();
+          await viewRequest.headerDropdown.click();
+          await viewRequest.headerDropdownMenu.clickCancel();
         });
       });
 
       it('closes request view', function () {
-        expect(ViewRequestInteractor.cancelRequestDialog.isPresent).to.be.false;
+        expect(viewRequest.cancelRequestDialog.isPresent).to.be.false;
       });
     });
 
     describe('edit request', function () {
       beforeEach(async () => {
-        await ViewRequestInteractor.headerDropdown.click();
-        await ViewRequestInteractor.headerDropdownMenu.clickEdit();
+        await viewRequest.headerDropdown.click();
+        await viewRequest.headerDropdownMenu.clickEdit();
       });
 
       it('opens request form in edit mode', function () {
@@ -57,9 +60,9 @@ describe('View request page', () => {
 
     describe('duplicate request', function () {
       beforeEach(async () => {
-        await ViewRequestInteractor.headerDropdown.click();
-        await ViewRequestInteractor.headerDropdownMenu.clickDuplicate();
-        await NewRequestInteractor.isPresent;
+        await viewRequest.headerDropdown.click();
+        await viewRequest.headerDropdownMenu.clickDuplicate();
+        await newRequest.isPresent;
       });
 
       it('opens request form', function () {
@@ -69,11 +72,11 @@ describe('View request page', () => {
 
     describe('toggle section', function () {
       beforeEach(async function () {
-        await ViewRequestInteractor.itemAccordionClick();
+        await viewRequest.itemAccordionClick();
       });
 
       it('toggles item section', function () {
-        expect(ViewRequestInteractor.itemAccordion.isExpanded).to.be.false;
+        expect(viewRequest.itemAccordion.isExpanded).to.be.false;
       });
     });
   });
@@ -91,7 +94,7 @@ describe('View request page', () => {
 
     it('shows delivery address', () => {
       const address = requester.attrs.personal.addresses[0].addressLine1;
-      expect(ViewRequestInteractor.requesterInfoContains(address)).to.be.true;
+      expect(viewRequest.requesterInfoContains(address)).to.be.true;
     });
   });
 
@@ -111,8 +114,8 @@ describe('View request page', () => {
     });
 
     it('shows cancellation reason', () => {
-      expect(ViewRequestInteractor.requestInfoContains('Item Not Available')).to.be.true;
-      expect(ViewRequestInteractor.requestInfoContains('Item not found')).to.be.true;
+      expect(viewRequest.requestInfoContains('Item Not Available')).to.be.true;
+      expect(viewRequest.requestInfoContains('Item not found')).to.be.true;
     });
   });
 });

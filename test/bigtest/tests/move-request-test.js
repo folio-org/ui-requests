@@ -7,10 +7,12 @@ import {
 import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
-import ViewRequestInteractor from '../interactors/view-request';
+import ViewRequest from '../interactors/view-request';
 
 describe('Move request', () => {
   setupApplication();
+
+  const viewRequestInteractor = new ViewRequest();
 
   beforeEach(async function () {
     const request = this.server.create('request', 'withPagedItems', { requestType: 'Page' });
@@ -19,38 +21,38 @@ describe('Move request', () => {
 
   describe('open move request dialog', function () {
     beforeEach(async () => {
-      await ViewRequestInteractor.headerDropdown.click();
-      await ViewRequestInteractor.headerDropdownMenu.clickMove();
+      await viewRequestInteractor.headerDropdown.click();
+      await viewRequestInteractor.headerDropdownMenu.clickMove();
     });
 
     it('opens move request dialog', function () {
-      expect(ViewRequestInteractor.moveRequestDialog.isVisible).to.equal(true);
+      expect(viewRequestInteractor.moveRequestDialog.isVisible).to.equal(true);
     });
   });
 
   describe('open choose request type dialog', function () {
     beforeEach(async () => {
-      await ViewRequestInteractor.headerDropdown.click();
-      await ViewRequestInteractor.headerDropdownMenu.clickMove();
-      await ViewRequestInteractor.moveRequestDialog.chooseItem();
+      await viewRequestInteractor.headerDropdown.click();
+      await viewRequestInteractor.headerDropdownMenu.clickMove();
+      await viewRequestInteractor.moveRequestDialog.chooseItem();
     });
 
     it('opens choose request type dialog', function () {
-      expect(ViewRequestInteractor.chooseRequestTypeDialog.isVisible).to.equal(true);
+      expect(viewRequestInteractor.chooseRequestTypeDialog.isVisible).to.equal(true);
     });
   });
 
   describe('move request', function () {
     beforeEach(async () => {
-      await ViewRequestInteractor.headerDropdown.click();
-      await ViewRequestInteractor.headerDropdownMenu.clickMove();
-      await ViewRequestInteractor.moveRequestDialog.chooseItem();
-      await ViewRequestInteractor.chooseRequestTypeDialog.clickConfirm();
+      await viewRequestInteractor.headerDropdown.click();
+      await viewRequestInteractor.headerDropdownMenu.clickMove();
+      await viewRequestInteractor.moveRequestDialog.chooseItem();
+      await viewRequestInteractor.chooseRequestTypeDialog.clickConfirm();
     });
 
     it('moves request', function () {
-      expect(ViewRequestInteractor.chooseRequestTypeDialog.isPresent).to.equal(false);
-      expect(ViewRequestInteractor.moveRequestDialog.isPresent).to.equal(false);
+      expect(viewRequestInteractor.chooseRequestTypeDialog.isPresent).to.equal(false);
+      expect(viewRequestInteractor.moveRequestDialog.isPresent).to.equal(false);
     });
   });
 });
