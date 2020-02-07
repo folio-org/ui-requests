@@ -2,7 +2,7 @@ import { beforeEach, describe, it } from '@bigtest/mocha';
 import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
-import RequestsInteractor from '../interactors/requests-interactor';
+import RequestsInteractor from '../interactors/requests';
 
 const servicePoint = {
   id: 'servicepointId1',

@@ -1,16 +1,10 @@
 import {
-  clickable,
   interactor,
+  clickable,
   isPresent,
-  scoped,
 } from '@bigtest/interactor';
 
-@interactor class ErrorModal {
-  defaultScope = '[data-test-error-modal]';
-
-  content = scoped('[data-test-error-modal-content]');
-  closeButton = scoped('[data-test-error-modal-close-button]');
-
+@interactor class ErrorModalInteractor {
   modalIsPresent = isPresent('[data-test-error-modal]');
   clickCloseBtn = clickable('[data-test-error-modal-close-button]');
 
@@ -19,4 +13,4 @@ import {
   }
 }
 
-export default ErrorModal;
+export default new ErrorModalInteractor('#OverlayContainer');

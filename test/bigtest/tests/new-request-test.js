@@ -7,18 +7,15 @@ import {
 import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
-import ErrorModal from '../interactors/error-modal';
-import NewRequest from '../interactors/new-request';
-import RequestsInteractor from '../interactors/requests-interactor';
-import ViewRequest from '../interactors/view-request';
+import NewRequestInteractor from '../interactors/new-request';
+import RequestsInteractor from '../interactors/requests';
+import ViewRequestInteractor from '../interactors/view-request';
+import errorModalInteractor from '../interactors/error-modal';
 
 describe('New Request page', () => {
   setupApplication();
 
-  const errorModalInteractor = new ErrorModal('#OverlayContainer');
-  const newRequest = new NewRequest('[data-test-requests-form]');
   const requests = new RequestsInteractor();
-  const viewRequest = new ViewRequest();
 
   describe('New request without prefilled user and item', function () {
     beforeEach(function () {
@@ -27,39 +24,39 @@ describe('New Request page', () => {
 
     describe('entering invalid item barcode', function () {
       beforeEach(async function () {
-        await newRequest.itemField.fillAndBlur('123');
-        await newRequest.clickNewRequest();
+        await NewRequestInteractor.itemField.fillAndBlur('123');
+        await NewRequestInteractor.clickNewRequest();
       });
 
       it('triggers item not found error', () => {
-        expect(newRequest.itemErrorIsPresent).to.be.true;
+        expect(NewRequestInteractor.itemErrorIsPresent).to.be.true;
       });
     });
 
     describe('entering invalid requestor barcode', function () {
       beforeEach(async function () {
-        await newRequest.userField.fillAndBlur('123');
-        await newRequest.clickNewRequest();
+        await NewRequestInteractor.userField.fillAndBlur('123');
+        await NewRequestInteractor.clickNewRequest();
       });
 
       it('triggers requester not found error', () => {
-        expect(newRequest.requesterErrorIsPresent).to.be.true;
+        expect(NewRequestInteractor.requesterErrorIsPresent).to.be.true;
       });
     });
 
     describe('visiting the create request page', () => {
       it('displays the title in the pane header', () => {
-        expect(newRequest.title).to.equal('New request');
+        expect(NewRequestInteractor.title).to.equal('New request');
       });
 
       describe('pane header menu', () => {
         beforeEach(async () => {
-          await newRequest.headerDropdown.click();
+          await NewRequestInteractor.headerDropdown.click();
         });
 
         describe('clicking on cancel', () => {
           beforeEach(async () => {
-            await newRequest.clickCancel();
+            await NewRequestInteractor.clickCancel();
           });
 
           it('should redirect to view requests page after click', () => {
@@ -88,21 +85,21 @@ describe('New Request page', () => {
           barcode: '9676761472501',
         });
 
-        await newRequest
+        await NewRequestInteractor
           .fillItemBarcode('9676761472500')
           .clickItemEnterBtn();
 
-        await newRequest
+        await NewRequestInteractor
           .fillUserBarcode('9676761472501')
           .clickUserEnterBtn();
 
-        await newRequest.chooseServicePoint('Circ Desk 2');
-        await newRequest.clickNewRequest();
+        await NewRequestInteractor.chooseServicePoint('Circ Desk 2');
+        await NewRequestInteractor.clickNewRequest();
       });
 
       it('should create a new request and open view request pane', () => {
-        expect(viewRequest.requestSectionPresent).to.be.true;
-        expect(viewRequest.requesterSectionPresent).to.be.true;
+        expect(ViewRequestInteractor.requestSectionPresent).to.be.true;
+        expect(ViewRequestInteractor.requesterSectionPresent).to.be.true;
       });
     });
 
@@ -127,28 +124,28 @@ describe('New Request page', () => {
         personal.update('addresses', [address.toJSON()]);
         user.update('personal', personal.toJSON());
 
-        await newRequest
+        await NewRequestInteractor
           .fillItemBarcode('9676761472500')
           .clickItemEnterBtn();
 
-        await newRequest
+        await NewRequestInteractor
           .fillUserBarcode('9676761472501')
           .clickUserEnterBtn();
 
-        await newRequest.chooseFulfillmentPreference('Delivery');
-        await newRequest.chooseDeliveryAddress('Claim');
-        await newRequest.clickNewRequest();
+        await NewRequestInteractor.chooseFulfillmentPreference('Delivery');
+        await NewRequestInteractor.chooseDeliveryAddress('Claim');
+        await NewRequestInteractor.clickNewRequest();
       });
 
       it('should create a new request and open view request pane', () => {
-        expect(viewRequest.requestSectionPresent).to.be.true;
-        expect(viewRequest.requesterSectionPresent).to.be.true;
+        expect(ViewRequestInteractor.requestSectionPresent).to.be.true;
+        expect(ViewRequestInteractor.requesterSectionPresent).to.be.true;
       });
     });
 
     describe('showing request type message', () => {
       it('should show request type message', () => {
-        expect(newRequest.requestTypeMessageIsPresent).to.be.true;
+        expect(NewRequestInteractor.requestTypeMessageIsPresent).to.be.true;
       });
     });
 
@@ -162,13 +159,13 @@ describe('New Request page', () => {
           }
         });
 
-        await newRequest
+        await NewRequestInteractor
           .fillItemBarcode('9676761472500')
           .clickItemEnterBtn();
       });
 
       it('should hide request type message', () => {
-        expect(newRequest.requestTypeMessageIsPresent).to.be.false;
+        expect(NewRequestInteractor.requestTypeMessageIsPresent).to.be.false;
       });
     });
 
@@ -180,14 +177,14 @@ describe('New Request page', () => {
             status: { name: 'Checked out' },
           });
 
-          await newRequest
+          await NewRequestInteractor
             .fillItemBarcode('9676761472501')
             .clickItemEnterBtn()
             .whenRequestTypesArePresent();
         });
 
         it('should show hold and recall options', () => {
-          expect(newRequest.requestTypeOptions).to.eql(['Hold', 'Recall']);
+          expect(NewRequestInteractor.requestTypeOptions).to.eql(['Hold', 'Recall']);
         });
       });
 
@@ -198,14 +195,14 @@ describe('New Request page', () => {
             status: { name: 'Available' },
           });
 
-          await newRequest
+          await NewRequestInteractor
             .fillItemBarcode('9676761472501')
             .clickItemEnterBtn()
             .whenRequestTypeIsPresent();
         });
 
         it('should show page option', () => {
-          expect(newRequest.requestTypeText).to.equal('Page');
+          expect(NewRequestInteractor.requestTypeText).to.equal('Page');
         });
       });
 
@@ -216,14 +213,14 @@ describe('New Request page', () => {
             status: { name: 'Awaiting pickup' },
           });
 
-          await newRequest
+          await NewRequestInteractor
             .fillItemBarcode('9676761472501')
             .clickItemEnterBtn()
             .whenRequestTypesArePresent();
         });
 
         it('should show hold and recall options', () => {
-          expect(newRequest.requestTypeOptions).to.eql(['Hold', 'Recall']);
+          expect(NewRequestInteractor.requestTypeOptions).to.eql(['Hold', 'Recall']);
         });
       });
 
@@ -234,14 +231,14 @@ describe('New Request page', () => {
             status: { name: 'In transit' },
           });
 
-          await newRequest
+          await NewRequestInteractor
             .fillItemBarcode('9676761472501')
             .clickItemEnterBtn()
             .whenRequestTypesArePresent();
         });
 
         it('should show hold and recall options', () => {
-          expect(newRequest.requestTypeOptions).to.eql(['Hold', 'Recall']);
+          expect(NewRequestInteractor.requestTypeOptions).to.eql(['Hold', 'Recall']);
         });
       });
 
@@ -252,14 +249,14 @@ describe('New Request page', () => {
             status: { name: 'Missing' },
           });
 
-          await newRequest
+          await NewRequestInteractor
             .fillItemBarcode('9676761472501')
             .clickItemEnterBtn()
             .whenRequestTypeIsPresent();
         });
 
         it('should show hold option', () => {
-          expect(newRequest.requestTypeText).to.equal('Hold');
+          expect(NewRequestInteractor.requestTypeText).to.equal('Hold');
         });
       });
 
@@ -270,14 +267,14 @@ describe('New Request page', () => {
             status: { name: 'Paged' },
           });
 
-          await newRequest
+          await NewRequestInteractor
             .fillItemBarcode('9676761472501')
             .clickItemEnterBtn()
             .whenRequestTypesArePresent();
         });
 
         it('should show hold and recall options', () => {
-          expect(newRequest.requestTypeOptions).to.eql(['Hold', 'Recall']);
+          expect(NewRequestInteractor.requestTypeOptions).to.eql(['Hold', 'Recall']);
         });
       });
 
@@ -288,14 +285,14 @@ describe('New Request page', () => {
             status: { name: 'On order' },
           });
 
-          await newRequest
+          await NewRequestInteractor
             .fillItemBarcode('9676761472501')
             .clickItemEnterBtn()
             .whenRequestTypesArePresent();
         });
 
         it('should show hold and recall options', () => {
-          expect(newRequest.requestTypeOptions).to.eql(['Hold', 'Recall']);
+          expect(NewRequestInteractor.requestTypeOptions).to.eql(['Hold', 'Recall']);
         });
       });
 
@@ -306,14 +303,14 @@ describe('New Request page', () => {
             status: { name: 'In process' },
           });
 
-          await newRequest
+          await NewRequestInteractor
             .fillItemBarcode('9676761472501')
             .clickItemEnterBtn()
             .whenRequestTypesArePresent();
         });
 
         it('should show hold and recall options', () => {
-          expect(newRequest.requestTypeOptions).to.eql(['Hold', 'Recall']);
+          expect(NewRequestInteractor.requestTypeOptions).to.eql(['Hold', 'Recall']);
         });
       });
 
@@ -324,55 +321,55 @@ describe('New Request page', () => {
             status: { name: 'Awaiting delivery' },
           });
 
-          await newRequest.fillItemBarcode('9676761472501');
-          await newRequest.clickItemEnterBtn();
-          await newRequest.whenRequestTypesArePresent();
+          await NewRequestInteractor.fillItemBarcode('9676761472501');
+          await NewRequestInteractor.clickItemEnterBtn();
+          await NewRequestInteractor.whenRequestTypesArePresent();
         });
 
         it('should show hold and recall options', () => {
-          expect(newRequest.requestTypeOptions).to.eql(['Hold', 'Recall']);
+          expect(NewRequestInteractor.requestTypeOptions).to.eql(['Hold', 'Recall']);
         });
       });
-    });
 
-    describe('New request for declared lost item', function () {
-      beforeEach(async function () {
-        const item = this.server.create('item', {
-          status: { name: 'Declared lost' },
-        });
-
-        await newRequest.itemField.fillAndBlur(item.barcode);
-        await errorModalInteractor.whenModalIsPresent();
-      });
-
-      it('shows declare lost error dialog', () => {
-        expect(errorModalInteractor.modalIsPresent).to.equal(true);
-      });
-
-      describe('Close declare lost error dialog', () => {
+      describe('New request for declared lost item', function () {
         beforeEach(async function () {
-          await errorModalInteractor.whenModalIsPresent();
-          await errorModalInteractor.clickCloseBtn();
-        });
+          const item = this.server.create('item', {
+            status: { name: 'Declared lost' },
+          });
 
-        it('closes lost error dialog', () => {
-          expect(errorModalInteractor.modalIsPresent).to.equal(false);
-        });
-      });
-
-      describe('Show declare lost error dialog on submit', () => {
-        beforeEach(async function () {
-          const user = this.server.create('user');
-
-          await errorModalInteractor.whenModalIsPresent();
-          await errorModalInteractor.clickCloseBtn();
-          await newRequest.userField.fillAndBlur(user.barcode);
-          await newRequest.clickNewRequest();
+          await NewRequestInteractor.itemField.fillAndBlur(item.barcode);
           await errorModalInteractor.whenModalIsPresent();
         });
 
         it('shows declare lost error dialog', () => {
           expect(errorModalInteractor.modalIsPresent).to.equal(true);
+        });
+
+        describe('Close declare lost error dialog', () => {
+          beforeEach(async function () {
+            await errorModalInteractor.whenModalIsPresent();
+            await errorModalInteractor.clickCloseBtn();
+          });
+
+          it('closes lost error dialog', () => {
+            expect(errorModalInteractor.modalIsPresent).to.equal(false);
+          });
+        });
+
+        describe('Show declare lost error dialog on submit', () => {
+          beforeEach(async function () {
+            const user = this.server.create('user');
+
+            await errorModalInteractor.whenModalIsPresent();
+            await errorModalInteractor.clickCloseBtn();
+            await NewRequestInteractor.userField.fillAndBlur(user.barcode);
+            await NewRequestInteractor.clickNewRequest();
+            await errorModalInteractor.whenModalIsPresent();
+          });
+
+          it('shows declare lost error dialog', () => {
+            expect(errorModalInteractor.modalIsPresent).to.equal(true);
+          });
         });
       });
     });
@@ -389,8 +386,8 @@ describe('New Request page', () => {
       });
 
       it('should update prefill user and item', () => {
-        expect(newRequest.containsUserBarcode).to.equal('9676761472504');
-        expect(newRequest.containsItemBarcode).to.equal('9676761472503');
+        expect(NewRequestInteractor.containsUserBarcode).to.equal('9676761472504');
+        expect(NewRequestInteractor.containsItemBarcode).to.equal('9676761472503');
       });
     });
 
@@ -405,13 +402,13 @@ describe('New Request page', () => {
         });
         this.visit('/requests/view/?layer=create&userBarcode=9676761472504&itemId=123');
 
-        await newRequest.chooseServicePoint('Circ Desk 2');
-        await newRequest.clickNewRequest();
+        await NewRequestInteractor.chooseServicePoint('Circ Desk 2');
+        await NewRequestInteractor.clickNewRequest();
       });
 
       it('should update prefill user and item', () => {
-        expect(viewRequest.requestSectionPresent).to.be.true;
-        expect(viewRequest.requesterSectionPresent).to.be.true;
+        expect(ViewRequestInteractor.requestSectionPresent).to.be.true;
+        expect(ViewRequestInteractor.requesterSectionPresent).to.be.true;
       });
     });
 
@@ -429,15 +426,15 @@ describe('New Request page', () => {
           defaultDeliveryAddressTypeId: user.personal.addresses[0].addressTypeId,
         });
 
-        await newRequest.fillItemBarcode(item.barcode);
-        await newRequest.clickItemEnterBtn();
-        await newRequest.fillUserBarcode(user.barcode);
-        await newRequest.clickUserEnterBtn();
+        await NewRequestInteractor.fillItemBarcode(item.barcode);
+        await NewRequestInteractor.clickItemEnterBtn();
+        await NewRequestInteractor.fillUserBarcode(user.barcode);
+        await NewRequestInteractor.clickUserEnterBtn();
       });
 
       it('should populate the fulfillment preferences fields according to the user\'s request preferences', () => {
-        expect(newRequest.fulfillmentPreferenceValue).to.equal(requestPreferences.fulfillment);
-        expect(newRequest.deliveryAddressTypeIdValue).to.equal(requestPreferences.defaultDeliveryAddressTypeId);
+        expect(NewRequestInteractor.fulfillmentPreferenceValue).to.equal(requestPreferences.fulfillment);
+        expect(NewRequestInteractor.deliveryAddressTypeIdValue).to.equal(requestPreferences.defaultDeliveryAddressTypeId);
       });
     });
   });

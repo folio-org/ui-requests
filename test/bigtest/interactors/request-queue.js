@@ -5,7 +5,11 @@ import {
 } from '@bigtest/interactor';
 
 import SortableListInteractor from './sortable-list';
-import ConfirmReorderModal from './confirm-reorder-modal';
+
+@interactor class ConfirmReorderModal {
+  clickConfirm = clickable('[data-test-confirmation-modal-confirm-button]');
+  clickCancel = clickable('[data-test-confirmation-modal-cancel-button]');
+}
 
 @interactor class RequestQueue {
   sortableList = new SortableListInteractor();
@@ -24,4 +28,4 @@ import ConfirmReorderModal from './confirm-reorder-modal';
   }
 }
 
-export default RequestQueue;
+export default new RequestQueue();

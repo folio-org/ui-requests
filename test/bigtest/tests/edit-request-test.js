@@ -7,15 +7,12 @@ import {
 import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
-import EditRequest from '../interactors/edit-request';
-import ViewRequest from '../interactors/view-request';
+import EditRequestInteractor from '../interactors/edit-request';
+import ViewRequestInteractor from '../interactors/view-request';
 import { requestStatuses } from '../../../src/constants';
 
 describe('Edit Request page', () => {
   setupApplication();
-
-  const EditRequestInteractor = new EditRequest();
-  const ViewRequestInteractor = new ViewRequest();
 
   beforeEach(async function () {
     this.visit('/requests/view/requestId0?layer=edit');
