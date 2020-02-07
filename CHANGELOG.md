@@ -17,6 +17,7 @@
 * Fix sorting by proxy. Fixes UIREQ-342.
 * Prevent all request types for declared lost item. Refs. UIREQ-392.
 * Update unit tests to accommodate action menu changes. Refs UIREQ-418, STCOM-553.
+* Fix a bug in request duplication. Fixes UIREQ-412.
 * Security update eslint to v6.2.1. Refs UIREQ-407.
 * Rename request export names in Action dropdown, make links disabled if no search/filtered results. Refs UIREQ-395.
 
