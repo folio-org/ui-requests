@@ -4,7 +4,6 @@ import {
 } from '@bigtest/interactor';
 
 @interactor class MoveRequestDialog {
-  clickClose = clickable('[data-test-cancel-move-request]');
   chooseItem = clickable('#instance-items-list [class^="mclRow---"]:first-of-type');
 }
 

@@ -176,7 +176,7 @@
     "filters.requestStatus.awaitingPickup": "Ouvert - En attente de retrait",
     "filters.requestStatus.inTransit": "Ouvert - En transit",
     "filters.requestStatus.notYetFilled": "Ouvert - Pas encore servi/fourni",
-    "noRequestTypesAvailable": "No request types available for selected item",
-    "declaredLost.title": "Item cannot be requested",
-    "declaredLost.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>Declared lost</strong> and cannot be requested."
+    "noRequestTypesAvailable": "Aucun type de demande disponible pour l'élément sélectionné",
+    "declaredLost.title": "L'article ne peut pas être demandé",
+    "declaredLost.message": "{title} ( {materialType} ) (Code à barres: {barcode} ) a le statut d'élément <strong> Déclaré perdu </strong> et ne peut pas être demandé."
 }

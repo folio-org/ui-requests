@@ -4,7 +4,7 @@ import {
   cloneDeep,
   keyBy,
 } from 'lodash';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
@@ -91,6 +91,7 @@ class ViewRequest extends React.Component {
         other: PropTypes.shape({
           totalRecords: PropTypes.number,
         }),
+        records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
     query: PropTypes.object,
@@ -285,8 +286,7 @@ class ViewRequest extends React.Component {
                 findResource={findResource}
               />
             </Layer>
-          )
-          }
+          ) }
         </IntlConsumer>
       );
     }
@@ -331,8 +331,7 @@ class ViewRequest extends React.Component {
               href={editLink}
               onClick={onEdit}
             />
-          </IfPermission>
-        }
+          </IfPermission> }
       </PaneMenu>
     );
   }
@@ -392,7 +391,7 @@ class ViewRequest extends React.Component {
       }
 
       return (
-        <Fragment>
+        <>
           <IfPermission perm="ui-requests.edit">
             <Button
               buttonStyle="dropdownItem"
@@ -448,8 +447,7 @@ class ViewRequest extends React.Component {
                   <FormattedMessage id="ui-requests.actions.moveRequest" />
                 </Icon>
               </Button>
-            </IfPermission>
-          }
+            </IfPermission> }
           {isRequestOpen &&
             <IfPermission perm="ui-requests.reorderQueue">
               <Button
@@ -464,9 +462,8 @@ class ViewRequest extends React.Component {
                   <FormattedMessage id="ui-requests.actions.reorderQueue" />
                 </Icon>
               </Button>
-            </IfPermission>
-          }
-        </Fragment>
+            </IfPermission> }
+        </>
       );
     };
 
@@ -545,16 +542,14 @@ class ViewRequest extends React.Component {
                     label={<FormattedMessage id="ui-requests.cancellationReason" />}
                     value={get(cancellationReasonMap[request.cancellationReasonId], 'name', '-')}
                   />
-                </Col>
-              }
+                </Col> }
               {request.cancellationAdditionalInformation &&
                 <Col xs={6}>
                   <KeyValue
                     label={<FormattedMessage id="ui-requests.cancellationAdditionalInformation" />}
                     value={request.cancellationAdditionalInformation}
                   />
-                </Col>
-              }
+                </Col> }
             </Row>
           </Accordion>
           <Accordion
@@ -591,8 +586,7 @@ class ViewRequest extends React.Component {
             onMove={this.onMove}
             onCancelMove={this.closeMoveRequest}
             request={request}
-          />
-        }
+          /> }
         <Callout ref={this.callout} />
       </Pane>
     );

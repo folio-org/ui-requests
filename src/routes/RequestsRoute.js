@@ -220,6 +220,7 @@ class RequestsRoute extends React.Component {
         hasLoaded: PropTypes.bool.isRequired,
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      currentServicePoint: PropTypes.object.isRequired,
       query: PropTypes.object,
       records: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
@@ -247,6 +248,7 @@ class RequestsRoute extends React.Component {
       store: PropTypes.shape({
         getState: PropTypes.func.isRequired,
       }),
+      user: PropTypes.object.isRequired,
     }).isRequired,
     history: PropTypes.object,
   };
@@ -257,11 +259,11 @@ class RequestsRoute extends React.Component {
     const { intl: { formatMessage } } = props;
 
     this.okapiUrl = props.stripes.okapi.url;
-    this.httpHeaders = Object.assign({}, {
+    this.httpHeaders = {
       'X-Okapi-Tenant': props.stripes.okapi.tenant,
       'X-Okapi-Token': props.stripes.store.getState().okapi.token,
       'Content-Type': 'application/json',
-    });
+    };
 
     this.columnLabels = {
       title: formatMessage({ id: 'ui-requests.requests.title' }),
@@ -438,7 +440,10 @@ class RequestsRoute extends React.Component {
       // this case, there should only ever be one result for each.
       const requester = get(users, 'users[0]', null);
       const requestCount = get(requests, 'totalRecords', 0);
-      return Object.assign({}, r, { requester, requestCount });
+      return {
+        ...requester,
+        ...requestCount,
+      };
     });
   }
 
@@ -683,7 +688,7 @@ class RequestsRoute extends React.Component {
     };
 
     const actionMenu = ({ onToggle }) => (
-      <React.Fragment>
+      <>
         <Button
           buttonStyle="dropdownItem"
           id="exportToCsvPaneHeaderBtn"
@@ -725,11 +730,11 @@ class RequestsRoute extends React.Component {
             values={{ sp: servicePointName }}
           />
         </PrintButton>
-      </React.Fragment>
+      </>
     );
 
     return (
-      <React.Fragment>
+      <>
         {
           isEmpty(errorModalData) ||
           <ErrorModal
@@ -794,7 +799,7 @@ class RequestsRoute extends React.Component {
             onFilterChange={this.handleFilterChange}
           />
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }

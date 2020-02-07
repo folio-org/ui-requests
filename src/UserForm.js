@@ -171,8 +171,7 @@ class UserForm extends React.Component {
             <Col xs={4} xsOffset={8}>
               {deliveryAddress}
             </Col>
-          </Row>
-        }
+          </Row> }
 
         {proxySection}
 
@@ -182,9 +181,7 @@ class UserForm extends React.Component {
             proxy={proxy}
             onSelectPatron={this.props.onSelectProxy}
             onClose={this.props.onCloseProxy}
-          />
-        }
-
+          /> }
       </div>
     );
   }
