@@ -77,7 +77,7 @@ export function getPatronGroup(patron, patronGroups) {
 }
 
 export function duplicateRequest(request) {
-  const itemStatus = get(request, 'item.status.name');
+  const itemStatus = get(request, 'item.status');
   const requestType = request.requestType;
   const requestTypes = requestTypesByItemStatus[itemStatus] || [];
   const clonedRequest = cloneDeep(request);
