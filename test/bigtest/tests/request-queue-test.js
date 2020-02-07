@@ -6,11 +6,13 @@ import {
 import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
-import requestQueue from '../interactors/request-queue';
+import RequestQueue from '../interactors/request-queue';
 import urls from '../../../src/routes/urls';
 
 describe('RequestQueue', () => {
   let requests;
+
+  const requestQueue = new RequestQueue();
 
   setupApplication({
     scenarios: ['requestQueueScenario'],

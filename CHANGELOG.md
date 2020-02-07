@@ -16,6 +16,7 @@
 * Filter Requests by Tags. Refs UIREQ-409.
 * Fix sorting by proxy. Fixes UIREQ-342.
 * Prevent all request types for declared lost item. Refs. UIREQ-392.
+* Update unit tests to accommodate action menu changes. Refs UIREQ-418, STCOM-553.
 * Fix a bug in request duplication. Fixes UIREQ-412.
 
 ## [1.14.0](https://github.com/folio-org/ui-requests/tree/v1.14.0) (2019-12-05)
