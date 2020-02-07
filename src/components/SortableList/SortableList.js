@@ -53,4 +53,5 @@ SortableList.propTypes = {
   onDragEnd: PropTypes.func,
   rowFormatter: PropTypes.func,
   isRowDraggable: PropTypes.func,
+  rowProps: PropTypes.object,
 };

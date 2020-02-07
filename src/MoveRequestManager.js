@@ -22,6 +22,9 @@ class MoveRequestManager extends React.Component {
       move: PropTypes.shape({
         POST: PropTypes.func.isRequired,
       }),
+      moveRequest: PropTypes.shape({
+        POST: PropTypes.func.isRequired,
+      }),
     }).isRequired,
   };
 
@@ -167,7 +170,7 @@ class MoveRequestManager extends React.Component {
     } = this.state;
 
     return (
-      <React.Fragment>
+      <>
         <MoveRequestDialog
           open={moveRequest || moveInProgress}
           request={request}
@@ -182,17 +185,14 @@ class MoveRequestManager extends React.Component {
             item={selectedItem}
             onConfirm={this.confirmChoosingRequestType}
             onCancel={this.cancelMoveRequest}
-          />
-        }
-        {
-          errorMessage &&
+          /> }
+        {errorMessage &&
           <ErrorModal
             onClose={this.closeErrorMessage}
             label={<FormattedMessage id="ui-requests.requestNotAllowed" />}
             errorMessage={errorMessage}
-          />
-        }
-      </React.Fragment>
+          /> }
+      </>
     );
   }
 }

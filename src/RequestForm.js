@@ -544,7 +544,10 @@ class RequestForm extends React.Component {
     if (!userProxy) return null;
 
     const id = proxy.id || request.proxyUserId;
-    return Object.assign({}, userProxy, { id });
+    return {
+      ...userProxy,
+      id,
+    };
   }
 
   getPatronBlocks = (resources) => {
@@ -798,15 +801,13 @@ class RequestForm extends React.Component {
                               <FormattedMessage id="ui-requests.enter" />
                             </Button>
                           </Col>
-                        </Row>
-                      }
+                        </Row> }
                       {selectedItem &&
                         <ItemDetail
                           item={{ id: get(request, 'itemId'), instanceId, ...selectedItem }}
                           loan={selectedLoan}
                           requestCount={request ? request.requestCount : requestCount}
-                        />
-                      }
+                        /> }
                     </Col>
                   </Row>
                 </div>
@@ -818,8 +819,7 @@ class RequestForm extends React.Component {
                 {isEditForm && request && request.metadata &&
                   <Col xs={12}>
                     <this.props.metadataDisplay metadata={request.metadata} />
-                  </Col>
-                }
+                  </Col> }
                 <Row>
                   <Col xs={8}>
                     <Row>
@@ -830,8 +830,7 @@ class RequestForm extends React.Component {
                               label={<FormattedMessage id="ui-requests.requestType" />}
                               value={<FormattedMessage id="ui-requests.requestType.message" />}
                             />
-                          </span>
-                        }
+                          </span> }
                         {multiRequestTypesVisible &&
                           <Field
                             label={<FormattedMessage id="ui-requests.requestType" />}
@@ -851,8 +850,7 @@ class RequestForm extends React.Component {
                                 )}
                               </FormattedMessage>
                             ))}
-                          </Field>
-                        }
+                          </Field> }
                         {singleRequestTypeVisible &&
                           <KeyValue
                             label={<FormattedMessage id="ui-requests.requestType" />}
@@ -861,28 +859,24 @@ class RequestForm extends React.Component {
                                 <FormattedMessage id={requestTypeOptions[0].id} />
                               </span>
                             }
-                          />
-                        }
+                          /> }
                         {isEditForm &&
                           <KeyValue
                             label={<FormattedMessage id="ui-requests.requestType" />}
                             value={request.requestType}
-                          />
-                        }
+                          /> }
                         {isDeclaredLost &&
                           <KeyValue
                             label={<FormattedMessage id="ui-requests.requestType" />}
                             value={<FormattedMessage id="ui-requests.noRequestTypesAvailable" />}
-                          />
-                        }
+                          /> }
                       </Col>
                       <Col xs={3}>
                         {isEditForm &&
                           <KeyValue
                             label={<FormattedMessage id="ui-requests.status" />}
                             value={request.status}
-                          />
-                        }
+                          /> }
                       </Col>
                       <Col xs={3}>
                         <Field
@@ -904,16 +898,14 @@ class RequestForm extends React.Component {
                             component={Datepicker}
                             dateFormat="YYYY-MM-DD"
                           />
-                        </Col>
-                      }
+                        </Col> }
                       {isEditForm && request.status !== requestStatuses.AWAITING_PICKUP &&
                         <Col xs={3}>
                           <KeyValue
                             label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
                             value={holdShelfExpireDate}
                           />
-                        </Col>
-                      }
+                        </Col> }
                     </Row>
                     {isEditForm &&
                       <Row>
@@ -923,8 +915,7 @@ class RequestForm extends React.Component {
                             value={<PositionLink request={request} />}
                           />
                         </Col>
-                      </Row>
-                    }
+                      </Row> }
                   </Col>
                 </Row>
               </Accordion>
@@ -982,8 +973,7 @@ class RequestForm extends React.Component {
                               <FormattedMessage id="ui-requests.enter" />
                             </Button>
                           </Col>
-                        </Row>
-                      }
+                        </Row> }
                       {selectedUser && (requestPreferencesLoaded || this.isEditForm()) &&
                         <UserForm
                           user={request ? request.requester : selectedUser}
@@ -1001,8 +991,7 @@ class RequestForm extends React.Component {
                           servicePoints={servicePoints}
                           onSelectProxy={this.onSelectProxy}
                           onCloseProxy={() => { this.setState({ selectedUser: null, proxy: null }); }}
-                        />
-                      }
+                        /> }
                     </Col>
                   </Row>
                 </div>
@@ -1037,8 +1026,7 @@ class RequestForm extends React.Component {
                     }}
                   />
                 }
-              />
-            }
+              /> }
           </Pane>
         </form>
       </Paneset>
