@@ -25,7 +25,7 @@ const ItemDetail = ({ item, loan, requestCount }) => {
   const itemLabel = item.barcode ? 'ui-requests.item.barcode' : 'ui-requests.item.id';
 
   return (
-    <React.Fragment>
+    <>
       <Row>
         <Col xs={4}>
           <KeyValue label={<FormattedMessage id={itemLabel} />}>
@@ -72,7 +72,7 @@ const ItemDetail = ({ item, loan, requestCount }) => {
           </KeyValue>
         </Col>
       </Row>
-    </React.Fragment>
+    </>
   );
 };
 

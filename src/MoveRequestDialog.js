@@ -201,8 +201,7 @@ class MoveRequestDialog extends React.Component {
               formatter={formatter}
               isEmptyMessage={<FormattedMessage id="ui-requests.moveRequest.instanceItems.notFound" />}
               onRowClick={(_, item) => this.onRowClick(item)}
-            />
-          }
+            /> }
         </Pane>
       </Modal>
     );

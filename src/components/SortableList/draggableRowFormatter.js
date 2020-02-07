@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Draggable
 } from 'react-beautiful-dnd';
@@ -31,3 +32,11 @@ export default function draggableRowFormatter(props) {
     </Draggable>
   );
 }
+
+draggableRowFormatter.propTypes = {
+  rowIndex: PropTypes.number,
+  rowData: PropTypes.object,
+  rowProps: PropTypes.shape({
+    isRowDraggable: PropTypes.bool
+  }),
+};
