@@ -1,7 +1,8 @@
 import {
-  clickable,
   interactor,
+  clickable,
 } from '@bigtest/interactor';
+
 
 @interactor class ConfirmReorderModal {
   clickConfirm = clickable('[data-test-confirmation-modal-confirm-button]');

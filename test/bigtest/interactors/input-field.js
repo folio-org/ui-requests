@@ -1,12 +1,13 @@
 import {
-  blurrable,
+  interactor,
   clickable,
   fillable,
-  interactor,
   triggerable,
+  blurrable,
 } from '@bigtest/interactor';
 
-@interactor class InputFieldInteractor {
+
+@interactor class InputField {
   clickInput = clickable();
   fillInput = fillable();
   blurInput = blurrable();
@@ -27,4 +28,4 @@ import {
   }
 }
 
-export default InputFieldInteractor;
+export default InputField;

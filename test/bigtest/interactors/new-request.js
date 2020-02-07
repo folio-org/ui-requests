@@ -11,9 +11,10 @@ import {
 
 import { getSelectValues } from './helpers';
 import HeaderDropdown from './header-dropdown';
-import InputFieldInteractor from './input-field';
+import InputField from './input-field';
 
-@interactor class NewRequestsInteractor {
+
+@interactor class NewRequest {
   pressEnter = triggerable('keydown', {
     bubbles: true,
     cancelable: true,
@@ -25,14 +26,16 @@ import InputFieldInteractor from './input-field';
   clickUserEnterBtn = clickable('#clickable-select-requester');
 
   title = text('[class*=paneTitleLabel---]');
-  headerDropdown = new HeaderDropdown('[class*=paneHeaderCenterInner---] [class*=dropdown---]');
+  headerDropdown = new HeaderDropdown();
   requestTypeMessageIsPresent = isPresent('[data-test-request-type-message]');
+  itemBarcodeIsPresent = isPresent('[name="item.barcode"]');
   fillItemBarcode = fillable('[name="item.barcode"]');
 
-  itemField = new InputFieldInteractor('[name="item.barcode"]');
+  itemField = new InputField('[name="item.barcode"]');
 
+  userBarcodeIsPresent = isPresent('[name="item.barcode"]');
   fillUserBarcode = fillable('[name="requester.barcode"]');
-  userField = new InputFieldInteractor('[name="requester.barcode"]');
+  userField = new InputField('[name="requester.barcode"]');
 
   chooseServicePoint = selectable('[name="pickupServicePointId"]');
   requestTypes = isPresent('[name="requestType"]');
@@ -48,6 +51,7 @@ import InputFieldInteractor from './input-field';
   chooseDeliveryAddress = selectable('[name="deliveryAddressTypeId"]');
   fulfillmentPreferenceValue = value('[name="fulfilmentPreference"]');
   deliveryAddressTypeIdValue = value('[name="deliveryAddressTypeId"]');
+  pickupServicePointIdValue = value('[name="pickupServicePointId"]');
 
   itemErrorIsPresent = isPresent('#section-item-info [class*=feedbackError---]');
   requesterErrorIsPresent = isPresent('#section-requester-info [class*=feedbackError---]');
@@ -61,4 +65,4 @@ import InputFieldInteractor from './input-field';
   }
 }
 
-export default new NewRequestsInteractor('[data-test-requests-form]');
+export default NewRequest;

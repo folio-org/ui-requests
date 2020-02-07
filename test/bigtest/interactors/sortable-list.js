@@ -1,19 +1,19 @@
 import {
-  interactor,
   collection,
-  text,
+  interactor,
   isPresent,
   scoped,
+  text,
 } from '@bigtest/interactor';
 
-import DraggableRowInteractor from './draggable-row';
+import DraggableRow from './draggable-row';
 
 @interactor class SortableListInteractor {
   log = text('[role="log"]');
   logPresent = isPresent('[role="log"]');
-  rows = collection('[data-test-draggable-row]', DraggableRowInteractor);
+  rows = collection('[data-test-draggable-row]', DraggableRow);
 
-  row = scoped('#row-1', DraggableRowInteractor);
+  row = scoped('#row-1', DraggableRow);
 
   moveRowUp() {
     return this

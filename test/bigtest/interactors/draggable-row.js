@@ -1,11 +1,11 @@
 import {
-  collection,
-  focusable,
   interactor,
+  focusable,
   triggerable,
+  collection,
 } from '@bigtest/interactor';
 
-@interactor class DraggableRowInteractor {
+@interactor class DraggableRow {
   focus = focusable();
   cols = collection('[role="gridcell"]');
 
@@ -31,4 +31,4 @@ import {
   });
 }
 
-export default DraggableRowInteractor;
+export default DraggableRow;

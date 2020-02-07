@@ -1,10 +1,11 @@
 import {
-  clickable,
   interactor,
+  clickable,
 } from '@bigtest/interactor';
 
+
 @interactor class HeaderDropdown {
-  click = clickable('button');
+  click = clickable('[data-test-pane-header-actions-button]');
 }
 
 export default HeaderDropdown;

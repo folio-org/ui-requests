@@ -24,4 +24,4 @@ import ConfirmReorderModal from './confirm-reorder-modal';
   }
 }
 
-export default new RequestQueue();
+export default RequestQueue;
