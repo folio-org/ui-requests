@@ -37,7 +37,7 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, viewUserPath }) => {
       <Row>
         <Col xs>
           <FormattedMessage id="ui-requests.blockedLabel" />
-          {':'}
+          `:`
         </Col>
       </Row>
       {renderBlocks}

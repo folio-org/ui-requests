@@ -108,11 +108,6 @@ class RequestQueueView extends React.Component {
     location: ReactRouterPropTypes.location,
   };
 
-  state = {
-    requests: [],
-    reorder: false, // eslint-disable-line react/no-unused-state
-  };
-
   static getDerivedStateFromProps(props, state) {
     const { data: { requests } } = props;
 
@@ -121,6 +116,15 @@ class RequestQueueView extends React.Component {
     }
 
     return null;
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      requests: [],
+      reorder: false,
+    };
   }
 
   componentDidMount() {
@@ -330,8 +334,7 @@ class RequestQueueView extends React.Component {
               isEmptyMessage={
                 <FormattedMessage id="ui-requests.requestQueue.requests.notFound" />
               }
-            />
-          }
+            /> }
         </Pane>
         <Callout ref={this.callout} />
         <ConfirmationModal
