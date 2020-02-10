@@ -28,7 +28,7 @@
     "item.title": "Title",
     "item.contributor": "Contributor",
     "item.shelfLocation": "Shelving location",
-    "item.callNumber": "Call number",
+    "item.callNumber": "Effective call number string",
     "item.volume": "Volume",
     "item.enumeration": "Enumeration",
     "item.copyNumber": "Copy",
@@ -153,10 +153,10 @@
     "requestQueue.requestExpirationDate": "Request expiration",
     "requestQueue.holdShelfExpirationDate": "Hold shelf expiration",
     "requestQueue.reorderSuccess": "Queue was successfully updated",
-    "requestQueue.confirmReorder.confirm": "Confirm",
+    "requestQueue.confirmReorder.confirm": "Move to position 2",
     "requestQueue.confirmReorder.title": "Request moved to position 2 of the queue",
-    "requestQueue.confirmReorder.message1": "Requests cannot be displaced from position 1 when fullfillment has begun. This request will be moved to position 2 in the request queue",
-    "requestQueue.confirmReorder.message2": "Requests cannot be moved above page requests, even when fullfillment hasn't begun. This request will be moved to position 2 in the request queue",
+    "requestQueue.confirmReorder.message1": "Requests cannot be displaced from position 1 when fulfillment has begun.",
+    "requestQueue.confirmReorder.message2": "Requests cannot be moved above page requests, even when fulfillment hasn't begun.",
     "requestQueue.requests.notFound": "No requests found",
     "requestQueue.confirmReorder.cancel": "Leave in current position",
     "cancellationReason": "Cancellation reason",
@@ -178,5 +178,8 @@
     "filters.requestStatus.notYetFilled": "Open - Not yet filled",
     "noRequestTypesAvailable": "No request types available for selected item",
     "declaredLost.title": "Item cannot be requested",
-    "declaredLost.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>Declared lost</strong> and cannot be requested."
+    "declaredLost.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>Declared lost</strong> and cannot be requested.",
+    "exportExpiredHoldShelfToCsv": "Export hold shelf clearance report for {currentServicePoint}",
+    "exportSearchResultsToCsv": "Export search results to CSV",
+    "common.cancel": "Cancel"
 }

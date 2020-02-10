@@ -178,5 +178,8 @@
     "filters.requestStatus.notYetFilled": "Aberto - Ainda não preenchido",
     "noRequestTypesAvailable": "Nenhum tipo de solicitação disponível para o item selecionado",
     "declaredLost.title": "O item não pode ser solicitado",
-    "declaredLost.message": "{title} ({materialType}) (Código de barras: {barcode} ) tem o status do item <strong>Declarado como perdido</strong> e não pode ser solicitado."
+    "declaredLost.message": "{title} ({materialType}) (Código de barras: {barcode} ) tem o status do item <strong>Declarado como perdido</strong> e não pode ser solicitado.",
+    "exportExpiredHoldShelfToCsv": "Exportar relatório de liberação de prateleira de reservas para {currentServicePoint}",
+    "exportSearchResultsToCsv": "Exportar resultados da pesquisa para CSV",
+    "common.cancel": "Cancelar"
 }
