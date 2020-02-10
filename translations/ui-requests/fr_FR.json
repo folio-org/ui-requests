@@ -28,7 +28,7 @@
     "item.title": "Titre",
     "item.contributor": "Contributeur",
     "item.shelfLocation": "Emplacement des rayonnages",
-    "item.callNumber": "Call number",
+    "item.callNumber": "Effective call number string",
     "item.volume": "Volume",
     "item.enumeration": "Enumeration",
     "item.copyNumber": "Copier/copie",
@@ -155,8 +155,8 @@
     "requestQueue.reorderSuccess": "La file d'attente a été mise à jour avec succès",
     "requestQueue.confirmReorder.confirm": "Confirmer",
     "requestQueue.confirmReorder.title": "Demande déplacée en position 2 de la file d'attente",
-    "requestQueue.confirmReorder.message1": "Requests cannot be displaced from position 1 when fullfillment has begun. This request will be moved to position 2 in the request queue",
-    "requestQueue.confirmReorder.message2": "Requests cannot be moved above page requests, even when fullfillment hasn't begun. This request will be moved to position 2 in the request queue",
+    "requestQueue.confirmReorder.message1": "Requests cannot be displaced from position 1 when fulfillment has begun.",
+    "requestQueue.confirmReorder.message2": "Requests cannot be moved above page requests, even when fulfillment hasn't begun.",
     "requestQueue.requests.notFound": "Aucune demande trouvée",
     "requestQueue.confirmReorder.cancel": "Laisser en position actuelle",
     "cancellationReason": "Motif de l'annulation",
@@ -178,5 +178,8 @@
     "filters.requestStatus.notYetFilled": "Ouvert - Pas encore servi/fourni",
     "noRequestTypesAvailable": "Aucun type de demande disponible pour l'élément sélectionné",
     "declaredLost.title": "L'article ne peut pas être demandé",
-    "declaredLost.message": "{title} ( {materialType} ) (Code à barres: {barcode} ) a le statut d'élément <strong> Déclaré perdu </strong> et ne peut pas être demandé."
+    "declaredLost.message": "{title} ( {materialType} ) (Code à barres: {barcode} ) a le statut d'élément <strong> Déclaré perdu </strong> et ne peut pas être demandé.",
+    "exportExpiredHoldShelfToCsv": "Export hold shelf clearance report for {currentServicePoint}",
+    "exportSearchResultsToCsv": "Exporter les résultats au format CSV",
+    "common.cancel": "Cancel"
 }

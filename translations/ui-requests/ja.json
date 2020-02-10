@@ -28,7 +28,7 @@
     "item.title": "Title",
     "item.contributor": "Contributor",
     "item.shelfLocation": "Shelving location",
-    "item.callNumber": "Call number",
+    "item.callNumber": "Effective call number string",
     "item.volume": "Volume",
     "item.enumeration": "Enumeration",
     "item.copyNumber": "Copy",
@@ -178,5 +178,8 @@
     "filters.requestStatus.notYetFilled": "Open - Not yet filled",
     "noRequestTypesAvailable": "No request types available for selected item",
     "declaredLost.title": "Item cannot be requested",
-    "declaredLost.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>Declared lost</strong> and cannot be requested."
+    "declaredLost.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>Declared lost</strong> and cannot be requested.",
+    "exportExpiredHoldShelfToCsv": "Export hold shelf clearance report for {currentServicePoint}",
+    "exportSearchResultsToCsv": "Export search results to CSV",
+    "common.cancel": "Cancel"
 }
