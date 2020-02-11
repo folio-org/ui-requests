@@ -55,7 +55,7 @@ const urls = {
     return `inventory/items?${query}`;
   },
   loan: (value) => {
-    const query = stringify({ query: `(itemId=="${value}")` });
+    const query = stringify({ query: `(itemId=="${value}") and status!=Closed` });
     return `circulation/loans?${query}`;
   },
   requestsForItem: (value) => {
