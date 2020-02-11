@@ -121,7 +121,7 @@
     "nothingToClear": "Rien à effacer",
     "noExpiredRequests": "Il n'y a actuellement aucune demande expirée ou annulée sur le rayon d'attente.",
     "item.location.libraryName": "Bibliothèque",
-    "item.location.code": "Shelving location code",
+    "item.location.code": "Effective location code",
     "requestQueue": "File d'attente",
     "location": "Emplacement",
     "materialType": "Type de ressource",
@@ -181,5 +181,9 @@
     "declaredLost.message": "{title} ( {materialType} ) (Code à barres: {barcode} ) a le statut d'élément <strong> Déclaré perdu </strong> et ne peut pas être demandé.",
     "exportExpiredHoldShelfToCsv": "Export hold shelf clearance report for {currentServicePoint}",
     "exportSearchResultsToCsv": "Exporter les résultats au format CSV",
-    "common.cancel": "Cancel"
+    "common.cancel": "Annuler",
+    "item.callNumberComponents.prefix": "Effective call number prefix",
+    "item.callNumberComponents.callNumber": "Effective call number",
+    "item.callNumberComponents.suffix": "Effective call number suffix",
+    "item.chronology": "Chronology"
 }

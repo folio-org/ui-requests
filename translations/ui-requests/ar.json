@@ -179,7 +179,11 @@
     "noRequestTypesAvailable": "لا تتوافر أنواع طلب للمادة المحددة",
     "declaredLost.title": "لا يمكن طلب المادة",
     "declaredLost.message": "{title} ({materialType}) (باركود: {barcode}) لها حالة المادة <strong>معلن فقدانها</strong> ولا يمكن طلبها.",
-    "exportExpiredHoldShelfToCsv": "Export hold shelf clearance report for {currentServicePoint}",
+    "exportExpiredHoldShelfToCsv": "تصدير تقرير مسح رف الحجوزات لـ {currentServicePoint}",
     "exportSearchResultsToCsv": "تصدير نتائج البحث إلى ملف CSV",
-    "common.cancel": "إلغاء"
+    "common.cancel": "إلغاء",
+    "item.callNumberComponents.prefix": "Effective call number prefix",
+    "item.callNumberComponents.callNumber": "Effective call number",
+    "item.callNumberComponents.suffix": "Effective call number suffix",
+    "item.chronology": "Chronology"
 }
