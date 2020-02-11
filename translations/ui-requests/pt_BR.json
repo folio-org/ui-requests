@@ -181,5 +181,9 @@
     "declaredLost.message": "{title} ({materialType}) (Código de barras: {barcode} ) tem o status do item <strong>Declarado como perdido</strong> e não pode ser solicitado.",
     "exportExpiredHoldShelfToCsv": "Exportar relatório de liberação de prateleira de reservas para {currentServicePoint}",
     "exportSearchResultsToCsv": "Exportar resultados da pesquisa para CSV",
-    "common.cancel": "Cancelar"
+    "common.cancel": "Cancelar",
+    "item.callNumberComponents.prefix": "Prefixo efetivo do número de chamada",
+    "item.callNumberComponents.callNumber": "Número de chamada efetivo",
+    "item.callNumberComponents.suffix": "Sufixo efetivo do número de chamada",
+    "item.chronology": "Cronologia"
 }

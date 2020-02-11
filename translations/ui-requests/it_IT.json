@@ -181,5 +181,9 @@
     "declaredLost.message": "{title} ({materialType}) (Codice a barre: {barcode}) ha come stato dell'item <strong>Dichiarato perso</strong> e non può essere richiesto.",
     "exportExpiredHoldShelfToCsv": "Esporta il rapporto sullo spazio libero negli scaffali",
     "exportSearchResultsToCsv": "Esporta i risultati della ricerca in CSV",
-    "common.cancel": "Cancel"
+    "common.cancel": "Cancel",
+    "item.callNumberComponents.prefix": "Effective call number prefix",
+    "item.callNumberComponents.callNumber": "Effective call number",
+    "item.callNumberComponents.suffix": "Effective call number suffix",
+    "item.chronology": "Chronology"
 }

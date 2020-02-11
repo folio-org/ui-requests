@@ -31,7 +31,7 @@
     "item.callNumber": "Effective call number string",
     "item.volume": "Volume",
     "item.enumeration": "Enumeration",
-    "item.copyNumber": "Copy",
+    "item.copyNumber": "Item copy",
     "item.status": "Item status",
     "item.dueDate": "Current due date",
     "item.numRequests": "Requests",
@@ -95,7 +95,7 @@
     "requestMeta.fulfilment.delivery": "Delivery",
     "actions.edit": "Edit",
     "item.contributorNamesNames": "Contributor names",
-    "item.location.name": "Shelving location",
+    "item.location.name": "Effective location",
     "proxy.name": "Requester's proxy name",
     "deliveryAddress": "Delivery address",
     "requester.patronGroup.group": "Requester Patron group",
@@ -121,7 +121,7 @@
     "nothingToClear": "Nothing to clear",
     "noExpiredRequests": "There are currently no expired or cancelled requests on the hold shelf.",
     "item.location.libraryName": "Library",
-    "item.location.code": "Shelving location code",
+    "item.location.code": "Effective location code",
     "requestQueue": "Request queue",
     "location": "Location",
     "materialType": "Material type",
@@ -181,5 +181,9 @@
     "declaredLost.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>Declared lost</strong> and cannot be requested.",
     "exportExpiredHoldShelfToCsv": "Export hold shelf clearance report for {currentServicePoint}",
     "exportSearchResultsToCsv": "Export search results to CSV",
-    "common.cancel": "Cancel"
+    "common.cancel": "Cancel",
+    "item.callNumberComponents.prefix": "Effective call number prefix",
+    "item.callNumberComponents.callNumber": "Effective call number",
+    "item.callNumberComponents.suffix": "Effective call number suffix",
+    "item.chronology": "Chronology"
 }
