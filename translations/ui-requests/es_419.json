@@ -95,7 +95,7 @@
     "requestMeta.fulfilment.delivery": "Delivery",
     "actions.edit": "Edit",
     "item.contributorNamesNames": "Contributor names",
-    "item.location.name": "Shelving location",
+    "item.location.name": "Effective location",
     "proxy.name": "Requester's proxy name",
     "deliveryAddress": "Delivery address",
     "requester.patronGroup.group": "Grupo de usuarios solicitante",
@@ -121,7 +121,7 @@
     "nothingToClear": "Nothing to clear",
     "noExpiredRequests": "Actualmente no hay reservas expiradas o canceladas en estantería",
     "item.location.libraryName": "Library",
-    "item.location.code": "Shelving location code",
+    "item.location.code": "Effective location code",
     "requestQueue": "Cola de petición",
     "location": "Location",
     "materialType": "Material type",
@@ -178,5 +178,12 @@
     "filters.requestStatus.notYetFilled": "Open - Not yet filled",
     "noRequestTypesAvailable": "No request types available for selected item",
     "declaredLost.title": "Item cannot be requested",
-    "declaredLost.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>Declared lost</strong> and cannot be requested."
+    "declaredLost.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>Declared lost</strong> and cannot be requested.",
+    "exportExpiredHoldShelfToCsv": "Export hold shelf clearance report for {currentServicePoint}",
+    "exportSearchResultsToCsv": "Export search results to CSV",
+    "common.cancel": "Cancelar",
+    "item.callNumberComponents.prefix": "Effective call number prefix",
+    "item.callNumberComponents.callNumber": "Effective call number",
+    "item.callNumberComponents.suffix": "Effective call number suffix",
+    "item.chronology": "Chronology"
 }

@@ -20,6 +20,7 @@
 * Fix a bug in request duplication. Fixes UIREQ-412.
 * Security update eslint to v6.2.1. Refs UIREQ-407.
 * Rename request export names in Action dropdown, make links disabled if no search/filtered results. Refs UIREQ-395.
+* Include effective call number elements in the Request CSV. Refs UIREQ-367.
 * Include effective call number elements in the Hold shelf clearance report. Refs UIREQ-368.
 
 ## [1.14.0](https://github.com/folio-org/ui-requests/tree/v1.14.0) (2019-12-05)
