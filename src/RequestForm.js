@@ -437,12 +437,11 @@ class RequestForm extends React.Component {
       const requestCount = results[1].requests.length;
       const holdingsRecord = results[2].holdingsRecords[0];
 
-      this.setState({ requestCount });
-      this.setState({ instanceId: holdingsRecord && holdingsRecord.instanceId });
-
-      if (selectedLoan) {
-        this.setState({ selectedLoan });
-      }
+      this.setState({
+        requestCount,
+        instanceId: holdingsRecord && holdingsRecord.instanceId,
+        selectedLoan
+      });
 
       return item;
     });
