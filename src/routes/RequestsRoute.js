@@ -291,6 +291,8 @@ class RequestsRoute extends React.Component {
       submitting: false,
       errorMessage: '',
       errorModalData: {},
+      servicePointId: '',
+      requests: [],
     };
   }
 
@@ -305,6 +307,7 @@ class RequestsRoute extends React.Component {
 
   componentDidMount() {
     this.setCurrentServicePointId();
+    this.buildRecordsForHoldsShelfReport();
   }
 
   componentDidUpdate(prevProps) {
@@ -365,6 +368,7 @@ class RequestsRoute extends React.Component {
     const { mutator } = this.props;
     const { id } = this.getCurrentServicePointInfo();
     mutator.currentServicePoint.update({ id });
+    this.buildRecordsForHoldsShelfReport();
   };
 
   getColumnHeaders = (headers) => {
@@ -513,7 +517,7 @@ class RequestsRoute extends React.Component {
     });
   };
 
-  exportExpiredHoldsToSCV = async () => {
+  buildRecordsForHoldsShelfReport = async () => {
     const {
       mutator: {
         expiredHolds: {
@@ -527,6 +531,21 @@ class RequestsRoute extends React.Component {
     reset();
 
     const servicePointId = get(user, 'user.curServicePoint.id', '');
+    const path = `circulation/requests-reports/hold-shelf-clearance/${servicePointId}`;
+    const { requests } = await GET({ path });
+
+    this.setState({
+      servicePointId,
+      requests,
+    });
+  }
+
+  exportExpiredHoldsToCSV = async () => {
+    const {
+      servicePointId,
+      requests,
+    } = this.state;
+
     if (!servicePointId) {
       this.setState(
         {
@@ -539,25 +558,12 @@ class RequestsRoute extends React.Component {
 
       return;
     }
-    const path = `circulation/requests-reports/hold-shelf-clearance/${servicePointId}`;
-    const { requests } = await GET({ path });
 
-    if (isEmpty(requests)) {
-      this.setState(
-        {
-          errorModalData: {
-            errorMessage: <FormattedMessage id="ui-requests.noExpiredRequests" />,
-            label: <FormattedMessage id="ui-requests.nothingToClear" />,
-          }
-        }
-      );
-    } else {
-      const recordsToCSV = this.buildHoldRecords(requests);
-      exportCsv(recordsToCSV, {
-        onlyFields: this.expiredHoldsReportColumnHeaders,
-        excludeFields: ['id'],
-      });
-    }
+    const recordsToCSV = this.buildHoldRecords(requests);
+    exportCsv(recordsToCSV, {
+      onlyFields: this.expiredHoldsReportColumnHeaders,
+      excludeFields: ['id'],
+    });
   };
 
   buildHoldRecords = (records) => {
@@ -602,6 +608,7 @@ class RequestsRoute extends React.Component {
       .join(',');
 
     mutator.query.update({ filters });
+    this.buildRecordsForHoldsShelfReport();
   };
 
   getActiveFilters = () => {
@@ -659,6 +666,8 @@ class RequestsRoute extends React.Component {
       dupRequest,
       errorMessage,
       errorModalData,
+      servicePointId,
+      requests,
     } = this.state;
 
     const { name: servicePointName } = this.getCurrentServicePointInfo();
@@ -706,10 +715,10 @@ class RequestsRoute extends React.Component {
         <Button
           buttonStyle="dropdownItem"
           id="exportExpiredHoldsToCsvPaneHeaderBtn"
-          disabled={!requestCount}
+          disabled={servicePointId && (isEmpty(requests) || !requestCount)}
           onClick={() => {
             onToggle();
-            this.exportExpiredHoldsToSCV();
+            this.exportExpiredHoldsToCSV();
           }}
         >
           <FormattedMessage

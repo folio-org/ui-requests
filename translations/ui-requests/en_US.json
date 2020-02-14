@@ -119,7 +119,6 @@
     "item.id": "Item id",
     "exportExpiredHoldsToCsv": "Hold shelf clearance report CSV",
     "nothingToClear": "Nothing to clear",
-    "noExpiredRequests": "There are currently no expired or cancelled requests on the hold shelf.",
     "item.location.libraryName": "Library",
     "item.location.code": "Effective location code",
     "requestQueue": "Request queue",
