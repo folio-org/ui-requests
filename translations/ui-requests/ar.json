@@ -182,8 +182,8 @@
     "exportExpiredHoldShelfToCsv": "تصدير تقرير مسح رف الحجوزات لـ {currentServicePoint}",
     "exportSearchResultsToCsv": "تصدير نتائج البحث إلى ملف CSV",
     "common.cancel": "إلغاء",
-    "item.callNumberComponents.prefix": "Effective call number prefix",
-    "item.callNumberComponents.callNumber": "Effective call number",
-    "item.callNumberComponents.suffix": "Effective call number suffix",
-    "item.chronology": "Chronology"
+    "item.callNumberComponents.prefix": "بادئة رقم الاستدعاء النشط",
+    "item.callNumberComponents.callNumber": "رقم الاستدعاء النشط",
+    "item.callNumberComponents.suffix": "لاحقة رقم الاستدعاء النشط",
+    "item.chronology": "التسلسل الزمني"
 }
