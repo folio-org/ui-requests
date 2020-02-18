@@ -80,35 +80,10 @@ describe('Export to CSV', () => {
     describe('Export expired holds to CSV', function () {
       beforeEach(async function () {
         await requests.headerDropdown.click();
-        await requests.headerDropdownMenu.clickExportExpiredHoldsToCSV();
       });
 
       it('exports data to csv', () => {
-        expect(requests.headerDropdownMenu.exportExpiredHoldsBtnIsVisible).to.be.false;
-      });
-
-      describe('error modal ', () => {
-        it('should be displayed', () => {
-          expect(requests.errorModal.isPresent).to.be.true;
-        });
-
-        it('should have proper text', () => {
-          expect(requests.errorModal.content.text).to.equal(translations.noExpiredRequests);
-        });
-
-        it('should have close button', () => {
-          expect(requests.errorModal.closeButton.isPresent).to.be.true;
-        });
-
-        describe('close button click', () => {
-          beforeEach(async function () {
-            await requests.errorModal.closeButton.click();
-          });
-
-          it('error modal should not be displayed', () => {
-            expect(requests.errorModal.isPresent).to.be.true;
-          });
-        });
+        expect(requests.headerDropdownMenu.isExportExpiredHoldsToCSVDisabled).to.be.true;
       });
     });
   });

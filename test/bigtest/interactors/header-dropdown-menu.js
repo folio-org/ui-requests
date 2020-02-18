@@ -13,6 +13,7 @@ import {
   clickEdit = clickable('#clickable-edit-request');
   clickExportToCSV = clickable('#exportToCsvPaneHeaderBtn');
   clickExportExpiredHoldsToCSV = clickable('#exportExpiredHoldsToCsvPaneHeaderBtn');
+  isExportExpiredHoldsToCSVDisabled = property('#exportExpiredHoldsToCsvPaneHeaderBtn', 'disabled');
   clickMove = clickable('#move-request');
   clickPrintPickSlipsBtn = clickable('#printPickSlipsBtn');
 

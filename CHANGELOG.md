@@ -23,6 +23,7 @@
 * Include effective call number elements in the Request CSV. Refs UIREQ-367.
 * Include effective call number elements in the Hold shelf clearance report. Refs UIREQ-368.
 * Only fetch open loans when loading an item. Fixes UIREQ-353.
+* Make `Export hold shelf clearance report` for `CurrentServicePoint` disabled if there is nothing on it for the currently selected service point. Fixes UIREQ-395.
 
 ## [1.14.0](https://github.com/folio-org/ui-requests/tree/v1.14.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.13.0...v1.14.0)
