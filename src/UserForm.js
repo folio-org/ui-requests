@@ -126,12 +126,16 @@ class UserForm extends React.Component {
     }
 
     const proxySection = proxyId && proxyId !== id
-      ? userHighlightBox(<FormattedMessage id="ui-requests.requester.proxy" />, proxyName, proxyId, proxyBarcode)
+      ? userHighlightBox(<FormattedMessage id="ui-requests.requester.proxy" />, name, id, barcode)
       : null;
+
+    const userSection = proxyId
+      ? userHighlightBox(<FormattedMessage id="ui-requests.requester.requester" />, proxyName, proxyId, proxyBarcode)
+      : userHighlightBox(<FormattedMessage id="ui-requests.requester.requester" />, name, id, barcode);
 
     return (
       <div>
-        {userHighlightBox(<FormattedMessage id="ui-requests.requester.requester" />, name, id, barcode)}
+        {userSection}
         <Row>
           <Col xs={4}>
             <KeyValue label={<FormattedMessage id="ui-requests.requester.patronGroup.group" />} value={patronGroup || '-'} />
