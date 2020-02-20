@@ -223,23 +223,53 @@ export default function config() {
   });
 
   this.get('circulation/pick-slips/servicepointId1', {
-    pickSlips: [{
-      id : '7212ba6a-8dcf-45a1-be9a-ffaa847c4423',
-      holdingsRecordId : 'e3ff6133-b9a2-4d4c-a1c9-dc1867d4df19',
-      instanceId: '5bf370e0-8cca-4d9c-82e4-5170ab2a0a39',
-      title: 'A semantic web primer',
-      barcode: '10101',
-      callNumber: 'TK5105.88815 . A58 2004 FT MEADE',
-      status: { name: 'Paged' },
-      contributors: [
-        { name: 'Antoniou, Grigoris' },
-        { name: 'Van Harmelen, Frank' }
-      ],
-      location: {
-        name: 'Main Library',
-        code: 'KU/CC/DI/M'
-      }
-    }],
+    pickSlips: [
+      {
+        item : {
+          title: 'The Long Way to a Small, Angry Planet',
+          barcode: '036000291452',
+          status: 'Paged',
+          primaryContributor: 'Chambers, Becky',
+          allContributors: 'Chambers, Becky',
+          enumeration: 'v.70:no.7-12',
+          volume: 'vol.1',
+          chronology: '1984:July-Dec.',
+          yearCaption: '1984; 1985',
+          materialType: 'Book',
+          loanType: 'Can Circulate',
+          copy: 'cp.2',
+          numberOfPieces: '3',
+          descriptionOfPieces: 'Description of three pieces',
+          effectiveLocationSpecific: '3rd Floor',
+          effectiveLocationLibrary: 'Djanogly Learning Resource Centre',
+          effectiveLocationCampus: 'Jubilee Campus',
+          effectiveLocationInstitution: 'Nottingham University',
+          callNumber: '123456',
+          callNumberPrefix: 'PREFIX',
+          callNumberSuffix: 'SUFFIX',
+          lastCheckedInDateTime: '2020-02-17T12:12:33.374Z',
+        },
+        request : {
+          requestID: 'dd606ca6-a2cb-4723-9a8d-e73b05c42232',
+          servicePointPickup: 'Circ Desk 1',
+          requestExpirationDate: '2019-07-30T00:00:00.000+03:00',
+          holdShelfExpirationDate: '2019-08-31T00:00:00.000+03:00',
+          deliveryAddressType: 'Home',
+        },
+        requester : {
+          firstName: 'Steven',
+          lastName: 'Jones',
+          middleName: 'Jacob',
+          barcode: '5694596854',
+          addressLine1: '16 Main St',
+          addressLine2: 'Apt 3a',
+          city: 'Northampton',
+          region: 'MA',
+          postalCode: '01060',
+          countryId: 'US',
+        },
+      },
+    ],
     totalRecords: 1,
   });
 

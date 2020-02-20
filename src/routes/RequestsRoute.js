@@ -249,6 +249,8 @@ class RequestsRoute extends React.Component {
         getState: PropTypes.func.isRequired,
       }),
       user: PropTypes.object.isRequired,
+      timezone: PropTypes.string.isRequired,
+      locale: PropTypes.string.isRequired,
     }).isRequired,
     history: PropTypes.object,
   };
@@ -648,6 +650,11 @@ class RequestsRoute extends React.Component {
       mutator,
       stripes,
       history,
+      intl,
+      stripes: {
+        timezone,
+        locale,
+      },
     } = this.props;
 
     const {
@@ -731,7 +738,7 @@ class RequestsRoute extends React.Component {
           id="printPickSlipsBtn"
           disabled={isEmpty(pickSlips)}
           template={this.getPrintTemplate()}
-          dataSource={convertToSlipData(pickSlips)}
+          dataSource={convertToSlipData(pickSlips, intl, timezone, locale)}
           onBeforePrint={onToggle}
         >
           <FormattedMessage
