@@ -25,6 +25,7 @@
 * Only fetch open loans when loading an item. Fixes UIREQ-353.
 * Make `Export hold shelf clearance report` for `CurrentServicePoint` disabled if there is nothing on it for the currently selected service point. Fixes UIREQ-395.
 * Add possibility for render all available tokens on pick slip. Fixes UICIRC-416.
+* Make disabling `Export hold shelf clearance report` for `CurrentServicePoint` not depending from filter results. Fixes UIREQ-395.
 
 ## [1.14.0](https://github.com/folio-org/ui-requests/tree/v1.14.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.13.0...v1.14.0)
