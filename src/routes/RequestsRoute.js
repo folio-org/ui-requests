@@ -610,7 +610,6 @@ class RequestsRoute extends React.Component {
       .join(',');
 
     mutator.query.update({ filters });
-    //this.buildRecordsForHoldsShelfReport();
   };
 
   getActiveFilters = () => {
@@ -674,6 +673,7 @@ class RequestsRoute extends React.Component {
       errorMessage,
       errorModalData,
       requests,
+      servicePointId,
     } = this.state;
 
     const { name: servicePointName } = this.getCurrentServicePointInfo();
@@ -721,7 +721,7 @@ class RequestsRoute extends React.Component {
         <Button
           buttonStyle="dropdownItem"
           id="exportExpiredHoldsToCsvPaneHeaderBtn"
-          disabled={isEmpty(requests)}
+          disabled={servicePointId && isEmpty(requests)}
           onClick={() => {
             onToggle();
             this.exportExpiredHoldsToCSV();
