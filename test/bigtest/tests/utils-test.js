@@ -157,12 +157,16 @@ describe('utils', () => {
           requestExpirationDate: '',
           holdShelfExpirationDate: '',
         },
-        requester,
+        requester: {
+          ...requester,
+          countryId: '',
+        },
       }];
       const expectSlipDataWithEmptyDate = [{
         ...slipData,
         'request.requestExpirationDate': '',
         'request.holdShelfExpirationDate': '',
+        'requester.country': '',
       }];
 
       expect(convertToSlipData(pickSlipsWithEmptyDate, intl, timeZone, locale)).to.deep.equal(expectSlipDataWithEmptyDate);
