@@ -110,7 +110,7 @@ class UserForm extends React.Component {
       request,
     } = this.props;
 
-    const id = user.id;
+    const id = user?.id ?? request.requesterId;
     const name = getFullName(user);
     const barcode = user.barcode;
     const isEditable = !!request;
