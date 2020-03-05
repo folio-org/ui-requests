@@ -2,12 +2,15 @@ import {
   interactor,
   isPresent,
   clickable,
+  scoped,
 } from '@bigtest/interactor';
 
 import SortableListInteractor from './sortable-list';
 import ConfirmReorderModal from './confirm-reorder-modal';
+import KeyValue from './KeyValue';
 
 @interactor class RequestQueue {
+  itemCallNumber = scoped('[data-test-item-call-number] div', KeyValue);
   sortableList = new SortableListInteractor();
   sortableListPresent = isPresent('[class^="mclScrollable---"]');
   confirmReorderModalIsPresent = isPresent('#confirm-reorder');
