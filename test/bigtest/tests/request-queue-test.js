@@ -28,7 +28,7 @@ describe('RequestQueue', () => {
   });
 
   it('should display value in `Effective call number string` field', () => {
-    expect(requestQueue.itemCallNumber.value.text).to.equal(effectiveCallNumberString);
+    expect(requestQueue.itemCallNumber.value.text).to.include(effectiveCallNumberString);
   });
 
   describe('Move request down in the queue', () => {
