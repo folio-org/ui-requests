@@ -166,8 +166,6 @@
     "query-string": "^5.1.0",
     "react-beautiful-dnd": "^11.0.5",
     "react-hot-loader": "^4.3.12",
-    "react-intl": "^2.4.0",
-    "react-router-dom": "^4.0.0",
     "react-router-prop-types": "^1.0.4",
     "redux-form": "^7.0.3",
     "react-to-print": "^2.3.2",
@@ -177,8 +175,9 @@
   "peerDependencies": {
     "@folio/stripes": "^2.13.0",
     "react": "*",
-    "react-router": "*",
-    "react-router-dom": "*"
+    "react-intl": "^2.4.0",
+    "react-router": "^4.0.0",
+    "react-router-dom": "^4.0.0"
   },
   "optionalDependencies": {
     "@folio/plugin-find-user": "^1.1.0"
