@@ -28,6 +28,7 @@
 * Make disabling `Export hold shelf clearance report` for `CurrentServicePoint` not depending on filter results. Fixes UIREQ-395.
 * Fix link to `ui-users` from request details screen. Fixes UIREQ-424.
 * Add 'Load more' button at the end of the results list. Fixes UIREQ-427.
+* Display effective call number string on the request queue page. Refs UIREQ-372.
 
 ## [1.14.0](https://github.com/folio-org/ui-requests/tree/v1.14.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.13.0...v1.14.0)

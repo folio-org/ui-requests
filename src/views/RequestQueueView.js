@@ -21,6 +21,7 @@ import {
   Row,
 } from '@folio/stripes/components';
 import { AppIcon } from '@folio/stripes/core';
+import { effectiveCallNumber } from '@folio/stripes/util';
 
 import { iconTypes } from '../constants';
 import {
@@ -232,7 +233,6 @@ class RequestQueueView extends React.Component {
       data: {
         item,
         request,
-        holding,
       },
     } = this.props;
     const {
@@ -293,28 +293,13 @@ class RequestQueueView extends React.Component {
                   value={get(item, 'effectiveLocation.name', '-')}
                 />
               </Col>
-              <Col xs={2}>
+              <Col
+                data-test-item-call-number
+                xs={4}
+              >
                 <KeyValue
                   label={<FormattedMessage id="ui-requests.item.callNumber" />}
-                  value={item.callNumber || holding.callNumber || '-'}
-                />
-              </Col>
-              <Col xs={1}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.item.volume" />}
-                  value={get(item, 'volume', '-')}
-                />
-              </Col>
-              <Col xs={1}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.item.enumeration" />}
-                  value={get(item, 'enumeration', '-')}
-                />
-              </Col>
-              <Col xs={1}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.item.copyNumber" />}
-                  value={get(item.copyNumber) || holding.copyNumber || '-'}
+                  value={effectiveCallNumber(item)}
                 />
               </Col>
             </Row>
