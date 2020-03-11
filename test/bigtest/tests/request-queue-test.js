@@ -11,6 +11,7 @@ import urls from '../../../src/routes/urls';
 
 describe('RequestQueue', () => {
   let requests;
+  const effectiveCallNumberString = 'prefix callNumber suffix volume enumeration chronology';
 
   const requestQueue = new RequestQueue();
 
@@ -24,6 +25,10 @@ describe('RequestQueue', () => {
 
     await requestQueue.whenSortableListPresent();
     await requestQueue.sortableList.whenLogIsPresent();
+  });
+
+  it('should display value in `Effective call number string` field', () => {
+    expect(requestQueue.itemCallNumber.value.text).to.equal(effectiveCallNumberString);
   });
 
   describe('Move request down in the queue', () => {

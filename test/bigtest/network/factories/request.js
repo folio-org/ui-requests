@@ -65,5 +65,25 @@ export default Factory.extend({
         deliveryAddressTypeId: user.personal.addresses[0].addressTypeId
       });
     }
+  }),
+
+  withCallNumber: trait({
+    afterCreate(request, server) {
+      const item = server.create('item', {
+        callNumberComponents: {
+          prefix: 'prefix',
+          callNumber: 'callNumber',
+          suffix: 'suffix',
+        },
+        volume: 'volume',
+        enumeration: 'enumeration',
+        chronology: 'chronology',
+      });
+
+      request.update({
+        item: item.attrs,
+        itemId: item.id,
+      });
+    }
   })
 });
