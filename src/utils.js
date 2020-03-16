@@ -1,9 +1,12 @@
 import {
   get,
+  forOwn,
+  isEmpty,
   isObject,
   omit,
   cloneDeep,
 } from 'lodash';
+import queryString from 'query-string';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Col, Headline, Row } from '@folio/stripes/components';
@@ -208,3 +211,21 @@ export const convertToSlipData = (source, intl, timeZone, locale, slipName = 'Pi
     };
   });
 };
+
+export function buildUrl(location, values) {
+  let url = values._path || location.pathname;
+  const locationQuery = location.query ? location.query : queryString.parse(location.search);
+  const params = {};
+
+  forOwn(Object.assign(locationQuery, values), (value, key) => {
+    if (value && key !== '_path') {
+      params[key] = value;
+    }
+  });
+
+  if (!isEmpty(params)) {
+    url += `?${queryString.stringify(params)}`;
+  }
+
+  return url;
+}

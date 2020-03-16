@@ -30,6 +30,7 @@ import {
   pickSlipType,
 } from '../constants';
 import {
+  buildUrl,
   getFullName,
   duplicateRequest,
   convertToSlipData,
@@ -254,6 +255,7 @@ class RequestsRoute extends React.Component {
       locale: PropTypes.string.isRequired,
     }).isRequired,
     history: PropTypes.object,
+    location: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -500,12 +502,15 @@ class RequestsRoute extends React.Component {
   };
 
   closeLayer() {
-    this.props.mutator.query.update({
+    const url = buildUrl(this.props.location, {
       layer: null,
       itemBarcode: null,
       userBarcode: null,
       itemId: null,
+      query: null,
     });
+
+    this.props.history.push(url);
   }
 
   onDuplicate = (request) => {
