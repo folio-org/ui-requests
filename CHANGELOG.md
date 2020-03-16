@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## [1.15.0] IN PROGRESS
+## [2.0.0](https://github.com/folio-org/ui-requests/tree/v2.0.0) (2020-03-16)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.14.0...v2.0.0)
 
 * Disable confirm button when cancel is in progress. Fixes UIREQ-321
 * Blocked patron can successfully place a Request. Refs UIREQ-394.
@@ -30,6 +31,7 @@
 * Add 'Load more' button at the end of the results list. Fixes UIREQ-427.
 * Display effective call number string on the request queue page. Refs UIREQ-372.
 * Upgrade to `stripes` `v3.0.0`.
+* Correctly handle multiple sequential 'cancel' requests. Refs UIREQ-417.
 
 ## [1.14.0](https://github.com/folio-org/ui-requests/tree/v1.14.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.13.0...v1.14.0)
