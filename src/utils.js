@@ -1,10 +1,11 @@
 import {
   get,
-  forOwn,
   isEmpty,
   isObject,
   omit,
   cloneDeep,
+  pickBy,
+  identity,
 } from 'lodash';
 import queryString from 'query-string';
 import React from 'react';
@@ -213,19 +214,9 @@ export const convertToSlipData = (source, intl, timeZone, locale, slipName = 'Pi
 };
 
 export function buildUrl(location, values) {
-  let url = values._path || location.pathname;
+  const url = values._path || location.pathname;
   const locationQuery = location.query ? location.query : queryString.parse(location.search);
-  const params = {};
+  const params = pickBy(omit({ ...locationQuery, ...values }, '_path'), identity);
 
-  forOwn(Object.assign(locationQuery, values), (value, key) => {
-    if (value && key !== '_path') {
-      params[key] = value;
-    }
-  });
-
-  if (!isEmpty(params)) {
-    url += `?${queryString.stringify(params)}`;
-  }
-
-  return url;
+  return isEmpty(params) ? url : `${url}?${queryString.stringify(params)}`;
 }
