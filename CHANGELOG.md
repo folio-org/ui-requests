@@ -1,5 +1,9 @@
 # Change history for ui-requests
 
+## 2.1.0 (IN PROGRESS)
+
+* Update to `plugin-find-user` `v2.0.0`.
+
 ## [2.0.0](https://github.com/folio-org/ui-requests/tree/v2.0.0) (2020-03-16)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.14.0...v2.0.0)
 
