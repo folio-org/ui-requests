@@ -14,19 +14,24 @@ import { requestStatuses } from '../../../src/constants';
 describe('Edit Request page', () => {
   setupApplication();
 
+  const requestsOnItemValue = '2';
+
   const EditRequestInteractor = new EditRequest();
   const ViewRequestInteractor = new ViewRequest();
 
   beforeEach(async function () {
-    this.visit('/requests/view/requestId0?layer=edit');
+    const request = this.server.create('request', { requestCount: requestsOnItemValue });
+
+    this.visit(`/requests/view/${request.id}?layer=edit`);
   });
 
-  describe('Request edit layer', function () {
-    it('layer exists', function () {
-      expect(EditRequestInteractor.isLayerPresent).to.be.true;
-    });
+  it('layer exists', () => {
+    expect(EditRequestInteractor.isLayerPresent).to.be.true;
   });
 
+  it('should display a number of requests on item', () => {
+    expect(EditRequestInteractor.requestsOnItem.value.text).to.equal(requestsOnItemValue);
+  });
 
   describe('clicking cancel editing button', function () {
     beforeEach(async () => {

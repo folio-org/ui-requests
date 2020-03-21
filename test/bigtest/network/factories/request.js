@@ -10,6 +10,7 @@ export default Factory.extend({
   requestDate: () => faker.date.past().toISOString().substring(0, 10),
   status: () => 'Open - Not yet filled',
   position: (i) => i + 1,
+  requestCount: (i) => i + 1,
   fulfilmentPreference: 'Hold Shelf',
   pickupServicePointId: 'servicepointId1',
   holdShelfExpirationDate: '2017-01-20',

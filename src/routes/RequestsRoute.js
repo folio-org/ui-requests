@@ -450,8 +450,9 @@ class RequestsRoute extends React.Component {
       const requester = get(users, 'users[0]', null);
       const requestCount = get(requests, 'totalRecords', 0);
       return {
-        ...requester,
-        ...requestCount,
+        ...r,
+        requester,
+        requestCount,
       };
     });
   }
