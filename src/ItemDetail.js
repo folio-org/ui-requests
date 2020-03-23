@@ -66,7 +66,10 @@ const ItemDetail = ({ item, loan, requestCount }) => {
             {loan && loan.dueDate ? <FormattedDate value={loan.dueDate} /> : '-'}
           </KeyValue>
         </Col>
-        <Col xs={4}>
+        <Col
+          data-test-requests-on-item
+          xs={4}
+        >
           <KeyValue label={<FormattedMessage id="ui-requests.item.requestsOnItem" />}>
             {positionLink}
           </KeyValue>

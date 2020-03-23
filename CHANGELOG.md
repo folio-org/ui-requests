@@ -38,6 +38,7 @@
 * Upgrade to `stripes` `v3.0.0`.
 * Correctly handle multiple sequential 'cancel' requests. Refs UIREQ-417.
 * Fix the ability to change service point for open page request. Fixes UIREQ-426.
+* Fix display of the request count on item in the view and edit mode. Fixes UIREQ-433.
 
 ## [1.14.0](https://github.com/folio-org/ui-requests/tree/v1.14.0) (2019-12-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v1.13.0...v1.14.0)
