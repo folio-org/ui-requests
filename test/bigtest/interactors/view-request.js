@@ -2,6 +2,7 @@ import {
   clickable,
   interactor,
   isPresent,
+  scoped,
 } from '@bigtest/interactor';
 
 import CancelRequestDialog from './cancel-request-dialog';
@@ -11,6 +12,7 @@ import HeaderDropdown from './header-dropdown';
 import HeaderDropdownMenu from './header-dropdown-menu';
 import ItemAccordion from './item-accordion';
 import MoveToSecondPositionDialog from './move-to-second-position-dialog';
+import KeyValue from './KeyValue';
 
 import { contains } from './helpers';
 
@@ -26,6 +28,7 @@ import { contains } from './helpers';
   requesterSectionPresent = isPresent('#requester-info');
   requesterInfoContains = contains('#requester-info');
   requestInfoContains = contains('#request-info');
+  requestsOnItem = scoped('[data-test-requests-on-item] div', KeyValue);
 
   itemAccordionClick = clickable('#accordion-toggle-button-item-info');
 }
