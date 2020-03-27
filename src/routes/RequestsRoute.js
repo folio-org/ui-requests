@@ -104,12 +104,13 @@ class RequestsRoute extends React.Component {
       initialValue: { sort: 'Request Date' },
     },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
+    resultOffset: { initialValue: 0 },
     records: {
       type: 'okapi',
       path: 'circulation/requests',
       records: 'requests',
-      recordsRequired: '%{resultCount}',
-      perRequest: 30,
+      resultOffset: '%{resultOffset}',
+      perRequest: 100,
       throwErrors: false,
       GET: {
         params: {
@@ -758,6 +759,8 @@ class RequestsRoute extends React.Component {
             }}
             viewRecordPerms="ui-requests.view"
             newRecordPerms="ui-requests.create"
+            pageAmount={100}
+            pagingType="click"
           />
         </div>
       </React.Fragment>
