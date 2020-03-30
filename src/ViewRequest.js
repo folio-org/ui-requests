@@ -322,16 +322,6 @@ class ViewRequest extends React.Component {
             )}
           </FormattedMessage>
         }
-        {!isRequestClosed &&
-          <IfPermission perm="ui-requests.edit">
-            <PaneHeaderIconButton
-              icon="edit"
-              id="clickable-edit-request"
-              style={{ visibility: !request ? 'hidden' : 'visible' }}
-              href={editLink}
-              onClick={onEdit}
-            />
-          </IfPermission> }
       </PaneMenu>
     );
   }
