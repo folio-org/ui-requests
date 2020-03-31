@@ -48,4 +48,15 @@ describe('Requests', () => {
       expect(requests.instance.isVisible).to.equal(true);
     });
   });
+
+  describe('clicking on New button', () => {
+    beforeEach(async function () {
+      await requests.headerDropdown.click();
+      await requests.headerDropdownMenu.clickNew();
+    });
+
+    it('should redirect on create request page', function () {
+      expect(this.location.search).to.include('layer=create');
+    });
+  });
 });

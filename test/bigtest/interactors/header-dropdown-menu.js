@@ -11,6 +11,7 @@ import {
   clickDelete = clickable('[data-test-delete-request]');
   clickDuplicate = clickable('#duplicate-request');
   clickEdit = clickable('#clickable-edit-request');
+  clickNew = clickable('#clickable-newrequest');
   clickExportToCSV = clickable('#exportToCsvPaneHeaderBtn');
   clickExportExpiredHoldsToCSV = clickable('#exportExpiredHoldsToCsvPaneHeaderBtn');
   isExportExpiredHoldsToCSVDisabled = property('#exportExpiredHoldsToCsvPaneHeaderBtn', 'disabled');

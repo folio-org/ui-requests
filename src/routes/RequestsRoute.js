@@ -16,6 +16,7 @@ import { SubmissionError } from 'redux-form';
 import {
   AppIcon,
   stripesConnect,
+  IfPermission,
 } from '@folio/stripes/core';
 import { Button } from '@folio/stripes/components';
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
@@ -711,6 +712,18 @@ class RequestsRoute extends React.Component {
 
     const actionMenu = ({ onToggle }) => (
       <>
+        <IfPermission perm="ui-requests.create">
+          <Button
+            buttonStyle="dropdownItem"
+            id="clickable-newrequest"
+            onClick={() => {
+              onToggle();
+            }}
+            to={`${this.props.location.pathname}?layer=create`}
+          >
+            <FormattedMessage id="stripes-smart-components.new" />
+          </Button>
+        </IfPermission>
         <Button
           buttonStyle="dropdownItem"
           id="exportToCsvPaneHeaderBtn"
@@ -767,6 +780,8 @@ class RequestsRoute extends React.Component {
         }
         <div data-test-request-instances>
           <SearchAndSort
+            onCreate={this.create}
+            hasNewButton={false}
             actionMenu={actionMenu}
             packageInfo={packageInfo}
             objectName="request"
@@ -793,7 +808,6 @@ class RequestsRoute extends React.Component {
             resultsFormatter={resultsFormatter}
             newRecordInitialValues={InitialValues}
             massageNewRecord={this.massageNewRecord}
-            onCreate={this.create}
             onCloseNewRecord={this.handleCloseNewRecord}
             parentResources={resources}
             parentMutator={mutator}
