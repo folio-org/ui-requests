@@ -716,10 +716,8 @@ class RequestsRoute extends React.Component {
           <Button
             buttonStyle="dropdownItem"
             id="clickable-newrequest"
-            onClick={() => {
-              onToggle();
-            }}
             to={`${this.props.location.pathname}?layer=create`}
+            onClick={onToggle}
           >
             <FormattedMessage id="stripes-smart-components.new" />
           </Button>
@@ -780,7 +778,6 @@ class RequestsRoute extends React.Component {
         }
         <div data-test-request-instances>
           <SearchAndSort
-            onCreate={this.create}
             hasNewButton={false}
             actionMenu={actionMenu}
             packageInfo={packageInfo}
@@ -808,6 +805,7 @@ class RequestsRoute extends React.Component {
             resultsFormatter={resultsFormatter}
             newRecordInitialValues={InitialValues}
             massageNewRecord={this.massageNewRecord}
+            onCreate={this.create}
             onCloseNewRecord={this.handleCloseNewRecord}
             parentResources={resources}
             parentMutator={mutator}
