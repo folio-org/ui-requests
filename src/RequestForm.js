@@ -122,7 +122,7 @@ class RequestForm extends React.Component {
     super(props);
 
     const { request } = props;
-    const { requester, item, loan } = (request || {});
+    const { requester, requesterId, item, loan } = (request || {});
 
     this.state = {
       accordions: {
@@ -132,7 +132,7 @@ class RequestForm extends React.Component {
       },
       proxy: {},
       selectedItem: item,
-      selectedUser: requester,
+      selectedUser: { ...requester, id: requesterId },
       selectedLoan: loan,
       blocked: false,
       ...this.getDefaultRequestPreferences(),
@@ -322,13 +322,18 @@ class RequestForm extends React.Component {
   }
 
   getDefaultRequestPreferences() {
+    const {
+      request,
+      initialValues,
+    } = this.props;
+
     return {
       hasDelivery: false,
       requestPreferencesLoaded: false,
       defaultDeliveryAddressTypeId: '',
-      defaultServicePointId: '',
-      deliverySelected: isDelivery(this.props.initialValues),
-      selectedAddressTypeId: this.props.initialValues.deliveryAddressTypeId || '',
+      defaultServicePointId: request?.pickupServicePointId || '',
+      deliverySelected: isDelivery(initialValues),
+      selectedAddressTypeId: initialValues.deliveryAddressTypeId || '',
     };
   }
 
