@@ -13,12 +13,19 @@ import NewRequestInteractor from '../interactors/new-request';
 describe('View request page', () => {
   setupApplication();
 
+  const requestsOnItemValue = '3';
+
   const viewRequest = new ViewRequestInteractor();
   const newRequest = new NewRequestInteractor();
 
   describe('View default request', () => {
     beforeEach(async function () {
-      this.visit('/requests/view/requestId0');
+      const request = this.server.create('request', { requestCount: requestsOnItemValue });
+      this.visit(`/requests/view/${request.id}`);
+    });
+
+    it('should display a number of requests on item', () => {
+      expect(viewRequest.requestsOnItem.value.text).to.equal(requestsOnItemValue);
     });
 
     describe('cancel request', function () {
