@@ -1,5 +1,11 @@
 # Change history for ui-requests
 
+## [2.0.2](https://github.com/folio-org/ui-requests/tree/v2.0.2) (2020-04-02)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v2.0.1...v2.0.2)
+
+* Fixed the ability to change service point for open page request. Refs UIREQ-426.
+* Fix display of the request count on item. Refs UIREQ-433.
+
 ## [2.0.1](https://github.com/folio-org/ui-requests/tree/v2.0.1) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v2.0.0...v2.0.1)
 
