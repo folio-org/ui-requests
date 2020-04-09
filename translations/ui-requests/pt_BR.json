@@ -18,7 +18,7 @@
     "errors.onlyCheckedOutForRecall": "Somente itens emprestados podem ter recall",
     "errors.onlyCheckedOutForHold": "Somente itens emprestados podem ser mantidos",
     "errors.selectItem": "Por favor selecione um item",
-    "errors.selectUser": "Por favor, selecione um solicitante",
+    "errors.selectUser": "Selecione um solicitante com o código de barras",
     "actions.closeNewRequest": "Fechar a nova solicitação",
     "actions.createNewRequest": "Criar nova solicitação de compra",
     "actions.newRequest": "Nova solicitação de compra",
