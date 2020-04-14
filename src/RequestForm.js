@@ -131,6 +131,7 @@ class RequestForm extends React.Component {
         'requester-info': true,
       },
       proxy: {},
+      gettingProxy: false,
       selectedItem: item,
       selectedUser: { ...requester, id: requesterId },
       selectedLoan: loan,
@@ -283,6 +284,8 @@ class RequestForm extends React.Component {
   // Executed when user is selected from the proxy dialog
   onSelectProxy(proxy) {
     const { selectedUser } = this.state;
+
+    this.setState({ gettingProxy: true });
 
     if (selectedUser.id === proxy.id) {
       this.setState({ selectedUser, proxy: selectedUser });
@@ -591,10 +594,18 @@ class RequestForm extends React.Component {
       pickupServicePointId,
     } = data;
 
-    const { selectedItem } = this.state;
+    const { selectedItem, gettingProxy } = this.state;
 
     if (isDeclaredLostItem(selectedItem)) {
       return this.showDeclaredLostModal();
+    }
+
+    // The proxy select form triggers a cascading form submission that
+    // saves and closes the main request form as well. This check prevents
+    // that from happening.
+    if (gettingProxy) {
+      this.setState({ gettingProxy: false });
+      return null;
     }
 
     const [block = {}] = this.getPatronBlocks(parentResources);

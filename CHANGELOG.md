@@ -1,7 +1,9 @@
 # Change history for ui-requests
 
-## [2.0.2] (IN PROGRESS)
+## [2.1.0] (IN PROGRESS)
+* Fix bug causing spurious form saves after proxy selection. Fixes UIREQ-449.
 
+## [2.0.2] (IN PROGRESS)
 * Paneheader Actions updates. Refs UIREQ-415.
 
 ## [2.0.1](https://github.com/folio-org/ui-requests/tree/v2.0.1) (2020-03-17)
