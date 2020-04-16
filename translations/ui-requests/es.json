@@ -95,7 +95,7 @@
     "requestMeta.fulfilment.delivery": "Delivery",
     "actions.edit": "Edit",
     "item.contributorNamesNames": "Contributor names",
-    "item.location.name": "Effective location",
+    "item.location.name": "Localización",
     "proxy.name": "Requester's proxy name",
     "deliveryAddress": "Delivery address",
     "requester.patronGroup.group": "Grupo de usuarios solicitante",
