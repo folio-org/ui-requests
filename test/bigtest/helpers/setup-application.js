@@ -5,13 +5,15 @@ export default function setupApplication({
   scenarios = ['default'],
   hasAllPerms = true,
   currentUser,
+  modules,
 } = {}) {
   setupStripesCore({
     mirageOptions,
     currentUser,
     scenarios,
     stripesConfig: {
-      hasAllPerms
-    }
+      hasAllPerms,
+    },
+    modules,
   });
 }

@@ -1,4 +1,4 @@
-import { get, isEmpty } from 'lodash';
+import { isEmpty } from 'lodash';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -30,12 +30,12 @@ export default async function asyncValidate(values, dispatch, props) {
   const { asyncErrors } = props;
   const errors = {};
 
-  if (get(values, 'item.barcode') && !get(asyncErrors, 'item.barcode')) {
+  if (values?.item?.barcode && !asyncErrors?.item?.barcode) {
     const error = await asyncValidateItem(values, props);
     if (error) errors.item = error;
   }
 
-  if (get(values, 'requester.barcode') && !get(asyncErrors, 'requester.barcode')) {
+  if (values?.requester?.barcode && !asyncErrors?.requester?.barcode) {
     const error = await asyncValidateUser(values, props);
     if (error) errors.requester = error;
   }

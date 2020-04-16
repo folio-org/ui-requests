@@ -12,6 +12,11 @@ export default function defaultScenario(server) {
 
   server.createList('request', 20);
 
+  server.create('user', {
+    id: '123',
+    barcode: '',
+  });
+
   const servicePoint = server.create('servicePoint', {
     id: 'servicepointId2',
     name: 'Circ Desk 2',

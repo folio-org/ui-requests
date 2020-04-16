@@ -3,6 +3,7 @@
 ## [2.0.2] (IN PROGRESS)
 
 * Paneheader Actions updates. Refs UIREQ-415.
+* Add ability to create a request with the requester without barcode. Fixes UIREQ-444.
 
 ## [2.0.1](https://github.com/folio-org/ui-requests/tree/v2.0.1) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v2.0.0...v2.0.1)

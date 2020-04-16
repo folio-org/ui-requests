@@ -16,6 +16,16 @@ export default function config() {
   this.get('/configurations/entries', {
     configs: []
   });
+
+  this.get('/tags');
+
+  this.get('/circulation/requests-report/expired-holds', {
+    expiredHolds: [],
+  });
+
+  this.get('/circulation/requests-reports/hold-shelf-clearance/:id', {});
+  this.get('/circulation/requests-reports/hold-shelf-clearance', {});
+
   this.post('/bl-users/login', () => {
     return new Response(201, {
       'X-Okapi-Token': `myOkapiToken:${Date.now()}`

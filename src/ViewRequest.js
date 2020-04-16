@@ -296,15 +296,11 @@ class ViewRequest extends React.Component {
 
   renderDetailMenu(request) {
     const {
-      editLink,
-      onEdit,
       tagsEnabled,
       tagsToggle,
     } = this.props;
 
     const tags = ((request && request.tags) || {}).tagList || [];
-    const requestStatus = get(request, ['status'], '-');
-    const isRequestClosed = requestStatus.startsWith('Closed');
 
     return (
       <PaneMenu>
