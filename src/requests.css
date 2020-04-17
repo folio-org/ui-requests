@@ -1,10 +1,10 @@
 .section {
   padding: 10px 10px 2px 10px;
-  border-bottom: 1px solid #ebebeb;
+  border-bottom: 1px solid #f8f8f8;
   margin-bottom: 5px;
 
   &.active {
-    background-color: #ebebeb;
+    background-color: #f8f8f8;
     border-radius: 6px;
   }
 }
