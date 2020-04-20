@@ -10,7 +10,12 @@ import {
 import queryString from 'query-string';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Col, Headline, Row } from '@folio/stripes/components';
+import {
+  Col,
+  Headline,
+  Row,
+  NoValue,
+} from '@folio/stripes/components';
 
 import {
   requestTypesByItemStatus,
@@ -54,7 +59,7 @@ export function userHighlightBox(title, name, id, barcode) {
             {' '}
             Barcode:
             {' '}
-            {barcodeLink}
+            {barcode ? barcodeLink : <NoValue />}
           </div>
         </div>
       </Col>

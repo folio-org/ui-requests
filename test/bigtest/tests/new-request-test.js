@@ -1,3 +1,5 @@
+
+import React from 'react';
 import {
   beforeEach,
   describe,
@@ -6,6 +8,8 @@ import {
 
 import { expect } from 'chai';
 
+import { Button } from '@folio/stripes/components';
+
 import setupApplication from '../helpers/setup-application';
 import ErrorModal from '../interactors/error-modal';
 import NewRequest from '../interactors/new-request';
@@ -13,7 +17,23 @@ import RequestsInteractor from '../interactors/requests-interactor';
 import ViewRequest from '../interactors/view-request';
 
 describe('New Request page', () => {
-  setupApplication();
+  setupApplication({
+    modules: [{
+      type: 'plugin',
+      name: '@folio/plugin-find-user',
+      displayName: 'Find user',
+      pluginType: 'find-user',
+      /* eslint-disable-next-line react/prop-types */
+      module: ({ selectUser }) => (
+        <Button
+          data-test-plugin-find-user-button
+          onClick={() => selectUser({ id: '123' })}
+        >
+          +
+        </Button>
+      ),
+    }],
+  });
 
   const errorModalInteractor = new ErrorModal('#OverlayContainer');
   const newRequest = new NewRequest('[data-test-requests-form]');
@@ -38,6 +58,7 @@ describe('New Request page', () => {
 
     describe('entering invalid requestor barcode', function () {
       beforeEach(async function () {
+        await newRequest.whenReady();
         await newRequest.userField.fillAndBlur('123');
         await newRequest.clickNewRequest();
       });
@@ -80,7 +101,7 @@ describe('New Request page', () => {
           barcode: '9676761472500',
           title: 'Best Book Ever',
           materialType: {
-            name: 'book'
+            name: 'book',
           },
         });
 
@@ -105,6 +126,33 @@ describe('New Request page', () => {
         expect(viewRequest.requesterSectionPresent).to.be.true;
       });
     });
+
+    describe('creating new request with user without barcode', () => {
+      beforeEach(async function () {
+        this.server.create('item', {
+          barcode: '9676761472500',
+          title: 'Best Book Ever',
+          materialType: {
+            name: 'book'
+          },
+        });
+
+        await newRequest.whenReady();
+        await newRequest
+          .fillItemBarcode('9676761472500')
+          .clickItemEnterBtn();
+        await newRequest.clickAddUser();
+        await newRequest.whenServicePointIsPresent();
+        await newRequest.chooseServicePoint('Circ Desk 2');
+        await newRequest.clickNewRequest();
+      });
+
+      it('should create a new request and open view request pane', () => {
+        expect(viewRequest.requestSectionPresent).to.be.true;
+        expect(viewRequest.requesterSectionPresent).to.be.true;
+      });
+    });
+
 
     describe('creating new request type with delivery', () => {
       beforeEach(async function () {

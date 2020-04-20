@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
+import {
+  Field,
+  getFormValues,
+} from 'redux-form';
 import {
   FormattedMessage,
   FormattedDate,
@@ -70,7 +73,10 @@ import css from './requests.css';
 class RequestForm extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
-      connect: PropTypes.func.isRequired
+      connect: PropTypes.func.isRequired,
+      store: PropTypes.shape({
+        getState: PropTypes.func.isRequired,
+      }).isRequired,
     }).isRequired,
     change: PropTypes.func.isRequired,
     errorMessage: PropTypes.string,
@@ -155,7 +161,7 @@ class RequestForm extends React.Component {
 
   componentDidMount() {
     if (this.props.query.userBarcode) {
-      this.findUser(this.props.query.userBarcode);
+      this.findUser('barcode', this.props.query.userBarcode);
     }
 
     if (this.props.query.itemBarcode) {
@@ -202,7 +208,7 @@ class RequestForm extends React.Component {
     }
 
     if (prevQuery.userBarcode !== query.userBarcode) {
-      this.findUser(query.userBarcode);
+      this.findUser('barcode', query.userBarcode);
     }
 
     if (prevQuery.itemBarcode !== query.itemBarcode) {
@@ -276,8 +282,17 @@ class RequestForm extends React.Component {
   // This function is called from the "search and select user" widget when
   // a user has been selected from the list
   onSelectUser(user) {
-    if (user) {
-      this.findUser(user.barcode);
+    if (!user) return;
+
+    const {
+      id,
+      barcode,
+    } = user;
+
+    if (barcode) {
+      this.findUser('barcode', barcode);
+    } else {
+      this.findUser('id', id);
     }
   }
 
@@ -301,16 +316,21 @@ class RequestForm extends React.Component {
     const barcode = get(this.requesterBarcodeRef, 'current.value');
 
     if (!barcode) return;
-    this.findUser(barcode);
+
+    this.findUser('barcode', barcode);
   }
 
-  findUser(barcode) {
+  findUser(fieldName, value) {
     const blocks = this.getPatronBlocks(this.props.parentResources);
     // Set the new value in the redux-form barcode field
-    this.props.change('requester.barcode', barcode);
+
+    if (fieldName === 'barcode') {
+      this.props.change('requester.barcode', value);
+    }
+
     this.setState({ selectedUser: null, proxy: null });
 
-    this.props.findResource('user', barcode, 'barcode').then((result) => {
+    this.props.findResource('user', value, fieldName).then((result) => {
       if (result.totalRecords === 1) {
         const selectedUser = result.users[0];
         if (blocks.length > 0 && blocks[0].userId === selectedUser.id) {
@@ -542,7 +562,15 @@ class RequestForm extends React.Component {
     });
   }
 
-  requireUser = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectUser" />);
+  requireUser = (value) => {
+    const values = this.getCurrentFormValues();
+
+    if (!value && !values.requesterId) {
+      return <FormattedMessage id="ui-requests.errors.selectUser" />;
+    }
+
+    return undefined;
+  }
 
   getProxy() {
     const { request } = this.props;
@@ -629,6 +657,10 @@ class RequestForm extends React.Component {
     }
 
     return this.props.onSubmit(data);
+  };
+
+  getCurrentFormValues = () => {
+    return getFormValues('requestForm')(this.props.stripes.store.getState());
   };
 
   renderAddRequestFirstMenu = () => (

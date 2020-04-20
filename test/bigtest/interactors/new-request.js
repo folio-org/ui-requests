@@ -38,6 +38,7 @@ import InputField from './input-field';
   userField = new InputField('[name="requester.barcode"]');
 
   chooseServicePoint = selectable('[name="pickupServicePointId"]');
+  servicePointPresent = isPresent('[name="pickupServicePointId"]');
   requestTypes = isPresent('[name="requestType"]');
   requestTypeOptions = getSelectValues('[name="requestType"] option');
   requestTypeText = text('[data-test-request-type-text]');
@@ -46,6 +47,8 @@ import InputField from './input-field';
   clickCancel = clickable('#clickable-cancel-request');
   containsUserBarcode = value('[name="requester.barcode"]');
   containsItemBarcode = value('[name="item.barcode"]');
+
+  clickAddUser = clickable('[data-test-plugin-find-user-button]');
 
   chooseFulfillmentPreference = selectable('[name="fulfilmentPreference"]');
   chooseDeliveryAddress = selectable('[name="deliveryAddressTypeId"]');
@@ -56,12 +59,20 @@ import InputField from './input-field';
   itemErrorIsPresent = isPresent('#section-item-info [class*=feedbackError---]');
   requesterErrorIsPresent = isPresent('#section-requester-info [class*=feedbackError---]');
 
+  whenReady() {
+    return this.when(() => this.itemBarcodeIsPresent);
+  }
+
   whenRequestTypeIsPresent() {
     return this.when(() => this.requestTypeIsPresent);
   }
 
   whenRequestTypesArePresent() {
     return this.when(() => this.requestTypes);
+  }
+
+  whenServicePointIsPresent() {
+    return this.when(() => this.servicePointPresent, 5000);
   }
 }
 
