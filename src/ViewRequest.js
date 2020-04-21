@@ -394,7 +394,7 @@ class ViewRequest extends React.Component {
             </Button>
             <Button
               buttonStyle="dropdownItem"
-              id="clickable-cancel-request"
+              id="clickable-cancel-request-dropdown"
               onClick={() => {
                 this.setState({ isCancellingRequest: true });
                 onToggle();
