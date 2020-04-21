@@ -339,25 +339,19 @@ class RequestsRoute extends React.Component {
       });
     }
 
-    if (this.csvExportPending) {
-      const recordsLoaded = this.props.resources.records.records;
-      const numTotalRecords = this.props.resources.records.other.totalRecords;
-
-      if (recordsLoaded.length === numTotalRecords) {
-        const recordsToCSV = this.buildRecords(recordsLoaded);
-
-        exportCsv(recordsToCSV, {
-          onlyFields: this.columnHeadersMap,
-          excludeFields: ['id'],
-        });
-
-        this.csvExportPending = false;
-      }
-    }
-
     if (prevStateServicePointId !== currentServicePointId) {
       this.setCurrentServicePointId();
     }
+  }
+
+  exportData = () => {
+    const records = this.props?.resources?.records?.records ?? [];
+    const recordsToCSV = this.buildRecords(records);
+
+    exportCsv(recordsToCSV, {
+      onlyFields: this.columnHeadersMap,
+      excludeFields: ['id'],
+    });
   }
 
   getCurrentServicePointInfo = () => {
@@ -728,10 +722,7 @@ class RequestsRoute extends React.Component {
           disabled={!requestCount}
           onClick={() => {
             onToggle();
-            if (!this.csvExportPending) {
-              mutator.resultCount.replace(resources.records.other.totalRecords);
-              this.csvExportPending = true;
-            }
+            this.exportData();
           }}
         >
           <FormattedMessage id="ui-requests.exportSearchResultsToCsv" />
