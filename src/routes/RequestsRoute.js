@@ -118,6 +118,10 @@ class RequestsRoute extends React.Component {
     patronGroups: {
       type: 'okapi',
       path: 'groups',
+      params: {
+        query: 'cql.allRecords=1 sortby group',
+        limit: '200',
+      },
       records: 'usergroups',
     },
     servicePoints: {
