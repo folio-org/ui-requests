@@ -4,6 +4,7 @@
 * Paneheader Actions updates. Refs UIREQ-415.
 * Add ability to create a request with the requester without barcode. Fixes UIREQ-444.
 * Fix bug causing spurious form saves after proxy selection. Fixes UIREQ-449.
+* Fix export to CSV. Fixes UIREQ-453.
 
 ## [2.0.1](https://github.com/folio-org/ui-requests/tree/v2.0.1) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v2.0.0...v2.0.1)
