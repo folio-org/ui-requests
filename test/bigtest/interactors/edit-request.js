@@ -17,7 +17,7 @@ import KeyValue from './KeyValue';
   fillRequestExpirationDateField = fillable('#requestExpirationDate');
   chooseServicePoint = selectable('[name="pickupServicePointId"]');
   clickUpdate = clickable('#clickable-save-request');
-  clickCancel = clickable('#clickable-cancel-request');
+  clickCancel = clickable('#clickable-cancel-request-changes');
   cancelRequestDialog = new CancelRequestDialog('[data-test-cancel-request-modal]');
   isLayerPresent = isPresent('[class*=LayerRoot][role=dialog]');
   fulfillmentPreferenceFieldDisabled = is('[data-test-fulfillment-preference-filed]', ':disabled');

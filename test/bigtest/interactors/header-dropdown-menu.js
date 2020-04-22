@@ -7,7 +7,7 @@ import {
 } from '@bigtest/interactor';
 
 @interactor class HeaderDropdownMenu {
-  clickCancel = clickable('#clickable-cancel-request-dropdown');
+  clickCancel = clickable('#clickable-cancel-request');
   clickDelete = clickable('[data-test-delete-request]');
   clickDuplicate = clickable('#duplicate-request');
   clickEdit = clickable('#clickable-edit-request');
