@@ -35,8 +35,7 @@ describe('Edit Request page', () => {
 
   describe('clicking cancel editing button', function () {
     beforeEach(async () => {
-      await EditRequestInteractor.headerDropdown.click();
-      await EditRequestInteractor.headerDropdownMenu.clickCancel();
+      await EditRequestInteractor.clickCancel();
     });
 
     it('closes the edit request form', function () {

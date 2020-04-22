@@ -44,7 +44,7 @@ import InputField from './input-field';
   requestTypeText = text('[data-test-request-type-text]');
   requestTypeIsPresent = isPresent('[data-test-request-type-text]');
   clickNewRequest = clickable('#clickable-save-request');
-  clickCancel = clickable('#clickable-cancel-request');
+  clickCancel = clickable('#clickable-cancel-request-changes');
   containsUserBarcode = value('[name="requester.barcode"]');
   containsItemBarcode = value('[name="item.barcode"]');
 

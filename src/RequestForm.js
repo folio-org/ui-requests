@@ -779,7 +779,7 @@ class RequestForm extends React.Component {
               <PaneFooter>
                 <div className={css.footerContent}>
                   <Button
-                    id="clickable-cancel-request"
+                    id="clickable-cancel-request-changes"
                     marginBottom0
                     buttonStyle="default mega"
                     onClick={onCancel}
