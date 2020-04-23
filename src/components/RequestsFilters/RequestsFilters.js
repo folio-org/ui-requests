@@ -9,6 +9,7 @@ import {
 
 import {
   Accordion,
+  AccordionSet,
   FilterAccordionHeader,
 } from '@folio/stripes/components';
 import {
@@ -56,7 +57,7 @@ export default class RequestsFilters extends React.Component {
     } = this.props;
 
     return (
-      <>
+      <AccordionSet>
         <Accordion
           displayClearButton={!isEmpty(requestType)}
           id={requestFilterTypes.REQUEST_TYPE}
@@ -103,9 +104,10 @@ export default class RequestsFilters extends React.Component {
             name={requestFilterTypes.TAGS}
             selectedValues={tags}
             onChange={onChange}
+            ariaLabelledBy={requestFilterTypes.TAGS}
           />
         </Accordion>
-      </>
+      </AccordionSet>
     );
   }
 }
