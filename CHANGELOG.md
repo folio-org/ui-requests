@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 2.0.3 (IN PROGRESS)
+## [2.0.3](https://github.com/folio-org/ui-requests/tree/v2.0.3) (2020-04-23)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v2.0.2...v2.0.3)
 
 * Fix export to CSV. Fixes UIREQ-453.
 * Restore the ability to view 'Block details' from "Patron blocked from requesting" modal. Fixes UIREQ-451.
