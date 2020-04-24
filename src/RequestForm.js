@@ -132,9 +132,9 @@ class RequestForm extends React.Component {
 
     this.state = {
       accordions: {
-        'request-info': true,
-        'item-info': true,
-        'requester-info': true,
+        'new-request-info': true,
+        'new-item-info': true,
+        'new-requester-info': true,
       },
       proxy: {},
       gettingProxy: false,
@@ -809,7 +809,7 @@ class RequestForm extends React.Component {
             }
             <AccordionSet accordionStatus={accordions} onToggle={this.onToggleSection}>
               <Accordion
-                id="item-info"
+                id="new-item-info"
                 label={
                   <FormattedMessage id="ui-requests.item.information">
                     {message => message + labelAsterisk}
@@ -860,7 +860,7 @@ class RequestForm extends React.Component {
                 </div>
               </Accordion>
               <Accordion
-                id="request-info"
+                id="new-request-info"
                 label={<FormattedMessage id="ui-requests.requestMeta.information" />}
               >
                 {isEditForm && request && request.metadata &&
@@ -967,7 +967,7 @@ class RequestForm extends React.Component {
                 </Row>
               </Accordion>
               <Accordion
-                id="requester-info"
+                id="new-requester-info"
                 label={
                   <FormattedMessage id="ui-requests.requester.information">
                     {message => message + labelAsterisk}

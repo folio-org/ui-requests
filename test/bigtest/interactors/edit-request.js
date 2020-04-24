@@ -9,8 +9,6 @@ import {
 } from '@bigtest/interactor';
 
 import CancelRequestDialog from './cancel-request-dialog';
-import HeaderDropdownMenu from './header-dropdown-menu';
-import HeaderDropdown from './header-dropdown';
 import KeyValue from './KeyValue';
 
 @interactor class EditRequests {
