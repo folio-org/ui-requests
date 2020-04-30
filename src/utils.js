@@ -107,7 +107,7 @@ export function duplicateRequest(request) {
     'requester',
     'item',
     'pickupServicePoint',
-    'proxyUserId'
+    'proxyUserId',
   ]);
 }
 
