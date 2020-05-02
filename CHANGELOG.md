@@ -5,9 +5,10 @@
 * Add ability to create a request with the requester without barcode. Fixes UIREQ-444.
 * Fix bug causing spurious form saves after proxy selection. Fixes UIREQ-449, UIREQ-454, UIREQ-455.
 * Prevent error on duplicating request with proxy requester. Fixes UIREQ-456.
-* Change requester background color on `Request detail` page to increase color contrast. Refs UIREQ-438. 
+* Change requester background color on `Request detail` page to increase color contrast. Refs UIREQ-438.
 * Fix export to CSV. Fixes UIREQ-453.
 * Restore the ability to view 'Block details' from "Patron blocked from requesting" modal. Fixes UIREQ-451.
+* Purge `intlShape` in prep for `react-intl` `v4` migration. Refs STRIPES-672.
 
 ## [2.0.1](https://github.com/folio-org/ui-requests/tree/v2.0.1) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v2.0.0...v2.0.1)
