@@ -3,8 +3,9 @@
 ## [2.1.0] (IN PROGRESS)
 * Paneheader Actions updates. Refs UIREQ-415.
 * Add ability to create a request with the requester without barcode. Fixes UIREQ-444.
-* Fix bug causing spurious form saves after proxy selection. Fixes UIREQ-449, UIREQ-454, UIREQ-455.
+* Fix bug causing spurious form saves after proxy selection. Fixes UIREQ-449, UIREQ-454.
 * Prevent error on duplicating request with proxy requester. Fixes UIREQ-456.
+* Set correct service point default for proxy sponsors. Fixes UIREQ-455.
 * Change requester background color on `Request detail` page to increase color contrast. Refs UIREQ-438. 
 * Fix export to CSV. Fixes UIREQ-453.
 * Restore the ability to view 'Block details' from "Patron blocked from requesting" modal. Fixes UIREQ-451.
