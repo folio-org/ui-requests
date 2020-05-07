@@ -294,7 +294,8 @@ class RequestForm extends React.Component {
     }
   }
 
-  // Executed when user is selected from the proxy dialog
+  // Executed when a user is selected from the proxy dialog,
+  // regardless of whether the selection is "self" or an actual proxy
   onSelectProxy(proxy) {
     const { selectedUser } = this.state;
 
@@ -305,6 +306,7 @@ class RequestForm extends React.Component {
       this.setState({ selectedUser, proxy });
       this.props.change('requesterId', proxy.id);
       this.props.change('proxyUserId', selectedUser.id);
+      this.findRequestPreferences(proxy.id);
     }
   }
 
@@ -365,7 +367,6 @@ class RequestForm extends React.Component {
     try {
       const { requestPreferences } = await findResource('requestPreferences', userId, 'userId');
       const preferences = requestPreferences[0];
-
       const requestPreference = {
         ...this.getDefaultRequestPreferences(),
         ...pick(preferences, ['defaultDeliveryAddressTypeId', 'defaultServicePointId']),
