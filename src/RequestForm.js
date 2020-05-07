@@ -65,6 +65,7 @@ import {
   getRequestTypeOptions,
   isDelivery,
   isDeclaredLostItem,
+  isWithdrawnItem,
 } from './utils';
 
 import css from './requests.css';
@@ -492,8 +493,8 @@ class RequestForm extends React.Component {
         // the slow loan and request lookups
         this.setState({ selectedItem: item });
 
-        if (isDeclaredLostItem(item)) {
-          this.showDeclaredLostModal();
+        if (isDeclaredLostItem(item) || isWithdrawnItem(item)) {
+          this.showErrorModal();
         }
 
         return item;
@@ -536,12 +537,12 @@ class RequestForm extends React.Component {
     this.props.onCancelRequest(cancellationInfo);
   }
 
-  hideDeclaredLostModal = () => {
-    this.setState({ showDeclaredLostError: false });
+  hideErrorModal = () => {
+    this.setState({ isErrorModalOpen: false });
   }
 
-  showDeclaredLostModal = () => {
-    this.setState({ showDeclaredLostError: true });
+  showErrorModal = () => {
+    this.setState({ isErrorModalOpen: true });
   }
 
   onCloseBlockedModal = () => {
@@ -621,8 +622,8 @@ class RequestForm extends React.Component {
 
     const { selectedItem } = this.state;
 
-    if (isDeclaredLostItem(selectedItem)) {
-      return this.showDeclaredLostModal();
+    if (isDeclaredLostItem(selectedItem) || isWithdrawnItem(selectedItem)) {
+      return this.showErrorModal();
     }
 
     const [block = {}] = this.getPatronBlocks(parentResources);
@@ -696,7 +697,7 @@ class RequestForm extends React.Component {
       isCancellingRequest,
       instanceId,
       requestPreferencesLoaded,
-      showDeclaredLostError,
+      isErrorModalOpen,
     } = this.state;
 
     const patronBlocks = this.getPatronBlocks(parentResources);
@@ -745,7 +746,8 @@ class RequestForm extends React.Component {
     const multiRequestTypesVisible = !isEditForm && selectedItem && requestTypeOptions.length > 1;
     const singleRequestTypeVisible = !isEditForm && selectedItem && requestTypeOptions.length === 1;
     const patronGroup = getPatronGroup(selectedUser, patronGroups);
-    const isDeclaredLost = isDeclaredLostItem(selectedItem);
+    const isLostOrWithdrawn = isDeclaredLostItem(selectedItem) || isWithdrawnItem(selectedItem);
+    const itemStatus = selectedItem?.status?.name;
 
     return (
       <Paneset isRoot>
@@ -859,7 +861,10 @@ class RequestForm extends React.Component {
                 <Row>
                   <Col xs={8}>
                     <Row>
-                      <Col xs={4}>
+                      <Col
+                        data-test-request-type
+                        xs={4}
+                      >
                         {!isEditForm && !selectedItem &&
                           <span data-test-request-type-message>
                             <KeyValue
@@ -901,7 +906,7 @@ class RequestForm extends React.Component {
                             label={<FormattedMessage id="ui-requests.requestType" />}
                             value={request.requestType}
                           /> }
-                        {isDeclaredLost &&
+                        {isLostOrWithdrawn &&
                           <KeyValue
                             label={<FormattedMessage id="ui-requests.requestType" />}
                             value={<FormattedMessage id="ui-requests.noRequestTypesAvailable" />}
@@ -1046,19 +1051,19 @@ class RequestForm extends React.Component {
               viewUserPath={() => this.onViewUserPath(selectedUser, patronGroup)}
               patronBlocks={patronBlocks || []}
             />
-            {showDeclaredLostError &&
+            {isErrorModalOpen &&
               <ErrorModal
-                id="declared-lost-modal"
-                data-test-declared-lost-modal
-                onClose={this.hideDeclaredLostModal}
-                label={<FormattedMessage id="ui-requests.declaredLost.title" />}
+                id={`${itemStatus}-modal`}
+                onClose={this.hideErrorModal}
+                label={<FormattedMessage id="ui-requests.errorModal.title" />}
                 errorMessage={
                   <SafeHTMLMessage
-                    id="ui-requests.declaredLost.message"
+                    id="ui-requests.errorModal.message"
                     values={{
                       title: selectedItem.title,
                       barcode: selectedItem.barcode,
                       materialType: get(selectedItem, 'materialType.name', ''),
+                      itemStatus,
                     }}
                   />
                 }

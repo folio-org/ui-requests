@@ -178,6 +178,6 @@
   "filters.requestStatus.notYetFilled": "Open - Not yet filled",
 
   "noRequestTypesAvailable": "No request types available for selected item",
-  "declaredLost.title": "Item cannot be requested",
-  "declaredLost.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>Declared lost</strong> and cannot be requested."
+  "errorModal.title": "Item cannot be requested",
+  "errorModal.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>{itemStatus}</strong> and cannot be requested."
 }
