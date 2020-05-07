@@ -8,7 +8,6 @@ import {
   FormattedMessage,
   FormattedDate,
   injectIntl,
-  intlShape,
 } from 'react-intl';
 
 import moment from 'moment-timezone';
@@ -109,7 +108,7 @@ class RequestForm extends React.Component {
     history: PropTypes.shape({
       push: PropTypes.func,
     }),
-    intl: intlShape,
+    intl: PropTypes.object,
     onChangePatron: PropTypes.func,
     query: PropTypes.object,
     onSubmit: PropTypes.func,

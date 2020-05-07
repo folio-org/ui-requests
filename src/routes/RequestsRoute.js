@@ -10,7 +10,6 @@ import {
   FormattedTime,
   FormattedMessage,
   injectIntl,
-  intlShape,
 } from 'react-intl';
 import { SubmissionError } from 'redux-form';
 import {
@@ -189,7 +188,7 @@ class RequestsRoute extends React.Component {
   };
 
   static propTypes = {
-    intl: intlShape,
+    intl: PropTypes.object,
     mutator: PropTypes.shape({
       records: PropTypes.shape({
         GET: PropTypes.func,
