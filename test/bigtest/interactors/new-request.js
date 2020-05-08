@@ -7,12 +7,13 @@ import {
   fillable,
   triggerable,
   selectable,
+  scoped,
 } from '@bigtest/interactor';
 
 import { getSelectValues } from './helpers';
 import HeaderDropdown from './header-dropdown';
 import InputField from './input-field';
-
+import KeyValue from './KeyValue';
 
 @interactor class NewRequest {
   pressEnter = triggerable('keydown', {
@@ -58,6 +59,8 @@ import InputField from './input-field';
 
   itemErrorIsPresent = isPresent('#section-item-info [class*=feedbackError---]');
   requesterErrorIsPresent = isPresent('#section-requester-info [class*=feedbackError---]');
+
+  requestType = scoped('[data-test-request-type] div', KeyValue);
 
   whenReady() {
     return this.when(() => this.itemBarcodeIsPresent);

@@ -16,6 +16,13 @@ import NewRequest from '../interactors/new-request';
 import RequestsInteractor from '../interactors/requests-interactor';
 import ViewRequest from '../interactors/view-request';
 
+import translations from '../../../translations/ui-requests/en';
+
+const itemStatuses = [
+  'Declared lost',
+  'Withdrawn',
+];
+
 describe('New Request page', () => {
   setupApplication({
     modules: [{
@@ -383,47 +390,54 @@ describe('New Request page', () => {
       });
     });
 
-    describe('New request for declared lost item', function () {
-      beforeEach(async function () {
-        const item = this.server.create('item', {
-          status: { name: 'Declared lost' },
-        });
-
-        await newRequest.itemField.fillAndBlur(item.barcode);
-        await errorModalInteractor.whenModalIsPresent();
-      });
-
-      it('shows declare lost error dialog', () => {
-        expect(errorModalInteractor.modalIsPresent).to.equal(true);
-      });
-
-      describe('Close declare lost error dialog', () => {
+    itemStatuses.forEach(status => {
+      describe(`New request for ${status} item`, function () {
         beforeEach(async function () {
-          await errorModalInteractor.whenModalIsPresent();
-          await errorModalInteractor.clickCloseBtn();
-        });
+          const item = this.server.create('item', {
+            status: { name: status },
+          });
 
-        it('closes lost error dialog', () => {
-          expect(errorModalInteractor.modalIsPresent).to.equal(false);
-        });
-      });
-
-      describe('Show declare lost error dialog on submit', () => {
-        beforeEach(async function () {
-          const user = this.server.create('user');
-
-          await errorModalInteractor.whenModalIsPresent();
-          await errorModalInteractor.clickCloseBtn();
-          await newRequest.userField.fillAndBlur(user.barcode);
-          await newRequest.clickNewRequest();
+          await newRequest.itemField.fillAndBlur(item.barcode);
           await errorModalInteractor.whenModalIsPresent();
         });
 
-        it('shows declare lost error dialog', () => {
+        it(`should show ${status} error dialog`, () => {
           expect(errorModalInteractor.modalIsPresent).to.equal(true);
+        });
+
+        describe(`closing ${status} error dialog`, () => {
+          beforeEach(async function () {
+            await errorModalInteractor.whenModalIsPresent();
+            await errorModalInteractor.clickCloseBtn();
+          });
+
+          it(`should close ${status} error dialog`, () => {
+            expect(errorModalInteractor.modalIsPresent).to.equal(false);
+          });
+
+          it('should display a message in request type field', () => {
+            expect(newRequest.requestType.value.text).to.equal(translations.noRequestTypesAvailable);
+          });
+        });
+
+        describe(`submitting New request for ${status} item form`, () => {
+          beforeEach(async function () {
+            const user = this.server.create('user');
+
+            await errorModalInteractor.whenModalIsPresent();
+            await errorModalInteractor.clickCloseBtn();
+            await newRequest.userField.fillAndBlur(user.barcode);
+            await newRequest.clickNewRequest();
+            await errorModalInteractor.whenModalIsPresent();
+          });
+
+          it(`should show ${status} error dialog`, () => {
+            expect(errorModalInteractor.modalIsPresent).to.equal(true);
+          });
         });
       });
     });
+
 
     describe('New request with prefilled user barcode and item barcode', function () {
       beforeEach(async function () {
