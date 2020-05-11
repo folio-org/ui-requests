@@ -21,6 +21,7 @@ import translations from '../../../translations/ui-requests/en';
 const itemStatuses = [
   'Declared lost',
   'Withdrawn',
+  'Claimed returned',
 ];
 
 describe('New Request page', () => {

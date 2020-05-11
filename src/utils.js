@@ -133,6 +133,11 @@ export function isWithdrawnItem(item) {
   return get(item, 'status.name') === itemStatuses.WITHDRAWN;
 }
 
+export function isClaimedReturned(item) {
+  return get(item, 'status.name') === itemStatuses.CLAIMED_RETURNED;
+}
+
+
 export function isDelivery(request) {
   return get(request, 'fulfilmentPreference') === fulfilmentTypeMap.DELIVERY;
 }
