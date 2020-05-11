@@ -66,6 +66,7 @@ import {
   isDelivery,
   isDeclaredLostItem,
   isWithdrawnItem,
+  isClaimedReturned,
 } from './utils';
 
 import css from './requests.css';
@@ -493,7 +494,7 @@ class RequestForm extends React.Component {
         // the slow loan and request lookups
         this.setState({ selectedItem: item });
 
-        if (isDeclaredLostItem(item) || isWithdrawnItem(item)) {
+        if (this.shouldShowRequestTypeError(item)) {
           this.showErrorModal();
         }
 
@@ -604,6 +605,12 @@ class RequestForm extends React.Component {
     return pristine || submitting;
   }
 
+  shouldShowRequestTypeError = (item) => {
+    return isDeclaredLostItem(item) ||
+      isWithdrawnItem(item) ||
+      isClaimedReturned(item);
+  }
+
   onSave = (data) => {
     const {
       intl: {
@@ -622,7 +629,7 @@ class RequestForm extends React.Component {
 
     const { selectedItem } = this.state;
 
-    if (isDeclaredLostItem(selectedItem) || isWithdrawnItem(selectedItem)) {
+    if (this.shouldShowRequestTypeError(selectedItem)) {
       return this.showErrorModal();
     }
 
@@ -746,7 +753,7 @@ class RequestForm extends React.Component {
     const multiRequestTypesVisible = !isEditForm && selectedItem && requestTypeOptions.length > 1;
     const singleRequestTypeVisible = !isEditForm && selectedItem && requestTypeOptions.length === 1;
     const patronGroup = getPatronGroup(selectedUser, patronGroups);
-    const isLostOrWithdrawn = isDeclaredLostItem(selectedItem) || isWithdrawnItem(selectedItem);
+    const requestTypeError = this.shouldShowRequestTypeError(selectedItem);
     const itemStatus = selectedItem?.status?.name;
 
     return (
@@ -906,7 +913,7 @@ class RequestForm extends React.Component {
                             label={<FormattedMessage id="ui-requests.requestType" />}
                             value={request.requestType}
                           /> }
-                        {isLostOrWithdrawn &&
+                        {requestTypeError &&
                           <KeyValue
                             label={<FormattedMessage id="ui-requests.requestType" />}
                             value={<FormattedMessage id="ui-requests.noRequestTypesAvailable" />}
