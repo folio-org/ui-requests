@@ -33,6 +33,8 @@ export const requestStatuses = {
 export const itemStatuses = {
   PAGED: 'Paged',
   DECLARED_LOST: 'Declared lost',
+  WITHDRAWN: 'Withdrawn',
+  CLAIMED_RETURNED: 'Claimed returned',
 };
 
 export const requestTypesMap = {

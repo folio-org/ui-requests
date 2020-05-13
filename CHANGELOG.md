@@ -14,6 +14,8 @@
 * Fix export to CSV. Fixes UIREQ-453.
 * Restore the ability to view 'Block details' from "Patron blocked from requesting" modal. Fixes UIREQ-451.
 * Purge `intlShape` in prep for `react-intl` `v4` migration. Refs STRIPES-672.
+* Prevent requests on for items with the status Withdrawn. Refs UIREQ-390.
+* Prevent requests on for items with the status Claimed returned. Refs UIREQ-391.
 
 ## [2.0.1](https://github.com/folio-org/ui-requests/tree/v2.0.1) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v2.0.0...v2.0.1)

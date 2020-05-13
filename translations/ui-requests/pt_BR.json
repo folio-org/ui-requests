@@ -185,5 +185,7 @@
     "item.callNumberComponents.prefix": "Prefixo efetivo do número de chamada",
     "item.callNumberComponents.callNumber": "Número de chamada efetivo",
     "item.callNumberComponents.suffix": "Sufixo efetivo do número de chamada",
-    "item.chronology": "Cronologia"
+    "item.chronology": "Cronologia",
+    "errorModal.title": "O item não pode ser solicitado",
+    "errorModal.message": "{title} ({materialType}) (Código de barras: {barcode}) tem o status do item <strong>{itemStatus}</strong> e não pode ser requisitado."
 }
