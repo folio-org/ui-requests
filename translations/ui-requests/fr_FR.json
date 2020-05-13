@@ -185,5 +185,7 @@
     "item.callNumberComponents.prefix": "Préfixe de la cote",
     "item.callNumberComponents.callNumber": "Chaîne de caractères de la cote",
     "item.callNumberComponents.suffix": "Suffixe de la cote",
-    "item.chronology": "Chronologie"
+    "item.chronology": "Chronologie",
+    "errorModal.title": "L'article ne peut pas être demandé",
+    "errorModal.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>{itemStatus}</strong> and cannot be requested."
 }

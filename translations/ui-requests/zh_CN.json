@@ -185,5 +185,7 @@
     "item.callNumberComponents.prefix": "有效的索书号前缀",
     "item.callNumberComponents.callNumber": "有效的索书号",
     "item.callNumberComponents.suffix": "有效的索书号后缀",
-    "item.chronology": "年表"
+    "item.chronology": "年表",
+    "errorModal.title": "Item cannot be requested",
+    "errorModal.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>{itemStatus}</strong> and cannot be requested."
 }
