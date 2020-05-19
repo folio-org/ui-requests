@@ -186,6 +186,6 @@
     "item.callNumberComponents.callNumber": "Effective call number",
     "item.callNumberComponents.suffix": "Effective call number suffix",
     "item.chronology": "Chronology",
-    "errorModal.title": "Item cannot be requested",
+    "errorModal.title": "Запрос на выдачу издания не может быть выполнен",
     "errorModal.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>{itemStatus}</strong> and cannot be requested."
 }
