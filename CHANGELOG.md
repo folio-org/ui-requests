@@ -5,6 +5,7 @@
 * Upgrade to `stripes` `4.0`, `react-intl` `4.5`. Refs STRIPES-672.
 
 ## [2.1.0] (IN PROGRESS)
+* Fix bug that require user hit Enter in item field before save the request. Fixes UIREQ-326.
 * Paneheader Actions updates. Refs UIREQ-415.
 * Add ability to create a request with the requester without barcode. Fixes UIREQ-444.
 * Fix bug causing spurious form saves after proxy selection. Fixes UIREQ-449, UIREQ-454.

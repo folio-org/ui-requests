@@ -571,6 +571,14 @@ class RequestForm extends React.Component {
     return undefined;
   }
 
+  requireEnterItem = () => {
+    if (this.state.selectedItem === undefined) {
+      return <FormattedMessage id="ui-requests.errors.selectItemRequired" />;
+    }
+
+    return undefined;
+  }
+
   getProxy() {
     const { request } = this.props;
     const { proxy } = this.state;
@@ -831,6 +839,7 @@ class RequestForm extends React.Component {
                                   withRef
                                   ref={this.itemBarcodeRef}
                                   onKeyDown={e => this.onKeyDown(e, 'item')}
+                                  validate={this.requireEnterItem}
                                 />
                               )}
                             </FormattedMessage>
