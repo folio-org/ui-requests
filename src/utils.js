@@ -137,6 +137,9 @@ export function isClaimedReturned(item) {
   return get(item, 'status.name') === itemStatuses.CLAIMED_RETURNED;
 }
 
+export function isLostAndPaidItem(item) {
+  return get(item, 'status.name') === itemStatuses.LOST_AND_PAID;
+}
 
 export function isDelivery(request) {
   return get(request, 'fulfilmentPreference') === fulfilmentTypeMap.DELIVERY;
