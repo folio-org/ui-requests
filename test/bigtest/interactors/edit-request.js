@@ -20,6 +20,9 @@ import KeyValue from './KeyValue';
   isLayerPresent = isPresent('[class*=LayerRoot][role=dialog]');
   fulfillmentPreferenceFieldDisabled = is('[data-test-fulfillment-preference-filed]', ':disabled');
   requestsOnItem = scoped('[data-test-requests-on-item] div', KeyValue);
+  fillUserBarcode = fillable('[name="requester.barcode"]');
+  clickUserEnterBtn = clickable('#clickable-select-requester');
+  isPatronBlockModalPresent = isPresent('[data-test-patron-block-modal]');
 }
 
 export default EditRequests;

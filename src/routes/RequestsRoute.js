@@ -150,6 +150,11 @@ class RequestsRoute extends React.Component {
         path: 'manualblocks/%{activeRecord.blockId}',
       },
     },
+    automatedPatronBlocks: {
+      type: 'okapi',
+      records: 'automatedPatronBlocks',
+      path: 'automated-patron-blocks/%{activeRecord.patronId}',
+    },
     activeRecord: {},
     expiredHolds: {
       accumulate: 'true',

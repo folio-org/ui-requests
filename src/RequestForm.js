@@ -16,6 +16,7 @@ import {
   find,
   get,
   isEqual,
+  isEmpty,
   keyBy,
   cloneDeep,
   defer,
@@ -188,8 +189,10 @@ class RequestForm extends React.Component {
       query: prevQuery,
     } = prevProps;
 
-    const prevBlocks = this.getPatronBlocks(prevParentResources);
-    const blocks = this.getPatronBlocks(parentResources);
+    const prevBlocks = this.getPatronManualBlocks(prevParentResources);
+    const blocks = this.getPatronManualBlocks(parentResources);
+    const prevAutomatedPatronBlocks = this.getAutomatedPatronBlocks(prevParentResources);
+    const automatedPatronBlocks = this.getAutomatedPatronBlocks(parentResources);
 
     if (
       (initialValues &&
@@ -226,6 +229,11 @@ class RequestForm extends React.Component {
         // eslint-disable-next-line react/no-did-update-set-state
         this.setState({ blocked: true });
       }
+    }
+
+    if (!isEqual(prevAutomatedPatronBlocks, automatedPatronBlocks) && !isEmpty(automatedPatronBlocks)) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ blocked: true });
     }
   }
 
@@ -322,7 +330,8 @@ class RequestForm extends React.Component {
   }
 
   findUser(fieldName, value) {
-    const blocks = this.getPatronBlocks(this.props.parentResources);
+    const blocks = this.getPatronManualBlocks(this.props.parentResources);
+    const automatedPatronBlocks = this.getAutomatedPatronBlocks(this.props.parentResources);
     // Set the new value in the redux-form barcode field
 
     if (fieldName === 'barcode') {
@@ -334,7 +343,7 @@ class RequestForm extends React.Component {
     this.props.findResource('user', value, fieldName).then((result) => {
       if (result.totalRecords === 1) {
         const selectedUser = result.users[0];
-        if (blocks.length > 0 && blocks[0].userId === selectedUser.id) {
+        if ((blocks.length > 0 && blocks[0].userId === selectedUser.id) || !isEmpty(automatedPatronBlocks)) {
           this.setState({ blocked: true });
         }
         this.props.onChangePatron(selectedUser);
@@ -508,8 +517,9 @@ class RequestForm extends React.Component {
   onItemClick() {
     const { parentResources } = this.props;
 
-    const blocks = this.getPatronBlocks(parentResources);
-    if (blocks.length > 0 && this.state.selectedUser) {
+    const blocks = this.getPatronManualBlocks(parentResources);
+    const automatedPatronBlocks = this.getAutomatedPatronBlocks(this.props.parentResources);
+    if ((blocks.length > 0 && this.state.selectedUser) || !isEmpty(automatedPatronBlocks)) {
       this.setState({ blocked: true });
     }
 
@@ -585,10 +595,21 @@ class RequestForm extends React.Component {
     };
   }
 
-  getPatronBlocks = (resources) => {
+  getPatronManualBlocks = (resources) => {
     let patronBlocks = get(resources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
     patronBlocks = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
     return patronBlocks;
+  }
+
+  getAutomatedPatronBlocks = (resources) => {
+    const automatedPatronBlocks = resources?.automatedPatronBlocks?.records || [];
+    return automatedPatronBlocks.reduce((blocks, block) => {
+      if (block.blockRequests) {
+        blocks.push(block.message);
+      }
+
+      return blocks;
+    }, []);
   }
 
   isEditForm() {
@@ -635,9 +656,10 @@ class RequestForm extends React.Component {
       return this.showErrorModal();
     }
 
-    const [block = {}] = this.getPatronBlocks(parentResources);
+    const [block = {}] = this.getPatronManualBlocks(parentResources);
+    const automatedPatronBlocks = this.getAutomatedPatronBlocks(parentResources);
 
-    if (get(block, 'userId') === this.state.selectedUser.id) {
+    if ((get(block, 'userId') === this.state.selectedUser.id) || !isEmpty(automatedPatronBlocks)) {
       return this.setState({ blocked: true });
     }
 
@@ -709,7 +731,8 @@ class RequestForm extends React.Component {
       isErrorModalOpen,
     } = this.state;
 
-    const patronBlocks = this.getPatronBlocks(parentResources);
+    const patronBlocks = this.getPatronManualBlocks(parentResources);
+    const automatedPatronBlocks = this.getAutomatedPatronBlocks(parentResources);
     const {
       fulfilmentPreference
     } = request || {};
@@ -1059,6 +1082,7 @@ class RequestForm extends React.Component {
               onClose={this.onCloseBlockedModal}
               viewUserPath={() => this.onViewUserPath(selectedUser, patronGroup)}
               patronBlocks={patronBlocks || []}
+              automatedPatronBlocks={automatedPatronBlocks}
             />
             {isErrorModalOpen &&
               <ErrorModal

@@ -9,9 +9,8 @@ import {
   Row
 } from '@folio/stripes/components';
 
-const PatronBlockModal = ({ open, onClose, patronBlocks, viewUserPath }) => {
+const PatronBlockModal = ({ open, onClose, patronBlocks, automatedPatronBlocks, viewUserPath }) => {
   const blocks = take(orderBy(patronBlocks, ['metadata.updatedDate'], ['desc']), 3);
-  const openModal = open && blocks.length > 0;
   const renderBlocks = blocks.map(block => {
     return (
       <Row>
@@ -21,10 +20,20 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, viewUserPath }) => {
       </Row>
     );
   });
+  const renderAutomatedPatronBlocks = automatedPatronBlocks.map(block => {
+    return (
+      <Row key={block}>
+        <Col xs>
+          <b>{block}</b>
+        </Col>
+      </Row>
+    );
+  });
 
   return (
     <Modal
-      open={openModal}
+      data-test-patron-block-modal
+      open={open}
       dismissible
       onClose={onClose}
       label={
@@ -37,10 +46,11 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, viewUserPath }) => {
       <Row>
         <Col xs>
           <FormattedMessage id="ui-requests.blockedLabel" />
-          `:`
+          :
         </Col>
       </Row>
       {renderBlocks}
+      {renderAutomatedPatronBlocks}
       <br />
       <Row>
         <Col xs={8}>{(patronBlocks.length > 3) && <FormattedMessage id="ui-requests.additionalReasons" />}</Col>
@@ -61,6 +71,7 @@ PatronBlockModal.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   patronBlocks: PropTypes.arrayOf(PropTypes.object),
+  automatedPatronBlocks: PropTypes.arrayOf(PropTypes.string),
   viewUserPath: PropTypes.func,
 };
 

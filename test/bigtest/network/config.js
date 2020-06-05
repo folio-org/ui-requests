@@ -207,6 +207,11 @@ export default function config() {
     manualblocks: [],
     totalRecords: 0,
   });
+  this.get('/automated-patron-blocks/:id', {
+    automatedPatronBlocks: [],
+    totalRecords: 0,
+  });
+
   this.get('/perms/users/:id/permissions', {
     permissionNames: [],
   });
