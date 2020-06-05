@@ -67,6 +67,7 @@ import {
   isDeclaredLostItem,
   isWithdrawnItem,
   isClaimedReturned,
+  isLostAndPaidItem,
 } from './utils';
 
 import css from './requests.css';
@@ -608,7 +609,8 @@ class RequestForm extends React.Component {
   shouldShowRequestTypeError = (item) => {
     return isDeclaredLostItem(item) ||
       isWithdrawnItem(item) ||
-      isClaimedReturned(item);
+      isClaimedReturned(item) ||
+      isLostAndPaidItem(item);
   }
 
   onSave = (data) => {

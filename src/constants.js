@@ -35,6 +35,7 @@ export const itemStatuses = {
   DECLARED_LOST: 'Declared lost',
   WITHDRAWN: 'Withdrawn',
   CLAIMED_RETURNED: 'Claimed returned',
+  LOST_AND_PAID: 'Lost and paid',
 };
 
 export const requestTypesMap = {
