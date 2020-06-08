@@ -3,6 +3,7 @@
 ## [3.0.0] IN PROGRESS
 
 * Upgrade to `stripes` `4.0`, `react-intl` `4.5`. Refs STRIPES-672.
+* Fixed label in move hold modal to show item title.  Fixes UIREQ-304.
 
 ## [2.1.0] (IN PROGRESS)
 * Paneheader Actions updates. Refs UIREQ-415.
