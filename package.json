@@ -32,7 +32,8 @@
       "circulation": "9.0",
       "inventory": "10.0",
       "request-storage": "3.0",
-      "pick-slips": "0.1"
+      "pick-slips": "0.1",
+      "automated-patron-blocks": "0.1"
     },
     "permissionSets": [
       {
