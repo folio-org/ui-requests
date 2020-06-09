@@ -128,7 +128,7 @@
     "loanType": "Loan type",
     "actions.moveRequest": "Move request",
     "moveRequest.selectItem": "Select item",
-    "moveRequest.instanceItems": "Other items in instance",
+    "moveRequest.instanceItems": "Other items in {title}",
     "moveRequest.instanceItems.notFound": "No items found",
     "moveRequest.requestTypeChangeHeading": "Tipo de reservas actuales no permitidas para el ítem seleccionado",
     "moveRequest.requestTypeChangeMessage": "Request will be converted to <strong>{requestType}</strong>.",

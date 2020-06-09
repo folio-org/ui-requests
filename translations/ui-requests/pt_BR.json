@@ -128,7 +128,7 @@
     "loanType": "Tipo de empréstimo",
     "actions.moveRequest": "Pedido de mudança",
     "moveRequest.selectItem": "Selecionar item",
-    "moveRequest.instanceItems": "Outros itens na instância",
+    "moveRequest.instanceItems": "Outros itens em {title}",
     "moveRequest.instanceItems.notFound": "Nenhum item encontrado",
     "moveRequest.requestTypeChangeHeading": "Tipo de solicitações atuais não são permitidos para o item selecionado",
     "moveRequest.requestTypeChangeMessage": "A requisição será convertida em <strong>{requestType}</strong>.",

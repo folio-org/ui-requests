@@ -128,7 +128,7 @@
     "loanType": "Type de prêt",
     "actions.moveRequest": "Déplacer la demande",
     "moveRequest.selectItem": "Sélectionner l'article",
-    "moveRequest.instanceItems": "Autres éléments de l'instance",
+    "moveRequest.instanceItems": "Autres éléments dans {title}",
     "moveRequest.instanceItems.notFound": "Aucun élément trouvé",
     "moveRequest.requestTypeChangeHeading": "Le type de demande actuel n'est pas autorisé pour l'élément sélectionné",
     "moveRequest.requestTypeChangeMessage": "La demande sera convertie en <strong> {requestType} </strong> .",

@@ -128,7 +128,7 @@
     "loanType": "Loan type",
     "actions.moveRequest": "Move request",
     "moveRequest.selectItem": "Select item",
-    "moveRequest.instanceItems": "Other items in instance",
+    "moveRequest.instanceItems": "Other items in {title}",
     "moveRequest.instanceItems.notFound": "No items found",
     "moveRequest.requestTypeChangeHeading": "Current requests type not allowed for selected item",
     "moveRequest.requestTypeChangeMessage": "Request will be converted to <strong>{requestType}</strong>.",
