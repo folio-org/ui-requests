@@ -187,5 +187,11 @@
     "item.callNumberComponents.suffix": "Sufixo efetivo do número de chamada",
     "item.chronology": "Cronologia",
     "errorModal.title": "O item não pode ser solicitado",
-    "errorModal.message": "{title} ({materialType}) (Código de barras: {barcode}) tem o status do item <strong>{itemStatus}</strong> e não pode ser requisitado."
+    "errorModal.message": "{title} ({materialType}) (Código de barras: {barcode}) tem o status do item <strong>{itemStatus}</strong> e não pode ser requisitado.",
+    "permission.moveRequest": "Requisições: Mover para novo item, reordenar fila",
+    "permission.reorderQueue": "Requisições: Reordenar fila",
+    "permission.all": "Requisições: Todas as permissões",
+    "permission.view": "Requisições: Ver",
+    "permission.create": "Requisições: Ver, criar",
+    "permission.edit": "Requisições: Ver, editar, cancelar"
 }

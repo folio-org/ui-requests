@@ -128,7 +128,7 @@
     "loanType": "借阅类型",
     "actions.moveRequest": "移动请求",
     "moveRequest.selectItem": "选择单件",
-    "moveRequest.instanceItems": "实例中其他单件",
+    "moveRequest.instanceItems": "{title}中其他单件",
     "moveRequest.instanceItems.notFound": "未找到单件",
     "moveRequest.requestTypeChangeHeading": "所选单件不允许使用当前请求类型",
     "moveRequest.requestTypeChangeMessage": "请求将转换为<strong> {requestType} </strong> 。",
@@ -186,6 +186,12 @@
     "item.callNumberComponents.callNumber": "有效的索书号",
     "item.callNumberComponents.suffix": "有效的索书号后缀",
     "item.chronology": "年表",
-    "errorModal.title": "Item cannot be requested",
-    "errorModal.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>{itemStatus}</strong> and cannot be requested."
+    "errorModal.title": "单件无法请求",
+    "errorModal.message": "{title} （ {materialType} ）（条码： {barcode} ）的单件状态为<strong> {itemStatus} </strong> ，因此无法请求。",
+    "permission.moveRequest": "Requests: Move to new item, reorder queue",
+    "permission.reorderQueue": "Requests: Reorder queue",
+    "permission.all": "Requests: All permissions",
+    "permission.view": "Requests: View",
+    "permission.create": "Requests: View, create",
+    "permission.edit": "Requests: View, edit, cancel"
 }

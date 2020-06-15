@@ -187,5 +187,11 @@
     "item.callNumberComponents.suffix": "Effective call number suffix",
     "item.chronology": "Chronology",
     "errorModal.title": "Item cannot be requested",
-    "errorModal.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>{itemStatus}</strong> and cannot be requested."
+    "errorModal.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>{itemStatus}</strong> and cannot be requested.",
+    "permission.moveRequest": "Requests: Move to new item, reorder queue",
+    "permission.reorderQueue": "Requests: Reorder queue",
+    "permission.all": "Requests: All permissions",
+    "permission.view": "Requests: View",
+    "permission.create": "Requests: View, create",
+    "permission.edit": "Requests: View, edit, cancel"
 }
