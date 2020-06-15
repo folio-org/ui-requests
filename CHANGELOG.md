@@ -1,13 +1,8 @@
 # Change history for ui-requests
 
-## [3.0.0] IN PROGRESS
+## [3.0.0](https://github.com/folio-org/ui-requests/tree/v3.0.0) (2020-06-15)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v2.0.1...v3.0.0)
 
-* Upgrade to `stripes` `4.0`, `react-intl` `4.5`. Refs STRIPES-672.
-* Fixed label in move hold modal to show item title.  Fixes UIREQ-304.
-* Patron Blocks: Is there an automated patron block on requesting? Refs UIREQ-471.
-* Make permission names l10nable. Refs UIREQ-474.
-
-## [2.1.0] (IN PROGRESS)
 * Paneheader Actions updates. Refs UIREQ-415.
 * Add ability to create a request with the requester without barcode. Fixes UIREQ-444.
 * Fix bug causing spurious form saves after proxy selection. Fixes UIREQ-449, UIREQ-454.
@@ -20,6 +15,10 @@
 * Prevent requests on for items with the status Withdrawn. Refs UIREQ-390.
 * Prevent requests on for items with the status Claimed returned. Refs UIREQ-391.
 * Prevent requests for items with the status Lost and paid. Refs UIREQ-400.
+* Upgrade to `stripes` `4.0`, `react-intl` `4.5`. Refs STRIPES-672.
+* Fixed label in move hold modal to show item title.  Fixes UIREQ-304.
+* Patron Blocks: Is there an automated patron block on requesting? Refs UIREQ-471.
+* Make permission names l10nable. Refs UIREQ-474.
 
 ## [2.0.1](https://github.com/folio-org/ui-requests/tree/v2.0.1) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v2.0.0...v2.0.1)
