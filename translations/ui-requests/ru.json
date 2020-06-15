@@ -189,9 +189,9 @@
     "errorModal.title": "Экземпляр не может быть заказан",
     "errorModal.message": "{title} ({materialType}) (Штрих-код: {barcode}) имеет статус экземпляра <strong>{itemStatus}</strong> и не может быть заказан.",
     "permission.moveRequest": "Requests: Move to new item, reorder queue",
-    "permission.reorderQueue": "Requests: Reorder queue",
-    "permission.all": "Requests: All permissions",
-    "permission.view": "Requests: View",
-    "permission.create": "Requests: View, create",
-    "permission.edit": "Requests: View, edit, cancel"
+    "permission.reorderQueue": "Заказы: Изменять очередь",
+    "permission.all": "Заказы: Все разрешения",
+    "permission.view": "Заказы: Просматривать",
+    "permission.create": "Заказы: Просматривать, создавать",
+    "permission.edit": "Заказы: Просматривать, редактировать, отменять"
 }
