@@ -1,5 +1,9 @@
 # Change history for ui-requests
 
+## [3.1.0](IN PROGRESS)
+
+* Add staff notes accordion to request details page. Refs UIREQ-457.
+
 ## [3.0.0](https://github.com/folio-org/ui-requests/tree/v3.0.0) (2020-06-15)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v2.0.1...v3.0.0)
 
