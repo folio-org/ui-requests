@@ -1,5 +1,9 @@
 # Change history for ui-requests
 
+## 3.0.1 (IN PROGRESS)
+
+* Increment `@folio/plugin-find-user` to `v3.0` for `@folio/stripes` `v4` compatibility.
+
 ## [3.0.0](https://github.com/folio-org/ui-requests/tree/v3.0.0) (2020-06-15)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v2.0.1...v3.0.0)
 
