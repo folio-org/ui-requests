@@ -32,7 +32,11 @@ import {
   PaneMenu,
   Row
 } from '@folio/stripes/components';
-import { ViewMetaData, withTags } from '@folio/stripes/smart-components';
+import {
+  ViewMetaData,
+  withTags,
+  NotesSmartAccordion,
+} from '@folio/stripes/smart-components';
 import { IfPermission } from '@folio/stripes-core';
 
 import CancelRequestDialog from './CancelRequestDialog';
@@ -557,6 +561,16 @@ class ViewRequest extends React.Component {
               pickupServicePoint={getPickupServicePointName}
             />
           </Accordion>
+          <NotesSmartAccordion
+            domainName="requests"
+            entityId={request.id}
+            entityName={request.item.title}
+            entityType="request"
+            id="staff-notes"
+            label={<FormattedMessage id="ui-requests.notes.staffNotes" />}
+            pathToNoteCreate="/requests/notes/new"
+            pathToNoteDetails="/requests/notes"
+          />
         </AccordionSet>
 
         <this.connectedCancelRequestDialog

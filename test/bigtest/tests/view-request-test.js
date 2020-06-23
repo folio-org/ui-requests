@@ -86,6 +86,20 @@ describe('View request page', () => {
         expect(viewRequest.itemAccordion.isExpanded).to.be.false;
       });
     });
+
+    it('should display staff notes accordion', () => {
+      expect(viewRequest.staffNotesAccordion.isPresent).to.be.true;
+    });
+
+    describe('when click new button in staff notes accordion', () => {
+      beforeEach(async () => {
+        await viewRequest.staffNotesAccordion.clickNewButton();
+      });
+
+      it('should display new staff notes page', function () {
+        expect(this.location.pathname).to.equal('/requests/notes/new');
+      });
+    });
   });
 
   describe.skip('View delivery request', () => {
