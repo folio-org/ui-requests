@@ -376,18 +376,87 @@ export default function config() {
     }
   });
 
-  this.get('/note-types', {
-    noteTypes: [{
-      id: '810ae935-85d5-4d8c-b826-9b181e709648',
-      name: 'General note',
-      usage: {
-        noteTotal: 3
-      },
-      metadata: {
-        createdDate: '2020-06-23T03:40:22.156+0000',
-        updatedDate: '2020-06-23T03:40:22.156+0000'
+  this.get('/note-types');
+
+  this.get('/note-links/domain/requests/type/:type/id/:id', ({ notes }, { params, queryParams }) => {
+    if (queryParams.status === 'all') {
+      return notes.all();
+    }
+
+    return notes.where((note) => {
+      let matches = false;
+
+      for (let i = 0; i < note.links.length; i++) {
+        if (note.links[i].type === params.type && note.links[i].id === params.id) {
+          matches = true;
+          if (queryParams.status === 'assigned') {
+            return true;
+          }
+        }
       }
-    }],
-    totalRecords: 1
+      if (!matches && queryParams.status === 'unassigned') {
+        return true;
+      }
+
+      return false;
+    });
+  });
+
+  this.put('/note-links/type/:type/id/:id', ({ notes }, { params, requestBody }) => {
+    const body = JSON.parse(requestBody);
+
+    body.notes.forEach((note) => {
+      const dbNote = notes.find(note.id);
+      const links = [...dbNote.links];
+
+      if (note.status === 'ASSIGNED') {
+        links.push({
+          id: params.id,
+          type: params.type,
+        });
+      } else {
+        for (let i = 0; i < links.length; i++) {
+          if (links[i].type === params.type && links[i].id === params.id) {
+            links.splice(i, 1);
+            break;
+          }
+        }
+      }
+
+      dbNote.update({ links });
+    });
+  });
+
+  this.get('/notes/:id', ({ notes }, { params }) => {
+    return notes.find(params.id);
+  });
+
+  this.post('/notes', (_, { requestBody }) => {
+    const noteData = JSON.parse(requestBody);
+
+    return this.create('note', noteData);
+  });
+
+  this.put('/notes/:id', ({ notes, noteTypes }, { params, requestBody }) => {
+    const noteData = JSON.parse(requestBody);
+    const noteTypeName = noteTypes.find(noteData.typeId).attrs.name;
+
+    return notes.find(params.id).update({
+      ...noteData,
+      type: noteTypeName,
+    });
+  });
+
+  this.delete('/notes/:id', ({ notes, noteTypes }, { params }) => {
+    const note = notes.find(params.id);
+    const noteType = noteTypes.find(note.attrs.typeId);
+
+    noteType.update({
+      usage: {
+        noteTotal: --noteType.attrs.usage.noteTotal,
+      },
+    });
+
+    return notes.find(params.id).destroy();
   });
 }

@@ -19,37 +19,10 @@ describe('View request page', () => {
   const newRequest = new NewRequestInteractor();
 
   describe('View default request', () => {
+    let request;
+
     beforeEach(async function () {
-      const request = this.server.create('request', { requestCount: requestsOnItemValue });
-      const note = {
-        id: 'test-note-id',
-        typeId: '810ae935-85d5-4d8c-b826-9b181e709648',
-        domain: 'requests',
-        title: 'Test request note',
-        creator: {
-          lastName: 'ADMINISTRATOR',
-          firstName: 'DIKU',
-        },
-        metadata: {
-          createdDate: '2020-06-23T07:47:33.688+0000',
-          createdByUserId: 'f2742b3a-b94f-53ab-877f-0444407546f2',
-          createdByUsername: 'diku_admin',
-          updatedDate: '2020-06-23T07:47:33.688+0000',
-          updatedByUserId: 'f2742b3a-b94f-53ab-877f-0444407546f2',
-        },
-        links: [{
-          id: 'test-note-link-id',
-          type: 'request',
-        }],
-      };
-
-      this.server.get('/note-links/domain/requests/type/:type/id/:id', {
-        notes: [note],
-        totalRecords: 1,
-      });
-
-      this.server.get('/notes/:id', note);
-
+      request = this.server.create('request', { requestCount: requestsOnItemValue });
       this.visit(`/requests/view/${request.id}`);
     });
 
@@ -130,14 +103,22 @@ describe('View request page', () => {
       });
     });
 
-    describe.only('when clicking on an assigned note', () => {
-      beforeEach(async () => {
+    describe('when clicking on an assigned note', () => {
+      beforeEach(async function () {
+        this.server.create('note', {
+          id: 'test-note-id',
+        });
+        this.server.get('/note-links/domain/requests/type/:type/id/:id', ({ notes }) => {
+          return notes.where(note => note.id === 'test-note-id');
+        });
+
+        this.visit(`/requests/view/${request.id}`);
         await viewRequest.whenNotesLoaded();
         await viewRequest.staffNotesAccordion.notes(0).click();
       });
 
       it('should redirect to note view page', function () {
-        expect(this.location.pathname).to.equal(this.location.pathname);
+        expect(this.location.pathname).to.equal('/requests/notes/test-note-id');
       });
     });
   });

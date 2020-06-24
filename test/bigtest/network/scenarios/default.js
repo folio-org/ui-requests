@@ -80,4 +80,7 @@ export default function defaultScenario(server) {
     ],
     'totalRecords': 1
   });
+
+  server.createList('note-type', 10);
+  server.createList('note', 40);
 }
