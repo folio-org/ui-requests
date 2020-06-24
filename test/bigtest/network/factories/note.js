@@ -8,7 +8,7 @@ export default Factory.extend({
   title: () => faker.commerce.productName(),
   type: null,
   typeId: null,
-  domain: 'users',
+  domain: 'requests',
   content: faker.lorem.paragraph(),
   creator: {
     lastName: faker.name.lastName(),
@@ -59,7 +59,7 @@ export default Factory.extend({
       });
     }
     if (!note.links.length) {
-      const records = server.schema.users.all();
+      const records = server.schema.requests.all();
       const randomRecordIndex = faker.random.number({
         min: 0,
         max: records.length - 1
@@ -68,7 +68,7 @@ export default Factory.extend({
       note.update({
         links: [{
           id: records.models[randomRecordIndex].attrs.id,
-          type: 'user'
+          type: 'request'
         }]
       });
     }

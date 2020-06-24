@@ -103,7 +103,7 @@ describe('View request page', () => {
       });
     });
 
-    describe('when clicking on an assigned note', () => {
+    describe('when there are Notes assigned to a request', () => {
       beforeEach(async function () {
         this.server.create('note', {
           id: 'test-note-id',
@@ -113,15 +113,31 @@ describe('View request page', () => {
         });
 
         this.visit(`/requests/view/${request.id}`);
-        await viewRequest.whenNotesLoaded();
-        await viewRequest.staffNotesAccordion.notes(0).click();
       });
 
-      it('should redirect to note view page', function () {
-        expect(this.location.pathname).to.equal('/requests/notes/test-note-id');
+      describe('when clicking on an assigned note', () => {
+        beforeEach(async () => {
+          await viewRequest.staffNotesAccordion.whenNotesLoaded();
+          await viewRequest.staffNotesAccordion.notes(0).click();
+        });
+
+        it('should redirect to note view page', function () {
+          expect(this.location.pathname).to.equal('/requests/notes/test-note-id');
+        });
+
+        describe('when clicking on X button', () => {
+          beforeEach(async () => {
+            await viewRequest.staffNotesAccordion.clickCloseButton();
+          });
+
+          it('should redirect to request view page', function () {
+            expect(this.location.pathname).to.equal(`/requests/view/${request.id}`);
+          });
+        });
       });
     });
   });
+
 
   describe.skip('View delivery request', () => {
     let requester;
