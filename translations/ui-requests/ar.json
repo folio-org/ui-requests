@@ -195,5 +195,7 @@
     "permission.create": "الطلبات: اعرض، أنشئ",
     "permission.edit": "الطلبات: اعرض، حرّر، الغ",
     "notes.StaffNotes": "ملاحظات الموظفين",
-    "notes.newStaffNote": "ملاحظة موظف جديدة"
+    "notes.newStaffNote": "ملاحظة موظف جديدة",
+    "notes.staffNotes": "ملاحظات الموظفين",
+    "notes.entityType.request": "طلب"
 }
