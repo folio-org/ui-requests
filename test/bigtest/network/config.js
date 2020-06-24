@@ -240,7 +240,7 @@ export default function config() {
   this.get('circulation/pick-slips/servicepointId1', {
     pickSlips: [
       {
-        item : {
+        item: {
           title: 'The Long Way to a Small, Angry Planet',
           barcode: '036000291452',
           status: 'Paged',
@@ -264,14 +264,14 @@ export default function config() {
           callNumberSuffix: 'SUFFIX',
           lastCheckedInDateTime: '2020-02-17T12:12:33.374Z',
         },
-        request : {
+        request: {
           requestID: 'dd606ca6-a2cb-4723-9a8d-e73b05c42232',
           servicePointPickup: 'Circ Desk 1',
           requestExpirationDate: '2019-07-30T00:00:00.000+03:00',
           holdShelfExpirationDate: '2019-08-31T00:00:00.000+03:00',
           deliveryAddressType: 'Home',
         },
-        requester : {
+        requester: {
           firstName: 'Steven',
           lastName: 'Jones',
           middleName: 'Jacob',
@@ -374,5 +374,20 @@ export default function config() {
     } else {
       return holdings.all();
     }
+  });
+
+  this.get('/note-types', {
+    noteTypes: [{
+      id: '810ae935-85d5-4d8c-b826-9b181e709648',
+      name: 'General note',
+      usage: {
+        noteTotal: 3
+      },
+      metadata: {
+        createdDate: '2020-06-23T03:40:22.156+0000',
+        updatedDate: '2020-06-23T03:40:22.156+0000'
+      }
+    }],
+    totalRecords: 1
   });
 }

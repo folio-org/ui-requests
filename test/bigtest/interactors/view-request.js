@@ -35,6 +35,10 @@ import { contains } from './helpers';
   staffNotesAccordion = new NotesAccordion('#staff-notes');
 
   itemAccordionClick = clickable('#accordion-toggle-button-item-info');
+
+  whenNotesLoaded() {
+    return this.when(() => this.staffNotesAccordion && this.staffNotesAccordion.notes().length > 0);
+  }
 }
 
 export default ViewRequestInteractor;
