@@ -98,7 +98,7 @@ describe('View request page', () => {
         await viewRequest.staffNotesAccordion.clickNewButton();
       });
 
-      it('should displayed new staff notes page', function () {
+      it('should display new staff notes page', function () {
         expect(this.location.pathname).to.equal('/requests/notes/new');
       });
     });

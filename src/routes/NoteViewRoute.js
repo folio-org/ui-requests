@@ -5,9 +5,7 @@ import { Redirect } from 'react-router';
 import { NoteViewPage } from '@folio/stripes/smart-components';
 
 import { formatNoteReferrerEntityData } from '../utils';
-import {
-  APP_ICON_NAME,
-} from '../constants';
+import { APP_ICON_NAME } from '../constants';
 
 const NoteViewRoute = ({
   location,
