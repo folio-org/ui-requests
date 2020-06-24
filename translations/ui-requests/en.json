@@ -114,8 +114,9 @@
   "requester.patronGroup.group": "Requester patron group",
   "tags.tagList": "Tags",
 
-  "notes.StaffNotes": "Staff notes",
+  "notes.staffNotes": "Staff notes",
   "notes.newStaffNote": "New staff note",
+  "notes.entityType.request": "Request",
 
   "cancel.cancelRequest": "Cancel request",
   "cancel.modalLabel": "Confirm request cancellation",
