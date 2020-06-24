@@ -195,5 +195,7 @@
     "permission.create": "Requests: View, create",
     "permission.edit": "Requests: View, edit, cancel",
     "notes.StaffNotes": "Notes du personnel",
-    "notes.newStaffNote": "Nouvelle note du personnel"
+    "notes.newStaffNote": "Nouvelle note du personnel",
+    "notes.staffNotes": "Staff notes",
+    "notes.entityType.request": "Request"
 }
