@@ -100,6 +100,16 @@ describe('View request page', () => {
         expect(this.location.pathname).to.equal('/requests/notes/new');
       });
     });
+
+    describe('when click assign / unassign button', () => {
+      beforeEach(async () => {
+        await viewRequest.staffNotesAccordion.clickAssignButton();
+      });
+
+      it('should open popup "Assign / Unassign note"', () => {
+        expect(viewRequest.notesModal.isDisplayed).to.be.true;
+      });
+    });
   });
 
   describe.skip('View delivery request', () => {
