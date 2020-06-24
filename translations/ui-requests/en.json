@@ -114,7 +114,7 @@
   "requester.patronGroup.group": "Requester patron group",
   "tags.tagList": "Tags",
 
-  "notes.StaffNotes": "Staff notes",
+  "notes.staffNotes": "Staff notes",
   "notes.newStaffNote": "New staff note",
   "notes.entityType.request": "Request",
   "notes.entityType.request.pluralized": "{count} {count, plural, one {request} other {requests}}",

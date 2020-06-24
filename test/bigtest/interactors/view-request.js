@@ -7,7 +7,10 @@ import {
 import { isEmpty } from 'lodash';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { NotesAccordion } from '@folio/stripes-smart-components/lib/Notes/NotesSmartAccordion/tests/interactors';
+import {
+  NotesAccordion,
+  NotesModal,
+} from '@folio/stripes-smart-components/lib/Notes/NotesSmartAccordion/tests/interactors';
 
 import CancelRequestDialog from './cancel-request-dialog';
 import MoveRequestDialog from './move-request-dialog';
@@ -34,6 +37,7 @@ import { contains } from './helpers';
   requestInfoContains = contains('#request-info');
   requestsOnItem = scoped('[data-test-requests-on-item] div', KeyValue);
   staffNotesAccordion = new NotesAccordion('#staff-notes');
+  notesModal = new NotesModal();
 
   itemAccordionClick = clickable('#accordion-toggle-button-item-info');
 
