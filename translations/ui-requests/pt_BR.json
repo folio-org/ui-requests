@@ -193,5 +193,7 @@
     "permission.all": "Requisições: Todas as permissões",
     "permission.view": "Requisições: Ver",
     "permission.create": "Requisições: Ver, criar",
-    "permission.edit": "Requisições: Ver, editar, cancelar"
+    "permission.edit": "Requisições: Ver, editar, cancelar",
+    "notes.StaffNotes": "Notas da equipe",
+    "notes.newStaffNote": "Nova Nota da equipe"
 }
