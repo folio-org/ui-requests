@@ -14,13 +14,20 @@ const NoteViewRoute = ({
 }) => {
   const { noteId } = match.params;
 
+  const onEdit = () => {
+    history.replace({
+      pathname: `/requests/notes/${noteId}/edit/`,
+      state: location.state,
+    });
+  };
+
   return location.state
     ? (
       <NoteViewPage
         entityTypeTranslationKeys={{ request: 'ui-requests.notes.entityType.request' }}
         entityTypePluralizedTranslationKeys={{ request: 'ui-requests.notes.entityType.request.pluralized' }}
         navigateBack={history.goBack}
-        onEdit={() => {}}
+        onEdit={onEdit}
         paneHeaderAppIcon={APP_ICON_NAME}
         referredEntityData={formatNoteReferrerEntityData(location.state)}
         noteId={noteId}
@@ -30,9 +37,9 @@ const NoteViewRoute = ({
 };
 
 NoteViewRoute.propTypes = {
-  history: ReactRouterPropTypes.history,
-  location: ReactRouterPropTypes.location,
-  match: ReactRouterPropTypes.match,
+  history: ReactRouterPropTypes.history.isRequired,
+  location: ReactRouterPropTypes.location.isRequired,
+  match: ReactRouterPropTypes.match.isRequired,
 };
 
 export default NoteViewRoute;

@@ -4,6 +4,7 @@ import {
   isPresent,
   scoped,
 } from '@bigtest/interactor';
+import { isEmpty } from 'lodash';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { NotesAccordion } from '@folio/stripes-smart-components/lib/Notes/NotesSmartAccordion/tests/interactors';
@@ -37,7 +38,7 @@ import { contains } from './helpers';
   itemAccordionClick = clickable('#accordion-toggle-button-item-info');
 
   whenNotesLoaded() {
-    return this.when(() => this.staffNotesAccordion && this.staffNotesAccordion.notes().length > 0);
+    return this.when(() => this.staffNotesAccordion && !isEmpty(this.staffNotesAccordion.notes()));
   }
 }
 
