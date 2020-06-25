@@ -112,7 +112,7 @@ export function duplicateRequest(request) {
 }
 
 export function getRequestTypeOptions(item) {
-  const itemStatus = get(item, 'status.name');
+  const itemStatus = item?.status?.name;
   const requestTypes = requestTypesByItemStatus[itemStatus] || [];
 
   return requestTypes.map(type => ({
@@ -122,24 +122,27 @@ export function getRequestTypeOptions(item) {
 }
 
 export function isPagedItem(item) {
-  return (get(item, 'status.name') === itemStatuses.PAGED);
+  return item?.status?.name === itemStatuses.PAGED;
 }
 
 export function isDeclaredLostItem(item) {
-  return get(item, 'status.name') === itemStatuses.DECLARED_LOST;
+  return item?.status?.name === itemStatuses.DECLARED_LOST;
 }
 
 export function isWithdrawnItem(item) {
-  return get(item, 'status.name') === itemStatuses.WITHDRAWN;
+  return item?.status?.name === itemStatuses.WITHDRAWN;
 }
 
 export function isClaimedReturned(item) {
-  return get(item, 'status.name') === itemStatuses.CLAIMED_RETURNED;
+  return item?.status?.name === itemStatuses.CLAIMED_RETURNED;
 }
 
+export function isLostAndPaidItem(item) {
+  return item?.status?.name === itemStatuses.LOST_AND_PAID;
+}
 
 export function isDelivery(request) {
-  return get(request, 'fulfilmentPreference') === fulfilmentTypeMap.DELIVERY;
+  return request?.fulfilmentPreference === fulfilmentTypeMap.DELIVERY;
 }
 
 export function isNotYetFilled(request) {
@@ -234,4 +237,22 @@ export function buildUrl(location, values) {
   const params = pickBy(omit({ ...locationQuery, ...values }, '_path'), identity);
 
   return isEmpty(params) ? url : `${url}?${queryString.stringify(params)}`;
+}
+
+export function formatNoteReferrerEntityData(data) {
+  if (!data) {
+    return false;
+  }
+
+  const {
+    entityName: name,
+    entityType: type,
+    entityId: id,
+  } = data;
+
+  return {
+    name,
+    type,
+    id,
+  };
 }

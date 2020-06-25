@@ -5,6 +5,12 @@ import {
   scoped,
 } from '@bigtest/interactor';
 
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  NotesAccordion,
+  NotesModal,
+} from '@folio/stripes-smart-components/lib/Notes/NotesSmartAccordion/tests/interactors';
+
 import CancelRequestDialog from './cancel-request-dialog';
 import MoveRequestDialog from './move-request-dialog';
 import ChooseRequestTypeDialog from './choose-request-type-dialog';
@@ -29,6 +35,8 @@ import { contains } from './helpers';
   requesterInfoContains = contains('#requester-info');
   requestInfoContains = contains('#request-info');
   requestsOnItem = scoped('[data-test-requests-on-item] div', KeyValue);
+  staffNotesAccordion = new NotesAccordion('#staff-notes');
+  notesModal = new NotesModal();
 
   itemAccordionClick = clickable('#accordion-toggle-button-item-info');
 }

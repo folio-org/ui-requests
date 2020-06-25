@@ -128,7 +128,7 @@
     "loanType": "Tipo de empréstimo",
     "actions.moveRequest": "Pedido de mudança",
     "moveRequest.selectItem": "Selecionar item",
-    "moveRequest.instanceItems": "Outros itens na instância",
+    "moveRequest.instanceItems": "Outros itens em {title}",
     "moveRequest.instanceItems.notFound": "Nenhum item encontrado",
     "moveRequest.requestTypeChangeHeading": "Tipo de solicitações atuais não são permitidos para o item selecionado",
     "moveRequest.requestTypeChangeMessage": "A requisição será convertida em <strong>{requestType}</strong>.",
@@ -187,5 +187,15 @@
     "item.callNumberComponents.suffix": "Sufixo efetivo do número de chamada",
     "item.chronology": "Cronologia",
     "errorModal.title": "O item não pode ser solicitado",
-    "errorModal.message": "{title} ({materialType}) (Código de barras: {barcode}) tem o status do item <strong>{itemStatus}</strong> e não pode ser requisitado."
+    "errorModal.message": "{title} ({materialType}) (Código de barras: {barcode}) tem o status do item <strong>{itemStatus}</strong> e não pode ser requisitado.",
+    "permission.moveRequest": "Requisições: Mover para novo item, reordenar fila",
+    "permission.reorderQueue": "Requisições: Reordenar fila",
+    "permission.all": "Requisições: Todas as permissões",
+    "permission.view": "Requisições: Ver",
+    "permission.create": "Requisições: Ver, criar",
+    "permission.edit": "Requisições: Ver, editar, cancelar",
+    "notes.StaffNotes": "Notas da equipe",
+    "notes.newStaffNote": "Nova Nota da equipe",
+    "notes.staffNotes": "Staff notes",
+    "notes.entityType.request": "Request"
 }

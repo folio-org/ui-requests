@@ -187,5 +187,15 @@
     "item.callNumberComponents.suffix": "لاحقة رقم الاستدعاء النشط",
     "item.chronology": "التسلسل الزمني",
     "errorModal.title": "لا يمكن طلب المادة",
-    "errorModal.message": "{title} ({materialType}) (باركود: {barcode}) له حالة المادة <strong>{itemStatus}</strong> ولا يمكن طلبه"
+    "errorModal.message": "{title} ({materialType}) (باركود: {barcode}) له حالة المادة <strong>{itemStatus}</strong> ولا يمكن طلبه",
+    "permission.moveRequest": "الطلبات: انقل إلى مادة جديدة، أعد ترتيب الصف",
+    "permission.reorderQueue": "الطلبات: أعد ترتيب الصف",
+    "permission.all": "الطلبات: كل الصلاحيات",
+    "permission.view": "الطلبات: اعرض",
+    "permission.create": "الطلبات: اعرض، أنشئ",
+    "permission.edit": "الطلبات: اعرض، حرّر، الغ",
+    "notes.StaffNotes": "ملاحظات الموظفين",
+    "notes.newStaffNote": "ملاحظة موظف جديدة",
+    "notes.staffNotes": "ملاحظات الموظفين",
+    "notes.entityType.request": "طلب"
 }

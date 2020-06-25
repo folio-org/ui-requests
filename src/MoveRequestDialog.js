@@ -165,6 +165,7 @@ class MoveRequestDialog extends React.Component {
       onClose,
       open,
       moveInProgress,
+      request,
     } = this.props;
     const {
       items,
@@ -172,6 +173,7 @@ class MoveRequestDialog extends React.Component {
     } = this.state;
     const contentData = orderBy(items, 'requestQueue');
     const count = items.length;
+    const title = request.item.title;
 
     return (
       <Modal
@@ -183,7 +185,7 @@ class MoveRequestDialog extends React.Component {
         dismissible
       >
         <Pane
-          paneTitle={<FormattedMessage id="ui-requests.moveRequest.instanceItems" />}
+          paneTitle={<FormattedMessage id="ui-requests.moveRequest.instanceItems" values={{ title }} />}
           paneSub={<FormattedMessage id="ui-requests.resultCount" values={{ count }} />}
           defaultWidth="fill"
           noOverflow

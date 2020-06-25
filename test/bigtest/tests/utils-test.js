@@ -11,6 +11,7 @@ import {
   convertToSlipData,
   isPagedItem,
   createUserHighlightBoxLink,
+  formatNoteReferrerEntityData,
 } from '../../../src/utils';
 
 describe('utils', () => {
@@ -170,6 +171,27 @@ describe('utils', () => {
       }];
 
       expect(convertToSlipData(pickSlipsWithEmptyDate, intl, timeZone, locale)).to.deep.equal(expectSlipDataWithEmptyDate);
+    });
+  });
+
+  describe('Format Note referrer entity data', () => {
+    it('should return formatted referrer entity data', () => {
+      const data = {
+        entityName: 'name',
+        entityType: 'type',
+        entityId: 'id',
+      };
+      const expectedData = {
+        name: data.entityName,
+        type: data.entityType,
+        id: data.entityId,
+      };
+
+      expect(formatNoteReferrerEntityData(data)).to.deep.equal(expectedData);
+    });
+
+    it('should return false when function gets uncorrect value', () => {
+      expect(formatNoteReferrerEntityData(null)).to.be.false;
     });
   });
 });

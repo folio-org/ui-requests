@@ -22,6 +22,7 @@ const itemStatuses = [
   'Declared lost',
   'Withdrawn',
   'Claimed returned',
+  'Lost and paid',
 ];
 
 describe('New Request page', () => {

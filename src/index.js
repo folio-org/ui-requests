@@ -6,6 +6,7 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 
 import RequestsRoute from './routes/RequestsRoute';
 import RequestQueueRoute from './routes/RequestQueueRoute';
+import NoteCreateRoute from './routes/NoteCreateRoute';
 
 const RequestsRouting = (props) => {
   const { match: { path } } = props;
@@ -15,6 +16,10 @@ const RequestsRouting = (props) => {
       <Route
         path={`${path}/view/:requestId/:itemId/reorder`}
         component={RequestQueueRoute}
+      />
+      <Route
+        path={`${path}/notes/new`}
+        component={NoteCreateRoute}
       />
       <Route
         path={path}

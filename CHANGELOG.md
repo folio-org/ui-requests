@@ -1,8 +1,17 @@
 # Change history for ui-requests
 
-## [3.0.0] IN PROGRESS
+## [3.1.0](IN PROGRESS)
 
-* Upgrade to `stripes` `4.0`, `react-intl` `4.5`. Refs STRIPES-672.
+* Add staff notes accordion to request details page. Refs UIREQ-457.
+* Request staff notes: Assign/Unassign Notes. Refs UIREQ-458.
+
+## [3.0.1](https://github.com/folio-org/ui-requests/tree/v3.0.1) (2020-06-19)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v3.0.0...v3.0.1)
+
+* Increment `@folio/plugin-find-user` to `v3.0` for `@folio/stripes` `v4` compatibility.
+
+## [3.0.0](https://github.com/folio-org/ui-requests/tree/v3.0.0) (2020-06-15)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v2.0.1...v3.0.0)
 
 ## [2.1.0] (IN PROGRESS)
 * Fix bug that require user hit Enter in item field before save the request. Fixes UIREQ-326.
@@ -17,6 +26,11 @@
 * Purge `intlShape` in prep for `react-intl` `v4` migration. Refs STRIPES-672.
 * Prevent requests on for items with the status Withdrawn. Refs UIREQ-390.
 * Prevent requests on for items with the status Claimed returned. Refs UIREQ-391.
+* Prevent requests for items with the status Lost and paid. Refs UIREQ-400.
+* Upgrade to `stripes` `4.0`, `react-intl` `4.5`. Refs STRIPES-672.
+* Fixed label in move hold modal to show item title.  Fixes UIREQ-304.
+* Patron Blocks: Is there an automated patron block on requesting? Refs UIREQ-471.
+* Make permission names l10nable. Refs UIREQ-474.
 
 ## [2.0.1](https://github.com/folio-org/ui-requests/tree/v2.0.1) (2020-03-17)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v2.0.0...v2.0.1)
