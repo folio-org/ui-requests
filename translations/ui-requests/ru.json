@@ -194,6 +194,8 @@
     "permission.view": "Заказы: Просматривать",
     "permission.create": "Заказы: Просматривать, создавать",
     "permission.edit": "Заказы: Просматривать, редактировать, отменять",
-    "notes.StaffNotes": "Staff notes",
-    "notes.newStaffNote": "New staff note"
+    "notes.StaffNotes": "Служебные заметки",
+    "notes.newStaffNote": "Новая служебная заметка",
+    "notes.staffNotes": "Staff notes",
+    "notes.entityType.request": "Request"
 }
