@@ -117,6 +117,7 @@
   "notes.staffNotes": "Staff notes",
   "notes.newStaffNote": "New staff note",
   "notes.entityType.request": "Request",
+  "notes.entityType.request.pluralized": "{count} {count, plural, one {request} other {requests}}",
 
   "cancel.cancelRequest": "Cancel request",
   "cancel.modalLabel": "Confirm request cancellation",

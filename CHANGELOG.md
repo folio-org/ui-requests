@@ -4,6 +4,7 @@
 
 * Add staff notes accordion to request details page. Refs UIREQ-457.
 * Request staff notes: Assign/Unassign Notes. Refs UIREQ-458.
+* Add staff notes view details page. Refs UIREQ-459.
 * Use `==` for more efficient queries. Refs PERF-62.
 
 ## [3.0.1](https://github.com/folio-org/ui-requests/tree/v3.0.1) (2020-06-19)
