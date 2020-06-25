@@ -55,6 +55,7 @@
   "errors.onlyCheckedOutForRecall": "Only checked out items can be recalled",
   "errors.onlyCheckedOutForHold": "Only checked out items can be held",
   "errors.selectItem": "Please select an item",
+  "errors.selectItemRequired": "Please select an item and hit enter",
   "errors.selectUser": "Please select a requester with the barcode",
 
   "actions.edit": "Edit",
