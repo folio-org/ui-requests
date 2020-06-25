@@ -38,6 +38,7 @@ import { contains } from './helpers';
   requestsOnItem = scoped('[data-test-requests-on-item] div', KeyValue);
   staffNotesAccordion = new NotesAccordion('#staff-notes');
   notesModal = new NotesModal();
+  clickCloseNoteButton = clickable('[data-test-leave-note-view]');
 
   itemAccordionClick = clickable('#accordion-toggle-button-item-info');
 

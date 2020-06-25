@@ -127,7 +127,7 @@ describe('View request page', () => {
 
         describe('when clicking on X button', () => {
           beforeEach(async () => {
-            await viewRequest.staffNotesAccordion.clickCloseButton();
+            await viewRequest.clickCloseNoteButton();
           });
 
           it('should redirect to request view page', function () {
