@@ -125,6 +125,7 @@ class ViewRequest extends React.Component {
         'request-info': true,
         'item-info': true,
         'requester-info': true,
+        'staff-notes': true,
       },
       moveRequest: false,
     };

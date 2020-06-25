@@ -4,6 +4,7 @@ import {
   isPresent,
   scoped,
 } from '@bigtest/interactor';
+import { isEmpty } from 'lodash';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
@@ -37,8 +38,13 @@ import { contains } from './helpers';
   requestsOnItem = scoped('[data-test-requests-on-item] div', KeyValue);
   staffNotesAccordion = new NotesAccordion('#staff-notes');
   notesModal = new NotesModal();
+  clickCloseNoteButton = clickable('[data-test-leave-note-view]');
 
   itemAccordionClick = clickable('#accordion-toggle-button-item-info');
+
+  whenNotesLoaded() {
+    return this.when(() => this.staffNotesAccordion && !isEmpty(this.staffNotesAccordion.notes()));
+  }
 }
 
 export default ViewRequestInteractor;

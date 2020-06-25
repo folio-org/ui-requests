@@ -19,8 +19,10 @@ describe('View request page', () => {
   const newRequest = new NewRequestInteractor();
 
   describe('View default request', () => {
+    let request;
+
     beforeEach(async function () {
-      const request = this.server.create('request', { requestCount: requestsOnItemValue });
+      request = this.server.create('request', { requestCount: requestsOnItemValue });
       this.visit(`/requests/view/${request.id}`);
     });
 
@@ -98,6 +100,40 @@ describe('View request page', () => {
 
       it('should display new staff notes page', function () {
         expect(this.location.pathname).to.equal('/requests/notes/new');
+      });
+    });
+
+    describe('when there are Notes assigned to a request', () => {
+      beforeEach(async function () {
+        this.server.create('note', {
+          id: 'test-note-id',
+        });
+        this.server.get('/note-links/domain/requests/type/:type/id/:id', ({ notes }) => {
+          return notes.where(note => note.id === 'test-note-id');
+        });
+
+        this.visit(`/requests/view/${request.id}`);
+      });
+
+      describe('when clicking on an assigned note', () => {
+        beforeEach(async () => {
+          await viewRequest.staffNotesAccordion.whenNotesLoaded();
+          await viewRequest.staffNotesAccordion.notes(0).click();
+        });
+
+        it('should redirect to note view page', function () {
+          expect(this.location.pathname).to.equal('/requests/notes/test-note-id');
+        });
+
+        describe('when clicking on X button', () => {
+          beforeEach(async () => {
+            await viewRequest.clickCloseNoteButton();
+          });
+
+          it('should redirect to request view page', function () {
+            expect(this.location.pathname).to.equal(`/requests/view/${request.id}`);
+          });
+        });
       });
     });
 
