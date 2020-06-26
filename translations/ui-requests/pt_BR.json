@@ -196,6 +196,8 @@
     "permission.edit": "Requisições: Ver, editar, cancelar",
     "notes.StaffNotes": "Notas da equipe",
     "notes.newStaffNote": "Nova Nota da equipe",
-    "notes.staffNotes": "Staff notes",
-    "notes.entityType.request": "Request"
+    "notes.staffNotes": "Notas da equipe",
+    "notes.entityType.request": "Requisição",
+    "notes.entityType.request.pluralized": "{count} {count, plural, one {requisição} other {requisições}}",
+    "errors.selectItemRequired": "Please select an item and hit enter"
 }
