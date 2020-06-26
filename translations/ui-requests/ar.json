@@ -197,5 +197,7 @@
     "notes.StaffNotes": "ملاحظات الموظفين",
     "notes.newStaffNote": "ملاحظة موظف جديدة",
     "notes.staffNotes": "ملاحظات الموظفين",
-    "notes.entityType.request": "طلب"
+    "notes.entityType.request": "طلب",
+    "notes.entityType.request.pluralized": "{count} {count, plural, one {طلب} other {طلباً}}",
+    "errors.selectItemRequired": "يرجى تحديد مادة والضغط على إدخال"
 }

@@ -197,5 +197,7 @@
     "notes.StaffNotes": "Staff notes",
     "notes.newStaffNote": "New staff note",
     "notes.staffNotes": "Staff notes",
-    "notes.entityType.request": "Request"
+    "notes.entityType.request": "Request",
+    "notes.entityType.request.pluralized": "{count} {count, plural, one {request} other {requests}}",
+    "errors.selectItemRequired": "Please select an item and hit enter"
 }
