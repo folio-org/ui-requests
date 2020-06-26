@@ -145,7 +145,7 @@ class RequestsRoute extends React.Component {
     patronBlocks: {
       type: 'okapi',
       records: 'manualblocks',
-      path: 'manualblocks?query=userId=%{activeRecord.patronId}',
+      path: 'manualblocks?query=userId==%{activeRecord.patronId}',
       DELETE: {
         path: 'manualblocks/%{activeRecord.blockId}',
       },
