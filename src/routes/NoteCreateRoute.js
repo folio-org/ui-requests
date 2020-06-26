@@ -22,7 +22,7 @@ const NoteCreateRoute = ({
         referredEntityData={formatNoteReferrerEntityData(location.state)}
         entityTypeTranslationKeys={{ request: 'ui-requests.notes.entityType.request' }}
         paneHeaderAppIcon={APP_ICON_NAME}
-        paneTitle={<FormattedMessage id="ui-request.notes.newStaffNote" />}
+        paneTitle={<FormattedMessage id="ui-requests.notes.newStaffNote" />}
         domain={DOMAIN_NAME}
         navigateBack={history.goBack}
       />
