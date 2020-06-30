@@ -39,6 +39,23 @@ describe('Requests', () => {
     expect(requests.instanceList.size).to.be.equal(20);
   });
 
+  describe('clicking on the Request Date header', function () {
+    let dateFirst;
+    let dateLast;
+
+    beforeEach(async function () {
+      dateFirst = requests.getCellContent(0, 0);
+      dateLast = requests.getCellContent(19, 0);
+
+      await requests.instanceList.headers(0).click();
+    });
+
+    it('should sort descending', function () {
+      expect(requests.getCellContent(0, 0)).to.equal(dateLast);
+      expect(requests.getCellContent(19, 0)).be.equal(dateFirst);
+    });
+  });
+
   describe('clicking on the first request item', function () {
     beforeEach(async function () {
       await requests.instances(0).click();
