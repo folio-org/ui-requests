@@ -48,6 +48,7 @@
   "requestMeta.expirationDate": "Request expiration date",
   "requestMeta.holdShelfExpirationDate": "Hold shelf expiration date",
   "requestMeta.queuePosition": "Position in queue",
+  "requestMeta.tags": "Tags",
 
   "showTags": "Show Tags",
   "errors.itemBarcodeDoesNotExist": "Item with this barcode does not exist",

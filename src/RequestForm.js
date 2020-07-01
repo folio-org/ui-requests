@@ -42,8 +42,8 @@ import {
   Select,
   TextField,
   PaneFooter,
+  Icon,
 } from '@folio/stripes/components';
-
 import stripesForm from '@folio/stripes/form';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
@@ -330,28 +330,50 @@ class RequestForm extends React.Component {
   }
 
   findUser(fieldName, value) {
-    const blocks = this.getPatronManualBlocks(this.props.parentResources);
-    const automatedPatronBlocks = this.getAutomatedPatronBlocks(this.props.parentResources);
-    // Set the new value in the redux-form barcode field
+    const {
+      change,
+      parentResources,
+      findResource,
+      onChangePatron,
+      asyncValidate: validate,
+    } = this.props;
 
+    // Set the new value in the redux-form barcode field
     if (fieldName === 'barcode') {
-      this.props.change('requester.barcode', value);
+      change('requester.barcode', value);
     }
 
-    this.setState({ selectedUser: null, proxy: null });
+    this.setState({
+      selectedUser: null,
+      proxy: null,
+      isUserLoading: true,
+    });
 
-    this.props.findResource('user', value, fieldName).then((result) => {
+    findResource('user', value, fieldName).then((result) => {
       if (result.totalRecords === 1) {
+        const blocks = this.getPatronManualBlocks(parentResources);
+        const automatedPatronBlocks = this.getAutomatedPatronBlocks(parentResources);
         const selectedUser = result.users[0];
-        if ((blocks.length > 0 && blocks[0].userId === selectedUser.id) || !isEmpty(automatedPatronBlocks)) {
-          this.setState({ blocked: true });
+        const state = { selectedUser };
+
+        if ((blocks.length && blocks[0].userId === selectedUser.id) || !isEmpty(automatedPatronBlocks)) {
+          state.blocked = true;
         }
-        this.props.onChangePatron(selectedUser);
-        this.setState({ selectedUser });
-        this.props.change('requesterId', selectedUser.id);
+
+        this.setState(state);
+        onChangePatron(selectedUser);
+        change('requesterId', selectedUser.id);
         this.findRequestPreferences(selectedUser.id);
+
+        return selectedUser;
       }
-    }).then(_ => this.props.asyncValidate());
+
+      return null;
+    })
+      .then(user => (!user ? validate() : user))
+      .finally(() => {
+        this.setState({ isUserLoading: false });
+      });
   }
 
   getDefaultRequestPreferences() {
@@ -410,7 +432,6 @@ class RequestForm extends React.Component {
     } catch (e) {
       this.setState({
         ...this.getDefaultRequestPreferences(),
-        requestPreferencesLoaded: true,
         deliverySelected: false,
       }, () => {
         change('fulfilmentPreference', fulfilmentTypeMap.HOLD_SHELF);
@@ -588,7 +609,7 @@ class RequestForm extends React.Component {
     const userProxy = request ? request.proxy : proxy;
     if (!userProxy) return null;
 
-    const id = proxy.id || request.proxyUserId;
+    const id = proxy?.id || request?.proxyUserId;
     return {
       ...userProxy,
       id,
@@ -727,7 +748,7 @@ class RequestForm extends React.Component {
       deliverySelected,
       isCancellingRequest,
       instanceId,
-      requestPreferencesLoaded,
+      isUserLoading,
       isErrorModalOpen,
     } = this.state;
 
@@ -1046,8 +1067,9 @@ class RequestForm extends React.Component {
                               <FormattedMessage id="ui-requests.enter" />
                             </Button>
                           </Col>
+
                         </Row> }
-                      {selectedUser && (requestPreferencesLoaded || this.isEditForm()) &&
+                      {(selectedUser?.id || request?.requester) &&
                         <UserForm
                           user={request ? request.requester : selectedUser}
                           stripes={this.props.stripes}
@@ -1064,7 +1086,9 @@ class RequestForm extends React.Component {
                           servicePoints={servicePoints}
                           onSelectProxy={this.onSelectProxy}
                           onCloseProxy={() => { this.setState({ selectedUser: null, proxy: null }); }}
-                        /> }
+                        />
+                      }
+                      {isUserLoading && <Icon icon="spinner-ellipsis" width="10px" />}
                     </Col>
                   </Row>
                 </div>
