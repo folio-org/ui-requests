@@ -196,8 +196,8 @@
     "permission.edit": "Заказы: Просматривать, редактировать, отменять",
     "notes.StaffNotes": "Служебные заметки",
     "notes.newStaffNote": "Новая служебная заметка",
-    "notes.staffNotes": "Staff notes",
-    "notes.entityType.request": "Request",
-    "notes.entityType.request.pluralized": "{count} {count, plural, one {request} other {requests}}",
+    "notes.staffNotes": "Служебные примечания",
+    "notes.entityType.request": "Запрос",
+    "notes.entityType.request.pluralized": "{count} {count, plural, one {запрос} other {запросы}}",
     "errors.selectItemRequired": "Пожалуйста, выберите экземпляр и нажмите Enter"
 }
