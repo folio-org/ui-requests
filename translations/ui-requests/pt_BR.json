@@ -199,5 +199,5 @@
     "notes.staffNotes": "Notas da equipe",
     "notes.entityType.request": "Requisição",
     "notes.entityType.request.pluralized": "{count} {count, plural, one {requisição} other {requisições}}",
-    "errors.selectItemRequired": "Please select an item and hit enter"
+    "errors.selectItemRequired": "Selecione um item e pressione Enter"
 }
