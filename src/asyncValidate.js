@@ -16,7 +16,7 @@ function asyncValidateItem(values, props) {
 
 function asyncValidateUser(values, props) {
   const uv = props.parentMutator.userUniquenessValidator;
-  const query = `(barcode="${values.requester.barcode}")`;
+  const query = `(barcode=="${values.requester.barcode}")`;
 
   uv.reset();
   return uv.GET({ params: { query } }).then((users) => {
