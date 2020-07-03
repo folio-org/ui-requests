@@ -113,6 +113,7 @@
         "displayName": "Requests: View, create",
         "subPermissions": [
           "ui-requests.view",
+          "automated-patron-blocks.collection.get",
           "circulation.requests.item.post",
           "circulation-storage.requests.item.post",
           "inventory-storage.locations.item.get"
