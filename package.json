@@ -116,6 +116,7 @@
           "automated-patron-blocks.collection.get",
           "circulation.requests.item.post",
           "circulation-storage.requests.item.post",
+          "circulation.pick-slips.get",
           "inventory-storage.locations.item.get"
         ],
         "visible": true
