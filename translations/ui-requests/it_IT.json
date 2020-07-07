@@ -183,10 +183,10 @@
     "exportSearchResultsToCsv": "Esporta i risultati della ricerca in CSV",
     "common.cancel": "Cancel",
     "item.callNumberComponents.prefix": "Effective call number prefix",
-    "item.callNumberComponents.callNumber": "Effective call number",
+    "item.callNumberComponents.callNumber": "Collocazione effettiva",
     "item.callNumberComponents.suffix": "Effective call number suffix",
-    "item.chronology": "Chronology",
-    "errorModal.title": "Item cannot be requested",
+    "item.chronology": "Cronologia",
+    "errorModal.title": "L'item non può essere richiesto",
     "errorModal.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>{itemStatus}</strong> and cannot be requested.",
     "permission.moveRequest": "Requests: Move to new item, reorder queue",
     "permission.reorderQueue": "Requests: Reorder queue",
@@ -197,7 +197,7 @@
     "notes.StaffNotes": "Staff notes",
     "notes.newStaffNote": "New staff note",
     "notes.staffNotes": "Staff notes",
-    "notes.entityType.request": "Request",
+    "notes.entityType.request": "Richiesta",
     "notes.entityType.request.pluralized": "{count} {count, plural, one {request} other {requests}}",
     "errors.selectItemRequired": "Please select an item and hit enter"
 }
