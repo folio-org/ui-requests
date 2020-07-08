@@ -1,6 +1,6 @@
 {
   "name": "@folio/requests",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "description": "Requests manager",
   "repository": "folio-org/ui-requests",
   "publishConfig": {
@@ -146,9 +146,9 @@
     "@bigtest/mocha": "^0.5.2",
     "@bigtest/react": "^0.1.2",
     "@folio/eslint-config-stripes": "^5.1.0",
-    "@folio/stripes": "^4.0.0",
+    "@folio/stripes": "^5.0.0",
     "@folio/stripes-cli": "^1.11.0",
-    "@folio/stripes-core": "^5.0.0",
+    "@folio/stripes-core": "^6.0.0",
     "babel-eslint": "^10.0.3",
     "chai": "^4.2.0",
     "core-js": "^3.6.4",
@@ -158,7 +158,7 @@
     "react-dom": "^16.5.1",
     "react-intl": "^4.5.3",
     "react-redux": "^5.0.7",
-    "react-router-dom": "^4.0.0",
+    "react-router-dom": "^5.2.0",
     "redux": "^4.0.0",
     "regenerator-runtime": "^0.13.3",
     "sinon": "^7.2.0"
@@ -178,11 +178,11 @@
     "redux-form": "^7.0.3"
   },
   "peerDependencies": {
-    "@folio/stripes": "^4.0.0",
+    "@folio/stripes": "^5.0.0",
     "react": "*",
     "react-intl": "^4.5.3",
-    "react-router": "^4.0.0",
-    "react-router-dom": "^4.0.0"
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0"
   },
   "optionalDependencies": {
     "@folio/plugin-find-user": "^3.0.0"
