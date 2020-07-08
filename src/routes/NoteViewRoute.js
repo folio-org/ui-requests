@@ -6,6 +6,7 @@ import { NoteViewPage } from '@folio/stripes/smart-components';
 
 import { formatNoteReferrerEntityData } from '../utils';
 import { APP_ICON_NAME } from '../constants';
+import { ReferredRecord } from '../components';
 
 const NoteViewRoute = ({
   location,
@@ -31,6 +32,7 @@ const NoteViewRoute = ({
         paneHeaderAppIcon={APP_ICON_NAME}
         referredEntityData={formatNoteReferrerEntityData(location.state)}
         noteId={noteId}
+        renderReferredRecord={() => <ReferredRecord values={location.state.referredRecordData} />}
       />
     )
     : <Redirect to="/requests" />;

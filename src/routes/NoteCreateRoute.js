@@ -11,6 +11,7 @@ import {
   APP_ICON_NAME,
 } from '../constants';
 import { formatNoteReferrerEntityData } from '../utils';
+import { ReferredRecord } from '../components';
 
 const NoteCreateRoute = ({
   location,
@@ -25,6 +26,7 @@ const NoteCreateRoute = ({
         paneTitle={<FormattedMessage id="ui-requests.notes.newStaffNote" />}
         domain={DOMAIN_NAME}
         navigateBack={history.goBack}
+        renderReferredRecord={() => <ReferredRecord values={location.state.referredRecordData} />}
       />
     )
     : <Redirect to="/requests" />;

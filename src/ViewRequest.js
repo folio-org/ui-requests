@@ -49,6 +49,7 @@ import { requestStatuses } from './constants';
 import {
   toUserAddress,
   isDelivery,
+  getFullName,
 } from './utils';
 import urls from './routes/urls';
 
@@ -458,6 +459,17 @@ class ViewRequest extends React.Component {
       );
     };
 
+    const referredRecordData = {
+      instanceTitle: request.item.title,
+      instanceId: request.item.instanceId,
+      itemBarcode: request.item.barcode,
+      itemId: request.itemId,
+      holdingsRecordId: request.item.holdingsRecordId,
+      requesterName: getFullName(request.requester),
+      requesterId: request.requester?.id ?? request.requesterId,
+      requestCreateDate: request.metadata.createdDate,
+    };
+
     return (
       <Pane
         data-test-instance-details
@@ -567,6 +579,7 @@ class ViewRequest extends React.Component {
             entityId={request.id}
             entityName={request.item.title}
             entityType="request"
+            referredRecordData={referredRecordData}
             id="staff-notes"
             label={<FormattedMessage id="ui-requests.notes.staffNotes" />}
             pathToNoteCreate="/requests/notes/new"
