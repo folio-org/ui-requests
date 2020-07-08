@@ -1,6 +1,6 @@
 # Change history for ui-requests
 
-## [3.1.0](IN PROGRESS)
+## 4.0.0 (IN PROGRESS)
 
 * Fix bug that require user hit Enter in item field before save the request. Fixes UIREQ-326.
 * Add staff notes accordion to request details page. Refs UIREQ-457.
@@ -9,6 +9,7 @@
 * Use `==` for more efficient queries. Refs PERF-62.
 * Use `==` for requestType and status filters. Refs CIRC-817.
 * Add subpermission to `Requests: View, create`. Refs UIREQ-486.
+* Increment `@folio/stripes` to `v5` for `react-router` `v5.2`.
 
 ## [3.0.1](https://github.com/folio-org/ui-requests/tree/v3.0.1) (2020-06-19)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v3.0.0...v3.0.1)
