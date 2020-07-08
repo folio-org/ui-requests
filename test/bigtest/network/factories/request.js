@@ -38,6 +38,12 @@ export default Factory.extend({
         },
         patronGroupId: user.patronGroup,
       },
+      metadata: {
+        createdDate: '2020-07-07T03:56:29.238+0000',
+        createdByUserId: '4d088ad2-fc70-5142-bd4d-9b60707846af',
+        updatedDate: '2020-07-07T03:56:29.238+0000',
+        updatedByUserId: '4d088ad2-fc70-5142-bd4d-9b60707846af',
+      },
       deliveryAddressTypeId: user.personal.addresses[0].addressTypeId
     });
   },

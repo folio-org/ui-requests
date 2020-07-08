@@ -120,6 +120,9 @@
   "notes.newStaffNote": "New staff note",
   "notes.entityType.request": "Request",
   "notes.entityType.request.pluralized": "{count} {count, plural, one {request} other {requests}}",
+  "notes.assigned.for": "For: {instanceLink} ({itemLink})",
+  "notes.assigned.requester": "Requester: {requesterName}",
+  "notes.assigned.requestDate": "Request date: {requestCreateDate}",
 
   "cancel.cancelRequest": "Cancel request",
   "cancel.modalLabel": "Confirm request cancellation",
