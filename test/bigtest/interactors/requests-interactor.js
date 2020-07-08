@@ -29,6 +29,10 @@ import ErrorModal from './error-modal';
       return this.instanceList.isPresent && this.instanceList.size === size;
     });
   }
+
+  getCellContent(item, cell) {
+    return this.instanceList.items(item).cells(cell).content;
+  }
 }
 
 export default RequestsInteractor;

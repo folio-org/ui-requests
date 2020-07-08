@@ -290,8 +290,23 @@ export default function config() {
 
   this.get('/cancellation-reason-storage/cancellation-reasons');
 
-  this.get('/circulation/requests', ({ requests }) => {
-    return requests.all();
+  this.get('/circulation/requests', ({ requests }, request) => {
+    const sortby = request.queryParams.query.split('sortby ')[1]?.split(' ')[0].split('/');
+
+    if (!sortby) return requests.all();
+
+    const [name, order] = sortby;
+
+    return requests.all().sort((a, b) => {
+      if (name === 'requestDate') {
+        const dateA = new Date(a.attrs.requestDate);
+        const dateB = new Date(b.attrs.requestDate);
+
+        return order ? dateB - dateA : dateA - dateB;
+      }
+
+      return 0;
+    });
   });
 
   this.get('/circulation/requests/:id', ({ requests }, request) => {

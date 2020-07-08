@@ -17,7 +17,7 @@
     ],
     "displayName": "ui-requests.meta.title",
     "route": "/requests",
-    "home": "/requests?filters=&sort=Request date",
+    "home": "/requests?filters=&sort=requestDate",
     "hasSettings": false,
     "icons": [
       {

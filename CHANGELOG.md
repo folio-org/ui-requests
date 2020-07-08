@@ -3,6 +3,7 @@
 ## 3.0.2 (IN PROGRESS)
 
 * Add subpermission to `Requests: View, create`. Refs UIREQ-486.
+* Fix the ability to sort by the `Request Date` column. Fixes UIREQ-481.
 
 ## [3.0.1](https://github.com/folio-org/ui-requests/tree/v3.0.1) (2020-06-19)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v3.0.0...v3.0.1)

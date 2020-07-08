@@ -81,7 +81,7 @@ class RequestsRoute extends React.Component {
       records: 'addressTypes',
     },
     query: {
-      initialValue: { sort: 'Request date' },
+      initialValue: { sort: 'requestDate' },
     },
     resultCount: { initialValue: INITIAL_RESULT_COUNT },
     resultOffset: { initialValue: 0 },
@@ -98,14 +98,14 @@ class RequestsRoute extends React.Component {
             'cql.allRecords=1',
             '(requesterId=="%{query.query}" or requester.barcode="%{query.query}*" or item.title="%{query.query}*" or item.barcode="%{query.query}*" or itemId=="%{query.query}")',
             {
-              'Title': 'item.title',
-              'Item barcode': 'item.barcode',
-              'Type': 'requestType',
-              'Requester': 'requester.lastName requester.firstName',
-              'Requester barcode': 'requester.barcode',
-              'Request date': 'requestDate',
-              'Position': 'position',
-              'Proxy': 'proxy',
+              'title': 'item.title',
+              'itemBarcode': 'item.barcode',
+              'type': 'requestType',
+              'requester': 'requester.lastName requester.firstName',
+              'requesterBarcode': 'requester.barcode',
+              'requestDate': 'requestDate',
+              'position': 'position',
+              'proxy': 'proxy',
             },
             RequestsFiltersConfig,
             2, // do not fetch unless we have a query or a filter
@@ -667,14 +667,7 @@ class RequestsRoute extends React.Component {
     } = this.props;
 
     const {
-      itemBarcode,
-      position,
-      proxy,
       requestDate,
-      requester,
-      requesterBarcode,
-      requestStatus,
-      type,
       title,
     } = this.columnLabels;
 
@@ -697,19 +690,19 @@ class RequestsRoute extends React.Component {
       { requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' };
 
     const resultsFormatter = {
-      [itemBarcode]: rq => (rq.item ? rq.item.barcode : ''),
-      [position]: rq => (rq.position || ''),
-      [proxy]: rq => (rq.proxy ? getFullName(rq.proxy) : ''),
-      [requestDate]: rq => (
+      'itemBarcode': rq => (rq.item ? rq.item.barcode : ''),
+      'position': rq => (rq.position || ''),
+      'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : ''),
+      'requestDate': rq => (
         <AppIcon size="small" app="requests">
           <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
         </AppIcon>
       ),
-      [requester]: rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
-      [requesterBarcode]: rq => (rq.requester ? rq.requester.barcode : ''),
-      [requestStatus]: rq => rq.status,
-      [type]: rq => rq.requestType,
-      [title]: rq => (rq.item ? rq.item.title : ''),
+      'requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
+      'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : ''),
+      'requestStatus': rq => rq.status,
+      'type': rq => rq.requestType,
+      'title': rq => (rq.item ? rq.item.title : ''),
     };
 
     const actionMenu = ({ onToggle }) => (
@@ -787,20 +780,21 @@ class RequestsRoute extends React.Component {
             editRecordComponent={RequestForm}
             getHelperResourcePath={this.getHelperResourcePath}
             visibleColumns={[
-              requestDate,
-              title,
-              itemBarcode,
-              type,
-              requestStatus,
-              position,
-              requester,
-              requesterBarcode,
-              proxy,
+              'requestDate',
+              'title',
+              'itemBarcode',
+              'type',
+              'requestStatus',
+              'position',
+              'requester',
+              'requesterBarcode',
+              'proxy',
             ]}
             columnWidths={{
               [requestDate]: '220px',
               [title]: '40%'
             }}
+            columnMapping={this.columnLabels}
             resultsFormatter={resultsFormatter}
             newRecordInitialValues={InitialValues}
             massageNewRecord={this.massageNewRecord}
