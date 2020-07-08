@@ -10,6 +10,7 @@
 * Use `==` for requestType and status filters. Refs CIRC-817.
 * Add subpermission to `Requests: View, create`. Refs UIREQ-486.
 * Increment `@folio/stripes` to `v5` for `react-router` `v5.2`.
+* Fix the ability to sort by the `Request Date` column. Fixes UIREQ-481.
 
 ## [3.0.1](https://github.com/folio-org/ui-requests/tree/v3.0.1) (2020-06-19)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v3.0.0...v3.0.1)
