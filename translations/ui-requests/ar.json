@@ -199,5 +199,8 @@
     "notes.staffNotes": "ملاحظات الموظفين",
     "notes.entityType.request": "طلب",
     "notes.entityType.request.pluralized": "{count} {count, plural, one {طلب} other {طلباً}}",
-    "errors.selectItemRequired": "يرجى تحديد مادة والضغط على إدخال"
+    "errors.selectItemRequired": "يرجى تحديد مادة والضغط على إدخال",
+    "notes.assigned.for": "لـ: {instanceLink} ({itemLink})",
+    "notes.assigned.requester": "مقدم الطلب: {requesterName}",
+    "notes.assigned.requestDate": "تاريخ الطلب: {requestCreateDate}"
 }

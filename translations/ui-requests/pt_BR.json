@@ -199,5 +199,8 @@
     "notes.staffNotes": "Notas da equipe",
     "notes.entityType.request": "Requisição",
     "notes.entityType.request.pluralized": "{count} {count, plural, one {requisição} other {requisições}}",
-    "errors.selectItemRequired": "Selecione um item e pressione Enter"
+    "errors.selectItemRequired": "Selecione um item e pressione Enter",
+    "notes.assigned.for": "For: {instanceLink} ({itemLink})",
+    "notes.assigned.requester": "Requester: {requesterName}",
+    "notes.assigned.requestDate": "Request date: {requestCreateDate}"
 }

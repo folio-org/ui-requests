@@ -199,5 +199,8 @@
     "notes.staffNotes": "Служебные примечания",
     "notes.entityType.request": "Запрос",
     "notes.entityType.request.pluralized": "{count} {count, plural, one {запрос} other {запросы}}",
-    "errors.selectItemRequired": "Пожалуйста, выберите экземпляр и нажмите Enter"
+    "errors.selectItemRequired": "Пожалуйста, выберите экземпляр и нажмите Enter",
+    "notes.assigned.for": "For: {instanceLink} ({itemLink})",
+    "notes.assigned.requester": "Requester: {requesterName}",
+    "notes.assigned.requestDate": "Request date: {requestCreateDate}"
 }

@@ -199,5 +199,8 @@
     "notes.staffNotes": "Staff notes",
     "notes.entityType.request": "Richiesta",
     "notes.entityType.request.pluralized": "{count} {count, plural, one {request} other {requests}}",
-    "errors.selectItemRequired": "Please select an item and hit enter"
+    "errors.selectItemRequired": "Please select an item and hit enter",
+    "notes.assigned.for": "For: {instanceLink} ({itemLink})",
+    "notes.assigned.requester": "Requester: {requesterName}",
+    "notes.assigned.requestDate": "Request date: {requestCreateDate}"
 }
