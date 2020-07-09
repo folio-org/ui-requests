@@ -77,3 +77,46 @@ describe('Requests', () => {
     });
   });
 });
+
+describe('Request without Item and Requester', () => {
+  setupApplication({
+    scenarios: ['requestWithoutItemAndRequester'],
+  });
+
+  const requests = new RequestsInteractor();
+
+  beforeEach(async function () {
+    this.visit('/requests');
+
+    await requests.clickHoldsCheckbox();
+    await requests.clickPagesCheckbox();
+    await requests.clickRecallsCheckbox();
+    await requests.whenInstancesArePresent(1);
+  });
+
+  describe('should has', function () {
+    it('empty title value', function () {
+      expect(requests.getCellContent(0, 1)).to.equal('');
+    });
+
+    it('empty item barcode value', function () {
+      expect(requests.getCellContent(0, 2)).to.equal('');
+    });
+
+    it('empty position value', function () {
+      expect(requests.getCellContent(0, 5)).to.equal('');
+    });
+
+    it('empty requester value', function () {
+      expect(requests.getCellContent(0, 6)).to.equal('');
+    });
+
+    it('empty requester barcode value', function () {
+      expect(requests.getCellContent(0, 7)).to.equal('');
+    });
+
+    it('empty proxy value', function () {
+      expect(requests.getCellContent(0, 8)).to.equal('');
+    });
+  });
+});

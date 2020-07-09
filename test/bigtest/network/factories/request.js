@@ -92,5 +92,17 @@ export default Factory.extend({
         itemId: item.id,
       });
     }
+  }),
+
+  withoutItemAndRequester: trait({
+    afterCreate(request) {
+      request.update({
+        item: null,
+        requester: null,
+        position: null,
+        proxy: null,
+        requestDate: '2000/01/01, 12:00 PM',
+      });
+    }
   })
 });
