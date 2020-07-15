@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 3.0.3 (IN PROGRESS)
+## [3.0.3](https://github.com/folio-org/ui-requests/tree/v3.0.3) (2020-07-14)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v3.0.2...v3.0.3)
 
 * Include tag-related permissions in `ui-users.edit` permission. Refs UITAG-29.
 
