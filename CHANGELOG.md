@@ -1,9 +1,13 @@
 # Change history for ui-requests
 
+## 3.0.4 (IN PROGRESS)
+
+* Include tag-view permissions in `ui-requests.view` permission. Refs UIREQ-504.
+
 ## [3.0.3](https://github.com/folio-org/ui-requests/tree/v3.0.3) (2020-07-14)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v3.0.2...v3.0.3)
 
-* Include tag-related permissions in `ui-users.edit` permission. Refs UITAG-29.
+* Include tag-related permissions in `ui-requests.edit` permission. Refs UITAG-29.
 
 ## [3.0.2](https://github.com/folio-org/ui-requests/tree/v3.0.2) (2020-07-10)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v3.0.1...v3.0.2)
