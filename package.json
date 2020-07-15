@@ -129,7 +129,9 @@
           "circulation.requests.item.put",
           "circulation-storage.requests.collection.delete",
           "circulation-storage.requests.item.put",
-          "circulation-storage.requests.item.delete"
+          "circulation-storage.requests.item.delete",
+          "tags.collection.get",
+          "tags.item.post"
         ],
         "visible": true
       }
