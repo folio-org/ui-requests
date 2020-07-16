@@ -4,10 +4,13 @@ import Switch from 'react-router-dom/Switch';
 import { hot } from 'react-hot-loader';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
-import RequestsRoute from './routes/RequestsRoute';
-import RequestQueueRoute from './routes/RequestQueueRoute';
-import NoteCreateRoute from './routes/NoteCreateRoute';
-import NoteViewRoute from './routes/NoteViewRoute';
+import {
+  NoteCreateRoute,
+  NoteViewRoute,
+  NoteEditRoute,
+  RequestQueueRoute,
+  RequestsRoute,
+} from './routes';
 
 const RequestsRouting = (props) => {
   const { match: { path } } = props;
@@ -21,6 +24,10 @@ const RequestsRouting = (props) => {
       <Route
         path={`${path}/notes/new`}
         component={NoteCreateRoute}
+      />
+      <Route
+        path={`${path}/notes/:noteId/edit`}
+        component={NoteEditRoute}
       />
       <Route
         path={`${path}/notes/:noteId`}

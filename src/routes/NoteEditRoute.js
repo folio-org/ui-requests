@@ -3,37 +3,41 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { Redirect } from 'react-router';
 import { FormattedMessage } from 'react-intl';
 
-import { NoteCreatePage } from '@folio/stripes/smart-components';
+import { NoteEditPage } from '@folio/stripes/smart-components';
 
 import {
   DOMAIN_NAME,
   APP_ICON_NAME,
 } from '../constants';
-import { formatNoteReferrerEntityData } from '../utils';
 import { ReferredRecord } from '../components';
+import { formatNoteReferrerEntityData } from '../utils';
 
-const NoteCreateRoute = ({
+const NoteEditRoute = ({
   location,
   history,
+  match,
 }) => {
   return location.state
     ? (
-      <NoteCreatePage
-        referredEntityData={formatNoteReferrerEntityData(location.state)}
+      <NoteEditPage
+        domain={DOMAIN_NAME}
+        entityTypePluralizedTranslationKeys={{ request: 'ui-requests.notes.entityType.request.pluralized' }}
         entityTypeTranslationKeys={{ request: 'ui-requests.notes.entityType.request' }}
+        navigateBack={history.goBack}
+        noteId={match.params.noteId}
         paneHeaderAppIcon={APP_ICON_NAME}
         paneTitle={<FormattedMessage id="ui-requests.notes.newStaffNote" />}
-        domain={DOMAIN_NAME}
-        navigateBack={history.goBack}
         renderReferredRecord={() => <ReferredRecord values={location.state.referredRecordData} />}
+        referredEntityData={formatNoteReferrerEntityData(location.state)}
       />
     )
     : <Redirect to="/requests" />;
 };
 
-NoteCreateRoute.propTypes = {
+NoteEditRoute.propTypes = {
   history: ReactRouterPropTypes.history.isRequired,
   location: ReactRouterPropTypes.location.isRequired,
+  match: ReactRouterPropTypes.match.isRequired,
 };
 
-export default NoteCreateRoute;
+export default NoteEditRoute;
