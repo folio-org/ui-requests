@@ -8,12 +8,14 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import NoteViewInteractor from '../interactors/note-view';
 import ViewRequestInteractor from '../interactors/view-request';
+import NoteEditInteractor from '../interactors/note-edit';
 
 describe('Note View page', () => {
   setupApplication();
 
   const viewRequest = new ViewRequestInteractor();
   const noteView = new NoteViewInteractor();
+  const noteEdit = new NoteEditInteractor();
   let request;
 
   describe('when there are Notes assigned to a request', () => {
@@ -31,6 +33,7 @@ describe('Note View page', () => {
       beforeEach(async () => {
         await viewRequest.staffNotesAccordion.whenNotesLoaded();
         await viewRequest.staffNotesAccordion.notes(0).click();
+        await noteView.whenLoaded();
       });
 
       it('should redirect to note view page', () => {
@@ -49,7 +52,17 @@ describe('Note View page', () => {
         expect(noteView.referredRecord.itemBarcode).to.equal(`${request.item.barcode}`);
       });
 
-      describe('when click on instance title', () => {
+      describe('when clicking on edit button', () => {
+        beforeEach(async () => {
+          await noteView.clickEditButton();
+        });
+
+        it('should redirect to note edit page', function () {
+          expect(this.location.pathname).to.equal('/requests/notes/test-note-id/edit/');
+        });
+      });
+
+      describe('when clicking on instance title', () => {
         beforeEach(async () => {
           await noteView.referredRecord.clickInstanceLink();
         });
@@ -59,7 +72,7 @@ describe('Note View page', () => {
         });
       });
 
-      describe('when click on item barcode', () => {
+      describe('when clicking on item barcode', () => {
         beforeEach(async () => {
           await noteView.referredRecord.clickItemLink();
         });
