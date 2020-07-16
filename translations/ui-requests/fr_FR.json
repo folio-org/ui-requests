@@ -200,7 +200,7 @@
     "notes.entityType.request": "Demande",
     "notes.entityType.request.pluralized": "{count} {count, plural, one { demande } other { demandes }}",
     "errors.selectItemRequired": "Veuillez sélectionner un élément et appuyez sur Entrée",
-    "notes.assigned.for": "For: {instanceLink} ({itemLink})",
-    "notes.assigned.requester": "Requester: {requesterName}",
-    "notes.assigned.requestDate": "Request date: {requestCreateDate}"
+    "notes.assigned.for": "Pour: {instanceLink} ( {itemLink} )",
+    "notes.assigned.requester": "Demandeur: {requesterName}",
+    "notes.assigned.requestDate": "Date de la demande: {requestCreateDate}"
 }
