@@ -18,7 +18,7 @@ const ItemDetail = ({ item, loan, requestCount }) => {
   const contributor = get(item, ['contributorNames', '0', 'name'], '-');
 
   const positionLink = (
-    <Link to={`/requests?filters=${openRequestStatusFilters}&query=${item.barcode || item.id}&sort=Request Date`}>
+    <Link to={`/requests?filters=${openRequestStatusFilters}&query=${item.id}&sort=Request Date`}>
       {requestCount}
     </Link>
   );

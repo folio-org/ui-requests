@@ -14,6 +14,7 @@
 * Request staff notes: View assigned notes. Refs UIREQ-467.
 * Include tag-related permissions in `ui-users.edit` permission. Refs UITAG-29.
 * Request staff notes: Edit note details. Refs UIREQ-460.
+* Use item id instead of barcode for links on request details screen. Fixes UIREQ-484.
 
 ## [3.0.1](https://github.com/folio-org/ui-requests/tree/v3.0.1) (2020-06-19)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v3.0.0...v3.0.1)
