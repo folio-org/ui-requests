@@ -8,14 +8,12 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import NoteViewInteractor from '../interactors/note-view';
 import ViewRequestInteractor from '../interactors/view-request';
-import NoteEditInteractor from '../interactors/note-edit';
 
 describe('Note View page', () => {
   setupApplication();
 
   const viewRequest = new ViewRequestInteractor();
   const noteView = new NoteViewInteractor();
-  const noteEdit = new NoteEditInteractor();
   let request;
 
   describe('when there are Notes assigned to a request', () => {
