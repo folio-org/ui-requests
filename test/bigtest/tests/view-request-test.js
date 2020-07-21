@@ -150,12 +150,12 @@ describe('View request page', () => {
 
   describe('View delivery request', () => {
     let requester;
-    beforeEach(async function () {
-      const request = await this.server.create('request', {
+    beforeEach(function () {
+      const request = this.server.create('request', {
         fulfilmentPreference: 'Delivery'
       });
 
-      requester = await this.server.schema.users.find(request.requesterId);
+      requester = this.server.schema.users.find(request.requesterId);
       return this.visit('/requests/view/' + request.id);
     });
 
