@@ -1,4 +1,4 @@
-import { trait, association } from '@bigtest/mirage';
+import { trait, association } from 'miragejs';
 
 import Factory from './application';
 
