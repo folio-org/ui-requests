@@ -121,7 +121,7 @@
     "nothingToClear": "Rien à effacer",
     "noExpiredRequests": "Il n'y a actuellement aucune demande expirée ou annulée sur le rayon d'attente.",
     "item.location.libraryName": "Bibliothèque",
-    "item.location.code": "Effective location code",
+    "item.location.code": "Code d'emplacement effectif",
     "requestQueue": "File d'attente",
     "location": "Emplacement",
     "materialType": "Type de ressource",
