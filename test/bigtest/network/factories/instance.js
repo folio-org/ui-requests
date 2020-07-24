@@ -1,4 +1,5 @@
-import { faker, trait } from '@bigtest/mirage';
+import { trait } from 'miragejs';
+import faker from 'faker';
 
 import Factory from './application';
 

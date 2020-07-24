@@ -148,15 +148,15 @@ describe('View request page', () => {
     });
   });
 
-  describe.skip('View delivery request', () => {
+  describe('View delivery request', () => {
     let requester;
-    beforeEach(async function () {
+    beforeEach(function () {
       const request = this.server.create('request', {
         fulfilmentPreference: 'Delivery'
       });
 
       requester = this.server.schema.users.find(request.requesterId);
-      this.visit('/requests/view/' + request.id);
+      return this.visit('/requests/view/' + request.id);
     });
 
     it('shows delivery address', () => {
