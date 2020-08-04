@@ -1,4 +1,3 @@
-import { get } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -121,7 +120,7 @@ class UserForm extends React.Component {
     let proxyId;
     if (proxy) {
       proxyName = getFullName(proxy);
-      proxyBarcode = get(proxy, ['barcode'], '-');
+      proxyBarcode = proxy?.barcode || '-';
       proxyId = proxy.id;
     }
 

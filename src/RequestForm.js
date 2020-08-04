@@ -1083,7 +1083,7 @@ class RequestForm extends React.Component {
                           user={request ? request.requester : selectedUser}
                           stripes={this.props.stripes}
                           request={request}
-                          patronGroup={get(patronGroup, 'desc')}
+                          patronGroup={patronGroup?.group}
                           deliverySelected={deliverySelected}
                           fulfilmentPreference={fulfilmentPreference}
                           deliveryAddress={addressDetail}
