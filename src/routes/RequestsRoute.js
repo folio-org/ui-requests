@@ -17,7 +17,10 @@ import {
   stripesConnect,
   IfPermission,
 } from '@folio/stripes/core';
-import { Button } from '@folio/stripes/components';
+import {
+  Button,
+  Icon,
+} from '@folio/stripes/components';
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
 import { exportCsv } from '@folio/stripes/util';
 
@@ -36,8 +39,12 @@ import {
   convertToSlipData,
 } from '../utils';
 import packageInfo from '../../package';
-import ErrorModal from '../components/ErrorModal';
-import PrintButton from '../components/PrintButton';
+import {
+  PrintButton,
+  ErrorModal,
+  LoadingButton,
+} from '../components';
+
 import {
   RequestsFilters,
   RequestsFiltersConfig,
@@ -245,6 +252,7 @@ class RequestsRoute extends React.Component {
       }),
       pickSlips: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object).isRequired,
+        isPending: PropTypes.bool,
       }),
     }).isRequired,
     stripes: PropTypes.shape({
@@ -689,6 +697,8 @@ class RequestsRoute extends React.Component {
     const InitialValues = dupRequest ||
       { requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' };
 
+    const pickSlipsArePending = resources?.pickSlips?.isPending;
+
     const resultsFormatter = {
       'itemBarcode': rq => (rq.item ? rq.item.barcode : ''),
       'position': rq => (rq.position || ''),
@@ -728,34 +738,42 @@ class RequestsRoute extends React.Component {
         >
           <FormattedMessage id="ui-requests.exportSearchResultsToCsv" />
         </Button>
-        <Button
-          buttonStyle="dropdownItem"
-          id="exportExpiredHoldsToCsvPaneHeaderBtn"
-          disabled={servicePointId && isEmpty(requests)}
-          onClick={() => {
-            onToggle();
-            this.exportExpiredHoldsToCSV();
-          }}
-        >
-          <FormattedMessage
-            id="ui-requests.exportExpiredHoldShelfToCsv"
-            values={{ currentServicePoint: servicePointName }}
-          />
-        </Button>
-        <PrintButton
-          buttonStyle="dropdownItem"
-          id="printPickSlipsBtn"
-          disabled={isEmpty(pickSlips)}
-          template={this.getPrintTemplate()}
-          dataSource={convertToSlipData(pickSlips, intl, timezone, locale)}
-          onBeforePrint={onToggle}
-        >
-          <FormattedMessage
-            id="ui-requests.printPickSlips"
-            values={{ sp: servicePointName }}
-          />
-        </PrintButton>
-      </>
+        {
+          !pickSlipsArePending ?
+            <LoadingButton>
+              <FormattedMessage id="ui-requests.pickSlipsLoading" />
+            </LoadingButton> :
+            <>
+              <Button
+                buttonStyle="dropdownItem"
+                id="exportExpiredHoldsToCsvPaneHeaderBtn"
+                disabled={servicePointId && isEmpty(requests)}
+                onClick={() => {
+                  onToggle();
+                  this.exportExpiredHoldsToCSV();
+                }}
+              >
+                <FormattedMessage
+                  id="ui-requests.exportExpiredHoldShelfToCsv"
+                  values={{ currentServicePoint: servicePointName }}
+                />
+              </Button>
+              <PrintButton
+                buttonStyle="dropdownItem"
+                id="printPickSlipsBtn"
+                disabled={isEmpty(pickSlips)}
+                template={this.getPrintTemplate()}
+                dataSource={convertToSlipData(pickSlips, intl, timezone, locale)}
+                onBeforePrint={onToggle}
+              >
+                <FormattedMessage
+                  id="ui-requests.printPickSlips"
+                  values={{ sp: servicePointName }}
+                />
+              </PrintButton>
+            </> //
+      }
+      </> //
     );
 
     return (
