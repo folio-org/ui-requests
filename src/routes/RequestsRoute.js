@@ -771,9 +771,9 @@ class RequestsRoute extends React.Component {
                   values={{ sp: servicePointName }}
                 />
               </PrintButton>
-            </> //
+            </>
       }
-      </> //
+      </>
     );
 
     return (
