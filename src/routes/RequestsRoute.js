@@ -739,7 +739,7 @@ class RequestsRoute extends React.Component {
           <FormattedMessage id="ui-requests.exportSearchResultsToCsv" />
         </Button>
         {
-          !pickSlipsArePending ?
+          pickSlipsArePending ?
             <LoadingButton>
               <FormattedMessage id="ui-requests.pickSlipsLoading" />
             </LoadingButton> :
