@@ -80,8 +80,8 @@ const formatter = {
   pickup: r => get(r, 'pickupServicePoint.name') ||
     ((r.deliveryType) ? <FormattedMessage id="ui-requests.requestQueue.deliveryType" values={{ type: r.deliveryType }} /> : '-'),
   requester: r => getFullName(r.requester),
-  requesterBarcode: r => get(r, 'requester.barcode', '-'),
-  patronGroup: r => get(r, 'requester.patronGroup.desc', '-'),
+  requesterBarcode: r => r?.requester?.barcode || '-',
+  patronGroup: r => r?.requester?.patronGroup?.group || '-',
   requestDate: r => (<FormattedTime value={r.requestDate} day="numeric" month="numeric" year="numeric" />),
   requestExpirationDate: r => (r.requestExpirationDate ? <FormattedDate value={r.requestExpirationDate} /> : '-'),
   holdShelfExpireDate: r => (r.holdShelfExpirationDate ? <FormattedDate value={r.holdShelfExpirationDate} /> : '-'),

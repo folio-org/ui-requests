@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
@@ -43,7 +42,7 @@ class UserDetail extends React.Component {
     let proxyId;
     if (proxy) {
       proxyName = getFullName(proxy);
-      proxyBarcode = _.get(proxy, ['barcode'], '-');
+      proxyBarcode = proxy?.barcode || '-';
       proxyId = proxy.id || request.proxyUserId;
     }
 
@@ -58,13 +57,13 @@ class UserDetail extends React.Component {
           <Col xs={4}>
             <KeyValue
               label={<FormattedMessage id="ui-requests.requester.patronGroup.group" />}
-              value={patronGroup.desc || '-'}
+              value={patronGroup.group || '-'}
             />
           </Col>
           <Col xs={4}>
             <KeyValue
               label={<FormattedMessage id="ui-requests.requester.fulfilmentPref" />}
-              value={_.get(request, ['fulfilmentPreference'], '-')}
+              value={request?.fulfilmentPreference || '-'}
             />
           </Col>
           <Col xs={4}>
