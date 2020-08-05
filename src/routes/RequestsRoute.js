@@ -720,68 +720,66 @@ class RequestsRoute extends React.Component {
       'title': rq => (rq.item ? rq.item.title : ''),
     };
 
-    const actionMenu = ({ onToggle }) => {
-      return (
-        <>
-          <IfPermission perm="ui-requests.create">
-            <Button
-              buttonStyle="dropdownItem"
-              id="clickable-newrequest"
-              to={`${this.props.location.pathname}?layer=create`}
-              onClick={onToggle}
-            >
-              <FormattedMessage id="stripes-smart-components.new" />
-            </Button>
-          </IfPermission>
+    const actionMenu = ({ onToggle }) => (
+      <>
+        <IfPermission perm="ui-requests.create">
           <Button
             buttonStyle="dropdownItem"
-            id="exportToCsvPaneHeaderBtn"
-            disabled={!requestCount}
-            onClick={() => {
-              onToggle();
-              this.exportData();
-            }}
+            id="clickable-newrequest"
+            to={`${this.props.location.pathname}?layer=create`}
+            onClick={onToggle}
           >
-            <FormattedMessage id="ui-requests.exportSearchResultsToCsv" />
+            <FormattedMessage id="stripes-smart-components.new" />
           </Button>
-          {
-            pickSlipsArePending ?
-              <LoadingButton>
-                <FormattedMessage id="ui-requests.pickSlipsLoading" />
-              </LoadingButton> :
-              <>
-                <Button
-                  buttonStyle="dropdownItem"
-                  id="exportExpiredHoldsToCsvPaneHeaderBtn"
-                  disabled={servicePointId && requestsEmpty}
-                  onClick={() => {
-                    onToggle();
-                    this.exportExpiredHoldsToCSV();
-                  }}
-                >
-                  <FormattedMessage
-                    id="ui-requests.exportExpiredHoldShelfToCsv"
-                    values={{ currentServicePoint: servicePointName }}
-                  />
-                </Button>
-                <PrintButton
-                  buttonStyle="dropdownItem"
-                  id="printPickSlipsBtn"
-                  disabled={pickSlipsEmpty}
-                  template={printTemplate}
-                  contentRef={this.printContentRef}
-                  onBeforePrint={onToggle}
-                >
-                  <FormattedMessage
-                    id="ui-requests.printPickSlips"
-                    values={{ sp: servicePointName }}
-                  />
-                </PrintButton>
-              </>
-          }
-        </>
-      );
-    };
+        </IfPermission>
+        <Button
+          buttonStyle="dropdownItem"
+          id="exportToCsvPaneHeaderBtn"
+          disabled={!requestCount}
+          onClick={() => {
+            onToggle();
+            this.exportData();
+          }}
+        >
+          <FormattedMessage id="ui-requests.exportSearchResultsToCsv" />
+        </Button>
+        {
+          pickSlipsArePending ?
+            <LoadingButton>
+              <FormattedMessage id="ui-requests.pickSlipsLoading" />
+            </LoadingButton> :
+            <>
+              <Button
+                buttonStyle="dropdownItem"
+                id="exportExpiredHoldsToCsvPaneHeaderBtn"
+                disabled={servicePointId && requestsEmpty}
+                onClick={() => {
+                  onToggle();
+                  this.exportExpiredHoldsToCSV();
+                }}
+              >
+                <FormattedMessage
+                  id="ui-requests.exportExpiredHoldShelfToCsv"
+                  values={{ currentServicePoint: servicePointName }}
+                />
+              </Button>
+              <PrintButton
+                buttonStyle="dropdownItem"
+                id="printPickSlipsBtn"
+                disabled={pickSlipsEmpty}
+                template={printTemplate}
+                contentRef={this.printContentRef}
+                onBeforePrint={onToggle}
+              >
+                <FormattedMessage
+                  id="ui-requests.printPickSlips"
+                  values={{ sp: servicePointName }}
+                />
+              </PrintButton>
+            </>
+        }
+      </>
+    );
 
     return (
       <>
