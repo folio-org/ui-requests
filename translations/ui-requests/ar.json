@@ -202,5 +202,6 @@
     "errors.selectItemRequired": "يرجى تحديد مادة والضغط على إدخال",
     "notes.assigned.for": "لـ: {instanceLink} ({itemLink})",
     "notes.assigned.requester": "مقدم الطلب: {requesterName}",
-    "notes.assigned.requestDate": "تاريخ الطلب: {requestCreateDate}"
+    "notes.assigned.requestDate": "تاريخ الطلب: {requestCreateDate}",
+    "pickSlipsLoading": "جاري تحميل قسائم الالتقاط، يرجى الانتظار"
 }

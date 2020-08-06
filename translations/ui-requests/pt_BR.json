@@ -202,5 +202,6 @@
     "errors.selectItemRequired": "Selecione um item e pressione Enter",
     "notes.assigned.for": "Para: {instanceLink} ({itemLink})",
     "notes.assigned.requester": "Solicitante: {requesterName}",
-    "notes.assigned.requestDate": "Data da requisição: {requestCreateDate}"
+    "notes.assigned.requestDate": "Data da requisição: {requestCreateDate}",
+    "pickSlipsLoading": "As guias de carregamento estão sendo carregadas. Aguarde"
 }
