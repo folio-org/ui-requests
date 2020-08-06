@@ -202,5 +202,6 @@
     "errors.selectItemRequired": "请选择一个单件，然后按回车",
     "notes.assigned.for": "对于： {instanceLink} （ {itemLink} ）",
     "notes.assigned.requester": "请求者： {requesterName}",
-    "notes.assigned.requestDate": "请求日期： {requestCreateDate}"
+    "notes.assigned.requestDate": "请求日期： {requestCreateDate}",
+    "pickSlipsLoading": "Pick slips are loading, please wait"
 }

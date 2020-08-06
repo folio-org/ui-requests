@@ -202,5 +202,6 @@
     "errors.selectItemRequired": "Пожалуйста, выберите экземпляр и нажмите Enter",
     "notes.assigned.for": "Для: {instanceLink} ({itemLink})",
     "notes.assigned.requester": "Requester: {requesterName}",
-    "notes.assigned.requestDate": "Дата запроса: {requestCreateDate}"
+    "notes.assigned.requestDate": "Дата запроса: {requestCreateDate}",
+    "pickSlipsLoading": "Pick slips are loading, please wait"
 }

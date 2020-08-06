@@ -202,5 +202,6 @@
     "errors.selectItemRequired": "Please select an item and hit enter",
     "notes.assigned.for": "For: {instanceLink} ({itemLink})",
     "notes.assigned.requester": "Requester: {requesterName}",
-    "notes.assigned.requestDate": "Request date: {requestCreateDate}"
+    "notes.assigned.requestDate": "Request date: {requestCreateDate}",
+    "pickSlipsLoading": "Pick slips are loading, please wait"
 }

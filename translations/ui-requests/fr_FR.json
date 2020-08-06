@@ -202,5 +202,6 @@
     "errors.selectItemRequired": "Veuillez sélectionner un élément et appuyez sur Entrée",
     "notes.assigned.for": "Pour: {instanceLink} ( {itemLink} )",
     "notes.assigned.requester": "Demandeur: {requesterName}",
-    "notes.assigned.requestDate": "Date de la demande: {requestCreateDate}"
+    "notes.assigned.requestDate": "Date de la demande: {requestCreateDate}",
+    "pickSlipsLoading": "Les bordereaux de prélèvement sont en cours de chargement, veuillez patienter"
 }
