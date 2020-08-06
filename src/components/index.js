@@ -4,4 +4,4 @@ export { default as ReferredRecord } from './ReferredRecord/ReferredRecord';
 export { default as LoadingButton } from './LoadingButton';
 export { default as ErrorModal } from './ErrorModal';
 export { default as PrintButton } from './PrintButton';
-
+export { default as PrintContent } from './PrintContent';

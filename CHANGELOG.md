@@ -18,6 +18,7 @@
 * Refactor to `miragejs` from `@bigtest/mirage`.
 * Add loading indicator when service point is switched. Fixes UIREQ-508.
 * Use patron group name ('group') instead of description in displays. Fixes UIREQ-499.
+* Improve performance issues with preview for print pick slips. Fixes UIREQ-507.
 
 ## [3.0.1](https://github.com/folio-org/ui-requests/tree/v3.0.1) (2020-06-19)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v3.0.0...v3.0.1)

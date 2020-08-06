@@ -8,17 +8,12 @@ import {
 
 import { Button } from '@folio/stripes/components';
 
-import ComponentToPrint from '../ComponentToPrint';
-
-import css from './PrintButton.css';
-
 class PrintButton extends React.Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
-    dataSource: PropTypes.arrayOf(PropTypes.object).isRequired,
-    template: PropTypes.string.isRequired,
     onAfterPrint: PropTypes.func,
     onBeforePrint: PropTypes.func,
+    contentRef: PropTypes.object,
   };
 
   static defaultProps = {
@@ -26,15 +21,13 @@ class PrintButton extends React.Component {
     onBeforePrint: noop,
   };
 
-  printContentRef = React.createRef();
-
   getContent = () => {
-    return this.printContentRef.current;
+    return this.props.contentRef.current;
   };
 
   renderTriggerButton = () => {
-    const filedsToSkip = ['dataSource', 'template', 'onBeforePrint', 'onAfterPrint'];
-    const props = omit(this.props, filedsToSkip);
+    const fieldsToSkip = ['contentRef', 'onBeforePrint', 'onAfterPrint'];
+    const props = omit(this.props, fieldsToSkip);
 
     return (
       <Button {...props}>
@@ -45,37 +38,18 @@ class PrintButton extends React.Component {
 
   render() {
     const {
-      dataSource,
-      template,
       onAfterPrint,
       onBeforePrint,
     } = this.props;
 
     return (
-      <>
-        <ReactToPrint
-          content={this.getContent}
-          removeAfterPrint
-          trigger={this.renderTriggerButton}
-          onAfterPrint={onAfterPrint}
-          onBeforePrint={onBeforePrint}
-        />
-        <div className={css.hiddenContent}>
-          <div ref={this.printContentRef}>
-            {dataSource.map(source => (
-              <div
-                key={source['request.requestID']}
-                style={{ pageBreakAfter: 'always' }}
-              >
-                <ComponentToPrint
-                  dataSource={source}
-                  template={template}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </>
+      <ReactToPrint
+        content={this.getContent}
+        removeAfterPrint
+        trigger={this.renderTriggerButton}
+        onAfterPrint={onAfterPrint}
+        onBeforePrint={onBeforePrint}
+      />
     );
   }
 }
