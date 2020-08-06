@@ -1,1 +1,1 @@
-export { default } from './ComponenToPrint';
+export { default } from './ComponentToPrint';

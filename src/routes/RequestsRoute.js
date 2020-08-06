@@ -19,7 +19,6 @@ import {
 } from '@folio/stripes/core';
 import {
   Button,
-  Icon,
 } from '@folio/stripes/components';
 import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
 import { exportCsv } from '@folio/stripes/util';
@@ -41,6 +40,7 @@ import {
 import packageInfo from '../../package';
 import {
   PrintButton,
+  PrintContent,
   ErrorModal,
   LoadingButton,
 } from '../components';
@@ -316,6 +316,8 @@ class RequestsRoute extends React.Component {
       servicePointId: '',
       requests: [],
     };
+
+    this.printContentRef = React.createRef();
   }
 
   static getDerivedStateFromProps(props) {
@@ -698,7 +700,10 @@ class RequestsRoute extends React.Component {
       { requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' };
 
     const pickSlipsArePending = resources?.pickSlips?.isPending;
-
+    const requestsEmpty = isEmpty(requests);
+    const pickSlipsEmpty = isEmpty(pickSlips);
+    const printTemplate = this.getPrintTemplate();
+    const pickSlipsData = convertToSlipData(pickSlips, intl, timezone, locale);
     const resultsFormatter = {
       'itemBarcode': rq => (rq.item ? rq.item.barcode : ''),
       'position': rq => (rq.position || ''),
@@ -747,7 +752,7 @@ class RequestsRoute extends React.Component {
               <Button
                 buttonStyle="dropdownItem"
                 id="exportExpiredHoldsToCsvPaneHeaderBtn"
-                disabled={servicePointId && isEmpty(requests)}
+                disabled={servicePointId && requestsEmpty}
                 onClick={() => {
                   onToggle();
                   this.exportExpiredHoldsToCSV();
@@ -761,9 +766,9 @@ class RequestsRoute extends React.Component {
               <PrintButton
                 buttonStyle="dropdownItem"
                 id="printPickSlipsBtn"
-                disabled={isEmpty(pickSlips)}
-                template={this.getPrintTemplate()}
-                dataSource={convertToSlipData(pickSlips, intl, timezone, locale)}
+                disabled={pickSlipsEmpty}
+                template={printTemplate}
+                contentRef={this.printContentRef}
                 onBeforePrint={onToggle}
               >
                 <FormattedMessage
@@ -772,7 +777,7 @@ class RequestsRoute extends React.Component {
                 />
               </PrintButton>
             </>
-      }
+        }
       </>
     );
 
@@ -846,6 +851,11 @@ class RequestsRoute extends React.Component {
             pagingType="click"
           />
         </div>
+        <PrintContent
+          ref={this.printContentRef}
+          template={printTemplate}
+          dataSource={pickSlipsData}
+        />
       </>
     );
   }
