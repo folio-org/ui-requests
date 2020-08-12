@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 3.0.5 (IN PROGRESS)
+## [3.0.5](https://github.com/folio-org/ui-requests/tree/v3.0.5) (2020-08-12)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v3.0.4...v3.0.5)
 
 * Add loading indicator when service point is switched. Fixes UIREQ-508.
 * Improve performance issues with preview for print pick slips. Fixes UIREQ-507.
