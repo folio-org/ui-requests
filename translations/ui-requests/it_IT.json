@@ -181,7 +181,7 @@
     "declaredLost.message": "{title} ({materialType}) (Barcode: {barcode}) ha come stato dell'item <strong>Dichiarato perso</strong> e non può essere richiesto.",
     "exportExpiredHoldShelfToCsv": "Esporta il rapporto sullo spazio libero negli scaffali",
     "exportSearchResultsToCsv": "Esporta i risultati della ricerca in CSV",
-    "common.cancel": "Cancel",
+    "common.cancel": "Annulla",
     "item.callNumberComponents.prefix": "Effective call number prefix",
     "item.callNumberComponents.callNumber": "Collocazione effettiva",
     "item.callNumberComponents.suffix": "Effective call number suffix",
@@ -198,10 +198,10 @@
     "notes.newStaffNote": "New staff note",
     "notes.staffNotes": "Staff notes",
     "notes.entityType.request": "Richiesta",
-    "notes.entityType.request.pluralized": "{count} {count, plural, one {request} other {requests}}",
+    "notes.entityType.request.pluralized": "{count} {count, plural, one {richiesta} other {richieste}}",
     "errors.selectItemRequired": "Please select an item and hit enter",
-    "notes.assigned.for": "For: {instanceLink} ({itemLink})",
-    "notes.assigned.requester": "Requester: {requesterName}",
-    "notes.assigned.requestDate": "Request date: {requestCreateDate}",
+    "notes.assigned.for": "Per: {instanceLink} ({itemLink})",
+    "notes.assigned.requester": "Nome del richiedente: {requesterName}",
+    "notes.assigned.requestDate": "Data della richiesta: {requestCreateDate}",
     "pickSlipsLoading": "Pick slips are loading, please wait"
 }
