@@ -10,6 +10,8 @@ import {
 import queryString from 'query-string';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { encodeHTML } from 'entities';
+
 import {
   Col,
   Headline,
@@ -166,7 +168,7 @@ export function buildTemplate(template = '') {
   return dataSource => {
     return template.replace(/{{([^{}]*)}}/g, (token, tokenName) => {
       const tokenValue = dataSource[tokenName];
-      return typeof tokenValue === 'string' || typeof tokenValue === 'number' ? tokenValue : '';
+      return typeof tokenValue === 'string' || typeof tokenValue === 'number' ? encodeHTML(tokenValue) : '';
     });
   };
 }
