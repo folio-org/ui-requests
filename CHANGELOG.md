@@ -5,6 +5,7 @@
 
 * Add loading indicator when service point is switched. Fixes UIREQ-508.
 * Improve performance issues with preview for print pick slips. Fixes UIREQ-507.
+* Escape values passed to `react-to-print`. Fixes UIREQ-510.
 
 ## [3.0.4](https://github.com/folio-org/ui-requests/tree/v3.0.4) (2020-07-15)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v3.0.3...v3.0.4)
