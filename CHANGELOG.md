@@ -1,5 +1,10 @@
 # Change history for ui-requests
 
+## [3.0.6](https://github.com/folio-org/ui-requests/tree/v3.0.6) (2020-08-20)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v3.0.5...v3.0.6)
+
+* Escape values passed to `react-to-print`. Fixes UIREQ-510.
+
 ## [3.0.5](https://github.com/folio-org/ui-requests/tree/v3.0.5) (2020-08-12)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v3.0.4...v3.0.5)
 
