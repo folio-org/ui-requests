@@ -13,12 +13,14 @@ class PrintButton extends React.Component {
     children: PropTypes.node.isRequired,
     onAfterPrint: PropTypes.func,
     onBeforePrint: PropTypes.func,
+    onBeforeGetContent: PropTypes.func,
     contentRef: PropTypes.object,
   };
 
   static defaultProps = {
     onAfterPrint: noop,
     onBeforePrint: noop,
+    onBeforeGetContent: noop,
   };
 
   getContent = () => {
@@ -40,6 +42,7 @@ class PrintButton extends React.Component {
     const {
       onAfterPrint,
       onBeforePrint,
+      onBeforeGetContent,
     } = this.props;
 
     return (
@@ -49,6 +52,7 @@ class PrintButton extends React.Component {
         trigger={this.renderTriggerButton}
         onAfterPrint={onAfterPrint}
         onBeforePrint={onBeforePrint}
+        onBeforeGetContent={onBeforeGetContent}
       />
     );
   }
