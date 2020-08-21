@@ -16,6 +16,7 @@ import {
   AppIcon,
   stripesConnect,
   IfPermission,
+  CalloutContext,
 } from '@folio/stripes/core';
 import {
   Button,
@@ -81,6 +82,8 @@ const urls = {
 };
 
 class RequestsRoute extends React.Component {
+  static contextType = CalloutContext;
+
   static manifest = {
     addressTypes: {
       type: 'okapi',
@@ -769,7 +772,15 @@ class RequestsRoute extends React.Component {
                 disabled={pickSlipsEmpty}
                 template={printTemplate}
                 contentRef={this.printContentRef}
-                onBeforePrint={onToggle}
+                onBeforeGetContent={
+                  () => new Promise(resolve => {
+                    this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
+                    onToggle();
+                    // without the timeout the printing process starts right away
+                    // and the callout and onToggle above are blocked
+                    setTimeout(() => resolve(), 1000);
+                  })
+                }
               >
                 <FormattedMessage
                   id="ui-requests.printPickSlips"

@@ -188,5 +188,6 @@
   "permission.view": "Requests: View",
   "permission.create": "Requests: View, create",
   "permission.edit": "Requests: View, edit, cancel",
-  "pickSlipsLoading": "Pick slips are loading, please wait"
+  "pickSlipsLoading": "Pick slips are loading, please wait",
+  "printInProgress": "Print options loading in progress. It might take a few seconds, please be patient."
 }
