@@ -21,6 +21,7 @@
 * Improve performance issues with preview for print pick slips. Fixes UIREQ-507.
 * Add feedback after print button is clicked. Fixes UIREQ-508.
 * Escape values passed to `react-to-print`. Fixes UIREQ-510.
+* Block requests for Aged to lost items. Refs UIREQ-429.
 
 ## [3.0.1](https://github.com/folio-org/ui-requests/tree/v3.0.1) (2020-06-19)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v3.0.0...v3.0.1)

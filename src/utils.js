@@ -143,6 +143,10 @@ export function isLostAndPaidItem(item) {
   return item?.status?.name === itemStatuses.LOST_AND_PAID;
 }
 
+export function isAgedToLostItem(item) {
+  return item?.status?.name === itemStatuses.AGED_TO_LOST;
+}
+
 export function isDelivery(request) {
   return request?.fulfilmentPreference === fulfilmentTypeMap.DELIVERY;
 }
