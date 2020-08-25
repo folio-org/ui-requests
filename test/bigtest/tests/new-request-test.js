@@ -23,6 +23,7 @@ const itemStatuses = [
   'Withdrawn',
   'Claimed returned',
   'Lost and paid',
+  'Aged to lost',
 ];
 
 describe('New Request page', () => {

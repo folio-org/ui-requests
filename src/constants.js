@@ -36,6 +36,7 @@ export const itemStatuses = {
   WITHDRAWN: 'Withdrawn',
   CLAIMED_RETURNED: 'Claimed returned',
   LOST_AND_PAID: 'Lost and paid',
+  AGED_TO_LOST: 'Aged to lost',
 };
 
 export const requestTypesMap = {

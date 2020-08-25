@@ -35,4 +35,3 @@ PrintContent.propTypes = {
 };
 
 export default memo(PrintContent, isEqual);
-

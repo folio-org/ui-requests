@@ -64,6 +64,7 @@ import {
   toUserAddress,
   getPatronGroup,
   getRequestTypeOptions,
+  isAgedToLostItem,
   isDelivery,
   isDeclaredLostItem,
   isWithdrawnItem,
@@ -660,7 +661,8 @@ class RequestForm extends React.Component {
     return isDeclaredLostItem(item) ||
       isWithdrawnItem(item) ||
       isClaimedReturned(item) ||
-      isLostAndPaidItem(item);
+      isLostAndPaidItem(item) ||
+      isAgedToLostItem(item);
   }
 
   onSave = (data) => {
