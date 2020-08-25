@@ -1,5 +1,10 @@
 # Change history for ui-requests
 
+## [3.0.7](https://github.com/folio-org/ui-requests/tree/v3.0.7) (2020-08-25)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v3.0.6...v3.0.7)
+
+* Add feedback after print button is clicked. Fixes UIREQ-508.
+
 ## [3.0.6](https://github.com/folio-org/ui-requests/tree/v3.0.6) (2020-08-20)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v3.0.5...v3.0.6)
 
@@ -10,7 +15,6 @@
 
 * Add loading indicator when service point is switched. Fixes UIREQ-508.
 * Improve performance issues with preview for print pick slips. Fixes UIREQ-507.
-* Add feedback after print button is clicked. Fixes UIREQ-508.
 * Escape values passed to `react-to-print`. Fixes UIREQ-510.
 
 ## [3.0.4](https://github.com/folio-org/ui-requests/tree/v3.0.4) (2020-07-15)
