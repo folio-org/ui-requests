@@ -203,5 +203,6 @@
     "notes.assigned.for": "Pour: {instanceLink} ( {itemLink} )",
     "notes.assigned.requester": "Demandeur: {requesterName}",
     "notes.assigned.requestDate": "Date de la demande: {requestCreateDate}",
-    "pickSlipsLoading": "Les bordereaux de prélèvement sont en cours de chargement, veuillez patienter"
+    "pickSlipsLoading": "Les bordereaux de prélèvement sont en cours de chargement, veuillez patienter",
+    "printInProgress": "Chargement des options d'impression en cours. Cela peut prendre quelques secondes, merci de patienter."
 }

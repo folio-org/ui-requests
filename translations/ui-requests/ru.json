@@ -203,5 +203,6 @@
     "notes.assigned.for": "Для: {instanceLink} ({itemLink})",
     "notes.assigned.requester": "Requester: {requesterName}",
     "notes.assigned.requestDate": "Дата запроса: {requestCreateDate}",
-    "pickSlipsLoading": "Pick slips are loading, please wait"
+    "pickSlipsLoading": "Pick slips are loading, please wait",
+    "printInProgress": "Print options loading in progress. It might take a few seconds, please be patient."
 }
