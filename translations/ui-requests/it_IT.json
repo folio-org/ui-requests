@@ -56,7 +56,7 @@
     "cancel.additionalInfoPlaceholderRequired": "Inserisci ulteriori informazioni sulla cancellazione (obbligatorio)",
     "cancel.additionalInfoPlaceholderOptional": "Inserisci ulteriori informazioni sulla cancellazione (opzionale)",
     "meta.title": "Richieste",
-    "resultCount": "{count, number} {count, plural, one {record trovato} other {records trovati}}",
+    "resultCount": "{count, number} {count, plural, one {record trovato} other {record trovati}}",
     "barcode": "Barcode",
     "actions.viewQueuePosition": "Visualizza posizione in coda",
     "item.requestsOnItem": "Richieste su item",
