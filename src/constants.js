@@ -120,7 +120,8 @@ export const expiredHoldsReportHeaders = [
 export const requestFilterTypes = {
   TAGS: 'tags',
   REQUEST_TYPE: 'requestType',
-  REQUEST_STATUS: 'requestStatus'
+  REQUEST_STATUS: 'requestStatus',
+  PICKUP_SERVICE_POINT: 'pickupServicePoints',
 };
 
 export const requestTypeFilters = [

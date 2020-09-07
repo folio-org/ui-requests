@@ -7,3 +7,7 @@ ModuleDescriptor.json
 yarn-error.log
 .vscode
 artifacts
+
+# stripes
+.stripesclirc
+stripes.config.js.local
