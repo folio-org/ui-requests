@@ -1,3 +1,7 @@
+import {
+  requestFilterTypes,
+} from '../../constants';
+
 export default [
   {
     name: 'requestType',
@@ -16,5 +20,11 @@ export default [
     name: 'tags',
     cql: 'tags.tagList',
     values: [],
+  },
+  {
+    name: requestFilterTypes.PICKUP_SERVICE_POINT,
+    cql: 'pickupServicePointId',
+    values: [],
+    operator: '==',
   },
 ];
