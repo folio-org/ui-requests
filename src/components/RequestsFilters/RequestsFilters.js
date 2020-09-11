@@ -23,6 +23,8 @@ import {
   requestTypeFilters,
 } from '../../constants';
 
+import { PickupServicePointFilter } from './PickupServicePointFilter';
+
 export default class RequestsFilters extends React.Component {
   static propTypes = {
     activeFilters: PropTypes.objectOf(PropTypes.array).isRequired,
@@ -51,6 +53,7 @@ export default class RequestsFilters extends React.Component {
         tags = [],
         requestType = [],
         requestStatus = [],
+        pickupServicePoints = [],
       },
       onChange,
       onClear,
@@ -107,6 +110,13 @@ export default class RequestsFilters extends React.Component {
             ariaLabelledBy={requestFilterTypes.TAGS}
           />
         </Accordion>
+
+        <PickupServicePointFilter
+          activeValues={pickupServicePoints}
+          servicePoints={this.props.resources?.servicePoints?.records}
+          onChange={onChange}
+          onClear={onClear}
+        />
       </AccordionSet>
     );
   }
