@@ -50,14 +50,14 @@ const COLUMN_NAMES = [
 ];
 
 const COLUMN_WIDTHS = {
-  position: '5%',
-  requestType: '5%',
-  status: '11%',
-  pickup: '9%',
-  requester: '15%',
-  requesterBarcode: '12%',
-  patronGroup: '13%',
-  requestDate: '11%',
+  position: { max: 74 },
+  requestType: { max: 101 },
+  status: { max: 198 },
+  pickup: { max: 133 },
+  requester: { max: 223 },
+  requesterBarcode: { max: 178 },
+  patronGroup: { max: 190 },
+  requestDate: { max: 180 },
   requestExpirationDate: '8%',
   holdShelfExpireDate: '13%',
 };
