@@ -825,8 +825,12 @@ class RequestsRoute extends React.Component {
               'proxy',
             ]}
             columnWidths={{
-              [requestDate]: '220px',
-              [title]: '40%'
+              requestDate: { max: 165 },
+              title: { max: 300 },
+              position: { max: 100 },
+              requestType: { max: 101 },
+              itemBarcode: { max: 115 },
+              type: { max: 100 }
             }}
             columnMapping={this.columnLabels}
             resultsFormatter={resultsFormatter}
