@@ -1,6 +1,6 @@
 {
     "requester.name": "Requester name",
-    "requester.username": "Username",
+    "requester.username": "ユーザー名",
     "requester.patronGroup": "利用者グループ",
     "actions.showNotes": "Show Notes",
     "requestMeta.detailLabel": "Request Detail",
