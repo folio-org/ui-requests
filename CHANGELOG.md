@@ -23,6 +23,7 @@
 * Escape values passed to `react-to-print`. Fixes UIREQ-510.
 * Block requests for Aged to lost items. Refs UIREQ-429.
 * Create filter for Requests - Pickup service point. Refs UIREQ-516.
+* Use MultiColumnList columnwidths API to shrink column widths - Fixes UIREQ-521.
 
 ## [3.0.1](https://github.com/folio-org/ui-requests/tree/v3.0.1) (2020-06-19)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v3.0.0...v3.0.1)
