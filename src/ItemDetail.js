@@ -3,8 +3,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FormattedDate, FormattedMessage } from 'react-intl';
+
 import { Col, KeyValue, Row } from '@folio/stripes/components';
 import { effectiveCallNumber } from '@folio/stripes/util';
+import {
+  ClipCopy,
+} from '@folio/stripes/smart-components';
 
 import { openRequestStatusFilters } from './utils';
 
@@ -30,6 +34,11 @@ const ItemDetail = ({ item, loan, requestCount }) => {
         <Col xs={4}>
           <KeyValue label={<FormattedMessage id={itemLabel} />}>
             {recordLink}
+            {
+              Boolean(item.barcode) && (
+                <ClipCopy text={item.barcode} />
+              )
+            }
           </KeyValue>
         </Col>
         <Col xs={4}>
