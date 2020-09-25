@@ -11,7 +11,7 @@ import {
   FilterAccordionHeader,
 } from '@folio/stripes/components';
 import {
-  CheckboxFilter,
+  MultiSelectionFilter,
 } from '@folio/stripes/smart-components';
 
 import {
@@ -47,11 +47,13 @@ const PickupServicePointFilter = ({
       separator={false}
       onClearFilter={clearFilter}
     >
-      <CheckboxFilter
+      <MultiSelectionFilter
+        ariaLabelledBy={`accordion-toggle-button-${name}`}
         dataOptions={filterOptions}
+        id="acq-tags-filter"
         name={name}
-        selectedValues={activeValues}
         onChange={onChange}
+        selectedValues={activeValues}
       />
     </Accordion>
   );

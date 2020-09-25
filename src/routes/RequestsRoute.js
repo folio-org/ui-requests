@@ -136,7 +136,7 @@ class RequestsRoute extends React.Component {
     servicePoints: {
       type: 'okapi',
       records: 'servicepoints',
-      path: 'service-points?query=(pickupLocation==true)&limit=100',
+      path: 'service-points?query=(pickupLocation==true) sortby name&limit=100',
     },
     itemUniquenessValidator: {
       type: 'okapi',
