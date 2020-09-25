@@ -50,7 +50,7 @@ const PickupServicePointFilter = ({
       <MultiSelectionFilter
         ariaLabelledBy={`accordion-toggle-button-${name}`}
         dataOptions={filterOptions}
-        id="acq-tags-filter"
+        id="req-pickup-service-point-filter"
         name={name}
         onChange={onChange}
         selectedValues={activeValues}
