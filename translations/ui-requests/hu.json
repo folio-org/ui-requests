@@ -49,7 +49,7 @@
     "actions.loading": "Betöltés...",
     "cancel.cancelRequest": "Kérés visszavonása",
     "cancel.modalLabel": "Erősítse meg a kérés lemondását",
-    "cancel.requestWillBeCancelled": "<b>{title} törölve lesz</b>",
+    "cancel.requestWillBeCancelled": "<b>{title}</b> törölve <b>lesz</b>",
     "cancel.reasonLabel": "A lemondás oka",
     "cancel.notifyLabel": "Olvasó értesítése",
     "cancel.additionalInfoLabel": "További információ",
