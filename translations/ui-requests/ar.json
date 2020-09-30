@@ -18,7 +18,7 @@
     "errors.onlyCheckedOutForRecall": "يمكن استرجاع المواد المعارة فقط",
     "errors.onlyCheckedOutForHold": "يمكن حجز المواد المعارة فقط",
     "errors.selectItem": "يرجى تحديد مادة",
-    "errors.selectUser": "يرجى تحديد مقدم الطلب",
+    "errors.selectUser": "يرجى تحديد مقدم طلب مع الباركود",
     "actions.closeNewRequest": "إغلاق الطلب الجديد",
     "actions.createNewRequest": "إنشاء طلب جديد",
     "actions.newRequest": "طلب جديد",
