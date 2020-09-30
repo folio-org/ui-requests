@@ -72,6 +72,7 @@ export const requestTypesByItemStatus = {
 export const reportHeaders = [
   'requestType',
   'status',
+  'requestDate',
   'requestExpirationDate',
   'holdShelfExpirationDate',
   'position',

@@ -26,6 +26,7 @@
 * Use MultiColumnList columnwidths API to shrink column widths - Fixes UIREQ-521.
 * Implement easy way to copy Barcode in the Request record. Refs UIREQ-478.
 * Switch service point filter from checkboxes to multi-select picker. Refs UIREQ-527.
+* Add Request Date to the Request CSV report. Refs UIREQ-531.
 
 ## [3.0.1](https://github.com/folio-org/ui-requests/tree/v3.0.1) (2020-06-19)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v3.0.0...v3.0.1)

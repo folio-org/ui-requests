@@ -13,6 +13,7 @@
   "requestType": "Request type",
   "requestType.message": "Select item to view available request types",
   "status": "Request status",
+  "requestDate": "Request date",
   "requestExpirationDate": "Request expiration date",
   "holdShelfExpirationDate": "Hold shelf expiration date",
   "position": "Position in queue",
