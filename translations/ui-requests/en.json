@@ -58,7 +58,7 @@
   "errors.onlyCheckedOutForHold": "Only checked out items can be held",
   "errors.selectItem": "Please select an item",
   "errors.selectItemRequired": "Please select an item and hit enter",
-  "errors.selectUser": "Please select a requester with the barcode",
+  "errors.selectUser": "Please fill out requestor information to continue",
 
   "actions.edit": "Edit",
   "actions.editRequestLink": "Edit Request Dialog",

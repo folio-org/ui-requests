@@ -2,6 +2,7 @@
 
 ## 4.0.0 (IN PROGRESS)
 
+* Reword error message when user does not select patron barcode.  Addresses UIREQ-514.
 * Fix bug that require user hit Enter in item field before save the request. Fixes UIREQ-326.
 * Add staff notes accordion to request details page. Refs UIREQ-457.
 * Request staff notes: Assign/Unassign Notes. Refs UIREQ-458.
