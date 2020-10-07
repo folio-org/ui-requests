@@ -204,5 +204,6 @@
     "notes.assigned.requester": "Requester: {requesterName}",
     "notes.assigned.requestDate": "Request date: {requestCreateDate}",
     "pickSlipsLoading": "Pick slips are loading, please wait",
-    "printInProgress": "Print options loading in progress. It might take a few seconds, please be patient."
+    "printInProgress": "Print options loading in progress. It might take a few seconds, please be patient.",
+    "requestDate": "requestDate"
 }
