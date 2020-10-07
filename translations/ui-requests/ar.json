@@ -204,5 +204,6 @@
     "notes.assigned.requester": "مقدم الطلب: {requesterName}",
     "notes.assigned.requestDate": "تاريخ الطلب: {requestCreateDate}",
     "pickSlipsLoading": "جاري تحميل قسائم الالتقاط، يرجى الانتظار",
-    "printInProgress": "تحميل خيارات الطباعة قيد التقدم. قد يستغرق الأمر بضع ثوان، يرجى الانتظار."
+    "printInProgress": "تحميل خيارات الطباعة قيد التقدم. قد يستغرق الأمر بضع ثوان، يرجى الانتظار.",
+    "requestDate": "requestDate"
 }
