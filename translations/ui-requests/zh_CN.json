@@ -204,5 +204,6 @@
     "notes.assigned.requester": "请求者： {requesterName}",
     "notes.assigned.requestDate": "请求日期： {requestCreateDate}",
     "pickSlipsLoading": "选取单正在加载，请稍候",
-    "printInProgress": "正在加载打印选项。可能需要几秒钟，请耐心等待。"
+    "printInProgress": "正在加载打印选项。可能需要几秒钟，请耐心等待。",
+    "requestDate": "requestDate"
 }
