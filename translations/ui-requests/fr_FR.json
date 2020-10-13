@@ -18,7 +18,7 @@
     "errors.onlyCheckedOutForRecall": "Seuls les articles empruntés peuvent être rappelés",
     "errors.onlyCheckedOutForHold": "Seuls les articles empruntés peuvent être conservés",
     "errors.selectItem": "Merci de sélectionner un élément",
-    "errors.selectUser": "Merci de sélectionner un demandeur",
+    "errors.selectUser": "Veuillez remplir les informations du demandeur pour continuer",
     "actions.closeNewRequest": "Fermer la nouvelle demande",
     "actions.createNewRequest": "Créer une nouvelle demande",
     "actions.newRequest": "Nouvelle demande",
