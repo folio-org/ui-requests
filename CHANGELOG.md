@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 4.0.0 (IN PROGRESS)
+## [4.0.0](https://github.com/folio-org/ui-requests/tree/v4.0.0) (2020-10-14)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v3.0.1...v4.0.0)
 
 * Reword error message when user does not select patron barcode.  Addresses UIREQ-514.
 * Fix bug that require user hit Enter in item field before save the request. Fixes UIREQ-326.
