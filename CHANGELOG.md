@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 4.0.0 (IN PROGRESS)
+## [4.0.0](https://github.com/folio-org/ui-requests/tree/v4.0.0) (2020-10-14)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v3.0.1...v4.0.0)
 
 * Reword error message when user does not select patron barcode.  Addresses UIREQ-514.
 * Fix bug that require user hit Enter in item field before save the request. Fixes UIREQ-326.
@@ -9,6 +10,7 @@
 * Add staff notes view details page. Refs UIREQ-459.
 * Use `==` for more efficient queries. Refs PERF-62.
 * Use `==` for requestType and status filters. Refs CIRC-817.
+* Improve loading requester details. Refs UIREQ-477.
 * Add subpermission to `Requests: View, create`. Refs UIREQ-486.
 * Increment `@folio/stripes` to `v5` for `react-router` `v5.2`.
 * Fix the ability to sort by the `Request Date` column. Fixes UIREQ-481.
