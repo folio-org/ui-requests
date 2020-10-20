@@ -117,7 +117,7 @@
     "additionalReasons": "عرض تفاصيل الحظر لمعرفة المزيد من أسباب الحظر...",
     "pickupServicePoint.name": "نقطة خدمة الالتقاط",
     "item.id": "معرّف المادة",
-    "exportExpiredHoldsToCsv": "تقرير الحجوزات المنتهية (CSV)",
+    "exportExpiredHoldsToCsv": "CSV تقرير تصفية رف الحجز",
     "nothingToClear": "لا يوجد شيء لمسحه",
     "noExpiredRequests": "لا توجد حاليًا أي طلبات منتهية أو ملغية على رف الحجز.",
     "item.location.libraryName": "المكتبة",
