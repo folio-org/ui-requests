@@ -1,5 +1,10 @@
 # Change history for ui-requests
 
+## [4.0.1](https://github.com/folio-org/ui-requests/tree/v4.0.1) (2020-10-15)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.0...v4.0.1)
+
+* Update plugins to `stripes v5`-compatible versions. Refs UIREQ-535.
+
 ## [4.0.0](https://github.com/folio-org/ui-requests/tree/v4.0.0) (2020-10-14)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v3.0.1...v4.0.0)
 
