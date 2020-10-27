@@ -177,6 +177,12 @@ class ViewRequest extends React.Component {
 
   update(record) {
     const updatedRecord = record;
+console.log("starting update with record", record)
+
+    // Recombine the date and time components of holdShelfExpirationDate
+    const [holdShelfDate, ...time] = updatedRecord.holdShelfExpirationDate.split('T');
+    const recombined = `${holdShelfDate}T${updatedRecord.holdShelfExpirationTime}`;
+    console.log("Got a recombined time of", recombined)
 
     // Remove the "enhanced record" fields that aren't part of the request schema (and thus can't)
     // be included in the record PUT, or the save will fail
@@ -270,6 +276,13 @@ class ViewRequest extends React.Component {
     const query = location.search ? queryString.parse(location.search) : {};
 
     if (query.layer === 'edit') {
+      // Split HSED
+      let hsed, hset;
+      if (request.holdShelfExpirationDate) {
+        [hsed, hset] = request.holdShelfExpirationDate?.split('T')
+
+      }
+
       return (
         <IntlConsumer>
           {intl => (
@@ -279,7 +292,12 @@ class ViewRequest extends React.Component {
             >
               <RequestForm
                 stripes={stripes}
-                initialValues={{ requestExpirationDate: null, ...request }}
+                initialValues={{
+                  requestExpirationDate: null,
+                  holdShelfExpirationDate: hsed,
+                  holdShelfExpirationTime: hset,
+                  ...request
+                }}
                 request={request}
                 metadataDisplay={this.cViewMetaData}
                 onSubmit={(record) => { this.update(record); }}
