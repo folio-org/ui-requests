@@ -677,6 +677,7 @@ class RequestForm extends React.Component {
     const {
       requestExpirationDate,
       holdShelfExpirationDate,
+      holdShelfExpirationTime,
       fulfilmentPreference,
       deliveryAddressTypeId,
       pickupServicePointId,
@@ -696,10 +697,13 @@ class RequestForm extends React.Component {
     }
 
     if (!requestExpirationDate) unset(data, 'requestExpirationDate');
-    if (holdShelfExpirationDate && !holdShelfExpirationDate.match('T')) {
-      const time = moment.tz(timeZone).format('HH:mm:ss');
-      data.holdShelfExpirationDate = moment.tz(`${holdShelfExpirationDate} ${time}`, timeZone).utc().format();
-    } else if (!holdShelfExpirationDate) {
+    if (holdShelfExpirationDate) {
+      // Recombine the values from datepicker and timepicker into a single date/time
+      const date = moment.tz(holdShelfExpirationDate, timeZone).format('YYYY-MM-DD');
+      const time = holdShelfExpirationTime.replace('Z', '');
+      const combinedDateTime = moment.tz(`${date} ${time}`, timeZone);
+      data.holdShelfExpirationDate = combinedDateTime.utc().format();
+    } else {
       unset(data, 'holdShelfExpirationDate');
     }
     if (fulfilmentPreference === fulfilmentTypeMap.HOLD_SHELF && isString(deliveryAddressTypeId)) {
@@ -812,7 +816,7 @@ class RequestForm extends React.Component {
     const patronGroup = getPatronGroup(selectedUser, patronGroups);
     const requestTypeError = this.shouldShowRequestTypeError(selectedItem);
     const itemStatus = selectedItem?.status?.name;
-console.log("rendering form initial values", this.props.initialValues)
+
     return (
       <Paneset isRoot>
         <form
@@ -1001,7 +1005,6 @@ console.log("rendering form initial values", this.props.initialValues)
                               name="holdShelfExpirationDate"
                               label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
                               aria-label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
-                              // backendDateStandard="YYYY-MM-DD"
                               component={Datepicker}
                               dateFormat="YYYY-MM-DD"
                             />
@@ -1009,9 +1012,10 @@ console.log("rendering form initial values", this.props.initialValues)
                           <Col xs={3}>
                             <Field
                               name="holdShelfExpirationTime"
-                              label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
-                              aria-label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
+                              label={<FormattedMessage id="ui-requests.holdShelfExpirationTime" />}
+                              aria-label={<FormattedMessage id="ui-requests.holdShelfExpirationTime" />}
                               component={Timepicker}
+                              timeZone="UTC"
                             />
                           </Col>
                         </>

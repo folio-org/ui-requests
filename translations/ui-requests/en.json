@@ -16,6 +16,7 @@
   "requestDate": "Request date",
   "requestExpirationDate": "Request expiration date",
   "holdShelfExpirationDate": "Hold shelf expiration date",
+  "holdShelfExpirationTime": "Hold shelf expiration time",
   "position": "Position in queue",
   "close": "Close",
   "blockedLabel": "Reason for block",

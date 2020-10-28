@@ -13,6 +13,7 @@ import {
   FormattedDate,
   FormattedTime,
 } from 'react-intl';
+import moment from 'moment-timezone';
 
 import {
   IntlConsumer,
@@ -177,12 +178,6 @@ class ViewRequest extends React.Component {
 
   update(record) {
     const updatedRecord = record;
-console.log("starting update with record", record)
-
-    // Recombine the date and time components of holdShelfExpirationDate
-    const [holdShelfDate, ...time] = updatedRecord.holdShelfExpirationDate.split('T');
-    const recombined = `${holdShelfDate}T${updatedRecord.holdShelfExpirationTime}`;
-    console.log("Got a recombined time of", recombined)
 
     // Remove the "enhanced record" fields that aren't part of the request schema (and thus can't)
     // be included in the record PUT, or the save will fail
@@ -195,6 +190,7 @@ console.log("starting update with record", record)
     delete updatedRecord.loan;
     delete updatedRecord.itemStatus;
     delete updatedRecord.requestCount;
+    delete updatedRecord.holdShelfExpirationTime;
 
     this.props.mutator.selectedRequest.PUT(updatedRecord).then(() => {
       this.props.onCloseEdit();
@@ -276,11 +272,13 @@ console.log("starting update with record", record)
     const query = location.search ? queryString.parse(location.search) : {};
 
     if (query.layer === 'edit') {
-      // Split HSED
-      let hsed, hset;
+      // The hold shelf expiration date is stored as a single value (e.g., 20201101T23:59:00-0400),
+      // but it's exposed in the UI as separate date- and time-picker components.
+      let momentDate;
       if (request.holdShelfExpirationDate) {
-        [hsed, hset] = request.holdShelfExpirationDate?.split('T')
-
+        momentDate = moment(request.holdShelfExpirationDate);
+      } else {
+        momentDate = moment();
       }
 
       return (
@@ -294,8 +292,8 @@ console.log("starting update with record", record)
                 stripes={stripes}
                 initialValues={{
                   requestExpirationDate: null,
-                  holdShelfExpirationDate: hsed,
-                  holdShelfExpirationTime: hset,
+                  holdShelfExpirationDate: request.holdShelfExpirationDate,
+                  holdShelfExpirationTime: momentDate.format('HH:mm'),
                   ...request
                 }}
                 request={request}
