@@ -43,6 +43,7 @@ import {
   TextField,
   PaneFooter,
   Icon,
+  Timepicker,
 } from '@folio/stripes/components';
 import stripesForm from '@folio/stripes/form';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
@@ -676,6 +677,7 @@ class RequestForm extends React.Component {
     const {
       requestExpirationDate,
       holdShelfExpirationDate,
+      holdShelfExpirationTime,
       fulfilmentPreference,
       deliveryAddressTypeId,
       pickupServicePointId,
@@ -695,10 +697,13 @@ class RequestForm extends React.Component {
     }
 
     if (!requestExpirationDate) unset(data, 'requestExpirationDate');
-    if (holdShelfExpirationDate && !holdShelfExpirationDate.match('T')) {
-      const time = moment.tz(timeZone).format('HH:mm:ss');
-      data.holdShelfExpirationDate = moment.tz(`${holdShelfExpirationDate} ${time}`, timeZone).utc().format();
-    } else if (!holdShelfExpirationDate) {
+    if (holdShelfExpirationDate) {
+      // Recombine the values from datepicker and timepicker into a single date/time
+      const date = moment.tz(holdShelfExpirationDate, timeZone).format('YYYY-MM-DD');
+      const time = holdShelfExpirationTime.replace('Z', '');
+      const combinedDateTime = moment.tz(`${date} ${time}`, timeZone);
+      data.holdShelfExpirationDate = combinedDateTime.utc().format();
+    } else {
       unset(data, 'holdShelfExpirationDate');
     }
     if (fulfilmentPreference === fulfilmentTypeMap.HOLD_SHELF && isString(deliveryAddressTypeId)) {
@@ -994,16 +999,27 @@ class RequestForm extends React.Component {
                         />
                       </Col>
                       {isEditForm && request.status === requestStatuses.AWAITING_PICKUP &&
-                        <Col xs={3}>
-                          <Field
-                            name="holdShelfExpirationDate"
-                            label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
-                            aria-label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
-                            backendDateStandard="YYYY-MM-DD"
-                            component={Datepicker}
-                            dateFormat="YYYY-MM-DD"
-                          />
-                        </Col> }
+                        <>
+                          <Col xs={3}>
+                            <Field
+                              name="holdShelfExpirationDate"
+                              label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
+                              aria-label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
+                              component={Datepicker}
+                              dateFormat="YYYY-MM-DD"
+                            />
+                          </Col>
+                          <Col xs={3}>
+                            <Field
+                              name="holdShelfExpirationTime"
+                              label={<FormattedMessage id="ui-requests.holdShelfExpirationTime" />}
+                              aria-label={<FormattedMessage id="ui-requests.holdShelfExpirationTime" />}
+                              component={Timepicker}
+                              timeZone="UTC"
+                            />
+                          </Col>
+                        </>
+                      }
                       {isEditForm && request.status !== requestStatuses.AWAITING_PICKUP &&
                         <Col xs={3}>
                           <KeyValue

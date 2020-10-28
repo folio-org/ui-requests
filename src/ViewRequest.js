@@ -13,6 +13,7 @@ import {
   FormattedDate,
   FormattedTime,
 } from 'react-intl';
+import moment from 'moment-timezone';
 
 import {
   IntlConsumer,
@@ -189,6 +190,7 @@ class ViewRequest extends React.Component {
     delete updatedRecord.loan;
     delete updatedRecord.itemStatus;
     delete updatedRecord.requestCount;
+    delete updatedRecord.holdShelfExpirationTime;
 
     this.props.mutator.selectedRequest.PUT(updatedRecord).then(() => {
       this.props.onCloseEdit();
@@ -270,6 +272,15 @@ class ViewRequest extends React.Component {
     const query = location.search ? queryString.parse(location.search) : {};
 
     if (query.layer === 'edit') {
+      // The hold shelf expiration date is stored as a single value (e.g., 20201101T23:59:00-0400),
+      // but it's exposed in the UI as separate date- and time-picker components.
+      let momentDate;
+      if (request.holdShelfExpirationDate) {
+        momentDate = moment(request.holdShelfExpirationDate);
+      } else {
+        momentDate = moment();
+      }
+
       return (
         <IntlConsumer>
           {intl => (
@@ -279,7 +290,12 @@ class ViewRequest extends React.Component {
             >
               <RequestForm
                 stripes={stripes}
-                initialValues={{ requestExpirationDate: null, ...request }}
+                initialValues={{
+                  requestExpirationDate: null,
+                  holdShelfExpirationDate: request.holdShelfExpirationDate,
+                  holdShelfExpirationTime: momentDate.format('HH:mm'),
+                  ...request
+                }}
                 request={request}
                 metadataDisplay={this.cViewMetaData}
                 onSubmit={(record) => { this.update(record); }}
