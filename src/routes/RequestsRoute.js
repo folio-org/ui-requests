@@ -112,6 +112,7 @@ class RequestsRoute extends React.Component {
               'itemBarcode': 'item.barcode',
               'type': 'requestType',
               'requester': 'requester.lastName requester.firstName',
+              'requestStatus': 'status',
               'requesterBarcode': 'requester.barcode',
               'requestDate': 'requestDate',
               'position': 'position',
