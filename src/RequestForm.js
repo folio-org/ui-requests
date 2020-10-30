@@ -403,11 +403,20 @@ class RequestForm extends React.Component {
     try {
       const { requestPreferences } = await findResource('requestPreferences', userId, 'userId');
       const preferences = requestPreferences[0];
+
+      const defaultPreferences = this.getDefaultRequestPreferences();
       const requestPreference = {
-        ...this.getDefaultRequestPreferences(),
+        ...defaultPreferences,
         ...pick(preferences, ['defaultDeliveryAddressTypeId', 'defaultServicePointId']),
         requestPreferencesLoaded: true,
       };
+
+      // if editing existing request and defaultServicePointId is present (it was
+      // set during creation) just keep it instead of choosing the preferred one.
+      // https://issues.folio.org/browse/UIREQ-544
+      if (this.isEditForm() && defaultPreferences.defaultServicePointId) {
+        requestPreference.defaultServicePointId = defaultPreferences.defaultServicePointId;
+      }
 
       const deliveryIsPredefined = get(preferences, 'delivery');
 
