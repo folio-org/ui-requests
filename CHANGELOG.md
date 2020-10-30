@@ -4,6 +4,7 @@
 
 * Fix sorting by request status. Fixes UIREQ-540.
 * Omit `holdShelfExpirationDate` field in duplicated request. Refs UIREQ-532.
+* Fix search by tags. Fixes UIREQ-542.
 
 ## [4.0.1](https://github.com/folio-org/ui-requests/tree/v4.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.0...v4.0.1)
