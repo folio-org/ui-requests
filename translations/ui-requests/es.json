@@ -205,5 +205,6 @@
     "notes.assigned.requestDate": "Request date: {requestCreateDate}",
     "pickSlipsLoading": "Pick slips are loading, please wait",
     "printInProgress": "Las opciones de impresión se están cargando. Puede que lleve unos segundos, por favor, ten paciencia.",
-    "requestDate": "requestDate"
+    "requestDate": "requestDate",
+    "holdShelfExpirationTime": "holdShelfExpirationTime"
 }
