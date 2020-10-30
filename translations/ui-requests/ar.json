@@ -178,7 +178,7 @@
     "filters.requestStatus.notYetFilled": "مفتوح - غير مملوء بعد",
     "noRequestTypesAvailable": "لا تتوافر أنواع طلب للمادة المحددة",
     "declaredLost.title": "لا يمكن طلب المادة",
-    "declaredLost.message": "{title} ({materialType}) (باركود: {barcode}) لها حالة المادة <strong>معلن فقدانها</strong> ولا يمكن طلبها.",
+    "declaredLost.message": "{title} ({materialType}) (باركود: {barcode}) لها حالة المادة <strong>معلن ضياعها</strong> ولا يمكن طلبها.",
     "exportExpiredHoldShelfToCsv": "تصدير تقرير مسح رف الحجوزات لـ {currentServicePoint}",
     "exportSearchResultsToCsv": "تصدير نتائج البحث إلى ملف CSV",
     "common.cancel": "إلغاء",
@@ -205,5 +205,6 @@
     "notes.assigned.requestDate": "تاريخ الطلب: {requestCreateDate}",
     "pickSlipsLoading": "جاري تحميل قسائم الالتقاط، يرجى الانتظار",
     "printInProgress": "تحميل خيارات الطباعة قيد التقدم. قد يستغرق الأمر بضع ثوان، يرجى الانتظار.",
-    "requestDate": "requestDate"
+    "requestDate": "requestDate",
+    "holdShelfExpirationTime": "holdShelfExpirationTime"
 }
