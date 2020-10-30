@@ -411,7 +411,7 @@ class RequestForm extends React.Component {
         requestPreferencesLoaded: true,
       };
 
-      // if editing existing request and defaultServicePointId is present (it was
+      // when in edit mode (editing existing request) and defaultServicePointId is present (it was
       // set during creation) just keep it instead of choosing the preferred one.
       // https://issues.folio.org/browse/UIREQ-544
       if (this.isEditForm() && defaultPreferences.defaultServicePointId) {
