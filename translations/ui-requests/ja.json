@@ -101,7 +101,7 @@
     "requester.patronGroup.group": "依頼者の利用者グループ",
     "actions.duplicateRequest": "Duplicate",
     "actions.cancelNewRequest": "キャンセル",
-    "close": "Close",
+    "close": "閉じる",
     "blockedLabel": "Reason for block",
     "blockModal": "Patron blocked from requesting",
     "detailsButton": "View block details",
