@@ -205,5 +205,6 @@
     "notes.assigned.requestDate": "Data da requisição: {requestCreateDate}",
     "pickSlipsLoading": "As guias de carregamento estão sendo carregadas. Aguarde",
     "printInProgress": "Carregamento das opções de impressão em andamento. Pode demorar alguns segundos, por favor seja paciente.",
-    "requestDate": "requestDate"
+    "requestDate": "requestDate",
+    "holdShelfExpirationTime": "holdShelfExpirationTime"
 }
