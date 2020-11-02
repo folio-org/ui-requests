@@ -699,10 +699,13 @@ class RequestForm extends React.Component {
     if (!requestExpirationDate) unset(data, 'requestExpirationDate');
     if (holdShelfExpirationDate) {
       // Recombine the values from datepicker and timepicker into a single date/time
-      const date = moment.tz(holdShelfExpirationDate, timeZone).format('YYYY-MM-DD');
+      const zone = "Europe/Paris"
+      const date = moment.tz(holdShelfExpirationDate, zone).format('YYYY-MM-DD');
       const time = holdShelfExpirationTime.replace('Z', '');
-      const combinedDateTime = moment.tz(`${date} ${time}`, timeZone);
+      console.log("converting", `${date} ${time}`)
+      const combinedDateTime = moment.tz(`${date} ${time}`, zone);
       data.holdShelfExpirationDate = combinedDateTime.utc().format();
+      console.log("result: ", data.holdShelfExpirationDate)
     } else {
       unset(data, 'holdShelfExpirationDate');
     }
