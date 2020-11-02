@@ -20,6 +20,7 @@ export default [
     name: 'tags',
     cql: 'tags.tagList',
     values: [],
+    operator: '=',
   },
   {
     name: requestFilterTypes.PICKUP_SERVICE_POINT,

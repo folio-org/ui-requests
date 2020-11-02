@@ -110,6 +110,7 @@ export function duplicateRequest(request) {
     'item',
     'pickupServicePoint',
     'proxyUserId',
+    'holdShelfExpirationDate',
   ]);
 }
 
