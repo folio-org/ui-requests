@@ -359,7 +359,7 @@ class RequestForm extends React.Component {
         const selectedUser = result.users[0];
         const state = { selectedUser };
 
-        if ((blocks.length && blocks[0].userId === selectedUser.id) || !isEmpty(automatedPatronBlocks) && !isAutomatedPatronBlocksRequestInPendingState) {
+        if ((blocks.length && blocks[0].userId === selectedUser.id) || (!isEmpty(automatedPatronBlocks) && !isAutomatedPatronBlocksRequestInPendingState)) {
           state.blocked = true;
         }
 
