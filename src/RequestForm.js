@@ -355,10 +355,11 @@ class RequestForm extends React.Component {
       if (result.totalRecords === 1) {
         const blocks = this.getPatronManualBlocks(parentResources);
         const automatedPatronBlocks = this.getAutomatedPatronBlocks(parentResources);
+        const isAutomatedPatronBlocksRequestInPendingState = parentResources.automatedPatronBlocks.isPending;
         const selectedUser = result.users[0];
         const state = { selectedUser };
 
-        if ((blocks.length && blocks[0].userId === selectedUser.id) || !isEmpty(automatedPatronBlocks)) {
+        if ((blocks.length && blocks[0].userId === selectedUser.id) || (!isEmpty(automatedPatronBlocks) && !isAutomatedPatronBlocksRequestInPendingState)) {
           state.blocked = true;
         }
 
