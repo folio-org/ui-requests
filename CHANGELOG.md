@@ -7,6 +7,7 @@
 * Fix sorting by request status. Fixes UIREQ-540.
 * Fix search by tags. Fixes UIREQ-542.
 * Fix default pickup service point when editing existing request. Fixes UIREQ-544.
+* Increase the limit to display all items in the `Move request` modal. Fixes UIREQ-541.
 
 ## [4.0.1](https://github.com/folio-org/ui-requests/tree/v4.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.0...v4.0.1)
