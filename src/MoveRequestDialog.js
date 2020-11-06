@@ -143,7 +143,7 @@ class MoveRequestDialog extends React.Component {
     const query = holdings.map(h => `holdingsRecordId==${h.id}`).join(' or ');
     items.reset();
 
-    return items.GET({ params: { query } });
+    return items.GET({ params: { query, limit: 1000 } });
   }
 
   fetchRequests(items) {
@@ -195,6 +195,7 @@ class MoveRequestDialog extends React.Component {
             <MultiColumnList
               id="instance-items-list"
               interactive
+              autosize
               ariaLabel={<FormattedMessage id="ui-requests.moveRequest.instanceItems" />}
               contentData={contentData}
               visibleColumns={COLUMN_NAMES}
