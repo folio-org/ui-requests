@@ -125,6 +125,37 @@ class RequestsRoute extends React.Component {
         staticFallback: { params: {} },
       },
     },
+    reportRecords: {
+      type: 'okapi',
+      path: 'circulation/requests',
+      records: 'requests',
+      resultOffset: '%{resultOffset}',
+      perRequest: 5000,
+      throwErrors: false,
+      GET: {
+        params: {
+          query: makeQueryFunction(
+            'cql.allRecords=1',
+            '(requesterId=="%{query.query}" or requester.barcode="%{query.query}*" or item.title="%{query.query}*" or item.barcode="%{query.query}*" or itemId=="%{query.query}")',
+            {
+              'title': 'item.title',
+              'itemBarcode': 'item.barcode',
+              'type': 'requestType',
+              'requester': 'requester.lastName requester.firstName',
+              'requestStatus': 'status',
+              'requesterBarcode': 'requester.barcode',
+              'requestDate': 'requestDate',
+              'position': 'position',
+              'proxy': 'proxy',
+            },
+            RequestsFiltersConfig,
+            2, // do not fetch unless we have a query or a filter
+          ),
+        },
+        staticFallback: { params: {} },
+      },
+    },
+
     patronGroups: {
       type: 'okapi',
       path: 'groups',
@@ -366,14 +397,69 @@ class RequestsRoute extends React.Component {
     }
   }
 
+  async fetchData(mutator, query) {
+    const { GET, reset } = mutator;
+    //console.log("query", query)
+    //const query = query;// this.queryString;
+    const limit = 1000;
+    const data = [];
+    console.log("GET", GET)
+
+    let offset = 0;
+    let hasData = true;
+    while (hasData) {
+      try {
+        reset();
+        // eslint-disable-next-line no-await-in-loop
+        const result = await GET({ params: { query, limit, offset } });
+        // const result = await this.props.mutator.records.GET();
+
+        hasData = result.length;
+        offset += limit;
+        if (hasData) {
+          data.push(...result);
+        }
+      } catch (err) {
+        hasData = false;
+      }
+    }
+
+    return data;
+  }
+
+  async justdoitalready() {
+    let query = makeQueryFunction(
+      'cql.allRecords=1',
+      '(item.title="%{query.query}*")',
+      {
+        'title': 'item.title',
+      },
+      RequestsFiltersConfig,
+      2, // do not fetch unless we have a query or a filter
+    )
+
+    //query = `(item.title="california*")`
+    this.props.mutator.reportRecords.reset()
+    await this.props.mutator.reportRecords.GET({ params: { query, limit: 1000 }}).then(results => {
+      console.log("experimental results", results)
+    })
+  }
+
   exportData = () => {
     const records = this.props?.resources?.records?.records ?? [];
     const recordsToCSV = this.buildRecords(records);
 
-    exportCsv(recordsToCSV, {
-      onlyFields: this.columnHeadersMap,
-      excludeFields: ['id'],
-    });
+    console.log("exporting records", records, recordsToCSV)
+    console.log("reportrecords", this.props.resources.reportRecords)
+
+    // console.log("fetched data", this.fetchData(this.props.mutator.reportRecords, query))
+    //this.justdoitalready()
+
+
+    // exportCsv(recordsToCSV, {
+    //   onlyFields: this.columnHeadersMap,
+    //   excludeFields: ['id'],
+    // });
   }
 
   getCurrentServicePointInfo = () => {
