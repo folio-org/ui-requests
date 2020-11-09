@@ -6,6 +6,7 @@
 * Omit `holdShelfExpirationDate` field in duplicated request. Refs UIREQ-532.
 * Fix sorting by request status. Fixes UIREQ-540.
 * Fix search by tags. Fixes UIREQ-542.
+* Fix CSV search results export. Fixes UIREQ-539.
 
 
 ## [4.0.1](https://github.com/folio-org/ui-requests/tree/v4.0.1) (2020-10-15)

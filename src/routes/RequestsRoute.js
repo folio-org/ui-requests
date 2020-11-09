@@ -129,31 +129,9 @@ class RequestsRoute extends React.Component {
       type: 'okapi',
       path: 'circulation/requests',
       records: 'requests',
-      resultOffset: '%{resultOffset}',
-      perRequest: 5000,
+      perRequest: 1000,
       throwErrors: false,
-      GET: {
-        params: {
-          query: makeQueryFunction(
-            'cql.allRecords=1',
-            '(requesterId=="%{query.query}" or requester.barcode="%{query.query}*" or item.title="%{query.query}*" or item.barcode="%{query.query}*" or itemId=="%{query.query}")',
-            {
-              'title': 'item.title',
-              'itemBarcode': 'item.barcode',
-              'type': 'requestType',
-              'requester': 'requester.lastName requester.firstName',
-              'requestStatus': 'status',
-              'requesterBarcode': 'requester.barcode',
-              'requestDate': 'requestDate',
-              'position': 'position',
-              'proxy': 'proxy',
-            },
-            RequestsFiltersConfig,
-            2, // do not fetch unless we have a query or a filter
-          ),
-        },
-        staticFallback: { params: {} },
-      },
+      accumulate: true,
     },
 
     patronGroups: {
@@ -240,6 +218,9 @@ class RequestsRoute extends React.Component {
       records: PropTypes.shape({
         GET: PropTypes.func,
         POST: PropTypes.func,
+      }),
+      reportRecords: PropTypes.shape({
+        GET: PropTypes.func,
       }),
       query: PropTypes.object,
       requestCount: PropTypes.shape({
@@ -397,23 +378,19 @@ class RequestsRoute extends React.Component {
     }
   }
 
-  async fetchData(mutator, query) {
+  async fetchReportData(mutator, query) {
     const { GET, reset } = mutator;
-    //console.log("query", query)
-    //const query = query;// this.queryString;
+
     const limit = 1000;
     const data = [];
-    console.log("GET", GET)
-
     let offset = 0;
     let hasData = true;
+
     while (hasData) {
       try {
         reset();
         // eslint-disable-next-line no-await-in-loop
         const result = await GET({ params: { query, limit, offset } });
-        // const result = await this.props.mutator.records.GET();
-
         hasData = result.length;
         offset += limit;
         if (hasData) {
@@ -427,39 +404,53 @@ class RequestsRoute extends React.Component {
     return data;
   }
 
-  async justdoitalready() {
-    let query = makeQueryFunction(
-      'cql.allRecords=1',
-      '(item.title="%{query.query}*")',
-      {
-        'title': 'item.title',
-      },
-      RequestsFiltersConfig,
-      2, // do not fetch unless we have a query or a filter
-    )
+  // Build a CQL expression for the active filters. This will produce something like
+  // '(filter1=="value1" or filter1=="value2") and (filter2=="value3")...'
+  buildFilterQuery() {
+    const filters = this.getActiveFilters();
+    const filterTypes = Object.keys(filters);
+    const filterTypeMap = {
+      'requestType': 'requestType',
+      'requestStatus': 'status',
+      'pickupServicePoints': 'pickupServicePointId',
+    };
 
-    //query = `(item.title="california*")`
-    this.props.mutator.reportRecords.reset()
-    await this.props.mutator.reportRecords.GET({ params: { query, limit: 1000 }}).then(results => {
-      console.log("experimental results", results)
-    })
+    const expressionClauses = [];
+    filterTypes.forEach(ft => {
+      const values = filters[ft];
+      const filterClauses = [];
+      values.forEach(v => { filterClauses.push(`${filterTypeMap[ft]}=="${v}"`); });
+      expressionClauses.push(filterClauses.join(' or '));
+    });
+
+    return expressionClauses.length > 0 ? `(${expressionClauses.join(') and (')})` : '';
   }
 
-  exportData = () => {
-    const records = this.props?.resources?.records?.records ?? [];
+  // Export function for the CSV search report action
+  async exportData() {
+    // Build a custom query for the CSV record export, which has to include
+    // all search and filter parameters
+    const queryClauses = [];
+    let queryString;
+
+    const queryTerm = this.props.resources?.query?.query;
+    const filterQuery = this.buildFilterQuery();
+
+    if (queryTerm) {
+      queryString = `(requesterId=="${queryTerm}" or requester.barcode="${queryTerm}*" or item.title="${queryTerm}*" or item.barcode="${queryTerm}*" or itemId=="${queryTerm}")`;
+      queryClauses.push(queryString);
+    }
+
+    if (filterQuery) queryClauses.push(filterQuery);
+
+    queryString = queryClauses.join(' and ');
+    const records = await this.fetchReportData(this.props.mutator.reportRecords, queryString);
     const recordsToCSV = this.buildRecords(records);
 
-    console.log("exporting records", records, recordsToCSV)
-    console.log("reportrecords", this.props.resources.reportRecords)
-
-    // console.log("fetched data", this.fetchData(this.props.mutator.reportRecords, query))
-    //this.justdoitalready()
-
-
-    // exportCsv(recordsToCSV, {
-    //   onlyFields: this.columnHeadersMap,
-    //   excludeFields: ['id'],
-    // });
+    exportCsv(recordsToCSV, {
+      onlyFields: this.columnHeadersMap,
+      excludeFields: ['id'],
+    });
   }
 
   getCurrentServicePointInfo = () => {
