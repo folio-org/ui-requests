@@ -81,6 +81,10 @@ const urls = {
   }
 };
 
+// Standard search query for request records; checks for a search term in
+// requester ID, requester barcode, item ID, item barcode, or item titlte
+const standardRecordQuery = '(requesterId=="%{query.query}" or requester.barcode="%{query.query}*" or item.title="%{query.query}*" or item.barcode="%{query.query}*" or itemId=="%{query.query}")';
+
 class RequestsRoute extends React.Component {
   static contextType = CalloutContext;
 
@@ -106,7 +110,7 @@ class RequestsRoute extends React.Component {
         params: {
           query: makeQueryFunction(
             'cql.allRecords=1',
-            '(requesterId=="%{query.query}" or requester.barcode="%{query.query}*" or item.title="%{query.query}*" or item.barcode="%{query.query}*" or itemId=="%{query.query}")',
+            standardRecordQuery,
             {
               'title': 'item.title',
               'itemBarcode': 'item.barcode',
@@ -437,7 +441,7 @@ class RequestsRoute extends React.Component {
     const filterQuery = this.buildFilterQuery();
 
     if (queryTerm) {
-      queryString = `(requesterId=="${queryTerm}" or requester.barcode="${queryTerm}*" or item.title="${queryTerm}*" or item.barcode="${queryTerm}*" or itemId=="${queryTerm}")`;
+      queryString = standardRecordQuery;
       queryClauses.push(queryString);
     }
 
