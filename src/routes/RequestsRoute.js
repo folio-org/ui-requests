@@ -20,8 +20,13 @@ import {
 } from '@folio/stripes/core';
 import {
   Button,
+  filters2cql,
 } from '@folio/stripes/components';
-import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
+import {
+  deparseFilters,
+  makeQueryFunction,
+  SearchAndSort,
+} from '@folio/stripes/smart-components';
 import { exportCsv } from '@folio/stripes/util';
 
 import ViewRequest from '../ViewRequest';
@@ -408,28 +413,6 @@ class RequestsRoute extends React.Component {
     return data;
   }
 
-  // Build a CQL expression for the active filters. This will produce something like
-  // '(filter1=="value1" or filter1=="value2") and (filter2=="value3")...'
-  buildFilterQuery() {
-    const filters = this.getActiveFilters();
-    const filterTypes = Object.keys(filters);
-    const filterTypeMap = {
-      'requestType': 'requestType',
-      'requestStatus': 'status',
-      'pickupServicePoints': 'pickupServicePointId',
-    };
-
-    const expressionClauses = [];
-    filterTypes.forEach(ft => {
-      const values = filters[ft];
-      const filterClauses = [];
-      values.forEach(v => { filterClauses.push(`${filterTypeMap[ft]}=="${v}"`); });
-      expressionClauses.push(filterClauses.join(' or '));
-    });
-
-    return expressionClauses.length > 0 ? `(${expressionClauses.join(') and (')})` : '';
-  }
-
   // Export function for the CSV search report action
   async exportData() {
     // Build a custom query for the CSV record export, which has to include
@@ -438,7 +421,7 @@ class RequestsRoute extends React.Component {
     let queryString;
 
     const queryTerm = this.props.resources?.query?.query;
-    const filterQuery = this.buildFilterQuery();
+    const filterQuery = filters2cql(RequestsFiltersConfig, deparseFilters(this.getActiveFilters()));
 
     if (queryTerm) {
       queryString = standardRecordQuery;
