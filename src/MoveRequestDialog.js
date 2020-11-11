@@ -47,6 +47,8 @@ const formatter = {
   loanType: item => (item.temporaryLoanType ? get(item, 'temporaryLoanType.name', '') : get(item, 'permanentLoanType.name', '')),
 };
 
+const MAX_HEIGHT = 500;
+
 class MoveRequestDialog extends React.Component {
   static manifest = {
     holdings: {
@@ -195,13 +197,13 @@ class MoveRequestDialog extends React.Component {
             <MultiColumnList
               id="instance-items-list"
               interactive
-              autosize
               ariaLabel={<FormattedMessage id="ui-requests.moveRequest.instanceItems" />}
               contentData={contentData}
               visibleColumns={COLUMN_NAMES}
               columnMapping={COLUMN_MAP}
               columnWidths={COLUMN_WIDTHS}
               formatter={formatter}
+              maxHeight={MAX_HEIGHT}
               isEmptyMessage={<FormattedMessage id="ui-requests.moveRequest.instanceItems.notFound" />}
               onRowClick={(_, item) => this.onRowClick(item)}
             /> }
