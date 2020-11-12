@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 4.0.2 IN PROGRESS
+## [4.0.2](https://github.com/folio-org/ui-requests/tree/v4.0.2) (2020-11-12)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.1...v4.0.2)
 
 * Fix sorting by request status. Fixes UIREQ-540.
 * Omit `holdShelfExpirationDate` field in duplicated request. Refs UIREQ-532.
