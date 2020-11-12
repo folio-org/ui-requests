@@ -20,8 +20,13 @@ import {
 } from '@folio/stripes/core';
 import {
   Button,
+  filters2cql,
 } from '@folio/stripes/components';
-import { makeQueryFunction, SearchAndSort } from '@folio/stripes/smart-components';
+import {
+  deparseFilters,
+  makeQueryFunction,
+  SearchAndSort,
+} from '@folio/stripes/smart-components';
 import { exportCsv } from '@folio/stripes/util';
 
 import ViewRequest from '../ViewRequest';
@@ -125,6 +130,15 @@ class RequestsRoute extends React.Component {
         staticFallback: { params: {} },
       },
     },
+    reportRecords: {
+      type: 'okapi',
+      path: 'circulation/requests',
+      records: 'requests',
+      perRequest: 1000,
+      throwErrors: false,
+      accumulate: true,
+    },
+
     patronGroups: {
       type: 'okapi',
       path: 'groups',
@@ -209,6 +223,9 @@ class RequestsRoute extends React.Component {
       records: PropTypes.shape({
         GET: PropTypes.func,
         POST: PropTypes.func,
+      }),
+      reportRecords: PropTypes.shape({
+        GET: PropTypes.func,
       }),
       query: PropTypes.object,
       requestCount: PropTypes.shape({
@@ -366,8 +383,51 @@ class RequestsRoute extends React.Component {
     }
   }
 
-  exportData = () => {
-    const records = this.props?.resources?.records?.records ?? [];
+  async fetchReportData(mutator, query) {
+    const { GET, reset } = mutator;
+
+    const limit = 1000;
+    const data = [];
+    let offset = 0;
+    let hasData = true;
+
+    while (hasData) {
+      try {
+        reset();
+        // eslint-disable-next-line no-await-in-loop
+        const result = await GET({ params: { query, limit, offset } });
+        hasData = result.length;
+        offset += limit;
+        if (hasData) {
+          data.push(...result);
+        }
+      } catch (err) {
+        hasData = false;
+      }
+    }
+
+    return data;
+  }
+
+  // Export function for the CSV search report action
+  async exportData() {
+    // Build a custom query for the CSV record export, which has to include
+    // all search and filter parameters
+    const queryClauses = [];
+    let queryString;
+
+    const queryTerm = this.props.resources?.query?.query;
+    const filterQuery = filters2cql(RequestsFiltersConfig, deparseFilters(this.getActiveFilters()));
+
+    if (queryTerm) {
+      queryString = `(requesterId=="${queryTerm}" or requester.barcode="${queryTerm}*" or item.title="${queryTerm}*" or item.barcode="${queryTerm}*" or itemId=="${queryTerm}")`;
+      queryClauses.push(queryString);
+    }
+
+    if (filterQuery) queryClauses.push(filterQuery);
+
+    queryString = queryClauses.join(' and ');
+    const records = await this.fetchReportData(this.props.mutator.reportRecords, queryString);
     const recordsToCSV = this.buildRecords(records);
 
     exportCsv(recordsToCSV, {
