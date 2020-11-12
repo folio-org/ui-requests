@@ -9,6 +9,7 @@
 * Fix default pickup service point when editing existing request. Fixes UIREQ-544.
 * Increase the limit to display all items in the `Move request` modal. Fixes UIREQ-541.
 * Fix the non-responsive design of the `Move request` modal. Fixes UIREQ-552.
+* Fix CSV search results export. Fixes UIREQ-539.
 
 ## [4.0.1](https://github.com/folio-org/ui-requests/tree/v4.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.0...v4.0.1)
