@@ -37,7 +37,7 @@ describe('Export to CSV', () => {
     describe('Export to CSV', function () {
       beforeEach(async () => {
         await requests.headerDropdown.click();
-        await requests.headerDropdownMenu.clickExportToCSV();
+        await requests.headerDropdownMenu.clickExportExpiredHoldsToCSV();
       });
 
       it('exports data to csv', () => {

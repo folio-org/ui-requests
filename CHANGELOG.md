@@ -1,5 +1,9 @@
 # Change history for ui-requests
 
+## 4.0.3 IN PROGRESS
+
+* Add a 'working' indicator for CSV search results export. Fixes UIREQ-555.
+
 ## [4.0.2](https://github.com/folio-org/ui-requests/tree/v4.0.2) (2020-11-12)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.1...v4.0.2)
 
@@ -10,7 +14,6 @@
 * Fix default pickup service point when editing existing request. Fixes UIREQ-544.
 * Increase the limit to display all items in the `Move request` modal. Fixes UIREQ-541.
 * Fix the non-responsive design of the `Move request` modal. Fixes UIREQ-552.
-* Fix CSV search results export. Fixes UIREQ-539.
 
 ## [4.0.1](https://github.com/folio-org/ui-requests/tree/v4.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.0...v4.0.1)
