@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 4.0.3 IN PROGRESS
+## [4.0.3](https://github.com/folio-org/ui-requests/tree/v4.0.3) (2020-11-16)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.2...v4.0.3)
 
 * Add a 'working' indicator for CSV search results export. Fixes UIREQ-555.
 
