@@ -26,7 +26,7 @@ const itemStatuses = [
   'Aged to lost',
 ];
 
-describe('New Request page', () => {
+describe.only('New Request page', () => {
   setupApplication({
     modules: [{
       type: 'plugin',
@@ -127,8 +127,10 @@ describe('New Request page', () => {
           .fillUserBarcode('9676761472501')
           .clickUserEnterBtn();
 
+        await newRequest.chooseFulfillmentPreference('Hold Shelf');
         await newRequest.chooseServicePoint('Circ Desk 2');
         await newRequest.clickNewRequest();
+        await viewRequest.isPresent;
       });
 
       it('should create a new request and open view request pane', () => {
@@ -152,9 +154,11 @@ describe('New Request page', () => {
           .fillItemBarcode('9676761472500')
           .clickItemEnterBtn();
         await newRequest.clickAddUser();
+        await newRequest.chooseFulfillmentPreference('Hold Shelf');
         await newRequest.whenServicePointIsPresent();
         await newRequest.chooseServicePoint('Circ Desk 2');
         await newRequest.clickNewRequest();
+        await viewRequest.isPresent;
       });
 
       it('should create a new request and open view request pane', () => {
@@ -196,6 +200,7 @@ describe('New Request page', () => {
         await newRequest.chooseFulfillmentPreference('Delivery');
         await newRequest.chooseDeliveryAddress('Claim');
         await newRequest.clickNewRequest();
+        await viewRequest.isPresent;
       });
 
       it('should create a new request and open view request pane', () => {
