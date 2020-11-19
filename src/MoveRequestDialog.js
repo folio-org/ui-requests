@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { countBy, get, orderBy } from 'lodash';
+import { countBy, get, orderBy, chunk } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -148,13 +148,28 @@ class MoveRequestDialog extends React.Component {
     return items.GET({ params: { query, limit: 1000 } });
   }
 
-  fetchRequests(items) {
+  async fetchRequests(items) {
     const { mutator: { requests } } = this.props;
-    let query = items.map(i => `itemId==${i.id}`).join(' or ');
-    query = `(${query}) and (status="Open")`;
-    requests.reset();
 
-    return requests.GET({ params: { query, limit: 1000 } });
+    // Split the list of items into small chunks to create a short enough query string
+    // that we can avoid a "414 Request URI Too Long" response from Okapi.
+    const CHUNK_SIZE = 40;
+
+    const chunkedItems = chunk(items, CHUNK_SIZE);
+
+    const data = [];
+
+    for (const itemChunk of chunkedItems) {
+      let query = itemChunk.map(i => `itemId==${i.id}`).join(' or ');
+      query = `(${query}) and (status="Open")`;
+
+      requests.reset();
+      const result = await requests.GET({ params: { query, limit: 1000 } });
+
+      data.push(...result);
+    }
+
+    return data;
   }
 
   async onRowClick(item) {
