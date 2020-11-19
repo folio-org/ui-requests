@@ -206,5 +206,6 @@
     "pickSlipsLoading": "جاري تحميل قسائم الالتقاط، يرجى الانتظار",
     "printInProgress": "تحميل خيارات الطباعة قيد التقدم. قد يستغرق الأمر بضع ثوان، يرجى الانتظار.",
     "requestDate": "requestDate",
-    "holdShelfExpirationTime": "holdShelfExpirationTime"
+    "holdShelfExpirationTime": "holdShelfExpirationTime",
+    "csvReportPending": "csvReportPending"
 }

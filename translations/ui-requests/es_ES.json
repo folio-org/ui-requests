@@ -206,5 +206,6 @@
     "pickSlipsLoading": "Pick slips are loading, please wait",
     "printInProgress": "Las opciones de impresión se están cargando. Puede que lleve unos segundos, por favor, ten paciencia.",
     "requestDate": "requestDate",
-    "holdShelfExpirationTime": "holdShelfExpirationTime"
+    "holdShelfExpirationTime": "holdShelfExpirationTime",
+    "csvReportPending": "csvReportPending"
 }
