@@ -183,7 +183,7 @@
     "redux-form": "^7.0.3"
   },
   "peerDependencies": {
-    "@folio/stripes": "^5.0.0",
+    "@folio/stripes": "^5.0.7",
     "react": "*",
     "react-intl": "^5.7.0",
     "react-router": "^5.2.0",
