@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 4.0.4 IN PROGRESS
+## [4.0.4](https://github.com/folio-org/ui-requests/tree/v4.0.4) (2020-11-20)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.3...v4.0.4)
 
 * Increment `@folio/stripes` to `^5.0.7`. Refs STFORM-16.
 * Add a toast notification for CSV search results export. Refs UIREQ-555.
