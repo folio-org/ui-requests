@@ -811,6 +811,7 @@ class RequestsRoute extends React.Component {
             id="exportToCsvPaneHeaderBtn"
             disabled={!requestCount}
             onClick={() => {
+              this.context.sendCallout({ message: <FormattedMessage id="ui-requests.csvReportInProgress" /> });
               onToggle();
               this.exportData();
             }}
