@@ -331,6 +331,7 @@ class RequestsRoute extends React.Component {
     this.expiredHoldsReportColumnHeaders = this.getColumnHeaders(expiredHoldsReportHeaders);
 
     this.state = {
+      csvReportPending: false,
       submitting: false,
       errorMessage: '',
       errorModalData: {},
@@ -411,6 +412,8 @@ class RequestsRoute extends React.Component {
 
   // Export function for the CSV search report action
   async exportData() {
+    this.setState({ csvReportPending: true });
+
     // Build a custom query for the CSV record export, which has to include
     // all search and filter parameters
     const queryClauses = [];
@@ -434,6 +437,8 @@ class RequestsRoute extends React.Component {
       onlyFields: this.columnHeadersMap,
       excludeFields: ['id'],
     });
+
+    this.setState({ csvReportPending: false });
   }
 
   getCurrentServicePointInfo = () => {
@@ -746,6 +751,7 @@ class RequestsRoute extends React.Component {
     } = this.columnLabels;
 
     const {
+      csvReportPending,
       dupRequest,
       errorMessage,
       errorModalData,
@@ -796,17 +802,23 @@ class RequestsRoute extends React.Component {
             <FormattedMessage id="stripes-smart-components.new" />
           </Button>
         </IfPermission>
-        <Button
-          buttonStyle="dropdownItem"
-          id="exportToCsvPaneHeaderBtn"
-          disabled={!requestCount}
-          onClick={() => {
-            onToggle();
-            this.exportData();
-          }}
-        >
-          <FormattedMessage id="ui-requests.exportSearchResultsToCsv" />
-        </Button>
+        { csvReportPending ?
+          <LoadingButton>
+            <FormattedMessage id="ui-requests.csvReportPending" />
+          </LoadingButton> :
+          <Button
+            buttonStyle="dropdownItem"
+            id="exportToCsvPaneHeaderBtn"
+            disabled={!requestCount}
+            onClick={() => {
+              this.context.sendCallout({ message: <FormattedMessage id="ui-requests.csvReportInProgress" /> });
+              onToggle();
+              this.exportData();
+            }}
+          >
+            <FormattedMessage id="ui-requests.exportSearchResultsToCsv" />
+          </Button>
+        }
         {
           pickSlipsArePending ?
             <LoadingButton>
