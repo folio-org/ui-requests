@@ -263,3 +263,9 @@ export function formatNoteReferrerEntityData(data) {
     id,
   };
 }
+
+export function eachPromise(arr, fn) {
+  if (!Array.isArray(arr)) return Promise.reject(new Error('Array not found'));
+
+  return arr.reduce((acc, cur) => acc.then(response => fn(response, cur)), Promise.resolve([]));
+}
