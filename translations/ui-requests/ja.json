@@ -34,7 +34,7 @@
     "item.copyNumber": "Item copy",
     "item.status": "Item status",
     "item.dueDate": "現在の期日",
-    "item.numRequests": "Requests",
+    "item.numRequests": "リクエスト",
     "requester.barcode": "Requester barcode",
     "requester.scanOrEnterBarcode": "リクエスト者バーコードをスキャンまたは入力する",
     "requester.findUserPluginLabel": "Requester look-up",
@@ -110,7 +110,7 @@
     "edit.deleteRequest": "Delete request",
     "edit.cancelEditing": "編集をキャンセル",
     "newRequest.cancel": "編集をキャンセル",
-    "showTags": "Show Tags",
+    "showTags": "タグを表示",
     "tags.tagList": "タグ",
     "item.copyNumbers": "Copy number",
     "requestNotAllowed": "Request not allowed",
@@ -206,5 +206,7 @@
     "pickSlipsLoading": "Pick slips are loading, please wait",
     "printInProgress": "Print options loading in progress. It might take a few seconds, please be patient.",
     "requestDate": "requestDate",
-    "holdShelfExpirationTime": "holdShelfExpirationTime"
+    "holdShelfExpirationTime": "holdShelfExpirationTime",
+    "csvReportPending": "csvReportPending",
+    "csvReportInProgress": "A CSV results report is being generated. This may take some time for larger result sets. Please be patient."
 }
