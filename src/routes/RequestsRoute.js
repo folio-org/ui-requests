@@ -746,11 +746,6 @@ class RequestsRoute extends React.Component {
     } = this.props;
 
     const {
-      requestDate,
-      title,
-    } = this.columnLabels;
-
-    const {
       csvReportPending,
       dupRequest,
       errorMessage,
