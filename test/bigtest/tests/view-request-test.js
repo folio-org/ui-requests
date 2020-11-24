@@ -175,6 +175,7 @@ describe('View request page', () => {
         fulfilmentPreference: 'Delivery',
         cancellationReasonId: cancellationReason.id,
         cancellationAdditionalInformation: 'Item not found',
+        status: 'Closed - Cancelled',
       });
 
       this.visit('/requests/view/' + request.id);
@@ -183,6 +184,18 @@ describe('View request page', () => {
     it('shows cancellation reason', () => {
       expect(viewRequest.requestInfoContains('Item Not Available')).to.be.true;
       expect(viewRequest.requestInfoContains('Item not found')).to.be.true;
+    });
+  });
+
+  describe('duplicate closed request', function () {
+    beforeEach(async () => {
+      await viewRequest.headerDropdown.click();
+      await viewRequest.headerDropdownMenu.clickDuplicate();
+      await newRequest.isPresent;
+    });
+
+    it('opens request form', function () {
+      expect(this.location.search).to.include('layer=create');
     });
   });
 });
