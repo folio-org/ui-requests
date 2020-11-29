@@ -1,5 +1,9 @@
 # Change history for ui-requests
 
+## 4.0.5 IN PROGRESS
+
+* Increase the limit to display correct number of requests in the `Move request` modal. Fixes UIREQ-566.
+
 ## [4.0.4](https://github.com/folio-org/ui-requests/tree/v4.0.4) (2020-11-20)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.3...v4.0.4)
 
