@@ -154,7 +154,7 @@ class MoveRequestDialog extends React.Component {
     query = `(${query}) and (status="Open")`;
     requests.reset();
 
-    return requests.GET({ params: { query } });
+    return requests.GET({ params: { query, limit: 1000 } });
   }
 
   async onRowClick(item) {
