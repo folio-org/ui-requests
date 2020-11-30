@@ -205,5 +205,8 @@
     "notes.assigned.requestDate": "Date de la demande: {requestCreateDate}",
     "pickSlipsLoading": "Les bordereaux de prélèvement sont en cours de chargement, veuillez patienter",
     "printInProgress": "Chargement des options d'impression en cours. Cela peut prendre quelques secondes, merci de patienter.",
-    "requestDate": "requestDate"
+    "requestDate": "requestDate",
+    "holdShelfExpirationTime": "holdShelfExpirationTime",
+    "csvReportPending": "csvReportPending",
+    "csvReportInProgress": "A CSV results report is being generated. This may take some time for larger result sets. Please be patient."
 }

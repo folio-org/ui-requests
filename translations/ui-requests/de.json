@@ -112,7 +112,7 @@
     "newRequest.cancel": "Cancel editing",
     "showTags": "Show Tags",
     "tags.tagList": "Tags",
-    "item.copyNumbers": "Copy number",
+    "item.copyNumbers": "Exemplarnummer",
     "requestNotAllowed": "Request not allowed",
     "additionalReasons": "View block details to see additional reasons for block...",
     "pickupServicePoint.name": "Pickup service point",
@@ -205,5 +205,8 @@
     "notes.assigned.requestDate": "Request date: {requestCreateDate}",
     "pickSlipsLoading": "Pick slips are loading, please wait",
     "printInProgress": "Print options loading in progress. It might take a few seconds, please be patient.",
-    "requestDate": "requestDate"
+    "requestDate": "requestDate",
+    "holdShelfExpirationTime": "holdShelfExpirationTime",
+    "csvReportPending": "csvReportPending",
+    "csvReportInProgress": "A CSV results report is being generated. This may take some time for larger result sets. Please be patient."
 }

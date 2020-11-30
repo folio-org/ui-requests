@@ -18,7 +18,7 @@
     "errors.onlyCheckedOutForRecall": "只能召回已出借单件",
     "errors.onlyCheckedOutForHold": "只能预约已出借单件",
     "errors.selectItem": "请选择一个单件",
-    "errors.selectUser": "请选择带有本条码的请求者",
+    "errors.selectUser": "请填写请求者信息以继续",
     "actions.closeNewRequest": "关闭 \"新建请求\"",
     "actions.createNewRequest": "新建请求",
     "actions.newRequest": "新建请求",
@@ -205,5 +205,8 @@
     "notes.assigned.requestDate": "请求日期： {requestCreateDate}",
     "pickSlipsLoading": "选取单正在加载，请稍候",
     "printInProgress": "正在加载打印选项。可能需要几秒钟，请耐心等待。",
-    "requestDate": "requestDate"
+    "requestDate": "requestDate",
+    "holdShelfExpirationTime": "holdShelfExpirationTime",
+    "csvReportPending": "csvReportPending",
+    "csvReportInProgress": "A CSV results report is being generated. This may take some time for larger result sets. Please be patient."
 }

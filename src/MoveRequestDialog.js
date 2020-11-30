@@ -47,6 +47,8 @@ const formatter = {
   loanType: item => (item.temporaryLoanType ? get(item, 'temporaryLoanType.name', '') : get(item, 'permanentLoanType.name', '')),
 };
 
+const MAX_HEIGHT = 500;
+
 class MoveRequestDialog extends React.Component {
   static manifest = {
     holdings: {
@@ -143,7 +145,7 @@ class MoveRequestDialog extends React.Component {
     const query = holdings.map(h => `holdingsRecordId==${h.id}`).join(' or ');
     items.reset();
 
-    return items.GET({ params: { query } });
+    return items.GET({ params: { query, limit: 1000 } });
   }
 
   fetchRequests(items) {
@@ -152,7 +154,7 @@ class MoveRequestDialog extends React.Component {
     query = `(${query}) and (status="Open")`;
     requests.reset();
 
-    return requests.GET({ params: { query } });
+    return requests.GET({ params: { query, limit: 1000 } });
   }
 
   async onRowClick(item) {
@@ -201,6 +203,7 @@ class MoveRequestDialog extends React.Component {
               columnMapping={COLUMN_MAP}
               columnWidths={COLUMN_WIDTHS}
               formatter={formatter}
+              maxHeight={MAX_HEIGHT}
               isEmptyMessage={<FormattedMessage id="ui-requests.moveRequest.instanceItems.notFound" />}
               onRowClick={(_, item) => this.onRowClick(item)}
             /> }

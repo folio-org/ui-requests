@@ -355,10 +355,11 @@ class RequestForm extends React.Component {
       if (result.totalRecords === 1) {
         const blocks = this.getPatronManualBlocks(parentResources);
         const automatedPatronBlocks = this.getAutomatedPatronBlocks(parentResources);
+        const isAutomatedPatronBlocksRequestInPendingState = parentResources.automatedPatronBlocks.isPending;
         const selectedUser = result.users[0];
         const state = { selectedUser };
 
-        if ((blocks.length && blocks[0].userId === selectedUser.id) || !isEmpty(automatedPatronBlocks)) {
+        if ((blocks.length && blocks[0].userId === selectedUser.id) || (!isEmpty(automatedPatronBlocks) && !isAutomatedPatronBlocksRequestInPendingState)) {
           state.blocked = true;
         }
 
@@ -403,11 +404,20 @@ class RequestForm extends React.Component {
     try {
       const { requestPreferences } = await findResource('requestPreferences', userId, 'userId');
       const preferences = requestPreferences[0];
+
+      const defaultPreferences = this.getDefaultRequestPreferences();
       const requestPreference = {
-        ...this.getDefaultRequestPreferences(),
+        ...defaultPreferences,
         ...pick(preferences, ['defaultDeliveryAddressTypeId', 'defaultServicePointId']),
         requestPreferencesLoaded: true,
       };
+
+      // when in edit mode (editing existing request) and defaultServicePointId is present (it was
+      // set during creation) just keep it instead of choosing the preferred one.
+      // https://issues.folio.org/browse/UIREQ-544
+      if (this.isEditForm() && defaultPreferences.defaultServicePointId) {
+        requestPreference.defaultServicePointId = defaultPreferences.defaultServicePointId;
+      }
 
       const deliveryIsPredefined = get(preferences, 'delivery');
 

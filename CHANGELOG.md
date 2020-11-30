@@ -3,11 +3,16 @@
 ## 5.0.0 (IN PROGRESS)
 
 * Add timepicker for hold shelf expiration date. Refs UIREQ-381.
-<<<<<<< HEAD
 * Omit `holdShelfExpirationDate` field in duplicated request. Refs UIREQ-532.
-=======
 * Fix sorting by request status. Fixes UIREQ-540.
->>>>>>> dc735788387be845b1b5396ec876fee96353831b
+* Fix search by tags. Fixes UIREQ-542.
+* Fix CSV search results export. Fixes UIREQ-539.
+* Fix default pickup service point when editing existing request. Fixes UIREQ-544.
+* Increase the limit to display all items in the `Move request` modal. Fixes UIREQ-541.
+* Fix the non-responsive design of the `Move request` modal. Fixes UIREQ-552.
+* Add a 'working' indicator for CSV search results export. Fixes UIREQ-555.
+* Add a toast notification for CSV search results export. Refs UIREQ-555.
+* Increase the limit to display correct number of requests in the `Move request` modal. Fixes UIREQ-566.
 
 ## [4.0.1](https://github.com/folio-org/ui-requests/tree/v4.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.0...v4.0.1)

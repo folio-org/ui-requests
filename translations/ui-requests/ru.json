@@ -205,5 +205,8 @@
     "notes.assigned.requestDate": "Дата запроса: {requestCreateDate}",
     "pickSlipsLoading": "Pick slips are loading, please wait",
     "printInProgress": "Print options loading in progress. It might take a few seconds, please be patient.",
-    "requestDate": "requestDate"
+    "requestDate": "requestDate",
+    "holdShelfExpirationTime": "holdShelfExpirationTime",
+    "csvReportPending": "csvReportPending",
+    "csvReportInProgress": "A CSV results report is being generated. This may take some time for larger result sets. Please be patient."
 }
