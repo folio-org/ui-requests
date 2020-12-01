@@ -185,17 +185,17 @@ describe('View request page', () => {
       expect(viewRequest.requestInfoContains('Item Not Available')).to.be.true;
       expect(viewRequest.requestInfoContains('Item not found')).to.be.true;
     });
-  });
 
-  describe('duplicate closed request', function () {
-    beforeEach(async () => {
-      await viewRequest.headerDropdown.click();
-      await viewRequest.headerDropdownMenu.clickDuplicate();
-      await newRequest.isPresent;
-    });
+    describe('duplicate closed request', function () {
+      beforeEach(async () => {
+        await viewRequest.headerDropdown.click();
+        await viewRequest.headerDropdownMenu.clickDuplicate();
+        await newRequest.isPresent;
+      });
 
-    it('opens request form', function () {
-      expect(this.location.search).to.include('layer=create');
+      it('opens request form', function () {
+        expect(this.location.search).to.include('layer=create');
+      });
     });
   });
 });
