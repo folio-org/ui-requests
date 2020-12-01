@@ -395,7 +395,22 @@ class ViewRequest extends React.Component {
 
     const actionMenu = ({ onToggle }) => {
       if (isRequestClosed) {
-        return undefined;
+        return (
+          <IfPermission perm="ui-requests.create">
+            <Button
+              id="duplicate-request"
+              onClick={() => {
+                onToggle();
+                this.props.onDuplicate(request);
+              }}
+              buttonStyle="dropdownItem"
+            >
+              <Icon icon="duplicate">
+                <FormattedMessage id="ui-requests.actions.duplicateRequest" />
+              </Icon>
+            </Button>
+          </IfPermission>
+        );
       }
 
       return (
