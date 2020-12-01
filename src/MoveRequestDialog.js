@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { countBy, get, orderBy, chunk, flatten } from 'lodash';
+import { countBy, get, orderBy, chunk } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -10,7 +10,6 @@ import {
 } from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
 import { Loading } from './components';
-import { eachPromise } from './utils';
 
 import css from './MoveRequestDialog.css';
 
@@ -120,7 +119,7 @@ class MoveRequestDialog extends React.Component {
     const holdings = await this.fetchHoldings();
     let items = await this.fetchItems(holdings);
     const requests = await this.fetchRequests(items);
-    const requestMap = countBy(flatten(requests), 'itemId');
+    const requestMap = countBy(requests, 'itemId');
     const { request } = this.props;
 
     items = items
@@ -165,6 +164,7 @@ class MoveRequestDialog extends React.Component {
       query = `(${query}) and (status="Open")`;
 
       requests.reset();
+      // eslint-disable-next-line no-await-in-loop
       const result = await requests.GET({ params: { query, limit: 1000 } });
 
       data.push(...result);
