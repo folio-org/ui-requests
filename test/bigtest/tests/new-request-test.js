@@ -26,7 +26,7 @@ const itemStatuses = [
   'Aged to lost',
 ];
 
-describe.only('New Request page', () => {
+describe('New Request page', () => {
   setupApplication({
     modules: [{
       type: 'plugin',
