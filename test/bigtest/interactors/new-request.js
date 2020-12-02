@@ -10,6 +10,8 @@ import {
   scoped,
 } from '@bigtest/interactor';
 
+import TextAreaInteractor from '@folio/stripes-components/lib/TextArea/tests/interactor'; // eslint-disable-line
+
 import { getSelectValues } from './helpers';
 import HeaderDropdown from './header-dropdown';
 import InputField from './input-field';
@@ -61,6 +63,7 @@ import KeyValue from './KeyValue';
   requesterErrorIsPresent = isPresent('#section-requester-info [class*=feedbackError---]');
 
   requestType = scoped('[data-test-request-type] div', KeyValue);
+  patronComments = new TextAreaInteractor('[class*=textArea---]');
 
   whenReady() {
     return this.when(() => this.itemBarcodeIsPresent);

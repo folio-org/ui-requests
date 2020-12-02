@@ -18,6 +18,7 @@
   "holdShelfExpirationDate": "Hold shelf expiration date",
   "holdShelfExpirationTime": "Hold shelf expiration time",
   "position": "Position in queue",
+  "patronComments": "Patron comments",
   "close": "Close",
   "blockedLabel": "Reason for block",
   "blockModal": "Patron blocked from requesting",
