@@ -59,6 +59,7 @@ import {
   requestStatuses,
   iconTypes,
   fulfilmentTypeMap,
+  createModes,
 } from './constants';
 import ErrorModal from './components/ErrorModal';
 import {
@@ -210,6 +211,15 @@ class RequestForm extends React.Component {
         selectedItem: request.item,
         selectedLoan: request.loan,
         selectedUser: request.requester,
+      });
+    }
+
+    if (query?.mode === createModes.DUPLICATE &&
+      !isEqual(this.state.selectedItem, initialValues.item)) {
+      const { item } = initialValues;
+
+      this.setState({
+        selectedItem: item,
       });
     }
 
@@ -479,7 +489,9 @@ class RequestForm extends React.Component {
       change('deliveryAddressTypeId', deliveryAddressTypeId);
       change('pickupServicePointId', '');
     } else {
-      change('pickupServicePointId', defaultServicePointId);
+      if (this.props?.query?.mode !== createModes.DUPLICATE) {
+        change('pickupServicePointId', defaultServicePointId);
+      }
       change('deliveryAddressTypeId', '');
     }
   }
