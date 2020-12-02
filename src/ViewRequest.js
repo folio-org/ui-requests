@@ -12,6 +12,7 @@ import {
   FormattedMessage,
   FormattedDate,
   FormattedTime,
+  injectIntl,
 } from 'react-intl';
 import moment from 'moment-timezone';
 
@@ -108,6 +109,7 @@ class ViewRequest extends React.Component {
         log: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
+    intl: PropTypes.object,
     tagsEnabled: PropTypes.bool,
     match: PropTypes.object,
   };
@@ -276,7 +278,7 @@ class ViewRequest extends React.Component {
       // but it's exposed in the UI as separate date- and time-picker components.
       let momentDate;
       if (request.holdShelfExpirationDate) {
-        momentDate = moment(request.holdShelfExpirationDate);
+        momentDate = moment.tz(request.holdShelfExpirationDate, this.props.intl.timeZone);
       } else {
         momentDate = moment();
       }
@@ -666,4 +668,4 @@ class ViewRequest extends React.Component {
 
 export default compose(
   withTags,
-)(ViewRequest);
+)(injectIntl(ViewRequest));
