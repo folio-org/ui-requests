@@ -11,6 +11,8 @@ import EditRequest from '../interactors/edit-request';
 import ViewRequest from '../interactors/view-request';
 import { requestStatuses } from '../../../src/constants';
 
+import translations from '../../../translations/ui-requests/en';
+
 describe('Edit Request page', () => {
   setupApplication();
 
@@ -31,6 +33,14 @@ describe('Edit Request page', () => {
 
   it('should display a number of requests on item', () => {
     expect(EditRequestInteractor.requestsOnItem.value.text).to.equal(requestsOnItemValue);
+  });
+
+  it('should display a patron comments field', () => {
+    expect(EditRequestInteractor.patronComments.label.text).to.equal(translations.patronComments);
+  });
+
+  it('patron comments field should not be editable', () => {
+    expect(EditRequestInteractor.isPatronCommentsEditable).to.be.false;
   });
 
   describe('clicking cancel editing button', function () {

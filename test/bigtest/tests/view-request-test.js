@@ -10,6 +10,8 @@ import setupApplication from '../helpers/setup-application';
 import ViewRequestInteractor from '../interactors/view-request';
 import NewRequestInteractor from '../interactors/new-request';
 
+import translations from '../../../translations/ui-requests/en';
+
 describe('View request page', () => {
   setupApplication();
 
@@ -28,6 +30,10 @@ describe('View request page', () => {
 
     it('should display a number of requests on item', () => {
       expect(viewRequest.requestsOnItem.value.text).to.equal(requestsOnItemValue);
+    });
+
+    it('should display a patron comments field', () => {
+      expect(viewRequest.patronComments.label.text).to.equal(translations.patronComments);
     });
 
     describe('cancel request', function () {
@@ -175,6 +181,7 @@ describe('View request page', () => {
         fulfilmentPreference: 'Delivery',
         cancellationReasonId: cancellationReason.id,
         cancellationAdditionalInformation: 'Item not found',
+        status: 'Closed - Cancelled',
       });
 
       this.visit('/requests/view/' + request.id);
@@ -183,6 +190,18 @@ describe('View request page', () => {
     it('shows cancellation reason', () => {
       expect(viewRequest.requestInfoContains('Item Not Available')).to.be.true;
       expect(viewRequest.requestInfoContains('Item not found')).to.be.true;
+    });
+
+    describe('duplicate closed request', function () {
+      beforeEach(async () => {
+        await viewRequest.headerDropdown.click();
+        await viewRequest.headerDropdownMenu.clickDuplicate();
+        await newRequest.isPresent;
+      });
+
+      it('opens request form', function () {
+        expect(this.location.search).to.include('layer=create');
+      });
     });
   });
 });

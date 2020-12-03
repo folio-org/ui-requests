@@ -36,6 +36,7 @@ import {
   fulfilmentTypes,
   expiredHoldsReportHeaders,
   pickSlipType,
+  createModes,
 } from '../constants';
 import {
   buildUrl,
@@ -605,6 +606,7 @@ class RequestsRoute extends React.Component {
       itemBarcode: request.item.barcode,
       itemId: request.itemId,
       userBarcode: request.requester.barcode,
+      mode: createModes.DUPLICATE,
     });
   };
 
@@ -746,11 +748,6 @@ class RequestsRoute extends React.Component {
     } = this.props;
 
     const {
-      requestDate,
-      title,
-    } = this.columnLabels;
-
-    const {
       csvReportPending,
       dupRequest,
       errorMessage,
@@ -766,7 +763,7 @@ class RequestsRoute extends React.Component {
     const servicePoints = get(resources, 'servicePoints.records', []);
     const cancellationReasons = get(resources, 'cancellationReasons.records', []);
     const requestCount = get(resources, 'records.other.totalRecords', 0);
-    const InitialValues = dupRequest ||
+    const initialValues = dupRequest ||
       { requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' };
 
     const pickSlipsArePending = resources?.pickSlips?.isPending;
@@ -907,7 +904,7 @@ class RequestsRoute extends React.Component {
             }}
             columnMapping={this.columnLabels}
             resultsFormatter={resultsFormatter}
-            newRecordInitialValues={InitialValues}
+            newRecordInitialValues={initialValues}
             massageNewRecord={this.massageNewRecord}
             onCreate={this.create}
             onCloseNewRecord={this.handleCloseNewRecord}

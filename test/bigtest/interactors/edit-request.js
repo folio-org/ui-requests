@@ -19,6 +19,8 @@ import KeyValue from './KeyValue';
   cancelRequestDialog = new CancelRequestDialog('[data-test-cancel-request-modal]');
   isLayerPresent = isPresent('[class*=LayerRoot][role=dialog]');
   fulfillmentPreferenceFieldDisabled = is('[data-test-fulfillment-preference-filed]', ':disabled');
+  patronComments = scoped('[data-test-request-patron-comments] div', KeyValue);
+  isPatronCommentsEditable = isPresent('[data-test-request-patron-comments] textarea');
   requestsOnItem = scoped('[data-test-requests-on-item] div', KeyValue);
   fillUserBarcode = fillable('[name="requester.barcode"]');
   clickUserEnterBtn = clickable('#clickable-select-requester');

@@ -6,10 +6,10 @@ import {
 } from '@bigtest/interactor';
 import { isEmpty } from 'lodash';
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 import {
   NotesAccordion,
   NotesModal,
+  // eslint-disable-next-line import/no-extraneous-dependencies
 } from '@folio/stripes-smart-components/lib/Notes/NotesSmartAccordion/tests/interactors';
 
 import CancelRequestDialog from './cancel-request-dialog';
@@ -35,6 +35,7 @@ import { contains } from './helpers';
   requesterSectionPresent = isPresent('#requester-info');
   requesterInfoContains = contains('#requester-info');
   requestInfoContains = contains('#request-info');
+  patronComments = scoped('[data-test-request-patron-comments] div', KeyValue);
   requestsOnItem = scoped('[data-test-requests-on-item] div', KeyValue);
   staffNotesAccordion = new NotesAccordion('#staff-notes');
   notesModal = new NotesModal();

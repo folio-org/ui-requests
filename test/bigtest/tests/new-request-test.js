@@ -26,7 +26,9 @@ const itemStatuses = [
   'Aged to lost',
 ];
 
-describe.only('New Request page', () => {
+const patronComment = 'I really need this in the next three days';
+
+describe('New Request page', () => {
   setupApplication({
     modules: [{
       type: 'plugin',
@@ -127,6 +129,7 @@ describe.only('New Request page', () => {
           .fillUserBarcode('9676761472501')
           .clickUserEnterBtn();
 
+        await newRequest.patronComments.fillAndBlur(patronComment);
         await newRequest.chooseFulfillmentPreference('Hold Shelf');
         await newRequest.chooseServicePoint('Circ Desk 2');
         await newRequest.clickNewRequest();
@@ -136,6 +139,10 @@ describe.only('New Request page', () => {
       it('should create a new request and open view request pane', () => {
         expect(viewRequest.requestSectionPresent).to.be.true;
         expect(viewRequest.requesterSectionPresent).to.be.true;
+      });
+
+      it('should display the patron comments', () => {
+        expect(viewRequest.patronComments.value.text).to.equal(patronComment);
       });
     });
 

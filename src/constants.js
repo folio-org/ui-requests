@@ -147,3 +147,7 @@ export const pickSlipType = 'pick slip';
 export const DOMAIN_NAME = 'requests';
 
 export const APP_ICON_NAME = 'requests';
+
+export const createModes = {
+  DUPLICATE: 'duplicate',
+};

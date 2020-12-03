@@ -40,6 +40,7 @@ import {
   Paneset,
   Row,
   Select,
+  TextArea,
   TextField,
   PaneFooter,
   Icon,
@@ -59,6 +60,7 @@ import {
   requestStatuses,
   iconTypes,
   fulfilmentTypeMap,
+  createModes,
 } from './constants';
 import ErrorModal from './components/ErrorModal';
 import {
@@ -210,6 +212,16 @@ class RequestForm extends React.Component {
         selectedItem: request.item,
         selectedLoan: request.loan,
         selectedUser: request.requester,
+      });
+    }
+
+    if (query?.mode === createModes.DUPLICATE &&
+      !isEqual(this.state.selectedItem, initialValues.item)) {
+      const { item } = initialValues;
+
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        selectedItem: item,
       });
     }
 
@@ -479,7 +491,12 @@ class RequestForm extends React.Component {
       change('deliveryAddressTypeId', deliveryAddressTypeId);
       change('pickupServicePointId', '');
     } else {
-      change('pickupServicePointId', defaultServicePointId);
+      // Do not update pickupServicePointId with defaultServicePointId if
+      // in duplicate mode. The pickupServicePointId from duplicated request
+      // record will be used instead.
+      if (this.props?.query?.mode !== createModes.DUPLICATE) {
+        change('pickupServicePointId', defaultServicePointId);
+      }
       change('deliveryAddressTypeId', '');
     }
   }
@@ -938,11 +955,11 @@ class RequestForm extends React.Component {
                     <this.props.metadataDisplay metadata={request.metadata} />
                   </Col> }
                 <Row>
-                  <Col xs={8}>
+                  <Col xs={12}>
                     <Row>
                       <Col
                         data-test-request-type
-                        xs={4}
+                        xs={3}
                       >
                         {!isEditForm && !selectedItem &&
                           <span data-test-request-type-message>
@@ -991,14 +1008,14 @@ class RequestForm extends React.Component {
                             value={<FormattedMessage id="ui-requests.noRequestTypesAvailable" />}
                           /> }
                       </Col>
-                      <Col xs={3}>
+                      <Col xs={2}>
                         {isEditForm &&
                           <KeyValue
                             label={<FormattedMessage id="ui-requests.status" />}
                             value={request.status}
                           /> }
                       </Col>
-                      <Col xs={3}>
+                      <Col xs={2}>
                         <Field
                           name="requestExpirationDate"
                           label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
@@ -1008,6 +1025,30 @@ class RequestForm extends React.Component {
                           id="requestExpirationDate"
                         />
                       </Col>
+                      <Col
+                        data-test-request-patron-comments
+                        xsOffset={1}
+                        xs={4}
+                      >
+                        {isEditForm
+                          ? (
+                            <KeyValue
+                              label={<FormattedMessage id="ui-requests.patronComments" />}
+                              value={request.patronComments}
+                            />
+                          )
+                          : (
+                            <Field
+                              name="patronComments"
+                              label={<FormattedMessage id="ui-requests.patronComments" />}
+                              id="patronComments"
+                              component={TextArea}
+                            />
+                          )
+                        }
+                      </Col>
+                    </Row>
+                    <Row>
                       {isEditForm && request.status === requestStatuses.AWAITING_PICKUP &&
                         <>
                           <Col xs={3}>

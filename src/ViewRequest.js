@@ -12,6 +12,7 @@ import {
   FormattedMessage,
   FormattedDate,
   FormattedTime,
+  injectIntl,
 } from 'react-intl';
 import moment from 'moment-timezone';
 
@@ -108,6 +109,7 @@ class ViewRequest extends React.Component {
         log: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
+    intl: PropTypes.object,
     tagsEnabled: PropTypes.bool,
     match: PropTypes.object,
   };
@@ -276,7 +278,7 @@ class ViewRequest extends React.Component {
       // but it's exposed in the UI as separate date- and time-picker components.
       let momentDate;
       if (request.holdShelfExpirationDate) {
-        momentDate = moment(request.holdShelfExpirationDate);
+        momentDate = moment.tz(request.holdShelfExpirationDate, this.props.intl.timeZone);
       } else {
         momentDate = moment();
       }
@@ -395,7 +397,22 @@ class ViewRequest extends React.Component {
 
     const actionMenu = ({ onToggle }) => {
       if (isRequestClosed) {
-        return undefined;
+        return (
+          <IfPermission perm="ui-requests.create">
+            <Button
+              id="duplicate-request"
+              onClick={() => {
+                onToggle();
+                this.props.onDuplicate(request);
+              }}
+              buttonStyle="dropdownItem"
+            >
+              <Icon icon="duplicate">
+                <FormattedMessage id="ui-requests.actions.duplicateRequest" />
+              </Icon>
+            </Button>
+          </IfPermission>
+        );
       }
 
       return (
@@ -569,6 +586,16 @@ class ViewRequest extends React.Component {
                     value={request.cancellationAdditionalInformation}
                   />
                 </Col> }
+              <Col
+                data-test-request-patron-comments
+                xsOffset={3}
+                xs={6}
+              >
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.patronComments" />}
+                  value={request.patronComments}
+                />
+              </Col>
             </Row>
           </Accordion>
           <Accordion
@@ -651,4 +678,4 @@ class ViewRequest extends React.Component {
 
 export default compose(
   withTags,
-)(ViewRequest);
+)(injectIntl(ViewRequest));
