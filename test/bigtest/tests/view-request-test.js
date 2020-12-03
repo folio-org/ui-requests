@@ -10,6 +10,8 @@ import setupApplication from '../helpers/setup-application';
 import ViewRequestInteractor from '../interactors/view-request';
 import NewRequestInteractor from '../interactors/new-request';
 
+import translations from '../../../translations/ui-requests/en';
+
 describe('View request page', () => {
   setupApplication();
 
@@ -28,6 +30,10 @@ describe('View request page', () => {
 
     it('should display a number of requests on item', () => {
       expect(viewRequest.requestsOnItem.value.text).to.equal(requestsOnItemValue);
+    });
+
+    it('should display a patron comments field', () => {
+      expect(viewRequest.patronComments.label.text).to.equal(translations.patronComments);
     });
 
     describe('cancel request', function () {

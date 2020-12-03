@@ -586,6 +586,16 @@ class ViewRequest extends React.Component {
                     value={request.cancellationAdditionalInformation}
                   />
                 </Col> }
+              <Col
+                data-test-request-patron-comments
+                xsOffset={3}
+                xs={6}
+              >
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.patronComments" />}
+                  value={request.patronComments}
+                />
+              </Col>
             </Row>
           </Accordion>
           <Accordion
