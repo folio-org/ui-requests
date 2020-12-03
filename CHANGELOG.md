@@ -16,6 +16,7 @@
 * Allow for duplicating a closed request. Fixes UIREQ-553.
 * Retrieve requests to items in chunks. Fixes UIREQ-558.
 * Add `Patron comments` field to request. Refs UIREQ-530.
+* Fix fulfillment misspelling. Fixes UIREQ-567.
 
 ## [4.0.1](https://github.com/folio-org/ui-requests/tree/v4.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.0...v4.0.1)
