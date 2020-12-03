@@ -218,6 +218,7 @@ class RequestForm extends React.Component {
       !isEqual(this.state.selectedItem, initialValues.item)) {
       const { item } = initialValues;
 
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         selectedItem: item,
       });
