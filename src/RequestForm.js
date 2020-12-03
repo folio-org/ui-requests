@@ -490,6 +490,9 @@ class RequestForm extends React.Component {
       change('deliveryAddressTypeId', deliveryAddressTypeId);
       change('pickupServicePointId', '');
     } else {
+      // Do not update pickupServicePointId with defaultServicePointId if
+      // in duplicate mode. The pickupServicePointId from duplicated request
+      // record will be used instead.
       if (this.props?.query?.mode !== createModes.DUPLICATE) {
         change('pickupServicePointId', defaultServicePointId);
       }
