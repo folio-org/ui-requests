@@ -59,6 +59,7 @@ import {
   requestStatuses,
   iconTypes,
   fulfilmentTypeMap,
+  createModes,
 } from './constants';
 import ErrorModal from './components/ErrorModal';
 import {
@@ -210,6 +211,16 @@ class RequestForm extends React.Component {
         selectedItem: request.item,
         selectedLoan: request.loan,
         selectedUser: request.requester,
+      });
+    }
+
+    if (query?.mode === createModes.DUPLICATE &&
+      !isEqual(this.state.selectedItem, initialValues.item)) {
+      const { item } = initialValues;
+
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        selectedItem: item,
       });
     }
 
@@ -479,7 +490,12 @@ class RequestForm extends React.Component {
       change('deliveryAddressTypeId', deliveryAddressTypeId);
       change('pickupServicePointId', '');
     } else {
-      change('pickupServicePointId', defaultServicePointId);
+      // Do not update pickupServicePointId with defaultServicePointId if
+      // in duplicate mode. The pickupServicePointId from duplicated request
+      // record will be used instead.
+      if (this.props?.query?.mode !== createModes.DUPLICATE) {
+        change('pickupServicePointId', defaultServicePointId);
+      }
       change('deliveryAddressTypeId', '');
     }
   }
