@@ -223,7 +223,7 @@ export const convertToSlipData = (source, intl, timeZone, locale, slipName = 'Pi
       'item.numberOfPieces': item.numberOfPieces,
       'item.descriptionOfPieces': item.descriptionOfPieces,
       'item.lastCheckedInDateTime': item.lastCheckedInDateTime
-        ? item.lastCheckedInDateTime && buildLocaleDateAndTime(item.lastCheckedInDateTime, timeZone, locale)
+        ? buildLocaleDateAndTime(item.lastCheckedInDateTime, timeZone, locale)
         : item.lastCheckedInDateTime,
       'item.fromServicePoint': item.fromServicePoint,
       'item.toServicePoint': item.toServicePoint,
