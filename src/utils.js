@@ -175,7 +175,7 @@ export function buildTemplate(template = '') {
   };
 }
 
-function buildLocaleDateAndTime(dateTime, timezone, locale) {
+export function buildLocaleDateAndTime(dateTime, timezone, locale) {
   return moment(dateTime)
     .tz(timezone)
     .locale(locale)
