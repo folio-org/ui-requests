@@ -179,7 +179,7 @@ function buildLocaleDateAndTime(dateTime, timezone, locale) {
   return moment(dateTime)
     .tz(timezone)
     .locale(locale)
-    .format('YYYY/MM/DD h:mm A');
+    .format('L LT');
 }
 
 export const convertToSlipData = (source, intl, timeZone, locale, slipName = 'Pick slip') => {
