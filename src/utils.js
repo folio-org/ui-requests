@@ -11,6 +11,7 @@ import {
 import queryString from 'query-string';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import moment from 'moment-timezone';
 
 import {
   Col,
@@ -29,7 +30,6 @@ import {
 } from './constants';
 
 import css from './requests.css';
-
 
 // eslint-disable-next-line import/prefer-default-export
 export function getFullName(user) {
@@ -175,6 +175,13 @@ export function buildTemplate(template = '') {
   };
 }
 
+export function buildLocaleDateAndTime(dateTime, timezone, locale) {
+  return moment(dateTime)
+    .tz(timezone)
+    .locale(locale)
+    .format('L LT');
+}
+
 export const convertToSlipData = (source, intl, timeZone, locale, slipName = 'Pick slip') => {
   return source.map(pickSlip => {
     const {
@@ -215,7 +222,9 @@ export const convertToSlipData = (source, intl, timeZone, locale, slipName = 'Pi
       'item.loanType': item.loanType,
       'item.numberOfPieces': item.numberOfPieces,
       'item.descriptionOfPieces': item.descriptionOfPieces,
-      'item.lastCheckedInDateTime': item.lastCheckedInDateTime,
+      'item.lastCheckedInDateTime': item.lastCheckedInDateTime
+        ? buildLocaleDateAndTime(item.lastCheckedInDateTime, timeZone, locale)
+        : item.lastCheckedInDateTime,
       'item.fromServicePoint': item.fromServicePoint,
       'item.toServicePoint': item.toServicePoint,
       'item.effectiveLocationInstitution': item.effectiveLocationInstitution,
