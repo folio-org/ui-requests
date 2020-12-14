@@ -63,7 +63,7 @@
     "actions.viewRequestsInQueue": "Ver cola de reservas",
     "actions.selectPickupSp": "Select pickup service point",
     "requester.pickupServicePoint": "Pickup service point",
-    "fulfilmentPreference": "Request fulfilment preference",
+    "fulfilmentPreference": "Request fulfillment preference",
     "requestType": "Request type",
     "status": "Request status",
     "requestExpirationDate": "Request expiration date",
@@ -208,5 +208,6 @@
     "requestDate": "requestDate",
     "holdShelfExpirationTime": "holdShelfExpirationTime",
     "csvReportPending": "csvReportPending",
-    "csvReportInProgress": "A CSV results report is being generated. This may take some time for larger result sets. Please be patient."
+    "csvReportInProgress": "A CSV results report is being generated. This may take some time for larger result sets. Please be patient.",
+    "patronComments": "Patron comments"
 }

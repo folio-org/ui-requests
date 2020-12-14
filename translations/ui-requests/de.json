@@ -39,7 +39,7 @@
     "requester.scanOrEnterBarcode": "Scan or enter requester barcode",
     "requester.findUserPluginLabel": "Requester look-up",
     "requester.proxy": "Requester's proxy",
-    "requester.fulfilmentPref": "Fulfilment preference",
+    "requester.fulfilmentPref": "Fulfillment preference",
     "requester.requester": "Requester",
     "requester.deliveryAddress": "Delivery address",
     "requester.pickupLocation": "Pickup location",
@@ -63,7 +63,7 @@
     "actions.viewRequestsInQueue": "view requests in queue",
     "actions.selectPickupSp": "Select pickup service point",
     "requester.pickupServicePoint": "Pickup service point",
-    "fulfilmentPreference": "Request fulfilment preference",
+    "fulfilmentPreference": "Request fulfillment preference",
     "requestType": "Request type",
     "status": "Request status",
     "requestExpirationDate": "Request expiration date",
@@ -197,7 +197,7 @@
     "notes.StaffNotes": "Staff notes",
     "notes.newStaffNote": "New staff note",
     "notes.staffNotes": "Staff notes",
-    "notes.entityType.request": "Request",
+    "notes.entityType.request": "Vormerkung",
     "notes.entityType.request.pluralized": "{count} {count, plural, one {request} other {requests}}",
     "errors.selectItemRequired": "Please select an item and hit enter",
     "notes.assigned.for": "For: {instanceLink} ({itemLink})",
@@ -208,5 +208,6 @@
     "requestDate": "requestDate",
     "holdShelfExpirationTime": "holdShelfExpirationTime",
     "csvReportPending": "csvReportPending",
-    "csvReportInProgress": "A CSV results report is being generated. This may take some time for larger result sets. Please be patient."
+    "csvReportInProgress": "A CSV results report is being generated. This may take some time for larger result sets. Please be patient.",
+    "patronComments": "Patron comments"
 }
