@@ -208,5 +208,6 @@
     "requestDate": "requestDate",
     "holdShelfExpirationTime": "holdShelfExpirationTime",
     "csvReportPending": "csvReportPending",
-    "csvReportInProgress": "A CSV results report is being generated. This may take some time for larger result sets. Please be patient."
+    "csvReportInProgress": "正在生成CSV结果报告。对于较大的结果集，可能需要一些时间。请耐心等待。",
+    "patronComments": "Patron comments"
 }
