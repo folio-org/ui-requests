@@ -208,5 +208,6 @@
     "requestDate": "requestDate",
     "holdShelfExpirationTime": "holdShelfExpirationTime",
     "csvReportPending": "csvReportPending",
-    "csvReportInProgress": "جاري توليد تقرير نتائج بتنسيق CSV. قد يستغرق هذا بعض الوقت لمجموعات النتائج الأكبر. شكراً لانتظارك."
+    "csvReportInProgress": "جاري توليد تقرير نتائج بتنسيق CSV. قد يستغرق هذا بعض الوقت لمجموعات النتائج الأكبر. شكراً لانتظارك.",
+    "patronComments": "تعليقات المستفيد"
 }
