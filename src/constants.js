@@ -100,6 +100,7 @@ export const reportHeaders = [
   'proxy.name',
   'proxy.barcode',
   'tags.tagList',
+  'patronComments',
 ];
 
 export const expiredHoldsReportHeaders = [

@@ -12,6 +12,7 @@ import {
   isPagedItem,
   createUserHighlightBoxLink,
   formatNoteReferrerEntityData,
+  buildLocaleDateAndTime,
 } from '../../../src/utils';
 
 describe('utils', () => {
@@ -51,8 +52,8 @@ describe('utils', () => {
       formatMessage: () => ('formatMessage'),
       formatDate: () => ('formatDate'),
     };
-    const timeZone = '';
-    const locale = '';
+    const timeZone = 'America/New_York';
+    const locale = 'en-US';
     const item = {
       title: 'The Long Way to a Small, Angry Planet',
       barcode: '036000291452',
@@ -133,7 +134,7 @@ describe('utils', () => {
       'item.loanType': 'Can Circulate',
       'item.numberOfPieces': '3',
       'item.descriptionOfPieces': 'Description of three pieces',
-      'item.lastCheckedInDateTime': '2020-02-17T12:12:33.374Z',
+      'item.lastCheckedInDateTime': buildLocaleDateAndTime('2020-02-17T12:12:33.374Z', timeZone, locale),
       'item.effectiveLocationInstitution': 'Nottingham University',
       'item.effectiveLocationCampus': 'Jubilee Campus',
       'item.effectiveLocationLibrary': 'Djanogly Learning Resource Centre',
