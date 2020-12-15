@@ -17,7 +17,7 @@
 * Retrieve requests to items in chunks. Fixes UIREQ-558.
 * Add `Patron comments` field to request. Refs UIREQ-530.
 * Fix fulfillment misspelling. Fixes UIREQ-567.
-* Add `Patron comments` field to search results CSV export. Refs UIREQ-549.
+* Add `Patron comments` field to search results CSV export and expired holds report. Refs UIREQ-549, UIREQ-550.
 * Show `lastCheckedInDateTime` token for staff slips in locale format and date/time. Refs UIREQ-495.
 
 ## [4.0.1](https://github.com/folio-org/ui-requests/tree/v4.0.1) (2020-10-15)
