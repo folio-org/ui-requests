@@ -1,4 +1,4 @@
-import { take, orderBy } from 'lodash';
+import { take, orderBy, isObject } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
@@ -10,21 +10,13 @@ import {
 } from '@folio/stripes/components';
 
 const PatronBlockModal = ({ open, onClose, patronBlocks, automatedPatronBlocks, viewUserPath }) => {
-  const blocks = take(orderBy(patronBlocks, ['metadata.updatedDate'], ['desc']), 1);
-  const renderBlocks = blocks.map(block => {
+  const blocks = orderBy(patronBlocks, ['metadata.updatedDate'], ['desc']);
+
+  const bloclsToRender = take([...automatedPatronBlocks, ...blocks], 3).map(block => {
     return (
       <Row>
         <Col xs>
-          <b>{block.desc || ''}</b>
-        </Col>
-      </Row>
-    );
-  });
-  const renderAutomatedPatronBlocks = automatedPatronBlocks.map(block => {
-    return (
-      <Row key={block}>
-        <Col xs>
-          <b>{block}</b>
+          <b>{ isObject(block) ? (block.desc || '') : block }</b>
         </Col>
       </Row>
     );
@@ -49,8 +41,7 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, automatedPatronBlocks, 
           :
         </Col>
       </Row>
-      {renderAutomatedPatronBlocks}
-      {renderBlocks}
+      {bloclsToRender}
       <br />
       <Row>
         <Col xs={8}>{(patronBlocks.length > 3) && <FormattedMessage id="ui-requests.additionalReasons" />}</Col>
