@@ -12,7 +12,7 @@ import {
 const PatronBlockModal = ({ open, onClose, patronBlocks, automatedPatronBlocks, viewUserPath }) => {
   const blocks = orderBy(patronBlocks, ['metadata.updatedDate'], ['desc']);
 
-  const bloclsToRender = take([...automatedPatronBlocks, ...blocks], 3).map(block => {
+  const blocksToRender = take([...automatedPatronBlocks, ...blocks], 3).map(block => {
     return (
       <Row>
         <Col xs>
@@ -41,7 +41,7 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, automatedPatronBlocks, 
           :
         </Col>
       </Row>
-      {bloclsToRender}
+      {blocksToRender}
       <br />
       <Row>
         <Col xs={8}>{(patronBlocks.length > 3) && <FormattedMessage id="ui-requests.additionalReasons" />}</Col>
