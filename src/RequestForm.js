@@ -916,7 +916,7 @@ class RequestForm extends React.Component {
                                   aria-label={<FormattedMessage id="ui-requests.item.barcode" />}
                                   fullWidth
                                   component={TextField}
-                                  withRef
+                                  forwardRef
                                   ref={this.itemBarcodeRef}
                                   onKeyDown={e => this.onKeyDown(e, 'item')}
                                   validate={this.requireEnterItem}
@@ -1113,7 +1113,7 @@ class RequestForm extends React.Component {
                                   aria-label={<FormattedMessage id="ui-requests.requester.barcode" />}
                                   fullWidth
                                   component={TextField}
-                                  withRef
+                                  forwardRef
                                   ref={this.requesterBarcodeRef}
                                   onKeyDown={e => this.onKeyDown(e, 'requester')}
                                   validate={this.requireUser}
