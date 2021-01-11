@@ -38,7 +38,7 @@
     "requester.requester": "Requester",
     "requester.pickupLocation": "Pickup location",
     "actions.editRequest": "リクエストを編集",
-    "actions.selectAddressType": "Select address type",
+    "actions.selectAddressType": "住所の種類を選択",
     "actions.selectPickupLoc": "Select pickup location",
     "actions.loading": "読み込み中...",
     "cancel.cancelRequest": "キャンセルリクエスト",
