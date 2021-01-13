@@ -9,6 +9,7 @@ import {
 
 import {
   convertToSlipData,
+  escapeValue,
   isPagedItem,
   createUserHighlightBoxLink,
   formatNoteReferrerEntityData,
@@ -192,6 +193,21 @@ describe('utils', () => {
 
     it('should return false when function gets uncorrect value', () => {
       expect(formatNoteReferrerEntityData(null)).to.be.false;
+    });
+  });
+
+  describe('escape value util', () => {
+    it('should return Barcode tag', () => {
+      const barcodeVal = '<Barcode>123456</Barcode>';
+
+      expect(escapeValue(barcodeVal)).to.equal(barcodeVal);
+    });
+
+    it('should return escaped values for non Barcode values', () => {
+      const passedValue = 'something<bad>very bad';
+      const expectedValue = 'something&lt;bad&gt;very bad';
+
+      expect(escapeValue(passedValue)).to.equal(expectedValue);
     });
   });
 });
