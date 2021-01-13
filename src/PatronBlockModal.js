@@ -10,9 +10,10 @@ import {
 } from '@folio/stripes/components';
 
 const PatronBlockModal = ({ open, onClose, patronBlocks, automatedPatronBlocks, viewUserPath }) => {
-  const blocks = orderBy(patronBlocks, ['metadata.updatedDate'], ['desc']);
+  const orderedPatronBlocks = orderBy(patronBlocks, ['metadata.updatedDate'], ['desc']);
+  const blocks = [...automatedPatronBlocks, ...orderedPatronBlocks];
 
-  const blocksToRender = take([...automatedPatronBlocks, ...blocks], 3).map(block => {
+  const blocksToRender = take(blocks, 3).map(block => {
     return (
       <Row>
         <Col xs>
@@ -44,7 +45,7 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, automatedPatronBlocks, 
       {blocksToRender}
       <br />
       <Row>
-        <Col xs={8}>{(patronBlocks.length > 3) && <FormattedMessage id="ui-requests.additionalReasons" />}</Col>
+        <Col xs={8}>{(blocks.length > 3) && <FormattedMessage id="ui-requests.additionalReasons" />}</Col>
         <Col xs={4}>
           <Row end="xs">
             <Col>
