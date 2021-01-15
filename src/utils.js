@@ -171,7 +171,7 @@ export const escapeValue = (val) => {
   if (val.startsWith('<Barcode>') && val.endsWith('</Barcode>')) {
     return val;
   }
-  
+
   return escape(val);
 };
 
