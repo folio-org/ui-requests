@@ -17,8 +17,10 @@
 * Retrieve requests to items in chunks. Fixes UIREQ-558.
 * Add `Patron comments` field to request. Refs UIREQ-530.
 * Fix fulfillment misspelling. Fixes UIREQ-567.
-* Add `Patron comments` field to search results CSV export. Refs UIREQ-549.
+* Add `Patron comments` field to search results CSV export and expired holds report. Refs UIREQ-549, UIREQ-550.
 * Show `lastCheckedInDateTime` token for staff slips in locale format and date/time. Refs UIREQ-495.
+* Barcode image not rendering on print slips. Refs UIREQ-570.
+* Patron block modal for Requesting should display up to 3 blocks, with Automated Patron Blocks on top of Manual Patron Blocks. Refs UIREQ-496.
 
 ## [4.0.1](https://github.com/folio-org/ui-requests/tree/v4.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.0...v4.0.1)

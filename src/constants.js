@@ -117,6 +117,7 @@ export const expiredHoldsReportHeaders = [
   'item.copyNumber',
   'status',
   'holdShelfExpirationDate',
+  'patronComments',
 ];
 
 export const requestFilterTypes = {
