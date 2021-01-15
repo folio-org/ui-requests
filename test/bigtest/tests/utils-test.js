@@ -16,7 +16,7 @@ import {
   buildLocaleDateAndTime,
 } from '../../../src/utils';
 
-describe.only('utils', () => {
+describe('utils', () => {
   describe('Create user highlight box link', () => {
     it('should create user highlight box link', () => {
       const linkText = 'linkText';
