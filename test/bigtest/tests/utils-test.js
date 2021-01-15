@@ -16,7 +16,7 @@ import {
   buildLocaleDateAndTime,
 } from '../../../src/utils';
 
-describe('utils', () => {
+describe.only('utils', () => {
   describe('Create user highlight box link', () => {
     it('should create user highlight box link', () => {
       const linkText = 'linkText';
@@ -85,6 +85,7 @@ describe('utils', () => {
       requestExpirationDate: '2019-07-30T00:00:00.000+03:00',
       holdShelfExpirationDate: '2019-08-31T00:00:00.000+03:00',
       deliveryAddressType: 'Home',
+      patronComments: 'Please hurry!',
     };
     const requester = {
       firstName: 'Steven',
@@ -144,7 +145,8 @@ describe('utils', () => {
       'request.deliveryAddressType': 'Home',
       'request.requestExpirationDate': 'formatDate',
       'request.holdShelfExpirationDate': 'formatDate',
-      'request.requestID': 'dd606ca6-a2cb-4723-9a8d-e73b05c42232'
+      'request.requestID': 'dd606ca6-a2cb-4723-9a8d-e73b05c42232',
+      'request.patronComments': 'Please hurry!',
     };
     const expectSlipData = [slipData];
 
