@@ -21,6 +21,7 @@
 * Show `lastCheckedInDateTime` token for staff slips in locale format and date/time. Refs UIREQ-495.
 * Barcode image not rendering on print slips. Refs UIREQ-570.
 * Patron block modal for Requesting should display up to 3 blocks, with Automated Patron Blocks on top of Manual Patron Blocks. Refs UIREQ-496.
+* Fix duplicating request when item is changed. Fixes UIREQ-572.
 
 ## [4.0.1](https://github.com/folio-org/ui-requests/tree/v4.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.0...v4.0.1)

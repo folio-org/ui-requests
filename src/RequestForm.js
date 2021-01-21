@@ -197,6 +197,7 @@ class RequestForm extends React.Component {
     const blocks = this.getPatronManualBlocks(parentResources);
     const prevAutomatedPatronBlocks = this.getAutomatedPatronBlocks(prevParentResources);
     const automatedPatronBlocks = this.getAutomatedPatronBlocks(parentResources);
+    const { item } = initialValues;
 
     if (
       (initialValues &&
@@ -215,10 +216,10 @@ class RequestForm extends React.Component {
       });
     }
 
+    // When in duplicate mode there are cases when selectedItem form state
+    // is missing or not set. In this case just set it to initial item.
     if (query?.mode === createModes.DUPLICATE &&
-      !isEqual(this.state.selectedItem, initialValues.item)) {
-      const { item } = initialValues;
-
+      item && !this.state.selectedItem) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         selectedItem: item,
@@ -545,6 +546,7 @@ class RequestForm extends React.Component {
 
         this.props.change('itemId', item.id);
         this.props.change('item.barcode', item.barcode);
+
         if (options.length === 1) {
           this.props.change('requestType', options[0].value);
         }
