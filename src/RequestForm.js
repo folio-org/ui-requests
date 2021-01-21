@@ -216,7 +216,7 @@ class RequestForm extends React.Component {
       });
     }
 
-    // When in duplicate mode there are cases when selectedItem form state
+    // When in duplicate mode there are cases when selectedItem from state
     // is missing or not set. In this case just set it to initial item.
     if (query?.mode === createModes.DUPLICATE &&
       item && !this.state.selectedItem) {
