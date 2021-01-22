@@ -1,5 +1,10 @@
 # Change history for ui-requests
 
+## [4.0.6](https://github.com/folio-org/ui-requests/tree/v4.0.6) (2021-01-25)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.5...v4.0.6)
+
+* Barcode image not rendering on print slips. Refs UIREQ-570.
+
 ## [4.0.5](https://github.com/folio-org/ui-requests/tree/v4.0.5) (2020-11-30)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.4...v4.0.5)
 
