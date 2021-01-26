@@ -161,7 +161,7 @@
     "react": "^16.5.1",
     "react-dom": "^16.5.1",
     "react-intl": "^5.7.0",
-    "react-redux": "^5.0.7",
+    "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
     "redux": "^4.0.0",
     "regenerator-runtime": "^0.13.3",
@@ -180,7 +180,7 @@
     "react-hot-loader": "^4.3.12",
     "react-router-prop-types": "^1.0.4",
     "react-to-print": "^2.9.0",
-    "redux-form": "^7.0.3"
+    "redux-form": "^8.3.0"
   },
   "peerDependencies": {
     "@folio/stripes": "^6.0.0",
