@@ -173,7 +173,7 @@ export const escapeValue = (val) => {
   }
 
   return escape(val);
-};
+}
 
 export function buildTemplate(template = '') {
   return dataSource => {
