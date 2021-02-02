@@ -31,12 +31,17 @@ export const requestStatuses = {
 };
 
 export const itemStatuses = {
-  PAGED: 'Paged',
-  DECLARED_LOST: 'Declared lost',
-  WITHDRAWN: 'Withdrawn',
-  CLAIMED_RETURNED: 'Claimed returned',
-  LOST_AND_PAID: 'Lost and paid',
   AGED_TO_LOST: 'Aged to lost',
+  CLAIMED_RETURNED: 'Claimed returned',
+  DECLARED_LOST: 'Declared lost',
+  IN_PROCESS_NON_REQUESTABLE: 'In process (non-requestable)',
+  INTELLECTUAL_ITEM: 'Intellectual item',
+  LONG_MISSING: 'Long missing',
+  LOST_AND_PAID: 'Lost and paid',
+  PAGED: 'Paged',
+  UNAVAILABLE: 'Unavailable',
+  UNKNOWN: 'Unknown',
+  WITHDRAWN: 'Withdrawn',
 };
 
 export const requestTypesMap = {

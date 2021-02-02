@@ -24,6 +24,7 @@
 * Fix duplicating request when item is changed. Fixes UIREQ-572.
 * Replace withRef with forwardRef. Refs STRIPES-721.
 * Add `Patron comments` to staff slip options. Refs UICIRC-523.
+* Prevent all request types for items with intellectual item, in process (non-requestable), long missing, unavailable, and unknown statuses. Refs UIREQ-393.
 
 ## [4.0.1](https://github.com/folio-org/ui-requests/tree/v4.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.0...v4.0.1)
