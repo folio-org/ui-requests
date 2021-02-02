@@ -51,7 +51,7 @@
     "cancel.additionalInfoPlaceholderOptional": "Introducir más información acerca de la cancelación (opcional)",
     "meta.title": "Reservas",
     "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
-    "barcode": "Barcode",
+    "barcode": "Código barras",
     "item.requestsOnItem": "Reservas del ítem",
     "actions.viewRequestsInQueue": "Ver cola de reservas",
     "actions.selectPickupSp": "Select pickup service point",
