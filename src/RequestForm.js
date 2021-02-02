@@ -67,12 +67,8 @@ import {
   toUserAddress,
   getPatronGroup,
   getRequestTypeOptions,
-  isAgedToLostItem,
   isDelivery,
-  isDeclaredLostItem,
-  isWithdrawnItem,
-  isClaimedReturned,
-  isLostAndPaidItem,
+  hasNonRequestableStatus,
 } from './utils';
 
 import css from './requests.css';
@@ -556,7 +552,7 @@ class RequestForm extends React.Component {
         // the slow loan and request lookups
         this.setState({ selectedItem: item });
 
-        if (this.shouldShowRequestTypeError(item)) {
+        if (hasNonRequestableStatus(item)) {
           this.showErrorModal();
         }
 
@@ -687,14 +683,6 @@ class RequestForm extends React.Component {
     return pristine || submitting;
   }
 
-  shouldShowRequestTypeError = (item) => {
-    return isDeclaredLostItem(item) ||
-      isWithdrawnItem(item) ||
-      isClaimedReturned(item) ||
-      isLostAndPaidItem(item) ||
-      isAgedToLostItem(item);
-  }
-
   onSave = (data) => {
     const {
       intl: {
@@ -714,7 +702,7 @@ class RequestForm extends React.Component {
 
     const { selectedItem } = this.state;
 
-    if (this.shouldShowRequestTypeError(selectedItem)) {
+    if (hasNonRequestableStatus(selectedItem)) {
       return this.showErrorModal();
     }
 
@@ -843,7 +831,7 @@ class RequestForm extends React.Component {
     const multiRequestTypesVisible = !isEditForm && selectedItem && requestTypeOptions.length > 1;
     const singleRequestTypeVisible = !isEditForm && selectedItem && requestTypeOptions.length === 1;
     const patronGroup = getPatronGroup(selectedUser, patronGroups);
-    const requestTypeError = this.shouldShowRequestTypeError(selectedItem);
+    const requestTypeError = hasNonRequestableStatus(selectedItem);
     const itemStatus = selectedItem?.status?.name;
 
     return (

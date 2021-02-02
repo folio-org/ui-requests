@@ -18,12 +18,17 @@ import ViewRequest from '../interactors/view-request';
 
 import translations from '../../../translations/ui-requests/en';
 
-const itemStatuses = [
-  'Declared lost',
-  'Withdrawn',
-  'Claimed returned',
-  'Lost and paid',
+const nonRequestableItemStatuses = [
   'Aged to lost',
+  'Claimed returned',
+  'Declared lost',
+  'In process (non-requestable)',
+  'Intellectual item',
+  'Long missing',
+  'Lost and paid',
+  'Unavailable',
+  'Unknown',
+  'Withdrawn',
 ];
 
 const patronComment = 'I really need this in the next three days';
@@ -405,7 +410,7 @@ describe('New Request page', () => {
       });
     });
 
-    itemStatuses.forEach(status => {
+    nonRequestableItemStatuses.forEach(status => {
       describe(`New request for ${status} item`, function () {
         beforeEach(async function () {
           const item = this.server.create('item', {
