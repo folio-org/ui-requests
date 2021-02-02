@@ -572,9 +572,10 @@ class RequestsRoute extends React.Component {
     throw new SubmissionError({ item });
   }
 
-  handleJsonError(error) {
-    const errorMessage = error.errors[0].message;
-    this.setState({ errorMessage });
+  handleJsonError({ errors }) {
+    const errorMessages = [];
+    errors.forEach(({ message }) => errorMessages.push(message));
+    this.setState({ errorMessage: errorMessages.join(',') });
   }
 
   handleCloseNewRecord = (e) => {

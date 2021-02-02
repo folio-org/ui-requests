@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import {
+  map,
+  split,
+} from 'lodash';
 
 import {
   Button,
@@ -14,6 +18,7 @@ const ErrorModal = (props) => {
     onClose,
     label,
   } = props;
+  const errors = split(errorMessage, ',');
 
   const footer = (
     <ModalFooter>
@@ -37,7 +42,7 @@ const ErrorModal = (props) => {
       onClose={onClose}
     >
       <div data-test-error-modal-content>
-        {errorMessage}
+        {map(errors, (error) => <div>{error}</div>)}
       </div>
     </Modal>
   );
