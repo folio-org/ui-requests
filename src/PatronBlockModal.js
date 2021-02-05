@@ -59,7 +59,10 @@ const PatronBlockModal = ({
           <Row end="xs">
             <Col>
               {canOverridePatronBlocks &&
-                <Button onClick={onOverride}>
+                <Button
+                  data-test-override-patron-block
+                  onClick={onOverride}
+                >
                   <FormattedMessage id="ui-requests.override" />
                 </Button>
               }
