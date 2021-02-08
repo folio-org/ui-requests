@@ -21,6 +21,7 @@ import {
 import {
   Button,
   filters2cql,
+  MenuSection,
 } from '@folio/stripes/components';
 import {
   deparseFilters,
@@ -787,80 +788,87 @@ class RequestsRoute extends React.Component {
       'title': rq => (rq.item ? rq.item.title : ''),
     };
 
-    const actionMenu = ({ onToggle }) => (
+    const actionMenu = ({ onToggle, renderColumnsMenu }) => (
       <>
-        <IfPermission perm="ui-requests.create">
-          <Button
-            buttonStyle="dropdownItem"
-            id="clickable-newrequest"
-            to={`${this.props.location.pathname}?layer=create`}
-            onClick={onToggle}
-          >
-            <FormattedMessage id="stripes-smart-components.new" />
-          </Button>
-        </IfPermission>
-        { csvReportPending ?
-          <LoadingButton>
-            <FormattedMessage id="ui-requests.csvReportPending" />
-          </LoadingButton> :
-          <Button
-            buttonStyle="dropdownItem"
-            id="exportToCsvPaneHeaderBtn"
-            disabled={!requestCount}
-            onClick={() => {
-              this.context.sendCallout({ message: <FormattedMessage id="ui-requests.csvReportInProgress" /> });
-              onToggle();
-              this.exportData();
-            }}
-          >
-            <FormattedMessage id="ui-requests.exportSearchResultsToCsv" />
-          </Button>
-        }
-        {
-          pickSlipsArePending ?
+        <MenuSection label={intl.formatMessage({ id: 'ui-requests.actions.label' })}>
+          <IfPermission perm="ui-requests.create">
+            <Button
+              buttonStyle="dropdownItem"
+              id="clickable-newrequest"
+              to={`${this.props.location.pathname}?layer=create`}
+              onClick={onToggle}
+            >
+              <FormattedMessage id="stripes-smart-components.new" />
+            </Button>
+          </IfPermission>
+          { csvReportPending ?
             <LoadingButton>
-              <FormattedMessage id="ui-requests.pickSlipsLoading" />
+              <FormattedMessage id="ui-requests.csvReportPending" />
             </LoadingButton> :
-            <>
-              <Button
-                buttonStyle="dropdownItem"
-                id="exportExpiredHoldsToCsvPaneHeaderBtn"
-                disabled={servicePointId && requestsEmpty}
-                onClick={() => {
-                  onToggle();
-                  this.exportExpiredHoldsToCSV();
-                }}
-              >
-                <FormattedMessage
-                  id="ui-requests.exportExpiredHoldShelfToCsv"
-                  values={{ currentServicePoint: servicePointName }}
-                />
-              </Button>
-              <PrintButton
-                buttonStyle="dropdownItem"
-                id="printPickSlipsBtn"
-                disabled={pickSlipsEmpty}
-                template={printTemplate}
-                contentRef={this.printContentRef}
-                onBeforeGetContent={
-                  () => new Promise(resolve => {
-                    this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
+            <Button
+              buttonStyle="dropdownItem"
+              id="exportToCsvPaneHeaderBtn"
+              disabled={!requestCount}
+              onClick={() => {
+                this.context.sendCallout({ message: <FormattedMessage id="ui-requests.csvReportInProgress" /> });
+                onToggle();
+                this.exportData();
+              }}
+            >
+              <FormattedMessage id="ui-requests.exportSearchResultsToCsv" />
+            </Button>
+          }
+          {
+            pickSlipsArePending ?
+              <LoadingButton>
+                <FormattedMessage id="ui-requests.pickSlipsLoading" />
+              </LoadingButton> :
+              <>
+                <Button
+                  buttonStyle="dropdownItem"
+                  id="exportExpiredHoldsToCsvPaneHeaderBtn"
+                  disabled={servicePointId && requestsEmpty}
+                  onClick={() => {
                     onToggle();
-                    // without the timeout the printing process starts right away
-                    // and the callout and onToggle above are blocked
-                    setTimeout(() => resolve(), 1000);
-                  })
-                }
-              >
-                <FormattedMessage
-                  id="ui-requests.printPickSlips"
-                  values={{ sp: servicePointName }}
-                />
-              </PrintButton>
-            </>
-        }
+                    this.exportExpiredHoldsToCSV();
+                  }}
+                >
+                  <FormattedMessage
+                    id="ui-requests.exportExpiredHoldShelfToCsv"
+                    values={{ currentServicePoint: servicePointName }}
+                  />
+                </Button>
+                <PrintButton
+                  buttonStyle="dropdownItem"
+                  id="printPickSlipsBtn"
+                  disabled={pickSlipsEmpty}
+                  template={printTemplate}
+                  contentRef={this.printContentRef}
+                  onBeforeGetContent={
+                    () => new Promise(resolve => {
+                      this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
+                      onToggle();
+                      // without the timeout the printing process starts right away
+                      // and the callout and onToggle above are blocked
+                      setTimeout(() => resolve(), 1000);
+                    })
+                  }
+                >
+                  <FormattedMessage
+                    id="ui-requests.printPickSlips"
+                    values={{ sp: servicePointName }}
+                  />
+                </PrintButton>
+              </>
+          }
+        </MenuSection>
+        {renderColumnsMenu}
       </>
     );
+
+    const columnManagerProps = {
+      excludeKeys: ['title'],
+    };
 
     return (
       <>
@@ -874,6 +882,7 @@ class RequestsRoute extends React.Component {
         }
         <div data-test-request-instances>
           <SearchAndSort
+            columnManagerProps={columnManagerProps}
             hasNewButton={false}
             actionMenu={actionMenu}
             packageInfo={packageInfo}
