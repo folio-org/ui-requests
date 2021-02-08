@@ -13,7 +13,7 @@ import ViewRequest from '../interactors/view-request';
 const RequestForm = new NewRequest();
 const ViewRequestPage = new ViewRequest();
 
-describe.only('Override patron block', () => {
+describe('Override patron block', () => {
   let user;
   let item;
   let servicePoint;
