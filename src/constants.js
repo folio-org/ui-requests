@@ -9,7 +9,7 @@ export const requestTypesTranslations = {
   'Recall': 'ui-requests.requestMeta.type.recall',
   'Hold': 'ui-requests.requestMeta.type.hold',
   'Page': 'ui-requests.requestMeta.type.page',
-}
+};
 
 export const fulfilmentTypes = [
   { id: 'Hold Shelf', label: 'ui-requests.requestMeta.fulfilment.holdShelf' },
