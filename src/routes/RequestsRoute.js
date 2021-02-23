@@ -355,7 +355,6 @@ class RequestsRoute extends React.Component {
 
   componentDidMount() {
     this.setCurrentServicePointId();
-    this.buildRecordsForHoldsShelfReport();
   }
 
   componentDidUpdate(prevProps) {
@@ -928,6 +927,7 @@ class RequestsRoute extends React.Component {
               patronGroups,
               query: resources.query,
               onDuplicate: this.onDuplicate,
+              buildRecordsForHoldsShelfReport: this.buildRecordsForHoldsShelfReport,
             }}
             viewRecordPerms="ui-requests.view"
             newRecordPerms="ui-requests.create"

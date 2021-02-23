@@ -331,6 +331,7 @@ export default function config() {
     const body = JSON.parse(request.requestBody);
     const reqModel = requests.find(body.id);
     const defaultReq = this.build('request');
+    this.get('/circulation/requests-reports/hold-shelf-clearance/:id', { requests: [{ id: reqModel.id }], totalRecords: 1 });
     return reqModel.update({ ...defaultReq, ...body });
   });
 
