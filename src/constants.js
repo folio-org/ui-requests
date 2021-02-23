@@ -4,6 +4,13 @@ export const requestTypes = [
   { id: 'Page', label: 'ui-requests.requestMeta.type.page' },
 ];
 
+// map from API's enum-value to translation key
+export const requestTypesTranslations = {
+  'Recall': 'ui-requests.requestMeta.type.recall',
+  'Hold': 'ui-requests.requestMeta.type.hold',
+  'Page': 'ui-requests.requestMeta.type.page',
+};
+
 export const fulfilmentTypes = [
   { id: 'Hold Shelf', label: 'ui-requests.requestMeta.fulfilment.holdShelf' },
   { id: 'Delivery', label: 'ui-requests.requestMeta.fulfilment.delivery' },
@@ -14,20 +21,39 @@ export const fulfilmentTypeMap = {
   HOLD_SHELF: 'Hold Shelf',
 };
 
+// map from API's enum-value to translation key
+export const fulfilmentTypesTranslations = {
+  'Delivery': 'ui-requests.requestMeta.fulfilment.delivery.',
+  'Hold Shelf': 'ui-requests.requestMeta.fulfilment.holdShelf.'
+};
+
 // used to perform queries with the backend
 // not used for data display
 export const requestStatuses = {
-  CHECKED_OUT: 'Checked out',
-  AWAITING_PICKUP: 'Open - Awaiting pickup',
   AWAITING_DELIVERY: 'Open - Awaiting delivery',
-  IN_TRANSIT: 'Open - In transit',
-  RECALL: 'Recall',
+  AWAITING_PICKUP: 'Open - Awaiting pickup',
+  CANCELLED: 'Closed - Cancelled',
+  CHECKED_OUT: 'Checked out',
+  FILLED: 'Closed - Filled',
   HOLD: 'Hold',
+  IN_TRANSIT: 'Open - In transit',
   NOT_YET_FILLED: 'Open - Not yet filled',
   PICKUP_EXPIRED: 'Closed - Pickup expired',
-  CANCELLED: 'Closed - Cancelled',
-  FILLED: 'Closed - Filled',
+  RECALL: 'Recall',
   UNFILLED: 'Closed - Unfilled',
+};
+
+// map from API's enum-value to translation key
+export const requestStatusesTranslations = {
+  'Closed - Cancelled': 'ui-requests.filters.requestStatus.cancelled',
+  'Closed - Filled': 'ui-requests.filters.requestStatus.filled',
+  'Closed - Pickup expired': 'ui-requests.filters.requestStatus.pickupExpired',
+  'Closed - Unfilled': 'ui-requests.filters.requestStatus.unfilled',
+
+  'Open - Awaiting delivery': 'ui-requests.filters.requestStatus.awaitingDelivery',
+  'Open - Awaiting pickup': 'ui-requests.filters.requestStatus.awaitingPickup',
+  'Open - In transit': 'ui-requests.filters.requestStatus.inTransit',
+  'Open - Not yet filled': 'ui-requests.filters.requestStatus.notYetFilled',
 };
 
 export const itemStatuses = {
