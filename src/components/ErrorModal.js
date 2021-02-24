@@ -44,7 +44,12 @@ const ErrorModal = (props) => {
       <div data-test-error-modal-content>
         {
           map(errors, (error, index) => (
-            <p key={`error-${index}`}>{error}</p>
+            <p
+              data-test-error-text
+              key={`error-${index}`}
+            >
+              {error}
+            </p>
           ))
         }
       </div>
