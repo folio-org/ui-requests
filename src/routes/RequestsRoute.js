@@ -37,6 +37,8 @@ import {
   expiredHoldsReportHeaders,
   pickSlipType,
   createModes,
+  requestStatusesTranslations,
+  requestTypesTranslations,
 } from '../constants';
 import {
   buildUrl,
@@ -575,7 +577,7 @@ class RequestsRoute extends React.Component {
   handleJsonError({ errors }) {
     const errorMessages = [];
     errors.forEach(({ message }) => errorMessages.push(message));
-    this.setState({ errorMessage: errorMessages.join(',') });
+    this.setState({ errorMessage: errorMessages.join(';') });
   }
 
   handleCloseNewRecord = (e) => {
@@ -783,8 +785,8 @@ class RequestsRoute extends React.Component {
       ),
       'requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
       'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : ''),
-      'requestStatus': rq => rq.status,
-      'type': rq => rq.requestType,
+      'requestStatus': rq => <FormattedMessage id={requestStatusesTranslations[rq.status]} />,
+      'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
       'title': rq => (rq.item ? rq.item.title : ''),
     };
 

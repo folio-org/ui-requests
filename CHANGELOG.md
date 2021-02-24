@@ -21,6 +21,12 @@
 * Show `lastCheckedInDateTime` token for staff slips in locale format and date/time. Refs UIREQ-495.
 * Barcode image not rendering on print slips. Refs UIREQ-570.
 * Patron block modal for Requesting should display up to 3 blocks, with Automated Patron Blocks on top of Manual Patron Blocks. Refs UIREQ-496.
+* Fix duplicating request when item is changed. Fixes UIREQ-572.
+* Replace withRef with forwardRef. Refs STRIPES-721.
+* Add `Patron comments` to staff slip options. Refs UICIRC-523.
+* Prevent all request types for items with intellectual item, in process (non-requestable), long missing, unavailable, and unknown statuses. Refs UIREQ-393.
+* Increment `@folio/stripes-cli` to `v2`. Refs UIREQ-578.
+* Display l10n'ed values for type, status in results pane. Refs UIREQ-580.
 * Override patron blocks of requesting when user has credentials. Refs UIREQ-576.
 
 ## [4.0.1](https://github.com/folio-org/ui-requests/tree/v4.0.1) (2020-10-15)

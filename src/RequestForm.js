@@ -67,12 +67,8 @@ import {
   toUserAddress,
   getPatronGroup,
   getRequestTypeOptions,
-  isAgedToLostItem,
   isDelivery,
-  isDeclaredLostItem,
-  isWithdrawnItem,
-  isClaimedReturned,
-  isLostAndPaidItem,
+  hasNonRequestableStatus,
 } from './utils';
 
 import css from './requests.css';
@@ -198,6 +194,7 @@ class RequestForm extends React.Component {
     const blocks = this.getPatronManualBlocks(parentResources);
     const prevAutomatedPatronBlocks = this.getAutomatedPatronBlocks(prevParentResources);
     const automatedPatronBlocks = this.getAutomatedPatronBlocks(parentResources);
+    const { item } = initialValues;
 
     if (
       (initialValues &&
@@ -216,10 +213,10 @@ class RequestForm extends React.Component {
       });
     }
 
+    // When in duplicate mode there are cases when selectedItem from state
+    // is missing or not set. In this case just set it to initial item.
     if (query?.mode === createModes.DUPLICATE &&
-      !isEqual(this.state.selectedItem, initialValues.item)) {
-      const { item } = initialValues;
-
+      item && !this.state.selectedItem) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         selectedItem: item,
@@ -546,6 +543,7 @@ class RequestForm extends React.Component {
 
         this.props.change('itemId', item.id);
         this.props.change('item.barcode', item.barcode);
+
         if (options.length === 1) {
           this.props.change('requestType', options[0].value);
         }
@@ -555,7 +553,7 @@ class RequestForm extends React.Component {
         // the slow loan and request lookups
         this.setState({ selectedItem: item });
 
-        if (this.shouldShowRequestTypeError(item)) {
+        if (hasNonRequestableStatus(item)) {
           this.showErrorModal();
         }
 
@@ -686,14 +684,6 @@ class RequestForm extends React.Component {
     return pristine || submitting;
   }
 
-  shouldShowRequestTypeError = (item) => {
-    return isDeclaredLostItem(item) ||
-      isWithdrawnItem(item) ||
-      isClaimedReturned(item) ||
-      isLostAndPaidItem(item) ||
-      isAgedToLostItem(item);
-  }
-
   onSave = (data) => {
     const {
       intl: {
@@ -716,7 +706,7 @@ class RequestForm extends React.Component {
       isPatronBlocksOverridden,
     } = this.state;
 
-    if (this.shouldShowRequestTypeError(selectedItem)) {
+    if (hasNonRequestableStatus(selectedItem)) {
       return this.showErrorModal();
     }
 
@@ -857,7 +847,7 @@ class RequestForm extends React.Component {
     const multiRequestTypesVisible = !isEditForm && selectedItem && requestTypeOptions.length > 1;
     const singleRequestTypeVisible = !isEditForm && selectedItem && requestTypeOptions.length === 1;
     const patronGroup = getPatronGroup(selectedUser, patronGroups);
-    const requestTypeError = this.shouldShowRequestTypeError(selectedItem);
+    const requestTypeError = hasNonRequestableStatus(selectedItem);
     const itemStatus = selectedItem?.status?.name;
 
     return (
@@ -932,7 +922,7 @@ class RequestForm extends React.Component {
                                   aria-label={<FormattedMessage id="ui-requests.item.barcode" />}
                                   fullWidth
                                   component={TextField}
-                                  withRef
+                                  forwardRef
                                   ref={this.itemBarcodeRef}
                                   onKeyDown={e => this.onKeyDown(e, 'item')}
                                   validate={this.requireEnterItem}
@@ -1129,7 +1119,7 @@ class RequestForm extends React.Component {
                                   aria-label={<FormattedMessage id="ui-requests.requester.barcode" />}
                                   fullWidth
                                   component={TextField}
-                                  withRef
+                                  forwardRef
                                   ref={this.requesterBarcodeRef}
                                   onKeyDown={e => this.onKeyDown(e, 'requester')}
                                   validate={this.requireUser}

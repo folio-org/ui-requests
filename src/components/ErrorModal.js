@@ -18,7 +18,7 @@ const ErrorModal = (props) => {
     onClose,
     label,
   } = props;
-  const errors = split(errorMessage, ',');
+  const errors = split(errorMessage, ';');
 
   const footer = (
     <ModalFooter>
