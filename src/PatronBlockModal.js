@@ -8,6 +8,7 @@ import {
   Modal,
   Row
 } from '@folio/stripes/components';
+import { IfPermission } from '@folio/stripes/core';
 
 const PatronBlockModal = ({
   open,
@@ -15,22 +16,18 @@ const PatronBlockModal = ({
   patronBlocks,
   automatedPatronBlocks,
   viewUserPath,
-  stripes,
   onOverride,
 }) => {
   const orderedPatronBlocks = orderBy(patronBlocks, ['metadata.updatedDate'], ['desc']);
   const blocks = [...automatedPatronBlocks, ...orderedPatronBlocks];
-  const canOverridePatronBlocks = stripes.hasPerm('ui-users.overridePatronBlock');
 
-  const blocksToRender = take(blocks, 3).map(block => {
-    return (
-      <Row>
-        <Col xs>
-          <b>{ isObject(block) ? (block.desc || '') : block }</b>
-        </Col>
-      </Row>
-    );
-  });
+  const blocksToRender = take(blocks, 3).map(block => (
+    <Row key={block.id}>
+      <Col xs>
+        <b>{ isObject(block) ? (block.desc || '') : block }</b>
+      </Col>
+    </Row>
+  ));
 
   return (
     <Modal
@@ -58,14 +55,14 @@ const PatronBlockModal = ({
         <Col xs={6}>
           <Row end="xs">
             <Col>
-              {canOverridePatronBlocks &&
+              <IfPermission perm="ui-users.overridePatronBlock">
                 <Button
                   data-test-override-patron-block
                   onClick={onOverride}
                 >
                   <FormattedMessage id="ui-requests.override" />
                 </Button>
-              }
+              </IfPermission>
               <Button onClick={onClose}><FormattedMessage id="ui-requests.close" /></Button>
               <Button buttonStyle="primary" onClick={viewUserPath}><FormattedMessage id="ui-requests.detailsButton" /></Button>
             </Col>
@@ -82,9 +79,6 @@ PatronBlockModal.propTypes = {
   patronBlocks: PropTypes.arrayOf(PropTypes.object),
   automatedPatronBlocks: PropTypes.arrayOf(PropTypes.string),
   viewUserPath: PropTypes.func,
-  stripes: PropTypes.shape({
-    hasPerm: PropTypes.func.isRequired,
-  }),
   onOverride: PropTypes.func.isRequired,
 };
 

@@ -42,7 +42,11 @@ const ErrorModal = (props) => {
       onClose={onClose}
     >
       <div data-test-error-modal-content>
-        {map(errors, (error) => <div>{error}</div>)}
+        {
+          map(errors, (error, index) => (
+            <p key={`error-${index}`}>{error}</p>
+          ))
+        }
       </div>
     </Modal>
   );

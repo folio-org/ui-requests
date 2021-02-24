@@ -149,7 +149,7 @@ class RequestForm extends React.Component {
       selectedLoan: loan,
       blocked: false,
       ...this.getDefaultRequestPreferences(),
-      isPatronBlocksOverriden: false,
+      isPatronBlocksOverridden: false,
     };
 
     this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
@@ -713,7 +713,7 @@ class RequestForm extends React.Component {
 
     const {
       selectedItem,
-      isPatronBlocksOverriden,
+      isPatronBlocksOverridden,
     } = this.state;
 
     if (this.shouldShowRequestTypeError(selectedItem)) {
@@ -723,7 +723,7 @@ class RequestForm extends React.Component {
     const [block = {}] = this.getPatronManualBlocks(parentResources);
     const automatedPatronBlocks = this.getAutomatedPatronBlocks(parentResources);
 
-    if ((get(block, 'userId') === this.state.selectedUser.id || !isEmpty(automatedPatronBlocks)) && !isPatronBlocksOverriden) {
+    if ((get(block, 'userId') === this.state.selectedUser.id || !isEmpty(automatedPatronBlocks)) && !isPatronBlocksOverridden) {
       return this.setState({ blocked: true });
     }
 
@@ -744,9 +744,11 @@ class RequestForm extends React.Component {
       unset(data, 'pickupServicePointId');
     }
 
-    if (isPatronBlocksOverriden) {
-      data.overrideBlocks = {
-        patronBlock: {},
+    if (isPatronBlocksOverridden) {
+      data.requestProcessingParameters = {
+        overrideBlocks: {
+          patronBlock: {},
+        }
       };
     }
 
@@ -772,7 +774,7 @@ class RequestForm extends React.Component {
   );
 
   overridePatronBlocks = () => {
-    this.setState({ isPatronBlocksOverriden: true });
+    this.setState({ isPatronBlocksOverridden: true });
   };
 
   render() {
@@ -806,7 +808,7 @@ class RequestForm extends React.Component {
       instanceId,
       isUserLoading,
       isErrorModalOpen,
-      isPatronBlocksOverriden,
+      isPatronBlocksOverridden,
     } = this.state;
 
     const patronBlocks = this.getPatronManualBlocks(parentResources);
@@ -1194,13 +1196,12 @@ class RequestForm extends React.Component {
               stripes={this.props.stripes}
             />
             <PatronBlockModal
-              open={blocked && !isPatronBlocksOverriden}
+              open={blocked && !isPatronBlocksOverridden}
               onClose={this.onCloseBlockedModal}
               onOverride={this.overridePatronBlocks}
               viewUserPath={() => this.onViewUserPath(selectedUser, patronGroup)}
               patronBlocks={patronBlocks || []}
               automatedPatronBlocks={automatedPatronBlocks}
-              stripes={this.props.stripes}
             />
             {isErrorModalOpen &&
               <ErrorModal
