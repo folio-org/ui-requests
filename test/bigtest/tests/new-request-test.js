@@ -179,6 +179,42 @@ describe('New Request page', () => {
       });
     });
 
+    describe('creating new request for item with status "Restricted"', () => {
+      beforeEach(async function () {
+        this.server.create('item', {
+          barcode: '9676761472500',
+          title: 'Best Book Ever',
+          materialType: {
+            name: 'book'
+          },
+          status: { name: 'Restricted' },
+        });
+
+        const user = this.server.create('user', { barcode: '9676761472501' });
+        this.server.create('request-preference', {
+          userId: user.id,
+          fulfillment: 'Hold Shelf',
+          defaultServicePointId: 'servicepointId1',
+        });
+
+        await newRequest
+          .fillItemBarcode('9676761472500')
+          .clickItemEnterBtn();
+
+        await newRequest
+          .fillUserBarcode('9676761472501')
+          .clickUserEnterBtn();
+
+        await newRequest.chooseServicePoint('Circ Desk 1');
+        await newRequest.clickNewRequest();
+        await viewRequest.isPresent;
+      });
+
+      it('should create a new request and open view request pane', () => {
+        expect(viewRequest.requestSectionPresent).to.be.true;
+        expect(viewRequest.requesterSectionPresent).to.be.true;
+      });
+    });
 
     describe('creating new request type with delivery', () => {
       beforeEach(async function () {
