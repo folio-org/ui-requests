@@ -51,7 +51,7 @@
     "cancel.additionalInfoPlaceholderOptional": "قم بإدخال مزيد من المعلومات حول الإلغاء (اختياري)",
     "meta.title": "طلبات",
     "resultCount": "تم العثور على {count, number} {count, plural, one { تسجيلة } other { تسجيلة }}",
-    "barcode": "باركود",
+    "barcode": "الباركود",
     "item.requestsOnItem": "طلبات على المادة",
     "actions.viewRequestsInQueue": "عرض الطلبات في الصف",
     "actions.selectPickupSp": "قم بتحديد نقطة خدمة الالتقاط",
@@ -190,5 +190,6 @@
     "holdShelfExpirationTime": "holdShelfExpirationTime",
     "csvReportPending": "csvReportPending",
     "csvReportInProgress": "جاري توليد تقرير نتائج بتنسيق CSV. قد يستغرق هذا بعض الوقت لمجموعات النتائج الأكبر. شكراً لانتظارك.",
-    "patronComments": "تعليقات المستفيد"
+    "patronComments": "تعليقات المستفيد",
+    "override": "تخطي"
 }
