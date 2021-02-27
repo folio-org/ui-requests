@@ -31,7 +31,7 @@
     "item.dueDate": "Aktuelles Fälligkeitsdatum",
     "item.numRequests": "Bestandsanfragen",
     "requester.barcode": "Barcode Benutzer/-in",
-    "requester.scanOrEnterBarcode": "Barcode Benutzer/-in scannen oder eingebn",
+    "requester.scanOrEnterBarcode": "Barcode Benutzer/-in scannen oder eingeben",
     "requester.findUserPluginLabel": "Personensuche",
     "requester.proxy": "Vollmachtnehmer/-in ",
     "requester.fulfilmentPref": "Bereitstellungspräferenz",
@@ -190,5 +190,6 @@
     "holdShelfExpirationTime": "Abholregal-Ablaufdatum",
     "csvReportPending": "CSV Bericht wird generiert. Bitte warten",
     "csvReportInProgress": "CSV Ergebnisbericht wird generiert. Dies kann bei größeren Ergebnismengen einige Zeit dauern. Bitte geduldig sein.",
-    "patronComments": "Kommentar Benutzer/-in"
+    "patronComments": "Kommentar Benutzer/-in",
+    "override": "Override"
 }

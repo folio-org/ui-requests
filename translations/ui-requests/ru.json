@@ -190,5 +190,6 @@
     "holdShelfExpirationTime": "holdShelfExpirationTime",
     "csvReportPending": "csvReportPending",
     "csvReportInProgress": "A CSV results report is being generated. This may take some time for larger result sets. Please be patient.",
-    "patronComments": "Patron comments"
+    "patronComments": "Patron comments",
+    "override": "Override"
 }
