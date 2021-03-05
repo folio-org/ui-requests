@@ -25,7 +25,7 @@
     "item.title": "Tytuł",
     "item.callNumber": "Ciąg znaków efektywnej sygnatury",
     "item.volume": "Wolumin",
-    "item.enumeration": "Numeracja",
+    "item.enumeration": "Wyliczenie",
     "item.copyNumber": "Kopia egzemplarza",
     "item.status": "Status egzemplarza",
     "item.dueDate": "Aktualny termin zwrotu",
@@ -191,5 +191,5 @@
     "csvReportPending": "Trwa generowanie raportu CSV. Proszę czekać.",
     "csvReportInProgress": "Raport CSV jest generowany. Może to być operacja długotrwała. Prosimy o cierpliwość.",
     "patronComments": "Uwagi czytelnika",
-    "override": "Override"
+    "override": "Zastąp"
 }
