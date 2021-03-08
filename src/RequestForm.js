@@ -145,6 +145,7 @@ class RequestForm extends React.Component {
       selectedLoan: loan,
       blocked: false,
       ...this.getDefaultRequestPreferences(),
+      isPatronBlocksOverridden: false,
     };
 
     this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
@@ -700,7 +701,10 @@ class RequestForm extends React.Component {
       pickupServicePointId,
     } = data;
 
-    const { selectedItem } = this.state;
+    const {
+      selectedItem,
+      isPatronBlocksOverridden,
+    } = this.state;
 
     if (hasNonRequestableStatus(selectedItem)) {
       return this.showErrorModal();
@@ -709,7 +713,7 @@ class RequestForm extends React.Component {
     const [block = {}] = this.getPatronManualBlocks(parentResources);
     const automatedPatronBlocks = this.getAutomatedPatronBlocks(parentResources);
 
-    if ((get(block, 'userId') === this.state.selectedUser.id) || !isEmpty(automatedPatronBlocks)) {
+    if ((get(block, 'userId') === this.state.selectedUser.id || !isEmpty(automatedPatronBlocks)) && !isPatronBlocksOverridden) {
       return this.setState({ blocked: true });
     }
 
@@ -728,6 +732,14 @@ class RequestForm extends React.Component {
     }
     if (fulfilmentPreference === fulfilmentTypeMap.DELIVERY && isString(pickupServicePointId)) {
       unset(data, 'pickupServicePointId');
+    }
+
+    if (isPatronBlocksOverridden) {
+      data.requestProcessingParameters = {
+        overrideBlocks: {
+          patronBlock: {},
+        }
+      };
     }
 
     return this.props.onSubmit(data);
@@ -750,6 +762,10 @@ class RequestForm extends React.Component {
       </FormattedMessage>
     </PaneMenu>
   );
+
+  overridePatronBlocks = () => {
+    this.setState({ isPatronBlocksOverridden: true });
+  };
 
   render() {
     const {
@@ -782,6 +798,7 @@ class RequestForm extends React.Component {
       instanceId,
       isUserLoading,
       isErrorModalOpen,
+      isPatronBlocksOverridden,
     } = this.state;
 
     const patronBlocks = this.getPatronManualBlocks(parentResources);
@@ -792,7 +809,6 @@ class RequestForm extends React.Component {
 
     const isEditForm = this.isEditForm();
     const requestTypeOptions = getRequestTypeOptions(selectedItem);
-
 
     const labelAsterisk = isEditForm
       ? ''
@@ -1170,8 +1186,9 @@ class RequestForm extends React.Component {
               stripes={this.props.stripes}
             />
             <PatronBlockModal
-              open={blocked}
+              open={blocked && !isPatronBlocksOverridden}
               onClose={this.onCloseBlockedModal}
+              onOverride={this.overridePatronBlocks}
               viewUserPath={() => this.onViewUserPath(selectedUser, patronGroup)}
               patronBlocks={patronBlocks || []}
               automatedPatronBlocks={automatedPatronBlocks}

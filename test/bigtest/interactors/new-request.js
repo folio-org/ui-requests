@@ -16,6 +16,7 @@ import { getSelectValues } from './helpers';
 import HeaderDropdown from './header-dropdown';
 import InputField from './input-field';
 import KeyValue from './KeyValue';
+import BlockModalInteractor from './patron-block-modal';
 
 @interactor class NewRequest {
   pressEnter = triggerable('keydown', {
@@ -64,6 +65,7 @@ import KeyValue from './KeyValue';
 
   requestType = scoped('[data-test-request-type] div', KeyValue);
   patronComments = new TextAreaInteractor('[class*=textArea---]');
+  patronBlockModal = new BlockModalInteractor('[data-test-patron-block-modal]');
 
   whenReady() {
     return this.when(() => this.itemBarcodeIsPresent);

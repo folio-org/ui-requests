@@ -25,6 +25,11 @@
 * Replace withRef with forwardRef. Refs STRIPES-721.
 * Add `Patron comments` to staff slip options. Refs UICIRC-523.
 * Prevent all request types for items with intellectual item, in process (non-requestable), long missing, unavailable, and unknown statuses. Refs UIREQ-393.
+* Increment `@folio/stripes-cli` to `v2`. Refs UIREQ-578.
+* Display l10n'ed values for type, status in results pane. Refs UIREQ-580.
+* Override patron blocks of requesting when user has credentials. Refs UIREQ-576.
+* Fix canceled request display in `Hold shelf clearance report`. Fixes UIREQ-543.
+* Allow requests for Restricted items. Refs UIREQ-581.
 
 ## [4.0.1](https://github.com/folio-org/ui-requests/tree/v4.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.0...v4.0.1)

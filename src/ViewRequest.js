@@ -87,6 +87,7 @@ class ViewRequest extends React.Component {
     onCloseEdit: PropTypes.func.isRequired,
     onEdit: PropTypes.func,
     onDuplicate: PropTypes.func,
+    buildRecordsForHoldsShelfReport: PropTypes.func.isRequired,
     optionLists: PropTypes.object,
     tagsToggle: PropTypes.func,
     paneWidth: PropTypes.string,
@@ -200,17 +201,25 @@ class ViewRequest extends React.Component {
   }
 
   cancelRequest(cancellationInfo) {
+    const {
+      resources,
+      mutator,
+      onCloseEdit,
+      buildRecordsForHoldsShelfReport,
+    } = this.props;
+
     // Get the initial request data, mix in the cancellation info, PUT,
     // and then close cancel/edit modes since cancelled requests can't be edited.
-    const request = get(this.props.resources, ['selectedRequest', 'records', 0], {});
+    const request = get(resources, ['selectedRequest', 'records', 0], {});
     const cancelledRequest = {
       ...request,
       ...cancellationInfo,
     };
 
-    this.props.mutator.selectedRequest.PUT(cancelledRequest).then(() => {
+    mutator.selectedRequest.PUT(cancelledRequest).then(() => {
       this.setState({ isCancellingRequest: false });
-      this.props.onCloseEdit();
+      onCloseEdit();
+      buildRecordsForHoldsShelfReport();
     });
   }
 

@@ -20,6 +20,7 @@
   "position": "Position in queue",
   "patronComments": "Patron comments",
   "close": "Close",
+  "override": "Override",
   "blockedLabel": "Reason for block",
   "blockModal": "Patron blocked from requesting",
   "detailsButton": "View block details",

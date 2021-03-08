@@ -38,6 +38,8 @@ import {
   expiredHoldsReportHeaders,
   pickSlipType,
   createModes,
+  requestStatusesTranslations,
+  requestTypesTranslations,
 } from '../constants';
 import {
   buildUrl,
@@ -140,7 +142,6 @@ class RequestsRoute extends React.Component {
       throwErrors: false,
       accumulate: true,
     },
-
     patronGroups: {
       type: 'okapi',
       path: 'groups',
@@ -355,7 +356,6 @@ class RequestsRoute extends React.Component {
 
   componentDidMount() {
     this.setCurrentServicePointId();
-    this.buildRecordsForHoldsShelfReport();
   }
 
   componentDidUpdate(prevProps) {
@@ -573,9 +573,10 @@ class RequestsRoute extends React.Component {
     throw new SubmissionError({ item });
   }
 
-  handleJsonError(error) {
-    const errorMessage = error.errors[0].message;
-    this.setState({ errorMessage });
+  handleJsonError({ errors }) {
+    const errorMessages = [];
+    errors.forEach(({ message }) => errorMessages.push(message));
+    this.setState({ errorMessage: errorMessages.join(';') });
   }
 
   handleCloseNewRecord = (e) => {
@@ -644,8 +645,8 @@ class RequestsRoute extends React.Component {
       this.setState(
         {
           errorModalData: {
-            errorMessage: <FormattedMessage id="ui-requests.noServicePoint.errorMessage" />,
-            label: <FormattedMessage id="ui-requests.noServicePoint.label" />,
+            errorMessage: 'ui-requests.noServicePoint.errorMessage',
+            label: 'ui-requests.noServicePoint.label',
           }
         }
       );
@@ -756,7 +757,6 @@ class RequestsRoute extends React.Component {
       requests,
       servicePointId,
     } = this.state;
-
     const { name: servicePointName } = this.getCurrentServicePointInfo();
     const pickSlips = get(resources, 'pickSlips.records', []);
     const patronGroups = get(resources, 'patronGroups.records', []);
@@ -783,8 +783,8 @@ class RequestsRoute extends React.Component {
       ),
       'requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
       'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : ''),
-      'requestStatus': rq => rq.status,
-      'type': rq => rq.requestType,
+      'requestStatus': rq => <FormattedMessage id={requestStatusesTranslations[rq.status]} />,
+      'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
       'title': rq => (rq.item ? rq.item.title : ''),
     };
 
@@ -876,8 +876,8 @@ class RequestsRoute extends React.Component {
           isEmpty(errorModalData) ||
           <ErrorModal
             onClose={this.errorModalClose}
-            label={errorModalData.label}
-            errorMessage={errorModalData.errorMessage}
+            label={intl.formatMessage({ id: errorModalData.label })}
+            errorMessage={intl.formatMessage({ id: errorModalData.errorMessage })}
           />
         }
         <div data-test-request-instances>
@@ -936,6 +936,7 @@ class RequestsRoute extends React.Component {
               patronGroups,
               query: resources.query,
               onDuplicate: this.onDuplicate,
+              buildRecordsForHoldsShelfReport: this.buildRecordsForHoldsShelfReport,
             }}
             viewRecordPerms="ui-requests.view"
             newRecordPerms="ui-requests.create"
