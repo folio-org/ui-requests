@@ -244,8 +244,10 @@ class RequestForm extends React.Component {
     }
 
     if (!isEqual(prevAutomatedPatronBlocks, automatedPatronBlocks) && !isEmpty(automatedPatronBlocks)) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ blocked: true });
+      if (this.state.selectedUser.id) {
+        // eslint-disable-next-line react/no-did-update-set-state
+        this.setState({ blocked: true });
+      }
     }
   }
 
@@ -334,6 +336,7 @@ class RequestForm extends React.Component {
   }
 
   onUserClick() {
+    this.resetPatronIsBlocked();
     const barcode = get(this.requesterBarcodeRef, 'current.value');
 
     if (!barcode) return;
@@ -368,15 +371,16 @@ class RequestForm extends React.Component {
         const isAutomatedPatronBlocksRequestInPendingState = parentResources.automatedPatronBlocks.isPending;
         const selectedUser = result.users[0];
         const state = { selectedUser };
+        onChangePatron(selectedUser);
+        change('requesterId', selectedUser.id);
+
+        this.setState(state);
+        this.findRequestPreferences(selectedUser.id);
 
         if ((blocks.length && blocks[0].userId === selectedUser.id) || (!isEmpty(automatedPatronBlocks) && !isAutomatedPatronBlocksRequestInPendingState)) {
           state.blocked = true;
+          state.isPatronBlocksOverridden = false;
         }
-
-        this.setState(state);
-        onChangePatron(selectedUser);
-        change('requesterId', selectedUser.id);
-        this.findRequestPreferences(selectedUser.id);
 
         return selectedUser;
       }
@@ -564,14 +568,6 @@ class RequestForm extends React.Component {
   }
 
   onItemClick() {
-    const { parentResources } = this.props;
-
-    const blocks = this.getPatronManualBlocks(parentResources);
-    const automatedPatronBlocks = this.getAutomatedPatronBlocks(this.props.parentResources);
-    if ((blocks.length > 0 && this.state.selectedUser) || !isEmpty(automatedPatronBlocks)) {
-      this.setState({ blocked: true });
-    }
-
     const barcode = get(this.itemBarcodeRef, 'current.value');
 
     if (barcode) {
@@ -766,6 +762,13 @@ class RequestForm extends React.Component {
   overridePatronBlocks = () => {
     this.setState({ isPatronBlocksOverridden: true });
   };
+
+  resetPatronIsBlocked = () => {
+    this.setState({
+      blocked: false,
+      isPatronBlocksOverridden: false,
+    });
+  }
 
   render() {
     const {
