@@ -156,7 +156,7 @@
     "filters.requestStatus.filled": "مغلق - مملوء",
     "filters.requestStatus.pickupExpired": "مغلق - انتهت صلاحية الالتقاط",
     "filters.requestStatus.unfilled": "مغلق - غير مملوء",
-    "filters.requestStatus.awaitingDelivery": "مفتوح - في النتظار التوصيل",
+    "filters.requestStatus.awaitingDelivery": "مفتوح - في انتظار التوصيل",
     "filters.requestStatus.awaitingPickup": "مفتوح - في انتظار الالتقاط",
     "filters.requestStatus.inTransit": "مفتوح - في النقل",
     "filters.requestStatus.notYetFilled": "مفتوح - غير مملوء بعد",
