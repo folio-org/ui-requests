@@ -30,6 +30,7 @@
 * Override patron blocks of requesting when user has credentials. Refs UIREQ-576.
 * Fix canceled request display in `Hold shelf clearance report`. Fixes UIREQ-543.
 * Allow requests for Restricted items. Refs UIREQ-581.
+* Previous patron block remembered on new request. Refs UIREQ-586.
 
 ## [4.0.1](https://github.com/folio-org/ui-requests/tree/v4.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.0...v4.0.1)
