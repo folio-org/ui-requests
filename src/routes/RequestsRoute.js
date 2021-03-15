@@ -892,17 +892,6 @@ class RequestsRoute extends React.Component {
             viewRecordComponent={ViewRequest}
             editRecordComponent={RequestForm}
             getHelperResourcePath={this.getHelperResourcePath}
-            visibleColumns={[
-              'requestDate',
-              'title',
-              'itemBarcode',
-              'type',
-              'requestStatus',
-              'position',
-              'requester',
-              'requesterBarcode',
-              'proxy',
-            ]}
             columnWidths={{
               requestDate: { max: 165 },
               title: { max: 300 },
