@@ -1,5 +1,10 @@
 # Change history for ui-requests
 
+## [5.0.1](https://github.com/folio-org/ui-requests/tree/v5.0.1) (2021-04-15)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.0.0...v5.0.1)
+
+* Fix display of the content of error modal. Fix UIREQ-587.
+
 ## [5.0.0](https://github.com/folio-org/ui-requests/tree/v5.0.0) (2021-03-18)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.6...v5.0.0)
 
@@ -32,7 +37,6 @@
 * Fix canceled request display in `Hold shelf clearance report`. Fixes UIREQ-543.
 * Allow requests for Restricted items. Refs UIREQ-581.
 * Previous patron block remembered on new request. Refs UIREQ-586.
-* Fix display of the content of error modal. Fix UIREQ-587.
 * Use `react-intl` `v5` compatible version of `react-intl-safe-html`.
 * Use `@folio/stripes` `v6` compatible version of `@folio/plugin-find-user`.
 
