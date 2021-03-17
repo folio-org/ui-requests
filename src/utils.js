@@ -275,3 +275,16 @@ export function formatNoteReferrerEntityData(data) {
     id,
   };
 }
+
+export function parseErrorMessage(errorMessage) {
+  return errorMessage
+    .split(';')
+    .map((error, index) => (
+      <p
+        data-test-error-text
+        key={`error-${index}`}
+      >
+        {error}
+      </p>
+    ));
+}

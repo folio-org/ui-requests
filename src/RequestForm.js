@@ -69,6 +69,7 @@ import {
   getRequestTypeOptions,
   isDelivery,
   hasNonRequestableStatus,
+  parseErrorMessage,
 } from './utils';
 
 import css from './requests.css';
@@ -899,7 +900,7 @@ class RequestForm extends React.Component {
               <ErrorModal
                 onClose={this.onClose}
                 label={<FormattedMessage id="ui-requests.requestNotAllowed" />}
-                errorMessage={errorMessage}
+                errorMessage={parseErrorMessage(errorMessage)}
               />
             }
             <AccordionSet accordionStatus={accordions} onToggle={this.onToggleSection}>
