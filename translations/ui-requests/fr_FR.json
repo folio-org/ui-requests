@@ -99,7 +99,7 @@
     "requestType.message": "Sélectionnez un élément pour afficher les types de demande disponibles",
     "showTags": "Afficher les mots-clés",
     "tags.tagList": "Mots-clés",
-    "item.copyNumbers": "Copy number",
+    "item.copyNumbers": "Numéro d'exemplaire",
     "requestNotAllowed": "Demande non autorisée",
     "additionalReasons": "View block details to see additional reasons for block...",
     "pickupServicePoint.name": "Point de retrait",
