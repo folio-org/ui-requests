@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 5.0.0 (IN PROGRESS)
+## [5.0.0](https://github.com/folio-org/ui-requests/tree/v5.0.0) (2021-03-18)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.6...v5.0.0)
 
 * Add timepicker for hold shelf expiration date. Refs UIREQ-381.
 * Omit `holdShelfExpirationDate` field in duplicated request. Refs UIREQ-532.
