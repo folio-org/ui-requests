@@ -312,15 +312,15 @@ class RequestsRoute extends React.Component {
     };
 
     this.columnLabels = {
+      requestDate: formatMessage({ id: 'ui-requests.requests.requestDate' }),
       title: formatMessage({ id: 'ui-requests.requests.title' }),
+      itemBarcode: formatMessage({ id: 'ui-requests.requests.itemBarcode' }),
       type: formatMessage({ id: 'ui-requests.requests.type' }),
       requestStatus: formatMessage({ id: 'ui-requests.requests.status' }),
-      requesterBarcode: formatMessage({ id: 'ui-requests.requests.requesterBarcode' }),
-      requester: formatMessage({ id: 'ui-requests.requests.requester' }),
-      requestDate: formatMessage({ id: 'ui-requests.requests.requestDate' }),
-      proxy: formatMessage({ id: 'ui-requests.requests.proxy' }),
       position: formatMessage({ id: 'ui-requests.requests.position' }),
-      itemBarcode: formatMessage({ id: 'ui-requests.requests.itemBarcode' })
+      requester: formatMessage({ id: 'ui-requests.requests.requester' }),
+      requesterBarcode: formatMessage({ id: 'ui-requests.requests.requesterBarcode' }),
+      proxy: formatMessage({ id: 'ui-requests.requests.proxy' }),
     };
 
     this.addRequestFields = this.addRequestFields.bind(this);
