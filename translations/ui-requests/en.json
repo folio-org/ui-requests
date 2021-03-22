@@ -63,6 +63,7 @@
   "errors.selectItemRequired": "Please select an item and hit enter",
   "errors.selectUser": "Please fill out requestor information to continue",
 
+  "actions.label": "Actions",
   "actions.edit": "Edit",
   "actions.editRequestLink": "Edit Request Dialog",
   "actions.closeNewRequest": "Close New Request",
