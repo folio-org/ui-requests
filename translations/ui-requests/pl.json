@@ -191,5 +191,6 @@
     "csvReportPending": "Trwa generowanie raportu CSV. Proszę czekać.",
     "csvReportInProgress": "Raport CSV jest generowany. Może to być operacja długotrwała. Prosimy o cierpliwość.",
     "patronComments": "Uwagi czytelnika",
-    "override": "Zastąp"
+    "override": "Zastąp",
+    "actions.label": "Actions"
 }

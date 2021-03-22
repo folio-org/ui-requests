@@ -191,5 +191,6 @@
     "csvReportPending": "csvReportPending",
     "csvReportInProgress": "Um relatório de resultados CSV está sendo gerado. Isso pode levar algum tempo para conjuntos de resultados maiores. Por favor, seja paciente.",
     "patronComments": "Comentários do usuário",
-    "override": "Sobrescrever"
+    "override": "Sobrescrever",
+    "actions.label": "Actions"
 }
