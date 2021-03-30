@@ -192,5 +192,5 @@
     "csvReportInProgress": "جاري توليد تقرير نتائج بتنسيق CSV. قد يستغرق هذا بعض الوقت لمجموعات النتائج الأكبر. شكراً لانتظارك.",
     "patronComments": "تعليقات المستفيد",
     "override": "تخطي",
-    "actions.label": "Actions"
+    "actions.label": "الإجراءات"
 }
