@@ -485,8 +485,14 @@ class RequestForm extends React.Component {
       defaultServicePointId,
       deliverySelected,
       selectedAddressTypeId,
+      selectedUser,
     } = this.state;
-    const { change } = this.props;
+    const {
+      change,
+      initialValues: {
+        requesterId,
+      },
+    } = this.props;
 
     if (deliverySelected) {
       const deliveryAddressTypeId = selectedAddressTypeId || defaultDeliveryAddressTypeId;
@@ -494,10 +500,11 @@ class RequestForm extends React.Component {
       change('deliveryAddressTypeId', deliveryAddressTypeId);
       change('pickupServicePointId', '');
     } else {
-      // Do not update pickupServicePointId with defaultServicePointId if
-      // in duplicate mode. The pickupServicePointId from duplicated request
-      // record will be used instead.
-      if (this.props?.query?.mode !== createModes.DUPLICATE) {
+      // Only change pickupServicePointId to defaultServicePointId
+      // if selected user has changed (by choosing a different user manually)
+      // or if the request form is not in a DUPLICATE mode.
+      // In DUPLICATE mode the pickupServicePointId from a duplicated request record will be used instead.
+      if (requesterId !== selectedUser?.id || this.props?.query?.mode !== createModes.DUPLICATE) {
         change('pickupServicePointId', defaultServicePointId);
       }
       change('deliveryAddressTypeId', '');
