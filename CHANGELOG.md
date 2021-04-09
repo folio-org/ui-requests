@@ -5,6 +5,7 @@
 
 * Fix display of the content of error modal. Fix UIREQ-587.
 * Increase limit for tags request to 10k. Refs UIREQ-596.
+* Choose correct service point when patron is changed in duplicate mode. Fixes UIREQ-595.
 
 ## [5.0.0](https://github.com/folio-org/ui-requests/tree/v5.0.0) (2021-03-18)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.6...v5.0.0)
