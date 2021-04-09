@@ -215,6 +215,7 @@ class RequestsRoute extends React.Component {
       path: 'tags',
       params: {
         query: 'cql.allRecords=1 sortby label',
+        limit: '10000',
       },
       records: 'tags',
     },
