@@ -1,5 +1,9 @@
 # Change history for ui-requests
 
+## 5.0.2 (IN PROGRESS)
+
+* Manual patron block modal is not shown. Refs UIREQ-601.
+
 ## [5.0.1](https://github.com/folio-org/ui-requests/tree/v5.0.1) (2021-04-15)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.0.0...v5.0.1)
 
