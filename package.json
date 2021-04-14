@@ -29,7 +29,7 @@
     "queryResource": "query",
     "okapiInterfaces": {
       "cancellation-reason-storage": "1.1",
-      "circulation": "9.0",
+      "circulation": "9.0 10.0",
       "inventory": "10.0",
       "request-storage": "3.0",
       "pick-slips": "0.1",
