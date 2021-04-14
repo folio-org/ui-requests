@@ -190,5 +190,7 @@
     "holdShelfExpirationTime": "holdShelfExpirationTime",
     "csvReportPending": "csvReportPending",
     "csvReportInProgress": "正在生成CSV结果报告。对于较大的结果集，可能需要一些时间。请耐心等待。",
-    "patronComments": "读者备注"
+    "patronComments": "读者备注",
+    "override": "越权",
+    "actions.label": "操作"
 }

@@ -67,12 +67,9 @@ import {
   toUserAddress,
   getPatronGroup,
   getRequestTypeOptions,
-  isAgedToLostItem,
   isDelivery,
-  isDeclaredLostItem,
-  isWithdrawnItem,
-  isClaimedReturned,
-  isLostAndPaidItem,
+  hasNonRequestableStatus,
+  parseErrorMessage,
 } from './utils';
 
 import css from './requests.css';
@@ -149,6 +146,7 @@ class RequestForm extends React.Component {
       selectedLoan: loan,
       blocked: false,
       ...this.getDefaultRequestPreferences(),
+      isPatronBlocksOverridden: false,
     };
 
     this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
@@ -197,6 +195,7 @@ class RequestForm extends React.Component {
     const blocks = this.getPatronManualBlocks(parentResources);
     const prevAutomatedPatronBlocks = this.getAutomatedPatronBlocks(prevParentResources);
     const automatedPatronBlocks = this.getAutomatedPatronBlocks(parentResources);
+    const { item } = initialValues;
 
     if (
       (initialValues &&
@@ -215,10 +214,10 @@ class RequestForm extends React.Component {
       });
     }
 
+    // When in duplicate mode there are cases when selectedItem from state
+    // is missing or not set. In this case just set it to initial item.
     if (query?.mode === createModes.DUPLICATE &&
-      !isEqual(this.state.selectedItem, initialValues.item)) {
-      const { item } = initialValues;
-
+      item && !this.state.selectedItem) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         selectedItem: item,
@@ -246,8 +245,10 @@ class RequestForm extends React.Component {
     }
 
     if (!isEqual(prevAutomatedPatronBlocks, automatedPatronBlocks) && !isEmpty(automatedPatronBlocks)) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ blocked: true });
+      if (this.state.selectedUser.id) {
+        // eslint-disable-next-line react/no-did-update-set-state
+        this.setState({ blocked: true });
+      }
     }
   }
 
@@ -336,6 +337,7 @@ class RequestForm extends React.Component {
   }
 
   onUserClick() {
+    this.resetPatronIsBlocked();
     const barcode = get(this.requesterBarcodeRef, 'current.value');
 
     if (!barcode) return;
@@ -370,15 +372,16 @@ class RequestForm extends React.Component {
         const isAutomatedPatronBlocksRequestInPendingState = parentResources.automatedPatronBlocks.isPending;
         const selectedUser = result.users[0];
         const state = { selectedUser };
+        onChangePatron(selectedUser);
+        change('requesterId', selectedUser.id);
+
+        this.setState(state);
+        this.findRequestPreferences(selectedUser.id);
 
         if ((blocks.length && blocks[0].userId === selectedUser.id) || (!isEmpty(automatedPatronBlocks) && !isAutomatedPatronBlocksRequestInPendingState)) {
           state.blocked = true;
+          state.isPatronBlocksOverridden = false;
         }
-
-        this.setState(state);
-        onChangePatron(selectedUser);
-        change('requesterId', selectedUser.id);
-        this.findRequestPreferences(selectedUser.id);
 
         return selectedUser;
       }
@@ -482,8 +485,14 @@ class RequestForm extends React.Component {
       defaultServicePointId,
       deliverySelected,
       selectedAddressTypeId,
+      selectedUser,
     } = this.state;
-    const { change } = this.props;
+    const {
+      change,
+      initialValues: {
+        requesterId,
+      },
+    } = this.props;
 
     if (deliverySelected) {
       const deliveryAddressTypeId = selectedAddressTypeId || defaultDeliveryAddressTypeId;
@@ -491,10 +500,11 @@ class RequestForm extends React.Component {
       change('deliveryAddressTypeId', deliveryAddressTypeId);
       change('pickupServicePointId', '');
     } else {
-      // Do not update pickupServicePointId with defaultServicePointId if
-      // in duplicate mode. The pickupServicePointId from duplicated request
-      // record will be used instead.
-      if (this.props?.query?.mode !== createModes.DUPLICATE) {
+      // Only change pickupServicePointId to defaultServicePointId
+      // if selected user has changed (by choosing a different user manually)
+      // or if the request form is not in a DUPLICATE mode.
+      // In DUPLICATE mode the pickupServicePointId from a duplicated request record will be used instead.
+      if (requesterId !== selectedUser?.id || this.props?.query?.mode !== createModes.DUPLICATE) {
         change('pickupServicePointId', defaultServicePointId);
       }
       change('deliveryAddressTypeId', '');
@@ -545,6 +555,7 @@ class RequestForm extends React.Component {
 
         this.props.change('itemId', item.id);
         this.props.change('item.barcode', item.barcode);
+
         if (options.length === 1) {
           this.props.change('requestType', options[0].value);
         }
@@ -554,7 +565,7 @@ class RequestForm extends React.Component {
         // the slow loan and request lookups
         this.setState({ selectedItem: item });
 
-        if (this.shouldShowRequestTypeError(item)) {
+        if (hasNonRequestableStatus(item)) {
           this.showErrorModal();
         }
 
@@ -565,14 +576,6 @@ class RequestForm extends React.Component {
   }
 
   onItemClick() {
-    const { parentResources } = this.props;
-
-    const blocks = this.getPatronManualBlocks(parentResources);
-    const automatedPatronBlocks = this.getAutomatedPatronBlocks(this.props.parentResources);
-    if ((blocks.length > 0 && this.state.selectedUser) || !isEmpty(automatedPatronBlocks)) {
-      this.setState({ blocked: true });
-    }
-
     const barcode = get(this.itemBarcodeRef, 'current.value');
 
     if (barcode) {
@@ -685,14 +688,6 @@ class RequestForm extends React.Component {
     return pristine || submitting;
   }
 
-  shouldShowRequestTypeError = (item) => {
-    return isDeclaredLostItem(item) ||
-      isWithdrawnItem(item) ||
-      isClaimedReturned(item) ||
-      isLostAndPaidItem(item) ||
-      isAgedToLostItem(item);
-  }
-
   onSave = (data) => {
     const {
       intl: {
@@ -710,16 +705,19 @@ class RequestForm extends React.Component {
       pickupServicePointId,
     } = data;
 
-    const { selectedItem } = this.state;
+    const {
+      selectedItem,
+      isPatronBlocksOverridden,
+    } = this.state;
 
-    if (this.shouldShowRequestTypeError(selectedItem)) {
+    if (hasNonRequestableStatus(selectedItem)) {
       return this.showErrorModal();
     }
 
     const [block = {}] = this.getPatronManualBlocks(parentResources);
     const automatedPatronBlocks = this.getAutomatedPatronBlocks(parentResources);
 
-    if ((get(block, 'userId') === this.state.selectedUser.id) || !isEmpty(automatedPatronBlocks)) {
+    if ((get(block, 'userId') === this.state.selectedUser.id || !isEmpty(automatedPatronBlocks)) && !isPatronBlocksOverridden) {
       return this.setState({ blocked: true });
     }
 
@@ -738,6 +736,14 @@ class RequestForm extends React.Component {
     }
     if (fulfilmentPreference === fulfilmentTypeMap.DELIVERY && isString(pickupServicePointId)) {
       unset(data, 'pickupServicePointId');
+    }
+
+    if (isPatronBlocksOverridden) {
+      data.requestProcessingParameters = {
+        overrideBlocks: {
+          patronBlock: {},
+        }
+      };
     }
 
     return this.props.onSubmit(data);
@@ -760,6 +766,17 @@ class RequestForm extends React.Component {
       </FormattedMessage>
     </PaneMenu>
   );
+
+  overridePatronBlocks = () => {
+    this.setState({ isPatronBlocksOverridden: true });
+  };
+
+  resetPatronIsBlocked = () => {
+    this.setState({
+      blocked: false,
+      isPatronBlocksOverridden: false,
+    });
+  }
 
   render() {
     const {
@@ -792,6 +809,7 @@ class RequestForm extends React.Component {
       instanceId,
       isUserLoading,
       isErrorModalOpen,
+      isPatronBlocksOverridden,
     } = this.state;
 
     const patronBlocks = this.getPatronManualBlocks(parentResources);
@@ -802,7 +820,6 @@ class RequestForm extends React.Component {
 
     const isEditForm = this.isEditForm();
     const requestTypeOptions = getRequestTypeOptions(selectedItem);
-
 
     const labelAsterisk = isEditForm
       ? ''
@@ -841,7 +858,7 @@ class RequestForm extends React.Component {
     const multiRequestTypesVisible = !isEditForm && selectedItem && requestTypeOptions.length > 1;
     const singleRequestTypeVisible = !isEditForm && selectedItem && requestTypeOptions.length === 1;
     const patronGroup = getPatronGroup(selectedUser, patronGroups);
-    const requestTypeError = this.shouldShowRequestTypeError(selectedItem);
+    const requestTypeError = hasNonRequestableStatus(selectedItem);
     const itemStatus = selectedItem?.status?.name;
 
     return (
@@ -890,7 +907,7 @@ class RequestForm extends React.Component {
               <ErrorModal
                 onClose={this.onClose}
                 label={<FormattedMessage id="ui-requests.requestNotAllowed" />}
-                errorMessage={errorMessage}
+                errorMessage={parseErrorMessage(errorMessage)}
               />
             }
             <AccordionSet accordionStatus={accordions} onToggle={this.onToggleSection}>
@@ -916,7 +933,7 @@ class RequestForm extends React.Component {
                                   aria-label={<FormattedMessage id="ui-requests.item.barcode" />}
                                   fullWidth
                                   component={TextField}
-                                  withRef
+                                  forwardRef
                                   ref={this.itemBarcodeRef}
                                   onKeyDown={e => this.onKeyDown(e, 'item')}
                                   validate={this.requireEnterItem}
@@ -1113,7 +1130,7 @@ class RequestForm extends React.Component {
                                   aria-label={<FormattedMessage id="ui-requests.requester.barcode" />}
                                   fullWidth
                                   component={TextField}
-                                  withRef
+                                  forwardRef
                                   ref={this.requesterBarcodeRef}
                                   onKeyDown={e => this.onKeyDown(e, 'requester')}
                                   validate={this.requireUser}
@@ -1180,8 +1197,9 @@ class RequestForm extends React.Component {
               stripes={this.props.stripes}
             />
             <PatronBlockModal
-              open={blocked}
+              open={blocked && !isPatronBlocksOverridden}
               onClose={this.onCloseBlockedModal}
+              onOverride={this.overridePatronBlocks}
               viewUserPath={() => this.onViewUserPath(selectedUser, patronGroup)}
               patronBlocks={patronBlocks || []}
               automatedPatronBlocks={automatedPatronBlocks}

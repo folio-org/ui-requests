@@ -9,6 +9,7 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import ViewRequestInteractor from '../interactors/view-request';
 import NewRequestInteractor from '../interactors/new-request';
+import RequestsInteractor from '../interactors/requests-interactor';
 
 import translations from '../../../translations/ui-requests/en';
 
@@ -17,14 +18,31 @@ describe('View request page', () => {
 
   const requestsOnItemValue = '3';
 
+  const servicePoint = {
+    id: 'servicepointId1',
+    name: 'Circ Desk 1',
+    code: 'cd1',
+    discoveryDisplayName: 'Circulation Desk -- Hallway',
+    pickupLocation: true,
+  };
+
   const viewRequest = new ViewRequestInteractor();
   const newRequest = new NewRequestInteractor();
+  const requests = new RequestsInteractor();
 
   describe('View default request', () => {
     let request;
 
+    setupApplication({
+      scenarios: ['default', 'zeroExpiredHoldsRecords'],
+      currentUser: {
+        servicePoints: [servicePoint],
+        curServicePoint: servicePoint,
+      },
+    });
+
     beforeEach(async function () {
-      request = this.server.create('request', { requestCount: requestsOnItemValue });
+      request = this.server.create('request', { requestCount: requestsOnItemValue, status: 'Open - Awaiting pickup' });
       this.visit(`/requests/view/${request.id}`);
     });
 
@@ -36,7 +54,17 @@ describe('View request page', () => {
       expect(viewRequest.patronComments.label.text).to.equal(translations.patronComments);
     });
 
-    describe('cancel request', function () {
+    describe('Request cancelation', function () {
+      describe('clicking the Actions menu on the Requests pane', function () {
+        beforeEach(async () => {
+          await requests.headerDropdown.click();
+        });
+
+        it('Export hold shelf clearance report button should be disabled', function () {
+          expect(requests.headerDropdownMenu.isExportExpiredHoldsToCSVDisabled).to.be.true;
+        });
+      });
+
       describe('confirm cancel request', function () {
         beforeEach(async () => {
           await viewRequest.headerDropdown.click();
@@ -47,6 +75,10 @@ describe('View request page', () => {
 
         it('closes request view', function () {
           expect(viewRequest.requestInfoContains('Closed - Cancelled')).to.be.true;
+        });
+
+        it('Export hold shelf clearance report button should be enabled', function () {
+          expect(requests.headerDropdownMenu.isExportExpiredHoldsToCSVDisabled).to.be.false;
         });
       });
 

@@ -1,6 +1,13 @@
 # Change history for ui-requests
 
-## 5.0.0 (IN PROGRESS)
+## [5.1.0] IN PROGRESS
+
+* Choose correct service point when patron is changed in duplicate mode. Fixes UIREQ-595.
+* Increase limit for tags request to 10k. Refs UIREQ-596.
+* Also support `circulation` `10.0`. Refs UIREQ-600.
+
+## [5.0.0](https://github.com/folio-org/ui-requests/tree/v5.0.0) (2021-03-18)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.6...v5.0.0)
 
 * Add timepicker for hold shelf expiration date. Refs UIREQ-381.
 * Omit `holdShelfExpirationDate` field in duplicated request. Refs UIREQ-532.
@@ -21,6 +28,51 @@
 * Show `lastCheckedInDateTime` token for staff slips in locale format and date/time. Refs UIREQ-495.
 * Barcode image not rendering on print slips. Refs UIREQ-570.
 * Patron block modal for Requesting should display up to 3 blocks, with Automated Patron Blocks on top of Manual Patron Blocks. Refs UIREQ-496.
+* Fix duplicating request when item is changed. Fixes UIREQ-572.
+* Replace withRef with forwardRef. Refs STRIPES-721.
+* Add `Patron comments` to staff slip options. Refs UICIRC-523.
+* Prevent all request types for items with intellectual item, in process (non-requestable), long missing, unavailable, and unknown statuses. Refs UIREQ-393.
+* Increment `@folio/stripes-cli` to `v2`. Refs UIREQ-578.
+* Display l10n'ed values for type, status in results pane. Refs UIREQ-580.
+* Override patron blocks of requesting when user has credentials. Refs UIREQ-576.
+* Fix canceled request display in `Hold shelf clearance report`. Fixes UIREQ-543.
+* Allow requests for Restricted items. Refs UIREQ-581.
+* Previous patron block remembered on new request. Refs UIREQ-586.
+* Fix display of the content of error modal. Fix UIREQ-587.
+* Use `react-intl` `v5` compatible version of `react-intl-safe-html`.
+* Use `@folio/stripes` `v6` compatible version of `@folio/plugin-find-user`.
+
+## [4.0.6](https://github.com/folio-org/ui-requests/tree/v4.0.6) (2021-01-25)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.5...v4.0.6)
+
+* Barcode image not rendering on print slips. Refs UIREQ-570.
+
+## [4.0.5](https://github.com/folio-org/ui-requests/tree/v4.0.5) (2020-11-30)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.4...v4.0.5)
+
+* Increase the limit to display correct number of requests in the `Move request` modal. Fixes UIREQ-566.
+
+## [4.0.4](https://github.com/folio-org/ui-requests/tree/v4.0.4) (2020-11-20)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.3...v4.0.4)
+
+* Increment `@folio/stripes` to `^5.0.7`. Refs STFORM-16.
+* Add a toast notification for CSV search results export. Refs UIREQ-555.
+
+## [4.0.3](https://github.com/folio-org/ui-requests/tree/v4.0.3) (2020-11-16)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.2...v4.0.3)
+
+* Add a 'working' indicator for CSV search results export. Fixes UIREQ-555.
+
+## [4.0.2](https://github.com/folio-org/ui-requests/tree/v4.0.2) (2020-11-12)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.1...v4.0.2)
+
+* Fix sorting by request status. Fixes UIREQ-540.
+* Omit `holdShelfExpirationDate` field in duplicated request. Refs UIREQ-532.
+* Fix search by tags. Fixes UIREQ-542.
+* Avoid phantom block modal after clearing blocks. Refs UIREQ-545.
+* Fix default pickup service point when editing existing request. Fixes UIREQ-544.
+* Increase the limit to display all items in the `Move request` modal. Fixes UIREQ-541.
+* Fix the non-responsive design of the `Move request` modal. Fixes UIREQ-552.
 
 ## [4.0.1](https://github.com/folio-org/ui-requests/tree/v4.0.1) (2020-10-15)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.0...v4.0.1)

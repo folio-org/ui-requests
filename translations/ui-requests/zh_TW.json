@@ -55,7 +55,7 @@
     "item.requestsOnItem": "單件的預約數量",
     "actions.viewRequestsInQueue": "查看預約排隊順序",
     "actions.selectPickupSp": "選擇取書工作區",
-    "fulfilmentPreference": "请求履行首选项",
+    "fulfilmentPreference": "請求履行偏好",
     "requestType": "預約類型",
     "status": "預約狀態",
     "requestExpirationDate": "預約到期日",
@@ -190,5 +190,7 @@
     "holdShelfExpirationTime": "holdShelfExpirationTime",
     "csvReportPending": "csvReportPending",
     "csvReportInProgress": "A CSV results report is being generated. This may take some time for larger result sets. Please be patient.",
-    "patronComments": "Patron comments"
+    "patronComments": "Patron comments",
+    "override": "Override",
+    "actions.label": "動作"
 }

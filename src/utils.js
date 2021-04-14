@@ -1,6 +1,7 @@
 import {
   escape,
   get,
+  includes,
   isEmpty,
   isObject,
   omit,
@@ -125,24 +126,19 @@ export function isPagedItem(item) {
   return item?.status?.name === itemStatuses.PAGED;
 }
 
-export function isDeclaredLostItem(item) {
-  return item?.status?.name === itemStatuses.DECLARED_LOST;
-}
-
-export function isWithdrawnItem(item) {
-  return item?.status?.name === itemStatuses.WITHDRAWN;
-}
-
-export function isClaimedReturned(item) {
-  return item?.status?.name === itemStatuses.CLAIMED_RETURNED;
-}
-
-export function isLostAndPaidItem(item) {
-  return item?.status?.name === itemStatuses.LOST_AND_PAID;
-}
-
-export function isAgedToLostItem(item) {
-  return item?.status?.name === itemStatuses.AGED_TO_LOST;
+export function hasNonRequestableStatus(item) {
+  return includes([
+    itemStatuses.AGED_TO_LOST,
+    itemStatuses.CLAIMED_RETURNED,
+    itemStatuses.DECLARED_LOST,
+    itemStatuses.INTELLECTUAL_ITEM,
+    itemStatuses.IN_PROCESS_NON_REQUESTABLE,
+    itemStatuses.LONG_MISSING,
+    itemStatuses.LOST_AND_PAID,
+    itemStatuses.UNAVAILABLE,
+    itemStatuses.UNKNOWN,
+    itemStatuses.WITHDRAWN,
+  ], item?.status?.name);
 }
 
 export function isDelivery(request) {
@@ -171,7 +167,7 @@ export const escapeValue = (val) => {
   if (val.startsWith('<Barcode>') && val.endsWith('</Barcode>')) {
     return val;
   }
-  
+
   return escape(val);
 };
 
@@ -249,6 +245,7 @@ export const convertToSlipData = (source, intl, timeZone, locale, slipName = 'Pi
         ? intl.formatDate(request.holdShelfExpirationDate, { timeZone, locale })
         : request.holdShelfExpirationDate,
       'request.requestID': request.requestID,
+      'request.patronComments': request.patronComments,
     };
   });
 };
@@ -277,4 +274,17 @@ export function formatNoteReferrerEntityData(data) {
     type,
     id,
   };
+}
+
+export function parseErrorMessage(errorMessage) {
+  return errorMessage
+    .split(';')
+    .map((error, index) => (
+      <p
+        data-test-error-text
+        key={`error-${index}`}
+      >
+        {error}
+      </p>
+    ));
 }

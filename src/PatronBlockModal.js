@@ -8,20 +8,26 @@ import {
   Modal,
   Row
 } from '@folio/stripes/components';
+import { IfPermission } from '@folio/stripes/core';
 
-const PatronBlockModal = ({ open, onClose, patronBlocks, automatedPatronBlocks, viewUserPath }) => {
+const PatronBlockModal = ({
+  open,
+  onClose,
+  patronBlocks,
+  automatedPatronBlocks,
+  viewUserPath,
+  onOverride,
+}) => {
   const orderedPatronBlocks = orderBy(patronBlocks, ['metadata.updatedDate'], ['desc']);
   const blocks = [...automatedPatronBlocks, ...orderedPatronBlocks];
 
-  const blocksToRender = take(blocks, 3).map(block => {
-    return (
-      <Row>
-        <Col xs>
-          <b>{ isObject(block) ? (block.desc || '') : block }</b>
-        </Col>
-      </Row>
-    );
-  });
+  const blocksToRender = take(blocks, 3).map(block => (
+    <Row key={block.id}>
+      <Col xs>
+        <b>{ isObject(block) ? (block.desc || '') : block }</b>
+      </Col>
+    </Row>
+  ));
 
   return (
     <Modal
@@ -45,12 +51,20 @@ const PatronBlockModal = ({ open, onClose, patronBlocks, automatedPatronBlocks, 
       {blocksToRender}
       <br />
       <Row>
-        <Col xs={8}>{(blocks.length > 3) && <FormattedMessage id="ui-requests.additionalReasons" />}</Col>
-        <Col xs={4}>
+        <Col xs={6}>{(blocks.length > 3) && <FormattedMessage id="ui-requests.additionalReasons" />}</Col>
+        <Col xs={6}>
           <Row end="xs">
             <Col>
+              <IfPermission perm="ui-users.overridePatronBlock">
+                <Button
+                  data-test-override-patron-block
+                  onClick={onOverride}
+                >
+                  <FormattedMessage id="ui-requests.override" />
+                </Button>
+              </IfPermission>
               <Button onClick={onClose}><FormattedMessage id="ui-requests.close" /></Button>
-              <Button style={{ 'marginLeft': '15px' }} buttonStyle="primary" onClick={viewUserPath}><FormattedMessage id="ui-requests.detailsButton" /></Button>
+              <Button buttonStyle="primary" onClick={viewUserPath}><FormattedMessage id="ui-requests.detailsButton" /></Button>
             </Col>
           </Row>
         </Col>
@@ -65,6 +79,7 @@ PatronBlockModal.propTypes = {
   patronBlocks: PropTypes.arrayOf(PropTypes.object),
   automatedPatronBlocks: PropTypes.arrayOf(PropTypes.string),
   viewUserPath: PropTypes.func,
+  onOverride: PropTypes.func.isRequired,
 };
 
 export default PatronBlockModal;

@@ -21,6 +21,7 @@ import {
 import {
   Button,
   filters2cql,
+  MenuSection,
 } from '@folio/stripes/components';
 import {
   deparseFilters,
@@ -37,6 +38,8 @@ import {
   expiredHoldsReportHeaders,
   pickSlipType,
   createModes,
+  requestStatusesTranslations,
+  requestTypesTranslations,
 } from '../constants';
 import {
   buildUrl,
@@ -139,7 +142,6 @@ class RequestsRoute extends React.Component {
       throwErrors: false,
       accumulate: true,
     },
-
     patronGroups: {
       type: 'okapi',
       path: 'groups',
@@ -213,6 +215,7 @@ class RequestsRoute extends React.Component {
       path: 'tags',
       params: {
         query: 'cql.allRecords=1 sortby label',
+        limit: '10000',
       },
       records: 'tags',
     },
@@ -310,15 +313,15 @@ class RequestsRoute extends React.Component {
     };
 
     this.columnLabels = {
+      requestDate: formatMessage({ id: 'ui-requests.requests.requestDate' }),
       title: formatMessage({ id: 'ui-requests.requests.title' }),
+      itemBarcode: formatMessage({ id: 'ui-requests.requests.itemBarcode' }),
       type: formatMessage({ id: 'ui-requests.requests.type' }),
       requestStatus: formatMessage({ id: 'ui-requests.requests.status' }),
-      requesterBarcode: formatMessage({ id: 'ui-requests.requests.requesterBarcode' }),
-      requester: formatMessage({ id: 'ui-requests.requests.requester' }),
-      requestDate: formatMessage({ id: 'ui-requests.requests.requestDate' }),
-      proxy: formatMessage({ id: 'ui-requests.requests.proxy' }),
       position: formatMessage({ id: 'ui-requests.requests.position' }),
-      itemBarcode: formatMessage({ id: 'ui-requests.requests.itemBarcode' })
+      requester: formatMessage({ id: 'ui-requests.requests.requester' }),
+      requesterBarcode: formatMessage({ id: 'ui-requests.requests.requesterBarcode' }),
+      proxy: formatMessage({ id: 'ui-requests.requests.proxy' }),
     };
 
     this.addRequestFields = this.addRequestFields.bind(this);
@@ -354,7 +357,6 @@ class RequestsRoute extends React.Component {
 
   componentDidMount() {
     this.setCurrentServicePointId();
-    this.buildRecordsForHoldsShelfReport();
   }
 
   componentDidUpdate(prevProps) {
@@ -572,9 +574,10 @@ class RequestsRoute extends React.Component {
     throw new SubmissionError({ item });
   }
 
-  handleJsonError(error) {
-    const errorMessage = error.errors[0].message;
-    this.setState({ errorMessage });
+  handleJsonError({ errors }) {
+    const errorMessages = [];
+    errors.forEach(({ message }) => errorMessages.push(message));
+    this.setState({ errorMessage: errorMessages.join(';') });
   }
 
   handleCloseNewRecord = (e) => {
@@ -643,8 +646,8 @@ class RequestsRoute extends React.Component {
       this.setState(
         {
           errorModalData: {
-            errorMessage: <FormattedMessage id="ui-requests.noServicePoint.errorMessage" />,
-            label: <FormattedMessage id="ui-requests.noServicePoint.label" />,
+            errorMessage: 'ui-requests.noServicePoint.errorMessage',
+            label: 'ui-requests.noServicePoint.label',
           }
         }
       );
@@ -755,7 +758,6 @@ class RequestsRoute extends React.Component {
       requests,
       servicePointId,
     } = this.state;
-
     const { name: servicePointName } = this.getCurrentServicePointInfo();
     const pickSlips = get(resources, 'pickSlips.records', []);
     const patronGroups = get(resources, 'patronGroups.records', []);
@@ -782,85 +784,92 @@ class RequestsRoute extends React.Component {
       ),
       'requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
       'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : ''),
-      'requestStatus': rq => rq.status,
-      'type': rq => rq.requestType,
+      'requestStatus': rq => <FormattedMessage id={requestStatusesTranslations[rq.status]} />,
+      'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
       'title': rq => (rq.item ? rq.item.title : ''),
     };
 
-    const actionMenu = ({ onToggle }) => (
+    const actionMenu = ({ onToggle, renderColumnsMenu }) => (
       <>
-        <IfPermission perm="ui-requests.create">
-          <Button
-            buttonStyle="dropdownItem"
-            id="clickable-newrequest"
-            to={`${this.props.location.pathname}?layer=create`}
-            onClick={onToggle}
-          >
-            <FormattedMessage id="stripes-smart-components.new" />
-          </Button>
-        </IfPermission>
-        { csvReportPending ?
-          <LoadingButton>
-            <FormattedMessage id="ui-requests.csvReportPending" />
-          </LoadingButton> :
-          <Button
-            buttonStyle="dropdownItem"
-            id="exportToCsvPaneHeaderBtn"
-            disabled={!requestCount}
-            onClick={() => {
-              this.context.sendCallout({ message: <FormattedMessage id="ui-requests.csvReportInProgress" /> });
-              onToggle();
-              this.exportData();
-            }}
-          >
-            <FormattedMessage id="ui-requests.exportSearchResultsToCsv" />
-          </Button>
-        }
-        {
-          pickSlipsArePending ?
+        <MenuSection label={intl.formatMessage({ id: 'ui-requests.actions.label' })}>
+          <IfPermission perm="ui-requests.create">
+            <Button
+              buttonStyle="dropdownItem"
+              id="clickable-newrequest"
+              to={`${this.props.location.pathname}?layer=create`}
+              onClick={onToggle}
+            >
+              <FormattedMessage id="stripes-smart-components.new" />
+            </Button>
+          </IfPermission>
+          { csvReportPending ?
             <LoadingButton>
-              <FormattedMessage id="ui-requests.pickSlipsLoading" />
+              <FormattedMessage id="ui-requests.csvReportPending" />
             </LoadingButton> :
-            <>
-              <Button
-                buttonStyle="dropdownItem"
-                id="exportExpiredHoldsToCsvPaneHeaderBtn"
-                disabled={servicePointId && requestsEmpty}
-                onClick={() => {
-                  onToggle();
-                  this.exportExpiredHoldsToCSV();
-                }}
-              >
-                <FormattedMessage
-                  id="ui-requests.exportExpiredHoldShelfToCsv"
-                  values={{ currentServicePoint: servicePointName }}
-                />
-              </Button>
-              <PrintButton
-                buttonStyle="dropdownItem"
-                id="printPickSlipsBtn"
-                disabled={pickSlipsEmpty}
-                template={printTemplate}
-                contentRef={this.printContentRef}
-                onBeforeGetContent={
-                  () => new Promise(resolve => {
-                    this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
+            <Button
+              buttonStyle="dropdownItem"
+              id="exportToCsvPaneHeaderBtn"
+              disabled={!requestCount}
+              onClick={() => {
+                this.context.sendCallout({ message: <FormattedMessage id="ui-requests.csvReportInProgress" /> });
+                onToggle();
+                this.exportData();
+              }}
+            >
+              <FormattedMessage id="ui-requests.exportSearchResultsToCsv" />
+            </Button>
+          }
+          {
+            pickSlipsArePending ?
+              <LoadingButton>
+                <FormattedMessage id="ui-requests.pickSlipsLoading" />
+              </LoadingButton> :
+              <>
+                <Button
+                  buttonStyle="dropdownItem"
+                  id="exportExpiredHoldsToCsvPaneHeaderBtn"
+                  disabled={servicePointId && requestsEmpty}
+                  onClick={() => {
                     onToggle();
-                    // without the timeout the printing process starts right away
-                    // and the callout and onToggle above are blocked
-                    setTimeout(() => resolve(), 1000);
-                  })
-                }
-              >
-                <FormattedMessage
-                  id="ui-requests.printPickSlips"
-                  values={{ sp: servicePointName }}
-                />
-              </PrintButton>
-            </>
-        }
+                    this.exportExpiredHoldsToCSV();
+                  }}
+                >
+                  <FormattedMessage
+                    id="ui-requests.exportExpiredHoldShelfToCsv"
+                    values={{ currentServicePoint: servicePointName }}
+                  />
+                </Button>
+                <PrintButton
+                  buttonStyle="dropdownItem"
+                  id="printPickSlipsBtn"
+                  disabled={pickSlipsEmpty}
+                  template={printTemplate}
+                  contentRef={this.printContentRef}
+                  onBeforeGetContent={
+                    () => new Promise(resolve => {
+                      this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
+                      onToggle();
+                      // without the timeout the printing process starts right away
+                      // and the callout and onToggle above are blocked
+                      setTimeout(() => resolve(), 1000);
+                    })
+                  }
+                >
+                  <FormattedMessage
+                    id="ui-requests.printPickSlips"
+                    values={{ sp: servicePointName }}
+                  />
+                </PrintButton>
+              </>
+          }
+        </MenuSection>
+        {renderColumnsMenu}
       </>
     );
+
+    const columnManagerProps = {
+      excludeKeys: ['title'],
+    };
 
     return (
       <>
@@ -868,12 +877,13 @@ class RequestsRoute extends React.Component {
           isEmpty(errorModalData) ||
           <ErrorModal
             onClose={this.errorModalClose}
-            label={errorModalData.label}
-            errorMessage={errorModalData.errorMessage}
+            label={intl.formatMessage({ id: errorModalData.label })}
+            errorMessage={intl.formatMessage({ id: errorModalData.errorMessage })}
           />
         }
         <div data-test-request-instances>
           <SearchAndSort
+            columnManagerProps={columnManagerProps}
             hasNewButton={false}
             actionMenu={actionMenu}
             packageInfo={packageInfo}
@@ -883,17 +893,6 @@ class RequestsRoute extends React.Component {
             viewRecordComponent={ViewRequest}
             editRecordComponent={RequestForm}
             getHelperResourcePath={this.getHelperResourcePath}
-            visibleColumns={[
-              'requestDate',
-              'title',
-              'itemBarcode',
-              'type',
-              'requestStatus',
-              'position',
-              'requester',
-              'requesterBarcode',
-              'proxy',
-            ]}
             columnWidths={{
               requestDate: { max: 165 },
               title: { max: 300 },
@@ -927,6 +926,7 @@ class RequestsRoute extends React.Component {
               patronGroups,
               query: resources.query,
               onDuplicate: this.onDuplicate,
+              buildRecordsForHoldsShelfReport: this.buildRecordsForHoldsShelfReport,
             }}
             viewRecordPerms="ui-requests.view"
             newRecordPerms="ui-requests.create"

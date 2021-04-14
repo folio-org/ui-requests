@@ -1,5 +1,6 @@
 import {
   clickable,
+  collection,
   interactor,
   isPresent,
   scoped,
@@ -9,6 +10,7 @@ import {
   defaultScope = '[data-test-error-modal]';
 
   content = scoped('[data-test-error-modal-content]');
+  errors = collection('[data-test-error-text]');
   closeButton = scoped('[data-test-error-modal-close-button]');
 
   modalIsPresent = isPresent('[data-test-error-modal]');
