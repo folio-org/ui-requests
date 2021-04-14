@@ -154,7 +154,7 @@
     "filters.requestType.recalls": "Rappels",
     "filters.requestStatus.cancelled": "Fermé - Annulé",
     "filters.requestStatus.filled": "Fermé - Fourni",
-    "filters.requestStatus.pickupExpired": "Fermé - Retrait expiré",
+    "filters.requestStatus.pickupExpired": "Fermé - Retrait échu",
     "filters.requestStatus.unfilled": "Fermé - Non fourni",
     "filters.requestStatus.awaitingDelivery": "Ouvert - En attente de livraison",
     "filters.requestStatus.awaitingPickup": "Ouvert - En attente de retrait",
