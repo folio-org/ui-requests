@@ -379,8 +379,10 @@ class RequestForm extends React.Component {
         this.findRequestPreferences(selectedUser.id);
 
         if ((blocks.length && blocks[0].userId === selectedUser.id) || (!isEmpty(automatedPatronBlocks) && !isAutomatedPatronBlocksRequestInPendingState)) {
-          state.blocked = true;
-          state.isPatronBlocksOverridden = false;
+          this.setState({
+            blocked: true,
+            isPatronBlocksOverridden: false,
+          });
         }
 
         return selectedUser;
