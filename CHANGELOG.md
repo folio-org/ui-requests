@@ -1,8 +1,15 @@
 # Change history for ui-requests
 
+## 5.0.3 (IN PROGRESS)
+
+* Change request type when changing to an item with different status. Fixes URIEQ-597.
+
 ## [5.0.2](https://github.com/folio-org/ui-requests/tree/v5.0.2) (2021-04-19)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.0.1...v5.0.2)
 
+* Choose correct service point when patron is changed in duplicate mode. Fixes UIREQ-595.
+* Increase limit for tags request to 10k. Refs UIREQ-596.
+* Also support `circulation` `10.0`. Refs UIREQ-600.
 * Manual patron block modal is not shown. Refs UIREQ-601.
 
 ## [5.0.1](https://github.com/folio-org/ui-requests/tree/v5.0.1) (2021-04-15)
