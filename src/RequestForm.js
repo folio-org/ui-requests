@@ -557,8 +557,7 @@ class RequestForm extends React.Component {
 
         this.props.change('itemId', item.id);
         this.props.change('item.barcode', item.barcode);
-
-        if (options.length === 1) {
+        if (options.length >= 1) {
           this.props.change('requestType', options[0].value);
         }
 
