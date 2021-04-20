@@ -112,7 +112,7 @@
     "loanType": "Tipologia prestito",
     "actions.moveRequest": "Sposta la richiesta",
     "moveRequest.selectItem": "Seleziona item",
-    "moveRequest.instanceItems": "Altri items sull'istanza",
+    "moveRequest.instanceItems": "Other items in {title}",
     "moveRequest.instanceItems.notFound": "Nessun item trovato",
     "moveRequest.requestTypeChangeHeading": "Tipo di richieste correnti non consentite per l'item selezionato",
     "moveRequest.requestTypeChangeMessage": "La richiesta verrà convertita in <strong> {requestType} </strong> .",

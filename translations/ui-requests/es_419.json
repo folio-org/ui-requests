@@ -112,7 +112,7 @@
     "loanType": "Tipo de préstamo",
     "actions.moveRequest": "Mover reserva",
     "moveRequest.selectItem": "Seleccionar ítem",
-    "moveRequest.instanceItems": "Otros ítems de la instancia",
+    "moveRequest.instanceItems": "Otros elementos en {title}",
     "moveRequest.instanceItems.notFound": "No se encontraron ítems",
     "moveRequest.requestTypeChangeHeading": "Tipo de reservas actuales no permitidas para el ítem seleccionado",
     "moveRequest.requestTypeChangeMessage": "La reserva se convertirá en <strong>{requestType}</strong>.",
