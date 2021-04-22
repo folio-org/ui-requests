@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 5.0.3 (IN PROGRESS)
+## [5.0.3](https://github.com/folio-org/ui-requests/tree/v5.0.3) (2021-04-22)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.0.2...v5.0.3)
 
 * Change request type when changing to an item with different status. Fixes URIEQ-597.
 
