@@ -2,9 +2,9 @@ import get from 'lodash/get';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { FormattedDate, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from '@folio/streact-intl';
 
-import { Col, KeyValue, Row } from '@folio/stripes/components';
+import { Col, KeyValue, Row, FormattedDate } from '@folio/stripes/components';
 import { effectiveCallNumber } from '@folio/stripes/util';
 import {
   ClipCopy,

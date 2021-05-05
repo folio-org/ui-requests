@@ -6,7 +6,6 @@ import {
 } from 'redux-form';
 import {
   FormattedMessage,
-  FormattedDate,
   injectIntl,
 } from 'react-intl';
 
@@ -33,17 +32,18 @@ import {
   Button,
   Col,
   Datepicker,
-  PaneHeaderIconButton,
+  FormattedDate,
+  Icon,
   KeyValue,
   Pane,
+  PaneFooter,
+  PaneHeaderIconButton,
   PaneMenu,
   Paneset,
   Row,
   Select,
   TextArea,
   TextField,
-  PaneFooter,
-  Icon,
   Timepicker,
 } from '@folio/stripes/components';
 import stripesForm from '@folio/stripes/form';

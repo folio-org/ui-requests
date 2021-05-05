@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  FormattedMessage,
-  FormattedDate,
-} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { KeyValue } from '@folio/stripes/components';
+import {
+  FormattedDate,
+  KeyValue,
+} from '@folio/stripes/components';
 
 import { createUserHighlightBoxLink } from '../../utils';
 

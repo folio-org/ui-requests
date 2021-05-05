@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import { stringify } from 'query-string';
 import moment from 'moment-timezone';
 import {
-  FormattedTime,
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
@@ -21,6 +20,7 @@ import {
 import {
   Button,
   filters2cql,
+  FormattedTime,
   MenuSection,
 } from '@folio/stripes/components';
 import {
