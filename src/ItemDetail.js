@@ -2,7 +2,7 @@ import get from 'lodash/get';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { FormattedMessage } from '@folio/streact-intl';
+import { FormattedMessage } from 'react-intl';
 
 import { Col, KeyValue, Row, FormattedDate } from '@folio/stripes/components';
 import { effectiveCallNumber } from '@folio/stripes/util';
