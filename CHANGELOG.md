@@ -10,6 +10,7 @@
 * Provide search by ISBN. Refs UIREQ-354.
 * Avoid console errors related to bad proptypes. Refs UIREQ-604.
 * Consume some i18n components via stripes proxies to avoid Safari bugs. Refs UIREQ-528.
+* Validate items by barcode with an efficient exact-match query. Fixes UIREQ-602.
 
 ## [5.0.0](https://github.com/folio-org/ui-requests/tree/v5.0.0) (2021-03-18)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.6...v5.0.0)
