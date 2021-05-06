@@ -252,7 +252,7 @@ class RequestsRoute extends React.Component {
         GET: PropTypes.func,
       }),
       pickSlips: PropTypes.shape({
-        GET: PropTypes.func.isRequired,
+        GET: PropTypes.func,
       }).isRequired,
       currentServicePoint: PropTypes.shape({
         update: PropTypes.func.isRequired,
