@@ -2,17 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { get } from 'lodash';
-import {
-  FormattedMessage,
-  FormattedDate,
-  FormattedTime,
-} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
 import {
   Col,
   Callout,
   ConfirmationModal,
+  FormattedDate,
+  FormattedTime,
   KeyValue,
   Pane,
   PaneHeaderIconButton,
