@@ -8,6 +8,7 @@
 * Change request type when changing to an item with different status. Fixes URIEQ-597.
 * Manual patron block modal is not shown. Refs UIREQ-601.
 * Provide search by ISBN. Refs UIREQ-354.
+* Avoid console errors related to bad proptypes. Refs UIREQ-604.
 
 ## [5.0.0](https://github.com/folio-org/ui-requests/tree/v5.0.0) (2021-03-18)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.6...v5.0.0)
