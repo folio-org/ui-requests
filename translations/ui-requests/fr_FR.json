@@ -21,7 +21,7 @@
     "actions.createNewRequest": "Créer une nouvelle demande",
     "actions.newRequest": "Nouvelle demande",
     "item.barcode": "Code-barres du document",
-    "item.scanOrEnterBarcode": "Scanner ou saisir le code-barres du document",
+    "item.scanOrEnterBarcode": "Scanner ou saisir le code-barres de l'exemplaire",
     "item.title": "Titre",
     "item.callNumber": "Chaîne de caractères de la cote",
     "item.volume": "Volume",
