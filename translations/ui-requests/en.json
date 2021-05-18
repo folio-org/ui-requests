@@ -63,6 +63,8 @@
   "errors.selectItemRequired": "Please select an item and hit enter",
   "errors.selectUser": "Please fill out requestor information to continue",
 
+  "mod-circulation.requesterHasItemOnLoan": "This requester currently has this item on loan.",
+
   "actions.label": "Actions",
   "actions.edit": "Edit",
   "actions.editRequestLink": "Edit Request Dialog",
