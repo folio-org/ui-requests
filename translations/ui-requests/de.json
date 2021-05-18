@@ -17,6 +17,7 @@
     "errors.onlyCheckedOutForHold": "Nur ausgeliehene Exemplare können vorgemerkt werden",
     "errors.selectItem": "Bitte ein Exemplar auswählen",
     "errors.selectUser": "Bitte Informationen zum Bestellenden ausfüllen, um fortzufahren",
+    "mod-circulation.requesterHasItemOnLoan": "Benutzer/-in hat das Exemplar bereits ausgeliehen.",
     "actions.closeNewRequest": "Neue Bestandsanfrage schließen",
     "actions.createNewRequest": "Neue Bestandsanfrage erstellen",
     "actions.newRequest": "Neue Bestandsanfrage",
