@@ -101,7 +101,7 @@
     "tags.tagList": "Mots-clés",
     "item.copyNumbers": "Numéro d'exemplaire",
     "requestNotAllowed": "Demande non autorisée",
-    "additionalReasons": "View block details to see additional reasons for block...",
+    "additionalReasons": "Afficher les détails pour voir les raisons supplémentaires de la suspension...",
     "pickupServicePoint.name": "Point de retrait",
     "item.id": "ID de l'exemplaire",
     "item.location.libraryName": "Bibliothèque",
@@ -192,5 +192,10 @@
     "csvReportInProgress": "Un rapport de résultats CSV est en cours de création. Cela peut prendre un certain temps pour des ensembles de résultats plus volumineux. Merci de votre patience.",
     "patronComments": "Commentaires utilisateur",
     "override": "Override",
-    "actions.label": "Actions"
+    "actions.label": "Actions",
+    "errors.sync.requestQueueLabel": "La file d'attente des réservations n'est pas synchronisée",
+    "errors.sync.requestQueueBody": "This request queue has been updated by another person or process and may be out of synch.",
+    "errors.unknown.requestQueueLabel": "Request queue error",
+    "errors.unknown.requestQueueBody": "Request queue reorder failed",
+    "requestQueue.refresh": "Rafraîchir la file d'attente"
 }

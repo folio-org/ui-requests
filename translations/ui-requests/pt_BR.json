@@ -192,5 +192,10 @@
     "csvReportInProgress": "Um relatório de resultados CSV está sendo gerado. Isso pode levar algum tempo para conjuntos de resultados maiores. Por favor, seja paciente.",
     "patronComments": "Comentários do usuário",
     "override": "Sobrescrever",
-    "actions.label": "Ações"
+    "actions.label": "Ações",
+    "errors.sync.requestQueueLabel": "Request queue is out of sync",
+    "errors.sync.requestQueueBody": "This request queue has been updated by another person or process and may be out of synch.",
+    "errors.unknown.requestQueueLabel": "Request queue error",
+    "errors.unknown.requestQueueBody": "Request queue reorder failed",
+    "requestQueue.refresh": "Refresh queue"
 }
