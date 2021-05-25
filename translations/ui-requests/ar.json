@@ -192,5 +192,10 @@
     "csvReportInProgress": "جاري توليد تقرير نتائج بتنسيق CSV. قد يستغرق هذا بعض الوقت لمجموعات النتائج الأكبر. شكراً لانتظارك.",
     "patronComments": "تعليقات المستفيد",
     "override": "تخطي",
-    "actions.label": "الإجراءات"
+    "actions.label": "الإجراءات",
+    "errors.sync.requestQueueLabel": "صف الطلبات غير متزامن",
+    "errors.sync.requestQueueBody": "تم تحديث صف الطلبات هذا بواسطة شخص آخر أو عملية أخرى وقد يكون غير متزامن.",
+    "errors.unknown.requestQueueLabel": "خطأ في صف الطلبات",
+    "errors.unknown.requestQueueBody": "فشلت إعادة ترتيب صف الطلبات",
+    "requestQueue.refresh": "تحديث الصف"
 }

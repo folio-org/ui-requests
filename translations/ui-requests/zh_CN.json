@@ -192,5 +192,10 @@
     "csvReportInProgress": "正在生成CSV结果报告。对于较大的结果集，可能需要一些时间。请耐心等待。",
     "patronComments": "读者备注",
     "override": "越权",
-    "actions.label": "操作"
+    "actions.label": "操作",
+    "errors.sync.requestQueueLabel": "Request queue is out of sync",
+    "errors.sync.requestQueueBody": "This request queue has been updated by another person or process and may be out of synch.",
+    "errors.unknown.requestQueueLabel": "Request queue error",
+    "errors.unknown.requestQueueBody": "Request queue reorder failed",
+    "requestQueue.refresh": "Refresh queue"
 }
