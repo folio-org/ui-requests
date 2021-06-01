@@ -193,9 +193,9 @@
     "patronComments": "读者备注",
     "override": "越权",
     "actions.label": "操作",
-    "errors.sync.requestQueueLabel": "Request queue is out of sync",
-    "errors.sync.requestQueueBody": "This request queue has been updated by another person or process and may be out of synch.",
-    "errors.unknown.requestQueueLabel": "Request queue error",
-    "errors.unknown.requestQueueBody": "Request queue reorder failed",
-    "requestQueue.refresh": "Refresh queue"
+    "errors.sync.requestQueueLabel": "请求队列不同步",
+    "errors.sync.requestQueueBody": "本请求队列已由其他人或进程更新，可能不同步。",
+    "errors.unknown.requestQueueLabel": "请求队列错误",
+    "errors.unknown.requestQueueBody": "请求队列重新排序失败",
+    "requestQueue.refresh": "刷新队列"
 }
