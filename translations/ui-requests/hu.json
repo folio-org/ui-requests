@@ -46,7 +46,7 @@
     "cancel.requestWillBeCancelled": "<b>{title}</b> törölve <b>lesz</b>",
     "cancel.reasonLabel": "A lemondás oka",
     "cancel.notifyLabel": "Olvasó értesítése",
-    "cancel.additionalInfoLabel": "További információ",
+    "cancel.additionalInfoLabel": "Additional information for patron {required}",
     "cancel.additionalInfoPlaceholderRequired": "Írjon be további információt a törlésről (szükséges)",
     "cancel.additionalInfoPlaceholderOptional": "Írjon be további információt a törlésről (opcionális)",
     "meta.title": "Kérések",
