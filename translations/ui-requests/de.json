@@ -191,11 +191,11 @@
     "csvReportPending": "CSV Bericht wird generiert. Bitte warten",
     "csvReportInProgress": "CSV Ergebnisbericht wird generiert. Dies kann bei größeren Ergebnismengen einige Zeit dauern. Bitte geduldig sein.",
     "patronComments": "Kommentar Benutzer/-in",
-    "override": "Override",
+    "override": "Spezielle Zustimmung",
     "actions.label": "Aktionen",
-    "errors.sync.requestQueueLabel": "Request queue is out of sync",
-    "errors.sync.requestQueueBody": "This request queue has been updated by another person or process and may be out of synch.",
-    "errors.unknown.requestQueueLabel": "Request queue error",
-    "errors.unknown.requestQueueBody": "Request queue reorder failed",
-    "requestQueue.refresh": "Refresh queue"
+    "errors.sync.requestQueueLabel": "Bestandsanfrage-Warteliste ist nicht synchronisiert",
+    "errors.sync.requestQueueBody": "Diese Bestandsanfrage-Warteliste wurde durch eine andere Person oder Prozess aktualisiert und ist möglicherweise nicht mehr synchron.",
+    "errors.unknown.requestQueueLabel": "Fehler Bestandsanfrage-Warteliste",
+    "errors.unknown.requestQueueBody": "Neuordnung der Bestandsanfrage-Warteliste fehlgeschlagen",
+    "requestQueue.refresh": "Warteliste aktualisieren"
 }
