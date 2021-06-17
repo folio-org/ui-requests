@@ -112,7 +112,7 @@
     "loanType": "借閱類型",
     "actions.moveRequest": "移動預約",
     "moveRequest.selectItem": "選擇單件",
-    "moveRequest.instanceItems": "实例中其他单件",
+    "moveRequest.instanceItems": "Other items in {title}",
     "moveRequest.instanceItems.notFound": "沒有找到單件",
     "moveRequest.requestTypeChangeHeading": "所选单件不允许使用当前请求类型",
     "moveRequest.requestTypeChangeMessage": "请求将转换为<strong> {requestType} </strong> 。",
