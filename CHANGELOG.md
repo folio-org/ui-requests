@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## [5.1.0] IN PROGRESS
+## [5.1.0](https://github.com/folio-org/ui-requests/tree/v5.1.0) (2021-06-17)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.0.0...v5.1.0)
 
 * Choose correct service point when patron is changed in duplicate mode. Fixes UIREQ-595.
 * Increase limit for tags request to 10k. Refs UIREQ-596.
