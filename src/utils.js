@@ -13,6 +13,7 @@ import queryString from 'query-string';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import moment from 'moment-timezone';
+import { FormattedMessage } from 'react-intl';
 
 import {
   Col,
@@ -60,7 +61,7 @@ export function userHighlightBox(title, name, id, barcode) {
           <div>
             {recordLink}
             {' '}
-            Barcode:
+            <FormattedMessage id="ui-requests.barcode" />:
             {' '}
             {barcode ? barcodeLink : <NoValue />}
           </div>
