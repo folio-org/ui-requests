@@ -164,7 +164,7 @@ export const openRequestStatusFilters = [
 
 
 export const escapeValue = (val) => {
-  if (val.startsWith('<Barcode>') && val.endsWith('</Barcode>')) {
+  if (typeof val === 'string' && val.startsWith('<Barcode>') && val.endsWith('</Barcode>')) {
     return val;
   }
 
