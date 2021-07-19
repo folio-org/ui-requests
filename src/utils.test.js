@@ -24,7 +24,7 @@ import {
   // isPageRequest,
   // parseErrorMessage,
   // toUserAddress,
-  userHighlightBox,
+  // userHighlightBox,
 } from './utils';
 
 describe('escapeValue', () => {
