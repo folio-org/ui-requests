@@ -1,7 +1,8 @@
+import React from 'react';
+
 import {
   escape,
 } from 'lodash';
-
 import '../test/jest/__mock__';
 
 import {
@@ -60,6 +61,21 @@ describe('buildTemplate', () => {
   });
 });
 
+describe('createUserHighlightBoxLink', () => {
+  it('returns a link given values', () => {
+    const text = 't';
+    const id = 'id';
+    const c = createUserHighlightBoxLink(text, id);
+
+    expect(c.props.to).toMatch(`/users/view/${id}`);
+    expect(c.props.children).toMatch(text);
+  });
+
+  it('returns empty string given no values', () => {
+    const text = createUserHighlightBoxLink('', '');
+    expect(text).toMatch('');
+  });
+});
 
 
 
