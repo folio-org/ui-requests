@@ -1,5 +1,9 @@
 # Change history for ui-requests
 
+## 5.2.0 IN PROGRESS
+
+* Localize `Barcode`. Refs UIREQ-220.
+
 ## [5.1.0](https://github.com/folio-org/ui-requests/tree/v5.1.0) (2021-06-17)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.0.0...v5.1.0)
 
