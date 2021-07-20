@@ -25,7 +25,6 @@ import { effectiveCallNumber } from '@folio/stripes/util';
 import {
   iconTypes,
   errorMessages,
-  errorCodes,
 } from '../constants';
 import {
   getFullName,
