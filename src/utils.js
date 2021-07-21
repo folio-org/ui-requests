@@ -98,7 +98,6 @@ export function duplicateRequest(request) {
   const requestType = request.requestType;
   const requestTypes = requestTypesByItemStatus[itemStatus] || [];
   const clonedRequest = cloneDeep(request);
-  console.log("cloned request", clonedRequest)
 
   // check if the current request type is valid if not pick a first available type
   clonedRequest.requestType = requestTypes.find(rt => rt === requestType) || requestTypes[0];
