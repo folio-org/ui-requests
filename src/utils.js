@@ -109,7 +109,10 @@ export function duplicateRequest(request) {
     'requestCount',
     'position',
     'requester',
+    'requesterId',
     'holdShelfExpirationDate',
+    'proxy',
+    'proxyUserId',
   ]);
 }
 
