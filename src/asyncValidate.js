@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 function asyncValidateItem(values, props) {
   const uv = props.parentMutator.itemUniquenessValidator;
-  const query = `(barcode="${values.item.barcode}")`;
+  const query = `(barcode=="${values.item.barcode}")`;
 
   uv.reset();
   return uv.GET({ params: { query } }).then((items) => {

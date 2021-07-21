@@ -62,6 +62,10 @@
   "errors.selectItem": "Please select an item",
   "errors.selectItemRequired": "Please select an item and hit enter",
   "errors.selectUser": "Please fill out requestor information to continue",
+  "errors.sync.requestQueueLabel": "Request queue is out of sync",
+  "errors.sync.requestQueueBody": "This request queue has been updated by another person or process and may be out of synch.",
+  "errors.unknown.requestQueueLabel": "Request queue error",
+  "errors.unknown.requestQueueBody": "Request queue reorder failed",
 
   "actions.label": "Actions",
   "actions.edit": "Edit",
@@ -172,6 +176,7 @@
   "requestQueue.confirmReorder.message1": "Requests cannot be displaced from position 1 when fulfillment has begun.",
   "requestQueue.confirmReorder.message2": "Requests cannot be moved above page requests, even when fulfillment hasn't begun.",
   "requestQueue.requests.notFound": "No requests found",
+  "requestQueue.refresh": "Refresh queue",
   "cancellationReason": "Cancellation reason",
   "cancellationAdditionalInformation": "Additional information for patron",
   "printPickSlips": "Print pick slips for {sp}",

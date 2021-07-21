@@ -1,10 +1,22 @@
 # Change history for ui-requests
 
-## [5.1.0] IN PROGRESS
+## 5.2.0 IN PROGRESS
+
+* Localize `Barcode`. Refs UIREQ-220.
+
+## [5.1.0](https://github.com/folio-org/ui-requests/tree/v5.1.0) (2021-06-17)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.0.0...v5.1.0)
 
 * Choose correct service point when patron is changed in duplicate mode. Fixes UIREQ-595.
 * Increase limit for tags request to 10k. Refs UIREQ-596.
 * Also support `circulation` `10.0`. Refs UIREQ-600.
+* Change request type when changing to an item with different status. Fixes URIEQ-597.
+* Manual patron block modal is not shown. Refs UIREQ-601.
+* Provide search by ISBN. Refs UIREQ-354.
+* Avoid console errors related to bad proptypes. Refs UIREQ-604.
+* Consume some i18n components via stripes proxies to avoid Safari bugs. Refs UIREQ-528.
+* Validate items by barcode with an efficient exact-match query. Fixes UIREQ-602.
+* Also support `circulation` `11.0`. Refs UIREQ-608.
 
 ## [5.0.0](https://github.com/folio-org/ui-requests/tree/v5.0.0) (2021-03-18)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v4.0.6...v5.0.0)

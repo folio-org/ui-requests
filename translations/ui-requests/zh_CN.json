@@ -156,10 +156,10 @@
     "filters.requestStatus.filled": "已关闭 - 已满足",
     "filters.requestStatus.pickupExpired": "已关闭 - 取件已过期",
     "filters.requestStatus.unfilled": "已关闭 - 未满足",
-    "filters.requestStatus.awaitingDelivery": "开放 - 等待交付",
-    "filters.requestStatus.awaitingPickup": "开放 - 等待取件",
-    "filters.requestStatus.inTransit": "开放 - 传送中",
-    "filters.requestStatus.notYetFilled": "开放 - 尚未满足",
+    "filters.requestStatus.awaitingDelivery": "未结 - 等待交付",
+    "filters.requestStatus.awaitingPickup": "未结 - 等待取件",
+    "filters.requestStatus.inTransit": "未结 - 传送中",
+    "filters.requestStatus.notYetFilled": "未结 - 尚未满足",
     "noRequestTypesAvailable": "没有适用于所选单件的请求类型",
     "exportExpiredHoldShelfToCsv": "导出{currentServicePoint}预约架清仓报告",
     "exportSearchResultsToCsv": "将搜索结果导出到 CSV",
@@ -192,5 +192,10 @@
     "csvReportInProgress": "正在生成CSV结果报告。对于较大的结果集，可能需要一些时间。请耐心等待。",
     "patronComments": "读者备注",
     "override": "越权",
-    "actions.label": "操作"
+    "actions.label": "操作",
+    "errors.sync.requestQueueLabel": "请求队列不同步",
+    "errors.sync.requestQueueBody": "本请求队列已由其他人或进程更新，可能不同步。",
+    "errors.unknown.requestQueueLabel": "请求队列错误",
+    "errors.unknown.requestQueueBody": "请求队列重新排序失败",
+    "requestQueue.refresh": "刷新队列"
 }

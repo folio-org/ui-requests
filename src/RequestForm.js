@@ -6,7 +6,6 @@ import {
 } from 'redux-form';
 import {
   FormattedMessage,
-  FormattedDate,
   injectIntl,
 } from 'react-intl';
 
@@ -33,17 +32,18 @@ import {
   Button,
   Col,
   Datepicker,
-  PaneHeaderIconButton,
+  FormattedDate,
+  Icon,
   KeyValue,
   Pane,
+  PaneFooter,
+  PaneHeaderIconButton,
   PaneMenu,
   Paneset,
   Row,
   Select,
   TextArea,
   TextField,
-  PaneFooter,
-  Icon,
   Timepicker,
 } from '@folio/stripes/components';
 import stripesForm from '@folio/stripes/form';
@@ -379,8 +379,10 @@ class RequestForm extends React.Component {
         this.findRequestPreferences(selectedUser.id);
 
         if ((blocks.length && blocks[0].userId === selectedUser.id) || (!isEmpty(automatedPatronBlocks) && !isAutomatedPatronBlocksRequestInPendingState)) {
-          state.blocked = true;
-          state.isPatronBlocksOverridden = false;
+          this.setState({
+            blocked: true,
+            isPatronBlocksOverridden: false,
+          });
         }
 
         return selectedUser;
@@ -555,8 +557,7 @@ class RequestForm extends React.Component {
 
         this.props.change('itemId', item.id);
         this.props.change('item.barcode', item.barcode);
-
-        if (options.length === 1) {
+        if (options.length >= 1) {
           this.props.change('requestType', options[0].value);
         }
 

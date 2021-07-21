@@ -2,17 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { get } from 'lodash';
-import {
-  FormattedMessage,
-  FormattedDate,
-  FormattedTime,
-} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
 import {
   Col,
   Callout,
   ConfirmationModal,
+  ErrorModal,
+  FormattedDate,
+  FormattedTime,
   KeyValue,
   Pane,
   PaneHeaderIconButton,
@@ -23,7 +22,10 @@ import {
 import { AppIcon } from '@folio/stripes/core';
 import { effectiveCallNumber } from '@folio/stripes/util';
 
-import { iconTypes } from '../constants';
+import {
+  iconTypes,
+  errorMessages,
+} from '../constants';
 import {
   getFullName,
   isNotYetFilled,
@@ -195,10 +197,36 @@ class RequestQueueView extends React.Component {
     }, () => this.finishReorder(requests));
   }
 
+  processError = (err) => {
+    let error = {
+      label: <FormattedMessage id="ui-requests.errors.unknown.requestQueueLabel" />,
+      content: <FormattedMessage id="ui-requests.errors.unknown.requestQueueBody" />,
+    };
+
+    if (err.json) {
+      return err.json().then(json => {
+        if (json?.errors?.[0]?.message === errorMessages.REORDER_SYNC_ERROR) {
+          error = {
+            label: <FormattedMessage id="ui-requests.errors.sync.requestQueueLabel" />,
+            content: <FormattedMessage id="ui-requests.errors.sync.requestQueueBody" />,
+          };
+        }
+
+        this.setState({ error });
+      });
+    }
+
+    return this.setState({ error });
+  }
+
   finishReorder = (requests) => {
-    this.props.onReorder(requests).then(this.showCallout(
-      'ui-requests.requestQueue.reorderSuccess',
-    ));
+    this.props.onReorder(requests)
+      .then(() => this.showCallout('ui-requests.requestQueue.reorderSuccess'))
+      .catch(this.processError);
+  }
+
+  reload = () => {
+    window.location.reload();
   }
 
   confirmReorder = () => {
@@ -238,6 +266,7 @@ class RequestQueueView extends React.Component {
     const {
       requests,
       confirmMessage,
+      error,
     } = this.state;
     const count = requests.length;
     const { title } = item;
@@ -331,6 +360,13 @@ class RequestQueueView extends React.Component {
           cancelLabel={<FormattedMessage id="ui-requests.requestQueue.confirmReorder.cancel" />}
           onConfirm={this.confirmReorder}
           onCancel={this.cancelReorder}
+        />
+        <ErrorModal
+          open={!!error}
+          label={error?.label}
+          content={error?.content}
+          buttonLabel={<FormattedMessage id="ui-requests.requestQueue.refresh" />}
+          onClose={this.reload}
         />
       </Paneset>
     );

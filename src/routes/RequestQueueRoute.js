@@ -75,6 +75,7 @@ class RequestQueueRoute extends React.Component {
       },
       fetch: false,
       clientGeneratePk: false,
+      throwErrors: false,
     },
   };
 

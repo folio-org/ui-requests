@@ -184,3 +184,13 @@ export const APP_ICON_NAME = 'requests';
 export const createModes = {
   DUPLICATE: 'duplicate',
 };
+
+export const errorMessages = {
+  REORDER_SYNC_ERROR: 'There is inconsistency between provided reordered queue and item queue.',
+};
+
+export const errorCodes = {
+  SYNC: 'sync',
+  UNKNOWN: 'unknown',
+};
+

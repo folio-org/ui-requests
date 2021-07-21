@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import { stringify } from 'query-string';
 import moment from 'moment-timezone';
 import {
-  FormattedTime,
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
@@ -21,6 +20,7 @@ import {
 import {
   Button,
   filters2cql,
+  FormattedTime,
   MenuSection,
 } from '@folio/stripes/components';
 import {
@@ -115,7 +115,7 @@ class RequestsRoute extends React.Component {
         params: {
           query: makeQueryFunction(
             'cql.allRecords=1',
-            '(requesterId=="%{query.query}" or requester.barcode="%{query.query}*" or item.title="%{query.query}*" or item.barcode="%{query.query}*" or itemId=="%{query.query}")',
+            '(requesterId=="%{query.query}" or requester.barcode="%{query.query}*" or item.title="%{query.query}*" or item.barcode="%{query.query}*" or itemId=="%{query.query}" or itemIsbn="%{query.query}")',
             {
               'title': 'item.title',
               'itemBarcode': 'item.barcode',
@@ -252,7 +252,7 @@ class RequestsRoute extends React.Component {
         GET: PropTypes.func,
       }),
       pickSlips: PropTypes.shape({
-        GET: PropTypes.func.isRequired,
+        GET: PropTypes.func,
       }).isRequired,
       currentServicePoint: PropTypes.shape({
         update: PropTypes.func.isRequired,
