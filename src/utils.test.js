@@ -11,7 +11,7 @@ import {
   // buildUrl,
   // convertToSlipData,
   createUserHighlightBoxLink,
-  // duplicateRequest,
+  duplicateRequest,
   escapeValue,
   // formatNoteReferrerEntityData,
   // getFullName,
@@ -26,6 +26,16 @@ import {
   // toUserAddress,
   // userHighlightBox,
 } from './utils';
+
+import {
+  // requestTypesByItemStatus,
+  // requestTypeOptionMap,
+  itemStatuses,
+  // fulfilmentTypeMap,
+  // requestStatuses,
+  requestTypesMap,
+  // requestTypes,
+} from './constants';
 
 describe('escapeValue', () => {
   it('escapes values', () => {
@@ -76,6 +86,86 @@ describe('createUserHighlightBoxLink', () => {
     expect(text).toMatch('');
   });
 });
+
+
+
+describe('duplicateRequest', () => {
+  it('omits non-cloneable attributes', () => {
+    const r = {
+      monkey: 'bagel',
+      requestType: 'r',
+      cancellationAdditionalInformation: '',
+      cancellationReasonId: '',
+      cancelledByUserId: '',
+      cancelledDate: '',
+      holdShelfExpirationDate: '',
+      id: '',
+      metadata: '',
+      position: '',
+      proxy: '',
+      proxyUserId: '',
+      requestCount: '',
+      requester: '',
+      requesterId: '',
+      status: '',
+    };
+    const duped = duplicateRequest(r);
+
+    const omit = [
+      'cancellationAdditionalInformation',
+      'cancellationReasonId',
+      'cancelledByUserId',
+      'cancelledDate',
+      'holdShelfExpirationDate',
+      'id',
+      'metadata',
+      'position',
+      'proxy',
+      'proxyUserId',
+      'requestCount',
+      'requester',
+      'requesterId',
+      'status',
+    ];
+
+    omit.forEach(i => {
+      expect(duped).not.toHaveProperty(i);
+    });
+  });
+
+  describe('adjusts request type if necessary', () => {
+    it('leaves request type if it is valid for item type', () => {
+      const r = {
+        monkey: 'bagel',
+        requestType: requestTypesMap.RECALL,
+        item: { status: itemStatuses.CHECKED_OUT }
+      };
+      const duped = duplicateRequest(r);
+      expect(duped.requestType).toBe(requestTypesMap.RECALL);
+    });
+
+    it('changes request type if it is invalid for item-status', () => {
+      const r = {
+        monkey: 'bagel',
+        requestType: requestTypesMap.RECALL,
+        item: { status: itemStatuses.AVAILABLE }
+      };
+      const duped = duplicateRequest(r);
+      expect(duped.requestType).toBe(requestTypesMap.PAGE);
+    });
+
+    it('omits request type if it is invalid for item-status', () => {
+      const r = {
+        monkey: 'bagel',
+        requestType: requestTypesMap.RECALL,
+        item: { status: itemStatuses.AGED_TO_LOST }
+      };
+      const duped = duplicateRequest(r);
+      expect(duped.requestType).toBeUndefined();
+    });
+  });
+});
+
 
 
 
