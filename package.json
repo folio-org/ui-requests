@@ -116,6 +116,7 @@
           "automated-patron-blocks.collection.get",
           "circulation.requests.item.post",
           "circulation-storage.requests.item.post",
+          "circulation-storage.request-preferences.collection.get",
           "circulation.pick-slips.get",
           "inventory-storage.locations.item.get"
         ],
@@ -130,6 +131,7 @@
           "circulation-storage.requests.collection.delete",
           "circulation-storage.requests.item.put",
           "circulation-storage.requests.item.delete",
+          "circulation-storage.request-preferences.collection.get",
           "tags.collection.get",
           "tags.item.post"
         ],
