@@ -4,6 +4,7 @@
 
 * Fix proxy bug in request duplication. Fixes UIREQ-626.
 * Include `request-preferences` permission in edit and create psets. Refs UIREQ-628.
+* Omit request-cancellation details in duplicated requests. Refs UIREQ-627.
 
 ## [5.1.0](https://github.com/folio-org/ui-requests/tree/v5.1.0) (2021-06-17)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.0.0...v5.1.0)

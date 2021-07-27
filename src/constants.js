@@ -58,12 +58,20 @@ export const requestStatusesTranslations = {
 
 export const itemStatuses = {
   AGED_TO_LOST: 'Aged to lost',
+  AVAILABLE: 'Available',
+  AWAITING_DELIVERY: 'Awaiting delivery',
+  AWAITING_PICKUP: 'Awaiting pickup',
+  CHECKED_OUT: 'Checked out',
   CLAIMED_RETURNED: 'Claimed returned',
   DECLARED_LOST: 'Declared lost',
+  IN_PROCESS: 'In process',
   IN_PROCESS_NON_REQUESTABLE: 'In process (non-requestable)',
+  IN_TRANSIT: 'In transit',
   INTELLECTUAL_ITEM: 'Intellectual item',
   LONG_MISSING: 'Long missing',
   LOST_AND_PAID: 'Lost and paid',
+  MISSING: 'Missing',
+  ON_ORDER: 'On order',
   PAGED: 'Paged',
   UNAVAILABLE: 'Unavailable',
   UNKNOWN: 'Unknown',
@@ -193,4 +201,3 @@ export const errorCodes = {
   SYNC: 'sync',
   UNKNOWN: 'unknown',
 };
-

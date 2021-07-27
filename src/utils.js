@@ -102,16 +102,20 @@ export function duplicateRequest(request) {
   clonedRequest.requestType = requestTypes.find(rt => rt === requestType) || requestTypes[0];
 
   return omit(clonedRequest, [
+    'cancellationAdditionalInformation',
+    'cancellationReasonId',
+    'cancelledByUserId',
+    'cancelledDate',
+    'holdShelfExpirationDate',
     'id',
     'metadata',
-    'status',
-    'requestCount',
     'position',
-    'requester',
-    'requesterId',
-    'holdShelfExpirationDate',
     'proxy',
     'proxyUserId',
+    'requestCount',
+    'requester',
+    'requesterId',
+    'status',
   ]);
 }
 
