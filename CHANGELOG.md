@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 5.1.1 IN PROGRESS
+## [5.1.1](https://github.com/folio-org/ui-requests/tree/v5.1.1) (2021-07-30)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v5.1.1)
 
 * Fix proxy bug in request duplication. Fixes UIREQ-626.
 * Include `request-preferences` permission in edit and create psets. Refs UIREQ-628.
