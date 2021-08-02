@@ -457,6 +457,7 @@ class RequestsRoute extends React.Component {
   setCurrentServicePointId = () => {
     const { mutator } = this.props;
     const { id } = this.getCurrentServicePointInfo();
+
     mutator.currentServicePoint.update({ id });
     this.buildRecordsForHoldsShelfReport();
   };
@@ -624,6 +625,10 @@ class RequestsRoute extends React.Component {
       stripes: { user },
     } = this.props;
 
+    this.setState({
+      holdsShelfReportPending: true,
+    });
+
     reset();
 
     const servicePointId = get(user, 'user.curServicePoint.id', '');
@@ -633,6 +638,7 @@ class RequestsRoute extends React.Component {
     this.setState({
       servicePointId,
       requests,
+      holdsShelfReportPending: false,
     });
   }
 
@@ -757,6 +763,7 @@ class RequestsRoute extends React.Component {
       errorModalData,
       requests,
       servicePointId,
+      holdsShelfReportPending,
     } = this.state;
     const { name: servicePointName } = this.getCurrentServicePointInfo();
     const pickSlips = get(resources, 'pickSlips.records', []);
@@ -828,7 +835,7 @@ class RequestsRoute extends React.Component {
                 <Button
                   buttonStyle="dropdownItem"
                   id="exportExpiredHoldsToCsvPaneHeaderBtn"
-                  disabled={servicePointId && requestsEmpty}
+                  disabled={holdsShelfReportPending || (servicePointId && requestsEmpty)}
                   onClick={() => {
                     onToggle();
                     this.exportExpiredHoldsToCSV();
