@@ -1,12 +1,16 @@
 # Change history for ui-requests
 
+## [5.1.2](https://github.com/folio-org/ui-requests/tree/v5.1.2) (2021-08-04)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.1...v5.1.2)
+
+* Disable hold shelf clearance report button when a request for hold-shelf-clearance data is pending. Fixes UIREQ-629.
+
 ## [5.1.1](https://github.com/folio-org/ui-requests/tree/v5.1.1) (2021-07-30)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v5.1.1)
 
 * Fix proxy bug in request duplication. Fixes UIREQ-626.
 * Include `request-preferences` permission in edit and create psets. Refs UIREQ-628.
 * Omit request-cancellation details in duplicated requests. Refs UIREQ-627.
-* Disable hold shelf clearance report button when a request for `hold-shelf-clearance` data is pending. Fixes UIREQ-629.
 
 ## [5.1.0](https://github.com/folio-org/ui-requests/tree/v5.1.0) (2021-06-17)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.0.0...v5.1.0)
