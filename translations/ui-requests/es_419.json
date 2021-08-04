@@ -176,7 +176,7 @@
     "permission.view": "Solicitudes: Ver",
     "permission.create": "Solicitudes: Ver, crear",
     "permission.edit": "Solicitudes: Ver, editar, cancelar",
-    "notes.newStaffNote": "New staff note",
+    "notes.newStaffNote": "Nueva nota para el staff",
     "notes.staffNotes": "Staff notes",
     "notes.entityType.request": "Request",
     "notes.entityType.request.pluralized": "{count} {count, plural, one {request} other {requests}}",
