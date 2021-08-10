@@ -193,9 +193,9 @@
     "patronComments": "Patron comments",
     "override": "Override",
     "actions.label": "Acciones",
-    "errors.sync.requestQueueLabel": "Request queue is out of sync",
-    "errors.sync.requestQueueBody": "This request queue has been updated by another person or process and may be out of synch.",
-    "errors.unknown.requestQueueLabel": "Request queue error",
-    "errors.unknown.requestQueueBody": "Request queue reorder failed",
-    "requestQueue.refresh": "Refresh queue"
+    "errors.sync.requestQueueLabel": "La cola de solicitudes no está sincronizada",
+    "errors.sync.requestQueueBody": "Esta cola de solicitudes ha sido actualizada por otra persona o proceso y es posible que no esté sincronizada.",
+    "errors.unknown.requestQueueLabel": "Solicitar error de cola",
+    "errors.unknown.requestQueueBody": "Error al reordenar la cola de solicitudes",
+    "requestQueue.refresh": "Actualizar cola"
 }
