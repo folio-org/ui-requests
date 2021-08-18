@@ -18,7 +18,7 @@
     "errors.selectItem": "Por favor selecione um item",
     "errors.selectUser": "Preencha as informações do solicitante para continuar",
     "actions.closeNewRequest": "Fechar a nova solicitação",
-    "actions.createNewRequest": "Criar nova solicitação de compra",
+    "actions.createNewRequest": "Criar nova solicitação",
     "actions.newRequest": "Nova solicitação",
     "item.barcode": "Código de barras do item",
     "item.scanOrEnterBarcode": "Escaneie ou insira o código de barras do item",
