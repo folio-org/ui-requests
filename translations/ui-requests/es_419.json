@@ -191,7 +191,7 @@
     "csvReportPending": "csvReportPending",
     "csvReportInProgress": "A CSV results report is being generated. This may take some time for larger result sets. Please be patient.",
     "patronComments": "Patron comments",
-    "override": "Override",
+    "override": "Anular",
     "actions.label": "Acciones",
     "errors.sync.requestQueueLabel": "La cola de solicitudes no está sincronizada",
     "errors.sync.requestQueueBody": "Esta cola de solicitudes ha sido actualizada por otra persona o proceso y es posible que no esté sincronizada.",
