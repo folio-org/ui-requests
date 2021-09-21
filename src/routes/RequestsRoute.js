@@ -115,7 +115,7 @@ class RequestsRoute extends React.Component {
         params: {
           query: makeQueryFunction(
             'cql.allRecords=1',
-            '(requesterId=="%{query.query}" or requester.barcode="%{query.query}*" or item.title="%{query.query}*" or item.barcode="%{query.query}*" or itemId=="%{query.query}" or itemIsbn="%{query.query}")',
+            '(requesterId=="%{query.query}" or requester.barcode="%{query.query}*" or item.title="%{query.query}*" or item.barcode=="%{query.query}*" or itemId=="%{query.query}" or itemIsbn="%{query.query}")',
             {
               'title': 'item.title',
               'itemBarcode': 'item.barcode',
@@ -426,7 +426,7 @@ class RequestsRoute extends React.Component {
     const filterQuery = filters2cql(RequestsFiltersConfig, deparseFilters(this.getActiveFilters()));
 
     if (queryTerm) {
-      queryString = `(requesterId=="${queryTerm}" or requester.barcode="${queryTerm}*" or item.title="${queryTerm}*" or item.barcode="${queryTerm}*" or itemId=="${queryTerm}")`;
+      queryString = `(requesterId=="${queryTerm}" or requester.barcode="${queryTerm}*" or item.title="${queryTerm}*" or item.barcode=="${queryTerm}*" or itemId=="${queryTerm}")`;
       queryClauses.push(queryString);
     }
 
