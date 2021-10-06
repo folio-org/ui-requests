@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 6.0.0 IN PROGRESS
+## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)
 
 * Localize `Barcode`. Refs UIREQ-220.
 * Fix proxy bug in request duplication. Fixes UIREQ-626.
