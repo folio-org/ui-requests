@@ -36,6 +36,7 @@
   "requests.proxy": "Proxy",
   "requests.position": "Position",
   "requests.itemBarcode": "Item barcode",
+  "requests.createTitleLevelRequest": "Create title level request",
 
   "requestMeta.detailLabel": "Request Detail",
   "requestMeta.information": "Request information",
@@ -108,6 +109,7 @@
   "item.numRequests": "Requests",
   "item.requestsOnItem": "Requests on item",
   "item.volume": "Volume",
+  "instance.information": "Title information",
   "loan.dueDate": "Current due date",
   "proxy.name": "Requester's proxy name",
   "proxy.barcode": "Requester's proxy barcode",

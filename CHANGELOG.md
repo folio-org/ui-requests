@@ -12,6 +12,7 @@
 * TLR - data migration for dialogboxes and reorder list. Refs UIREQ-665.
 * TLR - data migration for hold shelf clearance report. Refs UIREQ-677.
 * TLR - data migration, move `holdingsRecordId`. Refs UIREQ-685.
+* Create title level request checkbox. Refs UIREQ-655.
 
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)
