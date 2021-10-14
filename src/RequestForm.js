@@ -45,6 +45,7 @@ import {
   TextArea,
   TextField,
   Timepicker,
+  Checkbox,
 } from '@folio/stripes/components';
 import stripesForm from '@folio/stripes/form';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
@@ -70,6 +71,7 @@ import {
   isDelivery,
   hasNonRequestableStatus,
   parseErrorMessage,
+  getTlrSettings,
 } from './utils';
 
 import css from './requests.css';
@@ -134,6 +136,8 @@ class RequestForm extends React.Component {
     const { request } = props;
     const { requester, requesterId, item, loan } = (request || {});
 
+    const { titleLevelRequestsFeatureEnabled } = this.getTlrSettings();
+
     this.state = {
       accordions: {
         'new-request-info': true,
@@ -147,6 +151,7 @@ class RequestForm extends React.Component {
       blocked: false,
       ...this.getDefaultRequestPreferences(),
       isPatronBlocksOverridden: false,
+      titleLevelRequestsFeatureEnabled,
     };
 
     this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
@@ -179,6 +184,8 @@ class RequestForm extends React.Component {
     if (this.isEditForm()) {
       this.findRequestPreferences(this.props.initialValues.requesterId);
     }
+
+    this.setTlrCheckboxInitialState();
   }
 
   componentDidUpdate(prevProps) {
@@ -249,6 +256,37 @@ class RequestForm extends React.Component {
         // eslint-disable-next-line react/no-did-update-set-state
         this.setState({ blocked: true });
       }
+    }
+
+    if (prevParentResources?.configs?.records[0]?.value !== parentResources?.configs?.records[0]?.value) {
+      const {
+        titleLevelRequestsFeatureEnabled: newTitleLevelRequestsFeatureEnabled,
+      } = this.getTlrSettings();
+
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState(
+        {
+          titleLevelRequestsFeatureEnabled: newTitleLevelRequestsFeatureEnabled,
+        },
+        this.setTlrCheckboxInitialState(),
+      );
+    }
+  }
+
+  getTlrSettings() {
+    return getTlrSettings(this.props.parentResources?.configs?.records[0]?.value);
+  }
+
+  setTlrCheckboxInitialState() {
+    if (this.state.titleLevelRequestsFeatureEnabled === false) {
+      this.props.change('createTitleLevelRequest', false);
+      return;
+    }
+
+    if (this.props.query.itemId || this.props.query.itemBarcode) {
+      this.props.change('createTitleLevelRequest', false);
+    } else if (this.props.query.instanceId) {
+      this.props.change('createTitleLevelRequest', true);
     }
   }
 
@@ -747,6 +785,8 @@ class RequestForm extends React.Component {
       };
     }
 
+    unset(data, 'createTitleLevelRequest');
+
     return this.props.onSubmit(data);
   };
 
@@ -862,6 +902,8 @@ class RequestForm extends React.Component {
     const requestTypeError = hasNonRequestableStatus(selectedItem);
     const itemStatus = selectedItem?.status?.name;
 
+    const { createTitleLevelRequest } = this.getCurrentFormValues();
+
     return (
       <Paneset isRoot>
         <form
@@ -911,7 +953,38 @@ class RequestForm extends React.Component {
                 errorMessage={parseErrorMessage(errorMessage)}
               />
             }
+            {
+              this.state.titleLevelRequestsFeatureEnabled && !isEditForm &&
+              <div className={css.tlrCheckbox}>
+                <Row>
+                  <Col xs={12}>
+                    <Field
+                      name="createTitleLevelRequest"
+                      type="checkbox"
+                      label={formatMessage({ id: 'ui-requests.requests.createTitleLevelRequest' })}
+                      component={Checkbox}
+                      disabled={!this.state.titleLevelRequestsFeatureEnabled}
+                    />
+                  </Col>
+                </Row>
+              </div>
+            }
             <AccordionSet accordionStatus={accordions} onToggle={this.onToggleSection}>
+              {
+                createTitleLevelRequest &&
+                <Accordion
+                  id="new-instance-info"
+                  label={
+                    <FormattedMessage id="ui-requests.instance.information">
+                      {message => message + labelAsterisk}
+                    </FormattedMessage>
+                  }
+                >
+                  <div id="section-instance-info">
+                    Work in progress! Be patient!
+                  </div>
+                </Accordion>
+              }
               <Accordion
                 id="new-item-info"
                 label={

@@ -46,6 +46,7 @@ import {
   getFullName,
   duplicateRequest,
   convertToSlipData,
+  getTlrSettings,
 } from '../utils';
 import packageInfo from '../../package';
 import {
@@ -219,6 +220,14 @@ class RequestsRoute extends React.Component {
       },
       records: 'tags',
     },
+    configs: {
+      type: 'okapi',
+      records: 'configs',
+      path: 'configurations/entries',
+      params: {
+        query: '(module==SETTINGS and configName==TLR)',
+      },
+    },
   };
 
   static propTypes = {
@@ -278,6 +287,9 @@ class RequestsRoute extends React.Component {
       pickSlips: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object).isRequired,
         isPending: PropTypes.bool,
+      }),
+      configs: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object).isRequired,
       }),
     }).isRequired,
     stripes: PropTypes.shape({
@@ -595,6 +607,7 @@ class RequestsRoute extends React.Component {
       itemBarcode: null,
       userBarcode: null,
       itemId: null,
+      instanceId: null,
       query: null,
     });
 
@@ -609,6 +622,7 @@ class RequestsRoute extends React.Component {
       layer: 'create',
       itemBarcode: request.item.barcode,
       itemId: request.itemId,
+      instanceId: request.instanceId,
       userBarcode: request.requester.barcode,
       mode: createModes.DUPLICATE,
     });
@@ -772,8 +786,13 @@ class RequestsRoute extends React.Component {
     const servicePoints = get(resources, 'servicePoints.records', []);
     const cancellationReasons = get(resources, 'cancellationReasons.records', []);
     const requestCount = get(resources, 'records.other.totalRecords', 0);
+    const { createTitleLevelRequestsByDefault } = getTlrSettings(resources.configs.records[0]?.value);
     const initialValues = dupRequest ||
-      { requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' };
+      {
+        requestType: 'Hold',
+        fulfilmentPreference: 'Hold Shelf',
+        createTitleLevelRequest: createTitleLevelRequestsByDefault || false,
+      };
 
     const pickSlipsArePending = resources?.pickSlips?.isPending;
     const requestsEmpty = isEmpty(requests);

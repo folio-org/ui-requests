@@ -1,5 +1,9 @@
 # Change history for ui-requests
 
+## IN PROGRESS
+
+* Create title level request checkbox. Refs UIREQ-655.
+
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)
 

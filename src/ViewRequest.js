@@ -305,6 +305,7 @@ class ViewRequest extends React.Component {
                   requestExpirationDate: null,
                   holdShelfExpirationDate: request.holdShelfExpirationDate,
                   holdShelfExpirationTime: momentDate.format('HH:mm'),
+                  createTitleLevelRequest: false,
                   ...request
                 }}
                 request={request}
