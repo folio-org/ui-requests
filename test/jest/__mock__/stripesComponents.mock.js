@@ -18,8 +18,23 @@ jest.mock('@folio/stripes/components', () => ({
       {children}
     </div>
   )),
+  Modal: jest.fn(({ children }) => (
+    <div>
+      {children}
+    </div>
+  )),
+  MultiColumnList: jest.fn(({ children }) => (
+    <div>
+      {children}
+    </div>
+  )),
   NoValue: jest.fn(() => (
     <span>No value</span>
+  )),
+  Pane: jest.fn(({ children }) => (
+    <div>
+      {children}
+    </div>
   )),
   Row: jest.fn(({ children }) => (
     <div data-test-row>
