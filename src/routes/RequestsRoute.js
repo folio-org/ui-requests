@@ -219,6 +219,13 @@ class RequestsRoute extends React.Component {
       },
       records: 'tags',
     },
+    proxy: {
+      type: 'okapi',
+      records: 'proxiesFor',
+      path: 'proxiesfor',
+      accumulate: true,
+      fetch: false,
+    },
   };
 
   static propTypes = {
@@ -256,6 +263,10 @@ class RequestsRoute extends React.Component {
       }).isRequired,
       currentServicePoint: PropTypes.shape({
         update: PropTypes.func.isRequired,
+      }).isRequired,
+      proxy: PropTypes.shape({
+        reset: PropTypes.func.isRequired,
+        GET: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
     resources: PropTypes.shape({
