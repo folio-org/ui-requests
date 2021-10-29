@@ -111,9 +111,6 @@
     "materialType": "資料類型",
     "loanType": "借閱類型",
     "actions.moveRequest": "移動預約",
-    "moveRequest.selectItem": "選擇單件",
-    "moveRequest.instanceItems": "Other items in {title}",
-    "moveRequest.instanceItems.notFound": "沒有找到單件",
     "moveRequest.requestTypeChangeHeading": "所选单件不允许使用当前请求类型",
     "moveRequest.requestTypeChangeMessage": "请求将转换为<strong> {requestType} </strong> 。",
     "moveRequest.chooseRequestMessage": "請選擇允許的類型",
@@ -197,5 +194,8 @@
     "errors.sync.requestQueueBody": "This request queue has been updated by another person or process and may be out of synch.",
     "errors.unknown.requestQueueLabel": "Request queue error",
     "errors.unknown.requestQueueBody": "Request queue reorder failed",
-    "requestQueue.refresh": "Refresh queue"
+    "requestQueue.refresh": "Refresh queue",
+    "items.selectItem": "Select item",
+    "items.instanceItems": "Other items in {title}",
+    "items.instanceItems.notFound": "No items found"
 }

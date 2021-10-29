@@ -111,9 +111,6 @@
     "materialType": "Tipo de material",
     "loanType": "Tipo de empréstimo",
     "actions.moveRequest": "Pedido de mudança",
-    "moveRequest.selectItem": "Selecionar item",
-    "moveRequest.instanceItems": "Outros itens em {title}",
-    "moveRequest.instanceItems.notFound": "Nenhum item encontrado",
     "moveRequest.requestTypeChangeHeading": "Tipo de solicitações atuais não são permitidos para o item selecionado",
     "moveRequest.requestTypeChangeMessage": "A requisição será convertida em <strong>{requestType}</strong>.",
     "moveRequest.chooseRequestMessage": "Por favor, selecione o tipo permitido",
@@ -197,5 +194,8 @@
     "errors.sync.requestQueueBody": "Esta fila de pedidos foi atualizada por outra pessoa ou processo e pode estar fora de sincronia.",
     "errors.unknown.requestQueueLabel": "Erro na fila de requisições",
     "errors.unknown.requestQueueBody": "Falha na reordenação da fila de pedidos",
-    "requestQueue.refresh": "Atualizar fila"
+    "requestQueue.refresh": "Atualizar fila",
+    "items.selectItem": "Select item",
+    "items.instanceItems": "Other items in {title}",
+    "items.instanceItems.notFound": "No items found"
 }

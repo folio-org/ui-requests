@@ -111,9 +111,6 @@
     "materialType": "Type de ressource",
     "loanType": "Type de prêt",
     "actions.moveRequest": "Déplacer la demande",
-    "moveRequest.selectItem": "Sélectionner l'exemplaire",
-    "moveRequest.instanceItems": "Autres éléments dans {title}",
-    "moveRequest.instanceItems.notFound": "Aucun élément trouvé",
     "moveRequest.requestTypeChangeHeading": "Le type de réservation actuel n'est pas autorisé pour le document sélectionné",
     "moveRequest.requestTypeChangeMessage": "La demande sera convertie en <strong> {requestType} </strong> .",
     "moveRequest.chooseRequestMessage": "Merci de sélectionner le type autorisé",
@@ -197,5 +194,8 @@
     "errors.sync.requestQueueBody": "Cette file d'attente a été mise à jour par une autre personne ou un autre processus et peut être désynchronisée.",
     "errors.unknown.requestQueueLabel": "Erreur de file d'attente de la demande/réservation",
     "errors.unknown.requestQueueBody": "La réorganisation de la file d'attente de la demande/réservation a échoué",
-    "requestQueue.refresh": "Rafraîchir la file d'attente"
+    "requestQueue.refresh": "Rafraîchir la file d'attente",
+    "items.selectItem": "Select item",
+    "items.instanceItems": "Other items in {title}",
+    "items.instanceItems.notFound": "No items found"
 }

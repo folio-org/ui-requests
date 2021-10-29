@@ -111,9 +111,6 @@
     "materialType": "Tipologia materiale",
     "loanType": "Tipologia prestito",
     "actions.moveRequest": "Sposta la richiesta",
-    "moveRequest.selectItem": "Seleziona item",
-    "moveRequest.instanceItems": "Other items in {title}",
-    "moveRequest.instanceItems.notFound": "Nessun item trovato",
     "moveRequest.requestTypeChangeHeading": "Tipo di richieste correnti non consentite per l'item selezionato",
     "moveRequest.requestTypeChangeMessage": "La richiesta verrà convertita in <strong> {requestType} </strong> .",
     "moveRequest.chooseRequestMessage": "Seleziona tipologia consentita",
@@ -197,5 +194,8 @@
     "errors.sync.requestQueueBody": "This request queue has been updated by another person or process and may be out of synch.",
     "errors.unknown.requestQueueLabel": "Request queue error",
     "errors.unknown.requestQueueBody": "Request queue reorder failed",
-    "requestQueue.refresh": "Refresh queue"
+    "requestQueue.refresh": "Refresh queue",
+    "items.selectItem": "Select item",
+    "items.instanceItems": "Other items in {title}",
+    "items.instanceItems.notFound": "No items found"
 }
