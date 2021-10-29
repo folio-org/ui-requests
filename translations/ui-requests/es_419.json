@@ -111,9 +111,6 @@
     "materialType": "Tipo de material",
     "loanType": "Tipo de préstamo",
     "actions.moveRequest": "Mover reserva",
-    "moveRequest.selectItem": "Seleccionar ítem",
-    "moveRequest.instanceItems": "Otros elementos en {title}",
-    "moveRequest.instanceItems.notFound": "No se encontraron ítems",
     "moveRequest.requestTypeChangeHeading": "Tipo de reservas actuales no permitidas para el ítem seleccionado",
     "moveRequest.requestTypeChangeMessage": "La reserva se convertirá en <strong>{requestType}</strong>.",
     "moveRequest.chooseRequestMessage": "Por favor, seleccionar un tipo permitido",
@@ -177,7 +174,7 @@
     "permission.create": "Solicitudes: Ver, crear",
     "permission.edit": "Solicitudes: Ver, editar, cancelar",
     "notes.newStaffNote": "Nueva nota para el staff",
-    "notes.staffNotes": "Staff notes",
+    "notes.staffNotes": "Notas del personal",
     "notes.entityType.request": "Request",
     "notes.entityType.request.pluralized": "{count} {count, plural, one {request} other {requests}}",
     "errors.selectItemRequired": "Please select an item and hit enter",
@@ -197,5 +194,8 @@
     "errors.sync.requestQueueBody": "Esta cola de solicitudes ha sido actualizada por otra persona o proceso y es posible que no esté sincronizada.",
     "errors.unknown.requestQueueLabel": "Solicitar error de cola",
     "errors.unknown.requestQueueBody": "Error al reordenar la cola de solicitudes",
-    "requestQueue.refresh": "Actualizar cola"
+    "requestQueue.refresh": "Actualizar cola",
+    "items.selectItem": "Select item",
+    "items.instanceItems": "Other items in {title}",
+    "items.instanceItems.notFound": "No items found"
 }

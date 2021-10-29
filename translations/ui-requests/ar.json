@@ -111,9 +111,6 @@
     "materialType": "نوع المادة",
     "loanType": "نوع الإعارة",
     "actions.moveRequest": "نقل الطلب",
-    "moveRequest.selectItem": "تحديد مادة",
-    "moveRequest.instanceItems": "مواد أخرى في {title}",
-    "moveRequest.instanceItems.notFound": "لم يتم العثور على مواد",
     "moveRequest.requestTypeChangeHeading": "نوع الطلبات الحالي غير مسموح به للمادة المحددة",
     "moveRequest.requestTypeChangeMessage": "سيتم تحويل الطلب إلى <strong>{requestType}</strong>",
     "moveRequest.chooseRequestMessage": "يرجى تحديد النوع المسموح به",
@@ -197,5 +194,8 @@
     "errors.sync.requestQueueBody": "تم تحديث صف الطلبات هذا بواسطة شخص آخر أو عملية أخرى وقد يكون غير متزامن.",
     "errors.unknown.requestQueueLabel": "خطأ في صف الطلبات",
     "errors.unknown.requestQueueBody": "فشلت إعادة ترتيب صف الطلبات",
-    "requestQueue.refresh": "تحديث الصف"
+    "requestQueue.refresh": "تحديث الصف",
+    "items.selectItem": "Select item",
+    "items.instanceItems": "Other items in {title}",
+    "items.instanceItems.notFound": "No items found"
 }

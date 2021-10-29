@@ -111,9 +111,6 @@
     "materialType": "Materialtyp",
     "loanType": "Ausleihtyp",
     "actions.moveRequest": "Bestandsanfrage verschieben",
-    "moveRequest.selectItem": "Exemplar auswählen",
-    "moveRequest.instanceItems": "Andere Exemplare in {title}",
-    "moveRequest.instanceItems.notFound": "Keine Exemplare gefunden",
     "moveRequest.requestTypeChangeHeading": "Aktueller Bestandsanfragentyp für ausgewähltes Exemplar nicht zulässig",
     "moveRequest.requestTypeChangeMessage": "Bestandsanfrage wird in <strong>{requestType}</strong> umgewandelt.",
     "moveRequest.chooseRequestMessage": "Bitte zulässigen Typ auswählen",
@@ -197,5 +194,8 @@
     "errors.sync.requestQueueBody": "Diese Bestandsanfrage-Warteliste wurde durch eine andere Person oder Prozess aktualisiert und ist möglicherweise nicht mehr synchron.",
     "errors.unknown.requestQueueLabel": "Fehler Bestandsanfrage-Warteliste",
     "errors.unknown.requestQueueBody": "Neuordnung der Bestandsanfrage-Warteliste fehlgeschlagen",
-    "requestQueue.refresh": "Warteliste aktualisieren"
+    "requestQueue.refresh": "Warteliste aktualisieren",
+    "items.selectItem": "Select item",
+    "items.instanceItems": "Other items in {title}",
+    "items.instanceItems.notFound": "No items found"
 }
