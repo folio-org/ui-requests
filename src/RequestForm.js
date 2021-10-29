@@ -378,7 +378,6 @@ class RequestForm extends React.Component {
   findUser(fieldName, value) {
     const {
       change,
-      parentResources,
       findResource,
       onChangePatron,
       asyncValidate: validate,
@@ -400,6 +399,7 @@ class RequestForm extends React.Component {
         this.setState({ isAwaitingForProxySelection: true });
 
         if (result.totalRecords === 1) {
+          const { parentResources } = this.props;
           const blocks = this.getPatronManualBlocks(parentResources);
           const automatedPatronBlocks = this.getAutomatedPatronBlocks(parentResources);
           const isAutomatedPatronBlocksRequestInPendingState = parentResources.automatedPatronBlocks.isPending;
