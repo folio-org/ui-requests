@@ -195,7 +195,7 @@
     "errors.unknown.requestQueueLabel": "خطأ في صف الطلبات",
     "errors.unknown.requestQueueBody": "فشلت إعادة ترتيب صف الطلبات",
     "requestQueue.refresh": "تحديث الصف",
-    "items.selectItem": "Select item",
-    "items.instanceItems": "Other items in {title}",
-    "items.instanceItems.notFound": "No items found"
+    "items.selectItem": "تحديد مادة",
+    "items.instanceItems": "مواد أخرى في {title}",
+    "items.instanceItems.notFound": "لم يتم العثور على مواد"
 }
