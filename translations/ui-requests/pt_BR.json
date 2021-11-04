@@ -195,7 +195,7 @@
     "errors.unknown.requestQueueLabel": "Erro na fila de requisições",
     "errors.unknown.requestQueueBody": "Falha na reordenação da fila de pedidos",
     "requestQueue.refresh": "Atualizar fila",
-    "items.selectItem": "Select item",
-    "items.instanceItems": "Other items in {title}",
-    "items.instanceItems.notFound": "No items found"
+    "items.selectItem": "Selecionar item",
+    "items.instanceItems": "Outros itens em {title}",
+    "items.instanceItems.notFound": "Nenhum item encontrado"
 }
