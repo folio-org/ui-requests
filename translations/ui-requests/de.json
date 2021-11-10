@@ -66,7 +66,7 @@
     "proxy.barcode": "Barcode Vollmachtnehmer/-in",
     "requester.firstName": "Vorname Benutzer/-in",
     "routingErrorOops": "Uh-oh!",
-    "routingError": "Wie sind Sie zu {Pathname} gekommen?",
+    "routingError": "Wie sind Sie zu {pathname} gekommen?",
     "requests.title": "Titel",
     "requests.type": "Typ",
     "requests.status": "Status der Bestandsanfrage",
