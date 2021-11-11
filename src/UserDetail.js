@@ -34,7 +34,7 @@ class UserDetail extends React.Component {
 
     const id = user?.id ?? request.requesterId;
     const name = getFullName(user);
-    const barcode = user.barcode;
+    const barcode = user ? user.barcode : '';
     const patronGroup = getPatronGroup(user, patronGroups) || {};
 
     let proxyName;
