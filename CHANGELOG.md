@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## IN PROGRESS
+## [6.0.2](https://github.com/folio-org/ui-requests/tree/v6.0.2) (2021-11-12)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v6.0.1...v6.0.2)
 
 * When newly added patron is deleted after making and canceling request, requests page is unstable. Refs UIREQ-672.
 
