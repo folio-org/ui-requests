@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## IN PROGRESS
+## [6.0.1](https://github.com/folio-org/ui-requests/tree/v6.0.1) (2021-11-01)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v6.0.0...v6.0.1)
 
 * Fix the issue when proxy pop-up and block pop-up appear at the same time for requests. Refs UIREQ-668.
 * Fix the issue when `block` modal appears even if no manual blocks and vice versa. Refs UIREQ-670
