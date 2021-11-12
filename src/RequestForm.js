@@ -118,6 +118,12 @@ class RequestForm extends React.Component {
     query: PropTypes.object,
     onSubmit: PropTypes.func,
     reset: PropTypes.func,
+    parentMutator: PropTypes.shape({
+      proxy: PropTypes.shape({
+        reset: PropTypes.func.isRequired,
+        GET: PropTypes.func.isRequired,
+      }).isRequired,
+    }).isRequired,
   };
 
   static defaultProps = {
@@ -147,6 +153,7 @@ class RequestForm extends React.Component {
       blocked: false,
       ...this.getDefaultRequestPreferences(),
       isPatronBlocksOverridden: false,
+      isAwaitingForProxySelection: false,
     };
 
     this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
@@ -334,6 +341,8 @@ class RequestForm extends React.Component {
       this.props.change('proxyUserId', selectedUser.id);
       this.findRequestPreferences(proxy.id);
     }
+
+    this.setState({ isAwaitingForProxySelection: false });
   }
 
   onUserClick() {
@@ -345,10 +354,30 @@ class RequestForm extends React.Component {
     this.findUser('barcode', barcode);
   }
 
+  async hasProxies(user) {
+    if (!user) {
+      this.setState({ isAwaitingForProxySelection: false });
+
+      return;
+    }
+
+    const { parentMutator: mutator } = this.props;
+    const query = `query=(proxyUserId==${user.id})`;
+
+    mutator.proxy.reset();
+
+    const userProxies = await mutator.proxy.GET({ params: { query } });
+
+    if (userProxies.length) {
+      this.setState({ isAwaitingForProxySelection: true });
+    } else {
+      this.setState({ isAwaitingForProxySelection: false });
+    }
+  }
+
   findUser(fieldName, value) {
     const {
       change,
-      parentResources,
       findResource,
       onChangePatron,
       asyncValidate: validate,
@@ -365,32 +394,37 @@ class RequestForm extends React.Component {
       isUserLoading: true,
     });
 
-    findResource('user', value, fieldName).then((result) => {
-      if (result.totalRecords === 1) {
-        const blocks = this.getPatronManualBlocks(parentResources);
-        const automatedPatronBlocks = this.getAutomatedPatronBlocks(parentResources);
-        const isAutomatedPatronBlocksRequestInPendingState = parentResources.automatedPatronBlocks.isPending;
-        const selectedUser = result.users[0];
-        const state = { selectedUser };
-        onChangePatron(selectedUser);
-        change('requesterId', selectedUser.id);
+    findResource('user', value, fieldName)
+      .then((result) => {
+        this.setState({ isAwaitingForProxySelection: true });
 
-        this.setState(state);
-        this.findRequestPreferences(selectedUser.id);
+        if (result.totalRecords === 1) {
+          const { parentResources } = this.props;
+          const blocks = this.getPatronManualBlocks(parentResources);
+          const automatedPatronBlocks = this.getAutomatedPatronBlocks(parentResources);
+          const isAutomatedPatronBlocksRequestInPendingState = parentResources.automatedPatronBlocks.isPending;
+          const selectedUser = result.users[0];
+          const state = { selectedUser };
+          onChangePatron(selectedUser);
+          change('requesterId', selectedUser.id);
 
-        if ((blocks.length && blocks[0].userId === selectedUser.id) || (!isEmpty(automatedPatronBlocks) && !isAutomatedPatronBlocksRequestInPendingState)) {
-          this.setState({
-            blocked: true,
-            isPatronBlocksOverridden: false,
-          });
+          this.setState(state);
+          this.findRequestPreferences(selectedUser.id);
+
+          if ((blocks.length && blocks[0].userId === selectedUser.id) || (!isEmpty(automatedPatronBlocks) && !isAutomatedPatronBlocksRequestInPendingState)) {
+            this.setState({
+              blocked: true,
+              isPatronBlocksOverridden: false,
+            });
+          }
+
+          return selectedUser;
         }
 
-        return selectedUser;
-      }
-
-      return null;
-    })
+        return null;
+      })
       .then(user => (!user ? validate() : user))
+      .then(user => this.hasProxies(user))
       .finally(() => {
         this.setState({ isUserLoading: false });
       });
@@ -811,6 +845,8 @@ class RequestForm extends React.Component {
       isUserLoading,
       isErrorModalOpen,
       isPatronBlocksOverridden,
+      isAwaitingForProxySelection,
+      proxy,
     } = this.state;
 
     const patronBlocks = this.getPatronManualBlocks(parentResources);
@@ -861,6 +897,17 @@ class RequestForm extends React.Component {
     const patronGroup = getPatronGroup(selectedUser, patronGroups);
     const requestTypeError = hasNonRequestableStatus(selectedItem);
     const itemStatus = selectedItem?.status?.name;
+    const getPatronBlockModalOpenStatus = () => {
+      if (isAwaitingForProxySelection) {
+        return false;
+      }
+
+      const isBlockedAndOverriden = blocked && !isPatronBlocksOverridden;
+
+      return proxy?.id
+        ? isBlockedAndOverriden && (proxy.id === selectedUser?.id)
+        : isBlockedAndOverriden;
+    };
 
     return (
       <Paneset isRoot>
@@ -1198,7 +1245,7 @@ class RequestForm extends React.Component {
               stripes={this.props.stripes}
             />
             <PatronBlockModal
-              open={blocked && !isPatronBlocksOverridden}
+              open={getPatronBlockModalOpenStatus()}
               onClose={this.onCloseBlockedModal}
               onOverride={this.overridePatronBlocks}
               viewUserPath={() => this.onViewUserPath(selectedUser, patronGroup)}
