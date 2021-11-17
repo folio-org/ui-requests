@@ -65,20 +65,22 @@ export default function defaultScenario(server) {
         'status': 'Closed - Pickup expired',
         'pickupServicePointId': servicePoint.id,
         'awaitingPickupRequestClosedDate': '2019-03-11T15:45:23.000+0000',
-        'item': {
+        'instance': {
           'title': 'Children of Time',
+        },
+        'item': {
           'barcode': '760932543816',
-          'callNumber': 'A344JUI'
+          'callNumber': 'A344JUI',
         },
         'requester': {
           'firstName': 'Stephen',
           'lastName': 'Jones',
           'middleName': 'Anthony',
-          'barcode': '567023127436'
-        }
-      }
+          'barcode': '567023127436',
+        },
+      },
     ],
-    'totalRecords': 1
+    'totalRecords': 1,
   });
 
   server.createList('note-type', 10);
