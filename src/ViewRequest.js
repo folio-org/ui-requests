@@ -39,7 +39,7 @@ import {
   withTags,
   NotesSmartAccordion,
 } from '@folio/stripes/smart-components';
-import { IfPermission } from '@folio/stripes-core';
+import { IfPermission } from '@folio/stripes/core';
 
 import CancelRequestDialog from './CancelRequestDialog';
 import ItemDetail from './ItemDetail';
