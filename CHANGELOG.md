@@ -6,6 +6,7 @@
 * Fix the issue when `block` modal appears even if no manual blocks and vice versa. Refs UIREQ-670
 * Move reusable part of `move request dialog box` to reusable component. Refs UIREQ-660.
 * When newly added patron is deleted after making and canceling request, requests page is unstable. Refs UIREQ-672.
+* Import `stripes-core` components via `@folio/stripes`. Refs UIREQ-609.
 
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)
