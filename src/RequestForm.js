@@ -856,8 +856,6 @@ class RequestForm extends React.Component {
       instance,
     } = request || {};
 
-    console.log(instance);
-
     const isEditForm = this.isEditForm();
     const requestTypeOptions = getRequestTypeOptions(selectedItem);
 
