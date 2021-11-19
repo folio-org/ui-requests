@@ -539,7 +539,6 @@ class ViewRequest extends React.Component {
                 ...request.instance,
                 id: request.itemId,
                 instanceId: request.instanceId,
-
               }}
               loan={request.loan}
               requestCount={request.requestCount}
