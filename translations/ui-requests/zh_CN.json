@@ -197,5 +197,11 @@
     "requestQueue.refresh": "刷新队列",
     "items.selectItem": "Select item",
     "items.instanceItems": "Other items in {title}",
-    "items.instanceItems.notFound": "No items found"
+    "items.instanceItems.notFound": "No items found",
+    "titleInformation.titleLevelRequests": "Title level requests",
+    "titleInformation.title": "Title",
+    "titleInformation.contributors": "Contributor",
+    "titleInformation.publicationsDate": "Publication date",
+    "titleInformation.editions": "Edition",
+    "titleInformation.identifiers": "ISBN(s)"
 }
