@@ -17,6 +17,7 @@ import {
 import moment from 'moment-timezone';
 
 import {
+  IfPermission,
   IntlConsumer,
   TitleManager
 } from '@folio/stripes/core';
@@ -39,7 +40,6 @@ import {
   withTags,
   NotesSmartAccordion,
 } from '@folio/stripes/smart-components';
-import { IfPermission } from '@folio/stripes/core';
 
 import CancelRequestDialog from './CancelRequestDialog';
 import ItemDetail from './ItemDetail';
