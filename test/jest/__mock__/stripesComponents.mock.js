@@ -41,5 +41,19 @@ jest.mock('@folio/stripes/components', () => ({
       {children}
     </div>
   )),
+  KeyValue: jest.fn(({
+    label,
+    children,
+    value,
+  }) => (
+    <div>
+      <div>
+        {label}
+      </div>
+      <div>
+        {children || value}
+      </div>
+    </div>
+  )),
 }));
 
