@@ -61,6 +61,7 @@ import {
   iconTypes,
   fulfilmentTypeMap,
   createModes,
+  REQUEST_LEVEL_TYPES,
 } from './constants';
 import ErrorModal from './components/ErrorModal';
 import {
@@ -729,6 +730,7 @@ class RequestForm extends React.Component {
         timeZone,
       },
       parentResources,
+      request,
     } = this.props;
 
     const {
@@ -743,6 +745,7 @@ class RequestForm extends React.Component {
     const {
       selectedItem,
       isPatronBlocksOverridden,
+      instanceId,
     } = this.state;
 
     if (hasNonRequestableStatus(selectedItem)) {
@@ -780,6 +783,9 @@ class RequestForm extends React.Component {
         },
       };
     }
+
+    data.instanceId = request?.instanceId || instanceId;
+    data.requestLevel = request?.requestLevel || REQUEST_LEVEL_TYPES.ITEM;
 
     return this.props.onSubmit(data);
   };

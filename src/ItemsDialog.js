@@ -57,7 +57,7 @@ export const MAX_HEIGHT = 500;
 
 const ItemsDialog = ({
   request: {
-    item: {
+    instance: {
       title,
     },
   },
@@ -116,7 +116,7 @@ ItemsDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
   request: PropTypes.shape({
-    item: PropTypes.shape({
+    instance: PropTypes.shape({
       title: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,

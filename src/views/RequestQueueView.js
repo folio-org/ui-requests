@@ -269,9 +269,9 @@ class RequestQueueView extends React.Component {
       error,
     } = this.state;
     const count = requests.length;
-    const { title } = item;
+    const { title } = request?.instance || {};
     const itemLink = (item.barcode)
-      ? (<Link to={`/inventory/view/${get(request, 'item.instanceId')}/${get(request, 'item.holdingsRecordId')}/${item.id}`}>{item.barcode}</Link>)
+      ? (<Link to={`/inventory/view/${get(request, 'instanceId')}/${get(request, 'item.holdingsRecordId')}/${item.id}`}>{item.barcode}</Link>)
       : '-';
 
     return (
