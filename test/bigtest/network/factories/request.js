@@ -25,6 +25,7 @@ export default Factory.extend({
     const item = instance.holdings.models[0].items.models[0].attrs;
 
     request.update({
+      holdingsRecordId: item.holdingsRecordId,
       instanceId: item.instanceId,
       instance: {
         title: item.title,
@@ -64,6 +65,7 @@ export default Factory.extend({
       const item = instance.holdings.models[0].items.models[0].attrs;
 
       request.update({
+        holdingsRecordId: item.holdingsRecordId,
         instanceId: item.instanceId,
         instance: {
           title: item.title,
@@ -105,6 +107,7 @@ export default Factory.extend({
       });
 
       request.update({
+        holdingsRecordId: item.holdingsRecordId,
         instanceId: item.instanceId,
         instance: {
           title: item.title,

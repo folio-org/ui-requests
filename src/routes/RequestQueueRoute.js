@@ -45,7 +45,7 @@ class RequestQueueRoute extends React.Component {
       path: 'holdings-storage/holdings',
       params: (_q, _p, _r, _l, props) => {
         const request = RequestQueueRoute.getRequest(props);
-        const holdingsRecordId = get(request, 'item.holdingsRecordId');
+        const holdingsRecordId = get(request, 'holdingsRecordId');
 
         return (holdingsRecordId) ? { query: `id==${holdingsRecordId}` } : null;
       },

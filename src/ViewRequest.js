@@ -506,7 +506,7 @@ class ViewRequest extends React.Component {
       instanceId: request.instanceId,
       itemBarcode: request.item.barcode,
       itemId: request.itemId,
-      holdingsRecordId: request.item.holdingsRecordId,
+      holdingsRecordId: request.holdingsRecordId,
       requesterName: getFullName(request.requester),
       requesterId: request.requester?.id ?? request.requesterId,
       requestCreateDate: request.metadata.createdDate,
@@ -539,6 +539,7 @@ class ViewRequest extends React.Component {
                 ...request.instance,
                 id: request.itemId,
                 instanceId: request.instanceId,
+                holdingsRecordId: request.holdingsRecordId,
               }}
               loan={request.loan}
               requestCount={request.requestCount}

@@ -91,7 +91,7 @@ const ItemDetail = ({ item, loan, requestCount }) => {
 ItemDetail.propTypes = {
   item: PropTypes.object,
   loan: PropTypes.object,
-  requestCount: PropTypes.number
+  requestCount: PropTypes.number,
 };
 
 export default ItemDetail;

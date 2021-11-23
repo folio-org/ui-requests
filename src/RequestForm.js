@@ -786,6 +786,7 @@ class RequestForm extends React.Component {
 
     data.instanceId = request?.instanceId || instanceId;
     data.requestLevel = request?.requestLevel || REQUEST_LEVEL_TYPES.ITEM;
+    data.holdingsRecordId = request?.holdingsRecordId || selectedItem.holdingsRecordId;
 
     return this.props.onSubmit(data);
   };
@@ -1012,7 +1013,7 @@ class RequestForm extends React.Component {
                         <ItemDetail
                           item={{
                             id: get(request, 'itemId'),
-                            instanceId,
+                            instanceId: instanceId || request?.instanceId,
                             ...selectedItem,
                             ...instance,
                           }}

@@ -79,9 +79,7 @@ describe('Note View page', () => {
           const {
             itemId,
             instanceId,
-            item: {
-              holdingsRecordId,
-            },
+            holdingsRecordId,
           } = request;
 
           expect(this.location.pathname).to.equal(`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`);
