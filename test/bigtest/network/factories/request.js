@@ -25,7 +25,15 @@ export default Factory.extend({
     const item = instance.holdings.models[0].items.models[0].attrs;
 
     request.update({
-      item,
+      instanceId: item.instanceId,
+      instance: {
+        title: item.title,
+        contributorNames: item.contributorNames,
+      },
+      item: {
+        barcode: item.barcode,
+        status: item.status,
+      },
       itemId: item.id,
       requesterId: user.id,
       requester: {
@@ -35,7 +43,7 @@ export default Factory.extend({
         patronGroup: {
           id: user.patronGroup,
           group: 'test',
-          desc: 'test'
+          desc: 'test',
         },
         patronGroupId: user.patronGroup,
       },
@@ -45,7 +53,7 @@ export default Factory.extend({
         updatedDate: '2020-07-07T03:56:29.238+0000',
         updatedByUserId: '4d088ad2-fc70-5142-bd4d-9b60707846af',
       },
-      deliveryAddressTypeId: user.personal.addresses[0].addressTypeId
+      deliveryAddressTypeId: user.personal.addresses[0].addressTypeId,
     });
   },
 
@@ -56,7 +64,15 @@ export default Factory.extend({
       const item = instance.holdings.models[0].items.models[0].attrs;
 
       request.update({
-        item,
+        instanceId: item.instanceId,
+        instance: {
+          title: item.title,
+          contributorNames: item.contributorNames,
+        },
+        item: {
+          barcode: item.barcode,
+          status: item.status,
+        },
         itemId: item.id,
         requesterId: user.id,
         requester: {
@@ -66,13 +82,13 @@ export default Factory.extend({
           patronGroup: {
             id: user.patronGroup,
             group: 'test',
-            desc: 'test'
+            desc: 'test',
           },
           patronGroupId: user.patronGroup,
         },
-        deliveryAddressTypeId: user.personal.addresses[0].addressTypeId
+        deliveryAddressTypeId: user.personal.addresses[0].addressTypeId,
       });
-    }
+    },
   }),
 
   withCallNumber: trait({
@@ -89,9 +105,17 @@ export default Factory.extend({
       });
 
       request.update({
-        item: item.attrs,
+        instanceId: item.instanceId,
+        instance: {
+          title: item.title,
+          contributorNames: item.contributorNames,
+        },
+        item: {
+          barcode: item.barcode,
+          status: item.status,
+        },
         itemId: item.id,
       });
-    }
-  })
+    },
+  }),
 });

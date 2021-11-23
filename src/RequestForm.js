@@ -573,7 +573,7 @@ class RequestForm extends React.Component {
       this.setState({
         requestCount,
         instanceId: holdingsRecord && holdingsRecord.instanceId,
-        selectedLoan
+        selectedLoan,
       });
 
       return item;
@@ -777,7 +777,7 @@ class RequestForm extends React.Component {
       data.requestProcessingParameters = {
         overrideBlocks: {
           patronBlock: {},
-        }
+        },
       };
     }
 
@@ -852,7 +852,8 @@ class RequestForm extends React.Component {
     const patronBlocks = this.getPatronManualBlocks(parentResources);
     const automatedPatronBlocks = this.getAutomatedPatronBlocks(parentResources);
     const {
-      fulfilmentPreference
+      fulfilmentPreference,
+      instance,
     } = request || {};
 
     const isEditForm = this.isEditForm();
@@ -1003,7 +1004,12 @@ class RequestForm extends React.Component {
                         </Row> }
                       {selectedItem &&
                         <ItemDetail
-                          item={{ id: get(request, 'itemId'), instanceId, ...selectedItem }}
+                          item={{
+                            id: get(request, 'itemId'),
+                            instanceId,
+                            ...selectedItem,
+                            ...instance,
+                          }}
                           loan={selectedLoan}
                           requestCount={request ? request.requestCount : requestCount}
                         /> }
@@ -1261,7 +1267,7 @@ class RequestForm extends React.Component {
                   <SafeHTMLMessage
                     id="ui-requests.errorModal.message"
                     values={{
-                      title: selectedItem.title,
+                      title: instance?.title,
                       barcode: selectedItem.barcode,
                       materialType: get(selectedItem, 'materialType.name', ''),
                       itemStatus,
