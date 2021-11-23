@@ -24,7 +24,7 @@ export const fulfilmentTypeMap = {
 // map from API's enum-value to translation key
 export const fulfilmentTypesTranslations = {
   'Delivery': 'ui-requests.requestMeta.fulfilment.delivery.',
-  'Hold Shelf': 'ui-requests.requestMeta.fulfilment.holdShelf.'
+  'Hold Shelf': 'ui-requests.requestMeta.fulfilment.holdShelf.',
 };
 
 // used to perform queries with the backend
@@ -200,4 +200,9 @@ export const errorMessages = {
 export const errorCodes = {
   SYNC: 'sync',
   UNKNOWN: 'unknown',
+};
+
+export const REQUEST_LEVEL_TYPES = {
+  ITEM: 'Item',
+  TITLE: 'Title',
 };

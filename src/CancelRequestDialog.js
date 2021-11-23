@@ -25,9 +25,9 @@ class CancelRequestDialog extends React.Component {
     onClose: PropTypes.func,
     open: PropTypes.bool,
     request: PropTypes.shape({
-      item: PropTypes.shape({
-        title: PropTypes.string
-      })
+      instance: PropTypes.shape({
+        title: PropTypes.string,
+      }),
     }),
     resources: PropTypes.shape({
       cancellationReasons: PropTypes.shape({
@@ -38,8 +38,8 @@ class CancelRequestDialog extends React.Component {
       user: PropTypes.shape({
         user: PropTypes.shape({
           id: PropTypes.string,
-        })
-      })
+        }),
+      }),
     }),
   }
 
@@ -109,7 +109,7 @@ class CancelRequestDialog extends React.Component {
   onChangeReason = (e) => {
     const value = e.target.value;
     this.setState(({ reasons }) => ({
-      reason: reasons.find(r => r.value === value)
+      reason: reasons.find(r => r.value === value),
     }));
   }
 
@@ -166,7 +166,7 @@ class CancelRequestDialog extends React.Component {
         <p>
           <SafeHTMLMessage
             id="ui-requests.cancel.requestWillBeCancelled"
-            values={{ title: request.item.title }}
+            values={{ title: request.instance.title }}
           />
         </p>
         <Select
@@ -183,7 +183,7 @@ class CancelRequestDialog extends React.Component {
                 <FormattedMessage
                   id="ui-requests.cancel.additionalInfoLabel"
                   values={{
-                    required: reason.requiresAdditionalInformation ? '*' : ' '
+                    required: reason.requiresAdditionalInformation ? '*' : ' ',
                   }}
                 />
               }
