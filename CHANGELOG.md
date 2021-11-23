@@ -9,6 +9,7 @@
 * Import `stripes-core` components via `@folio/stripes`. Refs UIREQ-609.
 * Create reusable component for render title level information. Refs UIREQ-654.
 * TLR - data migration for request list, view, create, edit, duplicate. Refs UIREQ-664.
+* TLR - data migration for dialogboxes and reorder list. Refs UIREQ-665.
 
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)

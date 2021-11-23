@@ -88,7 +88,7 @@ class MoveRequestDialog extends React.Component {
   fetchHoldings() {
     const {
       mutator:  { holdings },
-      request: { item: { instanceId } }
+      request: { instanceId },
     } = this.props;
     const query = `instanceId==${instanceId}`;
     holdings.reset();
