@@ -62,7 +62,6 @@ import {
   iconTypes,
   fulfilmentTypeMap,
   createModes,
-  REQUEST_LEVEL_TYPES,
 } from './constants';
 import ErrorModal from './components/ErrorModal';
 import {
@@ -73,15 +72,10 @@ import {
   hasNonRequestableStatus,
   parseErrorMessage,
   getTlrSettings,
+  getRequestLevelValue,
 } from './utils';
 
 import css from './requests.css';
-
-export const setTitleLevelRequestValue = (value) => {
-  return value
-    ? REQUEST_LEVEL_TYPES.TITLE
-    : REQUEST_LEVEL_TYPES.ITEM;
-};
 
 class RequestForm extends React.Component {
   static propTypes = {
@@ -274,13 +268,13 @@ class RequestForm extends React.Component {
 
     if (prevParentResources?.configs?.records[0]?.value !== parentResources?.configs?.records[0]?.value) {
       const {
-        titleLevelRequestsFeatureEnabled: newTitleLevelRequestsFeatureEnabled,
+        titleLevelRequestsFeatureEnabled,
       } = this.getTlrSettings();
 
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState(
         {
-          titleLevelRequestsFeatureEnabled: newTitleLevelRequestsFeatureEnabled,
+          titleLevelRequestsFeatureEnabled,
         },
         this.setTlrCheckboxInitialState(),
       );
@@ -829,7 +823,7 @@ class RequestForm extends React.Component {
     }
 
     data.instanceId = request?.instanceId || instanceId;
-    data.requestLevel = request?.requestLevel || setTitleLevelRequestValue(data.createTitleLevelRequest);
+    data.requestLevel = request?.requestLevel || getRequestLevelValue(data.createTitleLevelRequest);
     data.holdingsRecordId = request?.holdingsRecordId || selectedItem.holdingsRecordId;
 
     unset(data, 'createTitleLevelRequest');
@@ -1016,7 +1010,10 @@ class RequestForm extends React.Component {
             }
             {
               this.state.titleLevelRequestsFeatureEnabled && !isEditForm &&
-              <div className={css.tlrCheckbox}>
+              <div
+                data-testid="tlrCheckbox"
+                className={css.tlrCheckbox}
+              >
                 <Row>
                   <Col xs={12}>
                     <Field

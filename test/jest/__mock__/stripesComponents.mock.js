@@ -1,6 +1,17 @@
 import React from 'react';
 
 jest.mock('@folio/stripes/components', () => ({
+  Accordion: jest.fn(({ children, label }) => (
+    <div>
+      {label}
+      {children}
+    </div>
+  )),
+  AccordionSet: jest.fn(({ children }) => (
+    <div>
+      {children}
+    </div>
+  )),
   Button: jest.fn(({ children }) => (
     <button data-test-button type="button">
       <span>
@@ -8,16 +19,20 @@ jest.mock('@folio/stripes/components', () => ({
       </span>
     </button>
   )),
+  Checkbox: jest.fn(() => <div>Checkbox</div>),
   Col: jest.fn(({ children }) => (
     <div data-test-col>
       {children}
     </div>
   )),
+  Datepicker: jest.fn(() => <div>Datepicker</div>),
+  FormattedDate: jest.fn(() => <div>Datepicker</div>),
   Headline: jest.fn(({ children }) => (
     <div data-test-headline>
       {children}
     </div>
   )),
+  Icon: jest.fn(() => <div>Icon</div>),
   Modal: jest.fn(({ children }) => (
     <div>
       {children}
@@ -32,6 +47,22 @@ jest.mock('@folio/stripes/components', () => ({
     <span>No value</span>
   )),
   Pane: jest.fn(({ children }) => (
+    <div>
+      {children}
+    </div>
+  )),
+  PaneFooter: jest.fn(({ children }) => (
+    <div>
+      {children}
+    </div>
+  )),
+  PaneHeaderIconButton: jest.fn(() => <div>PaneHeaderIconButton</div>),
+  PaneMenu: jest.fn(({ children }) => (
+    <div>
+      {children}
+    </div>
+  )),
+  Paneset: jest.fn(({ children }) => (
     <div>
       {children}
     </div>
@@ -55,5 +86,13 @@ jest.mock('@folio/stripes/components', () => ({
       </div>
     </div>
   )),
+  Layer: jest.fn(({ children }) => (
+    <div>
+      {children}
+    </div>
+  )),
+  Select: jest.fn(() => <div>Select</div>),
+  TextArea: jest.fn(() => <div>TextArea</div>),
+  TextField: jest.fn(() => <div>TextField</div>),
+  Timepicker: jest.fn(() => <div>Timepicker</div>),
 }));
-

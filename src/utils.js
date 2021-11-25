@@ -29,6 +29,7 @@ import {
   fulfilmentTypeMap,
   requestStatuses,
   requestTypesMap,
+  REQUEST_LEVEL_TYPES,
 } from './constants';
 
 import css from './requests.css';
@@ -303,4 +304,10 @@ export const getTlrSettings = (settings) => {
   } catch (error) {
     return {};
   }
+};
+
+export const getRequestLevelValue = (value) => {
+  return value
+    ? REQUEST_LEVEL_TYPES.TITLE
+    : REQUEST_LEVEL_TYPES.ITEM;
 };

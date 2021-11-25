@@ -804,12 +804,12 @@ class RequestsRoute extends React.Component {
     const servicePoints = get(resources, 'servicePoints.records', []);
     const cancellationReasons = get(resources, 'cancellationReasons.records', []);
     const requestCount = get(resources, 'records.other.totalRecords', 0);
-    const { createTitleLevelRequestsByDefault } = getTlrSettings(resources.configs.records[0]?.value);
+    const { createTitleLevelRequestsByDefault = false } = getTlrSettings(resources.configs.records[0]?.value);
     const initialValues = dupRequest ||
       {
         requestType: 'Hold',
         fulfilmentPreference: 'Hold Shelf',
-        createTitleLevelRequest: createTitleLevelRequestsByDefault || false,
+        createTitleLevelRequest: createTitleLevelRequestsByDefault,
       };
 
     const pickSlipsArePending = resources?.pickSlips?.isPending;
