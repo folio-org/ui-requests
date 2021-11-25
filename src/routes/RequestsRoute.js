@@ -115,9 +115,10 @@ class RequestsRoute extends React.Component {
         params: {
           query: makeQueryFunction(
             'cql.allRecords=1',
-            '(requesterId=="%{query.query}" or requester.barcode="%{query.query}*" or instance.title="%{query.query}*" or item.barcode=="%{query.query}*" or itemId=="%{query.query}" or itemIsbn="%{query.query}")',
+            '(requesterId=="%{query.query}" or requester.barcode="%{query.query}*" or instance.title="%{query.query}*" or instanceId="%{query.query}*" or item.barcode=="%{query.query}*" or itemId=="%{query.query}" or itemIsbn="%{query.query}")',
             {
               'title': 'instance.title',
+              'instanceId': 'instanceId',
               'itemBarcode': 'item.barcode',
               'type': 'requestType',
               'requester': 'requester.lastName requester.firstName',
