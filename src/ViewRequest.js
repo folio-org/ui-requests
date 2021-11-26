@@ -532,7 +532,7 @@ class ViewRequest extends React.Component {
     const referredRecordData = {
       instanceTitle: request.instance.title,
       instanceId: request.instanceId,
-      itemBarcode: request.item.barcode,
+      itemBarcode: request.item?.barcode,
       itemId: request.itemId,
       holdingsRecordId: request.holdingsRecordId,
       requesterName: getFullName(request.requester),

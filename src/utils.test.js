@@ -27,12 +27,14 @@ import {
   // userHighlightBox,
   getTlrSettings,
   getRequestLevelValue,
+  getInstanceRequestTypeOptions,
 } from './utils';
 
 import {
   // requestTypesByItemStatus,
   // requestTypeOptionMap,
   itemStatuses,
+  requestTypeOptionMap,
   // fulfilmentTypeMap,
   // requestStatuses,
   requestTypesMap,
@@ -195,6 +197,61 @@ describe('getRequestLevelValue', () => {
 
   it('should return `Item` if false is passed', () => {
     expect(getRequestLevelValue(false)).toBe(REQUEST_LEVEL_TYPES.ITEM);
+  });
+});
+
+describe('getInstanceRequestTypeOptions', () => {
+  const missedItem = {
+    status: {
+      name: itemStatuses.MISSING,
+    },
+  };
+  const availableItem = {
+    status: {
+      name: itemStatuses.AVAILABLE,
+    },
+  };
+  const checkedOutItem = {
+    status: {
+      name: itemStatuses.CHECKED_OUT,
+    },
+  };
+
+  it('should return `Page` request type if at least one available item is present', () => {
+    const expectedResult = [
+      {
+        id: requestTypeOptionMap[requestTypesMap.PAGE],
+        value: requestTypesMap.PAGE,
+      },
+    ];
+
+    expect(getInstanceRequestTypeOptions([missedItem, availableItem, checkedOutItem])).toEqual(expectedResult);
+  });
+
+  it('should return `Hold` request type if only missing items is present', () => {
+    const expectedResult = [
+      {
+        id: requestTypeOptionMap[requestTypesMap.HOLD],
+        value: requestTypesMap.HOLD,
+      },
+    ];
+
+    expect(getInstanceRequestTypeOptions([missedItem])).toEqual(expectedResult);
+  });
+
+  it('should return `Hold` and `Recall` request types if no available items and not all of them are missing', () => {
+    const expectedResult = [
+      {
+        id: requestTypeOptionMap[requestTypesMap.HOLD],
+        value: requestTypesMap.HOLD,
+      },
+      {
+        id: requestTypeOptionMap[requestTypesMap.RECALL],
+        value: requestTypesMap.RECALL,
+      },
+    ];
+
+    expect(getInstanceRequestTypeOptions([missedItem, checkedOutItem])).toEqual(expectedResult);
   });
 });
 

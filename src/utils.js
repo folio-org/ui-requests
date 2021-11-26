@@ -311,3 +311,38 @@ export const getRequestLevelValue = (value) => {
     ? REQUEST_LEVEL_TYPES.TITLE
     : REQUEST_LEVEL_TYPES.ITEM;
 };
+
+export const getInstanceRequestTypeOptions = (items) => {
+  const availableItems = items.filter(item => item.status.name === itemStatuses.AVAILABLE);
+
+  if (availableItems.length > 0) {
+    return [
+      {
+        id: requestTypeOptionMap[requestTypesMap.PAGE],
+        value: requestTypesMap.PAGE,
+      },
+    ];
+  }
+
+  const missedItems = items.filter(item => item.status.name === itemStatuses.MISSING);
+
+  if (missedItems.length > 0 && items.length === missedItems.length) {
+    return [
+      {
+        id: requestTypeOptionMap[requestTypesMap.HOLD],
+        value: requestTypesMap.HOLD,
+      },
+    ];
+  }
+
+  return [
+    {
+      id: requestTypeOptionMap[requestTypesMap.HOLD],
+      value: requestTypesMap.HOLD,
+    },
+    {
+      id: requestTypeOptionMap[requestTypesMap.RECALL],
+      value: requestTypesMap.RECALL,
+    },
+  ];
+};
