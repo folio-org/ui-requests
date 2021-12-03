@@ -195,7 +195,13 @@
     "errors.unknown.requestQueueLabel": "请求队列错误",
     "errors.unknown.requestQueueBody": "请求队列重新排序失败",
     "requestQueue.refresh": "刷新队列",
-    "items.selectItem": "Select item",
-    "items.instanceItems": "Other items in {title}",
-    "items.instanceItems.notFound": "No items found"
+    "items.selectItem": "选择单件",
+    "items.instanceItems": "{title}中其他单件",
+    "items.instanceItems.notFound": "未找到单件",
+    "titleInformation.titleLevelRequests": "标题/品种级请求",
+    "titleInformation.title": "标题/品种",
+    "titleInformation.contributors": "贡献者",
+    "titleInformation.publicationsDate": "出版日期",
+    "titleInformation.editions": "版本",
+    "titleInformation.identifiers": "ISBN"
 }

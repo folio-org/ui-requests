@@ -197,5 +197,11 @@
     "requestQueue.refresh": "Rafraîchir la file d'attente",
     "items.selectItem": "Select item",
     "items.instanceItems": "Other items in {title}",
-    "items.instanceItems.notFound": "No items found"
+    "items.instanceItems.notFound": "No items found",
+    "titleInformation.titleLevelRequests": "Title level requests",
+    "titleInformation.title": "Titre",
+    "titleInformation.contributors": "Contributeur / auteur",
+    "titleInformation.publicationsDate": "Date de publication",
+    "titleInformation.editions": "Edition",
+    "titleInformation.identifiers": "ISBN(s)"
 }
