@@ -197,5 +197,11 @@
     "requestQueue.refresh": "Refresh queue",
     "items.selectItem": "항목 선택",
     "items.instanceItems": "{title} 의 다른 항목",
-    "items.instanceItems.notFound": "항목을 찾지 못했습니다."
+    "items.instanceItems.notFound": "항목을 찾지 못했습니다.",
+    "titleInformation.titleLevelRequests": "Title level requests",
+    "titleInformation.title": "Title",
+    "titleInformation.contributors": "Contributor",
+    "titleInformation.publicationsDate": "Publication date",
+    "titleInformation.editions": "Edition",
+    "titleInformation.identifiers": "ISBN(s)"
 }

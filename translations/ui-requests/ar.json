@@ -197,5 +197,11 @@
     "requestQueue.refresh": "تحديث الصف",
     "items.selectItem": "تحديد مادة",
     "items.instanceItems": "مواد أخرى في {title}",
-    "items.instanceItems.notFound": "لم يتم العثور على مواد"
+    "items.instanceItems.notFound": "لم يتم العثور على مواد",
+    "titleInformation.titleLevelRequests": "طلبات على مستوى العنوان",
+    "titleInformation.title": "العنوان",
+    "titleInformation.contributors": "المساهم",
+    "titleInformation.publicationsDate": "تاريخ النشر",
+    "titleInformation.editions": "الطبعة",
+    "titleInformation.identifiers": "أرقام ردمك"
 }
