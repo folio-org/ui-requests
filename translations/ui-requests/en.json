@@ -36,6 +36,7 @@
   "requests.proxy": "Proxy",
   "requests.position": "Position",
   "requests.itemBarcode": "Item barcode",
+  "requests.createTitleLevelRequest": "Create title level request",
 
   "requestMeta.detailLabel": "Request Detail",
   "requestMeta.information": "Request information",
@@ -83,6 +84,7 @@
   "actions.duplicateRequest": "Duplicate",
   "actions.moveRequest": "Move request",
   "actions.reorderQueue": "Reorder queue",
+  "instance.information": "Title information",
   "instance.title": "Title",
   "instance.contributorNames": "Contributor",
   "item.information": "Item information",

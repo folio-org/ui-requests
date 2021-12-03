@@ -40,12 +40,14 @@ import {
   createModes,
   requestStatusesTranslations,
   requestTypesTranslations,
+  REQUEST_LEVEL_TYPES,
 } from '../constants';
 import {
   buildUrl,
   getFullName,
   duplicateRequest,
   convertToSlipData,
+  getTlrSettings,
 } from '../utils';
 import packageInfo from '../../package';
 import {
@@ -227,6 +229,14 @@ class RequestsRoute extends React.Component {
       accumulate: true,
       fetch: false,
     },
+    configs: {
+      type: 'okapi',
+      records: 'configs',
+      path: 'configurations/entries',
+      params: {
+        query: '(module==SETTINGS and configName==TLR)',
+      },
+    },
   };
 
   static propTypes = {
@@ -290,6 +300,9 @@ class RequestsRoute extends React.Component {
       pickSlips: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object).isRequired,
         isPending: PropTypes.bool,
+      }),
+      configs: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object).isRequired,
       }),
     }).isRequired,
     stripes: PropTypes.shape({
@@ -607,6 +620,7 @@ class RequestsRoute extends React.Component {
       itemBarcode: null,
       userBarcode: null,
       itemId: null,
+      instanceId: null,
       query: null,
     });
 
@@ -616,14 +630,20 @@ class RequestsRoute extends React.Component {
   onDuplicate = (request) => {
     const dupRequest = duplicateRequest(request);
 
-    this.setState({ dupRequest });
-    this.props.mutator.query.update({
+    const newRequestData = {
       layer: 'create',
-      itemBarcode: request.item.barcode,
-      itemId: request.itemId,
+      instanceId: request.instanceId,
       userBarcode: request.requester.barcode,
       mode: createModes.DUPLICATE,
-    });
+    };
+
+    if (request.requestLevel === REQUEST_LEVEL_TYPES.ITEM) {
+      newRequestData.itemBarcode = request.item.barcode;
+      newRequestData.itemId = request.itemId;
+    }
+
+    this.setState({ dupRequest });
+    this.props.mutator.query.update(newRequestData);
   };
 
   buildRecordsForHoldsShelfReport = async () => {
@@ -784,8 +804,13 @@ class RequestsRoute extends React.Component {
     const servicePoints = get(resources, 'servicePoints.records', []);
     const cancellationReasons = get(resources, 'cancellationReasons.records', []);
     const requestCount = get(resources, 'records.other.totalRecords', 0);
+    const { createTitleLevelRequestsByDefault = false } = getTlrSettings(resources.configs.records[0]?.value);
     const initialValues = dupRequest ||
-      { requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' };
+      {
+        requestType: 'Hold',
+        fulfilmentPreference: 'Hold Shelf',
+        createTitleLevelRequest: createTitleLevelRequestsByDefault,
+      };
 
     const pickSlipsArePending = resources?.pickSlips?.isPending;
     const requestsEmpty = isEmpty(requests);

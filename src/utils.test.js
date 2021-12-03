@@ -25,6 +25,8 @@ import {
   // parseErrorMessage,
   // toUserAddress,
   // userHighlightBox,
+  getTlrSettings,
+  getRequestLevelValue,
 } from './utils';
 
 import {
@@ -35,6 +37,7 @@ import {
   // requestStatuses,
   requestTypesMap,
   // requestTypes,
+  REQUEST_LEVEL_TYPES,
 } from './constants';
 
 describe('escapeValue', () => {
@@ -138,7 +141,7 @@ describe('duplicateRequest', () => {
       const r = {
         monkey: 'bagel',
         requestType: requestTypesMap.RECALL,
-        item: { status: itemStatuses.CHECKED_OUT }
+        item: { status: itemStatuses.CHECKED_OUT },
       };
       const duped = duplicateRequest(r);
       expect(duped.requestType).toBe(requestTypesMap.RECALL);
@@ -148,7 +151,7 @@ describe('duplicateRequest', () => {
       const r = {
         monkey: 'bagel',
         requestType: requestTypesMap.RECALL,
-        item: { status: itemStatuses.AVAILABLE }
+        item: { status: itemStatuses.AVAILABLE },
       };
       const duped = duplicateRequest(r);
       expect(duped.requestType).toBe(requestTypesMap.PAGE);
@@ -158,11 +161,40 @@ describe('duplicateRequest', () => {
       const r = {
         monkey: 'bagel',
         requestType: requestTypesMap.RECALL,
-        item: { status: itemStatuses.AGED_TO_LOST }
+        item: { status: itemStatuses.AGED_TO_LOST },
       };
       const duped = duplicateRequest(r);
       expect(duped.requestType).toBeUndefined();
     });
+  });
+});
+
+describe('getTlrSettings', () => {
+  const defaultSettings = {
+    titleLevelRequestsFeatureEnabled: true,
+    createTitleLevelRequestsByDefault: false,
+  };
+
+  it('should return parsed settings', () => {
+    expect(getTlrSettings(JSON.stringify(defaultSettings))).toEqual(defaultSettings);
+  });
+
+  it('should return empty object if nothing passed', () => {
+    expect(getTlrSettings()).toEqual({});
+  });
+
+  it('should return empty object if invalid settings passed', () => {
+    expect(getTlrSettings("{'foo': 1}")).toEqual({});
+  });
+});
+
+describe('getRequestLevelValue', () => {
+  it('should return `Title` if true is passed', () => {
+    expect(getRequestLevelValue(true)).toBe(REQUEST_LEVEL_TYPES.TITLE);
+  });
+
+  it('should return `Item` if false is passed', () => {
+    expect(getRequestLevelValue(false)).toBe(REQUEST_LEVEL_TYPES.ITEM);
   });
 });
 
