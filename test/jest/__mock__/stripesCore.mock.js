@@ -14,4 +14,6 @@ jest.mock('@folio/stripes/core', () => ({
   }),
   stripesConnect: jest.fn((component) => component),
   Pluggable: jest.fn(() => null),
+  IfPermission: jest.fn(({ children }) => <div>{children}</div>),
+  TitleManager: jest.fn(jest.fn(() => null)),
 }));

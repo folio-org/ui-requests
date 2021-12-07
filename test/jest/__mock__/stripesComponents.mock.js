@@ -19,6 +19,7 @@ jest.mock('@folio/stripes/components', () => ({
       </span>
     </button>
   )),
+  Callout: jest.fn(() => <div>Callout</div>),
   Checkbox: jest.fn(() => <div>Checkbox</div>),
   Col: jest.fn(({ children }) => (
     <div data-test-col>
@@ -32,7 +33,7 @@ jest.mock('@folio/stripes/components', () => ({
       {children}
     </div>
   )),
-  Icon: jest.fn(() => <div>Icon</div>),
+  Icon: jest.fn(({ children }) => <div>{children}</div>),
   Modal: jest.fn(({ children }) => (
     <div>
       {children}
