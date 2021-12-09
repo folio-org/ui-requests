@@ -21,7 +21,7 @@ import ItemDetail from './ItemDetail';
 
 import { REQUEST_LEVEL_TYPES } from './constants';
 
-const mockedTlrSettings = { titleLevelRequestsFeatureEnabled: true };
+let mockedTlrSettings;
 
 jest.mock('./utils', () => ({
   ...jest.requireActual('./utils'),
@@ -54,66 +54,55 @@ describe('RequestForm', () => {
     tlrCheckbox: 1,
     instanceHrid: 2,
   };
-  const mockedRequestForm = {
-    createTitleLevelRequest: true,
-  };
-  const mockedRequest = {
-    id: null,
-    instance: null,
-    instanceId: null,
-    requestLevel: null,
-    position: 'test',
-    item: null,
-    itemId: null,
-    requestCount: 'requestCount',
-  };
-  const mockedQuery = {
-    itemId: null,
-    itemBarcode: null,
-    instanceId: null,
-  };
   const mockedChangeFunction = jest.fn();
-  const defaultProps = {
-    stripes: {
-      connect: jest.fn((component) => component),
-      store: {
-        getState: jest.fn().mockReturnValue({
-          requestForm: mockedRequestForm,
-        }),
-      },
-    },
-    change: mockedChangeFunction,
-    handleSubmit: jest.fn(),
-    asyncValidate: jest.fn(),
-    findResource: jest.fn(() => new Promise((resolve) => resolve({}))),
-    request: mockedRequest,
-    initialValues: {},
-    location: {
-      pathname: 'pathname',
-    },
-    onCancel: jest.fn(),
-    parentMutator: {
-      proxy: {
-        reset: jest.fn(),
-        GET: jest.fn(),
-      },
-    },
-    query: mockedQuery,
-    onSubmit: jest.fn(),
-    parentResources: {
-      patronBlocks: {
-        records: [],
-      },
-    },
-  };
 
-  beforeEach(() => {
+  const renderComponent = (passedProps = {}) => {
+    const {
+      mockedRequestForm = {},
+      mockedRequest = {},
+      mockedQuery = {},
+    } = passedProps;
+
+    const props = {
+      stripes: {
+        connect: jest.fn((component) => component),
+        store: {
+          getState: jest.fn().mockReturnValue({
+            requestForm: mockedRequestForm,
+          }),
+        },
+      },
+      change: mockedChangeFunction,
+      handleSubmit: jest.fn(),
+      asyncValidate: jest.fn(),
+      findResource: jest.fn(() => new Promise((resolve) => resolve({}))),
+      request: mockedRequest || {},
+      initialValues: {},
+      location: {
+        pathname: 'pathname',
+      },
+      onCancel: jest.fn(),
+      parentMutator: {
+        proxy: {
+          reset: jest.fn(),
+          GET: jest.fn(),
+        },
+      },
+      query: mockedQuery || {},
+      onSubmit: jest.fn(),
+      parentResources: {
+        patronBlocks: {
+          records: [],
+        },
+      },
+    };
+
     render(
       <RequestForm
-        {...defaultProps}
+        {...props}
       />
     );
-  });
+  };
 
   afterEach(() => {
     Field.mockClear();
@@ -122,19 +111,21 @@ describe('RequestForm', () => {
 
   describe('when `TLR` in enabled', () => {
     beforeAll(() => {
-      mockedTlrSettings.titleLevelRequestsFeatureEnabled = true;
+      mockedTlrSettings = {
+        titleLevelRequestsFeatureEnabled: true,
+      };
     });
 
     describe('when `isEdit` is false', () => {
-      beforeAll(() => {
-        mockedRequest.id = null;
-      });
-
       it('should render `TLR` checkbox section', () => {
+        renderComponent();
+
         expect(screen.getByTestId(testIds.tlrCheckbox)).toBeVisible();
       });
 
       it('should execute `TLR`checkbox Field with passed props', () => {
+        renderComponent();
+
         const expectedResult = {
           name: 'createTitleLevelRequest',
           type: 'checkbox',
@@ -151,6 +142,8 @@ describe('RequestForm', () => {
       });
 
       it('should reset instance and item info on TLR checkbox change', () => {
+        renderComponent();
+
         fireEvent.click(screen.getByTestId(testIds.tlrCheckbox));
 
         expect(mockedChangeFunction).toBeCalledWith('item.barcode', null);
@@ -159,59 +152,67 @@ describe('RequestForm', () => {
       });
 
       describe('`TLR` checkbox handle on first render', () => {
-        afterAll(() => {
-          mockedQuery.itemId = null;
-          mockedQuery.itemBarcode = null;
-          mockedQuery.instanceId = null;
-        });
-
         describe('when only `itemId` is passed in query', () => {
-          beforeAll(() => {
-            mockedQuery.itemId = 'itemId';
-            mockedQuery.itemBarcode = null;
-            mockedQuery.instanceId = null;
-          });
+          const mockedQuery = {
+            itemId: 'itemId',
+          };
 
           it('should set form `createTitleLevelRequest` value to false', () => {
+            renderComponent({
+              mockedQuery,
+            });
+
             expect(mockedChangeFunction).toHaveBeenCalledWith('createTitleLevelRequest', false);
           });
         });
 
         describe('when only `itemBarcode` is passed in query', () => {
-          beforeAll(() => {
-            mockedQuery.itemId = null;
-            mockedQuery.itemBarcode = 'itemBarcode';
-            mockedQuery.instanceId = null;
-          });
+          const mockedQuery = {
+            itemBarcode: 'itemBarcode',
+          };
 
           it('should set form `createTitleLevelRequest` value to false', () => {
+            renderComponent({
+              mockedQuery,
+            });
+
             expect(mockedChangeFunction).toHaveBeenCalledWith('createTitleLevelRequest', false);
           });
         });
 
         describe('when only `instanceId` is passed in query', () => {
-          beforeAll(() => {
-            mockedQuery.itemId = null;
-            mockedQuery.itemBarcode = null;
-            mockedQuery.instanceId = 'instanceId';
-          });
+          const mockedQuery = {
+            instanceId: 'instanceId',
+          };
 
           it('should set form `createTitleLevelRequest` value to true', () => {
+            renderComponent({
+              mockedQuery,
+            });
+
             expect(mockedChangeFunction).toHaveBeenCalledWith('createTitleLevelRequest', true);
           });
         });
       });
 
       describe('when `TLR` checkbox is checked', () => {
-        beforeAll(() => {
-          mockedRequestForm.createTitleLevelRequest = true;
-        });
+        const mockedRequestForm = {
+          createTitleLevelRequest: true,
+        };
 
         it('should render Accordion with `Instance` information', () => {
+          renderComponent({
+            mockedRequestForm,
+          });
+
           expect(screen.getByText(new RegExp(labelIds.instanceInformation))).toBeVisible();
         });
 
         it('should render search filed for instance', () => {
+          renderComponent({
+            mockedRequestForm,
+          });
+
           const instanceSection = screen.getByTestId(testIds.instanceInfoSection);
           const expectedResult = {
             name: 'instance.hrid',
@@ -224,11 +225,15 @@ describe('RequestForm', () => {
       });
 
       describe('when `TLR` checkbox is unchecked', () => {
-        beforeAll(() => {
-          mockedRequestForm.createTitleLevelRequest = false;
-        });
+        const mockedRequestForm = {
+          createTitleLevelRequest: false,
+        };
 
         it('should not render Accordion with `Instance` information', () => {
+          renderComponent({
+            mockedRequestForm,
+          });
+
           expect(screen.queryByText(new RegExp(labelIds.instanceInformation))).not.toBeInTheDocument();
         });
       });
@@ -243,23 +248,29 @@ describe('RequestForm', () => {
         editions: 'instanceEditions',
         identifiers: 'instanceIdentifiers',
       };
-
-      beforeAll(() => {
-        mockedRequest.instance = mockedInstance;
-        mockedRequest.id = 'testId';
-        mockedRequest.instanceId = 'instanceId';
-      });
+      const mockedRequest = {
+        instance : mockedInstance,
+        id : 'testId',
+        instanceId : 'instanceId',
+      };
 
       it('should not render `TLR` checkbox section', () => {
+        renderComponent({
+          mockedRequest,
+        });
+
         expect(screen.queryByTestId(testIds.tlrCheckbox)).not.toBeInTheDocument();
       });
 
       describe('when `Title level` request is editing', () => {
-        beforeAll(() => {
-          mockedRequest.requestLevel = REQUEST_LEVEL_TYPES.TITLE;
-        });
-
         it('should execute `TitleInformation` with passed props', () => {
+          renderComponent({
+            mockedRequest: {
+              ...mockedRequest,
+              requestLevel: REQUEST_LEVEL_TYPES.TITLE,
+            },
+          });
+
           const expectedResult = {
             instanceId: mockedInstance.id,
             titleLevelRequestsCount: mockedRequest.position,
@@ -279,13 +290,16 @@ describe('RequestForm', () => {
           barcode: 'itemBarcode',
         };
 
-        beforeAll(() => {
-          mockedRequest.requestLevel = REQUEST_LEVEL_TYPES.ITEM;
-          mockedRequest.item = mockedItem;
-          mockedRequest.itemId = 'itemId';
-        });
 
         it('should execute `ItemDetail` with passed props', () => {
+          renderComponent({
+            mockedRequest: {
+              ...mockedRequest,
+              item: mockedItem,
+              requestLevel: REQUEST_LEVEL_TYPES.ITEM,
+            },
+          });
+
           const expectedResult = {
             item: {
               id: mockedRequest.itemId,
@@ -304,15 +318,24 @@ describe('RequestForm', () => {
 
   describe('when `TLR` is disabled', () => {
     beforeAll(() => {
-      mockedTlrSettings.titleLevelRequestsFeatureEnabled = false;
-      mockedRequest.id = null;
+      mockedTlrSettings = {
+        titleLevelRequestsFeatureEnabled: false,
+      };
     });
 
     it('should not display `TLR` checkbox', () => {
+      render(
+        renderComponent()
+      );
+
       expect(screen.queryByTestId(testIds.tlrCheckbox)).not.toBeInTheDocument();
     });
 
     it('should set form `createTitleLevelRequest` value to false', () => {
+      render(
+        renderComponent()
+      );
+
       expect(mockedChangeFunction).toHaveBeenCalledWith('createTitleLevelRequest', false);
     });
   });

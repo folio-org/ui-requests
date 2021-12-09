@@ -30,6 +30,7 @@ import {
   requestStatuses,
   requestTypesMap,
   REQUEST_LEVEL_TYPES,
+  REQUEST_TYPES,
 } from './constants';
 
 import css from './requests.css';
@@ -317,10 +318,7 @@ export const getInstanceRequestTypeOptions = (items) => {
 
   if (availableItems.length > 0) {
     return [
-      {
-        id: requestTypeOptionMap[requestTypesMap.PAGE],
-        value: requestTypesMap.PAGE,
-      },
+      REQUEST_TYPES[requestTypesMap.PAGE],
     ];
   }
 
@@ -328,21 +326,14 @@ export const getInstanceRequestTypeOptions = (items) => {
 
   if (missedItems.length > 0 && items.length === missedItems.length) {
     return [
-      {
-        id: requestTypeOptionMap[requestTypesMap.HOLD],
-        value: requestTypesMap.HOLD,
-      },
+      REQUEST_TYPES[requestTypesMap.HOLD],
     ];
   }
 
   return [
-    {
-      id: requestTypeOptionMap[requestTypesMap.HOLD],
-      value: requestTypesMap.HOLD,
-    },
-    {
-      id: requestTypeOptionMap[requestTypesMap.RECALL],
-      value: requestTypesMap.RECALL,
-    },
+    REQUEST_TYPES[requestTypesMap.HOLD],
+    REQUEST_TYPES[requestTypesMap.RECALL],
   ];
 };
+
+export const getInstanceQueryString = (hrid, id) => `("hrid"=="${hrid}" or "id"=="${id || hrid}")`;

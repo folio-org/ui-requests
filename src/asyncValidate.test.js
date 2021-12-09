@@ -1,4 +1,7 @@
+import '../test/jest/__mock__';
+
 import { asyncValidateInstance } from './asyncValidate';
+import { getInstanceQueryString } from './utils';
 
 describe('asyncValidateInstance', () => {
   const mockedValues = {
@@ -26,7 +29,8 @@ describe('asyncValidateInstance', () => {
   });
 
   it('should return null if instance is founded', async () => {
-    const expectedResult = `("hrid"=="${mockedValues.instance.hrid}" or "id"=="${mockedValues.instanceId}")`;
+    const { instance:{ hrid }, instanceId } = mockedValues;
+    const expectedResult = getInstanceQueryString(hrid, instanceId);
 
     expect(await asyncValidateInstance(mockedValues, mockedProps)).toBe(null);
     expect(mockedReset).toHaveBeenCalled();

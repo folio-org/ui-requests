@@ -1,6 +1,7 @@
 import { isEmpty } from 'lodash';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { getInstanceQueryString } from './utils';
 
 function asyncValidateItem(values, props) {
   const uv = props.parentMutator.itemUniquenessValidator;
@@ -28,13 +29,15 @@ function asyncValidateUser(values, props) {
 
 export const asyncValidateInstance = (values, props) => {
   const uv = props.parentMutator.instanceUniquenessValidator;
-  const query = `("hrid"=="${values.instance.hrid}" or "id"=="${values.instanceId}")`;
+  const { instance:{ hrid }, instanceId } = values;
+  const query = getInstanceQueryString(hrid, instanceId);
 
   uv.reset();
+
   return uv.GET({ params: { query } }).then((instances) => {
-    return (instances.length < 1)
-      ? { hrid: <FormattedMessage id="ui-requests.errors.instanceUuidOrHridDoesNotExist" /> }
-      : null;
+    return instances.length
+      ? null
+      : { hrid: <FormattedMessage id="ui-requests.errors.instanceUuidOrHridDoesNotExist" /> };
   });
 };
 
@@ -54,7 +57,10 @@ export default async function asyncValidate(values, dispatch, props) {
 
   if ((values?.instance?.hrid || values?.instanceId) && !values?.item?.barcode && !asyncErrors?.instance?.hrid) {
     const error = await asyncValidateInstance(values, props);
-    if (error) errors.instance = error;
+
+    if (error) {
+      errors.instance = error;
+    }
   }
 
   if (asyncErrors) {

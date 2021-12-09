@@ -23,6 +23,7 @@ import {
   pick,
   isBoolean,
   isString,
+  isUndefined,
 } from 'lodash';
 
 import { Pluggable } from '@folio/stripes/core';
@@ -81,6 +82,12 @@ import {
 } from './utils';
 
 import css from './requests.css';
+
+const RESOURCE_TYPES = {
+  ITEM: 'item',
+  INSTANCE: 'instance',
+  USER: 'user',
+};
 
 class RequestForm extends React.Component {
   static propTypes = {
@@ -146,7 +153,13 @@ class RequestForm extends React.Component {
     super(props);
 
     const { request } = props;
-    const { requester, requesterId, item, loan, instance } = (request || {});
+    const {
+      requester,
+      requesterId,
+      item,
+      loan,
+      instance,
+    } = (request || {});
 
     const { titleLevelRequestsFeatureEnabled } = this.getTlrSettings();
 
@@ -447,7 +460,7 @@ class RequestForm extends React.Component {
       isUserLoading: true,
     });
 
-    findResource('user', value, fieldName)
+    findResource(RESOURCE_TYPES.USER, value, fieldName)
       .then((result) => {
         this.setState({ isAwaitingForProxySelection: true });
 
@@ -641,7 +654,7 @@ class RequestForm extends React.Component {
       requestTypeOptions: [],
     });
 
-    return findResource('item', value, key)
+    return findResource(RESOURCE_TYPES.ITEM, value, key)
       .then((result) => {
         if (!result || result.totalRecords === 0) {
           this.setState({
@@ -680,7 +693,9 @@ class RequestForm extends React.Component {
   }
 
   findInstanceRelatedResources(instance) {
-    if (!instance) return null;
+    if (!instance) {
+      return null;
+    }
 
     const { findResource } = this.props;
 
@@ -702,7 +717,7 @@ class RequestForm extends React.Component {
       requestTypeOptions: [],
     });
 
-    return findResource('instance', value)
+    return findResource(RESOURCE_TYPES.INSTANCE, value)
       .then((result) => {
         if (!result || result.totalRecords === 0) {
           this.setState({
@@ -732,19 +747,27 @@ class RequestForm extends React.Component {
       .then(_ => this.props.asyncValidate());
   }
 
-  setInstanceRequestTypeOptions = async (instance) => {
-    if (!instance) return;
-
+  getInstanceItems = async (instanceId) => {
     const { findResource } = this.props;
 
-    const { items: itemsRelatedToInstance } = await findResource('holding', instance.id, 'instanceId')
+    const { items } = await findResource('holding', instanceId, 'instanceId')
       .then(responce => {
         const holdingRecordId = responce.holdingsRecords[0].id;
 
-        return findResource('item', holdingRecordId, 'holdingsRecordId');
+        return findResource(RESOURCE_TYPES.ITEM, holdingRecordId, 'holdingsRecordId');
       });
 
-    const requestTypeOptions = getInstanceRequestTypeOptions(itemsRelatedToInstance);
+    return items;
+  }
+
+  setInstanceRequestTypeOptions = async (instance) => {
+    if (!instance) {
+      return;
+    }
+
+    const instanceItems = await this.getInstanceItems(instance.id);
+
+    const requestTypeOptions = getInstanceRequestTypeOptions(instanceItems);
 
     this.setState({ requestTypeOptions });
   }
@@ -774,10 +797,10 @@ class RequestForm extends React.Component {
       e.preventDefault();
 
       switch (element) {
-        case 'item':
+        case RESOURCE_TYPES.ITEM:
           this.onItemClick();
           break;
-        case 'instance':
+        case RESOURCE_TYPES.INSTANCE:
           this.onInstanceClick();
           break;
         default:
@@ -833,7 +856,7 @@ class RequestForm extends React.Component {
   }
 
   requireEnterInstance = () => {
-    if (this.state.selectedInstance === undefined) {
+    if (isUndefined(this.state.selectedInstance)) {
       return <FormattedMessage id="ui-requests.errors.selectInstanceRequired" />;
     }
 
@@ -923,7 +946,9 @@ class RequestForm extends React.Component {
       return this.setState({ blocked: true });
     }
 
-    if (!requestExpirationDate) unset(requestData, 'requestExpirationDate');
+    if (!requestExpirationDate) {
+      unset(requestData, 'requestExpirationDate');
+    }
     if (holdShelfExpirationDate) {
       // Recombine the values from datepicker and timepicker into a single date/time
       const date = moment.tz(holdShelfExpirationDate, timeZone).format('YYYY-MM-DD');
@@ -957,11 +982,11 @@ class RequestForm extends React.Component {
 
     if (requestData.requestLevel === REQUEST_LEVEL_TYPES.TITLE) {
       unset(requestData, 'itemId');
-      unset(requestData, 'item');
+      unset(requestData, RESOURCE_TYPES.ITEM);
     }
 
     unset(requestData, 'createTitleLevelRequest');
-    unset(requestData, 'instance');
+    unset(requestData, RESOURCE_TYPES.INSTANCE);
 
     return this.props.onSubmit(requestData);
   };
@@ -1212,7 +1237,7 @@ class RequestForm extends React.Component {
                                         component={TextField}
                                         forwardRef
                                         ref={this.instanceValueRef}
-                                        onKeyDown={e => this.onKeyDown(e, 'instance')}
+                                        onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.INSTANCE)}
                                         validate={this.requireEnterInstance}
                                       />
                                     )}
@@ -1276,7 +1301,7 @@ class RequestForm extends React.Component {
                                         component={TextField}
                                         forwardRef
                                         ref={this.itemBarcodeRef}
-                                        onKeyDown={e => this.onKeyDown(e, 'item')}
+                                        onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.ITEM)}
                                         validate={this.requireEnterItem}
                                       />
                                     )}
