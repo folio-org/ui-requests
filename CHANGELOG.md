@@ -8,10 +8,10 @@
 * When newly added patron is deleted after making and canceling request, requests page is unstable. Refs UIREQ-672.
 * Import `stripes-core` components via `@folio/stripes`. Refs UIREQ-609.
 * Create reusable component for render title level information. Refs UIREQ-654.
-* TLR - data migration for request list, view, create, edit, duplicate. Refs UIREQ-664.
-* TLR - data migration for dialogboxes and reorder list. Refs UIREQ-665.
-* TLR - data migration for hold shelf clearance report. Refs UIREQ-677.
-* TLR - data migration, move `holdingsRecordId`. Refs UIREQ-685.
+* BREAKING: TLR - data migration for request list, view, create, edit, duplicate. Refs UIREQ-664.
+* BREAKING: TLR - data migration for dialogboxes and reorder list. Refs UIREQ-665.
+* BREAKING: TLR - data migration for hold shelf clearance report. Refs UIREQ-677.
+* BREAKING: TLR - data migration, move `holdingsRecordId`. Refs UIREQ-685.
 
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)
