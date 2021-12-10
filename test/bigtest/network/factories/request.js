@@ -1,6 +1,8 @@
 import { Factory, trait } from 'miragejs';
 import faker from 'faker';
 
+import { REQUEST_LEVEL_TYPES } from '../../../../src/constants';
+
 export default Factory.extend({
   id: (i) => 'requestId' + i,
   // requestType: () => faker.random.arrayElement(['Hold', 'Page', 'Recall']),
@@ -25,6 +27,7 @@ export default Factory.extend({
     const item = instance.holdings.models[0].items.models[0].attrs;
 
     request.update({
+      requestLevel: REQUEST_LEVEL_TYPES.ITEM,
       holdingsRecordId: item.holdingsRecordId,
       instanceId: item.instanceId,
       instance: {
@@ -65,6 +68,7 @@ export default Factory.extend({
       const item = instance.holdings.models[0].items.models[0].attrs;
 
       request.update({
+        requestLevel: REQUEST_LEVEL_TYPES.ITEM,
         holdingsRecordId: item.holdingsRecordId,
         instanceId: item.instanceId,
         instance: {
@@ -107,6 +111,7 @@ export default Factory.extend({
       });
 
       request.update({
+        requestLevel: REQUEST_LEVEL_TYPES.ITEM,
         holdingsRecordId: item.holdingsRecordId,
         instanceId: item.instanceId,
         instance: {

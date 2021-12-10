@@ -5,11 +5,16 @@ import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
 import { openRequestStatusFilters } from './utils';
+import {
+  REQUEST_LEVEL_TYPES,
+  REQUEST_DATE,
+} from './constants';
 
 export default function PositionLink({ request }) {
   const queuePosition = get(request, 'position');
   const barcode = get(request, 'item.barcode');
-  const openRequestsPath = `/requests?filters=${openRequestStatusFilters}&query=${request.itemId}&sort=Request Date`;
+  const id = request[request.requestLevel === REQUEST_LEVEL_TYPES.ITEM ? 'itemId' : 'instanceId'];
+  const openRequestsPath = `/requests?filters=${openRequestStatusFilters}&query=${id}&sort=${REQUEST_DATE}`;
 
   return (request && barcode ?
     <div>

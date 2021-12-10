@@ -14,7 +14,6 @@ import TitleInformation, {
   CONTRIBUTOR_SEPARATOR,
   MAX_IDENTIFIERS_COUNT,
   getContributors,
-  getPublications,
   getEditions,
   getIdentifiers,
 } from './TitleInformation';
@@ -77,70 +76,105 @@ describe('TitleInformation', () => {
     identifiers,
   };
 
-  beforeEach(() => {
-    render(
-      <TitleInformation {...defaultProps} />
-    );
-  });
-
   afterEach(() => {
     KeyValue.mockClear();
   });
 
-  it('should render title section', () => {
-    const expectedProps = {
-      label: labelIds.title,
-      value: title,
-    };
+  describe('with default props', () => {
+    beforeEach(() => {
+      render(
+        <TitleInformation {...defaultProps} />
+      );
+    });
 
-    expect(KeyValue).toHaveBeenNthCalledWith(orderOfKeyValueCall.title, expectedProps, {});
+    it('should render title level requests section', () => {
+      const expectedProps = {
+        label: labelIds.titleLevelRequests,
+      };
+
+      expect(KeyValue).toHaveBeenNthCalledWith(
+        orderOfKeyValueCall.titleLevelRequests,
+        expect.objectContaining(expectedProps),
+        {}
+      );
+    });
+
+    it('should render title section', () => {
+      const expectedProps = {
+        label: labelIds.title,
+      };
+
+      expect(KeyValue).toHaveBeenNthCalledWith(
+        orderOfKeyValueCall.title,
+        expect.objectContaining(expectedProps),
+        {}
+      );
+    });
+
+    it('should render contributors section', () => {
+      const expectedProps = {
+        label: labelIds.contributors,
+        value: expects.contributors,
+      };
+
+      expect(KeyValue).toHaveBeenNthCalledWith(orderOfKeyValueCall.contributors, expectedProps, {});
+    });
+
+    it('should render title publicationsDate', () => {
+      const expectedProps = {
+        label: labelIds.publicationsDate,
+        value: expects.publications,
+      };
+
+      expect(KeyValue).toHaveBeenNthCalledWith(orderOfKeyValueCall.publicationsDate, expectedProps, {});
+    });
+
+    it('should render title editions', () => {
+      const expectedProps = {
+        label: labelIds.editions,
+        value: expects.editions,
+      };
+
+      expect(KeyValue).toHaveBeenNthCalledWith(orderOfKeyValueCall.editions, expectedProps, {});
+    });
+
+    it('should render title identifiers', () => {
+      const expectedProps = {
+        label: labelIds.identifiers,
+        value: expects.identifiers,
+      };
+
+      expect(KeyValue).toHaveBeenNthCalledWith(orderOfKeyValueCall.identifiers, expectedProps, {});
+    });
   });
 
-  it('should render title section', () => {
-    const expectedProps = {
-      label: labelIds.contributors,
-      value: expects.contributors,
-    };
+  describe('when titleLevelRequestsLink is false', () => {
+    beforeEach(() => {
+      render(
+        <TitleInformation
+          {...defaultProps}
+          titleLevelRequestsLink={false}
+        />
+      );
+    });
 
-    expect(KeyValue).toHaveBeenNthCalledWith(orderOfKeyValueCall.contributors, expectedProps, {});
-  });
+    it('should render title level requests section', () => {
+      const expectedProps = {
+        label: labelIds.titleLevelRequests,
+        value: titleLevelRequestsCount,
+      };
 
-  it('should render title publicationsDate', () => {
-    const expectedProps = {
-      label: labelIds.publicationsDate,
-      value: expects.publications,
-    };
-
-    expect(KeyValue).toHaveBeenNthCalledWith(orderOfKeyValueCall.publicationsDate, expectedProps, {});
-  });
-
-  it('should render title editions', () => {
-    const expectedProps = {
-      label: labelIds.editions,
-      value: expects.editions,
-    };
-
-    expect(KeyValue).toHaveBeenNthCalledWith(orderOfKeyValueCall.editions, expectedProps, {});
-  });
-
-  it('should render title identifiers', () => {
-    const expectedProps = {
-      label: labelIds.identifiers,
-      value: expects.identifiers,
-    };
-
-    expect(KeyValue).toHaveBeenNthCalledWith(orderOfKeyValueCall.identifiers, expectedProps, {});
+      expect(KeyValue).toHaveBeenNthCalledWith(
+        orderOfKeyValueCall.titleLevelRequests,
+        expectedProps,
+        {}
+      );
+    });
   });
 
   describe('getContributors', () => {
     it('should return contributors', () => {
       expect(getContributors(contributors, CONTRIBUTOR_SEPARATOR)).toBe(expects.contributors);
-    });
-  });
-
-  describe('getPublications', () => {
-    it('should return publications', () => {
-      expect(getPublications(publications, TEXT_SEPARATOR)).toBe(expects.publications);
     });
   });
 
