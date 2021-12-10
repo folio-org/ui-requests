@@ -197,5 +197,11 @@
     "requestQueue.refresh": "Warteliste aktualisieren",
     "items.selectItem": "Exemplar auswählen",
     "items.instanceItems": "Andere Exemplare in {title}",
-    "items.instanceItems.notFound": "Keine Exemplare gefunden"
+    "items.instanceItems.notFound": "Keine Exemplare gefunden",
+    "titleInformation.titleLevelRequests": "Title level requests",
+    "titleInformation.title": "Title",
+    "titleInformation.contributors": "Contributor",
+    "titleInformation.publicationsDate": "Publication date",
+    "titleInformation.editions": "Edition",
+    "titleInformation.identifiers": "ISBN(s)"
 }
