@@ -14,6 +14,7 @@
 * TLR - data migration, move `holdingsRecordId`. Refs UIREQ-685.
 * Create title level request checkbox. Refs UIREQ-655.
 * Update request results page. Refs UIREQ-614.
+* Update request details pane. Refs UIREQ-613.
 
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)

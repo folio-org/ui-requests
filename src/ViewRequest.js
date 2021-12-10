@@ -43,11 +43,15 @@ import {
 
 import CancelRequestDialog from './CancelRequestDialog';
 import ItemDetail from './ItemDetail';
+import TitleInformation from './components/TitleInformation';
 import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
 import PositionLink from './PositionLink';
 import MoveRequestManager from './MoveRequestManager';
-import { requestStatuses } from './constants';
+import {
+  requestStatuses,
+  REQUEST_LEVEL_TYPES,
+} from './constants';
 import {
   toUserAddress,
   isDelivery,
@@ -128,6 +132,7 @@ class ViewRequest extends React.Component {
       request: {},
       accordions: {
         'request-info': true,
+        'title-info': true,
         'item-info': true,
         'requester-info': true,
         'staff-notes': true,
@@ -192,7 +197,8 @@ class ViewRequest extends React.Component {
     delete updatedRecord.location;
     delete updatedRecord.loan;
     delete updatedRecord.itemStatus;
-    delete updatedRecord.requestCount;
+    delete updatedRecord.titleRequestCount;
+    delete updatedRecord.itemRequestCount;
     delete updatedRecord.holdShelfExpirationTime;
 
     this.props.mutator.selectedRequest.PUT(updatedRecord).then(() => {
@@ -369,6 +375,7 @@ class ViewRequest extends React.Component {
       isCancellingRequest,
       moveRequest,
     } = this.state;
+    const { requestLevel } = request;
 
     const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');
@@ -468,7 +475,7 @@ class ViewRequest extends React.Component {
               </Icon>
             </Button>
           </IfPermission>
-          {isRequestNotFilled &&
+          {requestLevel === REQUEST_LEVEL_TYPES.ITEM && isRequestNotFilled &&
             <IfPermission perm="ui-requests.moveRequest">
               <Button
                 id="move-request"
@@ -526,25 +533,52 @@ class ViewRequest extends React.Component {
         <TitleManager record={get(request, ['instance', 'title'])} />
         <AccordionSet accordionStatus={accordions} onToggle={this.onToggleSection}>
           <Accordion
+            id="title-info"
+            label={
+              <FormattedMessage
+                id="ui-requests.title.information"
+              />
+            }
+          >
+            <TitleInformation
+              instanceId={request.instanceId}
+              titleLevelRequestsCount={request.titleRequestCount}
+              title={request.instance.title}
+              contributors={request.instance.contributorNames}
+              publications={request.instance.publications}
+              editions={request.instance.editions}
+              identifiers={request.instance.identifiers}
+              titleLevelRequestsLink={false}
+            />
+          </Accordion>
+          <Accordion
             id="item-info"
             label={
               <FormattedMessage
                 id="ui-requests.item.information"
-                values={{ required: '' }}
               />
             }
           >
-            <ItemDetail
-              item={{
-                ...request.item,
-                ...request.instance,
-                id: request.itemId,
-                instanceId: request.instanceId,
-                holdingsRecordId: request.holdingsRecordId,
-              }}
-              loan={request.loan}
-              requestCount={request.requestCount}
-            />
+            {requestLevel === REQUEST_LEVEL_TYPES.TITLE
+              ? (
+                <FormattedMessage
+                  id="ui-requests.item.noInformation"
+                />
+              )
+              : (
+                <ItemDetail
+                  item={{
+                    ...request.item,
+                    ...request.instance,
+                    id: request.itemId,
+                    instanceId: request.instanceId,
+                    holdingsRecordId: request.holdingsRecordId,
+                  }}
+                  loan={request.loan}
+                  requestCount={request.itemRequestCount}
+                />
+              )
+            }
           </Accordion>
           <Accordion
             id="request-info"
@@ -586,6 +620,12 @@ class ViewRequest extends React.Component {
                 <KeyValue
                   label={<FormattedMessage id="ui-requests.position" />}
                   value={<PositionLink request={request} />}
+                />
+              </Col>
+              <Col xs={3}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.requestLevel" />}
+                  value={<FormattedMessage id={`ui-requests.${requestLevel.toLowerCase()}Level`} />}
                 />
               </Col>
               {request.cancellationReasonId &&

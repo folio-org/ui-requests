@@ -42,7 +42,7 @@ describe('View request page', () => {
     });
 
     beforeEach(async function () {
-      request = this.server.create('request', { requestCount: requestsOnItemValue, status: 'Open - Awaiting pickup' });
+      request = this.server.create('request', { itemRequestCount: requestsOnItemValue, status: 'Open - Awaiting pickup' });
       this.visit(`/requests/view/${request.id}`);
     });
 

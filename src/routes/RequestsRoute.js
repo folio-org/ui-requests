@@ -83,6 +83,10 @@ const urls = {
     const query = stringify({ query: `(itemId=="${value}" and status=Open)` });
     return `request-storage/requests?${query}`;
   },
+  requestsForInstance: (value) => {
+    const query = stringify({ query: `(instanceId=="${value}" and requestLevel=="${REQUEST_LEVEL_TYPES.TITLE}" and status=Open)` });
+    return `request-storage/requests?${query}`;
+  },
   requestPreferences: (value) => {
     const query = stringify({ query: `(userId=="${value}")` });
     return `request-preference-storage/request-preference?${query}`;
@@ -553,20 +557,34 @@ class RequestsRoute extends React.Component {
 
   // Called as a map function
   addRequestFields(r) {
+    const { requestLevel } = r;
+
     return Promise.all(
       [
         this.findResource('user', r.requesterId),
-        this.findResource('requestsForItem', r.itemId),
+        this.findResource('requestsForInstance', r.instanceId),
+        ...(requestLevel === REQUEST_LEVEL_TYPES.ITEM
+          ? [
+            this.findResource('requestsForItem', r.itemId)
+          ]
+          : []),
       ],
-    ).then(([users, requests]) => {
+    ).then(([users, titleRequests, itemRequests]) => {
       // Each element of the promises array returns an array of results, but in
       // this case, there should only ever be one result for each.
       const requester = get(users, 'users[0]', null);
-      const requestCount = get(requests, 'totalRecords', 0);
+      const titleRequestCount = get(titleRequests, 'totalRecords', 0);
+      const dynamicProperties = {};
+
+      if (requestLevel === REQUEST_LEVEL_TYPES.ITEM) {
+        dynamicProperties.itemRequestCount = get(itemRequests, 'totalRecords', 0);
+      }
+
       return {
         ...r,
         requester,
-        requestCount,
+        titleRequestCount,
+        ...dynamicProperties,
       };
     });
   }

@@ -206,3 +206,5 @@ export const REQUEST_LEVEL_TYPES = {
   ITEM: 'Item',
   TITLE: 'Title',
 };
+
+export const REQUEST_DATE = 'Request Date';
