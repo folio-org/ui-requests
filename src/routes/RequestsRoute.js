@@ -61,6 +61,7 @@ import {
   RequestsFilters,
   RequestsFiltersConfig,
 } from '../components/RequestsFilters';
+import { getFormattedYears } from './utils';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -121,6 +122,7 @@ class RequestsRoute extends React.Component {
             {
               'title': 'instance.title',
               'instanceId': 'instanceId',
+              'publications': 'instance.publications',
               'itemBarcode': 'item.barcode',
               'type': 'requestType',
               'requester': 'requester.lastName requester.firstName',
@@ -340,6 +342,7 @@ class RequestsRoute extends React.Component {
     this.columnLabels = {
       requestDate: formatMessage({ id: 'ui-requests.requests.requestDate' }),
       title: formatMessage({ id: 'ui-requests.requests.title' }),
+      year: formatMessage({ id: 'ui-requests.requests.year' }),
       itemBarcode: formatMessage({ id: 'ui-requests.requests.itemBarcode' }),
       type: formatMessage({ id: 'ui-requests.requests.type' }),
       requestStatus: formatMessage({ id: 'ui-requests.requests.status' }),
@@ -831,6 +834,7 @@ class RequestsRoute extends React.Component {
       'requestStatus': rq => <FormattedMessage id={requestStatusesTranslations[rq.status]} />,
       'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
       'title': rq => (rq.instance ? rq.instance.title : ''),
+      'year': rq => getFormattedYears(rq.instance?.publications),
     };
 
     const actionMenu = ({ onToggle, renderColumnsMenu }) => (
@@ -940,9 +944,10 @@ class RequestsRoute extends React.Component {
             columnWidths={{
               requestDate: { max: 165 },
               title: { max: 300 },
-              position: { max: 100 },
+              year: { max: 58 },
+              position: { max: 150 },
               requestType: { max: 101 },
-              itemBarcode: { max: 115 },
+              itemBarcode: { max: 140 },
               type: { max: 100 },
             }}
             columnMapping={this.columnLabels}
