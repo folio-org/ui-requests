@@ -56,6 +56,7 @@ import {
   toUserAddress,
   isDelivery,
   getFullName,
+  getTlrSettings,
 } from './utils';
 import urls from './routes/urls';
 
@@ -97,6 +98,9 @@ class ViewRequest extends React.Component {
     paneWidth: PropTypes.string,
     patronGroups: PropTypes.arrayOf(PropTypes.object),
     parentMutator: PropTypes.object,
+    parentResources: PropTypes.shape({
+      configs: PropTypes.object.isRequired,
+    }).isRequired,
     resources: PropTypes.shape({
       selectedRequest: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
@@ -128,6 +132,8 @@ class ViewRequest extends React.Component {
   constructor(props) {
     super(props);
 
+    const { titleLevelRequestsFeatureEnabled } = getTlrSettings(props.parentResources.configs.records[0]?.value);
+
     this.state = {
       request: {},
       accordions: {
@@ -138,6 +144,7 @@ class ViewRequest extends React.Component {
         'staff-notes': true,
       },
       moveRequest: false,
+      titleLevelRequestsFeatureEnabled,
     };
 
     const { stripes: { connect } } = props;
@@ -163,12 +170,21 @@ class ViewRequest extends React.Component {
   componentDidUpdate(prevProps) {
     const prevRQ = prevProps.resources.selectedRequest;
     const currentRQ = this.props.resources.selectedRequest;
+    const prevSettings = prevProps.parentResources.configs.records[0]?.value;
+    const currentSettings = this.props.parentResources.configs.records[0]?.value;
 
     // Only update if actually needed (otherwise, this gets called way too often)
     if (prevRQ && currentRQ && currentRQ.hasLoaded) {
       if ((!isEqual(prevRQ.records[0], currentRQ.records[0]))) {
         this.loadFullRequest(currentRQ.records[0]);
       }
+    }
+
+    if (prevSettings !== currentSettings) {
+      const { titleLevelRequestsFeatureEnabled } = getTlrSettings(currentSettings);
+
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ titleLevelRequestsFeatureEnabled });
     }
   }
 
@@ -414,6 +430,10 @@ class ViewRequest extends React.Component {
 
     const actionMenu = ({ onToggle }) => {
       if (isRequestClosed) {
+        if (request.requestLevel === REQUEST_LEVEL_TYPES.TITLE && !this.state.titleLevelRequestsFeatureEnabled) {
+          return null;
+        }
+
         return (
           <IfPermission perm="ui-requests.create">
             <Button
