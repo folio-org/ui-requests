@@ -39,8 +39,10 @@ export function getFullName(user) {
   const lastName = get(userNameObj, ['lastName'], '');
   const firstName = get(userNameObj, ['firstName'], '');
   const middleName = get(userNameObj, ['middleName'], '');
+  const preferredFirstName = get(userNameObj, ['preferredFirstName'], '');
+  const displayedFirstName = preferredFirstName || firstName;
 
-  return `${lastName}${firstName ? ', ' : ' '}${firstName} ${middleName}`;
+  return `${lastName}${displayedFirstName ? ', ' : ' '}${displayedFirstName} ${middleName}`;
 }
 
 export const createUserHighlightBoxLink = (linkText, id) => {
