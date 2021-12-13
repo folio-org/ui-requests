@@ -171,7 +171,7 @@
     "permission.reorderQueue": "Richieste: riordina coda",
     "permission.all": "Richieste: tutte le autorizzazioni",
     "permission.view": "Richieste: visualizza",
-    "permission.create": "Richieste: visualizza, crea",
+    "permission.create": "Richieste: Visualizzare, creare",
     "permission.edit": "Richieste: visualizza, crea, annulla",
     "notes.newStaffNote": "Nuova nota per lo staff",
     "notes.staffNotes": "Note per lo staff",
@@ -197,5 +197,11 @@
     "requestQueue.refresh": "Refresh queue",
     "items.selectItem": "Select item",
     "items.instanceItems": "Other items in {title}",
-    "items.instanceItems.notFound": "No items found"
+    "items.instanceItems.notFound": "No items found",
+    "titleInformation.titleLevelRequests": "Title level requests",
+    "titleInformation.title": "Title",
+    "titleInformation.contributors": "Contributor",
+    "titleInformation.publicationsDate": "Publication date",
+    "titleInformation.editions": "Edition",
+    "titleInformation.identifiers": "ISBN(s)"
 }
