@@ -48,6 +48,7 @@ import {
   duplicateRequest,
   convertToSlipData,
   getTlrSettings,
+  getInstanceQueryString,
 } from '../utils';
 import packageInfo from '../../package';
 import {
@@ -75,6 +76,11 @@ const urls = {
     const query = stringify({ query: `(${idType}=="${value}")` });
     return `inventory/items?${query}`;
   },
+  instance: (value) => {
+    const query = stringify(getInstanceQueryString(value));
+
+    return `inventory/instances?${query}`;
+  },
   loan: (value) => {
     const query = stringify({ query: `(itemId=="${value}") and status=Open` });
     return `circulation/loans?${query}`;
@@ -85,6 +91,7 @@ const urls = {
   },
   requestsForInstance: (value) => {
     const query = stringify({ query: `(instanceId=="${value}" and requestLevel=="${REQUEST_LEVEL_TYPES.TITLE}" and status=Open)` });
+
     return `request-storage/requests?${query}`;
   },
   requestPreferences: (value) => {
@@ -177,6 +184,13 @@ class RequestsRoute extends React.Component {
       records: 'users',
       accumulate: 'true',
       path: 'users',
+      fetch: false,
+    },
+    instanceUniquenessValidator: {
+      type: 'okapi',
+      records: 'instances',
+      accumulate: true,
+      path: 'inventory/instances',
       fetch: false,
     },
     patronBlocks: {

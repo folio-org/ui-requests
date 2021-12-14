@@ -208,3 +208,18 @@ export const REQUEST_LEVEL_TYPES = {
 };
 
 export const REQUEST_DATE = 'Request Date';
+
+export const REQUEST_TYPES = {
+  [requestTypesMap.PAGE]:{
+    id: requestTypeOptionMap[requestTypesMap.PAGE],
+    value: requestTypesMap.PAGE,
+  },
+  [requestTypesMap.HOLD]: {
+    id: requestTypeOptionMap[requestTypesMap.HOLD],
+    value: requestTypesMap.HOLD,
+  },
+  [requestTypesMap.RECALL]: {
+    id: requestTypeOptionMap[requestTypesMap.RECALL],
+    value: requestTypesMap.RECALL,
+  },
+};

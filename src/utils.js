@@ -30,6 +30,7 @@ import {
   requestStatuses,
   requestTypesMap,
   REQUEST_LEVEL_TYPES,
+  REQUEST_TYPES,
 } from './constants';
 
 import css from './requests.css';
@@ -311,3 +312,28 @@ export const getRequestLevelValue = (value) => {
     ? REQUEST_LEVEL_TYPES.TITLE
     : REQUEST_LEVEL_TYPES.ITEM;
 };
+
+export const getInstanceRequestTypeOptions = (items) => {
+  const availableItems = items.filter(item => item.status.name === itemStatuses.AVAILABLE);
+
+  if (availableItems.length > 0) {
+    return [
+      REQUEST_TYPES[requestTypesMap.PAGE],
+    ];
+  }
+
+  const missedItems = items.filter(item => item.status.name === itemStatuses.MISSING);
+
+  if (missedItems.length > 0 && items.length === missedItems.length) {
+    return [
+      REQUEST_TYPES[requestTypesMap.HOLD],
+    ];
+  }
+
+  return [
+    REQUEST_TYPES[requestTypesMap.HOLD],
+    REQUEST_TYPES[requestTypesMap.RECALL],
+  ];
+};
+
+export const getInstanceQueryString = (hrid, id) => `("hrid"=="${hrid}" or "id"=="${id || hrid}")`;
