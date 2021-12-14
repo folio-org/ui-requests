@@ -197,5 +197,11 @@
     "requestQueue.refresh": "Atualizar fila",
     "items.selectItem": "Selecionar item",
     "items.instanceItems": "Outros itens em {title}",
-    "items.instanceItems.notFound": "Nenhum item encontrado"
+    "items.instanceItems.notFound": "Nenhum item encontrado",
+    "titleInformation.titleLevelRequests": "Title level requests",
+    "titleInformation.title": "Title",
+    "titleInformation.contributors": "Contributor",
+    "titleInformation.publicationsDate": "Publication date",
+    "titleInformation.editions": "Edition",
+    "titleInformation.identifiers": "ISBN(s)"
 }
