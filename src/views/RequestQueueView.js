@@ -11,7 +11,6 @@ import {
   ConfirmationModal,
   ErrorModal,
   FormattedDate,
-  FormattedTime,
   KeyValue,
   Pane,
   PaneHeaderIconButton,
@@ -19,7 +18,6 @@ import {
   Paneset,
   Row,
 } from '@folio/stripes/components';
-import { AppIcon } from '@folio/stripes/core';
 import { effectiveCallNumber } from '@folio/stripes/util';
 
 import {
@@ -27,7 +25,6 @@ import {
   errorMessages,
 } from '../constants';
 import {
-  getFullName,
   isNotYetFilled,
   isPageRequest,
 } from '../utils';
@@ -37,6 +34,11 @@ import {
 } from '../components';
 
 import css from './RequestQueueView.css';
+import {
+  COLUMN_MAP,
+  COLUMN_WIDTHS,
+  formatter,
+} from './constants';
 
 const COLUMN_NAMES = [
   'position',
@@ -50,44 +52,6 @@ const COLUMN_NAMES = [
   'requestExpirationDate',
   'holdShelfExpireDate',
 ];
-
-const COLUMN_WIDTHS = {
-  position: { max: 74 },
-  requestType: { max: 101 },
-  status: { max: 198 },
-  pickup: { max: 133 },
-  requester: { max: 223 },
-  requesterBarcode: { max: 178 },
-  patronGroup: { max: 190 },
-  requestDate: { max: 180 },
-  requestExpirationDate: '8%',
-  holdShelfExpireDate: '13%',
-};
-
-const COLUMN_MAP = {
-  position: <FormattedMessage id="ui-requests.requestQueue.position" />,
-  requestType: <FormattedMessage id="ui-requests.requestQueue.requestType" />,
-  status: <FormattedMessage id="ui-requests.requestQueue.requestStatus" />,
-  pickup: <FormattedMessage id="ui-requests.requestQueue.pickup" />,
-  requester: <FormattedMessage id="ui-requests.requestQueue.requesterName" />,
-  requesterBarcode: <FormattedMessage id="ui-requests.requestQueue.requesterBarcode" />,
-  patronGroup: <FormattedMessage id="ui-requests.requestQueue.patronGroup" />,
-  requestDate: <FormattedMessage id="ui-requests.requestQueue.requestDate" />,
-  requestExpirationDate: <FormattedMessage id="ui-requests.requestQueue.requestExpirationDate" />,
-  holdShelfExpireDate: <FormattedMessage id="ui-requests.requestQueue.holdShelfExpirationDate" />,
-};
-
-const formatter = {
-  position: r => (<AppIcon size="small" app="requests">{r.position}</AppIcon>),
-  pickup: r => get(r, 'pickupServicePoint.name') ||
-    ((r.deliveryType) ? <FormattedMessage id="ui-requests.requestQueue.deliveryType" values={{ type: r.deliveryType }} /> : '-'),
-  requester: r => getFullName(r.requester),
-  requesterBarcode: r => r?.requester?.barcode || '-',
-  patronGroup: r => r?.requester?.patronGroup?.group || '-',
-  requestDate: r => (<FormattedTime value={r.requestDate} day="numeric" month="numeric" year="numeric" />),
-  requestExpirationDate: r => (r.requestExpirationDate ? <FormattedDate value={r.requestExpirationDate} /> : '-'),
-  holdShelfExpireDate: r => (r.holdShelfExpirationDate ? <FormattedDate value={r.holdShelfExpirationDate} /> : '-'),
-};
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -333,9 +297,9 @@ class RequestQueueView extends React.Component {
               </Col>
             </Row>
           </div>
-          {isLoading ?
-            <Loading /> :
-            <SortableList
+          {isLoading
+            ? <Loading />
+            : <SortableList
               id="requests-list"
               onDragEnd={this.onDragEnd}
               isRowDraggable={this.isRowDraggable}
@@ -348,7 +312,7 @@ class RequestQueueView extends React.Component {
               isEmptyMessage={
                 <FormattedMessage id="ui-requests.requestQueue.requests.notFound" />
               }
-            /> }
+            />}
         </Pane>
         <Callout ref={this.callout} />
         <ConfirmationModal
