@@ -33,11 +33,7 @@ describe('ItemsDialog', () => {
   };
   const onClose = jest.fn();
   const onRowClick = jest.fn();
-  const testRequest = {
-    instance: {
-      title: 'testTitle',
-    },
-  };
+  const testTitle = 'testTitle';
   const testItems = [{
     requestQueue: 2,
   }, {
@@ -52,7 +48,7 @@ describe('ItemsDialog', () => {
     open: false,
     onClose,
     onRowClick,
-    request: testRequest,
+    title: testTitle,
     items: testItems,
     isLoading: false,
   };

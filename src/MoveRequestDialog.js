@@ -151,7 +151,7 @@ class MoveRequestDialog extends React.Component {
         onRowClick={(_, item) => this.onRowClick(item)}
         isLoading={!!(isLoading || moveInProgress)}
         items={items}
-        request={request}
+        request={request?.instance?.title ?? ''}
         onClose={onClose}
         open={open}
       />

@@ -56,11 +56,7 @@ export const formatter = {
 export const MAX_HEIGHT = 500;
 
 const ItemsDialog = ({
-  request: {
-    instance: {
-      title,
-    },
-  },
+  title,
   onClose,
   open,
   items,
@@ -115,11 +111,7 @@ ItemsDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  request: PropTypes.shape({
-    instance: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
+  title: PropTypes.string.isRequired,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       records: PropTypes.array,

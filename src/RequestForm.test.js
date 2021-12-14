@@ -38,6 +38,7 @@ jest.mock('./PatronBlockModal', () => jest.fn(() => null));
 jest.mock('./CancelRequestDialog', () => jest.fn(() => null));
 jest.mock('./components/TitleInformation', () => jest.fn(() => null));
 jest.mock('./ItemDetail', () => jest.fn(() => null));
+jest.mock('./ItemsDialog', () => jest.fn(() => null));
 jest.mock('./PositionLink', () => jest.fn(() => null));
 
 describe('RequestForm', () => {
