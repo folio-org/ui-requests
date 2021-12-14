@@ -17,6 +17,7 @@
 * Update request details pane. Refs UIREQ-613.
 * Closed TLR should not be able to be duplicated when TLR is disabled. Refs UIREQ-691.
 * Update form for posibility of `Title` level requests. Refs UIREQ-620.
+* Unchecking the Title level request box when it is automatically checked. Refs UIREQ-633.
 
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)

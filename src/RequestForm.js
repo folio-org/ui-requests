@@ -60,6 +60,7 @@ import {
   ErrorModal,
   TitleInformation,
 } from './components';
+import ItemsDialog from './ItemsDialog';
 
 import asyncValidate from './asyncValidate';
 import {
@@ -181,6 +182,9 @@ class RequestForm extends React.Component {
       isAwaitingForProxySelection: false,
       titleLevelRequestsFeatureEnabled,
       isItemOrInstanceLoading: false,
+      isItemsDialogOpen: false,
+      areInstanceItemsBeingLoaded: false,
+      instanceItems: [],
     };
 
     this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
@@ -1020,7 +1024,9 @@ class RequestForm extends React.Component {
     });
   }
 
-  handleTlrCheckboxChange = () => {
+  handleTlrCheckboxChange = (event, newValue) => {
+    const { selectedInstance } = this.state;
+
     this.props.change('item.barcode', null);
     this.props.change('instance.hrid', null);
     this.props.change('instanceId', null);
@@ -1030,7 +1036,37 @@ class RequestForm extends React.Component {
       selectedInstance: undefined,
       requestTypeOptions: [],
     });
+
+    if (!newValue && selectedInstance) {
+      this.setState({
+        isItemsDialogOpen: true,
+        areInstanceItemsBeingLoaded: true,
+      });
+
+      this.getInstanceItems(selectedInstance.id).then((instanceItems) => {
+        this.setState({
+          instanceItems,
+          areInstanceItemsBeingLoaded: false,
+        });
+      });
+    }
   };
+
+  handleItemsDialogClose = () => {
+    this.setState({
+      isItemsDialogOpen: false,
+      instanceItems: [],
+    });
+  }
+
+  handleInstanceItemClick = (event, item) => {
+    this.setState({
+      isItemsDialogOpen: false,
+      instanceItems: [],
+    });
+
+    this.findItem('id', item.id);
+  }
 
   render() {
     const {
@@ -1068,8 +1104,11 @@ class RequestForm extends React.Component {
       isErrorModalOpen,
       isPatronBlocksOverridden,
       isAwaitingForProxySelection,
+      isItemsDialogOpen,
+      areInstanceItemsBeingLoaded,
       proxy,
       requestTypeOptions,
+      instanceItems,
     } = this.state;
 
     const { createTitleLevelRequest } = this.getCurrentFormValues();
@@ -1582,6 +1621,14 @@ class RequestForm extends React.Component {
               viewUserPath={() => this.onViewUserPath(selectedUser, patronGroup)}
               patronBlocks={patronBlocks || []}
               automatedPatronBlocks={automatedPatronBlocks}
+            />
+            <ItemsDialog
+              onClose={this.handleItemsDialogClose}
+              onRowClick={this.handleInstanceItemClick}
+              title={selectedInstance?.title || ''}
+              open={isItemsDialogOpen}
+              isLoading={areInstanceItemsBeingLoaded}
+              items={instanceItems}
             />
             {isErrorModalOpen &&
               <ErrorModal
