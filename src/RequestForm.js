@@ -24,6 +24,7 @@ import {
   isBoolean,
   isString,
   isUndefined,
+  isNil,
 } from 'lodash';
 
 import { Pluggable } from '@folio/stripes/core';
@@ -88,6 +89,7 @@ const RESOURCE_TYPES = {
   ITEM: 'item',
   INSTANCE: 'instance',
   USER: 'user',
+  HOLDING: 'holding',
 };
 
 class RequestForm extends React.Component {
@@ -633,7 +635,7 @@ class RequestForm extends React.Component {
       [
         findResource('loan', item.id),
         findResource('requestsForItem', item.id),
-        findResource('holding', item.holdingsRecordId),
+        findResource(RESOURCE_TYPES.HOLDING, item.holdingsRecordId),
       ],
     ).then((results) => {
       const selectedLoan = results[0].loans[0];
@@ -713,7 +715,7 @@ class RequestForm extends React.Component {
       });
   }
 
-  findInstance = (value) => {
+  findInstance = async (instanceId, holdingsRecordId) => {
     const { findResource } = this.props;
 
     this.setState({
@@ -721,7 +723,11 @@ class RequestForm extends React.Component {
       requestTypeOptions: [],
     });
 
-    return findResource(RESOURCE_TYPES.INSTANCE, value)
+    const resultInstanceId = isNil(instanceId)
+      ? await findResource(RESOURCE_TYPES.HOLDING, holdingsRecordId).then((holding) => holding.holdingsRecords[0].instanceId)
+      : instanceId;
+
+    return findResource(RESOURCE_TYPES.INSTANCE, resultInstanceId)
       .then((result) => {
         if (!result || result.totalRecords === 0) {
           this.setState({
@@ -754,7 +760,7 @@ class RequestForm extends React.Component {
   getInstanceItems = async (instanceId) => {
     const { findResource } = this.props;
 
-    const { items } = await findResource('holding', instanceId, 'instanceId')
+    const { items } = await findResource(RESOURCE_TYPES.HOLDING, instanceId, 'instanceId')
       .then(responce => {
         const holdingRecordId = responce.holdingsRecords[0].id;
 
@@ -786,11 +792,11 @@ class RequestForm extends React.Component {
   }
 
   onInstanceClick() {
-    const value = get(this.instanceValueRef, 'current.value');
+    const instanceId = get(this.instanceValueRef, 'current.value');
 
-    if (value) {
+    if (instanceId) {
       this.setState({ selectedInstance: null });
-      this.findInstance(value);
+      this.findInstance(instanceId);
     }
   }
 
@@ -1025,7 +1031,10 @@ class RequestForm extends React.Component {
   }
 
   handleTlrCheckboxChange = (event, newValue) => {
-    const { selectedInstance } = this.state;
+    const {
+      selectedInstance,
+      selectedItem,
+    } = this.state;
 
     this.props.change('item.barcode', null);
     this.props.change('instance.hrid', null);
@@ -1037,7 +1046,11 @@ class RequestForm extends React.Component {
       requestTypeOptions: [],
     });
 
-    if (!newValue && selectedInstance) {
+    if (newValue) {
+      if (selectedItem) {
+        this.findInstance(null, selectedItem.holdingsRecordId);
+      }
+    } else if (selectedInstance) {
       this.setState({
         isItemsDialogOpen: true,
         areInstanceItemsBeingLoaded: true,
