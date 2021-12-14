@@ -36,6 +36,11 @@ jest.mock('@folio/stripes/components', () => ({
       {children}
     </div>
   )),
+  Paneset: jest.fn(({ children }) => (
+    <div>
+      {children}
+    </div>
+  )),
   Row: jest.fn(({ children }) => (
     <div data-test-row>
       {children}

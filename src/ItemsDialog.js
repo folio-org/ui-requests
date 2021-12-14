@@ -14,7 +14,9 @@ import {
   Modal,
   MultiColumnList,
   Pane,
+  Paneset,
 } from '@folio/stripes/components';
+
 import { Loading } from './components';
 
 import css from './ItemsDialog.css';
@@ -80,29 +82,34 @@ const ItemsDialog = ({
       onClose={onClose}
       dismissible
     >
-      <Pane
-        paneTitle={formatMessage({ id: 'ui-requests.items.instanceItems' }, { title })}
-        paneSub={formatMessage({ id: 'ui-requests.resultCount' }, { count })}
-        defaultWidth="fill"
-        noOverflow
+      <Paneset
+        id="itemsDialog"
+        isRoot
+        static
       >
-        {isLoading
-          ? <Loading />
-          : <MultiColumnList
-            id="instance-items-list"
-            interactive
-            ariaLabel={formatMessage({ id: 'ui-requests.items.instanceItems' })}
-            contentData={contentData}
-            visibleColumns={COLUMN_NAMES}
-            columnMapping={COLUMN_MAP}
-            columnWidths={COLUMN_WIDTHS}
-            formatter={formatter}
-            maxHeight={MAX_HEIGHT}
-            isEmptyMessage={formatMessage({ id: 'ui-requests.items.instanceItems.notFound' })}
-            onRowClick={onRowClick}
-          />
-        }
-      </Pane>
+        <Pane
+          paneTitle={formatMessage({ id: 'ui-requests.items.instanceItems' }, { title })}
+          paneSub={formatMessage({ id: 'ui-requests.resultCount' }, { count })}
+          defaultWidth="fill"
+        >
+          {isLoading
+            ? <Loading />
+            : <MultiColumnList
+              id="instance-items-list"
+              interactive
+              ariaLabel={formatMessage({ id: 'ui-requests.items.instanceItems' })}
+              contentData={contentData}
+              visibleColumns={COLUMN_NAMES}
+              columnMapping={COLUMN_MAP}
+              columnWidths={COLUMN_WIDTHS}
+              formatter={formatter}
+              maxHeight={MAX_HEIGHT}
+              isEmptyMessage={formatMessage({ id: 'ui-requests.items.instanceItems.notFound' })}
+              onRowClick={onRowClick}
+            />
+          }
+        </Pane>
+      </Paneset>
     </Modal>
   );
 };
