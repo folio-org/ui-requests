@@ -223,3 +223,5 @@ export const REQUEST_TYPES = {
     value: requestTypesMap.RECALL,
   },
 };
+
+export const MISSING_VALUE_SYMBOL = '-';

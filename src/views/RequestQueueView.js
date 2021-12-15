@@ -1,28 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { get } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
 import {
-  Col,
   Callout,
   ConfirmationModal,
   ErrorModal,
-  FormattedDate,
-  KeyValue,
   Pane,
   PaneHeaderIconButton,
   PaneMenu,
   Paneset,
-  Row,
 } from '@folio/stripes/components';
-import { effectiveCallNumber } from '@folio/stripes/util';
 
 import {
   iconTypes,
   errorMessages,
+  requestStatuses,
 } from '../constants';
 import {
   isNotYetFilled,
@@ -32,8 +27,8 @@ import {
   SortableList,
   Loading,
 } from '../components';
+import FulfillmentRequestsData from './components/FulfillmentRequestsData';
 
-import css from './RequestQueueView.css';
 import {
   COLUMN_MAP,
   COLUMN_WIDTHS,
@@ -223,7 +218,6 @@ class RequestQueueView extends React.Component {
       isLoading,
       onClose,
       data: {
-        item,
         request,
       },
     } = this.props;
@@ -234,9 +228,16 @@ class RequestQueueView extends React.Component {
     } = this.state;
     const count = requests.length;
     const { title } = request?.instance || {};
-    const itemLink = (item.barcode)
-      ? (<Link to={`/inventory/view/${get(request, 'instanceId')}/${get(request, 'holdingsRecordId')}/${item.id}`}>{item.barcode}</Link>)
-      : '-';
+    const notYetFilledRequests = [];
+    const inProgressRequests = [];
+
+    requests.forEach(r => {
+      if (r.status === requestStatuses.NOT_YET_FILLED) {
+        notYetFilledRequests.push(r);
+      } else {
+        inProgressRequests.push(r);
+      }
+    });
 
     return (
       <Paneset isRoot>
@@ -260,59 +261,31 @@ class RequestQueueView extends React.Component {
           paneTitle={<FormattedMessage id="ui-requests.requestQueue.title" values={{ title }} />}
           paneSub={<FormattedMessage id="ui-requests.resultCount" values={{ count }} />}
         >
-          <div className={css.section}>
-            <Row>
-              <Col xs={1}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.item.barcode" />}
-                  value={itemLink}
-                />
-              </Col>
-              <Col xs={2}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.item.status" />}
-                  value={get(item, 'status.name', '-')}
-                />
-              </Col>
-              <Col xs={2}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.item.dueDate" />}
-                  value={get(request, 'loan.dueDate') ? <FormattedDate value={request.loan.dueDate} /> : '-'}
-                />
-              </Col>
-              <Col xs={2}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.item.location.name" />}
-                  value={get(item, 'effectiveLocation.name', '-')}
-                />
-              </Col>
-              <Col
-                data-test-item-call-number
-                xs={4}
-              >
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.item.callNumber" />}
-                  value={effectiveCallNumber(item)}
-                />
-              </Col>
-            </Row>
-          </div>
-          {isLoading
+          {
+          isLoading
             ? <Loading />
-            : <SortableList
-              id="requests-list"
-              onDragEnd={this.onDragEnd}
-              isRowDraggable={this.isRowDraggable}
-              contentData={requests}
-              visibleColumns={COLUMN_NAMES}
-              columnMapping={COLUMN_MAP}
-              columnWidths={COLUMN_WIDTHS}
-              formatter={formatter}
-              height="70vh"
-              isEmptyMessage={
-                <FormattedMessage id="ui-requests.requestQueue.requests.notFound" />
-              }
-            />}
+            : (
+              <>
+                <FulfillmentRequestsData
+                  contentData={inProgressRequests}
+                />
+                <SortableList
+                  id="requests-list"
+                  onDragEnd={this.onDragEnd}
+                  isRowDraggable={this.isRowDraggable}
+                  contentData={notYetFilledRequests}
+                  visibleColumns={COLUMN_NAMES}
+                  columnMapping={COLUMN_MAP}
+                  columnWidths={COLUMN_WIDTHS}
+                  formatter={formatter}
+                  height="70vh"
+                  isEmptyMessage={
+                    <FormattedMessage id="ui-requests.requestQueue.requests.notFound" />
+                  }
+                />
+              </>
+            )
+          }
         </Pane>
         <Callout ref={this.callout} />
         <ConfirmationModal
