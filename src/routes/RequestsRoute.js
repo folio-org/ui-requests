@@ -133,7 +133,7 @@ class RequestsRoute extends React.Component {
             {
               'title': 'instance.title',
               'instanceId': 'instanceId',
-              'publications': 'instance.publications',
+              'publication': 'instance.publication',
               'itemBarcode': 'item.barcode',
               'type': 'requestType',
               'requester': 'requester.lastName requester.firstName',
@@ -866,7 +866,7 @@ class RequestsRoute extends React.Component {
       'requestStatus': rq => <FormattedMessage id={requestStatusesTranslations[rq.status]} />,
       'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
       'title': rq => (rq.instance ? rq.instance.title : ''),
-      'year': rq => getFormattedYears(rq.instance?.publications),
+      'year': rq => getFormattedYears(rq.instance?.publication),
     };
 
     const actionMenu = ({ onToggle, renderColumnsMenu }) => (

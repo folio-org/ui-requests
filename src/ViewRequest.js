@@ -565,7 +565,7 @@ class ViewRequest extends React.Component {
               titleLevelRequestsCount={request.titleRequestCount}
               title={request.instance.title}
               contributors={request.instance.contributorNames}
-              publications={request.instance.publications}
+              publications={request.instance.publication}
               editions={request.instance.editions}
               identifiers={request.instance.identifiers}
               titleLevelRequestsLink={false}
