@@ -2,8 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { REQUEST_LEVEL_TYPES } from '../../constants';
-import { MISSING_VALUE_SYMBOL } from '../constants';
+import {
+  MISSING_VALUE_SYMBOL,
+  REQUEST_LEVEL_TYPES,
+} from '../../constants';
+
 
 const ItemLink = ({
   request: {

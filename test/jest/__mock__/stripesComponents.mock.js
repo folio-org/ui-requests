@@ -26,7 +26,9 @@ jest.mock('@folio/stripes/components', () => ({
       {children}
     </div>
   )),
+  ConfirmationModal: jest.fn(() => <div>ConfirmationModal</div>),
   Datepicker: jest.fn(() => <div>Datepicker</div>),
+  ErrorModal: jest.fn(() => <div>ErrorModal</div>),
   FormattedDate: jest.fn(() => <div>Datepicker</div>),
   Headline: jest.fn(({ children }) => (
     <div data-test-headline>

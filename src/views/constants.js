@@ -3,15 +3,12 @@ import {
   FormattedMessage,
 } from 'react-intl';
 
-import { AppIcon } from '@folio/stripes-core';
+import { AppIcon } from '@folio/stripes/core';
 
-import {
-  ItemLink,
-  RequesterLink,
-} from './components';
+import ItemLink from './components/ItemLink';
+import RequesterLink from './components/RequesterLink';
 import { getFullName } from '../utils';
-
-export const MISSING_VALUE_SYMBOL = '-';
+import { MISSING_VALUE_SYMBOL } from '../constants';
 
 export const COLUMN_MAP = {
   position: <FormattedMessage id="ui-requests.requestQueue.order" />,

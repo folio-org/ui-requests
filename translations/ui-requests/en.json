@@ -197,6 +197,7 @@
   "requestQueue.requests.notFound": "No requests found",
   "requestQueue.refresh": "Refresh queue",
   "requestQueue.requestInProgress": "In progress",
+  "requestQueue.noDataForFulfillment": "There are no requests in fulfillment.",
   "cancellationReason": "Cancellation reason",
   "cancellationAdditionalInformation": "Additional information for patron",
   "printPickSlips": "Print pick slips for {sp}",
