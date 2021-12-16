@@ -1,0 +1,7 @@
+.description {
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 15px;
+}

@@ -2,9 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
 import {
+  Accordion,
+  AccordionSet,
   Callout,
   ConfirmationModal,
   ErrorModal,
@@ -13,6 +16,7 @@ import {
   PaneMenu,
   Paneset,
 } from '@folio/stripes/components';
+import { AppIcon } from '@folio/stripes/core';
 
 import {
   iconTypes,
@@ -23,30 +27,17 @@ import {
   isNotYetFilled,
   isPageRequest,
 } from '../utils';
-import {
-  SortableList,
-  Loading,
-} from '../components';
+import { Loading } from '../components';
 import FulfillmentRequestsData from './components/FulfillmentRequestsData';
+import NotYetFilledRequestsData from './components/NotYetFilledRequestsData';
 
 import {
-  COLUMN_MAP,
-  COLUMN_WIDTHS,
-  formatter,
-} from './constants';
+  getFormattedYears,
+  getFormattedPublishers,
+  getFormattedContributors,
+} from '../routes/utils';
 
-const COLUMN_NAMES = [
-  'position',
-  'status',
-  'pickup',
-  'requester',
-  'requesterBarcode',
-  'patronGroup',
-  'requestDate',
-  'requestType',
-  'requestExpirationDate',
-  'holdShelfExpireDate',
-];
+import css from './RequestQueueView.css';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -86,6 +77,10 @@ class RequestQueueView extends React.Component {
     this.state = {
       requests: [],
       reorder: false,
+      accordions: {
+        'fulfillment-in-progress': true,
+        'not-yet-filled': true,
+      },
     };
   }
 
@@ -213,6 +208,17 @@ class RequestQueueView extends React.Component {
       (isNotYetFilled(request) && !isPageRequest(request));
   }
 
+  handleToggleSection = ({ id }) => {
+    const { accordions } = this.state;
+
+    this.setState({
+      accordions: {
+        ...accordions,
+        [id]: !accordions[id],
+      },
+    });
+  }
+
   render() {
     const {
       isLoading,
@@ -225,9 +231,14 @@ class RequestQueueView extends React.Component {
       requests,
       confirmMessage,
       error,
+      accordions,
     } = this.state;
     const count = requests.length;
-    const { title } = request?.instance || {};
+    const {
+      title,
+      publication,
+      contributors,
+    } = request?.instance || {};
     const notYetFilledRequests = [];
     const inProgressRequests = [];
 
@@ -238,6 +249,8 @@ class RequestQueueView extends React.Component {
         inProgressRequests.push(r);
       }
     });
+
+    const formattedContributors = getFormattedContributors(contributors);
 
     return (
       <Paneset isRoot>
@@ -258,32 +271,64 @@ class RequestQueueView extends React.Component {
               </FormattedMessage>
             </PaneMenu>
           }
-          paneTitle={<FormattedMessage id="ui-requests.requestQueue.title" values={{ title }} />}
+          paneTitle={
+            <AppIcon size="small" app="requests">
+              <FormattedMessage
+                id="ui-requests.requestQueue.title"
+                values={{
+                  title,
+                  author: formattedContributors,
+                }}
+              />
+            </AppIcon>
+          }
           paneSub={<FormattedMessage id="ui-requests.resultCount" values={{ count }} />}
         >
+          <div className={css.description}>
+            <FormattedMessage
+              id="ui-requests.requestQueue.description"
+              values={{
+                title,
+                author: formattedContributors,
+                publisher: getFormattedPublishers(publication),
+                publicationDate: getFormattedYears(publication),
+                instanceLink: (chunks) => <Link to={`/inventory/view/${get(request, 'instanceId')}`}>{chunks}</Link>,
+                i: (chunks) => <i>{chunks}</i>,
+              }}
+            />
+          </div>
           {
           isLoading
             ? <Loading />
             : (
-              <>
-                <FulfillmentRequestsData
-                  contentData={inProgressRequests}
-                />
-                <SortableList
-                  id="requests-list"
-                  onDragEnd={this.onDragEnd}
-                  isRowDraggable={this.isRowDraggable}
-                  contentData={notYetFilledRequests}
-                  visibleColumns={COLUMN_NAMES}
-                  columnMapping={COLUMN_MAP}
-                  columnWidths={COLUMN_WIDTHS}
-                  formatter={formatter}
-                  height="70vh"
-                  isEmptyMessage={
-                    <FormattedMessage id="ui-requests.requestQueue.requests.notFound" />
+              <AccordionSet
+                accordionStatus={accordions}
+                onToggle={this.handleToggleSection}
+              >
+                <Accordion
+                  id="fulfillment-in-progress"
+                  label={
+                    <FormattedMessage id="ui-requests.requestQueue.fulfillmentInProgressSectionTitle" />
                   }
-                />
-              </>
+                >
+                  <FulfillmentRequestsData
+                    contentData={inProgressRequests}
+                  />
+                </Accordion>
+                <Accordion
+                  id="not-yet-filled"
+                  label={
+                    <FormattedMessage id="ui-requests.requestQueue.notYetFilledSectionTitle" />
+                  }
+                >
+                  <NotYetFilledRequestsData
+                    id="requests-list"
+                    onDragEnd={this.onDragEnd}
+                    isRowDraggable={this.isRowDraggable}
+                    contentData={notYetFilledRequests}
+                  />
+                </Accordion>
+              </AccordionSet>
             )
           }
         </Pane>

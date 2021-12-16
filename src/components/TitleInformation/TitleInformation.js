@@ -10,7 +10,10 @@ import {
 } from '@folio/stripes/components';
 
 import { getFormattedYears } from '../../routes/utils';
-import { REQUEST_DATE } from '../../constants';
+import {
+  DEFAULT_DISPLAYED_YEARS_AMOUNT,
+  REQUEST_DATE,
+} from '../../constants';
 
 export const TEXT_SEPARATOR = ', ';
 export const CONTRIBUTOR_SEPARATOR = '; ';
@@ -66,7 +69,7 @@ const TitleInformation = (props) => {
         <Col xs={4}>
           <KeyValue
             label={formatMessage({ id: 'ui-requests.titleInformation.publicationsDate' })}
-            value={getFormattedYears(publications)}
+            value={getFormattedYears(publications, DEFAULT_DISPLAYED_YEARS_AMOUNT)}
           />
         </Col>
         <Col xs={4}>
