@@ -15,6 +15,7 @@ import { REQUEST_DATE } from '../../constants';
 export const TEXT_SEPARATOR = ', ';
 export const CONTRIBUTOR_SEPARATOR = '; ';
 export const MAX_IDENTIFIERS_COUNT = 4;
+const DISPLAYED_YEARS_AMOUNT = 3;
 
 export const getURL = (id, count) => <Link to={`/requests?filters=query=${id}&sort=${REQUEST_DATE}`}>{count}</Link>;
 export const getTitleURL = (id, title) => <Link to={`/inventory/view/${id}`}>{title}</Link>;
@@ -66,7 +67,7 @@ const TitleInformation = (props) => {
         <Col xs={4}>
           <KeyValue
             label={formatMessage({ id: 'ui-requests.titleInformation.publicationsDate' })}
-            value={getFormattedYears(publications)}
+            value={getFormattedYears(publications, DISPLAYED_YEARS_AMOUNT)}
           />
         </Col>
         <Col xs={4}>

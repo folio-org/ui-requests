@@ -66,6 +66,7 @@ import { getFormattedYears } from './utils';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
+const DISPLAYED_YEARS_AMOUNT = 3;
 
 const urls = {
   user: (value, idType) => {
@@ -866,7 +867,7 @@ class RequestsRoute extends React.Component {
       'requestStatus': rq => <FormattedMessage id={requestStatusesTranslations[rq.status]} />,
       'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
       'title': rq => (rq.instance ? rq.instance.title : ''),
-      'year': rq => getFormattedYears(rq.instance?.publications),
+      'year': rq => getFormattedYears(rq.instance?.publications, DISPLAYED_YEARS_AMOUNT),
     };
 
     const actionMenu = ({ onToggle, renderColumnsMenu }) => (
