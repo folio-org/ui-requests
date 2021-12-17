@@ -1040,13 +1040,12 @@ class RequestForm extends React.Component {
     this.props.change('instance.hrid', null);
     this.props.change('instanceId', null);
 
-    this.setState({
-      selectedItem: undefined,
-      selectedInstance: undefined,
-      requestTypeOptions: [],
-    });
-
     if (newValue) {
+      this.setState({
+        requestTypeOptions: [],
+        selectedItem: undefined,
+      });
+
       if (selectedItem) {
         this.findInstance(null, selectedItem.holdingsRecordId);
       }
@@ -1062,6 +1061,11 @@ class RequestForm extends React.Component {
           areInstanceItemsBeingLoaded: false,
         });
       });
+    } else {
+      this.setState({
+        requestTypeOptions: [],
+        selectedInstance: undefined,
+      });
     }
   };
 
@@ -1069,6 +1073,8 @@ class RequestForm extends React.Component {
     this.setState({
       isItemsDialogOpen: false,
       instanceItems: [],
+      requestTypeOptions: [],
+      selectedInstance: undefined,
     });
   }
 
@@ -1076,6 +1082,8 @@ class RequestForm extends React.Component {
     this.setState({
       isItemsDialogOpen: false,
       instanceItems: [],
+      requestTypeOptions: [],
+      selectedInstance: undefined,
     });
 
     this.findItem('id', item.id);
