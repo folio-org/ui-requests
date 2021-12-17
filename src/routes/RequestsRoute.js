@@ -77,7 +77,7 @@ const urls = {
     return `inventory/items?${query}`;
   },
   instance: (value) => {
-    const query = stringify(getInstanceQueryString(value));
+    const query = stringify({ query: getInstanceQueryString(value) });
 
     return `inventory/instances?${query}`;
   },
