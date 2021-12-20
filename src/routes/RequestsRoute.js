@@ -801,12 +801,16 @@ class RequestsRoute extends React.Component {
   }
 
   renderFilters = (onChange) => {
+    const { resources } = this.props;
+    const { titleLevelRequestsFeatureEnabled = false } = getTlrSettings(resources.configs.records[0]?.value);
+
     return (
       <RequestsFilters
         activeFilters={this.getActiveFilters()}
-        resources={this.props.resources}
+        resources={resources}
         onChange={onChange}
         onClear={(name) => onChange({ name, values: [] })}
+        titleLevelRequestsFeatureEnabled={titleLevelRequestsFeatureEnabled}
       />
     );
   };
