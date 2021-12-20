@@ -10,6 +10,7 @@
 * Create reusable component for render title level information. Refs UIREQ-654.
 * Add preferred name to Requests UI. Refs UIREQ-605.
 * After the "Select item" window appears, the size of the Request information changes. Refs UIREQ-690.
+* Upgrade `react-beautiful-dnd` to `v13.1.0`. Refs UIREQ-698.
 
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)
