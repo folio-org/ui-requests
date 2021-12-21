@@ -264,6 +264,17 @@ class ViewRequest extends React.Component {
     this.setState({ moveRequest: true });
   }
 
+  onReorderRequest = (request) => {
+    const {
+      location: { search },
+      history,
+    } = this.props;
+    const { titleLevelRequestsFeatureEnabled } = this.state;
+    const idForHistory = titleLevelRequestsFeatureEnabled ? request.instanceId : request.itemId;
+
+    history.push(`${urls.requestQueueView(request.id, idForHistory)}${search}`, { request });
+  }
+
   onToggleSection({ id }) {
     this.setState((curState) => {
       const newState = cloneDeep(curState);
@@ -382,9 +393,7 @@ class ViewRequest extends React.Component {
     const {
       stripes,
       patronGroups,
-      history,
       optionLists: { cancellationReasons },
-      location: { search },
     } = this.props;
     const {
       accordions,
@@ -516,7 +525,7 @@ class ViewRequest extends React.Component {
                 id="reorder-queue"
                 onClick={() => {
                   onToggle();
-                  history.push(`${urls.requestQueueView(request.id, request.itemId)}${search}`, { request });
+                  this.onReorderRequest(request);
                 }}
                 buttonStyle="dropdownItem"
               >

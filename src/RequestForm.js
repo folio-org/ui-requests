@@ -776,8 +776,11 @@ class RequestForm extends React.Component {
     }
 
     const instanceItems = await this.getInstanceItems(instance.id);
-
     const requestTypeOptions = getInstanceRequestTypeOptions(instanceItems);
+
+    if (requestTypeOptions.length) {
+      this.props.change('requestType', requestTypeOptions[0].value);
+    }
 
     this.setState({ requestTypeOptions });
   }
@@ -850,7 +853,7 @@ class RequestForm extends React.Component {
   requireUser = (value) => {
     const values = this.getCurrentFormValues();
 
-    if (!value && !values.requesterId) {
+    if (!value && !values?.requesterId) {
       return <FormattedMessage id="ui-requests.errors.selectUser" />;
     }
 
@@ -995,6 +998,7 @@ class RequestForm extends React.Component {
       unset(requestData, RESOURCE_TYPES.ITEM);
     }
 
+    unset(requestData, 'titleRequestCount');
     unset(requestData, 'createTitleLevelRequest');
     unset(requestData, RESOURCE_TYPES.INSTANCE);
 
@@ -1255,7 +1259,7 @@ class RequestForm extends React.Component {
                       type="checkbox"
                       label={formatMessage({ id: 'ui-requests.requests.createTitleLevelRequest' })}
                       component={Checkbox}
-                      disabled={!this.state.titleLevelRequestsFeatureEnabled}
+                      disabled={!this.state.titleLevelRequestsFeatureEnabled || isItemOrInstanceLoading}
                       onChange={this.handleTlrCheckboxChange}
                     />
                   </Col>

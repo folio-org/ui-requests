@@ -31,14 +31,14 @@ describe('RequestQueueView', () => {
       status: requestStatuses.IN_TRANSIT,
     },
   ];
-  const notYetFilledRequest = {
-    status: requestStatuses.NOT_YET_FILLED,
-  };
+  const notYetFilledRequests = [
+    {
+      status: requestStatuses.NOT_YET_FILLED,
+    },
+  ];
   const mockedData = {
-    requests: [
-      ...inProgressRequests,
-      notYetFilledRequest,
-    ],
+    inProgressRequests,
+    notYetFilledRequests,
   };
 
   afterEach(() => {

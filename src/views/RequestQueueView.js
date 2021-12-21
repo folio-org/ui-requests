@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { get } from 'lodash';
+import {
+  get,
+  isEqual,
+} from 'lodash';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
@@ -21,7 +24,6 @@ import { AppIcon } from '@folio/stripes/core';
 import {
   iconTypes,
   errorMessages,
-  requestStatuses,
 } from '../constants';
 import {
   isNotYetFilled,
@@ -50,7 +52,8 @@ const reorder = (list, startIndex, endIndex) => {
 class RequestQueueView extends React.Component {
   static propTypes = {
     data: PropTypes.shape({
-      requests: PropTypes.arrayOf(PropTypes.object),
+      notYetFilledRequests: PropTypes.arrayOf(PropTypes.object).isRequired,
+      inProgressRequests: PropTypes.arrayOf(PropTypes.object).isRequired,
       item: PropTypes.object,
       holding: PropTypes.object,
       request: PropTypes.object,
@@ -61,22 +64,17 @@ class RequestQueueView extends React.Component {
     location: ReactRouterPropTypes.location,
   };
 
-  static getDerivedStateFromProps(props, state) {
-    const { data: { requests } } = props;
-
-    if (!state.reorder) {
-      return { requests };
-    }
-
-    return null;
-  }
-
   constructor(props) {
     super(props);
 
+    const { data: {
+      notYetFilledRequests,
+    } } = props;
+    const requestsPositionsForReorder = notYetFilledRequests.map(r => r.position);
+
     this.state = {
-      requests: [],
-      reorder: false,
+      notYetFilledRequests,
+      requestsPositionsForReorder,
       accordions: {
         'fulfillment-in-progress': true,
         'not-yet-filled': true,
@@ -95,6 +93,21 @@ class RequestQueueView extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    const { notYetFilledRequests: prevNotYetFilledRequests } = prevProps.data;
+    const { notYetFilledRequests } = this.props.data;
+
+    if (!isEqual(prevNotYetFilledRequests, notYetFilledRequests)) {
+      const requestsPositionsForReorder = notYetFilledRequests.map(r => r.position);
+
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        notYetFilledRequests,
+        requestsPositionsForReorder,
+      });
+    }
+  }
+
   callout = React.createRef();
 
   onDragEnd = (result) => {
@@ -107,10 +120,10 @@ class RequestQueueView extends React.Component {
       return;
     }
 
-    const { requests } = this.state;
+    const { notYetFilledRequests } = this.state;
     const destIndex = destination.index;
     const sourceIndex = source.index;
-    const destRequest = requests[destIndex];
+    const destRequest = notYetFilledRequests[destIndex];
     let confirmMessage;
 
     if (sourceIndex === destIndex) {
@@ -137,18 +150,29 @@ class RequestQueueView extends React.Component {
   }
 
   reorderRequests = (sourceIndex, destIndex) => {
-    const data = this.state.requests;
+    const {
+      notYetFilledRequests,
+      requestsPositionsForReorder,
+    } = this.state;
+    const {
+      data: {
+        inProgressRequests,
+      },
+    } = this.props;
+
     const requests = reorder(
-      data,
+      notYetFilledRequests,
       sourceIndex,
       destIndex
-    ).map((r, index) => ({ ...r, position: index + 1 }));
+    ).map((r, index) => ({ ...r, position: requestsPositionsForReorder[index] }));
 
     this.setState({
       confirmMessage: null,
-      reorder: true, // eslint-disable-line react/no-unused-state
-      requests,
-    }, () => this.finishReorder(requests));
+      notYetFilledRequests: requests,
+    }, () => this.finishReorder([
+      ...requests,
+      ...inProgressRequests,
+    ]));
   }
 
   processError = (err) => {
@@ -225,31 +249,21 @@ class RequestQueueView extends React.Component {
       onClose,
       data: {
         request,
+        inProgressRequests,
       },
     } = this.props;
     const {
-      requests,
       confirmMessage,
       error,
       accordions,
+      notYetFilledRequests,
     } = this.state;
-    const count = requests.length;
     const {
       title,
       publication,
       contributors,
     } = request?.instance || {};
-    const notYetFilledRequests = [];
-    const inProgressRequests = [];
-
-    requests.forEach(r => {
-      if (r.status === requestStatuses.NOT_YET_FILLED) {
-        notYetFilledRequests.push(r);
-      } else {
-        inProgressRequests.push(r);
-      }
-    });
-
+    const count = inProgressRequests.length + notYetFilledRequests.length;
     const formattedContributors = getFormattedContributors(contributors);
 
     return (

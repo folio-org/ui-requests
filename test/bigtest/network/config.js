@@ -10,11 +10,11 @@ export default function config() {
   this.get('_/proxy/tenants/:id/modules', []);
 
   this.get('/saml/check', {
-    ssoEnabled: false
+    ssoEnabled: false,
   });
 
   this.get('/configurations/entries', {
-    configs: []
+    configs: [],
   });
 
   this.get('/tags');
@@ -28,7 +28,7 @@ export default function config() {
 
   this.post('/bl-users/login', () => {
     return new Response(201, {
-      'X-Okapi-Token': `myOkapiToken:${Date.now()}`
+      'X-Okapi-Token': `myOkapiToken:${Date.now()}`,
     }, {
       user: {
         id: 'test',
@@ -37,11 +37,11 @@ export default function config() {
           lastName: 'User',
           firstName: 'Test',
           email: 'user@folio.org',
-        }
+        },
       },
       permissions: {
-        permissions: []
-      }
+        permissions: [],
+      },
     });
   });
   this.get('/groups', {
@@ -74,7 +74,7 @@ export default function config() {
       'desc': 'Undergraduate Student',
       'id': 'group7',
     }],
-    'totalRecords': 7
+    'totalRecords': 7,
   });
   this.get('/addresstypes', {
     'addressTypes': [{
@@ -102,7 +102,7 @@ export default function config() {
       'desc': 'Work Address',
       'id': 'Type6',
     }],
-    'totalRecords': 6
+    'totalRecords': 6,
   });
 
   this.get('/users', ({ users }, request) => {
@@ -130,7 +130,7 @@ export default function config() {
     const cqlParser = new CQLParser();
     cqlParser.parse(cqlQuery);
     return servicePointsUsers.where({
-      userId: cqlParser.tree.term
+      userId: cqlParser.tree.term,
     });
   });
 
@@ -143,7 +143,7 @@ export default function config() {
       const cqlParser = new CQLParser();
       cqlParser.parse(request.queryParams.query);
       return requestPreferences.where({
-        userId: cqlParser.tree.term
+        userId: cqlParser.tree.term,
       });
     } else {
       return [];
@@ -234,7 +234,7 @@ export default function config() {
       active: true,
       template: '<p><strong>{{item.title}}</strong></p>',
     }],
-    totalRecords: 1
+    totalRecords: 1,
   });
 
   this.get('circulation/pick-slips/servicepointId1', {
@@ -290,6 +290,8 @@ export default function config() {
 
   this.get('/cancellation-reason-storage/cancellation-reasons');
 
+  this.get('circulation/requests/queue/item/:{id}', ({ requests }) => requests.all());
+
   this.get('/circulation/requests', ({ requests }, request) => {
     const sortby = request.queryParams.query.split('sortby ')[1]?.split(' ')[0].split('/');
 
@@ -323,7 +325,7 @@ export default function config() {
 
     return this.create('request', {
       id: body.id,
-      itemId: body.destinationItemId
+      itemId: body.destinationItemId,
     });
   });
 
@@ -342,7 +344,7 @@ export default function config() {
     cqlParser.parse(cqlQuery);
 
     return requests.where({
-      itemId: cqlParser.tree.term
+      itemId: cqlParser.tree.term,
     });
   });
 
@@ -361,7 +363,7 @@ export default function config() {
     }
   });
 
-  this.post('/circulation/requests/queue/:itemId/reorder', []);
+  this.post('circulation/requests/queue/item/:{id}/reorder', []);
 
   this.get('/circulation/loans', ({ loans }, request) => {
     if (request.queryParams.query) {
@@ -369,11 +371,11 @@ export default function config() {
       cqlParser.parse(request.queryParams.query);
       if (cqlParser.tree instanceof CQLBoolean) {
         return loans.where({
-          itemId: cqlParser.tree.left.term
+          itemId: cqlParser.tree.left.term,
         });
       } else {
         return loans.where({
-          itemId: cqlParser.tree.term
+          itemId: cqlParser.tree.term,
         });
       }
     } else {
