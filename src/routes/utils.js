@@ -1,11 +1,10 @@
 const YEAR_SEPARATOR = ', ';
-const DISPLAYED_YEARS_AMOUNT = 3;
 const YEAR_REGEX = /^([1-9][0-9]{0,3})$/;
 
 const isYear = (value) => YEAR_REGEX.test(value);
 
 // eslint-disable-next-line import/prefer-default-export
-export const getFormattedYears = (publications) => {
+export const getFormattedYears = (publications, limit) => {
   const years = publications
     ?.map(({ dateOfPublication }) => dateOfPublication)
     .filter((year) => isYear(year));
@@ -14,7 +13,15 @@ export const getFormattedYears = (publications) => {
     ? years
       .map((year) => parseInt(year, 10))
       .sort((a, b) => b - a)
-      .slice(0, DISPLAYED_YEARS_AMOUNT)
+      .slice(0, limit)
       .join(YEAR_SEPARATOR)
     : '';
 };
+
+export const getFormattedPublishers = (publications) => (
+  publications?.find(({ publisher }) => !!publisher)?.publisher ?? ''
+);
+
+export const getFormattedContributors = (contributors) => (
+  contributors?.find(({ name }) => !!name)?.name ?? ''
+);

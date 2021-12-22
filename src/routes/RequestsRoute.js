@@ -41,6 +41,7 @@ import {
   requestStatusesTranslations,
   requestTypesTranslations,
   REQUEST_LEVEL_TYPES,
+  DEFAULT_DISPLAYED_YEARS_AMOUNT,
 } from '../constants';
 import {
   buildUrl,
@@ -579,7 +580,7 @@ class RequestsRoute extends React.Component {
         this.findResource('requestsForInstance', r.instanceId),
         ...(requestLevel === REQUEST_LEVEL_TYPES.ITEM
           ? [
-            this.findResource('requestsForItem', r.itemId)
+            this.findResource('requestsForItem', r.itemId),
           ]
           : []),
       ],
@@ -866,7 +867,7 @@ class RequestsRoute extends React.Component {
       'requestStatus': rq => <FormattedMessage id={requestStatusesTranslations[rq.status]} />,
       'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
       'title': rq => (rq.instance ? rq.instance.title : ''),
-      'year': rq => getFormattedYears(rq.instance?.publication),
+      'year': rq => getFormattedYears(rq.instance?.publications, DEFAULT_DISPLAYED_YEARS_AMOUNT),
     };
 
     const actionMenu = ({ onToggle, renderColumnsMenu }) => (

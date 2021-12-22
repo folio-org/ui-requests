@@ -223,3 +223,7 @@ export const REQUEST_TYPES = {
     value: requestTypesMap.RECALL,
   },
 };
+
+export const MISSING_VALUE_SYMBOL = '-';
+
+export const DEFAULT_DISPLAYED_YEARS_AMOUNT = 3;

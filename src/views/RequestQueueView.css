@@ -1,8 +1,7 @@
-@import "@folio/stripes-components/lib/variables.css";
-
-.section {
-  padding: 10px;
-  border-radius: 6px;
-  background-color: var( --color-fill);
-  margin: 5px 10px 20px 10px;
+.description {
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 15px;
 }
