@@ -4,20 +4,18 @@ import PropTypes from 'prop-types';
 
 import {
   MISSING_VALUE_SYMBOL,
-  REQUEST_LEVEL_TYPES,
 } from '../../constants';
 
 
 const ItemLink = ({
   request: {
-    requestLevel,
     instanceId,
     holdingsRecordId,
     itemId,
     item,
   },
 }) => (
-  requestLevel === REQUEST_LEVEL_TYPES.ITEM
+  item
     ? (<Link to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}>{item.barcode}</Link>)
     : MISSING_VALUE_SYMBOL
 );

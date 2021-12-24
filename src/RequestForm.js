@@ -995,9 +995,11 @@ class RequestForm extends React.Component {
 
     if (requestData.requestLevel === REQUEST_LEVEL_TYPES.TITLE) {
       unset(requestData, 'itemId');
+      unset(requestData, 'holdingsRecordId');
       unset(requestData, RESOURCE_TYPES.ITEM);
     }
 
+    unset(requestData, 'itemRequestCount');
     unset(requestData, 'titleRequestCount');
     unset(requestData, 'createTitleLevelRequest');
     unset(requestData, RESOURCE_TYPES.INSTANCE);
