@@ -72,7 +72,6 @@ describe('ItemsDialog', () => {
           paneTitle: labelIds.instanceItems,
           paneSub: labelIds.resultCount,
           defaultWidth: 'fill',
-          noOverflow: true,
         }), {}
       );
     });
