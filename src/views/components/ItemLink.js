@@ -14,11 +14,11 @@ const ItemLink = ({
     instanceId,
     holdingsRecordId,
     itemId,
-    item: { barcode },
+    item,
   },
 }) => (
   requestLevel === REQUEST_LEVEL_TYPES.ITEM
-    ? (<Link to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}>{barcode}</Link>)
+    ? (<Link to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}>{item.barcode}</Link>)
     : MISSING_VALUE_SYMBOL
 );
 
