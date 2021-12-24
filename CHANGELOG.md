@@ -8,6 +8,10 @@
 * When newly added patron is deleted after making and canceling request, requests page is unstable. Refs UIREQ-672.
 * Import `stripes-core` components via `@folio/stripes`. Refs UIREQ-609.
 * Create reusable component for render title level information. Refs UIREQ-654.
+* Add preferred name to Requests UI. Refs UIREQ-605.
+* After the "Select item" window appears, the size of the Request information changes. Refs UIREQ-690.
+* Upgrade `react-beautiful-dnd` to `v13.1.0`. Refs UIREQ-698.
+* Fix big tests. Refs UIREQ-703.
 * BREAKING: TLR - data migration for request list, view, create, edit, duplicate. Refs UIREQ-664.
 * BREAKING: TLR - data migration for dialogboxes and reorder list. Refs UIREQ-665.
 * BREAKING: TLR - data migration for hold shelf clearance report. Refs UIREQ-677.
