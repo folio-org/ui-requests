@@ -224,6 +224,9 @@
   "filters.requestStatus.inTransit": "Open - In transit",
   "filters.requestStatus.notYetFilled": "Open - Not yet filled",
 
+  "filters.requestLevel.item": "Item",
+  "filters.requestLevel.title": "Title",
+
   "noRequestTypesAvailable": "No request types available for selected item",
   "errorModal.title": "Item cannot be requested",
   "errorModal.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>{itemStatus}</strong> and cannot be requested.",

@@ -30,6 +30,7 @@
 * View & reorder requests (first accordion). Refs UIREQ-630.
 * View & reorder requests (second accordion). Refs UIREQ-644.
 * Migrate requests queue/reorder page on new end-points. Refs UIREQ-695.
+* Create new request filter. Refs UIREQ-612.
 
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)

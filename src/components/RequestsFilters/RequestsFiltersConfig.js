@@ -17,6 +17,12 @@ export default [
     operator: '==',
   },
   {
+    name: requestFilterTypes.REQUEST_LEVELS,
+    cql: 'requestLevel',
+    values: [],
+    operator: '==',
+  },
+  {
     name: 'tags',
     cql: 'tags.tagList',
     values: [],
