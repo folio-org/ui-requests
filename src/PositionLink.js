@@ -4,16 +4,18 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
-import { openRequestStatusFilters } from './utils';
 import {
-  REQUEST_LEVEL_TYPES,
+  requestStatuses,
   REQUEST_DATE,
 } from './constants';
 
-export default function PositionLink({ request }) {
+export default function PositionLink({
+  request,
+  isTlrEnabled,
+}) {
   const queuePosition = get(request, 'position');
-  const id = request[request.requestLevel === REQUEST_LEVEL_TYPES.ITEM ? 'itemId' : 'instanceId'];
-  const openRequestsPath = `/requests?filters=${openRequestStatusFilters}&query=${id}&sort=${REQUEST_DATE}`;
+  const id = request[isTlrEnabled ? 'instanceId' : 'itemId'];
+  const openRequestsPath = `/requests?filters=requestStatus.${requestStatuses.NOT_YET_FILLED}&query=${id}&sort=${REQUEST_DATE}`;
 
   return request
     ? (
@@ -33,4 +35,5 @@ export default function PositionLink({ request }) {
 
 PositionLink.propTypes = {
   request: PropTypes.object,
+  isTlrEnabled: PropTypes.bool.isRequired,
 };

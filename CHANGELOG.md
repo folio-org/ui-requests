@@ -34,6 +34,7 @@
 * Migrate requests queue/reorder page on new end-points. Refs UIREQ-695.
 * Create new request filter. Refs UIREQ-612.
 * Change render dependency for item link and information from `requestLevel` to `item`. Refs UIREQ-704.
+* Fixed behavior of `hyperlinks` related to `TLR`. Refs UIREQ-702.
 
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)

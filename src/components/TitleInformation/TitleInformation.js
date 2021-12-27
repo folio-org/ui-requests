@@ -13,13 +13,15 @@ import { getFormattedYears } from '../../routes/utils';
 import {
   DEFAULT_DISPLAYED_YEARS_AMOUNT,
   REQUEST_DATE,
+  REQUEST_LEVEL_TYPES,
 } from '../../constants';
+import { openRequestStatusFilters } from '../../utils';
 
 export const TEXT_SEPARATOR = ', ';
 export const CONTRIBUTOR_SEPARATOR = '; ';
 export const MAX_IDENTIFIERS_COUNT = 4;
 
-export const getURL = (id, count) => <Link to={`/requests?filters=query=${id}&sort=${REQUEST_DATE}`}>{count}</Link>;
+export const getURL = (id, count) => <Link to={`/requests?filters=${openRequestStatusFilters},requestLevels.${REQUEST_LEVEL_TYPES.TITLE}&query=${id}&sort=${REQUEST_DATE}`}>{count}</Link>;
 export const getTitleURL = (id, title) => <Link to={`/inventory/view/${id}`}>{title}</Link>;
 export const getContributors = (data, separator) => data.map(({ name }) => name).join(separator);
 export const getEditions = (data, separator) => data.join(separator);
