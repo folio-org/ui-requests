@@ -58,6 +58,7 @@ class RequestQueueView extends React.Component {
       holding: PropTypes.object,
       request: PropTypes.object,
     }),
+    isTlrEnabled: PropTypes.bool.isRequired,
     onClose: PropTypes.func,
     onReorder: PropTypes.func,
     isLoading: PropTypes.bool,
@@ -121,6 +122,7 @@ class RequestQueueView extends React.Component {
     }
 
     const { notYetFilledRequests } = this.state;
+    const { isTlrEnabled } = this.props;
     const destIndex = destination.index;
     const sourceIndex = source.index;
     const destRequest = notYetFilledRequests[destIndex];
@@ -130,11 +132,7 @@ class RequestQueueView extends React.Component {
       return;
     }
 
-    if (destIndex === 0 && !isNotYetFilled(destRequest)) {
-      confirmMessage = 'ui-requests.requestQueue.confirmReorder.message1';
-    }
-
-    if (destIndex === 0 && isPageRequest(destRequest)) {
+    if (destIndex === 0 && isPageRequest(destRequest) && !isTlrEnabled) {
       confirmMessage = 'ui-requests.requestQueue.confirmReorder.message2';
     }
 
