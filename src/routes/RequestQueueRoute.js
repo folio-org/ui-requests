@@ -221,6 +221,7 @@ class RequestQueueRoute extends React.Component {
   }
 
   render() {
+    const titleLevelRequestsFeatureEnabled = !!this.state?.titleLevelRequestsFeatureEnabled;
     const { resources, location } = this.props;
     const request = this.getRequest();
     const requests = this.getRequestsWithDeliveryTypes();
@@ -245,6 +246,7 @@ class RequestQueueRoute extends React.Component {
           holding: get(resources, 'holdings.records[0]', {}),
           request,
         }}
+        isTlrEnabled={titleLevelRequestsFeatureEnabled}
         onClose={this.handleClose}
         isLoading={this.isLoading()}
         onReorder={this.reorder}
