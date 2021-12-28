@@ -42,6 +42,7 @@ import {
   requestTypesTranslations,
   REQUEST_LEVEL_TYPES,
   DEFAULT_DISPLAYED_YEARS_AMOUNT,
+  requestStatuses,
 } from '../constants';
 import {
   buildUrl,
@@ -88,12 +89,12 @@ const urls = {
   },
   requestsForItem: (value) => {
     const query = stringify({ query: `(itemId=="${value}" and status=Open)` });
-    return `request-storage/requests?${query}`;
+    return `circulation/requests?${query}`;
   },
   requestsForInstance: (value) => {
-    const query = stringify({ query: `(instanceId=="${value}" and requestLevel=="${REQUEST_LEVEL_TYPES.TITLE}" and status=Open)` });
+    const query = stringify({ query: `(instanceId=="${value}" and status=Open)` });
 
-    return `request-storage/requests?${query}`;
+    return `circulation/requests?${query}`;
   },
   requestPreferences: (value) => {
     const query = stringify({ query: `(userId=="${value}")` });
@@ -323,6 +324,7 @@ class RequestsRoute extends React.Component {
         isPending: PropTypes.bool,
       }),
       configs: PropTypes.shape({
+        hasLoaded: PropTypes.bool.isRequired,
         records: PropTypes.arrayOf(PropTypes.object).isRequired,
       }),
     }).isRequired,
@@ -350,6 +352,10 @@ class RequestsRoute extends React.Component {
     super(props);
 
     const { intl: { formatMessage } } = props;
+    const {
+      titleLevelRequestsFeatureEnabled = false,
+      createTitleLevelRequestsByDefault = false,
+    } = getTlrSettings(props.resources.configs.records[0]?.value);
 
     this.okapiUrl = props.stripes.okapi.url;
     this.httpHeaders = {
@@ -388,6 +394,8 @@ class RequestsRoute extends React.Component {
       errorModalData: {},
       servicePointId: '',
       requests: [],
+      titleLevelRequestsFeatureEnabled,
+      createTitleLevelRequestsByDefault,
     };
 
     this.printContentRef = React.createRef();
@@ -414,6 +422,8 @@ class RequestsRoute extends React.Component {
     const expired = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
     const { id: currentServicePointId } = this.getCurrentServicePointInfo();
     const prevStateServicePointId = get(prevProps.resources.currentServicePoint, 'id');
+    const { configs: prevConfigs } = prevProps.resources;
+    const { configs } = this.props.resources;
 
     if (prevExpired.length > 0 && expired.length === 0) {
       // eslint-disable-next-line react/no-did-update-set-state
@@ -431,6 +441,19 @@ class RequestsRoute extends React.Component {
 
     if (prevStateServicePointId !== currentServicePointId) {
       this.setCurrentServicePointId();
+    }
+
+    if (prevConfigs.hasLoaded !== configs.hasLoaded && configs.hasLoaded) {
+      const {
+        titleLevelRequestsFeatureEnabled = false,
+        createTitleLevelRequestsByDefault = false,
+      } = getTlrSettings(configs.records[0]?.value);
+
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        titleLevelRequestsFeatureEnabled,
+        createTitleLevelRequestsByDefault,
+      });
     }
   }
 
@@ -573,6 +596,7 @@ class RequestsRoute extends React.Component {
   // Called as a map function
   addRequestFields(r) {
     const { requestLevel } = r;
+    const { titleLevelRequestsFeatureEnabled } = this.state;
 
     return Promise.all(
       [
@@ -590,6 +614,9 @@ class RequestsRoute extends React.Component {
       const requester = get(users, 'users[0]', null);
       const titleRequestCount = get(titleRequests, 'totalRecords', 0);
       const dynamicProperties = {};
+      const requestsForFilter = titleLevelRequestsFeatureEnabled ? titleRequests : itemRequests;
+
+      dynamicProperties.numberOfNotYetFilledRequests = requestsForFilter.requests.filter(request => request.status === requestStatuses.NOT_YET_FILLED).length;
 
       if (requestLevel === REQUEST_LEVEL_TYPES.ITEM) {
         dynamicProperties.itemRequestCount = get(itemRequests, 'totalRecords', 0);
@@ -802,7 +829,7 @@ class RequestsRoute extends React.Component {
 
   renderFilters = (onChange) => {
     const { resources } = this.props;
-    const { titleLevelRequestsFeatureEnabled = false } = getTlrSettings(resources.configs.records[0]?.value);
+    const { titleLevelRequestsFeatureEnabled } = this.state;
 
     return (
       <RequestsFilters
@@ -836,6 +863,7 @@ class RequestsRoute extends React.Component {
       requests,
       servicePointId,
       holdsShelfReportPending,
+      createTitleLevelRequestsByDefault,
     } = this.state;
     const { name: servicePointName } = this.getCurrentServicePointInfo();
     const pickSlips = get(resources, 'pickSlips.records', []);
@@ -844,7 +872,6 @@ class RequestsRoute extends React.Component {
     const servicePoints = get(resources, 'servicePoints.records', []);
     const cancellationReasons = get(resources, 'cancellationReasons.records', []);
     const requestCount = get(resources, 'records.other.totalRecords', 0);
-    const { createTitleLevelRequestsByDefault = false } = getTlrSettings(resources.configs.records[0]?.value);
     const initialValues = dupRequest ||
       {
         requestType: 'Hold',
