@@ -2,6 +2,7 @@
   "routingErrorOops": "Uh-oh!",
   "routingError": "How did you get to {pathname}?",
 
+  "items": "{number} items",
   "meta.title": "Requests",
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
   "barcode": "Barcode",
@@ -28,6 +29,7 @@
   "enter": "Enter",
   "requestNotAllowed": "Request not allowed",
   "requestLevel": "Request level",
+
   "itemLevel": "Item",
   "titleLevel": "Title",
   "requests.title": "Title",

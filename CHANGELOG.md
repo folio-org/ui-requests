@@ -36,6 +36,7 @@
 * Change render dependency for item link and information from `requestLevel` to `item`. Refs UIREQ-704.
 * Fixed behavior of `hyperlinks` related to `TLR`. Refs UIREQ-702.
 * Disable validation on reordering for `Page` requests for `TLR` feature. Refs UIREQ-706.
+* Add all required attributes for the `position` field in request info. Refs UIREQ-707.
 
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)
