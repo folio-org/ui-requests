@@ -2,7 +2,7 @@ import get from 'lodash/get';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 import {
   requestStatuses,
@@ -13,6 +13,7 @@ export default function PositionLink({
   request,
   isTlrEnabled,
 }) {
+  const { formatMessage } = useIntl();
   const queuePosition = get(request, 'position');
   const id = request[isTlrEnabled ? 'instanceId' : 'itemId'];
   const openRequestsPath = `/requests?filters=requestStatus.${requestStatuses.NOT_YET_FILLED}&query=${id}&sort=${REQUEST_DATE}`;
@@ -21,12 +22,11 @@ export default function PositionLink({
     ? (
       <div>
         <span>
-          {queuePosition}
-          &nbsp;
+          {`${queuePosition} (${formatMessage({ id: 'ui-requests.items' }, { number: request.numberOfNotYetFilledRequests })})`}
           &nbsp;
         </span>
         <Link to={openRequestsPath}>
-          <FormattedMessage id="ui-requests.actions.viewRequestsInQueue" />
+          {formatMessage({ id: 'ui-requests.actions.viewRequestsInQueue' })}
         </Link>
       </div>
     )
