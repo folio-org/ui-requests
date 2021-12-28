@@ -399,6 +399,7 @@ class ViewRequest extends React.Component {
       accordions,
       isCancellingRequest,
       moveRequest,
+      titleLevelRequestsFeatureEnabled,
     } = this.state;
     const {
       requestLevel,
@@ -651,7 +652,12 @@ class ViewRequest extends React.Component {
               <Col xs={3}>
                 <KeyValue
                   label={<FormattedMessage id="ui-requests.position" />}
-                  value={<PositionLink request={request} />}
+                  value={
+                    <PositionLink
+                      request={request}
+                      isTlrEnabled={titleLevelRequestsFeatureEnabled}
+                    />
+                  }
                 />
               </Col>
               <Col xs={3}>

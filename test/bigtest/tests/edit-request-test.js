@@ -22,7 +22,7 @@ describe('Edit Request page', () => {
   const ViewRequestInteractor = new ViewRequest();
 
   beforeEach(async function () {
-    const request = this.server.create('request', { requestCount: requestsOnItemValue });
+    const request = this.server.create('request', { itemRequestCount: requestsOnItemValue });
 
     this.visit(`/requests/view/${request.id}?layer=edit`);
   });
@@ -71,7 +71,7 @@ describe('Edit Request page', () => {
     beforeEach(function () {
       this.server.create('request', {
         status: requestStatuses.AWAITING_DELIVERY,
-        id: 'someId'
+        id: 'someId',
       });
 
       this.visit('/requests/view/someId?layer=edit');
@@ -86,7 +86,7 @@ describe('Edit Request page', () => {
     beforeEach(function () {
       this.server.create('request', {
         status: requestStatuses.AWAITING_PICKUP,
-        id: 'someId2'
+        id: 'someId2',
       });
 
       this.visit('/requests/view/someId2?layer=edit');
