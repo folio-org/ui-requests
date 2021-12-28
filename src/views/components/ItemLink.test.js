@@ -10,7 +10,6 @@ import '../../../test/jest/__mock__';
 import ItemLink from './ItemLink';
 
 import {
-  REQUEST_LEVEL_TYPES,
   MISSING_VALUE_SYMBOL,
 } from '../../constants';
 
@@ -19,18 +18,21 @@ describe('ItemLink', () => {
     barcode: 'testItemBarcode',
   };
   const mockedRequest = {
-    requestLevel: REQUEST_LEVEL_TYPES.ITEM,
     instanceId: 'testInstanceId',
     holdingsRecordId: 'testHoldingsRecordId',
     itemId: 'testItemId',
-    item: mockedItem,
   };
 
-  describe(`if request level is ${REQUEST_LEVEL_TYPES.ITEM}`, () => {
+  describe('if `item` is present in request', () => {
     beforeEach(() => {
       render(
         <BrowserRouter>
-          <ItemLink request={mockedRequest} />
+          <ItemLink
+            request={{
+              ...mockedRequest,
+              item: mockedItem,
+            }}
+          />
         </BrowserRouter>
       );
     });
@@ -46,15 +48,12 @@ describe('ItemLink', () => {
     });
   });
 
-  describe(`if request level is ${REQUEST_LEVEL_TYPES.TITLE}`, () => {
+  describe('if there is no `item` in request', () => {
     beforeEach(() => {
       render(
         <BrowserRouter>
           <ItemLink
-            request={{
-              ...mockedRequest,
-              requestLevel: REQUEST_LEVEL_TYPES.TITLE,
-            }}
+            request={mockedRequest}
           />
         </BrowserRouter>
       );
