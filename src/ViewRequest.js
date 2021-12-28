@@ -400,7 +400,10 @@ class ViewRequest extends React.Component {
       isCancellingRequest,
       moveRequest,
     } = this.state;
-    const { requestLevel } = request;
+    const {
+      requestLevel,
+      item,
+    } = request;
 
     const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');
@@ -588,13 +591,8 @@ class ViewRequest extends React.Component {
               />
             }
           >
-            {requestLevel === REQUEST_LEVEL_TYPES.TITLE
+            { item
               ? (
-                <FormattedMessage
-                  id="ui-requests.item.noInformation"
-                />
-              )
-              : (
                 <ItemDetail
                   item={{
                     ...request.item,
@@ -605,6 +603,11 @@ class ViewRequest extends React.Component {
                   }}
                   loan={request.loan}
                   requestCount={request.itemRequestCount}
+                />
+              )
+              : (
+                <FormattedMessage
+                  id="ui-requests.item.noInformation"
                 />
               )
             }
