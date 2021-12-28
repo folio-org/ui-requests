@@ -1327,8 +1327,8 @@ class RequestForm extends React.Component {
                             {
                               selectedInstance && !isItemOrInstanceLoading &&
                               <TitleInformation
-                                instanceId={selectedInstance.id || instanceId}
-                                titleLevelRequestsCount={request?.position || instanceRequestCount}
+                                instanceId={request?.instanceId || selectedInstance.id || instanceId}
+                                titleLevelRequestsCount={request?.titleRequestCount || instanceRequestCount}
                                 title={selectedInstance.title}
                                 contributors={selectedInstance.contributors || selectedInstance.contributorNames}
                                 publications={selectedInstance.publication}
@@ -1399,7 +1399,7 @@ class RequestForm extends React.Component {
                                   ...instance,
                                 }}
                                 loan={selectedLoan}
-                                requestCount={request?.requestCount || itemRequestCount}
+                                requestCount={request?.itemRequestCount || itemRequestCount}
                               />
                             }
                           </Col>
