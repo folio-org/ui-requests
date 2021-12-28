@@ -1,6 +1,7 @@
 import {
   get,
   isEmpty,
+  isArray,
 } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -75,7 +76,15 @@ const urls = {
     return `users?${query}`;
   },
   item: (value, idType) => {
-    const query = stringify({ query: `(${idType}=="${value}")` });
+    let query;
+
+    if (isArray(value)) {
+      query = `(${value.map((valueItem) => `${idType}=="${valueItem}"`).join(' or ')})`;
+    } else {
+      query = `(${idType}=="${value}")`;
+    }
+
+    query = stringify({ query });
     return `inventory/items?${query}`;
   },
   instance: (value) => {
