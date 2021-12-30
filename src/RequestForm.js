@@ -61,6 +61,7 @@ import {
   iconTypes,
   fulfilmentTypeMap,
   createModes,
+  REQUEST_LEVEL_TYPES,
 } from './constants';
 import ErrorModal from './components/ErrorModal';
 import {
@@ -573,7 +574,7 @@ class RequestForm extends React.Component {
       this.setState({
         requestCount,
         instanceId: holdingsRecord && holdingsRecord.instanceId,
-        selectedLoan
+        selectedLoan,
       });
 
       return item;
@@ -729,6 +730,7 @@ class RequestForm extends React.Component {
         timeZone,
       },
       parentResources,
+      request,
     } = this.props;
 
     const {
@@ -743,6 +745,7 @@ class RequestForm extends React.Component {
     const {
       selectedItem,
       isPatronBlocksOverridden,
+      instanceId,
     } = this.state;
 
     if (hasNonRequestableStatus(selectedItem)) {
@@ -777,9 +780,13 @@ class RequestForm extends React.Component {
       data.requestProcessingParameters = {
         overrideBlocks: {
           patronBlock: {},
-        }
+        },
       };
     }
+
+    data.instanceId = request?.instanceId || instanceId;
+    data.requestLevel = request?.requestLevel || REQUEST_LEVEL_TYPES.ITEM;
+    data.holdingsRecordId = request?.holdingsRecordId || selectedItem.holdingsRecordId;
 
     return this.props.onSubmit(data);
   };
@@ -852,7 +859,8 @@ class RequestForm extends React.Component {
     const patronBlocks = this.getPatronManualBlocks(parentResources);
     const automatedPatronBlocks = this.getAutomatedPatronBlocks(parentResources);
     const {
-      fulfilmentPreference
+      fulfilmentPreference,
+      instance,
     } = request || {};
 
     const isEditForm = this.isEditForm();
@@ -1003,7 +1011,12 @@ class RequestForm extends React.Component {
                         </Row> }
                       {selectedItem &&
                         <ItemDetail
-                          item={{ id: get(request, 'itemId'), instanceId, ...selectedItem }}
+                          item={{
+                            id: get(request, 'itemId'),
+                            instanceId: instanceId || request?.instanceId,
+                            ...selectedItem,
+                            ...instance,
+                          }}
                           loan={selectedLoan}
                           requestCount={request ? request.requestCount : requestCount}
                         /> }
@@ -1261,7 +1274,7 @@ class RequestForm extends React.Component {
                   <SafeHTMLMessage
                     id="ui-requests.errorModal.message"
                     values={{
-                      title: selectedItem.title,
+                      title: instance?.title,
                       barcode: selectedItem.barcode,
                       materialType: get(selectedItem, 'materialType.name', ''),
                       itemStatus,

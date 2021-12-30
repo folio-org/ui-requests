@@ -87,7 +87,7 @@ const urls = {
   holding: (value, idType) => {
     const query = stringify({ query: `(${idType}=="${value}")` });
     return `holdings-storage/holdings?${query}`;
-  }
+  },
 };
 
 class RequestsRoute extends React.Component {
@@ -115,9 +115,10 @@ class RequestsRoute extends React.Component {
         params: {
           query: makeQueryFunction(
             'cql.allRecords=1',
-            '(requesterId=="%{query.query}" or requester.barcode="%{query.query}*" or item.title="%{query.query}*" or item.barcode=="%{query.query}*" or itemId=="%{query.query}" or itemIsbn="%{query.query}")',
+            '(requesterId=="%{query.query}" or requester.barcode="%{query.query}*" or instance.title="%{query.query}*" or instanceId="%{query.query}*" or item.barcode=="%{query.query}*" or itemId=="%{query.query}" or itemIsbn="%{query.query}")',
             {
-              'title': 'item.title',
+              'title': 'instance.title',
+              'instanceId': 'instanceId',
               'itemBarcode': 'item.barcode',
               'type': 'requestType',
               'requester': 'requester.lastName requester.firstName',
@@ -478,7 +479,7 @@ class RequestsRoute extends React.Component {
 
     return headers.map(item => ({
       label: formatMessage({ id: `ui-requests.${item}` }),
-      value: item
+      value: item,
     }));
   };
 
@@ -490,8 +491,8 @@ class RequestsRoute extends React.Component {
       const contributorNamesMap = [];
       const tagListMap = [];
 
-      if (record.item.contributorNames && record.item.contributorNames.length > 0) {
-        record.item.contributorNames.forEach(item => {
+      if (record.instance.contributorNames && record.instance.contributorNames.length > 0) {
+        record.instance.contributorNames.forEach(item => {
           contributorNamesMap.push(item.name);
         });
       }
@@ -516,7 +517,7 @@ class RequestsRoute extends React.Component {
         const { addressLine1, city, region, postalCode, countryId } = record.deliveryAddress;
         record.deliveryAddress = `${addressLine1 || ''} ${city || ''} ${region || ''} ${countryId || ''} ${postalCode || ''}`;
       }
-      record.item.contributorNames = contributorNamesMap.join('; ');
+      record.instance.contributorNames = contributorNamesMap.join('; ');
       if (record.tags) record.tags.tagList = tagListMap.join('; ');
     });
 
@@ -665,7 +666,7 @@ class RequestsRoute extends React.Component {
           errorModalData: {
             errorMessage: 'ui-requests.noServicePoint.errorMessage',
             label: 'ui-requests.noServicePoint.label',
-          }
+          },
         }
       );
 
@@ -804,7 +805,7 @@ class RequestsRoute extends React.Component {
       'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : ''),
       'requestStatus': rq => <FormattedMessage id={requestStatusesTranslations[rq.status]} />,
       'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
-      'title': rq => (rq.item ? rq.item.title : ''),
+      'title': rq => (rq.instance ? rq.instance.title : ''),
     };
 
     const actionMenu = ({ onToggle, renderColumnsMenu }) => (
@@ -917,7 +918,7 @@ class RequestsRoute extends React.Component {
               position: { max: 100 },
               requestType: { max: 101 },
               itemBarcode: { max: 115 },
-              type: { max: 100 }
+              type: { max: 100 },
             }}
             columnMapping={this.columnLabels}
             resultsFormatter={resultsFormatter}

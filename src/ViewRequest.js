@@ -19,7 +19,7 @@ import moment from 'moment-timezone';
 import {
   IfPermission,
   IntlConsumer,
-  TitleManager
+  TitleManager,
 } from '@folio/stripes/core';
 import {
   Button,
@@ -33,7 +33,7 @@ import {
   Layer,
   Pane,
   PaneMenu,
-  Row
+  Row,
 } from '@folio/stripes/components';
 import {
   ViewMetaData,
@@ -118,7 +118,7 @@ class ViewRequest extends React.Component {
   static defaultProps = {
     editLink: '',
     paneWidth: '50%',
-    onEdit: () => { }
+    onEdit: () => { },
   };
 
   constructor(props) {
@@ -305,7 +305,7 @@ class ViewRequest extends React.Component {
                   requestExpirationDate: null,
                   holdShelfExpirationDate: request.holdShelfExpirationDate,
                   holdShelfExpirationTime: momentDate.format('HH:mm'),
-                  ...request
+                  ...request,
                 }}
                 request={request}
                 metadataDisplay={this.cViewMetaData}
@@ -502,11 +502,11 @@ class ViewRequest extends React.Component {
     };
 
     const referredRecordData = {
-      instanceTitle: request.item.title,
-      instanceId: request.item.instanceId,
+      instanceTitle: request.instance.title,
+      instanceId: request.instanceId,
       itemBarcode: request.item.barcode,
       itemId: request.itemId,
-      holdingsRecordId: request.item.holdingsRecordId,
+      holdingsRecordId: request.holdingsRecordId,
       requesterName: getFullName(request.requester),
       requesterId: request.requester?.id ?? request.requesterId,
       requestCreateDate: request.metadata.createdDate,
@@ -522,7 +522,7 @@ class ViewRequest extends React.Component {
         {... (showActionMenu ? { actionMenu } : {})}
         onClose={this.props.onClose}
       >
-        <TitleManager record={get(request, ['item', 'title'])} />
+        <TitleManager record={get(request, ['instance', 'title'])} />
         <AccordionSet accordionStatus={accordions} onToggle={this.onToggleSection}>
           <Accordion
             id="item-info"
@@ -534,7 +534,13 @@ class ViewRequest extends React.Component {
             }
           >
             <ItemDetail
-              item={{ ...request.item, id: request.itemId }}
+              item={{
+                ...request.item,
+                ...request.instance,
+                id: request.itemId,
+                instanceId: request.instanceId,
+                holdingsRecordId: request.holdingsRecordId,
+              }}
               loan={request.loan}
               requestCount={request.requestCount}
             />
@@ -629,7 +635,7 @@ class ViewRequest extends React.Component {
           <NotesSmartAccordion
             domainName="requests"
             entityId={request.id}
-            entityName={request.item.title}
+            entityName={request.instance.title}
             entityType="request"
             referredRecordData={referredRecordData}
             id="staff-notes"

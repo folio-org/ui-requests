@@ -43,7 +43,7 @@ describe('Note View page', () => {
       });
 
       it('should display instance link', () => {
-        expect(noteView.referredRecord.instanceTitle).to.equal(request.item.title);
+        expect(noteView.referredRecord.instanceTitle).to.equal(request.instance.title);
       });
 
       it('should display item link', () => {
@@ -66,7 +66,7 @@ describe('Note View page', () => {
         });
 
         it('should redirect to instance page', function () {
-          expect(this.location.pathname).to.equal(`/inventory/view/${request.item.instanceId}`);
+          expect(this.location.pathname).to.equal(`/inventory/view/${request.instanceId}`);
         });
       });
 
@@ -78,10 +78,8 @@ describe('Note View page', () => {
         it('should redirect to item page', function () {
           const {
             itemId,
-            item: {
-              instanceId,
-              holdingsRecordId,
-            },
+            instanceId,
+            holdingsRecordId,
           } = request;
 
           expect(this.location.pathname).to.equal(`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`);

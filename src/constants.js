@@ -24,7 +24,7 @@ export const fulfilmentTypeMap = {
 // map from API's enum-value to translation key
 export const fulfilmentTypesTranslations = {
   'Delivery': 'ui-requests.requestMeta.fulfilment.delivery.',
-  'Hold Shelf': 'ui-requests.requestMeta.fulfilment.holdShelf.'
+  'Hold Shelf': 'ui-requests.requestMeta.fulfilment.holdShelf.',
 };
 
 // used to perform queries with the backend
@@ -116,8 +116,8 @@ export const reportHeaders = [
   'holdShelfExpirationDate',
   'position',
   'item.barcode',
-  'item.title',
-  'item.contributorNames',
+  'instance.title',
+  'instance.contributorNames',
   'item.location.libraryName',
   'item.location.name',
   'item.location.code',
@@ -145,7 +145,7 @@ export const reportHeaders = [
 export const expiredHoldsReportHeaders = [
   'requester.name',
   'requester.barcode',
-  'item.title',
+  'instance.title',
   'item.barcode',
   'item.callNumberComponents.prefix',
   'item.callNumberComponents.callNumber',
@@ -200,4 +200,9 @@ export const errorMessages = {
 export const errorCodes = {
   SYNC: 'sync',
   UNKNOWN: 'unknown',
+};
+
+export const REQUEST_LEVEL_TYPES = {
+  ITEM: 'Item',
+  TITLE: 'Title',
 };

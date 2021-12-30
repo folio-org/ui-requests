@@ -157,7 +157,7 @@ describe('New Request page', () => {
           barcode: '9676761472500',
           title: 'Best Book Ever',
           materialType: {
-            name: 'book'
+            name: 'book',
           },
         });
 
@@ -185,7 +185,7 @@ describe('New Request page', () => {
           barcode: '9676761472500',
           title: 'Best Book Ever',
           materialType: {
-            name: 'book'
+            name: 'book',
           },
           status: { name: 'Restricted' },
         });
@@ -222,7 +222,7 @@ describe('New Request page', () => {
           barcode: '9676761472500',
           title: 'Best Book Ever',
           materialType: {
-            name: 'book'
+            name: 'book',
           },
         });
 
@@ -269,8 +269,8 @@ describe('New Request page', () => {
           barcode: '9676761472500',
           title: 'Best Book Ever',
           materialType: {
-            name: 'book'
-          }
+            name: 'book',
+          },
         });
 
         await newRequest

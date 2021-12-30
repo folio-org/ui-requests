@@ -12,6 +12,10 @@
 * After the "Select item" window appears, the size of the Request information changes. Refs UIREQ-690.
 * Upgrade `react-beautiful-dnd` to `v13.1.0`. Refs UIREQ-698.
 * Fix big tests. Refs UIREQ-703.
+* BREAKING: TLR - data migration for request list, view, create, edit, duplicate. Refs UIREQ-664.
+* BREAKING: TLR - data migration for dialogboxes and reorder list. Refs UIREQ-665.
+* BREAKING: TLR - data migration for hold shelf clearance report. Refs UIREQ-677.
+* BREAKING: TLR - data migration, move `holdingsRecordId`. Refs UIREQ-685.
 
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)
