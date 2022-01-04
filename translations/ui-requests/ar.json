@@ -203,5 +203,7 @@
     "titleInformation.contributors": "المساهم",
     "titleInformation.publicationsDate": "تاريخ النشر",
     "titleInformation.editions": "الطبعة",
-    "titleInformation.identifiers": "أرقام ردمك"
+    "titleInformation.identifiers": "أرقام ردمك",
+    "instance.title": "العنوان",
+    "instance.contributorNames": "المساهم"
 }

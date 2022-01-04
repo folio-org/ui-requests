@@ -203,5 +203,7 @@
     "titleInformation.contributors": "Contributor",
     "titleInformation.publicationsDate": "Publication date",
     "titleInformation.editions": "Edition",
-    "titleInformation.identifiers": "ISBN(s)"
+    "titleInformation.identifiers": "ISBN(s)",
+    "instance.title": "Title",
+    "instance.contributorNames": "Contributor"
 }

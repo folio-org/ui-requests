@@ -203,5 +203,7 @@
     "titleInformation.contributors": "贡献者",
     "titleInformation.publicationsDate": "出版日期",
     "titleInformation.editions": "版本",
-    "titleInformation.identifiers": "ISBN"
+    "titleInformation.identifiers": "ISBN",
+    "instance.title": "Title",
+    "instance.contributorNames": "Contributor"
 }
