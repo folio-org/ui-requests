@@ -250,10 +250,12 @@ class ViewRequest extends React.Component {
       history,
       location: { search },
     } = this.props;
+    const { titleLevelRequestsFeatureEnabled } = this.state;
+    const id = titleLevelRequestsFeatureEnabled ? request.instanceId : request.itemId;
 
     this.loadFullRequest(request);
 
-    history.push(`${urls.requestQueueView(request.id, request.itemId)}${search}`, { afterMove: true });
+    history.push(`${urls.requestQueueView(request.id, id)}${search}`, { afterMove: true });
   }
 
   closeMoveRequest = () => {
