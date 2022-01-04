@@ -16,6 +16,8 @@
 * BREAKING: TLR - data migration for dialogboxes and reorder list. Refs UIREQ-665.
 * BREAKING: TLR - data migration for hold shelf clearance report. Refs UIREQ-677.
 * BREAKING: TLR - data migration, move `holdingsRecordId`. Refs UIREQ-685.
+* BREAKING: TLR - depend on okapi interface `circulation` `12`. Refs UIREQ-685.
+* BREAKING: TLR - depend on okapi interface `request-storage` `4.0`. Refs UIREQ-685, UIREQ-708, FOLIO-3376.
 
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)
