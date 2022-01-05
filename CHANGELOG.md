@@ -31,6 +31,7 @@
 * Fixed behavior of `hyperlinks` related to `TLR`. Refs UIREQ-702.
 * Disable validation on reordering for `Page` requests for `TLR` feature. Refs UIREQ-706.
 * Add all required attributes for the `position` field in request info. Refs UIREQ-707.
+* The user is redirected to the `Request queue` where the request queue is not displayed. Refs UIREQ-709.
 
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)
