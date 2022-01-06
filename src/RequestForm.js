@@ -185,8 +185,6 @@ class RequestForm extends React.Component {
       titleLevelRequestsFeatureEnabled,
       isItemOrInstanceLoading: false,
       isItemsDialogOpen: false,
-      areInstanceItemsBeingLoaded: false,
-      instanceItems: [],
     };
 
     this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
@@ -762,9 +760,9 @@ class RequestForm extends React.Component {
 
     const { items } = await findResource(RESOURCE_TYPES.HOLDING, instanceId, 'instanceId')
       .then(responce => {
-        const holdingRecordId = responce.holdingsRecords[0].id;
+        const holdingRecordIds = responce.holdingsRecords.map(({ id }) => id);
 
-        return findResource(RESOURCE_TYPES.ITEM, holdingRecordId, 'holdingsRecordId');
+        return findResource(RESOURCE_TYPES.ITEM, holdingRecordIds, 'holdingsRecordId');
       });
 
     return items;
@@ -1058,14 +1056,6 @@ class RequestForm extends React.Component {
     } else if (selectedInstance) {
       this.setState({
         isItemsDialogOpen: true,
-        areInstanceItemsBeingLoaded: true,
-      });
-
-      this.getInstanceItems(selectedInstance.id).then((instanceItems) => {
-        this.setState({
-          instanceItems,
-          areInstanceItemsBeingLoaded: false,
-        });
       });
     } else {
       this.setState({
@@ -1078,7 +1068,6 @@ class RequestForm extends React.Component {
   handleItemsDialogClose = () => {
     this.setState({
       isItemsDialogOpen: false,
-      instanceItems: [],
       requestTypeOptions: [],
       selectedInstance: undefined,
     });
@@ -1087,7 +1076,6 @@ class RequestForm extends React.Component {
   handleInstanceItemClick = (event, item) => {
     this.setState({
       isItemsDialogOpen: false,
-      instanceItems: [],
       requestTypeOptions: [],
       selectedInstance: undefined,
     });
@@ -1132,10 +1120,8 @@ class RequestForm extends React.Component {
       isPatronBlocksOverridden,
       isAwaitingForProxySelection,
       isItemsDialogOpen,
-      areInstanceItemsBeingLoaded,
       proxy,
       requestTypeOptions,
-      instanceItems,
     } = this.state;
 
     const { createTitleLevelRequest } = this.getCurrentFormValues();
@@ -1652,10 +1638,9 @@ class RequestForm extends React.Component {
             <ItemsDialog
               onClose={this.handleItemsDialogClose}
               onRowClick={this.handleInstanceItemClick}
-              title={selectedInstance?.title || ''}
+              instanceId={selectedInstance?.id}
+              title={selectedInstance?.title}
               open={isItemsDialogOpen}
-              isLoading={areInstanceItemsBeingLoaded}
-              items={instanceItems}
             />
             {isErrorModalOpen &&
               <ErrorModal
