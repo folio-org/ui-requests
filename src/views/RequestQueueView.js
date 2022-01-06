@@ -259,10 +259,10 @@ class RequestQueueView extends React.Component {
     const {
       title,
       publication,
-      contributors,
+      contributorNames,
     } = request?.instance || {};
     const count = inProgressRequests.length + notYetFilledRequests.length;
-    const formattedContributors = getFormattedContributors(contributors);
+    const formattedContributors = getFormattedContributors(contributorNames);
 
     return (
       <Paneset isRoot>
