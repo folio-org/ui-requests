@@ -1,7 +1,10 @@
-import { uniqueId } from 'lodash';
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { MultiColumnList } from '@folio/stripes/components';
+import { uniqueId } from 'lodash';
+import {
+  MultiColumnList,
+  Icon,
+} from '@folio/stripes/components';
 import {
   DragDropContext,
   Droppable,
@@ -16,7 +19,31 @@ export default function SortableList(props) {
     rowFormatter,
     isRowDraggable,
     rowProps,
+    visibleColumns: originalVisibleColumns,
+    columnWidths: originalColumnWidths,
+    columnMapping: originalColumnMapping,
+    formatter: originalFormatter,
   } = props;
+
+  const visibleColumns = useMemo(() => ([
+    'draggable',
+    ...originalVisibleColumns,
+  ]), [originalVisibleColumns]);
+
+  const columnWidths = useMemo(() => ({
+    draggable: { max: 40 },
+    ...originalColumnWidths,
+  }), [originalColumnWidths]);
+
+  const columnMapping = useMemo(() => ({
+    draggable: '',
+    ...originalColumnMapping,
+  }), [originalColumnMapping]);
+
+  const formatter = useMemo(() => ({
+    draggable: () => <Icon icon="drag-drop" />,
+    ...originalFormatter,
+  }), [originalFormatter]);
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -28,6 +55,10 @@ export default function SortableList(props) {
           >
             <MultiColumnList
               {...props}
+              columnWidths={columnWidths}
+              visibleColumns={visibleColumns}
+              columnMapping={columnMapping}
+              formatter={formatter}
               rowFormatter={rowFormatter}
               rowProps={{
                 ...rowProps,
@@ -54,4 +85,8 @@ SortableList.propTypes = {
   rowFormatter: PropTypes.func,
   isRowDraggable: PropTypes.func,
   rowProps: PropTypes.object,
+  visibleColumns: PropTypes.array.isRequired,
+  columnWidths: PropTypes.object.isRequired,
+  columnMapping: PropTypes.object.isRequired,
+  formatter: PropTypes.object.isRequired,
 };

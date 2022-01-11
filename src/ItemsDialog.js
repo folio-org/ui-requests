@@ -149,6 +149,7 @@ const ItemsDialog = ({
     }
 
     // items with status available must go first
+    // eslint-disable-next-line no-confusing-arrow
     return resultItems.sort((a) => a.status.name === itemStatuses.AVAILABLE ? -1 : 1);
   }, [items, skippedItemId]);
 

@@ -33,7 +33,6 @@ const NotYetFilledRequestsData = ({
 
   return (
     <SortableList
-      id="requests-list"
       onDragEnd={onDragEnd}
       isRowDraggable={isRowDraggable}
       contentData={contentData}

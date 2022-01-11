@@ -334,7 +334,6 @@ class RequestQueueView extends React.Component {
                   }
                 >
                   <NotYetFilledRequestsData
-                    id="requests-list"
                     onDragEnd={this.onDragEnd}
                     isRowDraggable={this.isRowDraggable}
                     contentData={notYetFilledRequests}
