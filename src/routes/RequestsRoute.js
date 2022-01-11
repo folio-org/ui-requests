@@ -826,14 +826,14 @@ class RequestsRoute extends React.Component {
       'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : ''),
       'requestDate': rq => (
         <AppIcon size="small" app="requests">
-          <TextLink to={this.getRowURL(rq.id)} onClick={() => this.setURL(rq.id)}><FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" /></TextLink>
+          <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
         </AppIcon>
       ),
       'requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
       'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : ''),
       'requestStatus': rq => <FormattedMessage id={requestStatusesTranslations[rq.status]} />,
       'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
-      'title': rq => (rq.instance ? rq.instance.title : ''),
+      'title': rq => <TextLink to={this.getRowURL(rq.id)} onClick={() => this.setURL(rq.id)}>{(rq.instance ? rq.instance.title : '')}</TextLink>,
     };
 
     const actionMenu = ({ onToggle, renderColumnsMenu }) => (
@@ -983,7 +983,7 @@ class RequestsRoute extends React.Component {
             renderFilters={this.renderFilters}
             resultIsSelected={this.resultIsSelected}
             onFilterChange={this.handleFilterChange}
-            resultClickHandlers={false}
+            resultRowClickHandlers={false}
             pageAmount={100}
             pagingType="click"
           />
