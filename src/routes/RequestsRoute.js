@@ -22,6 +22,8 @@ import {
   filters2cql,
   FormattedTime,
   MenuSection,
+  TextLink,
+  DefaultMCLRowFormatter,
 } from '@folio/stripes/components';
 import {
   deparseFilters,
@@ -310,6 +312,7 @@ class RequestsRoute extends React.Component {
     }).isRequired,
     history: PropTypes.object,
     location: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -336,6 +339,7 @@ class RequestsRoute extends React.Component {
       proxy: formatMessage({ id: 'ui-requests.requests.proxy' }),
     };
 
+    this.getRowURL = this.getRowURL.bind(this);
     this.addRequestFields = this.addRequestFields.bind(this);
     this.processError = this.processError.bind(this);
     this.create = this.create.bind(this);
@@ -353,6 +357,7 @@ class RequestsRoute extends React.Component {
       errorModalData: {},
       servicePointId: '',
       requests: [],
+      selectedId: '',
     };
 
     this.printContentRef = React.createRef();
@@ -556,6 +561,29 @@ class RequestsRoute extends React.Component {
   }
 
   getHelperResourcePath = (helper, id) => `circulation/requests/${id}`;
+
+  getRowURL(id) {
+    const {
+      match: { path },
+      location: { search },
+    } = this.props;
+
+    return `${path}/view/${id}${search}`;
+  }
+
+  setURL(id) {
+    this.setState({
+      selectedId: id
+    });
+  }
+
+  resultIsSelected = ({ item }) => item.id === this.state.selectedId;
+
+  viewRecordOnCollapse = () => {
+    this.setState({
+      selectedId: null
+    });
+  }
 
   massageNewRecord = (requestData) => {
     const { intl: { timeZone } } = this.props;
@@ -798,7 +826,7 @@ class RequestsRoute extends React.Component {
       'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : ''),
       'requestDate': rq => (
         <AppIcon size="small" app="requests">
-          <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
+          <TextLink to={this.getRowURL(rq.id)} onClick={() => this.setURL(rq.id)}><FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" /></TextLink>
         </AppIcon>
       ),
       'requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
@@ -921,7 +949,9 @@ class RequestsRoute extends React.Component {
               type: { max: 100 },
             }}
             columnMapping={this.columnLabels}
+            resultsRowClickHandlers={false}
             resultsFormatter={resultsFormatter}
+            resultRowFormatter={DefaultMCLRowFormatter}
             newRecordInitialValues={initialValues}
             massageNewRecord={this.massageNewRecord}
             onCreate={this.create}
@@ -947,10 +977,13 @@ class RequestsRoute extends React.Component {
               onDuplicate: this.onDuplicate,
               buildRecordsForHoldsShelfReport: this.buildRecordsForHoldsShelfReport,
             }}
+            viewRecordOnCollapse={this.viewRecordOnCollapse}
             viewRecordPerms="ui-requests.view"
             newRecordPerms="ui-requests.create"
             renderFilters={this.renderFilters}
+            resultIsSelected={this.resultIsSelected}
             onFilterChange={this.handleFilterChange}
+            resultClickHandlers={false}
             pageAmount={100}
             pagingType="click"
           />
