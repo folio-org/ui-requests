@@ -12,6 +12,7 @@ import {
 } from '../constants';
 
 export const COLUMN_NAMES = [
+  'position',
   'fulfillmentStatus',
   'itemBarcode',
   'requestDate',

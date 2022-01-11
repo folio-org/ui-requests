@@ -45,7 +45,7 @@ export const COLUMN_WIDTHS = {
 };
 
 export const formatter = {
-  fulfillmentStatus: () => (<AppIcon size="small" app="requests"><FormattedMessage id="ui-requests.requestQueue.requestInProgress" /></AppIcon>),
+  fulfillmentStatus: () => <FormattedMessage id="ui-requests.requestQueue.requestInProgress" />,
   position: request => (<AppIcon size="small" app="requests">{request.position}</AppIcon>),
   itemBarcode: request => <ItemLink request={request} />,
   requestDate: request => <FormattedDate value={request.requestDate} day="numeric" month="numeric" year="numeric" hour="numeric" minute="numeric" />,
