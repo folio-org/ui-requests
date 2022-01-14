@@ -46,7 +46,6 @@ describe('NotYetFilledRequestsData', () => {
 
   it('should execute `SortableList` with passed props', () => {
     const expectedResult = {
-      id: 'requests-list',
       contentData: testContentData,
       visibleColumns: COLUMN_NAMES,
       columnMapping: COLUMN_MAP,
