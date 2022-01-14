@@ -41,6 +41,7 @@
 * Select item modal should display all items in the Instance when user uncheck box. Refs UIREQ-700.
 * Header and Subhead do not match the given form in Request queue page. Refs UIREQ-713.
 * Fulfillment in progress accordion should have position column in Request queue page. Refs UIREQ-705.
+* Upgrade `circulation` to `13.0`. Refs UIREQ-717.
 
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)
