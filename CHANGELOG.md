@@ -16,6 +16,8 @@
 * BREAKING: TLR - data migration for dialogboxes and reorder list. Refs UIREQ-665.
 * BREAKING: TLR - data migration for hold shelf clearance report. Refs UIREQ-677.
 * BREAKING: TLR - data migration, move `holdingsRecordId`. Refs UIREQ-685.
+* BREAKING: TLR - depend on okapi interface `circulation` `12`. Refs UIREQ-685.
+* BREAKING: TLR - depend on okapi interface `request-storage` `4.0`. Refs UIREQ-685, UIREQ-708, FOLIO-3376.
 * TLR - data migration for request list, view, create, edit, duplicate. Refs UIREQ-664.
 * TLR - data migration for dialogboxes and reorder list. Refs UIREQ-665.
 * TLR - data migration for hold shelf clearance report. Refs UIREQ-677.

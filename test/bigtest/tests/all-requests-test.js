@@ -12,7 +12,9 @@ const servicePoint = {
   pickupLocation: true,
 };
 
-describe('Requests', () => {
+describe('Requests', function () {
+  this.timeout(5000);
+
   setupApplication({
     currentUser: {
       servicePoints: [servicePoint],
