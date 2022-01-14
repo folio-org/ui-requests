@@ -18,7 +18,3 @@ See project [UIREQ](https://issues.folio.org/browse/UIREQ)
 at the [FOLIO issue tracker](https://dev.folio.org/guidelines/issue-tracker).
 
 Other FOLIO Developer documentation is at [dev.folio.org](https://dev.folio.org/)
-
-## BREAKING CHANGES
-
-In adding title-level request we removed support for interfaces that only handle item-level requests.
