@@ -1,18 +1,21 @@
-import get from 'lodash/get';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
-import { Col, KeyValue, Row, FormattedDate } from '@folio/stripes/components';
+import {
+  Col,
+  KeyValue,
+  Row,
+  FormattedDate,
+  NoValue,
+} from '@folio/stripes/components';
 import { effectiveCallNumber } from '@folio/stripes/util';
 import {
   ClipCopy,
 } from '@folio/stripes/smart-components';
 
 import { openRequestStatusFilters } from './utils';
-
-const MISSING_VALUE_SYMBOL = '-';
 
 const ItemDetail = ({
   currentInstanceId,
@@ -29,15 +32,15 @@ const ItemDetail = ({
 
   const instanceId = request?.instanceId || currentInstanceId;
   const holdingsRecordId = request?.holdingsRecordId || item.holdingsRecordId;
-  const title = request?.instance.title || item.title || MISSING_VALUE_SYMBOL;
-  const contributor = get(request, ['instance', 'contributorNames', '0', 'name']) || get(item, ['contributorNames', '0', 'name']) || MISSING_VALUE_SYMBOL;
+  const title = request?.instance.title || item.title || <NoValue />;
+  const contributor = request?.instance.contributorNames?.[0]?.name || item.contributorNames?.[0]?.name || <NoValue />;
   const count = request?.requestCount || requestCount;
-  const status = get(item, 'status.name') || get(item, 'status') || MISSING_VALUE_SYMBOL;
-  const effectiveLocationName = get(item, 'effectiveLocation.name') || get(item, 'location.name') || MISSING_VALUE_SYMBOL;
-  const dueDate = loan?.dueDate ? <FormattedDate value={loan.dueDate} /> : MISSING_VALUE_SYMBOL;
+  const status = item.status.name || item.status || <NoValue />;
+  const effectiveLocationName = item.effectiveLocation?.name || item.location?.name || <NoValue />;
+  const dueDate = loan?.dueDate ? <FormattedDate value={loan.dueDate} /> : <NoValue />;
 
   const effectiveCallNumberString = effectiveCallNumber(item);
-  const recordLink = itemId ? <Link to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}>{item.barcode || itemId}</Link> : MISSING_VALUE_SYMBOL;
+  const recordLink = itemId ? <Link to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}>{item.barcode || itemId}</Link> : <NoValue />;
   const positionLink = (
     <Link to={`/requests?filters=${openRequestStatusFilters}&query=${itemId}&sort=Request Date`}>
       {count}
