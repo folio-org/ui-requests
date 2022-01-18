@@ -116,7 +116,7 @@
     "moveRequest.chooseRequestMessage": "Bitte zulässigen Typ auswählen",
     "moveRequest.confirm": "Bestätigen",
     "moveRequest.success": "Bestandsanfrage wurde erfolgreich verschoben",
-    "moveRequest.secondPositionTitle": "Bestandsanfrage an Position 2 der Warteliste verschoben",
+    "moveRequest.secondPositionTitle": "Bestandsanfrage an Position 2 der Warteliste verschieben",
     "moveRequest.secondPositionMessage": "Bestandsanfragen können nicht über die Ausleihbestellung verschoben werden, auch wenn die Bereitstellung noch nicht begonnen hat. Diese Bestandsanfrage wird in Position 2 in der Warteliste verschoben.",
     "noServicePoint.errorMessage": "Sie müssen an einer Servicestelle angemeldet sein, um auf den Abräumliste für das Abholregal zugreifen zu können. Bitte fügen Sie Ihrem Konto in der Personen-App einen oder mehrere Servicestellen hinzu. Wenden Sie sich an einen Administrator, wenn Sie nicht in der Lage sind, Ihrem Datensatz Servicestellen hinzuzufügen.",
     "noServicePoint.label": "Keine Servicestelle ausgewählt",
@@ -198,10 +198,12 @@
     "items.selectItem": "Exemplar auswählen",
     "items.instanceItems": "Andere Exemplare in {title}",
     "items.instanceItems.notFound": "Keine Exemplare gefunden",
-    "titleInformation.titleLevelRequests": "Title level requests",
-    "titleInformation.title": "Title",
-    "titleInformation.contributors": "Contributor",
-    "titleInformation.publicationsDate": "Publication date",
-    "titleInformation.editions": "Edition",
-    "titleInformation.identifiers": "ISBN(s)"
+    "titleInformation.titleLevelRequests": "Bestandsanfragen auf Titelebene",
+    "titleInformation.title": "Haupttitel",
+    "titleInformation.contributors": "Mitwirkende/-r",
+    "titleInformation.publicationsDate": "Erscheinungsdatum",
+    "titleInformation.editions": "Ausgabe",
+    "titleInformation.identifiers": "ISBN",
+    "instance.title": "Haupttitel",
+    "instance.contributorNames": "Mitwirkende/-r"
 }
