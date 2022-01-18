@@ -1011,14 +1011,11 @@ class RequestForm extends React.Component {
                         </Row> }
                       {selectedItem &&
                         <ItemDetail
-                          item={{
-                            id: get(request, 'itemId'),
-                            instanceId: instanceId || request?.instanceId,
-                            ...selectedItem,
-                            ...instance,
-                          }}
+                          request={request}
+                          currentInstanceId={instanceId}
+                          item={selectedItem}
                           loan={selectedLoan}
-                          requestCount={request ? request.requestCount : requestCount}
+                          requestCount={requestCount}
                         /> }
                     </Col>
                   </Row>
