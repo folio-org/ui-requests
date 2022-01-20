@@ -293,22 +293,19 @@ describe('RequestForm', () => {
 
 
         it('should execute `ItemDetail` with passed props', () => {
+          const newMockedRequest = {
+            ...mockedRequest,
+            item: mockedItem,
+            requestLevel: REQUEST_LEVEL_TYPES.ITEM,
+          };
+
           renderComponent({
-            mockedRequest: {
-              ...mockedRequest,
-              item: mockedItem,
-              requestLevel: REQUEST_LEVEL_TYPES.ITEM,
-            },
+            mockedRequest: newMockedRequest,
           });
 
           const expectedResult = {
-            item: {
-              id: mockedRequest.itemId,
-              instanceId: mockedRequest.instanceId,
-              ...mockedItem,
-              ...mockedInstance,
-            },
-            requestCount: mockedRequest.requestCount,
+            request: newMockedRequest,
+            item: mockedItem,
           };
 
           expect(ItemDetail).toHaveBeenCalledWith(expect.objectContaining(expectedResult), {});

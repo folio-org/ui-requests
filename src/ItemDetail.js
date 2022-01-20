@@ -34,7 +34,7 @@ const ItemDetail = ({
   const holdingsRecordId = request?.holdingsRecordId || item.holdingsRecordId;
   const title = request?.instance.title || item.title || <NoValue />;
   const contributor = request?.instance.contributorNames?.[0]?.name || item.contributorNames?.[0]?.name || <NoValue />;
-  const count = request?.requestCount || requestCount;
+  const count = request?.itemRequestCount || requestCount;
   const status = item.status.name || item.status || <NoValue />;
   const effectiveLocationName = item.effectiveLocation?.name || item.location?.name || <NoValue />;
   const dueDate = loan?.dueDate ? <FormattedDate value={loan.dueDate} /> : <NoValue />;
