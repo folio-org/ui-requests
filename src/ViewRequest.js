@@ -597,15 +597,10 @@ class ViewRequest extends React.Component {
             { item
               ? (
                 <ItemDetail
-                  item={{
-                    ...request.item,
-                    ...request.instance,
-                    id: request.itemId,
-                    instanceId: request.instanceId,
-                    holdingsRecordId: request.holdingsRecordId,
-                  }}
+                  request={request}
+                  item={request.item}
                   loan={request.loan}
-                  requestCount={request.itemRequestCount}
+                  requestCount={request.requestCount}
                 />
               )
               : (

@@ -1376,16 +1376,13 @@ class RequestForm extends React.Component {
                               isItemOrInstanceLoading && <Icon icon="spinner-ellipsis" width="10px" />
                             }
                             {
-                              selectedItem && !isItemOrInstanceLoading &&
+                            selectedItem &&
                               <ItemDetail
-                                item={{
-                                  id: get(request, 'itemId'),
-                                  instanceId: instanceId || request?.instanceId,
-                                  ...selectedItem,
-                                  ...instance,
-                                }}
+                                request={request}
+                                currentInstanceId={instanceId}
+                                item={selectedItem}
                                 loan={selectedLoan}
-                                requestCount={request?.itemRequestCount || itemRequestCount}
+                                requestCount={itemRequestCount}
                               />
                             }
                           </Col>
