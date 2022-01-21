@@ -2,29 +2,38 @@ import get from 'lodash/get';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
+import { useIntl } from 'react-intl';
 
-import { openRequestStatusFilters } from './utils';
+import {
+  requestStatuses,
+  REQUEST_DATE,
+} from './constants';
 
-export default function PositionLink({ request }) {
+export default function PositionLink({
+  request,
+  isTlrEnabled,
+}) {
+  const { formatMessage } = useIntl();
   const queuePosition = get(request, 'position');
-  const barcode = get(request, 'item.barcode');
-  const openRequestsPath = `/requests?filters=${openRequestStatusFilters}&query=${request.itemId}&sort=Request Date`;
+  const id = request[isTlrEnabled ? 'instanceId' : 'itemId'];
+  const openRequestsPath = `/requests?filters=requestStatus.${requestStatuses.NOT_YET_FILLED}&query=${id}&sort=${REQUEST_DATE}`;
 
-  return (request && barcode ?
-    <div>
-      <span>
-        {queuePosition}
-        &nbsp;
-        &nbsp;
-      </span>
-      <Link to={openRequestsPath}>
-        <FormattedMessage id="ui-requests.actions.viewRequestsInQueue" />
-      </Link>
-    </div> : '-'
-  );
+  return request
+    ? (
+      <div>
+        <span>
+          {`${queuePosition} (${formatMessage({ id: 'ui-requests.items' }, { number: request.numberOfNotYetFilledRequests })})`}
+          &nbsp;
+        </span>
+        <Link to={openRequestsPath}>
+          {formatMessage({ id: 'ui-requests.actions.viewRequestsInQueue' })}
+        </Link>
+      </div>
+    )
+    : '-';
 }
 
 PositionLink.propTypes = {
   request: PropTypes.object,
+  isTlrEnabled: PropTypes.bool.isRequired,
 };

@@ -24,6 +24,7 @@ import {
 } from '../../constants';
 
 import { PickupServicePointFilter } from './PickupServicePointFilter';
+import { RequestLevelFilter } from './RequestLevelFilter';
 
 export default class RequestsFilters extends React.Component {
   static propTypes = {
@@ -31,6 +32,7 @@ export default class RequestsFilters extends React.Component {
     resources: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
     onClear: PropTypes.func.isRequired,
+    titleLevelRequestsFeatureEnabled: PropTypes.bool.isRequired,
   };
 
   transformRequestFilterOptions = (source = []) => {
@@ -54,9 +56,11 @@ export default class RequestsFilters extends React.Component {
         requestType = [],
         requestStatus = [],
         pickupServicePoints = [],
+        requestLevels = [],
       },
       onChange,
       onClear,
+      titleLevelRequestsFeatureEnabled,
     } = this.props;
 
     return (
@@ -93,6 +97,13 @@ export default class RequestsFilters extends React.Component {
             onChange={onChange}
           />
         </Accordion>
+        {titleLevelRequestsFeatureEnabled && (
+          <RequestLevelFilter
+            activeValues={requestLevels}
+            onChange={onChange}
+            onClear={onClear}
+          />
+        )}
         <Accordion
           displayClearButton={!isEmpty(tags)}
           id={requestFilterTypes.TAGS}

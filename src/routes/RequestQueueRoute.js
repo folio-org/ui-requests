@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import {
   get,
   keyBy,
-  sortBy,
 } from 'lodash';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { stripesConnect } from '@folio/stripes/core';
 
 import RequestQueueView from '../views/RequestQueueView';
 import urls from './urls';
+import { requestStatuses } from '../constants';
+import { getTlrSettings } from '../utils';
 
 class RequestQueueRoute extends React.Component {
   static getRequest(props) {
@@ -23,6 +24,14 @@ class RequestQueueRoute extends React.Component {
   }
 
   static manifest = {
+    configs: {
+      type: 'okapi',
+      records: 'configs',
+      path: 'configurations/entries',
+      params: {
+        query: '(module==SETTINGS and configName==TLR)',
+      },
+    },
     addressTypes: {
       type: 'okapi',
       path: 'addresstypes',
@@ -62,16 +71,23 @@ class RequestQueueRoute extends React.Component {
       type: 'okapi',
       path: 'circulation/requests',
       records: 'requests',
-      params: {
-        query: 'itemId==:{itemId} and status="Open"',
-        limit: '1000',
-      },
+      accumulate: true,
+      fetch: false,
       shouldRefresh: () => false,
     },
-    reorder: {
+    reorderInstanceQueue: {
       type: 'okapi',
       POST: {
-        path: 'circulation/requests/queue/:{itemId}/reorder',
+        path: 'circulation/requests/queue/instance/:{id}/reorder',
+      },
+      fetch: false,
+      clientGeneratePk: false,
+      throwErrors: false,
+    },
+    reorderItemQueue: {
+      type: 'okapi',
+      POST: {
+        path: 'circulation/requests/queue/item/:{id}/reorder',
       },
       fetch: false,
       clientGeneratePk: false,
@@ -90,16 +106,65 @@ class RequestQueueRoute extends React.Component {
       }),
       requests: PropTypes.shape({
         records: PropTypes.array,
-      }),
+      }).isRequired,
+      configs: PropTypes.shape({
+        records: PropTypes.array.isRequired,
+        hasLoaded: PropTypes.bool.isRequired,
+      }).isRequired,
     }),
+    match: PropTypes.object.isRequired,
     mutator: PropTypes.shape({
-      reorder: PropTypes.object,
+      reorderInstanceQueue: PropTypes.object.isRequired,
+      reorderItemQueue: PropTypes.object.isRequired,
+      requests: PropTypes.object.isRequired,
     }),
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
       goBack: PropTypes.func.isRequired,
     }).isRequired,
   };
+
+  componentDidMount() {
+    this.setTlrSettings();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { configs: prevConfigs } = prevProps.resources;
+    const { configs } = this.props.resources;
+
+    if ((prevConfigs.hasLoaded !== configs.hasLoaded && configs.hasLoaded)) {
+      this.setTlrSettings();
+    }
+  }
+
+  setTlrSettings = () => {
+    const { configs } = this.props.resources;
+    const { titleLevelRequestsFeatureEnabled } = getTlrSettings(configs.records[0]?.value);
+
+    this.setState({ titleLevelRequestsFeatureEnabled }, this.getRequests);
+  }
+
+  getRequests = () => {
+    const {
+      mutator: { requests },
+      resources: {
+        configs,
+      },
+      match: {
+        params,
+      },
+    } = this.props;
+    const { titleLevelRequestsFeatureEnabled } = this.state;
+
+    if (!configs.hasLoaded) {
+      return;
+    }
+
+    const path = `circulation/requests/queue/${titleLevelRequestsFeatureEnabled ? 'instance' : 'item'}/${params.id}`;
+
+    requests.reset();
+    requests.GET({ path });
+  }
 
   getRequest = () => {
     return RequestQueueRoute.getRequest(this.props);
@@ -120,13 +185,21 @@ class RequestQueueRoute extends React.Component {
   }
 
   reorder = (requests) => {
-    const { mutator: { reorder } } = this.props;
+    const {
+      mutator: {
+        reorderInstanceQueue,
+        reorderItemQueue,
+      },
+    } = this.props;
+    const { titleLevelRequestsFeatureEnabled } = this.state;
     const reorderedQueue = requests.map(({ id, position: newPosition }) => ({
       id,
       newPosition,
     }));
 
-    return reorder.POST({ reorderedQueue });
+    return titleLevelRequestsFeatureEnabled
+      ? reorderInstanceQueue.POST({ reorderedQueue })
+      : reorderItemQueue.POST({ reorderedQueue });
   }
 
   isLoading = () => {
@@ -148,18 +221,32 @@ class RequestQueueRoute extends React.Component {
   }
 
   render() {
+    const titleLevelRequestsFeatureEnabled = !!this.state?.titleLevelRequestsFeatureEnabled;
     const { resources, location } = this.props;
     const request = this.getRequest();
     const requests = this.getRequestsWithDeliveryTypes();
+    const notYetFilledRequests = [];
+    const inProgressRequests = [];
+
+    requests
+      .forEach(r => {
+        if (r.status === requestStatuses.NOT_YET_FILLED) {
+          notYetFilledRequests.push(r);
+        } else {
+          inProgressRequests.push(r);
+        }
+      });
 
     return (
       <RequestQueueView
         data={{
-          requests: sortBy(requests, r => r.position),
+          notYetFilledRequests,
+          inProgressRequests,
           item: get(resources, 'items.records[0]', {}),
           holding: get(resources, 'holdings.records[0]', {}),
           request,
         }}
+        isTlrEnabled={titleLevelRequestsFeatureEnabled}
         onClose={this.handleClose}
         isLoading={this.isLoading()}
         onReorder={this.reorder}

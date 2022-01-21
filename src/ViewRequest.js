@@ -43,15 +43,20 @@ import {
 
 import CancelRequestDialog from './CancelRequestDialog';
 import ItemDetail from './ItemDetail';
+import TitleInformation from './components/TitleInformation';
 import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
 import PositionLink from './PositionLink';
 import MoveRequestManager from './MoveRequestManager';
-import { requestStatuses } from './constants';
+import {
+  requestStatuses,
+  REQUEST_LEVEL_TYPES,
+} from './constants';
 import {
   toUserAddress,
   isDelivery,
   getFullName,
+  getTlrSettings,
 } from './utils';
 import urls from './routes/urls';
 
@@ -93,6 +98,9 @@ class ViewRequest extends React.Component {
     paneWidth: PropTypes.string,
     patronGroups: PropTypes.arrayOf(PropTypes.object),
     parentMutator: PropTypes.object,
+    parentResources: PropTypes.shape({
+      configs: PropTypes.object.isRequired,
+    }).isRequired,
     resources: PropTypes.shape({
       selectedRequest: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
@@ -124,15 +132,19 @@ class ViewRequest extends React.Component {
   constructor(props) {
     super(props);
 
+    const { titleLevelRequestsFeatureEnabled } = getTlrSettings(props.parentResources.configs.records[0]?.value);
+
     this.state = {
       request: {},
       accordions: {
         'request-info': true,
+        'title-info': true,
         'item-info': true,
         'requester-info': true,
         'staff-notes': true,
       },
       moveRequest: false,
+      titleLevelRequestsFeatureEnabled,
     };
 
     const { stripes: { connect } } = props;
@@ -158,12 +170,21 @@ class ViewRequest extends React.Component {
   componentDidUpdate(prevProps) {
     const prevRQ = prevProps.resources.selectedRequest;
     const currentRQ = this.props.resources.selectedRequest;
+    const prevSettings = prevProps.parentResources.configs.records[0]?.value;
+    const currentSettings = this.props.parentResources.configs.records[0]?.value;
 
     // Only update if actually needed (otherwise, this gets called way too often)
     if (prevRQ && currentRQ && currentRQ.hasLoaded) {
       if ((!isEqual(prevRQ.records[0], currentRQ.records[0]))) {
         this.loadFullRequest(currentRQ.records[0]);
       }
+    }
+
+    if (prevSettings !== currentSettings) {
+      const { titleLevelRequestsFeatureEnabled } = getTlrSettings(currentSettings);
+
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ titleLevelRequestsFeatureEnabled });
     }
   }
 
@@ -192,7 +213,8 @@ class ViewRequest extends React.Component {
     delete updatedRecord.location;
     delete updatedRecord.loan;
     delete updatedRecord.itemStatus;
-    delete updatedRecord.requestCount;
+    delete updatedRecord.titleRequestCount;
+    delete updatedRecord.itemRequestCount;
     delete updatedRecord.holdShelfExpirationTime;
 
     this.props.mutator.selectedRequest.PUT(updatedRecord).then(() => {
@@ -228,10 +250,12 @@ class ViewRequest extends React.Component {
       history,
       location: { search },
     } = this.props;
+    const { titleLevelRequestsFeatureEnabled } = this.state;
+    const id = titleLevelRequestsFeatureEnabled ? request.instanceId : request.itemId;
 
     this.loadFullRequest(request);
 
-    history.push(`${urls.requestQueueView(request.id, request.itemId)}${search}`, { afterMove: true });
+    history.push(`${urls.requestQueueView(request.id, id)}${search}`, { afterMove: true });
   }
 
   closeMoveRequest = () => {
@@ -240,6 +264,17 @@ class ViewRequest extends React.Component {
 
   openMoveRequest = () => {
     this.setState({ moveRequest: true });
+  }
+
+  onReorderRequest = (request) => {
+    const {
+      location: { search },
+      history,
+    } = this.props;
+    const { titleLevelRequestsFeatureEnabled } = this.state;
+    const idForHistory = titleLevelRequestsFeatureEnabled ? request.instanceId : request.itemId;
+
+    history.push(`${urls.requestQueueView(request.id, idForHistory)}${search}`, { request });
   }
 
   onToggleSection({ id }) {
@@ -305,6 +340,7 @@ class ViewRequest extends React.Component {
                   requestExpirationDate: null,
                   holdShelfExpirationDate: request.holdShelfExpirationDate,
                   holdShelfExpirationTime: momentDate.format('HH:mm'),
+                  createTitleLevelRequest: false,
                   ...request,
                 }}
                 request={request}
@@ -359,15 +395,18 @@ class ViewRequest extends React.Component {
     const {
       stripes,
       patronGroups,
-      history,
       optionLists: { cancellationReasons },
-      location: { search },
     } = this.props;
     const {
       accordions,
       isCancellingRequest,
       moveRequest,
+      titleLevelRequestsFeatureEnabled,
     } = this.state;
+    const {
+      requestLevel,
+      item,
+    } = request;
 
     const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');
@@ -406,6 +445,10 @@ class ViewRequest extends React.Component {
 
     const actionMenu = ({ onToggle }) => {
       if (isRequestClosed) {
+        if (request.requestLevel === REQUEST_LEVEL_TYPES.TITLE && !this.state.titleLevelRequestsFeatureEnabled) {
+          return null;
+        }
+
         return (
           <IfPermission perm="ui-requests.create">
             <Button
@@ -467,7 +510,7 @@ class ViewRequest extends React.Component {
               </Icon>
             </Button>
           </IfPermission>
-          {isRequestNotFilled &&
+          {requestLevel === REQUEST_LEVEL_TYPES.ITEM && isRequestNotFilled &&
             <IfPermission perm="ui-requests.moveRequest">
               <Button
                 id="move-request"
@@ -488,7 +531,7 @@ class ViewRequest extends React.Component {
                 id="reorder-queue"
                 onClick={() => {
                   onToggle();
-                  history.push(`${urls.requestQueueView(request.id, request.itemId)}${search}`, { request });
+                  this.onReorderRequest(request);
                 }}
                 buttonStyle="dropdownItem"
               >
@@ -504,7 +547,7 @@ class ViewRequest extends React.Component {
     const referredRecordData = {
       instanceTitle: request.instance.title,
       instanceId: request.instanceId,
-      itemBarcode: request.item.barcode,
+      itemBarcode: request.item?.barcode,
       itemId: request.itemId,
       holdingsRecordId: request.holdingsRecordId,
       requesterName: getFullName(request.requester),
@@ -525,20 +568,47 @@ class ViewRequest extends React.Component {
         <TitleManager record={get(request, ['instance', 'title'])} />
         <AccordionSet accordionStatus={accordions} onToggle={this.onToggleSection}>
           <Accordion
+            id="title-info"
+            label={
+              <FormattedMessage
+                id="ui-requests.title.information"
+              />
+            }
+          >
+            <TitleInformation
+              instanceId={request.instanceId}
+              titleLevelRequestsCount={request.titleRequestCount}
+              title={request.instance.title}
+              contributors={request.instance.contributorNames}
+              publications={request.instance.publication}
+              editions={request.instance.editions}
+              identifiers={request.instance.identifiers}
+              titleLevelRequestsLink={false}
+            />
+          </Accordion>
+          <Accordion
             id="item-info"
             label={
               <FormattedMessage
                 id="ui-requests.item.information"
-                values={{ required: '' }}
               />
             }
           >
-            <ItemDetail
-              request={request}
-              item={request.item}
-              loan={request.loan}
-              requestCount={request.requestCount}
-            />
+            { item
+              ? (
+                <ItemDetail
+                  request={request}
+                  item={request.item}
+                  loan={request.loan}
+                  requestCount={request.requestCount}
+                />
+              )
+              : (
+                <FormattedMessage
+                  id="ui-requests.item.noInformation"
+                />
+              )
+            }
           </Accordion>
           <Accordion
             id="request-info"
@@ -579,7 +649,18 @@ class ViewRequest extends React.Component {
               <Col xs={3}>
                 <KeyValue
                   label={<FormattedMessage id="ui-requests.position" />}
-                  value={<PositionLink request={request} />}
+                  value={
+                    <PositionLink
+                      request={request}
+                      isTlrEnabled={titleLevelRequestsFeatureEnabled}
+                    />
+                  }
+                />
+              </Col>
+              <Col xs={3}>
+                <KeyValue
+                  label={<FormattedMessage id="ui-requests.requestLevel" />}
+                  value={<FormattedMessage id={`ui-requests.${requestLevel.toLowerCase()}Level`} />}
                 />
               </Col>
               {request.cancellationReasonId &&

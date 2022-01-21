@@ -18,6 +18,26 @@
 * BREAKING: TLR - data migration, move `holdingsRecordId`. Refs UIREQ-685.
 * BREAKING: TLR - depend on okapi interface `circulation` `12`. Refs UIREQ-685.
 * BREAKING: TLR - depend on okapi interface `request-storage` `4.0`. Refs UIREQ-685, UIREQ-708, FOLIO-3376.
+* Create title level request checkbox. Refs UIREQ-655.
+* Update request results page. Refs UIREQ-614.
+* Update request details pane. Refs UIREQ-613.
+* Closed TLR should not be able to be duplicated when TLR is disabled. Refs UIREQ-691.
+* Update form for posibility of `Title` level requests. Refs UIREQ-620.
+* Unchecking the Title level request box when it is automatically checked. Refs UIREQ-633.
+* Turn an item level request into a title level request. Refs UIREQ-635.
+* View & reorder requests (first accordion). Refs UIREQ-630.
+* View & reorder requests (second accordion). Refs UIREQ-644.
+* Migrate requests queue/reorder page on new end-points. Refs UIREQ-695.
+* Create new request filter. Refs UIREQ-612.
+* Change render dependency for item link and information from `requestLevel` to `item`. Refs UIREQ-704.
+* Fixed behavior of `hyperlinks` related to `TLR`. Refs UIREQ-702.
+* Disable validation on reordering for `Page` requests for `TLR` feature. Refs UIREQ-706.
+* Add all required attributes for the `position` field in request info. Refs UIREQ-707.
+* The user is redirected to the `Request queue` where the request queue is not displayed. Refs UIREQ-709.
+* Select item modal should display all items in the Instance when user uncheck box. Refs UIREQ-700.
+* Header and Subhead do not match the given form in Request queue page. Refs UIREQ-713.
+* Fulfillment in progress accordion should have position column in Request queue page. Refs UIREQ-705.
+* Upgrade `circulation` to `13.0`. Refs UIREQ-717.
 * Fix the issue when user is not redirected to "Item page". Refs UIREQ-714.
 
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)

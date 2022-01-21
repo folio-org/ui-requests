@@ -23,6 +23,8 @@ import {
   pick,
   isBoolean,
   isString,
+  isUndefined,
+  isNil,
 } from 'lodash';
 
 import { Pluggable } from '@folio/stripes/core';
@@ -45,6 +47,7 @@ import {
   TextArea,
   TextField,
   Timepicker,
+  Checkbox,
 } from '@folio/stripes/components';
 import stripesForm from '@folio/stripes/form';
 import SafeHTMLMessage from '@folio/react-intl-safe-html';
@@ -54,6 +57,11 @@ import UserForm from './UserForm';
 import ItemDetail from './ItemDetail';
 import PatronBlockModal from './PatronBlockModal';
 import PositionLink from './PositionLink';
+import {
+  ErrorModal,
+  TitleInformation,
+} from './components';
+import ItemsDialog from './ItemsDialog';
 
 import asyncValidate from './asyncValidate';
 import {
@@ -63,7 +71,6 @@ import {
   createModes,
   REQUEST_LEVEL_TYPES,
 } from './constants';
-import ErrorModal from './components/ErrorModal';
 import {
   toUserAddress,
   getPatronGroup,
@@ -71,9 +78,19 @@ import {
   isDelivery,
   hasNonRequestableStatus,
   parseErrorMessage,
+  getTlrSettings,
+  getRequestLevelValue,
+  getInstanceRequestTypeOptions,
 } from './utils';
 
 import css from './requests.css';
+
+const RESOURCE_TYPES = {
+  ITEM: 'item',
+  INSTANCE: 'instance',
+  USER: 'user',
+  HOLDING: 'holding',
+};
 
 class RequestForm extends React.Component {
   static propTypes = {
@@ -139,15 +156,25 @@ class RequestForm extends React.Component {
     super(props);
 
     const { request } = props;
-    const { requester, requesterId, item, loan } = (request || {});
+    const {
+      requester,
+      requesterId,
+      item,
+      loan,
+      instance,
+    } = (request || {});
+
+    const { titleLevelRequestsFeatureEnabled } = this.getTlrSettings();
 
     this.state = {
       accordions: {
         'new-request-info': true,
+        'new-instance-info': true,
         'new-item-info': true,
         'new-requester-info': true,
       },
       proxy: {},
+      selectedInstance: instance,
       selectedItem: item,
       selectedUser: { ...requester, id: requesterId },
       selectedLoan: loan,
@@ -155,12 +182,16 @@ class RequestForm extends React.Component {
       ...this.getDefaultRequestPreferences(),
       isPatronBlocksOverridden: false,
       isAwaitingForProxySelection: false,
+      titleLevelRequestsFeatureEnabled,
+      isItemOrInstanceLoading: false,
+      isItemsDialogOpen: false,
     };
 
     this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
     this.onChangeAddress = this.onChangeAddress.bind(this);
     this.onChangeFulfilment = this.onChangeFulfilment.bind(this);
     this.onItemClick = this.onItemClick.bind(this);
+    this.onInstanceClick = this.onInstanceClick.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onSelectUser = this.onSelectUser.bind(this);
     this.onToggleSection = this.onToggleSection.bind(this);
@@ -168,6 +199,7 @@ class RequestForm extends React.Component {
     this.onUserClick = this.onUserClick.bind(this);
     this.onClose = this.onClose.bind(this);
     this.itemBarcodeRef = React.createRef();
+    this.instanceValueRef = React.createRef();
     this.requesterBarcodeRef = React.createRef();
   }
 
@@ -184,9 +216,15 @@ class RequestForm extends React.Component {
       this.findItem('id', this.props.query.itemId);
     }
 
+    if (this.props.query.instanceId && !this.props.query.itemBarcode && !this.props.query.itemId) {
+      this.findInstance(this.props.query.instanceId);
+    }
+
     if (this.isEditForm()) {
       this.findRequestPreferences(this.props.initialValues.requesterId);
     }
+
+    this.setTlrCheckboxInitialState();
   }
 
   componentDidUpdate(prevProps) {
@@ -257,6 +295,37 @@ class RequestForm extends React.Component {
         // eslint-disable-next-line react/no-did-update-set-state
         this.setState({ blocked: true });
       }
+    }
+
+    if (prevParentResources?.configs?.records[0]?.value !== parentResources?.configs?.records[0]?.value) {
+      const {
+        titleLevelRequestsFeatureEnabled,
+      } = this.getTlrSettings();
+
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState(
+        {
+          titleLevelRequestsFeatureEnabled,
+        },
+        this.setTlrCheckboxInitialState(),
+      );
+    }
+  }
+
+  getTlrSettings() {
+    return getTlrSettings(this.props.parentResources?.configs?.records[0]?.value);
+  }
+
+  setTlrCheckboxInitialState() {
+    if (this.state.titleLevelRequestsFeatureEnabled === false) {
+      this.props.change('createTitleLevelRequest', false);
+      return;
+    }
+
+    if (this.props.query.itemId || this.props.query.itemBarcode) {
+      this.props.change('createTitleLevelRequest', false);
+    } else if (this.props.query.instanceId) {
+      this.props.change('createTitleLevelRequest', true);
     }
   }
 
@@ -395,7 +464,7 @@ class RequestForm extends React.Component {
       isUserLoading: true,
     });
 
-    findResource('user', value, fieldName)
+    findResource(RESOURCE_TYPES.USER, value, fieldName)
       .then((result) => {
         this.setState({ isAwaitingForProxySelection: true });
 
@@ -556,7 +625,7 @@ class RequestForm extends React.Component {
     return deliverySelected ? defaultDeliveryAddressTypeId : '';
   }
 
-  findRelatedResources(item) {
+  findItemRelatedResources(item) {
     const { findResource } = this.props;
     if (!item) return null;
 
@@ -564,16 +633,16 @@ class RequestForm extends React.Component {
       [
         findResource('loan', item.id),
         findResource('requestsForItem', item.id),
-        findResource('holding', item.holdingsRecordId),
+        findResource(RESOURCE_TYPES.HOLDING, item.holdingsRecordId),
       ],
     ).then((results) => {
       const selectedLoan = results[0].loans[0];
-      const requestCount = results[1].requests.length;
+      const itemRequestCount = results[1].requests.length;
       const holdingsRecord = results[2].holdingsRecords[0];
 
       this.setState({
-        requestCount,
-        instanceId: holdingsRecord && holdingsRecord.instanceId,
+        itemRequestCount,
+        instanceId: holdingsRecord?.instanceId,
         selectedLoan,
       });
 
@@ -583,9 +652,21 @@ class RequestForm extends React.Component {
 
   findItem(key, value) {
     const { findResource } = this.props;
-    return findResource('item', value, key)
+
+    this.setState({
+      isItemOrInstanceLoading: true,
+      requestTypeOptions: [],
+    });
+
+    return findResource(RESOURCE_TYPES.ITEM, value, key)
       .then((result) => {
-        if (!result || result.totalRecords === 0) return null;
+        if (!result || result.totalRecords === 0) {
+          this.setState({
+            isItemOrInstanceLoading: false,
+          });
+
+          return null;
+        }
 
         const item = result.items[0];
         const options = getRequestTypeOptions(item);
@@ -599,7 +680,11 @@ class RequestForm extends React.Component {
         // Setting state here is redundant with what follows, but it lets us
         // display the matched item as quickly as possible, without waiting for
         // the slow loan and request lookups
-        this.setState({ selectedItem: item });
+        this.setState({
+          selectedItem: item,
+          requestTypeOptions: options,
+          isItemOrInstanceLoading: false,
+        });
 
         if (hasNonRequestableStatus(item)) {
           this.showErrorModal();
@@ -607,8 +692,95 @@ class RequestForm extends React.Component {
 
         return item;
       })
-      .then(item => this.findRelatedResources(item))
+      .then(item => this.findItemRelatedResources(item))
       .then(_ => this.props.asyncValidate());
+  }
+
+  findInstanceRelatedResources(instance) {
+    if (!instance) {
+      return null;
+    }
+
+    const { findResource } = this.props;
+
+    return findResource('requestsForInstance', instance.id)
+      .then((result) => {
+        const instanceRequestCount = result.requests.length;
+
+        this.setState({ instanceRequestCount });
+
+        return instance;
+      });
+  }
+
+  findInstance = async (instanceId, holdingsRecordId) => {
+    const { findResource } = this.props;
+
+    this.setState({
+      isItemOrInstanceLoading: true,
+      requestTypeOptions: [],
+    });
+
+    const resultInstanceId = isNil(instanceId)
+      ? await findResource(RESOURCE_TYPES.HOLDING, holdingsRecordId).then((holding) => holding.holdingsRecords[0].instanceId)
+      : instanceId;
+
+    return findResource(RESOURCE_TYPES.INSTANCE, resultInstanceId)
+      .then((result) => {
+        if (!result || result.totalRecords === 0) {
+          this.setState({
+            isItemOrInstanceLoading: false,
+          });
+
+          return null;
+        }
+
+        const instance = result.instances[0];
+
+        this.props.change('instanceId', instance.id);
+        this.props.change('instance.hrid', instance.hrid);
+
+        this.setState({
+          selectedInstance: instance,
+          isItemOrInstanceLoading: false,
+        });
+
+        return instance;
+      })
+      .then(instance => {
+        this.findInstanceRelatedResources(instance);
+        return instance;
+      })
+      .then(instance => this.setInstanceRequestTypeOptions(instance))
+      .then(_ => this.props.asyncValidate());
+  }
+
+  getInstanceItems = async (instanceId) => {
+    const { findResource } = this.props;
+
+    const { items } = await findResource(RESOURCE_TYPES.HOLDING, instanceId, 'instanceId')
+      .then(responce => {
+        const holdingRecordIds = responce.holdingsRecords.map(({ id }) => id);
+
+        return findResource(RESOURCE_TYPES.ITEM, holdingRecordIds, 'holdingsRecordId');
+      });
+
+    return items;
+  }
+
+  setInstanceRequestTypeOptions = async (instance) => {
+    if (!instance) {
+      return;
+    }
+
+    const instanceItems = await this.getInstanceItems(instance.id);
+    const requestTypeOptions = getInstanceRequestTypeOptions(instanceItems);
+
+    if (requestTypeOptions.length) {
+      this.props.change('requestType', requestTypeOptions[0].value);
+    }
+
+    this.setState({ requestTypeOptions });
   }
 
   onItemClick() {
@@ -620,15 +792,30 @@ class RequestForm extends React.Component {
     }
   }
 
+  onInstanceClick() {
+    const instanceId = get(this.instanceValueRef, 'current.value');
+
+    if (instanceId) {
+      this.setState({ selectedInstance: null });
+      this.findInstance(instanceId);
+    }
+  }
+
   // This function only exists to enable 'do lookup on enter' for item and
   // user search
   onKeyDown(e, element) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      if (element === 'item') {
-        this.onItemClick();
-      } else {
-        this.onUserClick();
+
+      switch (element) {
+        case RESOURCE_TYPES.ITEM:
+          this.onItemClick();
+          break;
+        case RESOURCE_TYPES.INSTANCE:
+          this.onInstanceClick();
+          break;
+        default:
+          this.onUserClick();
       }
     }
   }
@@ -664,7 +851,7 @@ class RequestForm extends React.Component {
   requireUser = (value) => {
     const values = this.getCurrentFormValues();
 
-    if (!value && !values.requesterId) {
+    if (!value && !values?.requesterId) {
       return <FormattedMessage id="ui-requests.errors.selectUser" />;
     }
 
@@ -674,6 +861,14 @@ class RequestForm extends React.Component {
   requireEnterItem = () => {
     if (this.state.selectedItem === undefined) {
       return <FormattedMessage id="ui-requests.errors.selectItemRequired" />;
+    }
+
+    return undefined;
+  }
+
+  requireEnterInstance = () => {
+    if (isUndefined(this.state.selectedInstance)) {
+      return <FormattedMessage id="ui-requests.errors.selectInstanceRequired" />;
     }
 
     return undefined;
@@ -733,6 +928,8 @@ class RequestForm extends React.Component {
       request,
     } = this.props;
 
+    const requestData = cloneDeep(data);
+
     const {
       requestExpirationDate,
       holdShelfExpirationDate,
@@ -740,12 +937,13 @@ class RequestForm extends React.Component {
       fulfilmentPreference,
       deliveryAddressTypeId,
       pickupServicePointId,
-    } = data;
+    } = requestData;
 
     const {
       selectedItem,
       isPatronBlocksOverridden,
       instanceId,
+      selectedInstance,
     } = this.state;
 
     if (hasNonRequestableStatus(selectedItem)) {
@@ -759,36 +957,52 @@ class RequestForm extends React.Component {
       return this.setState({ blocked: true });
     }
 
-    if (!requestExpirationDate) unset(data, 'requestExpirationDate');
+    if (!requestExpirationDate) {
+      unset(requestData, 'requestExpirationDate');
+    }
     if (holdShelfExpirationDate) {
       // Recombine the values from datepicker and timepicker into a single date/time
       const date = moment.tz(holdShelfExpirationDate, timeZone).format('YYYY-MM-DD');
       const time = holdShelfExpirationTime.replace('Z', '');
       const combinedDateTime = moment.tz(`${date} ${time}`, timeZone);
-      data.holdShelfExpirationDate = combinedDateTime.utc().format();
+      requestData.holdShelfExpirationDate = combinedDateTime.utc().format();
     } else {
-      unset(data, 'holdShelfExpirationDate');
+      unset(requestData, 'holdShelfExpirationDate');
     }
     if (fulfilmentPreference === fulfilmentTypeMap.HOLD_SHELF && isString(deliveryAddressTypeId)) {
-      unset(data, 'deliveryAddressTypeId');
+      unset(requestData, 'deliveryAddressTypeId');
     }
     if (fulfilmentPreference === fulfilmentTypeMap.DELIVERY && isString(pickupServicePointId)) {
-      unset(data, 'pickupServicePointId');
+      unset(requestData, 'pickupServicePointId');
     }
 
     if (isPatronBlocksOverridden) {
-      data.requestProcessingParameters = {
+      requestData.requestProcessingParameters = {
         overrideBlocks: {
           patronBlock: {},
         },
       };
     }
 
-    data.instanceId = request?.instanceId || instanceId;
-    data.requestLevel = request?.requestLevel || REQUEST_LEVEL_TYPES.ITEM;
-    data.holdingsRecordId = request?.holdingsRecordId || selectedItem.holdingsRecordId;
+    requestData.instanceId = request?.instanceId || instanceId || selectedInstance?.id;
+    requestData.requestLevel = request?.requestLevel || getRequestLevelValue(requestData.createTitleLevelRequest);
 
-    return this.props.onSubmit(data);
+    if (requestData.requestLevel === REQUEST_LEVEL_TYPES.ITEM) {
+      requestData.holdingsRecordId = request?.holdingsRecordId || selectedItem?.holdingsRecordId;
+    }
+
+    if (requestData.requestLevel === REQUEST_LEVEL_TYPES.TITLE) {
+      unset(requestData, 'itemId');
+      unset(requestData, 'holdingsRecordId');
+      unset(requestData, RESOURCE_TYPES.ITEM);
+    }
+
+    unset(requestData, 'itemRequestCount');
+    unset(requestData, 'titleRequestCount');
+    unset(requestData, 'createTitleLevelRequest');
+    unset(requestData, RESOURCE_TYPES.INSTANCE);
+
+    return this.props.onSubmit(requestData);
   };
 
   getCurrentFormValues = () => {
@@ -820,6 +1034,55 @@ class RequestForm extends React.Component {
     });
   }
 
+  handleTlrCheckboxChange = (event, newValue) => {
+    const {
+      selectedInstance,
+      selectedItem,
+    } = this.state;
+
+    this.props.change('item.barcode', null);
+    this.props.change('instance.hrid', null);
+    this.props.change('instanceId', null);
+
+    if (newValue) {
+      this.setState({
+        requestTypeOptions: [],
+        selectedItem: undefined,
+      });
+
+      if (selectedItem) {
+        this.findInstance(null, selectedItem.holdingsRecordId);
+      }
+    } else if (selectedInstance) {
+      this.setState({
+        isItemsDialogOpen: true,
+      });
+    } else {
+      this.setState({
+        requestTypeOptions: [],
+        selectedInstance: undefined,
+      });
+    }
+  };
+
+  handleItemsDialogClose = () => {
+    this.setState({
+      isItemsDialogOpen: false,
+      requestTypeOptions: [],
+      selectedInstance: undefined,
+    });
+  }
+
+  handleInstanceItemClick = (event, item) => {
+    this.setState({
+      isItemsDialogOpen: false,
+      requestTypeOptions: [],
+      selectedInstance: undefined,
+    });
+
+    this.findItem('id', item.id);
+  }
+
   render() {
     const {
       handleSubmit,
@@ -843,19 +1106,25 @@ class RequestForm extends React.Component {
       blocked,
       selectedUser,
       selectedItem,
+      selectedInstance,
       selectedLoan,
-      requestCount,
+      itemRequestCount,
+      instanceRequestCount,
       selectedAddressTypeId,
       deliverySelected,
       isCancellingRequest,
       instanceId,
       isUserLoading,
+      isItemOrInstanceLoading,
       isErrorModalOpen,
       isPatronBlocksOverridden,
       isAwaitingForProxySelection,
+      isItemsDialogOpen,
       proxy,
+      requestTypeOptions,
     } = this.state;
 
+    const { createTitleLevelRequest } = this.getCurrentFormValues();
     const patronBlocks = this.getPatronManualBlocks(parentResources);
     const automatedPatronBlocks = this.getAutomatedPatronBlocks(parentResources);
     const {
@@ -864,7 +1133,6 @@ class RequestForm extends React.Component {
     } = request || {};
 
     const isEditForm = this.isEditForm();
-    const requestTypeOptions = getRequestTypeOptions(selectedItem);
 
     const labelAsterisk = isEditForm
       ? ''
@@ -900,8 +1168,8 @@ class RequestForm extends React.Component {
       barcode: formatMessage({ id: 'ui-requests.barcode' }),
     };
 
-    const multiRequestTypesVisible = !isEditForm && selectedItem && requestTypeOptions.length > 1;
-    const singleRequestTypeVisible = !isEditForm && selectedItem && requestTypeOptions.length === 1;
+    const multiRequestTypesVisible = !isEditForm && (selectedItem || selectedInstance) && requestTypeOptions?.length > 1;
+    const singleRequestTypeVisible = !isEditForm && (selectedItem || selectedInstance) && requestTypeOptions?.length === 1;
     const patronGroup = getPatronGroup(selectedUser, patronGroups);
     const requestTypeError = hasNonRequestableStatus(selectedItem);
     const itemStatus = selectedItem?.status?.name;
@@ -966,61 +1234,163 @@ class RequestForm extends React.Component {
                 errorMessage={parseErrorMessage(errorMessage)}
               />
             }
-            <AccordionSet accordionStatus={accordions} onToggle={this.onToggleSection}>
-              <Accordion
-                id="new-item-info"
-                label={
-                  <FormattedMessage id="ui-requests.item.information">
-                    {message => message + labelAsterisk}
-                  </FormattedMessage>
-                }
+            {
+              this.state.titleLevelRequestsFeatureEnabled && !isEditForm &&
+              <div
+                className={css.tlrCheckbox}
               >
-                <div id="section-item-info">
-                  <Row>
-                    <Col xs={12}>
-                      {!isEditForm &&
+                <Row>
+                  <Col xs={12}>
+                    <Field
+                      data-testid="tlrCheckbox"
+                      name="createTitleLevelRequest"
+                      type="checkbox"
+                      label={formatMessage({ id: 'ui-requests.requests.createTitleLevelRequest' })}
+                      component={Checkbox}
+                      disabled={!this.state.titleLevelRequestsFeatureEnabled || isItemOrInstanceLoading}
+                      onChange={this.handleTlrCheckboxChange}
+                    />
+                  </Col>
+                </Row>
+              </div>
+            }
+            <AccordionSet
+              accordionStatus={accordions}
+              onToggle={this.onToggleSection}
+            >
+              {
+                createTitleLevelRequest || (request?.requestLevel === REQUEST_LEVEL_TYPES.TITLE)
+                  ? (
+                    <Accordion
+                      id="new-instance-info"
+                      label={
+                        <FormattedMessage id="ui-requests.instance.information">
+                          {message => message + labelAsterisk}
+                        </FormattedMessage>
+                      }
+                    >
+                      <div
+                        data-testid="instanceInfoSection"
+                        id="section-instance-info"
+                      >
                         <Row>
-                          <Col xs={9}>
-                            <FormattedMessage id="ui-requests.item.scanOrEnterBarcode">
-                              {placeholder => (
-                                <Field
-                                  name="item.barcode"
-                                  placeholder={placeholder}
-                                  aria-label={<FormattedMessage id="ui-requests.item.barcode" />}
-                                  fullWidth
-                                  component={TextField}
-                                  forwardRef
-                                  ref={this.itemBarcodeRef}
-                                  onKeyDown={e => this.onKeyDown(e, 'item')}
-                                  validate={this.requireEnterItem}
-                                />
-                              )}
-                            </FormattedMessage>
+                          <Col xs={12}>
+                            {
+                              !isEditForm &&
+                              <Row>
+                                <Col xs={9}>
+                                  <FormattedMessage id="ui-requests.instance.scanOrEnterBarcode">
+                                    {placeholder => (
+                                      <Field
+                                        name="instance.hrid"
+                                        placeholder={placeholder}
+                                        aria-label={<FormattedMessage id="ui-requests.instance.value" />}
+                                        fullWidth
+                                        component={TextField}
+                                        forwardRef
+                                        ref={this.instanceValueRef}
+                                        onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.INSTANCE)}
+                                        validate={this.requireEnterInstance}
+                                      />
+                                    )}
+                                  </FormattedMessage>
+                                </Col>
+                                <Col xs={3}>
+                                  <Button
+                                    buttonStyle="primary noRadius"
+                                    fullWidth
+                                    onClick={this.onInstanceClick}
+                                    disabled={submitting}
+                                  >
+                                    <FormattedMessage id="ui-requests.enter" />
+                                  </Button>
+                                </Col>
+                              </Row>
+                            }
+                            {
+                              isItemOrInstanceLoading && <Icon icon="spinner-ellipsis" width="10px" />
+                            }
+                            {
+                              selectedInstance && !isItemOrInstanceLoading &&
+                              <TitleInformation
+                                instanceId={request?.instanceId || selectedInstance.id || instanceId}
+                                titleLevelRequestsCount={request?.titleRequestCount || instanceRequestCount}
+                                title={selectedInstance.title}
+                                contributors={selectedInstance.contributors || selectedInstance.contributorNames}
+                                publications={selectedInstance.publication}
+                                editions={selectedInstance.editions}
+                                identifiers={selectedInstance.identifiers}
+                              />
+                            }
                           </Col>
-                          <Col xs={3}>
-                            <Button
-                              id="clickable-select-item"
-                              buttonStyle="primary noRadius"
-                              fullWidth
-                              onClick={this.onItemClick}
-                              disabled={submitting}
-                            >
-                              <FormattedMessage id="ui-requests.enter" />
-                            </Button>
+                        </Row>
+                      </div>
+                    </Accordion>
+                  )
+                  : (
+                    <Accordion
+                      id="new-item-info"
+                      label={
+                        <FormattedMessage id="ui-requests.item.information">
+                          {message => message + labelAsterisk}
+                        </FormattedMessage>
+                      }
+                    >
+                      <div id="section-item-info">
+                        <Row>
+                          <Col xs={12}>
+                            {
+                              !isEditForm &&
+                              <Row>
+                                <Col xs={9}>
+                                  <FormattedMessage id="ui-requests.item.scanOrEnterBarcode">
+                                    {placeholder => (
+                                      <Field
+                                        name="item.barcode"
+                                        placeholder={placeholder}
+                                        aria-label={<FormattedMessage id="ui-requests.item.barcode" />}
+                                        fullWidth
+                                        component={TextField}
+                                        forwardRef
+                                        ref={this.itemBarcodeRef}
+                                        onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.ITEM)}
+                                        validate={this.requireEnterItem}
+                                      />
+                                    )}
+                                  </FormattedMessage>
+                                </Col>
+                                <Col xs={3}>
+                                  <Button
+                                    id="clickable-select-item"
+                                    buttonStyle="primary noRadius"
+                                    fullWidth
+                                    onClick={this.onItemClick}
+                                    disabled={submitting}
+                                  >
+                                    <FormattedMessage id="ui-requests.enter" />
+                                  </Button>
+                                </Col>
+                              </Row>
+                            }
+                            {
+                              isItemOrInstanceLoading && <Icon icon="spinner-ellipsis" width="10px" />
+                            }
+                            {
+                            selectedItem &&
+                              <ItemDetail
+                                request={request}
+                                currentInstanceId={instanceId}
+                                item={selectedItem}
+                                loan={selectedLoan}
+                                requestCount={itemRequestCount}
+                              />
+                            }
                           </Col>
-                        </Row> }
-                      {selectedItem &&
-                        <ItemDetail
-                          request={request}
-                          currentInstanceId={instanceId}
-                          item={selectedItem}
-                          loan={selectedLoan}
-                          requestCount={requestCount}
-                        /> }
-                    </Col>
-                  </Row>
-                </div>
-              </Accordion>
+                        </Row>
+                      </div>
+                    </Accordion>
+                  )
+              }
               <Accordion
                 id="new-request-info"
                 label={<FormattedMessage id="ui-requests.requestMeta.information" />}
@@ -1036,7 +1406,7 @@ class RequestForm extends React.Component {
                         data-test-request-type
                         xs={3}
                       >
-                        {!isEditForm && !selectedItem &&
+                        {!isEditForm && !requestTypeOptions?.length && !requestTypeError &&
                           <span data-test-request-type-message>
                             <KeyValue
                               label={<FormattedMessage id="ui-requests.requestType" />}
@@ -1262,6 +1632,13 @@ class RequestForm extends React.Component {
               patronBlocks={patronBlocks || []}
               automatedPatronBlocks={automatedPatronBlocks}
             />
+            <ItemsDialog
+              onClose={this.handleItemsDialogClose}
+              onRowClick={this.handleInstanceItemClick}
+              instanceId={selectedInstance?.id}
+              title={selectedInstance?.title}
+              open={isItemsDialogOpen}
+            />
             {isErrorModalOpen &&
               <ErrorModal
                 id={`${itemStatus}-modal`}
@@ -1289,7 +1666,7 @@ class RequestForm extends React.Component {
 export default stripesForm({
   form: 'requestForm',
   asyncValidate,
-  asyncBlurFields: ['item.barcode', 'requester.barcode'],
+  asyncBlurFields: ['item.barcode', 'requester.barcode', 'instance.hrid'],
   navigationCheck: true,
   enableReinitialize: true,
 })(injectIntl(RequestForm));

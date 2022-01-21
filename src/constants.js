@@ -163,7 +163,13 @@ export const requestFilterTypes = {
   TAGS: 'tags',
   REQUEST_TYPE: 'requestType',
   REQUEST_STATUS: 'requestStatus',
+  REQUEST_LEVELS: 'requestLevels',
   PICKUP_SERVICE_POINT: 'pickupServicePoints',
+};
+
+export const REQUEST_LEVEL_TYPES = {
+  ITEM: 'Item',
+  TITLE: 'Title',
 };
 
 export const requestTypeFilters = [
@@ -181,6 +187,11 @@ export const requestStatusFilters = [
   { label: 'ui-requests.filters.requestStatus.awaitingPickup', value: requestStatuses.AWAITING_PICKUP },
   { label: 'ui-requests.filters.requestStatus.inTransit', value: requestStatuses.IN_TRANSIT },
   { label: 'ui-requests.filters.requestStatus.notYetFilled', value: requestStatuses.NOT_YET_FILLED },
+];
+
+export const requestLevelFilters = [
+  { label: 'ui-requests.filters.requestLevel.item', value: REQUEST_LEVEL_TYPES.ITEM },
+  { label: 'ui-requests.filters.requestLevel.title', value: REQUEST_LEVEL_TYPES.TITLE },
 ];
 
 export const pickSlipType = 'pick slip';
@@ -202,7 +213,23 @@ export const errorCodes = {
   UNKNOWN: 'unknown',
 };
 
-export const REQUEST_LEVEL_TYPES = {
-  ITEM: 'Item',
-  TITLE: 'Title',
+export const REQUEST_DATE = 'Request Date';
+
+export const REQUEST_TYPES = {
+  [requestTypesMap.PAGE]:{
+    id: requestTypeOptionMap[requestTypesMap.PAGE],
+    value: requestTypesMap.PAGE,
+  },
+  [requestTypesMap.HOLD]: {
+    id: requestTypeOptionMap[requestTypesMap.HOLD],
+    value: requestTypesMap.HOLD,
+  },
+  [requestTypesMap.RECALL]: {
+    id: requestTypeOptionMap[requestTypesMap.RECALL],
+    value: requestTypesMap.RECALL,
+  },
 };
+
+export const MISSING_VALUE_SYMBOL = '-';
+
+export const DEFAULT_DISPLAYED_YEARS_AMOUNT = 3;

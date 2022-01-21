@@ -9,18 +9,27 @@ import {
   KeyValue,
 } from '@folio/stripes/components';
 
+import { getFormattedYears } from '../../routes/utils';
+import {
+  DEFAULT_DISPLAYED_YEARS_AMOUNT,
+  REQUEST_DATE,
+  REQUEST_LEVEL_TYPES,
+} from '../../constants';
+import { openRequestStatusFilters } from '../../utils';
+
 export const TEXT_SEPARATOR = ', ';
 export const CONTRIBUTOR_SEPARATOR = '; ';
 export const MAX_IDENTIFIERS_COUNT = 4;
 
-export const getURL = (id, count) => <Link to={`/requests?filters=query=${id}&sort=Request Date`}>{count}</Link>;
+export const getURL = (id, count) => <Link to={`/requests?filters=${openRequestStatusFilters},requestLevels.${REQUEST_LEVEL_TYPES.TITLE}&query=${id}&sort=${REQUEST_DATE}`}>{count}</Link>;
+export const getTitleURL = (id, title) => <Link to={`/inventory/view/${id}`}>{title}</Link>;
 export const getContributors = (data, separator) => data.map(({ name }) => name).join(separator);
-export const getPublications = (data, separator) => data.map(({ dateOfPublication }) => dateOfPublication).join(separator);
 export const getEditions = (data, separator) => data.join(separator);
 export const getIdentifiers = (data, separator, limit) => data.slice(0, limit).map(({ value }) => value).join(separator);
 
 const TitleInformation = (props) => {
   const {
+    titleLevelRequestsLink,
     instanceId,
     titleLevelRequestsCount,
     title,
@@ -39,13 +48,16 @@ const TitleInformation = (props) => {
         <Col xs={4}>
           <KeyValue
             label={formatMessage({ id: 'ui-requests.titleInformation.titleLevelRequests' })}
-            value={getURL(instanceId, titleLevelRequestsCount)}
+            value={titleLevelRequestsLink
+              ? getURL(instanceId, titleLevelRequestsCount)
+              : titleLevelRequestsCount
+            }
           />
         </Col>
         <Col xs={4}>
           <KeyValue
             label={formatMessage({ id: 'ui-requests.titleInformation.title' })}
-            value={title}
+            value={getTitleURL(instanceId, title)}
           />
         </Col>
         <Col xs={4}>
@@ -59,7 +71,7 @@ const TitleInformation = (props) => {
         <Col xs={4}>
           <KeyValue
             label={formatMessage({ id: 'ui-requests.titleInformation.publicationsDate' })}
-            value={getPublications(publications, TEXT_SEPARATOR)}
+            value={getFormattedYears(publications, DEFAULT_DISPLAYED_YEARS_AMOUNT)}
           />
         </Col>
         <Col xs={4}>
@@ -84,9 +96,11 @@ TitleInformation.defaultProps = {
   publications: [],
   editions: [],
   identifiers: [],
+  titleLevelRequestsLink: true,
 };
 
 TitleInformation.propTypes = {
+  titleLevelRequestsLink: PropTypes.bool,
   titleLevelRequestsCount: PropTypes.number.isRequired,
   instanceId: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
