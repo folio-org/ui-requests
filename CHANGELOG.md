@@ -39,6 +39,7 @@
 * Fulfillment in progress accordion should have position column in Request queue page. Refs UIREQ-705.
 * Upgrade `circulation` to `13.0`. Refs UIREQ-717.
 * Fix the issue when user is not redirected to "Item page". Refs UIREQ-714.
+* Fix unnecessary add of the `numberOfNotYetFilledRequests` field to the request data. Refs UIREQ-726.
 
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)

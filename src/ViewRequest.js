@@ -215,6 +215,7 @@ class ViewRequest extends React.Component {
     delete updatedRecord.itemStatus;
     delete updatedRecord.titleRequestCount;
     delete updatedRecord.itemRequestCount;
+    delete updatedRecord.numberOfNotYetFilledRequests;
     delete updatedRecord.holdShelfExpirationTime;
 
     this.props.mutator.selectedRequest.PUT(updatedRecord).then(() => {
