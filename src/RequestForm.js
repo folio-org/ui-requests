@@ -342,7 +342,7 @@ class RequestForm extends React.Component {
       value: id,
     }));
 
-    return !hasDelivery && !this.isEditForm()
+    return !hasDelivery
       ? fulfilmentTypeOptions.filter(option => option.value !== fulfilmentTypeMap.DELIVERY)
       : fulfilmentTypeOptions;
   }

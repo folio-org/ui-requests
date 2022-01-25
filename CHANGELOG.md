@@ -41,6 +41,7 @@
 * Fix the issue when user is not redirected to "Item page". Refs UIREQ-714.
 * Fix unnecessary add of the `numberOfNotYetFilledRequests` field to the request data. Refs UIREQ-726.
 * Make translation keys more specific. Refs UIREQ-715.
+* Fulfillment Preference field not respecting user fulfillment preferences in edit mode. Refs UIREQ-658.
 
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)
