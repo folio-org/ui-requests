@@ -286,7 +286,7 @@ class RequestQueueView extends React.Component {
           paneTitle={
             <AppIcon size="small" app="requests">
               <FormattedMessage
-                id="ui-requests.requestQueue.title"
+                id="ui-requests.requestQueue.heading"
                 values={{
                   title,
                   author: formattedContributors,

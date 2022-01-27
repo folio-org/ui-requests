@@ -380,7 +380,7 @@ class RequestsRoute extends React.Component {
       itemBarcode: formatMessage({ id: 'ui-requests.requests.itemBarcode' }),
       type: formatMessage({ id: 'ui-requests.requests.type' }),
       requestStatus: formatMessage({ id: 'ui-requests.requests.status' }),
-      position: formatMessage({ id: 'ui-requests.requests.position' }),
+      position: formatMessage({ id: 'ui-requests.requests.queuePosition' }),
       requester: formatMessage({ id: 'ui-requests.requests.requester' }),
       requesterBarcode: formatMessage({ id: 'ui-requests.requests.requesterBarcode' }),
       proxy: formatMessage({ id: 'ui-requests.requests.proxy' }),

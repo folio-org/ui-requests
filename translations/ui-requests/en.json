@@ -40,7 +40,7 @@
   "requests.requesterBarcode": "Requester Barcode",
   "requests.requestDate": "Request Date",
   "requests.proxy": "Proxy",
-  "requests.position": "Queue position",
+  "requests.queuePosition": "Queue position",
   "requests.itemBarcode": "Item barcode",
   "requests.createTitleLevelRequest": "Create title level request",
 
@@ -175,7 +175,7 @@
   "noServicePoint.errorMessage": "You must be logged into a service point to access the Hold shelf clearance report. Please add one or more service points to your user record in the Users app. Contact an administrator if you do not have the ability to add service points to your record.",
   "noServicePoint.label": "No service point selected",
 
-  "requestQueue.title": "Request queue on instance • {title} /{author}.",
+  "requestQueue.heading": "Request queue on instance • {title} /{author}.",
   "requestQueue.description": "Instance: <instanceLink>{title} /{author}.</instanceLink> <i>{publisher}, {publicationDate}</i>",
   "requestQueue.fulfillmentInProgressSectionTitle": "Fulfillment in progress",
   "requestQueue.notYetFilledSectionTitle": "Open - Not yet filled",
