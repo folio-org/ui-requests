@@ -142,6 +142,7 @@ class RequestForm extends React.Component {
         GET: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
+    isTlrEnabledOnEditPage: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -150,6 +151,7 @@ class RequestForm extends React.Component {
     optionLists: {},
     pristine: true,
     submitting: false,
+    isTlrEnabledOnEditPage: false,
   };
 
   constructor(props) {
@@ -1100,6 +1102,7 @@ class RequestForm extends React.Component {
       },
       errorMessage,
       onCancel,
+      isTlrEnabledOnEditPage,
     } = this.props;
 
     const {
@@ -1530,7 +1533,12 @@ class RequestForm extends React.Component {
                         <Col xs={3}>
                           <KeyValue
                             label={<FormattedMessage id="ui-requests.position" />}
-                            value={<PositionLink request={request} />}
+                            value={
+                              <PositionLink
+                                request={request}
+                                isTlrEnabled={isTlrEnabledOnEditPage}
+                              />
+                          }
                           />
                         </Col>
                       </Row> }
