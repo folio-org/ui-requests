@@ -44,6 +44,7 @@
 * Fulfillment Preference field not respecting user fulfillment preferences in edit mode. Refs UIREQ-658.
 * Fix `view requests in queue` link behaviour. Refs UIREQ-727.
 * Add link for `Requests on item` field if level of request is `Title`. Refs UIREQ-730.
+* Add `circulation.requests.queue.collection.get` permission. Refs UIREQ-734.
 
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)
