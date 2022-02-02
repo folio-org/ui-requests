@@ -315,6 +315,9 @@ class ViewRequest extends React.Component {
       patronGroups,
       parentMutator,
     } = this.props;
+    const {
+      titleLevelRequestsFeatureEnabled,
+    } = this.state;
 
     const query = location.search ? queryString.parse(location.search) : {};
 
@@ -354,6 +357,7 @@ class ViewRequest extends React.Component {
                 query={this.props.query}
                 parentMutator={parentMutator}
                 findResource={findResource}
+                isTlrEnabledOnEditPage={titleLevelRequestsFeatureEnabled}
               />
             </Layer>
           ) }

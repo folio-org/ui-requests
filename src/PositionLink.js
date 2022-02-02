@@ -4,7 +4,10 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 
+import { NoValue } from '@folio/stripes-components';
+
 import {
+  requestOpenStatuses,
   requestStatuses,
   REQUEST_DATE,
 } from './constants';
@@ -18,7 +21,7 @@ export default function PositionLink({
   const id = request[isTlrEnabled ? 'instanceId' : 'itemId'];
   const openRequestsPath = `/requests?filters=requestStatus.${requestStatuses.NOT_YET_FILLED}&query=${id}&sort=${REQUEST_DATE}`;
 
-  return request
+  return requestOpenStatuses.includes(request.status)
     ? (
       <div>
         <span>
@@ -30,7 +33,7 @@ export default function PositionLink({
         </Link>
       </div>
     )
-    : '-';
+    : <NoValue />;
 }
 
 PositionLink.propTypes = {

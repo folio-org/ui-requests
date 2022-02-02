@@ -43,6 +43,13 @@ export const requestStatuses = {
   UNFILLED: 'Closed - Unfilled',
 };
 
+export const requestOpenStatuses = [
+  requestStatuses.AWAITING_DELIVERY,
+  requestStatuses.AWAITING_PICKUP,
+  requestStatuses.IN_TRANSIT,
+  requestStatuses.NOT_YET_FILLED,
+];
+
 // map from API's enum-value to translation key
 export const requestStatusesTranslations = {
   'Closed - Cancelled': 'ui-requests.filters.requestStatus.cancelled',
