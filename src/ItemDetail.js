@@ -17,6 +17,8 @@ import {
 
 import { openRequestStatusFilters } from './utils';
 
+const DEFAULT_COUNT_VALUE = 0;
+
 const ItemDetail = ({
   currentInstanceId,
   request,
@@ -34,18 +36,20 @@ const ItemDetail = ({
   const holdingsRecordId = request?.holdingsRecordId || item.holdingsRecordId;
   const title = request?.instance.title || item.title || <NoValue />;
   const contributor = request?.instance.contributorNames?.[0]?.name || item.contributorNames?.[0]?.name || <NoValue />;
-  const count = request?.itemRequestCount || requestCount;
+  const count = request?.itemRequestCount || requestCount || DEFAULT_COUNT_VALUE;
   const status = item.status.name || item.status || <NoValue />;
   const effectiveLocationName = item.effectiveLocation?.name || item.location?.name || <NoValue />;
   const dueDate = loan?.dueDate ? <FormattedDate value={loan.dueDate} /> : <NoValue />;
 
   const effectiveCallNumberString = effectiveCallNumber(item);
   const recordLink = itemId ? <Link to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}>{item.barcode || itemId}</Link> : <NoValue />;
-  const positionLink = (
-    <Link to={`/requests?filters=${openRequestStatusFilters}&query=${itemId}&sort=Request Date`}>
-      {count}
-    </Link>
-  );
+  const positionLink = count
+    ? (
+      <Link to={`/requests?filters=${openRequestStatusFilters}&query=${itemId}&sort=Request Date`}>
+        {count}
+      </Link>
+    )
+    : count;
   const itemLabel = item.barcode ? 'ui-requests.item.barcode' : 'ui-requests.item.id';
 
   return (
@@ -99,9 +103,10 @@ const ItemDetail = ({
           data-test-requests-on-item
           xs={4}
         >
-          <KeyValue label={<FormattedMessage id="ui-requests.item.requestsOnItem" />}>
-            {positionLink}
-          </KeyValue>
+          <KeyValue
+            label={<FormattedMessage id="ui-requests.item.requestsOnItem" />}
+            value={positionLink}
+          />
         </Col>
       </Row>
     </>

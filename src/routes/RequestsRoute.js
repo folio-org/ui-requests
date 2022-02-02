@@ -603,17 +603,21 @@ class RequestsRoute extends React.Component {
   }
 
   // Called as a map function
-  addRequestFields(r) {
-    const { requestLevel } = r;
+  addRequestFields(request) {
+    const {
+      requesterId,
+      instanceId,
+      itemId,
+    } = request;
     const { titleLevelRequestsFeatureEnabled } = this.state;
 
     return Promise.all(
       [
-        this.findResource('user', r.requesterId),
-        this.findResource('requestsForInstance', r.instanceId),
-        ...(requestLevel === REQUEST_LEVEL_TYPES.ITEM
+        this.findResource('user', requesterId),
+        this.findResource('requestsForInstance', instanceId),
+        ...(itemId
           ? [
-            this.findResource('requestsForItem', r.itemId),
+            this.findResource('requestsForItem', itemId),
           ]
           : []),
       ],
@@ -625,14 +629,14 @@ class RequestsRoute extends React.Component {
       const dynamicProperties = {};
       const requestsForFilter = titleLevelRequestsFeatureEnabled ? titleRequests : itemRequests;
 
-      dynamicProperties.numberOfNotYetFilledRequests = requestsForFilter.requests.filter(request => request.status === requestStatuses.NOT_YET_FILLED).length;
+      dynamicProperties.numberOfNotYetFilledRequests = requestsForFilter.requests.filter(currentRequest => currentRequest.status === requestStatuses.NOT_YET_FILLED).length;
 
-      if (requestLevel === REQUEST_LEVEL_TYPES.ITEM) {
+      if (itemId) {
         dynamicProperties.itemRequestCount = get(itemRequests, 'totalRecords', 0);
       }
 
       return {
-        ...r,
+        ...request,
         requester,
         titleRequestCount,
         ...dynamicProperties,
