@@ -57,6 +57,6 @@ describe('NotYetFilledRequestsData', () => {
       isRowDraggable: testIsRowDraggable,
     };
 
-    expect(SortableList).toHaveBeenCalledWith(expectedResult, {});
+    expect(SortableList).toHaveBeenCalledWith(expect.objectContaining(expectedResult), {});
   });
 });
