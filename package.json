@@ -55,6 +55,7 @@
         "displayName": "Requests: Reorder queue",
         "visible": true,
         "subPermissions": [
+          "circulation.requests.queue.collection.get",
           "circulation.requests.queue.reorder.collection.post",
           "circulation.rules.request-policy.get"
         ]
