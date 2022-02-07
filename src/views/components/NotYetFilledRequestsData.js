@@ -9,6 +9,8 @@ import {
 } from '../constants';
 import { SortableList } from '../../components';
 
+import css from './NotYetFilledRequestsData.css';
+
 export const COLUMN_NAMES = [
   'position',
   'itemBarcode',
@@ -44,6 +46,9 @@ const NotYetFilledRequestsData = ({
       isEmptyMessage={
         formatMessage({ id: 'ui-requests.requestQueue.notYetFilledRequests.noData' })
       }
+      rowProps={{
+        additionalClasses: [css.rowOfDraggableList],
+      }}
     />
   );
 };
