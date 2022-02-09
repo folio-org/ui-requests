@@ -10,6 +10,7 @@ import {
   Select
 } from '@folio/stripes/components';
 
+import { Loading } from './components';
 import {
   getRequestTypeOptions,
 } from './utils';
@@ -17,9 +18,14 @@ import {
 class ChooseRequestTypeDialog extends React.Component {
   static propTypes = {
     item: PropTypes.object.isRequired,
+    isLoading: PropTypes.bool,
     onConfirm: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
     open: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    isLoading: false,
   };
 
   constructor(props) {
@@ -49,6 +55,7 @@ class ChooseRequestTypeDialog extends React.Component {
     const {
       open,
       onCancel,
+      isLoading,
     } = this.props;
     const { requestType } = this.state;
     const footer = (
@@ -57,12 +64,14 @@ class ChooseRequestTypeDialog extends React.Component {
           data-test-confirm-request-type
           buttonStyle="primary"
           onClick={this.onConfirm}
+          disabled={isLoading}
         >
           <FormattedMessage id="ui-requests.moveRequest.confirm" />
         </Button>
         <Button
           data-test-cancel-move-request
           onClick={onCancel}
+          disabled={isLoading}
         >
           <FormattedMessage id="stripes-core.button.cancel" />
         </Button>
@@ -77,25 +86,27 @@ class ChooseRequestTypeDialog extends React.Component {
         onClose={onCancel}
         footer={footer}
       >
-        {this.options.length > 1 ?
-          <Select
-            label={<FormattedMessage id="ui-requests.moveRequest.chooseRequestMessage" />}
-            name="requestType"
-            onChange={this.selectRequestType}
-          >
-            {this.options.map(({ id, value }) => (
-              <FormattedMessage id={id} key={id}>
-                {translatedLabel => (
-                  <option
-                    value={value}
-                  >
-                    {translatedLabel}
-                  </option>
-                )}
-              </FormattedMessage>
-            ))}
-          </Select>
-          : <SafeHTMLMessage id="ui-requests.moveRequest.requestTypeChangeMessage" values={{ requestType }} />}
+        {isLoading
+          ? <Loading data-testid="loading" />
+          : this.options.length > 1 ?
+            <Select
+              label={<FormattedMessage id="ui-requests.moveRequest.chooseRequestMessage" />}
+              name="requestType"
+              onChange={this.selectRequestType}
+            >
+              {this.options.map(({ id, value }) => (
+                <FormattedMessage id={id} key={id}>
+                  {translatedLabel => (
+                    <option
+                      value={value}
+                    >
+                      {translatedLabel}
+                    </option>
+                  )}
+                </FormattedMessage>
+              ))}
+            </Select>
+            : <SafeHTMLMessage id="ui-requests.moveRequest.requestTypeChangeMessage" values={{ requestType }} />}
       </Modal>
     );
   }

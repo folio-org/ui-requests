@@ -46,6 +46,7 @@
 * Add link for `Requests on item` field if level of request is `Title`. Refs UIREQ-730.
 * Add `circulation.requests.queue.collection.get` permission. Refs UIREQ-734.
 * When scrolling, a white background appears and the blue focus indicator is cut off. Refs UIREQ-733.
+* The item requested is duplicated in the queue. Refs UIREQ-737.
 
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)
