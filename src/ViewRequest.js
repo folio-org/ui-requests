@@ -569,6 +569,7 @@ class ViewRequest extends React.Component {
         dismissible
         {... (showActionMenu ? { actionMenu } : {})}
         onClose={this.props.onClose}
+        id="request-detail-pane"
       >
         <TitleManager record={get(request, ['instance', 'title'])} />
         <AccordionSet accordionStatus={accordions} onToggle={this.onToggleSection}>
@@ -753,6 +754,7 @@ class ViewRequest extends React.Component {
         lastMenu={this.renderDetailMenu()}
         dismissible
         onClose={this.props.onClose}
+        id="request-detail-pane"
       >
         <div style={{ paddingTop: '1rem' }}>
           <Icon icon="spinner-ellipsis" width="100px" />
