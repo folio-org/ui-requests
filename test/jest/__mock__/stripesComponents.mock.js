@@ -37,7 +37,16 @@ jest.mock('@folio/stripes/components', () => ({
     </div>
   )),
   Icon: jest.fn(({ children }) => <div>{children}</div>),
-  Modal: jest.fn(({ children }) => (
+  Modal: jest.fn(({
+    children,
+    footer,
+  }) => (
+    <div>
+      {children}
+      {footer}
+    </div>
+  )),
+  ModalFooter: jest.fn(({ children }) => (
     <div>
       {children}
     </div>

@@ -4,3 +4,4 @@ import './intl.mock';
 import './stripesComponents.mock';
 import './stripesCore.mock';
 import './stripesSmartComponents.mock';
+import './reactIntlSafeHtml.mock';

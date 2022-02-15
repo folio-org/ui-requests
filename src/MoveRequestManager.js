@@ -79,7 +79,6 @@ class MoveRequestManager extends React.Component {
   confirmChoosingRequestType = (selectedRequestType) => {
     this.setState({
       selectedRequestType,
-      chooseRequestType: false
     }, () => this.execSteps(1));
   }
 
@@ -106,6 +105,10 @@ class MoveRequestManager extends React.Component {
     try {
       const movedRequest = await POST(data);
       this.props.onMove(movedRequest);
+
+      this.setState({
+        chooseRequestType: false,
+      });
     } catch (resp) {
       this.processError(resp);
     } finally {
@@ -172,7 +175,7 @@ class MoveRequestManager extends React.Component {
     return (
       <>
         <ItemsDialog
-          open={moveRequest || moveInProgress}
+          open={moveRequest}
           instanceId={request.instanceId}
           title={request.instance.title}
           isLoading={moveInProgress}
@@ -185,6 +188,7 @@ class MoveRequestManager extends React.Component {
             open={chooseRequestType}
             data-test-choose-request-type-modal
             item={selectedItem}
+            isLoading={moveInProgress}
             onConfirm={this.confirmChoosingRequestType}
             onCancel={this.cancelMoveRequest}
           /> }
