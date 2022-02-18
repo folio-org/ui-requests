@@ -52,6 +52,7 @@ import {
   convertToSlipData,
   getTlrSettings,
   getInstanceQueryString,
+  isDuplicateMode,
 } from '../utils';
 import packageInfo from '../../package';
 import {
@@ -672,9 +673,38 @@ class RequestsRoute extends React.Component {
   };
 
   create = (data) => {
+    const {
+      firstName,
+      lastName,
+    } = data.requester.personal;
+    const query = new URLSearchParams(this.props.location.search);
+    const mode = query.get('mode');
+
     return this.props.mutator.records.POST(data)
-      .then(() => this.closeLayer())
-      .catch(resp => this.processError(resp));
+      .then(() => {
+        this.closeLayer();
+
+        if (!isDuplicateMode(mode)) {
+          this.context.sendCallout({
+            message: (
+              <FormattedMessage
+                id="ui-requests.createRequest.success"
+                values={{ requester: `${lastName}, ${firstName}` }}
+              />
+            ),
+          });
+        }
+      })
+      .catch(resp => {
+        this.processError(resp);
+
+        if (!isDuplicateMode(mode)) {
+          this.context.sendCallout({
+            message: <FormattedMessage id="ui-requests.createRequest.fail" />,
+            type: 'error',
+          });
+        }
+      });
   };
 
   processError(resp) {

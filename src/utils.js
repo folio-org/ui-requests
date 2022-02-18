@@ -31,6 +31,7 @@ import {
   requestTypesMap,
   REQUEST_LEVEL_TYPES,
   REQUEST_TYPES,
+  createModes,
 } from './constants';
 
 import css from './requests.css';
@@ -163,6 +164,10 @@ export function isNotYetFilled(request) {
 
 export function isPageRequest(request) {
   return requestTypesMap.PAGE === request.requestType;
+}
+
+export function isDuplicateMode(mode) {
+  return mode === createModes.DUPLICATE;
 }
 
 export const openRequestStatusFilters = [
