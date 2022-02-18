@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import { FormattedMessage } from 'react-intl';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 import {
   Modal,
   ModalFooter,
@@ -164,7 +163,7 @@ class CancelRequestDialog extends React.Component {
         footer={footer}
       >
         <p>
-          <SafeHTMLMessage
+          <FormattedMessage
             id="ui-requests.cancel.requestWillBeCancelled"
             values={{ title: request.instance.title }}
           />
