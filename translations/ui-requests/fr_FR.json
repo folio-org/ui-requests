@@ -230,6 +230,6 @@
     "requestQueue.notYetFilledRequests.noData": "No requests found",
     "filters.requestLevel.item": "Exemplaire",
     "filters.requestLevel.title": "Titre",
-    "requests.queuePosition": "Queue position",
+    "requests.queuePosition": "Position en file d'attente",
     "requestQueue.heading": "Request queue on instance • {title} /{author}."
 }
