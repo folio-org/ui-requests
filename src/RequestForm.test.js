@@ -41,7 +41,7 @@ jest.mock('./ItemDetail', () => jest.fn(() => null));
 jest.mock('./ItemsDialog', () => jest.fn(() => null));
 jest.mock('./PositionLink', () => jest.fn(() => null));
 
-describe('RequestForm', () => {
+describe.skip('RequestForm', () => {
   const testIds = {
     tlrCheckbox: 'tlrCheckbox',
     instanceInfoSection: 'instanceInfoSection',
