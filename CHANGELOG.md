@@ -2,6 +2,7 @@
 
 ## IN PROGRESS
 * Add id for Pane component. Refs UIREQ-742.
+* Add pull request template. Refs UIREQ-746.
 
 ## [7.0.0](https://github.com/folio-org/ui-requests/tree/v7.0.0) (2022-02-25)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v6.0.2...v7.0.0)
