@@ -1197,6 +1197,7 @@ class RequestForm extends React.Component {
           data-test-requests-form
         >
           <Pane
+            id="request"
             defaultWidth="100%"
             height="100%"
             firstMenu={this.renderAddRequestFirstMenu()}

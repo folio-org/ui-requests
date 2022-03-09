@@ -562,6 +562,7 @@ class ViewRequest extends React.Component {
 
     return (
       <Pane
+        id="instance-details"
         data-test-instance-details
         defaultWidth={this.props.paneWidth}
         paneTitle={<FormattedMessage id="ui-requests.requestMeta.detailLabel" />}
@@ -748,6 +749,7 @@ class ViewRequest extends React.Component {
   renderSpinner() {
     return (
       <Pane
+        id="request-details"
         defaultWidth={this.props.paneWidth}
         paneTitle={<FormattedMessage id="ui-requests.requestMeta.detailLabel" />}
         lastMenu={this.renderDetailMenu()}

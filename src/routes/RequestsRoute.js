@@ -115,6 +115,21 @@ const urls = {
   },
 };
 
+export const buildHoldRecords = (records) => {
+  return records.map(record => {
+    if (record.requester) {
+      const {
+        firstName,
+        lastName,
+      } = record.requester;
+
+      record.requester.name = [lastName, firstName].filter(namePart => namePart).join(', ');
+    }
+
+    return record;
+  });
+};
+
 class RequestsRoute extends React.Component {
   static contextType = CalloutContext;
 
@@ -769,25 +784,10 @@ class RequestsRoute extends React.Component {
       return;
     }
 
-    const recordsToCSV = this.buildHoldRecords(requests);
+    const recordsToCSV = buildHoldRecords(requests);
     exportCsv(recordsToCSV, {
       onlyFields: this.expiredHoldsReportColumnHeaders,
       excludeFields: ['id'],
-    });
-  };
-
-  buildHoldRecords = (records) => {
-    return records.map(record => {
-      if (record.requester) {
-        const {
-          firstName,
-          lastName,
-        } = record.requester;
-
-        record.requester.name = [firstName, lastName].filter(e => e).join(',');
-      }
-
-      return record;
     });
   };
 
