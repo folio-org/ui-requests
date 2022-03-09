@@ -50,7 +50,6 @@ import {
   Checkbox,
 } from '@folio/stripes/components';
 import stripesForm from '@folio/stripes/form';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import CancelRequestDialog from './CancelRequestDialog';
 import UserForm from './UserForm';
@@ -1655,7 +1654,7 @@ class RequestForm extends React.Component {
                 onClose={this.hideErrorModal}
                 label={<FormattedMessage id="ui-requests.errorModal.title" />}
                 errorMessage={
-                  <SafeHTMLMessage
+                  <FormattedMessage
                     id="ui-requests.errorModal.message"
                     values={{
                       title: instance?.title,
