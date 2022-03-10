@@ -177,6 +177,9 @@
   "editRequest.success": "Request has been successfully edited for {requester}",
   "editRequest.fail": "This request was not saved successfully",
 
+  "duplicateRequest.success": "Request has been successfully created for {requester}",
+  "duplicateRequest.fail": "This request was not placed successfully",
+
   "exportExpiredHoldShelfToCsv": "Export hold shelf clearance report for {currentServicePoint}",
   "exportSearchResultsToCsv": "Export search results to CSV",
   "noServicePoint.errorMessage": "You must be logged into a service point to access the Hold shelf clearance report. Please add one or more service points to your user record in the Users app. Contact an administrator if you do not have the ability to add service points to your record.",
