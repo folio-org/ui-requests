@@ -211,6 +211,6 @@
   },
   "optionalDependencies": {
     "@folio/plugin-find-user": "^6.0.0",
-    "@folio/plugin-find-instance": "*"
+    "@folio/plugin-find-instance": "^6.0.0"
   }
 }
