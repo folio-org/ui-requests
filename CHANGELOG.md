@@ -1,11 +1,16 @@
 # Change history for ui-requests
 
-## IN PROGRESS
+## 7.1.0 IN PROGRESS
 
-* Fix the issue when proxy pop-up and block pop-up appear at the same time for requests. Refs UIREQ-668.
-* Fix the issue when `block` modal appears even if no manual blocks and vice versa. Refs UIREQ-670
+* Add id for Pane component. Refs UIREQ-742.
+* Add pull request template. Refs UIREQ-746.
+* Replace `SafeHTMLMessage` with `FormattedMessage`. Refs UIREQ-610.
+* Move page requests to first accordion of unified queue when reordering. Refs UIREQ-728.
+
+## [7.0.0](https://github.com/folio-org/ui-requests/tree/v7.0.0) (2022-02-25)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v6.0.2...v7.0.0)
+
 * Move reusable part of `move request dialog box` to reusable component. Refs UIREQ-660.
-* When newly added patron is deleted after making and canceling request, requests page is unstable. Refs UIREQ-672.
 * Import `stripes-core` components via `@folio/stripes`. Refs UIREQ-609.
 * Create reusable component for render title level information. Refs UIREQ-654.
 * Add preferred name to Requests UI. Refs UIREQ-605.
@@ -47,6 +52,18 @@
 * Add `circulation.requests.queue.collection.get` permission. Refs UIREQ-734.
 * When scrolling, a white background appears and the blue focus indicator is cut off. Refs UIREQ-733.
 * The item requested is duplicated in the queue. Refs UIREQ-737.
+* Requester name displayed incorrectly in hold shelf clearance report. Refs UIREQ-729.
+
+## [6.0.2](https://github.com/folio-org/ui-requests/tree/v6.0.2) (2021-11-12)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v6.0.1...v6.0.2)
+
+* When newly added patron is deleted after making and canceling request, requests page is unstable. Refs UIREQ-672.
+
+## [6.0.1](https://github.com/folio-org/ui-requests/tree/v6.0.1) (2021-11-12)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v6.0.0...v6.0.1)
+
+* Fix the issue when proxy pop-up and block pop-up appear at the same time for requests. Refs UIREQ-668.
+* Fix the issue when `block` modal appears even if no manual blocks and vice versa. Refs UIREQ-670
 
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)

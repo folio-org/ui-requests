@@ -267,6 +267,7 @@ class RequestQueueView extends React.Component {
     return (
       <Paneset isRoot>
         <Pane
+          id="request-queue"
           defaultWidth="100%"
           height="100%"
           firstMenu={

@@ -169,6 +169,7 @@ const ItemsDialog = ({
         static
       >
         <Pane
+          id="items-dialog-instance-items-list"
           paneTitle={formatMessage({ id: 'ui-requests.items.instanceItems' }, { title })}
           paneSub={formatMessage({ id: 'ui-requests.resultCount' }, { count: itemsAmount })}
           defaultWidth="fill"

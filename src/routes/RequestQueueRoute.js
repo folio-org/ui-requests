@@ -10,7 +10,10 @@ import { stripesConnect } from '@folio/stripes/core';
 import RequestQueueView from '../views/RequestQueueView';
 import urls from './urls';
 import { requestStatuses } from '../constants';
-import { getTlrSettings } from '../utils';
+import {
+  getTlrSettings,
+  isPageRequest,
+} from '../utils';
 
 class RequestQueueRoute extends React.Component {
   static getRequest(props) {
@@ -226,16 +229,24 @@ class RequestQueueRoute extends React.Component {
     const request = this.getRequest();
     const requests = this.getRequestsWithDeliveryTypes();
     const notYetFilledRequests = [];
-    const inProgressRequests = [];
+    let inProgressRequests = [];
+    const pageRequests = [];
 
     requests
-      .forEach(r => {
-        if (r.status === requestStatuses.NOT_YET_FILLED) {
+      .forEach((r) => {
+        if (isPageRequest(r)) {
+          pageRequests.push(r);
+        } else if (r.status === requestStatuses.NOT_YET_FILLED) {
           notYetFilledRequests.push(r);
         } else {
           inProgressRequests.push(r);
         }
       });
+
+    inProgressRequests = [
+      ...inProgressRequests,
+      ...pageRequests, // page requests should be shown at the bottom of the accordion
+    ];
 
     return (
       <RequestQueueView
