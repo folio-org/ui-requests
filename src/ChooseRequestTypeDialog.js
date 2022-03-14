@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import SafeHTMLMessage from '@folio/react-intl-safe-html';
 
 import {
   Modal,
@@ -106,7 +105,7 @@ class ChooseRequestTypeDialog extends React.Component {
                 </FormattedMessage>
               ))}
             </Select>
-            : <SafeHTMLMessage id="ui-requests.moveRequest.requestTypeChangeMessage" values={{ requestType }} />}
+            : <FormattedMessage id="ui-requests.moveRequest.requestTypeChangeMessage" values={{ requestType }} />}
       </Modal>
     );
   }
