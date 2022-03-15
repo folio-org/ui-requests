@@ -1,4 +1,5 @@
 import React, {
+  useCallback,
   useState,
   useLayoutEffect,
   useMemo,
@@ -78,21 +79,21 @@ const ItemsDialog = ({
   const [items, setItems] = useState([]);
   const { formatMessage } = useIntl();
 
-  const fetchHoldings = () => {
+  const fetchHoldings = useCallback(() => {
     const query = `instanceId==${instanceId}`;
     mutator.holdings.reset();
 
     return mutator.holdings.GET({ params: { query } });
-  };
+  }, [instanceId, mutator]);
 
-  const fetchItems = (holdings) => {
+  const fetchItems = useCallback((holdings) => {
     const query = holdings.map(h => `holdingsRecordId==${h.id}`).join(' or ');
     mutator.items.reset();
 
     return mutator.items.GET({ params: { query, limit: 1000 } });
-  };
+  }, [mutator]);
 
-  const fetchRequests = async (itemsList) => {
+  const fetchRequests = useCallback(async (itemsList) => {
     // Split the list of items into small chunks to create a short enough query string
     // that we can avoid a "414 Request URI Too Long" response from Okapi.
     const CHUNK_SIZE = 40;
@@ -113,7 +114,7 @@ const ItemsDialog = ({
     }
 
     return data;
-  };
+  }, [mutator]);
 
   useLayoutEffect(() => {
     const getItems = async () => {
@@ -136,8 +137,11 @@ const ItemsDialog = ({
 
     return () => setItems([]);
   }, [
-    open,
+    fetchHoldings,
+    fetchItems,
+    fetchRequests,
     instanceId,
+    open,
   ]);
 
   const contentData = useMemo(() => {
