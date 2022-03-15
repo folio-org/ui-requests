@@ -90,6 +90,7 @@ const RESOURCE_TYPES = {
   USER: 'user',
   HOLDING: 'holding',
 };
+const INSTANCE_SEGMENT_FOR_PLUGIN = 'instances';
 
 class RequestForm extends React.Component {
   static propTypes = {
@@ -1281,35 +1282,50 @@ class RequestForm extends React.Component {
                           <Col xs={12}>
                             {
                               !isEditForm &&
-                              <Row>
-                                <Col xs={9}>
-                                  <FormattedMessage id="ui-requests.instance.scanOrEnterBarcode">
-                                    {placeholder => (
-                                      <Field
-                                        name="instance.hrid"
-                                        placeholder={placeholder}
-                                        aria-label={<FormattedMessage id="ui-requests.instance.value" />}
-                                        fullWidth
-                                        component={TextField}
-                                        forwardRef
-                                        ref={this.instanceValueRef}
-                                        onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.INSTANCE)}
-                                        validate={this.requireEnterInstance}
-                                      />
-                                    )}
-                                  </FormattedMessage>
-                                </Col>
-                                <Col xs={3}>
-                                  <Button
-                                    buttonStyle="primary noRadius"
-                                    fullWidth
-                                    onClick={this.onInstanceClick}
-                                    disabled={submitting}
-                                  >
-                                    <FormattedMessage id="ui-requests.enter" />
-                                  </Button>
-                                </Col>
-                              </Row>
+                              <>
+                                <Row>
+                                  <Col xs={9}>
+                                    <FormattedMessage id="ui-requests.instance.scanOrEnterBarcode">
+                                      {placeholder => (
+                                        <Field
+                                          name="instance.hrid"
+                                          placeholder={placeholder}
+                                          aria-label={<FormattedMessage id="ui-requests.instance.value" />}
+                                          fullWidth
+                                          component={TextField}
+                                          forwardRef
+                                          ref={this.instanceValueRef}
+                                          onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.INSTANCE)}
+                                          validate={this.requireEnterInstance}
+                                        />
+                                      )}
+                                    </FormattedMessage>
+                                  </Col>
+                                  <Col xs={3}>
+                                    <Button
+                                      buttonStyle="primary noRadius"
+                                      fullWidth
+                                      onClick={this.onInstanceClick}
+                                      disabled={submitting}
+                                    >
+                                      <FormattedMessage id="ui-requests.enter" />
+                                    </Button>
+                                  </Col>
+                                </Row>
+                                <Row>
+                                  <Pluggable
+                                    searchButtonStyle="link"
+                                    type="find-instance"
+                                    searchLabel={formatMessage({ id: 'ui-requests.titleLookupPlugin' })}
+                                    selectInstance={(instanceFromPlugin) => this.findInstance(instanceFromPlugin.hrid)}
+                                    config={{
+                                      availableSegments: [{
+                                        name: INSTANCE_SEGMENT_FOR_PLUGIN,
+                                      }],
+                                    }}
+                                  />
+                                </Row>
+                              </>
                             }
                             {
                               isItemOrInstanceLoading && <Icon icon="spinner-ellipsis" width="10px" />
