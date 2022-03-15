@@ -1,5 +1,4 @@
 import React, {
-  useCallback,
   useState,
   useLayoutEffect,
   useMemo,
@@ -79,21 +78,21 @@ const ItemsDialog = ({
   const [items, setItems] = useState([]);
   const { formatMessage } = useIntl();
 
-  const fetchHoldings = useCallback(() => {
+  const fetchHoldings = () => {
     const query = `instanceId==${instanceId}`;
     mutator.holdings.reset();
 
     return mutator.holdings.GET({ params: { query } });
-  }, [instanceId, mutator]);
+  };
 
-  const fetchItems = useCallback((holdings) => {
+  const fetchItems = (holdings) => {
     const query = holdings.map(h => `holdingsRecordId==${h.id}`).join(' or ');
     mutator.items.reset();
 
     return mutator.items.GET({ params: { query, limit: 1000 } });
-  }, [mutator]);
+  };
 
-  const fetchRequests = useCallback(async (itemsList) => {
+  const fetchRequests = async (itemsList) => {
     // Split the list of items into small chunks to create a short enough query string
     // that we can avoid a "414 Request URI Too Long" response from Okapi.
     const CHUNK_SIZE = 40;
@@ -114,7 +113,7 @@ const ItemsDialog = ({
     }
 
     return data;
-  }, [mutator]);
+  };
 
   useLayoutEffect(() => {
     const getItems = async () => {
@@ -136,13 +135,15 @@ const ItemsDialog = ({
     }
 
     return () => setItems([]);
-  }, [
-    fetchHoldings,
-    fetchItems,
-    fetchRequests,
-    instanceId,
-    open,
-  ]);
+  },
+  // The deps react-hooks complains about here are the fetch* functions
+  // but both the suggestions (making them deps, moving them inside this
+  // function) cause test failures. I ... don't really understand the
+  // details of the problem, beyond the fact that it's obviously some kind
+  // of bad interaction between hooks and stripes-connect.
+  //
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [instanceId, open]);
 
   const contentData = useMemo(() => {
     let resultItems = items;
