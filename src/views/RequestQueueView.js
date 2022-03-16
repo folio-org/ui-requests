@@ -18,6 +18,10 @@ import {
   PaneHeaderIconButton,
   PaneMenu,
   Paneset,
+  HasCommand,
+  AccordionStatus,
+  expandAllSections,
+  collapseAllSections,
 } from '@folio/stripes/components';
 import { AppIcon } from '@folio/stripes/core';
 
@@ -76,11 +80,20 @@ class RequestQueueView extends React.Component {
     this.state = {
       notYetFilledRequests,
       requestsPositionsForReorder,
-      accordions: {
-        'fulfillment-in-progress': true,
-        'not-yet-filled': true,
-      },
     };
+
+    this.accordionStatusRef = React.createRef();
+
+    this.keyCommands = [
+      {
+        name: 'expandAllSections',
+        handler: (e) => expandAllSections(e, this.accordionStatusRef),
+      },
+      {
+        name: 'collapseAllSections',
+        handler: (e) => collapseAllSections(e, this.accordionStatusRef),
+      },
+    ];
   }
 
   componentDidMount() {
@@ -230,17 +243,6 @@ class RequestQueueView extends React.Component {
       (isNotYetFilled(request) && !isPageRequest(request));
   }
 
-  handleToggleSection = ({ id }) => {
-    const { accordions } = this.state;
-
-    this.setState({
-      accordions: {
-        ...accordions,
-        [id]: !accordions[id],
-      },
-    });
-  }
-
   render() {
     const {
       isLoading,
@@ -253,7 +255,6 @@ class RequestQueueView extends React.Component {
     const {
       confirmMessage,
       error,
-      accordions,
       notYetFilledRequests,
     } = this.state;
     const {
@@ -265,104 +266,107 @@ class RequestQueueView extends React.Component {
     const formattedContributors = getFormattedContributors(contributorNames);
 
     return (
-      <Paneset isRoot>
-        <Pane
-          id="request-queue"
-          defaultWidth="100%"
-          height="100%"
-          firstMenu={
-            <PaneMenu>
-              <FormattedMessage id="ui-requests.actions.closeNewRequest">
-                {label => (
-                  <PaneHeaderIconButton
-                    onClick={onClose}
-                    data-test-close-request-queue-view
-                    ariaLabel={label}
-                    icon={iconTypes.times}
+      <>
+        <HasCommand commands={this.keyCommands}>
+          <Paneset isRoot>
+            <Pane
+              id="request-queue"
+              defaultWidth="100%"
+              height="100%"
+              firstMenu={
+                <PaneMenu>
+                  <FormattedMessage id="ui-requests.actions.closeNewRequest">
+                    {label => (
+                      <PaneHeaderIconButton
+                        onClick={onClose}
+                        data-test-close-request-queue-view
+                        ariaLabel={label}
+                        icon={iconTypes.times}
+                      />
+                    )}
+                  </FormattedMessage>
+                </PaneMenu>
+              }
+              paneTitle={
+                <AppIcon size="small" app="requests">
+                  <FormattedMessage
+                    id="ui-requests.requestQueue.heading"
+                    values={{
+                      title,
+                      author: formattedContributors,
+                    }}
                   />
-                )}
-              </FormattedMessage>
-            </PaneMenu>
-          }
-          paneTitle={
-            <AppIcon size="small" app="requests">
-              <FormattedMessage
-                id="ui-requests.requestQueue.heading"
-                values={{
-                  title,
-                  author: formattedContributors,
-                }}
-              />
-            </AppIcon>
-          }
-          paneSub={<FormattedMessage id="ui-requests.resultCount" values={{ count }} />}
-        >
-          <div className={css.description}>
-            <FormattedMessage
-              id="ui-requests.requestQueue.description"
-              values={{
-                title,
-                author: formattedContributors,
-                publisher: getFormattedPublishers(publication),
-                publicationDate: getFormattedYears(publication),
-                instanceLink: (chunks) => <Link to={`/inventory/view/${get(request, 'instanceId')}`}>{chunks}</Link>,
-                i: (chunks) => <i>{chunks}</i>,
-              }}
+                </AppIcon>
+              }
+              paneSub={<FormattedMessage id="ui-requests.resultCount" values={{ count }} />}
+            >
+              <div className={css.description}>
+                <FormattedMessage
+                  id="ui-requests.requestQueue.description"
+                  values={{
+                    title,
+                    author: formattedContributors,
+                    publisher: getFormattedPublishers(publication),
+                    publicationDate: getFormattedYears(publication),
+                    instanceLink: (chunks) => <Link to={`/inventory/view/${get(request, 'instanceId')}`}>{chunks}</Link>,
+                    i: (chunks) => <i>{chunks}</i>,
+                  }}
+                />
+              </div>
+              {
+              isLoading
+                ? <Loading />
+                : (
+                  <AccordionStatus ref={this.accordionStatusRef}>
+                    <AccordionSet>
+                      <Accordion
+                        id="fulfillment-in-progress"
+                        label={
+                          <FormattedMessage id="ui-requests.requestQueue.fulfillmentInProgressSectionTitle" />
+                        }
+                      >
+                        <FulfillmentRequestsData
+                          contentData={inProgressRequests}
+                        />
+                      </Accordion>
+                      <Accordion
+                        id="not-yet-filled"
+                        label={
+                          <FormattedMessage id="ui-requests.requestQueue.notYetFilledSectionTitle" />
+                        }
+                      >
+                        <NotYetFilledRequestsData
+                          onDragEnd={this.onDragEnd}
+                          isRowDraggable={this.isRowDraggable}
+                          contentData={notYetFilledRequests}
+                        />
+                      </Accordion>
+                    </AccordionSet>
+                  </AccordionStatus>
+                )
+              }
+            </Pane>
+            <Callout ref={this.callout} />
+            <ConfirmationModal
+              id="confirm-reorder"
+              open={!!confirmMessage}
+              heading={<FormattedMessage id="ui-requests.requestQueue.confirmReorder.title" />}
+              message={<FormattedMessage id={`${confirmMessage}`} />}
+              confirmLabel={<FormattedMessage id="ui-requests.requestQueue.confirmReorder.confirm" />}
+              cancelLabel={<FormattedMessage id="ui-requests.requestQueue.confirmReorder.cancel" />}
+              onConfirm={this.confirmReorder}
+              onCancel={this.cancelReorder}
             />
-          </div>
-          {
-          isLoading
-            ? <Loading />
-            : (
-              <AccordionSet
-                accordionStatus={accordions}
-                onToggle={this.handleToggleSection}
-              >
-                <Accordion
-                  id="fulfillment-in-progress"
-                  label={
-                    <FormattedMessage id="ui-requests.requestQueue.fulfillmentInProgressSectionTitle" />
-                  }
-                >
-                  <FulfillmentRequestsData
-                    contentData={inProgressRequests}
-                  />
-                </Accordion>
-                <Accordion
-                  id="not-yet-filled"
-                  label={
-                    <FormattedMessage id="ui-requests.requestQueue.notYetFilledSectionTitle" />
-                  }
-                >
-                  <NotYetFilledRequestsData
-                    onDragEnd={this.onDragEnd}
-                    isRowDraggable={this.isRowDraggable}
-                    contentData={notYetFilledRequests}
-                  />
-                </Accordion>
-              </AccordionSet>
-            )
-          }
-        </Pane>
-        <Callout ref={this.callout} />
-        <ConfirmationModal
-          id="confirm-reorder"
-          open={!!confirmMessage}
-          heading={<FormattedMessage id="ui-requests.requestQueue.confirmReorder.title" />}
-          message={<FormattedMessage id={`${confirmMessage}`} />}
-          confirmLabel={<FormattedMessage id="ui-requests.requestQueue.confirmReorder.confirm" />}
-          cancelLabel={<FormattedMessage id="ui-requests.requestQueue.confirmReorder.cancel" />}
-          onConfirm={this.confirmReorder}
-          onCancel={this.cancelReorder}
-        />
-        <ErrorModal
-          open={!!error}
-          label={error?.label}
-          content={error?.content}
-          buttonLabel={<FormattedMessage id="ui-requests.requestQueue.refresh" />}
-          onClose={this.reload}
-        />
-      </Paneset>
+            <ErrorModal
+              open={!!error}
+              label={error?.label}
+              content={error?.content}
+              buttonLabel={<FormattedMessage id="ui-requests.requestQueue.refresh" />}
+              onClose={this.reload}
+            />
+          </Paneset>
+        </HasCommand>
+      </>
     );
   }
 }

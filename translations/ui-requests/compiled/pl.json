@@ -1,0 +1,1645 @@
+{
+  "actions.cancelNewRequest": [
+    {
+      "type": 0,
+      "value": "Anuluj"
+    }
+  ],
+  "actions.closeNewRequest": [
+    {
+      "type": 0,
+      "value": "Zamknij nowe zamówienie"
+    }
+  ],
+  "actions.createNewRequest": [
+    {
+      "type": 0,
+      "value": "Utwórz nowe zamówienie"
+    }
+  ],
+  "actions.duplicateRequest": [
+    {
+      "type": 0,
+      "value": "Powiel"
+    }
+  ],
+  "actions.edit": [
+    {
+      "type": 0,
+      "value": "Edytuj"
+    }
+  ],
+  "actions.editRequest": [
+    {
+      "type": 0,
+      "value": "Edytuj zamówienie"
+    }
+  ],
+  "actions.editRequestLink": [
+    {
+      "type": 0,
+      "value": "Okno edycji zamówienia"
+    }
+  ],
+  "actions.label": [
+    {
+      "type": 0,
+      "value": "Actions"
+    }
+  ],
+  "actions.loading": [
+    {
+      "type": 0,
+      "value": "Ładowanie..."
+    }
+  ],
+  "actions.moveRequest": [
+    {
+      "type": 0,
+      "value": "Przesuń zamówienie"
+    }
+  ],
+  "actions.newRequest": [
+    {
+      "type": 0,
+      "value": "Nowe zamówienie"
+    }
+  ],
+  "actions.reorderQueue": [
+    {
+      "type": 0,
+      "value": "Zmień kolejność w kolejce"
+    }
+  ],
+  "actions.selectAddressType": [
+    {
+      "type": 0,
+      "value": "Wybierz typ adresu"
+    }
+  ],
+  "actions.selectPickupLoc": [
+    {
+      "type": 0,
+      "value": "Wybierz miejsce odbioru"
+    }
+  ],
+  "actions.selectPickupSp": [
+    {
+      "type": 0,
+      "value": "Wybierz punkt odbioru"
+    }
+  ],
+  "actions.viewRequestsInQueue": [
+    {
+      "type": 0,
+      "value": "wyświetl zamówienia w kolejce"
+    }
+  ],
+  "additionalReasons": [
+    {
+      "type": 0,
+      "value": "Wyświetl szczegóły blokady, aby zobaczyć dodatkowe przyczyny blokady ..."
+    }
+  ],
+  "barcode": [
+    {
+      "type": 0,
+      "value": "Kod kreskowy"
+    }
+  ],
+  "blockModal": [
+    {
+      "type": 0,
+      "value": "Czytelnika ma zablokowane zamówienia"
+    }
+  ],
+  "blockedLabel": [
+    {
+      "type": 0,
+      "value": "Przyczyna blokady"
+    }
+  ],
+  "cancel.additionalInfoLabel": [
+    {
+      "type": 0,
+      "value": "Dodatkowe informacje dla czytelnika "
+    },
+    {
+      "type": 1,
+      "value": "required"
+    }
+  ],
+  "cancel.additionalInfoPlaceholderOptional": [
+    {
+      "type": 0,
+      "value": "Wprowadź więcej informacji o anulowaniu (opcjonalnie)"
+    }
+  ],
+  "cancel.additionalInfoPlaceholderRequired": [
+    {
+      "type": 0,
+      "value": "Wprowadź więcej informacji o anulowaniu (wymagane)"
+    }
+  ],
+  "cancel.cancelRequest": [
+    {
+      "type": 0,
+      "value": "Anuluj zamówienie"
+    }
+  ],
+  "cancel.modalLabel": [
+    {
+      "type": 0,
+      "value": "Potwierdź anulowanie zamówienia"
+    }
+  ],
+  "cancel.notifyLabel": [
+    {
+      "type": 0,
+      "value": "Powiadom czytelnika"
+    }
+  ],
+  "cancel.reasonLabel": [
+    {
+      "type": 0,
+      "value": "Powód anulowania"
+    }
+  ],
+  "cancel.requestWillBeCancelled": [
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "title"
+        }
+      ],
+      "type": 8,
+      "value": "b"
+    },
+    {
+      "type": 0,
+      "value": " zostanie "
+    },
+    {
+      "children": [
+        {
+          "type": 0,
+          "value": "anulowane"
+        }
+      ],
+      "type": 8,
+      "value": "b"
+    }
+  ],
+  "cancellationAdditionalInformation": [
+    {
+      "type": 0,
+      "value": "Dodatkowe informacje dla czytelnika"
+    }
+  ],
+  "cancellationReason": [
+    {
+      "type": 0,
+      "value": "Powód anulowania"
+    }
+  ],
+  "close": [
+    {
+      "type": 0,
+      "value": "Zamknij"
+    }
+  ],
+  "common.cancel": [
+    {
+      "type": 0,
+      "value": "Anuluj"
+    }
+  ],
+  "common.saveAndClose": [
+    {
+      "type": 0,
+      "value": "Zapisz i zamknij"
+    }
+  ],
+  "csvReportInProgress": [
+    {
+      "type": 0,
+      "value": "Raport CSV jest generowany. Może to być operacja długotrwała. Prosimy o cierpliwość."
+    }
+  ],
+  "csvReportPending": [
+    {
+      "type": 0,
+      "value": "Trwa generowanie raportu CSV. Proszę czekać."
+    }
+  ],
+  "deliveryAddress": [
+    {
+      "type": 0,
+      "value": "Adres dostawy"
+    }
+  ],
+  "detailsButton": [
+    {
+      "type": 0,
+      "value": "Wyświetl szczegóły blokady"
+    }
+  ],
+  "enter": [
+    {
+      "type": 0,
+      "value": "Wprowadź"
+    }
+  ],
+  "errorModal.message": [
+    {
+      "type": 1,
+      "value": "title"
+    },
+    {
+      "type": 0,
+      "value": " ("
+    },
+    {
+      "type": 1,
+      "value": "materialType"
+    },
+    {
+      "type": 0,
+      "value": ") (Kod kreskowy: "
+    },
+    {
+      "type": 1,
+      "value": "barcode"
+    },
+    {
+      "type": 0,
+      "value": ") ma status "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "itemStatus"
+        }
+      ],
+      "type": 8,
+      "value": "strong"
+    },
+    {
+      "type": 0,
+      "value": " i nie może zostać zamówiony."
+    }
+  ],
+  "errorModal.title": [
+    {
+      "type": 0,
+      "value": "Egzemplarz nie może zostać zamówiony"
+    }
+  ],
+  "errors.instanceUuidOrHridDoesNotExist": [
+    {
+      "type": 0,
+      "value": "Instance with this HRID or UUID does not exist"
+    }
+  ],
+  "errors.itemBarcodeDoesNotExist": [
+    {
+      "type": 0,
+      "value": "Egzemplarz o takim kodzie kreskowym nie istnieje"
+    }
+  ],
+  "errors.onlyCheckedOutForHold": [
+    {
+      "type": 0,
+      "value": "Tylko wypożyczone egzemplarze mogą być rezerwowane"
+    }
+  ],
+  "errors.onlyCheckedOutForRecall": [
+    {
+      "type": 0,
+      "value": "Tylko dla wypożyczonych egzemplarzy mogą być tworzone upomnienia"
+    }
+  ],
+  "errors.selectInstanceRequired": [
+    {
+      "type": 0,
+      "value": "Please select an instance and hit enter"
+    }
+  ],
+  "errors.selectItem": [
+    {
+      "type": 0,
+      "value": "Proszę wybrać egzemplarz"
+    }
+  ],
+  "errors.selectItemRequired": [
+    {
+      "type": 0,
+      "value": "Proszę zaznaczyć pozycję i nacisnąć enter"
+    }
+  ],
+  "errors.selectUser": [
+    {
+      "type": 0,
+      "value": "Proszę wypełnić informacje o zamawiajacym aby kontynuować"
+    }
+  ],
+  "errors.sync.requestQueueBody": [
+    {
+      "type": 0,
+      "value": "This request queue has been updated by another person or process and may be out of synch."
+    }
+  ],
+  "errors.sync.requestQueueLabel": [
+    {
+      "type": 0,
+      "value": "Request queue is out of sync"
+    }
+  ],
+  "errors.unknown.requestQueueBody": [
+    {
+      "type": 0,
+      "value": "Request queue reorder failed"
+    }
+  ],
+  "errors.unknown.requestQueueLabel": [
+    {
+      "type": 0,
+      "value": "Request queue error"
+    }
+  ],
+  "errors.userBarcodeDoesNotExist": [
+    {
+      "type": 0,
+      "value": "Użytkownik o takim kodzie kreskowym nie istnieje"
+    }
+  ],
+  "exportExpiredHoldShelfToCsv": [
+    {
+      "type": 0,
+      "value": "Wyeksportuj raport o zwolnionych rezerwacjach dla "
+    },
+    {
+      "type": 1,
+      "value": "currentServicePoint"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "exportSearchResultsToCsv": [
+    {
+      "type": 0,
+      "value": "Eksportuj wynik wyszukiwania do CSV"
+    }
+  ],
+  "filters.requestLevel.item": [
+    {
+      "type": 0,
+      "value": "Item"
+    }
+  ],
+  "filters.requestLevel.title": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ],
+  "filters.requestStatus.awaitingDelivery": [
+    {
+      "type": 0,
+      "value": "Otwarte - oczekuje na dostawę"
+    }
+  ],
+  "filters.requestStatus.awaitingPickup": [
+    {
+      "type": 0,
+      "value": "Otwarte - oczekuje na odbiór"
+    }
+  ],
+  "filters.requestStatus.cancelled": [
+    {
+      "type": 0,
+      "value": "Zamknięte - anulowane"
+    }
+  ],
+  "filters.requestStatus.filled": [
+    {
+      "type": 0,
+      "value": "Zamknięte - wypełnione"
+    }
+  ],
+  "filters.requestStatus.inTransit": [
+    {
+      "type": 0,
+      "value": "Otwarte - w trakcie realizacji"
+    }
+  ],
+  "filters.requestStatus.notYetFilled": [
+    {
+      "type": 0,
+      "value": "Otwarte - jeszcze niewypełnione"
+    }
+  ],
+  "filters.requestStatus.pickupExpired": [
+    {
+      "type": 0,
+      "value": "Zamknięte - nieodebrane"
+    }
+  ],
+  "filters.requestStatus.unfilled": [
+    {
+      "type": 0,
+      "value": "Zamknięte - niewypełnione"
+    }
+  ],
+  "filters.requestType.holds": [
+    {
+      "type": 0,
+      "value": "Umieszczone"
+    }
+  ],
+  "filters.requestType.pages": [
+    {
+      "type": 0,
+      "value": "Strony"
+    }
+  ],
+  "filters.requestType.recalls": [
+    {
+      "type": 0,
+      "value": "Przypomnienia"
+    }
+  ],
+  "fulfilmentPreference": [
+    {
+      "type": 0,
+      "value": "Preferencje realizacji zamówienia"
+    }
+  ],
+  "holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "Data ważności rezerwacji"
+    }
+  ],
+  "holdShelfExpirationTime": [
+    {
+      "type": 0,
+      "value": "holdShelfExpirationTime"
+    }
+  ],
+  "instance.contributorNames": [
+    {
+      "type": 0,
+      "value": "Contributor"
+    }
+  ],
+  "instance.information": [
+    {
+      "type": 0,
+      "value": "Title information"
+    }
+  ],
+  "instance.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "Enter HRID or UUID"
+    }
+  ],
+  "instance.title": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ],
+  "instance.value": [
+    {
+      "type": 0,
+      "value": "Instance HRID or UUID"
+    }
+  ],
+  "item.barcode": [
+    {
+      "type": 0,
+      "value": "Kod kreskowy egzemplarza"
+    }
+  ],
+  "item.callNumber": [
+    {
+      "type": 0,
+      "value": "Ciąg znaków efektywnej sygnatury"
+    }
+  ],
+  "item.callNumberComponents.callNumber": [
+    {
+      "type": 0,
+      "value": "Efektywna sygnatura"
+    }
+  ],
+  "item.callNumberComponents.prefix": [
+    {
+      "type": 0,
+      "value": "Prefiks efektywnej sygnatury"
+    }
+  ],
+  "item.callNumberComponents.suffix": [
+    {
+      "type": 0,
+      "value": "Sufiks efektywnej sygnatury"
+    }
+  ],
+  "item.chronology": [
+    {
+      "type": 0,
+      "value": "Chronologia"
+    }
+  ],
+  "item.contributorNames": [
+    {
+      "type": 0,
+      "value": "Współtwórca"
+    }
+  ],
+  "item.copyNumber": [
+    {
+      "type": 0,
+      "value": "Kopia egzemplarza"
+    }
+  ],
+  "item.copyNumbers": [
+    {
+      "type": 0,
+      "value": "Numer egzemplarza"
+    }
+  ],
+  "item.dueDate": [
+    {
+      "type": 0,
+      "value": "Aktualny termin zwrotu"
+    }
+  ],
+  "item.effectiveLocation": [
+    {
+      "type": 0,
+      "value": "Efektywna lokalizacja"
+    }
+  ],
+  "item.enumeration": [
+    {
+      "type": 0,
+      "value": "Wyliczenie"
+    }
+  ],
+  "item.id": [
+    {
+      "type": 0,
+      "value": "ID egzemplarza"
+    }
+  ],
+  "item.information": [
+    {
+      "type": 0,
+      "value": "Informacje o egzemplarzu"
+    }
+  ],
+  "item.location.code": [
+    {
+      "type": 0,
+      "value": "Kod efektywnej lokalizacji"
+    }
+  ],
+  "item.location.libraryName": [
+    {
+      "type": 0,
+      "value": "Biblioteka"
+    }
+  ],
+  "item.location.name": [
+    {
+      "type": 0,
+      "value": "Efektywna lokalizacja"
+    }
+  ],
+  "item.noInformation": [
+    {
+      "type": 0,
+      "value": "There is no item information for this request."
+    }
+  ],
+  "item.numRequests": [
+    {
+      "type": 0,
+      "value": "Zamówienia"
+    }
+  ],
+  "item.requestsOnItem": [
+    {
+      "type": 0,
+      "value": "zamówienia egzemplarzy"
+    }
+  ],
+  "item.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "Zeskanuj lub wprowadź kod kreskowy egzemplarza"
+    }
+  ],
+  "item.status": [
+    {
+      "type": 0,
+      "value": "Status egzemplarza"
+    }
+  ],
+  "item.title": [
+    {
+      "type": 0,
+      "value": "Tytuł"
+    }
+  ],
+  "item.volume": [
+    {
+      "type": 0,
+      "value": "Wolumin"
+    }
+  ],
+  "itemLevel": [
+    {
+      "type": 0,
+      "value": "Item"
+    }
+  ],
+  "items": [
+    {
+      "type": 1,
+      "value": "number"
+    },
+    {
+      "type": 0,
+      "value": " items"
+    }
+  ],
+  "items.instanceItems": [
+    {
+      "type": 0,
+      "value": "Other items in "
+    },
+    {
+      "type": 1,
+      "value": "title"
+    }
+  ],
+  "items.instanceItems.notFound": [
+    {
+      "type": 0,
+      "value": "No items found"
+    }
+  ],
+  "items.selectItem": [
+    {
+      "type": 0,
+      "value": "Select item"
+    }
+  ],
+  "loan.dueDate": [
+    {
+      "type": 0,
+      "value": "Aktualny termin zwrotu"
+    }
+  ],
+  "loanType": [
+    {
+      "type": 0,
+      "value": "Sposób wypożyczania"
+    }
+  ],
+  "location": [
+    {
+      "type": 0,
+      "value": "Lokalizacja"
+    }
+  ],
+  "materialType": [
+    {
+      "type": 0,
+      "value": "Typ materiału"
+    }
+  ],
+  "meta.title": [
+    {
+      "type": 0,
+      "value": "Zamówienia"
+    }
+  ],
+  "moveRequest.chooseRequestMessage": [
+    {
+      "type": 0,
+      "value": "Proszę wybrać dopuszczalny typ"
+    }
+  ],
+  "moveRequest.confirm": [
+    {
+      "type": 0,
+      "value": "Potwierdź"
+    }
+  ],
+  "moveRequest.requestTypeChangeHeading": [
+    {
+      "type": 0,
+      "value": "Ten typ zamówień nie jest dostępny dla wybranego egzemplarza"
+    }
+  ],
+  "moveRequest.requestTypeChangeMessage": [
+    {
+      "type": 0,
+      "value": "Zamówienie zostanie zmienione na "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "requestType"
+        }
+      ],
+      "type": 8,
+      "value": "strong"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "moveRequest.secondPositionMessage": [
+    {
+      "type": 0,
+      "value": "Zamówienia nie mogą być modyfikowane powyżej zamówionych stron, nawet jeśli ich realizacja jeszcze się nie rozpoczęła. To zamówienie zostanie przeniesione na pozycję 2 w kolejce zamówień."
+    }
+  ],
+  "moveRequest.secondPositionTitle": [
+    {
+      "type": 0,
+      "value": "Zamówienie zostało przesunięte na 2 pozycję w kolejce"
+    }
+  ],
+  "moveRequest.success": [
+    {
+      "type": 0,
+      "value": "Zamówienie zostało pomyślnie przeniesione"
+    }
+  ],
+  "noRequestTypesAvailable": [
+    {
+      "type": 0,
+      "value": "Brak dostępnych zamówień dla wybranej pozycji"
+    }
+  ],
+  "noServicePoint.errorMessage": [
+    {
+      "type": 0,
+      "value": "Musisz być zalogowany do punktu obsługi, aby uzyskać dostęp do raportu o zwolnionych rezerwacjach. Dodaj co najmniej jeden punkt obsługi do rekordu użytkownika w aplikacji Użytkownicy. Skontaktuj się z administratorem, jeśli nie masz możliwości dodawania punktów obsługi do rekordu."
+    }
+  ],
+  "noServicePoint.label": [
+    {
+      "type": 0,
+      "value": "Nie wybrano punktu obsługi"
+    }
+  ],
+  "notes.assigned.for": [
+    {
+      "type": 0,
+      "value": "Dla "
+    },
+    {
+      "type": 1,
+      "value": "instanceLink"
+    },
+    {
+      "type": 0,
+      "value": " ("
+    },
+    {
+      "type": 1,
+      "value": "itemLink"
+    },
+    {
+      "type": 0,
+      "value": ")"
+    }
+  ],
+  "notes.assigned.requestDate": [
+    {
+      "type": 0,
+      "value": "Data zamówienia: "
+    },
+    {
+      "type": 1,
+      "value": "requestCreateDate"
+    }
+  ],
+  "notes.assigned.requester": [
+    {
+      "type": 0,
+      "value": "Zamawiający: "
+    },
+    {
+      "type": 1,
+      "value": "requesterName"
+    }
+  ],
+  "notes.entityType.request": [
+    {
+      "type": 0,
+      "value": "Zamówienie"
+    }
+  ],
+  "notes.entityType.request.pluralized": [
+    {
+      "type": 1,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "one": {
+          "value": [
+            {
+              "type": 0,
+              "value": "zamówienie"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "zamówienia"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "notes.newStaffNote": [
+    {
+      "type": 0,
+      "value": "Nowa uwaga dla pracowników"
+    }
+  ],
+  "notes.staffNotes": [
+    {
+      "type": 0,
+      "value": "Uwagi pracowników"
+    }
+  ],
+  "override": [
+    {
+      "type": 0,
+      "value": "Zastąp"
+    }
+  ],
+  "patronComments": [
+    {
+      "type": 0,
+      "value": "Uwagi czytelnika"
+    }
+  ],
+  "permission.all": [
+    {
+      "type": 0,
+      "value": "Zamówienia: wszystkie uprawnienia"
+    }
+  ],
+  "permission.create": [
+    {
+      "type": 0,
+      "value": "Zamówienie: wyświetlanie, tworzenie"
+    }
+  ],
+  "permission.edit": [
+    {
+      "type": 0,
+      "value": "Zamówienie: wyświetlanie, edycja, anulowanie"
+    }
+  ],
+  "permission.moveRequest": [
+    {
+      "type": 0,
+      "value": "Zamówienia: przejdź do nowego egzemplarza, zmień kolejkę"
+    }
+  ],
+  "permission.reorderQueue": [
+    {
+      "type": 0,
+      "value": "Zamówienia: kolejka zamówień"
+    }
+  ],
+  "permission.view": [
+    {
+      "type": 0,
+      "value": "Zamówienie: wyświetlanie"
+    }
+  ],
+  "pickSlipsLoading": [
+    {
+      "type": 0,
+      "value": "Trwa ładowanie pokwitowań, proszę czekać"
+    }
+  ],
+  "pickupServicePoint.name": [
+    {
+      "type": 0,
+      "value": "Punkt odbioru"
+    }
+  ],
+  "position": [
+    {
+      "type": 0,
+      "value": "Pozycja w kolejce"
+    }
+  ],
+  "printInProgress": [
+    {
+      "type": 0,
+      "value": "Trwa ładowanie opcji drukowania. Może to zająć kilka sekund, prosimy o cierpliwość."
+    }
+  ],
+  "printPickSlips": [
+    {
+      "type": 0,
+      "value": "Wydrukuj pokwitowania dla "
+    },
+    {
+      "type": 1,
+      "value": "sp"
+    }
+  ],
+  "proxy.barcode": [
+    {
+      "type": 0,
+      "value": "Kod kreskowy pełnomocnika zamawiającego"
+    }
+  ],
+  "proxy.name": [
+    {
+      "type": 0,
+      "value": "Nazwa pełnomocnika zamawiającego"
+    }
+  ],
+  "requestDate": [
+    {
+      "type": 0,
+      "value": "Data zamówienia"
+    }
+  ],
+  "requestExpirationDate": [
+    {
+      "type": 0,
+      "value": "Data ważności zamówienia"
+    }
+  ],
+  "requestLevel": [
+    {
+      "type": 0,
+      "value": "Request level"
+    }
+  ],
+  "requestMeta.detailLabel": [
+    {
+      "type": 0,
+      "value": "Szczegóły zamówienia"
+    }
+  ],
+  "requestMeta.expirationDate": [
+    {
+      "type": 0,
+      "value": "Data ważności zamówienia"
+    }
+  ],
+  "requestMeta.fulfilment.delivery": [
+    {
+      "type": 0,
+      "value": "Dostawa"
+    }
+  ],
+  "requestMeta.fulfilment.holdShelf": [
+    {
+      "type": 0,
+      "value": "Umieść na półce"
+    }
+  ],
+  "requestMeta.holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "Data ważności rezerwacji"
+    }
+  ],
+  "requestMeta.information": [
+    {
+      "type": 0,
+      "value": "Informacja o zamówieniu"
+    }
+  ],
+  "requestMeta.queuePosition": [
+    {
+      "type": 0,
+      "value": "Pozycja w kolejce"
+    }
+  ],
+  "requestMeta.status": [
+    {
+      "type": 0,
+      "value": "Status zamówienia"
+    }
+  ],
+  "requestMeta.tags": [
+    {
+      "type": 0,
+      "value": "Etykiety"
+    }
+  ],
+  "requestMeta.type": [
+    {
+      "type": 0,
+      "value": "Typ zamówienia"
+    }
+  ],
+  "requestMeta.type.hold": [
+    {
+      "type": 0,
+      "value": "Umieść"
+    }
+  ],
+  "requestMeta.type.holds": [
+    {
+      "type": 0,
+      "value": "Umieszczone"
+    }
+  ],
+  "requestMeta.type.page": [
+    {
+      "type": 0,
+      "value": "Strona"
+    }
+  ],
+  "requestMeta.type.pages": [
+    {
+      "type": 0,
+      "value": "Strony"
+    }
+  ],
+  "requestMeta.type.recall": [
+    {
+      "type": 0,
+      "value": "Przypomnienie"
+    }
+  ],
+  "requestMeta.type.recalls": [
+    {
+      "type": 0,
+      "value": "Przypomnienia"
+    }
+  ],
+  "requestNotAllowed": [
+    {
+      "type": 0,
+      "value": "Zamówienie niedozwolone"
+    }
+  ],
+  "requestQueue": [
+    {
+      "type": 0,
+      "value": "Kolejka zamówień"
+    }
+  ],
+  "requestQueue.chronology": [
+    {
+      "type": 0,
+      "value": "Chronology"
+    }
+  ],
+  "requestQueue.confirmReorder.cancel": [
+    {
+      "type": 0,
+      "value": "Pozostaw na aktualnej pozycji"
+    }
+  ],
+  "requestQueue.confirmReorder.confirm": [
+    {
+      "type": 0,
+      "value": "Przesuń na pozycję 2"
+    }
+  ],
+  "requestQueue.confirmReorder.message1": [
+    {
+      "type": 0,
+      "value": "Zamówienia nie mogą zostać przesunięte z pozycji 1 po rozpoczęciu realizacji."
+    }
+  ],
+  "requestQueue.confirmReorder.message2": [
+    {
+      "type": 0,
+      "value": "Zamówienia nie mogą być modyfikowane powyżej zamówionych strony, nawet jeśli ich realizacja jeszcze się nie rozpoczęła."
+    }
+  ],
+  "requestQueue.confirmReorder.title": [
+    {
+      "type": 0,
+      "value": "Zamówienie zostało przesunięte na 2 pozycję w kolejce"
+    }
+  ],
+  "requestQueue.deliveryType": [
+    {
+      "type": 0,
+      "value": "Dostawa: "
+    },
+    {
+      "type": 1,
+      "value": "type"
+    }
+  ],
+  "requestQueue.description": [
+    {
+      "type": 0,
+      "value": "Instance: "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "title"
+        },
+        {
+          "type": 0,
+          "value": " /"
+        },
+        {
+          "type": 1,
+          "value": "author"
+        },
+        {
+          "type": 0,
+          "value": "."
+        }
+      ],
+      "type": 8,
+      "value": "instanceLink"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "publisher"
+        },
+        {
+          "type": 0,
+          "value": ", "
+        },
+        {
+          "type": 1,
+          "value": "publicationDate"
+        }
+      ],
+      "type": 8,
+      "value": "i"
+    }
+  ],
+  "requestQueue.enumeration": [
+    {
+      "type": 0,
+      "value": "Enumeration"
+    }
+  ],
+  "requestQueue.fulfillmentInProgressSectionTitle": [
+    {
+      "type": 0,
+      "value": "Fulfillment in progress"
+    }
+  ],
+  "requestQueue.fulfillmentStatus": [
+    {
+      "type": 0,
+      "value": "Status"
+    }
+  ],
+  "requestQueue.heading": [
+    {
+      "type": 0,
+      "value": "Request queue on instance • "
+    },
+    {
+      "type": 1,
+      "value": "title"
+    },
+    {
+      "type": 0,
+      "value": " /"
+    },
+    {
+      "type": 1,
+      "value": "author"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "requestQueue.holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "Ważność rezerwacji"
+    }
+  ],
+  "requestQueue.itemBarcode": [
+    {
+      "type": 0,
+      "value": "Item barcode"
+    }
+  ],
+  "requestQueue.noDataForFulfillment": [
+    {
+      "type": 0,
+      "value": "There are no requests in fulfillment."
+    }
+  ],
+  "requestQueue.notYetFilledRequests.noData": [
+    {
+      "type": 0,
+      "value": "No requests found"
+    }
+  ],
+  "requestQueue.notYetFilledSectionTitle": [
+    {
+      "type": 0,
+      "value": "Open - Not yet filled"
+    }
+  ],
+  "requestQueue.order": [
+    {
+      "type": 0,
+      "value": "Order"
+    }
+  ],
+  "requestQueue.patronComments": [
+    {
+      "type": 0,
+      "value": "Patron comments"
+    }
+  ],
+  "requestQueue.patronGroup": [
+    {
+      "type": 0,
+      "value": "Grupa czytelnika"
+    }
+  ],
+  "requestQueue.pickup": [
+    {
+      "type": 0,
+      "value": "Odbiór/Dostawa"
+    }
+  ],
+  "requestQueue.refresh": [
+    {
+      "type": 0,
+      "value": "Refresh queue"
+    }
+  ],
+  "requestQueue.reorderSuccess": [
+    {
+      "type": 0,
+      "value": "Kolejka została pomyślnie zaktualizowana"
+    }
+  ],
+  "requestQueue.requestDate": [
+    {
+      "type": 0,
+      "value": "Data zamówienia"
+    }
+  ],
+  "requestQueue.requestExpirationDate": [
+    {
+      "type": 0,
+      "value": "Ważność zamówienia"
+    }
+  ],
+  "requestQueue.requestInProgress": [
+    {
+      "type": 0,
+      "value": "In progress"
+    }
+  ],
+  "requestQueue.requestType": [
+    {
+      "type": 0,
+      "value": "Rodzaj"
+    }
+  ],
+  "requestQueue.requesterBarcode": [
+    {
+      "type": 0,
+      "value": "Kod kreskowy zamawiającego"
+    }
+  ],
+  "requestQueue.requesterName": [
+    {
+      "type": 0,
+      "value": "Zamawiający"
+    }
+  ],
+  "requestQueue.status": [
+    {
+      "type": 0,
+      "value": "Request status"
+    }
+  ],
+  "requestQueue.volume": [
+    {
+      "type": 0,
+      "value": "Volume"
+    }
+  ],
+  "requestType": [
+    {
+      "type": 0,
+      "value": "Typ zamówienia"
+    }
+  ],
+  "requestType.message": [
+    {
+      "type": 0,
+      "value": "Wybierze egzemplarz aby zobaczyć dostępne zamówienia"
+    }
+  ],
+  "requester.barcode": [
+    {
+      "type": 0,
+      "value": "Kod kreskowy zamawiającego"
+    }
+  ],
+  "requester.findUserPluginLabel": [
+    {
+      "type": 0,
+      "value": "Wyszukiwanie zamawiającego"
+    }
+  ],
+  "requester.firstName": [
+    {
+      "type": 0,
+      "value": "Imię zamawiającego"
+    }
+  ],
+  "requester.fulfilmentPref": [
+    {
+      "type": 0,
+      "value": "Preferencje realizacji"
+    }
+  ],
+  "requester.information": [
+    {
+      "type": 0,
+      "value": "Informacje o zamawiającym"
+    }
+  ],
+  "requester.name": [
+    {
+      "type": 0,
+      "value": "Nazwa zamawiającego"
+    }
+  ],
+  "requester.patronGroup.group": [
+    {
+      "type": 0,
+      "value": "Grupa czytelników zamawiającego"
+    }
+  ],
+  "requester.pickupLocation": [
+    {
+      "type": 0,
+      "value": "Miejsce odbioru"
+    }
+  ],
+  "requester.proxy": [
+    {
+      "type": 0,
+      "value": "Pełnomocnik zamawiającego"
+    }
+  ],
+  "requester.requester": [
+    {
+      "type": 0,
+      "value": "Zamawiający"
+    }
+  ],
+  "requester.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "Zeskanuj lub wprowadź kod kreskowy zamawiającego"
+    }
+  ],
+  "requester.username": [
+    {
+      "type": 0,
+      "value": "Nazwa użytkownika"
+    }
+  ],
+  "requests.createTitleLevelRequest": [
+    {
+      "type": 0,
+      "value": "Create title level request"
+    }
+  ],
+  "requests.itemBarcode": [
+    {
+      "type": 0,
+      "value": "Kod kreskowy egzemplarza"
+    }
+  ],
+  "requests.proxy": [
+    {
+      "type": 0,
+      "value": "Pełnomocnika"
+    }
+  ],
+  "requests.queuePosition": [
+    {
+      "type": 0,
+      "value": "Queue position"
+    }
+  ],
+  "requests.requestDate": [
+    {
+      "type": 0,
+      "value": "Data zamówienia"
+    }
+  ],
+  "requests.requester": [
+    {
+      "type": 0,
+      "value": "Zamawiający"
+    }
+  ],
+  "requests.requesterBarcode": [
+    {
+      "type": 0,
+      "value": "Kod kreskowy zamawiającego"
+    }
+  ],
+  "requests.status": [
+    {
+      "type": 0,
+      "value": "Status zamówienia"
+    }
+  ],
+  "requests.title": [
+    {
+      "type": 0,
+      "value": "Tytuł"
+    }
+  ],
+  "requests.type": [
+    {
+      "type": 0,
+      "value": "Rodzaj"
+    }
+  ],
+  "requests.year": [
+    {
+      "type": 0,
+      "value": "Year"
+    }
+  ],
+  "resultCount": [
+    {
+      "style": null,
+      "type": 2,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "one": {
+          "value": [
+            {
+              "type": 0,
+              "value": "znaleziony rekord"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "znalezione rekordy"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "routingError": [
+    {
+      "type": 0,
+      "value": "Jak udało ci się dotrzeć do "
+    },
+    {
+      "type": 1,
+      "value": "pathname"
+    },
+    {
+      "type": 0,
+      "value": "?"
+    }
+  ],
+  "routingErrorOops": [
+    {
+      "type": 0,
+      "value": "O o!"
+    }
+  ],
+  "showTags": [
+    {
+      "type": 0,
+      "value": "Pokaż etykiety"
+    }
+  ],
+  "status": [
+    {
+      "type": 0,
+      "value": "Status zamówienia"
+    }
+  ],
+  "tags.tagList": [
+    {
+      "type": 0,
+      "value": "Etykiety"
+    }
+  ],
+  "title.information": [
+    {
+      "type": 0,
+      "value": "Title information"
+    }
+  ],
+  "titleInformation.contributors": [
+    {
+      "type": 0,
+      "value": "Contributor"
+    }
+  ],
+  "titleInformation.editions": [
+    {
+      "type": 0,
+      "value": "Edition"
+    }
+  ],
+  "titleInformation.identifiers": [
+    {
+      "type": 0,
+      "value": "ISBN(s)"
+    }
+  ],
+  "titleInformation.publicationsDate": [
+    {
+      "type": 0,
+      "value": "Publication date"
+    }
+  ],
+  "titleInformation.title": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ],
+  "titleInformation.titleLevelRequests": [
+    {
+      "type": 0,
+      "value": "Title level requests"
+    }
+  ],
+  "titleLevel": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ]
+}

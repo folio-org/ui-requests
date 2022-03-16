@@ -339,3 +339,16 @@ export const getInstanceRequestTypeOptions = (items) => {
 };
 
 export const getInstanceQueryString = (hrid, id) => `("hrid"=="${hrid}" or "id"=="${id || hrid}")`;
+
+export const handleKeyCommand = (handler, { disabled } = {}) => {
+  return (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+
+    if (!disabled) {
+      handler();
+    }
+  };
+};
+

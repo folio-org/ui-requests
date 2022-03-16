@@ -1,0 +1,1641 @@
+{
+  "actions.cancelNewRequest": [
+    {
+      "type": 0,
+      "value": "Cancel"
+    }
+  ],
+  "actions.closeNewRequest": [
+    {
+      "type": 0,
+      "value": "Close New Request"
+    }
+  ],
+  "actions.createNewRequest": [
+    {
+      "type": 0,
+      "value": "Create New Request"
+    }
+  ],
+  "actions.duplicateRequest": [
+    {
+      "type": 0,
+      "value": "Duplicate"
+    }
+  ],
+  "actions.edit": [
+    {
+      "type": 0,
+      "value": "Redigér"
+    }
+  ],
+  "actions.editRequest": [
+    {
+      "type": 0,
+      "value": "Rediger låneanmodning"
+    }
+  ],
+  "actions.editRequestLink": [
+    {
+      "type": 0,
+      "value": "Rediger kommunikation for låneanmodning"
+    }
+  ],
+  "actions.label": [
+    {
+      "type": 0,
+      "value": "Actions"
+    }
+  ],
+  "actions.loading": [
+    {
+      "type": 0,
+      "value": "Loading..."
+    }
+  ],
+  "actions.moveRequest": [
+    {
+      "type": 0,
+      "value": "Move request"
+    }
+  ],
+  "actions.newRequest": [
+    {
+      "type": 0,
+      "value": "New request"
+    }
+  ],
+  "actions.reorderQueue": [
+    {
+      "type": 0,
+      "value": "Reorder queue"
+    }
+  ],
+  "actions.selectAddressType": [
+    {
+      "type": 0,
+      "value": "Select address type"
+    }
+  ],
+  "actions.selectPickupLoc": [
+    {
+      "type": 0,
+      "value": "Select pickup location"
+    }
+  ],
+  "actions.selectPickupSp": [
+    {
+      "type": 0,
+      "value": "Select pickup service point"
+    }
+  ],
+  "actions.viewRequestsInQueue": [
+    {
+      "type": 0,
+      "value": "view requests in queue"
+    }
+  ],
+  "additionalReasons": [
+    {
+      "type": 0,
+      "value": "View block details to see additional reasons for block..."
+    }
+  ],
+  "barcode": [
+    {
+      "type": 0,
+      "value": "Barcode"
+    }
+  ],
+  "blockModal": [
+    {
+      "type": 0,
+      "value": "Patron blocked from requesting"
+    }
+  ],
+  "blockedLabel": [
+    {
+      "type": 0,
+      "value": "Reason for block"
+    }
+  ],
+  "cancel.additionalInfoLabel": [
+    {
+      "type": 0,
+      "value": "Additional information for patron "
+    },
+    {
+      "type": 1,
+      "value": "required"
+    }
+  ],
+  "cancel.additionalInfoPlaceholderOptional": [
+    {
+      "type": 0,
+      "value": "Enter more information about the cancellation (optional)"
+    }
+  ],
+  "cancel.additionalInfoPlaceholderRequired": [
+    {
+      "type": 0,
+      "value": "Enter more information about the cancellation (required)"
+    }
+  ],
+  "cancel.cancelRequest": [
+    {
+      "type": 0,
+      "value": "Cancel request"
+    }
+  ],
+  "cancel.modalLabel": [
+    {
+      "type": 0,
+      "value": "Confirm request cancellation"
+    }
+  ],
+  "cancel.notifyLabel": [
+    {
+      "type": 0,
+      "value": "Notify patron"
+    }
+  ],
+  "cancel.reasonLabel": [
+    {
+      "type": 0,
+      "value": "Reason for cancellation"
+    }
+  ],
+  "cancel.requestWillBeCancelled": [
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "title"
+        }
+      ],
+      "type": 8,
+      "value": "b"
+    },
+    {
+      "type": 0,
+      "value": " will be "
+    },
+    {
+      "children": [
+        {
+          "type": 0,
+          "value": "cancelled"
+        }
+      ],
+      "type": 8,
+      "value": "b"
+    }
+  ],
+  "cancellationAdditionalInformation": [
+    {
+      "type": 0,
+      "value": "Additional information for patron"
+    }
+  ],
+  "cancellationReason": [
+    {
+      "type": 0,
+      "value": "Cancellation reason"
+    }
+  ],
+  "close": [
+    {
+      "type": 0,
+      "value": "Close"
+    }
+  ],
+  "common.cancel": [
+    {
+      "type": 0,
+      "value": "Cancel"
+    }
+  ],
+  "common.saveAndClose": [
+    {
+      "type": 0,
+      "value": "Gem & luk"
+    }
+  ],
+  "csvReportInProgress": [
+    {
+      "type": 0,
+      "value": "A CSV results report is being generated. This may take some time for larger result sets. Please be patient."
+    }
+  ],
+  "csvReportPending": [
+    {
+      "type": 0,
+      "value": "csvReportPending"
+    }
+  ],
+  "deliveryAddress": [
+    {
+      "type": 0,
+      "value": "Delivery address"
+    }
+  ],
+  "detailsButton": [
+    {
+      "type": 0,
+      "value": "View block details"
+    }
+  ],
+  "enter": [
+    {
+      "type": 0,
+      "value": "Enter"
+    }
+  ],
+  "errorModal.message": [
+    {
+      "type": 1,
+      "value": "title"
+    },
+    {
+      "type": 0,
+      "value": " ("
+    },
+    {
+      "type": 1,
+      "value": "materialType"
+    },
+    {
+      "type": 0,
+      "value": ") (Barcode: "
+    },
+    {
+      "type": 1,
+      "value": "barcode"
+    },
+    {
+      "type": 0,
+      "value": ") has the item status "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "itemStatus"
+        }
+      ],
+      "type": 8,
+      "value": "strong"
+    },
+    {
+      "type": 0,
+      "value": " and cannot be requested."
+    }
+  ],
+  "errorModal.title": [
+    {
+      "type": 0,
+      "value": "Item cannot be requested"
+    }
+  ],
+  "errors.instanceUuidOrHridDoesNotExist": [
+    {
+      "type": 0,
+      "value": "Instance with this HRID or UUID does not exist"
+    }
+  ],
+  "errors.itemBarcodeDoesNotExist": [
+    {
+      "type": 0,
+      "value": "Item with this barcode does not exist"
+    }
+  ],
+  "errors.onlyCheckedOutForHold": [
+    {
+      "type": 0,
+      "value": "Only checked out items can be held"
+    }
+  ],
+  "errors.onlyCheckedOutForRecall": [
+    {
+      "type": 0,
+      "value": "Only checked out items can be recalled"
+    }
+  ],
+  "errors.selectInstanceRequired": [
+    {
+      "type": 0,
+      "value": "Please select an instance and hit enter"
+    }
+  ],
+  "errors.selectItem": [
+    {
+      "type": 0,
+      "value": "Please select an item"
+    }
+  ],
+  "errors.selectItemRequired": [
+    {
+      "type": 0,
+      "value": "Please select an item and hit enter"
+    }
+  ],
+  "errors.selectUser": [
+    {
+      "type": 0,
+      "value": "Please fill out requestor information to continue"
+    }
+  ],
+  "errors.sync.requestQueueBody": [
+    {
+      "type": 0,
+      "value": "This request queue has been updated by another person or process and may be out of synch."
+    }
+  ],
+  "errors.sync.requestQueueLabel": [
+    {
+      "type": 0,
+      "value": "Request queue is out of sync"
+    }
+  ],
+  "errors.unknown.requestQueueBody": [
+    {
+      "type": 0,
+      "value": "Request queue reorder failed"
+    }
+  ],
+  "errors.unknown.requestQueueLabel": [
+    {
+      "type": 0,
+      "value": "Request queue error"
+    }
+  ],
+  "errors.userBarcodeDoesNotExist": [
+    {
+      "type": 0,
+      "value": "User with this barcode does not exist"
+    }
+  ],
+  "exportExpiredHoldShelfToCsv": [
+    {
+      "type": 0,
+      "value": "Export hold shelf clearance report for "
+    },
+    {
+      "type": 1,
+      "value": "currentServicePoint"
+    }
+  ],
+  "exportSearchResultsToCsv": [
+    {
+      "type": 0,
+      "value": "Export search results to CSV"
+    }
+  ],
+  "filters.requestLevel.item": [
+    {
+      "type": 0,
+      "value": "Item"
+    }
+  ],
+  "filters.requestLevel.title": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ],
+  "filters.requestStatus.awaitingDelivery": [
+    {
+      "type": 0,
+      "value": "Open - Awaiting delivery"
+    }
+  ],
+  "filters.requestStatus.awaitingPickup": [
+    {
+      "type": 0,
+      "value": "Open - Awaiting pickup"
+    }
+  ],
+  "filters.requestStatus.cancelled": [
+    {
+      "type": 0,
+      "value": "Closed - Cancelled"
+    }
+  ],
+  "filters.requestStatus.filled": [
+    {
+      "type": 0,
+      "value": "Closed - Filled"
+    }
+  ],
+  "filters.requestStatus.inTransit": [
+    {
+      "type": 0,
+      "value": "Open - In transit"
+    }
+  ],
+  "filters.requestStatus.notYetFilled": [
+    {
+      "type": 0,
+      "value": "Open - Not yet filled"
+    }
+  ],
+  "filters.requestStatus.pickupExpired": [
+    {
+      "type": 0,
+      "value": "Closed - Pickup expired"
+    }
+  ],
+  "filters.requestStatus.unfilled": [
+    {
+      "type": 0,
+      "value": "Closed - Unfilled"
+    }
+  ],
+  "filters.requestType.holds": [
+    {
+      "type": 0,
+      "value": "Holds"
+    }
+  ],
+  "filters.requestType.pages": [
+    {
+      "type": 0,
+      "value": "Pages"
+    }
+  ],
+  "filters.requestType.recalls": [
+    {
+      "type": 0,
+      "value": "Recalls"
+    }
+  ],
+  "fulfilmentPreference": [
+    {
+      "type": 0,
+      "value": "Request fulfillment preference"
+    }
+  ],
+  "holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "Hold shelf expiration date"
+    }
+  ],
+  "holdShelfExpirationTime": [
+    {
+      "type": 0,
+      "value": "holdShelfExpirationTime"
+    }
+  ],
+  "instance.contributorNames": [
+    {
+      "type": 0,
+      "value": "Contributor"
+    }
+  ],
+  "instance.information": [
+    {
+      "type": 0,
+      "value": "Title information"
+    }
+  ],
+  "instance.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "Enter HRID or UUID"
+    }
+  ],
+  "instance.title": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ],
+  "instance.value": [
+    {
+      "type": 0,
+      "value": "Instance HRID or UUID"
+    }
+  ],
+  "item.barcode": [
+    {
+      "type": 0,
+      "value": "Item barcode"
+    }
+  ],
+  "item.callNumber": [
+    {
+      "type": 0,
+      "value": "Effective call number string"
+    }
+  ],
+  "item.callNumberComponents.callNumber": [
+    {
+      "type": 0,
+      "value": "Effective call number"
+    }
+  ],
+  "item.callNumberComponents.prefix": [
+    {
+      "type": 0,
+      "value": "Effective call number prefix"
+    }
+  ],
+  "item.callNumberComponents.suffix": [
+    {
+      "type": 0,
+      "value": "Effective call number suffix"
+    }
+  ],
+  "item.chronology": [
+    {
+      "type": 0,
+      "value": "Chronology"
+    }
+  ],
+  "item.contributorNames": [
+    {
+      "type": 0,
+      "value": "Contributor"
+    }
+  ],
+  "item.copyNumber": [
+    {
+      "type": 0,
+      "value": "Item copy"
+    }
+  ],
+  "item.copyNumbers": [
+    {
+      "type": 0,
+      "value": "Copy number"
+    }
+  ],
+  "item.dueDate": [
+    {
+      "type": 0,
+      "value": "Current due date"
+    }
+  ],
+  "item.effectiveLocation": [
+    {
+      "type": 0,
+      "value": "Effective location"
+    }
+  ],
+  "item.enumeration": [
+    {
+      "type": 0,
+      "value": "Enumeration"
+    }
+  ],
+  "item.id": [
+    {
+      "type": 0,
+      "value": "Item id"
+    }
+  ],
+  "item.information": [
+    {
+      "type": 0,
+      "value": "Item information"
+    }
+  ],
+  "item.location.code": [
+    {
+      "type": 0,
+      "value": "Effective location code"
+    }
+  ],
+  "item.location.libraryName": [
+    {
+      "type": 0,
+      "value": "Library"
+    }
+  ],
+  "item.location.name": [
+    {
+      "type": 0,
+      "value": "Effective location"
+    }
+  ],
+  "item.noInformation": [
+    {
+      "type": 0,
+      "value": "There is no item information for this request."
+    }
+  ],
+  "item.numRequests": [
+    {
+      "type": 0,
+      "value": "Requests"
+    }
+  ],
+  "item.requestsOnItem": [
+    {
+      "type": 0,
+      "value": "Requests on item"
+    }
+  ],
+  "item.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "Scan or enter item barcode"
+    }
+  ],
+  "item.status": [
+    {
+      "type": 0,
+      "value": "Item status"
+    }
+  ],
+  "item.title": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ],
+  "item.volume": [
+    {
+      "type": 0,
+      "value": "Volume"
+    }
+  ],
+  "itemLevel": [
+    {
+      "type": 0,
+      "value": "Item"
+    }
+  ],
+  "items": [
+    {
+      "type": 1,
+      "value": "number"
+    },
+    {
+      "type": 0,
+      "value": " items"
+    }
+  ],
+  "items.instanceItems": [
+    {
+      "type": 0,
+      "value": "Other items in "
+    },
+    {
+      "type": 1,
+      "value": "title"
+    }
+  ],
+  "items.instanceItems.notFound": [
+    {
+      "type": 0,
+      "value": "No items found"
+    }
+  ],
+  "items.selectItem": [
+    {
+      "type": 0,
+      "value": "Select item"
+    }
+  ],
+  "loan.dueDate": [
+    {
+      "type": 0,
+      "value": "Current due date"
+    }
+  ],
+  "loanType": [
+    {
+      "type": 0,
+      "value": "Loan type"
+    }
+  ],
+  "location": [
+    {
+      "type": 0,
+      "value": "Location"
+    }
+  ],
+  "materialType": [
+    {
+      "type": 0,
+      "value": "Material type"
+    }
+  ],
+  "meta.title": [
+    {
+      "type": 0,
+      "value": "Requests"
+    }
+  ],
+  "moveRequest.chooseRequestMessage": [
+    {
+      "type": 0,
+      "value": "Please select allowed type"
+    }
+  ],
+  "moveRequest.confirm": [
+    {
+      "type": 0,
+      "value": "Confirm"
+    }
+  ],
+  "moveRequest.requestTypeChangeHeading": [
+    {
+      "type": 0,
+      "value": "Current requests type not allowed for selected item"
+    }
+  ],
+  "moveRequest.requestTypeChangeMessage": [
+    {
+      "type": 0,
+      "value": "Request will be converted to "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "requestType"
+        }
+      ],
+      "type": 8,
+      "value": "strong"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "moveRequest.secondPositionMessage": [
+    {
+      "type": 0,
+      "value": "Requests cannot be moved above page requests, even when fulfillment has not begun. This request will be moved to position 2 in the request queue."
+    }
+  ],
+  "moveRequest.secondPositionTitle": [
+    {
+      "type": 0,
+      "value": "Request moved to position 2 of the queue"
+    }
+  ],
+  "moveRequest.success": [
+    {
+      "type": 0,
+      "value": "Request has been moved successfully"
+    }
+  ],
+  "noRequestTypesAvailable": [
+    {
+      "type": 0,
+      "value": "No request types available for selected item"
+    }
+  ],
+  "noServicePoint.errorMessage": [
+    {
+      "type": 0,
+      "value": "You must be logged into a service point to access the Hold shelf clearance report. Please add one or more service points to your user record in the Users app. Contact an administrator if you do not have the ability to add service points to your record."
+    }
+  ],
+  "noServicePoint.label": [
+    {
+      "type": 0,
+      "value": "No service point selected"
+    }
+  ],
+  "notes.assigned.for": [
+    {
+      "type": 0,
+      "value": "For: "
+    },
+    {
+      "type": 1,
+      "value": "instanceLink"
+    },
+    {
+      "type": 0,
+      "value": " ("
+    },
+    {
+      "type": 1,
+      "value": "itemLink"
+    },
+    {
+      "type": 0,
+      "value": ")"
+    }
+  ],
+  "notes.assigned.requestDate": [
+    {
+      "type": 0,
+      "value": "Request date: "
+    },
+    {
+      "type": 1,
+      "value": "requestCreateDate"
+    }
+  ],
+  "notes.assigned.requester": [
+    {
+      "type": 0,
+      "value": "Requester: "
+    },
+    {
+      "type": 1,
+      "value": "requesterName"
+    }
+  ],
+  "notes.entityType.request": [
+    {
+      "type": 0,
+      "value": "Request"
+    }
+  ],
+  "notes.entityType.request.pluralized": [
+    {
+      "type": 1,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "one": {
+          "value": [
+            {
+              "type": 0,
+              "value": "request"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "requests"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "notes.newStaffNote": [
+    {
+      "type": 0,
+      "value": "New staff note"
+    }
+  ],
+  "notes.staffNotes": [
+    {
+      "type": 0,
+      "value": "Staff notes"
+    }
+  ],
+  "override": [
+    {
+      "type": 0,
+      "value": "Override"
+    }
+  ],
+  "patronComments": [
+    {
+      "type": 0,
+      "value": "Patron comments"
+    }
+  ],
+  "permission.all": [
+    {
+      "type": 0,
+      "value": "Requests: All permissions"
+    }
+  ],
+  "permission.create": [
+    {
+      "type": 0,
+      "value": "Requests: View, create"
+    }
+  ],
+  "permission.edit": [
+    {
+      "type": 0,
+      "value": "Låneanmodninger: Se, rediger, og annuller"
+    }
+  ],
+  "permission.moveRequest": [
+    {
+      "type": 0,
+      "value": "Requests: Move to new item, reorder queue"
+    }
+  ],
+  "permission.reorderQueue": [
+    {
+      "type": 0,
+      "value": "Requests: Reorder queue"
+    }
+  ],
+  "permission.view": [
+    {
+      "type": 0,
+      "value": "Requests: View"
+    }
+  ],
+  "pickSlipsLoading": [
+    {
+      "type": 0,
+      "value": "Pick slips are loading, please wait"
+    }
+  ],
+  "pickupServicePoint.name": [
+    {
+      "type": 0,
+      "value": "Pickup service point"
+    }
+  ],
+  "position": [
+    {
+      "type": 0,
+      "value": "Position in queue"
+    }
+  ],
+  "printInProgress": [
+    {
+      "type": 0,
+      "value": "Print options loading in progress. It might take a few seconds, please be patient."
+    }
+  ],
+  "printPickSlips": [
+    {
+      "type": 0,
+      "value": "Print pick slips for "
+    },
+    {
+      "type": 1,
+      "value": "sp"
+    }
+  ],
+  "proxy.barcode": [
+    {
+      "type": 0,
+      "value": "Requester's proxy barcode"
+    }
+  ],
+  "proxy.name": [
+    {
+      "type": 0,
+      "value": "Requester's proxy name"
+    }
+  ],
+  "requestDate": [
+    {
+      "type": 0,
+      "value": "requestDate"
+    }
+  ],
+  "requestExpirationDate": [
+    {
+      "type": 0,
+      "value": "Request expiration date"
+    }
+  ],
+  "requestLevel": [
+    {
+      "type": 0,
+      "value": "Request level"
+    }
+  ],
+  "requestMeta.detailLabel": [
+    {
+      "type": 0,
+      "value": "Request Detail"
+    }
+  ],
+  "requestMeta.expirationDate": [
+    {
+      "type": 0,
+      "value": "Request expiration date"
+    }
+  ],
+  "requestMeta.fulfilment.delivery": [
+    {
+      "type": 0,
+      "value": "Delivery"
+    }
+  ],
+  "requestMeta.fulfilment.holdShelf": [
+    {
+      "type": 0,
+      "value": "Hold Shelf"
+    }
+  ],
+  "requestMeta.holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "Hold shelf expiration date"
+    }
+  ],
+  "requestMeta.information": [
+    {
+      "type": 0,
+      "value": "Request information"
+    }
+  ],
+  "requestMeta.queuePosition": [
+    {
+      "type": 0,
+      "value": "Position in queue"
+    }
+  ],
+  "requestMeta.status": [
+    {
+      "type": 0,
+      "value": "Request status"
+    }
+  ],
+  "requestMeta.tags": [
+    {
+      "type": 0,
+      "value": "Tags"
+    }
+  ],
+  "requestMeta.type": [
+    {
+      "type": 0,
+      "value": "Request type"
+    }
+  ],
+  "requestMeta.type.hold": [
+    {
+      "type": 0,
+      "value": "Hold"
+    }
+  ],
+  "requestMeta.type.holds": [
+    {
+      "type": 0,
+      "value": "Holds"
+    }
+  ],
+  "requestMeta.type.page": [
+    {
+      "type": 0,
+      "value": "Page"
+    }
+  ],
+  "requestMeta.type.pages": [
+    {
+      "type": 0,
+      "value": "Pages"
+    }
+  ],
+  "requestMeta.type.recall": [
+    {
+      "type": 0,
+      "value": "Recall"
+    }
+  ],
+  "requestMeta.type.recalls": [
+    {
+      "type": 0,
+      "value": "Recalls"
+    }
+  ],
+  "requestNotAllowed": [
+    {
+      "type": 0,
+      "value": "Request not allowed"
+    }
+  ],
+  "requestQueue": [
+    {
+      "type": 0,
+      "value": "Request queue"
+    }
+  ],
+  "requestQueue.chronology": [
+    {
+      "type": 0,
+      "value": "Chronology"
+    }
+  ],
+  "requestQueue.confirmReorder.cancel": [
+    {
+      "type": 0,
+      "value": "Leave in current position"
+    }
+  ],
+  "requestQueue.confirmReorder.confirm": [
+    {
+      "type": 0,
+      "value": "Move to position 2"
+    }
+  ],
+  "requestQueue.confirmReorder.message1": [
+    {
+      "type": 0,
+      "value": "Requests cannot be displaced from position 1 when fulfillment has begun."
+    }
+  ],
+  "requestQueue.confirmReorder.message2": [
+    {
+      "type": 0,
+      "value": "Requests cannot be moved above page requests, even when fulfillment hasn't begun."
+    }
+  ],
+  "requestQueue.confirmReorder.title": [
+    {
+      "type": 0,
+      "value": "Request moved to position 2 of the queue"
+    }
+  ],
+  "requestQueue.deliveryType": [
+    {
+      "type": 0,
+      "value": "Delivery: "
+    },
+    {
+      "type": 1,
+      "value": "type"
+    }
+  ],
+  "requestQueue.description": [
+    {
+      "type": 0,
+      "value": "Instance: "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "title"
+        },
+        {
+          "type": 0,
+          "value": " /"
+        },
+        {
+          "type": 1,
+          "value": "author"
+        },
+        {
+          "type": 0,
+          "value": "."
+        }
+      ],
+      "type": 8,
+      "value": "instanceLink"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "publisher"
+        },
+        {
+          "type": 0,
+          "value": ", "
+        },
+        {
+          "type": 1,
+          "value": "publicationDate"
+        }
+      ],
+      "type": 8,
+      "value": "i"
+    }
+  ],
+  "requestQueue.enumeration": [
+    {
+      "type": 0,
+      "value": "Enumeration"
+    }
+  ],
+  "requestQueue.fulfillmentInProgressSectionTitle": [
+    {
+      "type": 0,
+      "value": "Fulfillment in progress"
+    }
+  ],
+  "requestQueue.fulfillmentStatus": [
+    {
+      "type": 0,
+      "value": "Status"
+    }
+  ],
+  "requestQueue.heading": [
+    {
+      "type": 0,
+      "value": "Request queue on instance • "
+    },
+    {
+      "type": 1,
+      "value": "title"
+    },
+    {
+      "type": 0,
+      "value": " /"
+    },
+    {
+      "type": 1,
+      "value": "author"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "requestQueue.holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "Hold shelf expiration"
+    }
+  ],
+  "requestQueue.itemBarcode": [
+    {
+      "type": 0,
+      "value": "Item barcode"
+    }
+  ],
+  "requestQueue.noDataForFulfillment": [
+    {
+      "type": 0,
+      "value": "There are no requests in fulfillment."
+    }
+  ],
+  "requestQueue.notYetFilledRequests.noData": [
+    {
+      "type": 0,
+      "value": "No requests found"
+    }
+  ],
+  "requestQueue.notYetFilledSectionTitle": [
+    {
+      "type": 0,
+      "value": "Open - Not yet filled"
+    }
+  ],
+  "requestQueue.order": [
+    {
+      "type": 0,
+      "value": "Order"
+    }
+  ],
+  "requestQueue.patronComments": [
+    {
+      "type": 0,
+      "value": "Patron comments"
+    }
+  ],
+  "requestQueue.patronGroup": [
+    {
+      "type": 0,
+      "value": "Patron group"
+    }
+  ],
+  "requestQueue.pickup": [
+    {
+      "type": 0,
+      "value": "Pickup/Delivery"
+    }
+  ],
+  "requestQueue.refresh": [
+    {
+      "type": 0,
+      "value": "Refresh queue"
+    }
+  ],
+  "requestQueue.reorderSuccess": [
+    {
+      "type": 0,
+      "value": "Queue was successfully updated"
+    }
+  ],
+  "requestQueue.requestDate": [
+    {
+      "type": 0,
+      "value": "Request date"
+    }
+  ],
+  "requestQueue.requestExpirationDate": [
+    {
+      "type": 0,
+      "value": "Request expiration"
+    }
+  ],
+  "requestQueue.requestInProgress": [
+    {
+      "type": 0,
+      "value": "In progress"
+    }
+  ],
+  "requestQueue.requestType": [
+    {
+      "type": 0,
+      "value": "Type"
+    }
+  ],
+  "requestQueue.requesterBarcode": [
+    {
+      "type": 0,
+      "value": "Requester barcode"
+    }
+  ],
+  "requestQueue.requesterName": [
+    {
+      "type": 0,
+      "value": "Requester"
+    }
+  ],
+  "requestQueue.status": [
+    {
+      "type": 0,
+      "value": "Request status"
+    }
+  ],
+  "requestQueue.volume": [
+    {
+      "type": 0,
+      "value": "Volume"
+    }
+  ],
+  "requestType": [
+    {
+      "type": 0,
+      "value": "Request type"
+    }
+  ],
+  "requestType.message": [
+    {
+      "type": 0,
+      "value": "Select item to view available request types"
+    }
+  ],
+  "requester.barcode": [
+    {
+      "type": 0,
+      "value": "Requester barcode"
+    }
+  ],
+  "requester.findUserPluginLabel": [
+    {
+      "type": 0,
+      "value": "Requester look-up"
+    }
+  ],
+  "requester.firstName": [
+    {
+      "type": 0,
+      "value": "Requester First Name"
+    }
+  ],
+  "requester.fulfilmentPref": [
+    {
+      "type": 0,
+      "value": "Fulfillment preference"
+    }
+  ],
+  "requester.information": [
+    {
+      "type": 0,
+      "value": "Requester information"
+    }
+  ],
+  "requester.name": [
+    {
+      "type": 0,
+      "value": "Requester name"
+    }
+  ],
+  "requester.patronGroup.group": [
+    {
+      "type": 0,
+      "value": "Requester patron group"
+    }
+  ],
+  "requester.pickupLocation": [
+    {
+      "type": 0,
+      "value": "Pickup location"
+    }
+  ],
+  "requester.proxy": [
+    {
+      "type": 0,
+      "value": "Requester's proxy"
+    }
+  ],
+  "requester.requester": [
+    {
+      "type": 0,
+      "value": "Requester"
+    }
+  ],
+  "requester.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "Scan or enter requester barcode"
+    }
+  ],
+  "requester.username": [
+    {
+      "type": 0,
+      "value": "Username"
+    }
+  ],
+  "requests.createTitleLevelRequest": [
+    {
+      "type": 0,
+      "value": "Create title level request"
+    }
+  ],
+  "requests.itemBarcode": [
+    {
+      "type": 0,
+      "value": "Item barcode"
+    }
+  ],
+  "requests.proxy": [
+    {
+      "type": 0,
+      "value": "Proxy"
+    }
+  ],
+  "requests.queuePosition": [
+    {
+      "type": 0,
+      "value": "Queue position"
+    }
+  ],
+  "requests.requestDate": [
+    {
+      "type": 0,
+      "value": "Request Date"
+    }
+  ],
+  "requests.requester": [
+    {
+      "type": 0,
+      "value": "Requester"
+    }
+  ],
+  "requests.requesterBarcode": [
+    {
+      "type": 0,
+      "value": "Requester Barcode"
+    }
+  ],
+  "requests.status": [
+    {
+      "type": 0,
+      "value": "Request status"
+    }
+  ],
+  "requests.title": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ],
+  "requests.type": [
+    {
+      "type": 0,
+      "value": "Type"
+    }
+  ],
+  "requests.year": [
+    {
+      "type": 0,
+      "value": "Year"
+    }
+  ],
+  "resultCount": [
+    {
+      "style": null,
+      "type": 2,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "one": {
+          "value": [
+            {
+              "type": 0,
+              "value": "Record found"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "Records found"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "routingError": [
+    {
+      "type": 0,
+      "value": "How did you get to "
+    },
+    {
+      "type": 1,
+      "value": "pathname"
+    },
+    {
+      "type": 0,
+      "value": "?"
+    }
+  ],
+  "routingErrorOops": [
+    {
+      "type": 0,
+      "value": "Uh-oh!"
+    }
+  ],
+  "showTags": [
+    {
+      "type": 0,
+      "value": "Show Tags"
+    }
+  ],
+  "status": [
+    {
+      "type": 0,
+      "value": "Request status"
+    }
+  ],
+  "tags.tagList": [
+    {
+      "type": 0,
+      "value": "Tags"
+    }
+  ],
+  "title.information": [
+    {
+      "type": 0,
+      "value": "Title information"
+    }
+  ],
+  "titleInformation.contributors": [
+    {
+      "type": 0,
+      "value": "Contributor"
+    }
+  ],
+  "titleInformation.editions": [
+    {
+      "type": 0,
+      "value": "Edition"
+    }
+  ],
+  "titleInformation.identifiers": [
+    {
+      "type": 0,
+      "value": "ISBN(s)"
+    }
+  ],
+  "titleInformation.publicationsDate": [
+    {
+      "type": 0,
+      "value": "Publication date"
+    }
+  ],
+  "titleInformation.title": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ],
+  "titleInformation.titleLevelRequests": [
+    {
+      "type": 0,
+      "value": "Title level requests"
+    }
+  ],
+  "titleLevel": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ]
+}

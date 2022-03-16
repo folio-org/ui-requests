@@ -1,0 +1,1669 @@
+{
+  "actions.cancelNewRequest": [
+    {
+      "type": 0,
+      "value": "取消"
+    }
+  ],
+  "actions.closeNewRequest": [
+    {
+      "type": 0,
+      "value": "關閉新的預約"
+    }
+  ],
+  "actions.createNewRequest": [
+    {
+      "type": 0,
+      "value": "新增預約"
+    }
+  ],
+  "actions.duplicateRequest": [
+    {
+      "type": 0,
+      "value": "複製預約"
+    }
+  ],
+  "actions.edit": [
+    {
+      "type": 0,
+      "value": "編輯"
+    }
+  ],
+  "actions.editRequest": [
+    {
+      "type": 0,
+      "value": "編輯預約"
+    }
+  ],
+  "actions.editRequestLink": [
+    {
+      "type": 0,
+      "value": "編輯預約對話框"
+    }
+  ],
+  "actions.label": [
+    {
+      "type": 0,
+      "value": "動作"
+    }
+  ],
+  "actions.loading": [
+    {
+      "type": 0,
+      "value": "載入中…"
+    }
+  ],
+  "actions.moveRequest": [
+    {
+      "type": 0,
+      "value": "移動預約"
+    }
+  ],
+  "actions.newRequest": [
+    {
+      "type": 0,
+      "value": "新增預約"
+    }
+  ],
+  "actions.reorderQueue": [
+    {
+      "type": 0,
+      "value": "調整排隊順序"
+    }
+  ],
+  "actions.selectAddressType": [
+    {
+      "type": 0,
+      "value": "選擇地址類型"
+    }
+  ],
+  "actions.selectPickupLoc": [
+    {
+      "type": 0,
+      "value": "選擇取件地"
+    }
+  ],
+  "actions.selectPickupSp": [
+    {
+      "type": 0,
+      "value": "選擇取書工作區"
+    }
+  ],
+  "actions.viewRequestsInQueue": [
+    {
+      "type": 0,
+      "value": "查看預約排隊順序"
+    }
+  ],
+  "additionalReasons": [
+    {
+      "type": 0,
+      "value": "查看冻结详情以了解冻结的其他原因..."
+    }
+  ],
+  "barcode": [
+    {
+      "type": 0,
+      "value": "條碼"
+    }
+  ],
+  "blockModal": [
+    {
+      "type": 0,
+      "value": "讀者被禁止預約"
+    }
+  ],
+  "blockedLabel": [
+    {
+      "type": 0,
+      "value": "冻结原因"
+    }
+  ],
+  "cancel.additionalInfoLabel": [
+    {
+      "type": 0,
+      "value": "讀者的附加訊息"
+    },
+    {
+      "type": 1,
+      "value": "required"
+    }
+  ],
+  "cancel.additionalInfoPlaceholderOptional": [
+    {
+      "type": 0,
+      "value": "輸入有關取消的更多資訊（非必填）"
+    }
+  ],
+  "cancel.additionalInfoPlaceholderRequired": [
+    {
+      "type": 0,
+      "value": "輸入有關取消的更多資訊（必填）"
+    }
+  ],
+  "cancel.cancelRequest": [
+    {
+      "type": 0,
+      "value": "取消預約"
+    }
+  ],
+  "cancel.modalLabel": [
+    {
+      "type": 0,
+      "value": "確認取消預約"
+    }
+  ],
+  "cancel.notifyLabel": [
+    {
+      "type": 0,
+      "value": "通知讀者"
+    }
+  ],
+  "cancel.reasonLabel": [
+    {
+      "type": 0,
+      "value": "取消原因"
+    }
+  ],
+  "cancel.requestWillBeCancelled": [
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "title"
+        }
+      ],
+      "type": 8,
+      "value": "b"
+    },
+    {
+      "type": 0,
+      "value": " 將被"
+    },
+    {
+      "children": [
+        {
+          "type": 0,
+          "value": "取消"
+        }
+      ],
+      "type": 8,
+      "value": "b"
+    }
+  ],
+  "cancellationAdditionalInformation": [
+    {
+      "type": 0,
+      "value": "读者附加信息"
+    }
+  ],
+  "cancellationReason": [
+    {
+      "type": 0,
+      "value": "取消原因"
+    }
+  ],
+  "close": [
+    {
+      "type": 0,
+      "value": "关闭"
+    }
+  ],
+  "common.cancel": [
+    {
+      "type": 0,
+      "value": "取消"
+    }
+  ],
+  "common.saveAndClose": [
+    {
+      "type": 0,
+      "value": "保存并关闭"
+    }
+  ],
+  "csvReportInProgress": [
+    {
+      "type": 0,
+      "value": "正在生成CSV结果报告。对于较大的结果集，可能需要一些时间。请耐心等待。"
+    }
+  ],
+  "csvReportPending": [
+    {
+      "type": 0,
+      "value": "csvReportPending"
+    }
+  ],
+  "deliveryAddress": [
+    {
+      "type": 0,
+      "value": "送货地址"
+    }
+  ],
+  "detailsButton": [
+    {
+      "type": 0,
+      "value": "查看冻结详情"
+    }
+  ],
+  "enter": [
+    {
+      "type": 0,
+      "value": "輸入"
+    }
+  ],
+  "errorModal.message": [
+    {
+      "type": 1,
+      "value": "title"
+    },
+    {
+      "type": 0,
+      "value": " （ "
+    },
+    {
+      "type": 1,
+      "value": "materialType"
+    },
+    {
+      "type": 0,
+      "value": " ）（条码： "
+    },
+    {
+      "type": 1,
+      "value": "barcode"
+    },
+    {
+      "type": 0,
+      "value": " ）的单件状态为"
+    },
+    {
+      "children": [
+        {
+          "type": 0,
+          "value": " "
+        },
+        {
+          "type": 1,
+          "value": "itemStatus"
+        },
+        {
+          "type": 0,
+          "value": " "
+        }
+      ],
+      "type": 8,
+      "value": "strong"
+    },
+    {
+      "type": 0,
+      "value": " ，因此无法请求。"
+    }
+  ],
+  "errorModal.title": [
+    {
+      "type": 0,
+      "value": "单件无法请求"
+    }
+  ],
+  "errors.instanceUuidOrHridDoesNotExist": [
+    {
+      "type": 0,
+      "value": "Instance with this HRID or UUID does not exist"
+    }
+  ],
+  "errors.itemBarcodeDoesNotExist": [
+    {
+      "type": 0,
+      "value": "沒有此條碼的單件"
+    }
+  ],
+  "errors.onlyCheckedOutForHold": [
+    {
+      "type": 0,
+      "value": "只能預約已借出的單件"
+    }
+  ],
+  "errors.onlyCheckedOutForRecall": [
+    {
+      "type": 0,
+      "value": "只能催還已借出的單件"
+    }
+  ],
+  "errors.selectInstanceRequired": [
+    {
+      "type": 0,
+      "value": "Please select an instance and hit enter"
+    }
+  ],
+  "errors.selectItem": [
+    {
+      "type": 0,
+      "value": "請選擇一個單件"
+    }
+  ],
+  "errors.selectItemRequired": [
+    {
+      "type": 0,
+      "value": "请选择一个单件，然后按回车"
+    }
+  ],
+  "errors.selectUser": [
+    {
+      "type": 0,
+      "value": "透過條碼選擇一個要求者"
+    }
+  ],
+  "errors.sync.requestQueueBody": [
+    {
+      "type": 0,
+      "value": "This request queue has been updated by another person or process and may be out of synch."
+    }
+  ],
+  "errors.sync.requestQueueLabel": [
+    {
+      "type": 0,
+      "value": "Request queue is out of sync"
+    }
+  ],
+  "errors.unknown.requestQueueBody": [
+    {
+      "type": 0,
+      "value": "Request queue reorder failed"
+    }
+  ],
+  "errors.unknown.requestQueueLabel": [
+    {
+      "type": 0,
+      "value": "Request queue error"
+    }
+  ],
+  "errors.userBarcodeDoesNotExist": [
+    {
+      "type": 0,
+      "value": "沒有此條碼的使用者"
+    }
+  ],
+  "exportExpiredHoldShelfToCsv": [
+    {
+      "type": 0,
+      "value": "导出"
+    },
+    {
+      "type": 1,
+      "value": "currentServicePoint"
+    },
+    {
+      "type": 0,
+      "value": "预约架清仓报告"
+    }
+  ],
+  "exportSearchResultsToCsv": [
+    {
+      "type": 0,
+      "value": "輸出查詢結果到 CSV 檔案"
+    }
+  ],
+  "filters.requestLevel.item": [
+    {
+      "type": 0,
+      "value": "館藏"
+    }
+  ],
+  "filters.requestLevel.title": [
+    {
+      "type": 0,
+      "value": "題名"
+    }
+  ],
+  "filters.requestStatus.awaitingDelivery": [
+    {
+      "type": 0,
+      "value": "开放 - 等待交付"
+    }
+  ],
+  "filters.requestStatus.awaitingPickup": [
+    {
+      "type": 0,
+      "value": "开放 - 等待取件"
+    }
+  ],
+  "filters.requestStatus.cancelled": [
+    {
+      "type": 0,
+      "value": "已关闭 - 已取消"
+    }
+  ],
+  "filters.requestStatus.filled": [
+    {
+      "type": 0,
+      "value": "已关闭 - 已满足"
+    }
+  ],
+  "filters.requestStatus.inTransit": [
+    {
+      "type": 0,
+      "value": "开放 - 传送中"
+    }
+  ],
+  "filters.requestStatus.notYetFilled": [
+    {
+      "type": 0,
+      "value": "开放 - 尚未满足"
+    }
+  ],
+  "filters.requestStatus.pickupExpired": [
+    {
+      "type": 0,
+      "value": "已关闭 - 取件已过期"
+    }
+  ],
+  "filters.requestStatus.unfilled": [
+    {
+      "type": 0,
+      "value": "已关闭 - 未满足"
+    }
+  ],
+  "filters.requestType.holds": [
+    {
+      "type": 0,
+      "value": "預約"
+    }
+  ],
+  "filters.requestType.pages": [
+    {
+      "type": 0,
+      "value": "处理"
+    }
+  ],
+  "filters.requestType.recalls": [
+    {
+      "type": 0,
+      "value": "召回"
+    }
+  ],
+  "fulfilmentPreference": [
+    {
+      "type": 0,
+      "value": "請求履行偏好"
+    }
+  ],
+  "holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "预约书架到期日期"
+    }
+  ],
+  "holdShelfExpirationTime": [
+    {
+      "type": 0,
+      "value": "holdShelfExpirationTime"
+    }
+  ],
+  "instance.contributorNames": [
+    {
+      "type": 0,
+      "value": "Contributor"
+    }
+  ],
+  "instance.information": [
+    {
+      "type": 0,
+      "value": "Title information"
+    }
+  ],
+  "instance.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "Enter HRID or UUID"
+    }
+  ],
+  "instance.title": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ],
+  "instance.value": [
+    {
+      "type": 0,
+      "value": "Instance HRID or UUID"
+    }
+  ],
+  "item.barcode": [
+    {
+      "type": 0,
+      "value": "單件條碼"
+    }
+  ],
+  "item.callNumber": [
+    {
+      "type": 0,
+      "value": "有效的索書號字串"
+    }
+  ],
+  "item.callNumberComponents.callNumber": [
+    {
+      "type": 0,
+      "value": "有效的索書號"
+    }
+  ],
+  "item.callNumberComponents.prefix": [
+    {
+      "type": 0,
+      "value": "有效的索书号前缀"
+    }
+  ],
+  "item.callNumberComponents.suffix": [
+    {
+      "type": 0,
+      "value": "有效的索书号后缀"
+    }
+  ],
+  "item.chronology": [
+    {
+      "type": 0,
+      "value": "年表"
+    }
+  ],
+  "item.contributorNames": [
+    {
+      "type": 0,
+      "value": "作者"
+    }
+  ],
+  "item.copyNumber": [
+    {
+      "type": 0,
+      "value": "單件複本號"
+    }
+  ],
+  "item.copyNumbers": [
+    {
+      "type": 0,
+      "value": "複本號"
+    }
+  ],
+  "item.dueDate": [
+    {
+      "type": 0,
+      "value": "目前到期日"
+    }
+  ],
+  "item.effectiveLocation": [
+    {
+      "type": 0,
+      "value": "有效的館藏地"
+    }
+  ],
+  "item.enumeration": [
+    {
+      "type": 0,
+      "value": "期數"
+    }
+  ],
+  "item.id": [
+    {
+      "type": 0,
+      "value": "單件 ID"
+    }
+  ],
+  "item.information": [
+    {
+      "type": 0,
+      "value": "單件資訊"
+    }
+  ],
+  "item.location.code": [
+    {
+      "type": 0,
+      "value": "有效的館藏地代碼"
+    }
+  ],
+  "item.location.libraryName": [
+    {
+      "type": 0,
+      "value": "圖書館"
+    }
+  ],
+  "item.location.name": [
+    {
+      "type": 0,
+      "value": "有效的館藏地名稱"
+    }
+  ],
+  "item.noInformation": [
+    {
+      "type": 0,
+      "value": "There is no item information for this request."
+    }
+  ],
+  "item.numRequests": [
+    {
+      "type": 0,
+      "value": "預約"
+    }
+  ],
+  "item.requestsOnItem": [
+    {
+      "type": 0,
+      "value": "單件的預約數量"
+    }
+  ],
+  "item.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "掃描或輸入單件條碼"
+    }
+  ],
+  "item.status": [
+    {
+      "type": 0,
+      "value": "單件狀態"
+    }
+  ],
+  "item.title": [
+    {
+      "type": 0,
+      "value": "題名"
+    }
+  ],
+  "item.volume": [
+    {
+      "type": 0,
+      "value": "卷"
+    }
+  ],
+  "itemLevel": [
+    {
+      "type": 0,
+      "value": "Item"
+    }
+  ],
+  "items": [
+    {
+      "type": 1,
+      "value": "number"
+    },
+    {
+      "type": 0,
+      "value": " items"
+    }
+  ],
+  "items.instanceItems": [
+    {
+      "type": 0,
+      "value": "Other items in "
+    },
+    {
+      "type": 1,
+      "value": "title"
+    }
+  ],
+  "items.instanceItems.notFound": [
+    {
+      "type": 0,
+      "value": "No items found"
+    }
+  ],
+  "items.selectItem": [
+    {
+      "type": 0,
+      "value": "Select item"
+    }
+  ],
+  "loan.dueDate": [
+    {
+      "type": 0,
+      "value": "当前到期日"
+    }
+  ],
+  "loanType": [
+    {
+      "type": 0,
+      "value": "借閱類型"
+    }
+  ],
+  "location": [
+    {
+      "type": 0,
+      "value": "館藏地"
+    }
+  ],
+  "materialType": [
+    {
+      "type": 0,
+      "value": "資料類型"
+    }
+  ],
+  "meta.title": [
+    {
+      "type": 0,
+      "value": "預約"
+    }
+  ],
+  "moveRequest.chooseRequestMessage": [
+    {
+      "type": 0,
+      "value": "請選擇允許的類型"
+    }
+  ],
+  "moveRequest.confirm": [
+    {
+      "type": 0,
+      "value": "確認"
+    }
+  ],
+  "moveRequest.requestTypeChangeHeading": [
+    {
+      "type": 0,
+      "value": "所选单件不允许使用当前请求类型"
+    }
+  ],
+  "moveRequest.requestTypeChangeMessage": [
+    {
+      "type": 0,
+      "value": "请求将转换为"
+    },
+    {
+      "children": [
+        {
+          "type": 0,
+          "value": " "
+        },
+        {
+          "type": 1,
+          "value": "requestType"
+        },
+        {
+          "type": 0,
+          "value": " "
+        }
+      ],
+      "type": 8,
+      "value": "strong"
+    },
+    {
+      "type": 0,
+      "value": " 。"
+    }
+  ],
+  "moveRequest.secondPositionMessage": [
+    {
+      "type": 0,
+      "value": "即使尚未开始执行，也无法将请求移至处理请求之上。此请求将移至请求队列中的位置2。"
+    }
+  ],
+  "moveRequest.secondPositionTitle": [
+    {
+      "type": 0,
+      "value": "預約已移到排隊順序的第 2 位"
+    }
+  ],
+  "moveRequest.success": [
+    {
+      "type": 0,
+      "value": "移動預約成功"
+    }
+  ],
+  "noRequestTypesAvailable": [
+    {
+      "type": 0,
+      "value": "没有适用于所选单件的请求类型"
+    }
+  ],
+  "noServicePoint.errorMessage": [
+    {
+      "type": 0,
+      "value": "您必須先登錄工作區才能訪問預約保留架的清理報告。請在「使用者」App 中為您的使用者記錄新增一個或多個工作區。如果無法在記錄中新增工作區，請與管理員聯繫。"
+    }
+  ],
+  "noServicePoint.label": [
+    {
+      "type": 0,
+      "value": "未選擇工作區"
+    }
+  ],
+  "notes.assigned.for": [
+    {
+      "type": 0,
+      "value": "对于： "
+    },
+    {
+      "type": 1,
+      "value": "instanceLink"
+    },
+    {
+      "type": 0,
+      "value": " （ "
+    },
+    {
+      "type": 1,
+      "value": "itemLink"
+    },
+    {
+      "type": 0,
+      "value": " ）"
+    }
+  ],
+  "notes.assigned.requestDate": [
+    {
+      "type": 0,
+      "value": "请求日期： "
+    },
+    {
+      "type": 1,
+      "value": "requestCreateDate"
+    }
+  ],
+  "notes.assigned.requester": [
+    {
+      "type": 0,
+      "value": "请求者： "
+    },
+    {
+      "type": 1,
+      "value": "requesterName"
+    }
+  ],
+  "notes.entityType.request": [
+    {
+      "type": 0,
+      "value": "请求"
+    }
+  ],
+  "notes.entityType.request.pluralized": [
+    {
+      "type": 1,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "one": {
+          "value": [
+            {
+              "type": 0,
+              "value": "请求"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "请求"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "notes.newStaffNote": [
+    {
+      "type": 0,
+      "value": "新建员工附注"
+    }
+  ],
+  "notes.staffNotes": [
+    {
+      "type": 0,
+      "value": "员工附注"
+    }
+  ],
+  "override": [
+    {
+      "type": 0,
+      "value": "越权"
+    }
+  ],
+  "patronComments": [
+    {
+      "type": 0,
+      "value": "读者备注"
+    }
+  ],
+  "permission.all": [
+    {
+      "type": 0,
+      "value": "请求：所有权限"
+    }
+  ],
+  "permission.create": [
+    {
+      "type": 0,
+      "value": "请求：查看、创建"
+    }
+  ],
+  "permission.edit": [
+    {
+      "type": 0,
+      "value": "请求：查看、编辑、取消"
+    }
+  ],
+  "permission.moveRequest": [
+    {
+      "type": 0,
+      "value": "请求：移至新单件，重新排序队列"
+    }
+  ],
+  "permission.reorderQueue": [
+    {
+      "type": 0,
+      "value": "请求：重新排序队列"
+    }
+  ],
+  "permission.view": [
+    {
+      "type": 0,
+      "value": "请求：查看"
+    }
+  ],
+  "pickSlipsLoading": [
+    {
+      "type": 0,
+      "value": "选取单正在加载，请稍候"
+    }
+  ],
+  "pickupServicePoint.name": [
+    {
+      "type": 0,
+      "value": "取書工作區"
+    }
+  ],
+  "position": [
+    {
+      "type": 0,
+      "value": "队列中的位置"
+    }
+  ],
+  "printInProgress": [
+    {
+      "type": 0,
+      "value": "正在加载打印选项。可能需要几秒钟，请耐心等待。"
+    }
+  ],
+  "printPickSlips": [
+    {
+      "type": 0,
+      "value": "打印"
+    },
+    {
+      "type": 1,
+      "value": "sp"
+    },
+    {
+      "type": 0,
+      "value": "选取单"
+    }
+  ],
+  "proxy.barcode": [
+    {
+      "type": 0,
+      "value": "请求者的代理条码"
+    }
+  ],
+  "proxy.name": [
+    {
+      "type": 0,
+      "value": "请求者的代理名称"
+    }
+  ],
+  "requestDate": [
+    {
+      "type": 0,
+      "value": "requestDate"
+    }
+  ],
+  "requestExpirationDate": [
+    {
+      "type": 0,
+      "value": "預約到期日"
+    }
+  ],
+  "requestLevel": [
+    {
+      "type": 0,
+      "value": "Request level"
+    }
+  ],
+  "requestMeta.detailLabel": [
+    {
+      "type": 0,
+      "value": "預約詳細資料"
+    }
+  ],
+  "requestMeta.expirationDate": [
+    {
+      "type": 0,
+      "value": "預約到期日"
+    }
+  ],
+  "requestMeta.fulfilment.delivery": [
+    {
+      "type": 0,
+      "value": "送货"
+    }
+  ],
+  "requestMeta.fulfilment.holdShelf": [
+    {
+      "type": 0,
+      "value": "預約書架"
+    }
+  ],
+  "requestMeta.holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "保留在架到期日"
+    }
+  ],
+  "requestMeta.information": [
+    {
+      "type": 0,
+      "value": "預約資料"
+    }
+  ],
+  "requestMeta.queuePosition": [
+    {
+      "type": 0,
+      "value": "排隊順序"
+    }
+  ],
+  "requestMeta.status": [
+    {
+      "type": 0,
+      "value": "預約狀態"
+    }
+  ],
+  "requestMeta.tags": [
+    {
+      "type": 0,
+      "value": "标签"
+    }
+  ],
+  "requestMeta.type": [
+    {
+      "type": 0,
+      "value": "預約類型"
+    }
+  ],
+  "requestMeta.type.hold": [
+    {
+      "type": 0,
+      "value": "預約"
+    }
+  ],
+  "requestMeta.type.holds": [
+    {
+      "type": 0,
+      "value": "預約"
+    }
+  ],
+  "requestMeta.type.page": [
+    {
+      "type": 0,
+      "value": "处理"
+    }
+  ],
+  "requestMeta.type.pages": [
+    {
+      "type": 0,
+      "value": "处理"
+    }
+  ],
+  "requestMeta.type.recall": [
+    {
+      "type": 0,
+      "value": "催還"
+    }
+  ],
+  "requestMeta.type.recalls": [
+    {
+      "type": 0,
+      "value": "催還"
+    }
+  ],
+  "requestNotAllowed": [
+    {
+      "type": 0,
+      "value": "預約不被允許"
+    }
+  ],
+  "requestQueue": [
+    {
+      "type": 0,
+      "value": "預約排隊順序"
+    }
+  ],
+  "requestQueue.chronology": [
+    {
+      "type": 0,
+      "value": "Chronology"
+    }
+  ],
+  "requestQueue.confirmReorder.cancel": [
+    {
+      "type": 0,
+      "value": "留在当前位置"
+    }
+  ],
+  "requestQueue.confirmReorder.confirm": [
+    {
+      "type": 0,
+      "value": "移至位置2"
+    }
+  ],
+  "requestQueue.confirmReorder.message1": [
+    {
+      "type": 0,
+      "value": "开始执行后，无法将请求从位置1移开。"
+    }
+  ],
+  "requestQueue.confirmReorder.message2": [
+    {
+      "type": 0,
+      "value": "即使尚未开始执行，也无法将请求移到处理请求之前。"
+    }
+  ],
+  "requestQueue.confirmReorder.title": [
+    {
+      "type": 0,
+      "value": "请求已移至队列的第2位"
+    }
+  ],
+  "requestQueue.deliveryType": [
+    {
+      "type": 0,
+      "value": "交付： "
+    },
+    {
+      "type": 1,
+      "value": "type"
+    }
+  ],
+  "requestQueue.description": [
+    {
+      "type": 0,
+      "value": "Instance: "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "title"
+        },
+        {
+          "type": 0,
+          "value": " /"
+        },
+        {
+          "type": 1,
+          "value": "author"
+        },
+        {
+          "type": 0,
+          "value": "."
+        }
+      ],
+      "type": 8,
+      "value": "instanceLink"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "publisher"
+        },
+        {
+          "type": 0,
+          "value": ", "
+        },
+        {
+          "type": 1,
+          "value": "publicationDate"
+        }
+      ],
+      "type": 8,
+      "value": "i"
+    }
+  ],
+  "requestQueue.enumeration": [
+    {
+      "type": 0,
+      "value": "Enumeration"
+    }
+  ],
+  "requestQueue.fulfillmentInProgressSectionTitle": [
+    {
+      "type": 0,
+      "value": "Fulfillment in progress"
+    }
+  ],
+  "requestQueue.fulfillmentStatus": [
+    {
+      "type": 0,
+      "value": "Status"
+    }
+  ],
+  "requestQueue.heading": [
+    {
+      "type": 0,
+      "value": "Request queue on instance • "
+    },
+    {
+      "type": 1,
+      "value": "title"
+    },
+    {
+      "type": 0,
+      "value": " /"
+    },
+    {
+      "type": 1,
+      "value": "author"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "requestQueue.holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "預約書架到期"
+    }
+  ],
+  "requestQueue.itemBarcode": [
+    {
+      "type": 0,
+      "value": "Item barcode"
+    }
+  ],
+  "requestQueue.noDataForFulfillment": [
+    {
+      "type": 0,
+      "value": "There are no requests in fulfillment."
+    }
+  ],
+  "requestQueue.notYetFilledRequests.noData": [
+    {
+      "type": 0,
+      "value": "No requests found"
+    }
+  ],
+  "requestQueue.notYetFilledSectionTitle": [
+    {
+      "type": 0,
+      "value": "Open - Not yet filled"
+    }
+  ],
+  "requestQueue.order": [
+    {
+      "type": 0,
+      "value": "Order"
+    }
+  ],
+  "requestQueue.patronComments": [
+    {
+      "type": 0,
+      "value": "Patron comments"
+    }
+  ],
+  "requestQueue.patronGroup": [
+    {
+      "type": 0,
+      "value": "讀者群組"
+    }
+  ],
+  "requestQueue.pickup": [
+    {
+      "type": 0,
+      "value": "取件/交付"
+    }
+  ],
+  "requestQueue.refresh": [
+    {
+      "type": 0,
+      "value": "Refresh queue"
+    }
+  ],
+  "requestQueue.reorderSuccess": [
+    {
+      "type": 0,
+      "value": "队列更新成功"
+    }
+  ],
+  "requestQueue.requestDate": [
+    {
+      "type": 0,
+      "value": "请求日期"
+    }
+  ],
+  "requestQueue.requestExpirationDate": [
+    {
+      "type": 0,
+      "value": "请求过期"
+    }
+  ],
+  "requestQueue.requestInProgress": [
+    {
+      "type": 0,
+      "value": "In progress"
+    }
+  ],
+  "requestQueue.requestType": [
+    {
+      "type": 0,
+      "value": "类型"
+    }
+  ],
+  "requestQueue.requesterBarcode": [
+    {
+      "type": 0,
+      "value": "请求者条码"
+    }
+  ],
+  "requestQueue.requesterName": [
+    {
+      "type": 0,
+      "value": "请求者"
+    }
+  ],
+  "requestQueue.status": [
+    {
+      "type": 0,
+      "value": "Request status"
+    }
+  ],
+  "requestQueue.volume": [
+    {
+      "type": 0,
+      "value": "Volume"
+    }
+  ],
+  "requestType": [
+    {
+      "type": 0,
+      "value": "預約類型"
+    }
+  ],
+  "requestType.message": [
+    {
+      "type": 0,
+      "value": "选择单件以查看可用的请求类型"
+    }
+  ],
+  "requester.barcode": [
+    {
+      "type": 0,
+      "value": "預約者條碼"
+    }
+  ],
+  "requester.findUserPluginLabel": [
+    {
+      "type": 0,
+      "value": "查詢預約者"
+    }
+  ],
+  "requester.firstName": [
+    {
+      "type": 0,
+      "value": "預約者名字"
+    }
+  ],
+  "requester.fulfilmentPref": [
+    {
+      "type": 0,
+      "value": "取件偏好設定"
+    }
+  ],
+  "requester.information": [
+    {
+      "type": 0,
+      "value": "預約者詳細資訊"
+    }
+  ],
+  "requester.name": [
+    {
+      "type": 0,
+      "value": "預約者名稱"
+    }
+  ],
+  "requester.patronGroup.group": [
+    {
+      "type": 0,
+      "value": "預約者讀者群組"
+    }
+  ],
+  "requester.pickupLocation": [
+    {
+      "type": 0,
+      "value": "取書館藏地"
+    }
+  ],
+  "requester.proxy": [
+    {
+      "type": 0,
+      "value": "預約者的代理人"
+    }
+  ],
+  "requester.requester": [
+    {
+      "type": 0,
+      "value": "預約者"
+    }
+  ],
+  "requester.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "掃描或輸入預約者條碼"
+    }
+  ],
+  "requester.username": [
+    {
+      "type": 0,
+      "value": "使用者名稱"
+    }
+  ],
+  "requests.createTitleLevelRequest": [
+    {
+      "type": 0,
+      "value": "Create title level request"
+    }
+  ],
+  "requests.itemBarcode": [
+    {
+      "type": 0,
+      "value": "單件條碼"
+    }
+  ],
+  "requests.proxy": [
+    {
+      "type": 0,
+      "value": "代理"
+    }
+  ],
+  "requests.queuePosition": [
+    {
+      "type": 0,
+      "value": "Queue position"
+    }
+  ],
+  "requests.requestDate": [
+    {
+      "type": 0,
+      "value": "預約日期"
+    }
+  ],
+  "requests.requester": [
+    {
+      "type": 0,
+      "value": "預約者"
+    }
+  ],
+  "requests.requesterBarcode": [
+    {
+      "type": 0,
+      "value": "預約者條碼"
+    }
+  ],
+  "requests.status": [
+    {
+      "type": 0,
+      "value": "預約狀態"
+    }
+  ],
+  "requests.title": [
+    {
+      "type": 0,
+      "value": "題名"
+    }
+  ],
+  "requests.type": [
+    {
+      "type": 0,
+      "value": "類型"
+    }
+  ],
+  "requests.year": [
+    {
+      "type": 0,
+      "value": "Year"
+    }
+  ],
+  "resultCount": [
+    {
+      "type": 0,
+      "value": "找到 "
+    },
+    {
+      "style": null,
+      "type": 2,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "one": {
+          "value": [
+            {
+              "type": 0,
+              "value": "筆紀錄"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "筆紀錄"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "routingError": [
+    {
+      "type": 0,
+      "value": "你是怎么到"
+    },
+    {
+      "type": 1,
+      "value": "pathname"
+    },
+    {
+      "type": 0,
+      "value": " 的？"
+    }
+  ],
+  "routingErrorOops": [
+    {
+      "type": 0,
+      "value": "哦哦！"
+    }
+  ],
+  "showTags": [
+    {
+      "type": 0,
+      "value": "顯示標籤"
+    }
+  ],
+  "status": [
+    {
+      "type": 0,
+      "value": "預約狀態"
+    }
+  ],
+  "tags.tagList": [
+    {
+      "type": 0,
+      "value": "標籤"
+    }
+  ],
+  "title.information": [
+    {
+      "type": 0,
+      "value": "Title information"
+    }
+  ],
+  "titleInformation.contributors": [
+    {
+      "type": 0,
+      "value": "Contributor"
+    }
+  ],
+  "titleInformation.editions": [
+    {
+      "type": 0,
+      "value": "Edition"
+    }
+  ],
+  "titleInformation.identifiers": [
+    {
+      "type": 0,
+      "value": "ISBN(s)"
+    }
+  ],
+  "titleInformation.publicationsDate": [
+    {
+      "type": 0,
+      "value": "Publication date"
+    }
+  ],
+  "titleInformation.title": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ],
+  "titleInformation.titleLevelRequests": [
+    {
+      "type": 0,
+      "value": "Title level requests"
+    }
+  ],
+  "titleLevel": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ]
+}

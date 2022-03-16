@@ -11,6 +11,10 @@ import {
   Accordion,
   AccordionSet,
   FilterAccordionHeader,
+  HasCommand,
+  AccordionStatus,
+  collapseAllSections,
+  expandAllSections,
 } from '@folio/stripes/components';
 import {
   CheckboxFilter,
@@ -34,6 +38,23 @@ export default class RequestsFilters extends React.Component {
     onClear: PropTypes.func.isRequired,
     titleLevelRequestsFeatureEnabled: PropTypes.bool.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+
+    this.accordionStatusRef = React.createRef();
+
+    this.keyCommands = [
+      {
+        name: 'expandAllSections',
+        handler: (e) => expandAllSections(e, this.accordionStatusRef),
+      },
+      {
+        name: 'collapseAllSections',
+        handler: (e) => collapseAllSections(e, this.accordionStatusRef),
+      },
+    ];
+  }
 
   transformRequestFilterOptions = (source = []) => {
     return source.map(({ label, value }) => ({
@@ -64,71 +85,77 @@ export default class RequestsFilters extends React.Component {
     } = this.props;
 
     return (
-      <AccordionSet>
-        <Accordion
-          displayClearButton={!isEmpty(requestType)}
-          id={requestFilterTypes.REQUEST_TYPE}
-          header={FilterAccordionHeader}
-          label={<FormattedMessage id="ui-requests.requestMeta.type" />}
-          name={requestFilterTypes.REQUEST_TYPE}
-          separator={false}
-          onClearFilter={() => onClear(requestFilterTypes.REQUEST_TYPE)}
-        >
-          <CheckboxFilter
-            dataOptions={this.transformRequestFilterOptions(requestTypeFilters)}
-            name={requestFilterTypes.REQUEST_TYPE}
-            selectedValues={requestType}
-            onChange={onChange}
-          />
-        </Accordion>
-        <Accordion
-          displayClearButton={!isEmpty(requestStatus)}
-          id={requestFilterTypes.REQUEST_STATUS}
-          header={FilterAccordionHeader}
-          label={<FormattedMessage id="ui-requests.requestMeta.status" />}
-          name={requestFilterTypes.REQUEST_STATUS}
-          separator={false}
-          onClearFilter={() => onClear(requestFilterTypes.REQUEST_STATUS)}
-        >
-          <CheckboxFilter
-            dataOptions={this.transformRequestFilterOptions(requestStatusFilters)}
-            name={requestFilterTypes.REQUEST_STATUS}
-            selectedValues={requestStatus}
-            onChange={onChange}
-          />
-        </Accordion>
-        {titleLevelRequestsFeatureEnabled && (
-          <RequestLevelFilter
-            activeValues={requestLevels}
-            onChange={onChange}
-            onClear={onClear}
-          />
-        )}
-        <Accordion
-          displayClearButton={!isEmpty(tags)}
-          id={requestFilterTypes.TAGS}
-          header={FilterAccordionHeader}
-          label={<FormattedMessage id="ui-requests.requestMeta.tags" />}
-          name={requestFilterTypes.TAGS}
-          separator={false}
-          onClearFilter={() => onClear(requestFilterTypes.TAGS)}
-        >
-          <MultiSelectionFilter
-            dataOptions={this.transformTagsOptions()}
-            name={requestFilterTypes.TAGS}
-            selectedValues={tags}
-            onChange={onChange}
-            ariaLabelledBy={requestFilterTypes.TAGS}
-          />
-        </Accordion>
+      <>
+        <HasCommand commands={this.keyCommands}>
+          <AccordionStatus ref={this.accordionStatusRef}>
+            <AccordionSet>
+              <Accordion
+                displayClearButton={!isEmpty(requestType)}
+                id={requestFilterTypes.REQUEST_TYPE}
+                header={FilterAccordionHeader}
+                label={<FormattedMessage id="ui-requests.requestMeta.type" />}
+                name={requestFilterTypes.REQUEST_TYPE}
+                separator={false}
+                onClearFilter={() => onClear(requestFilterTypes.REQUEST_TYPE)}
+              >
+                <CheckboxFilter
+                  dataOptions={this.transformRequestFilterOptions(requestTypeFilters)}
+                  name={requestFilterTypes.REQUEST_TYPE}
+                  selectedValues={requestType}
+                  onChange={onChange}
+                />
+              </Accordion>
+              <Accordion
+                displayClearButton={!isEmpty(requestStatus)}
+                id={requestFilterTypes.REQUEST_STATUS}
+                header={FilterAccordionHeader}
+                label={<FormattedMessage id="ui-requests.requestMeta.status" />}
+                name={requestFilterTypes.REQUEST_STATUS}
+                separator={false}
+                onClearFilter={() => onClear(requestFilterTypes.REQUEST_STATUS)}
+              >
+                <CheckboxFilter
+                  dataOptions={this.transformRequestFilterOptions(requestStatusFilters)}
+                  name={requestFilterTypes.REQUEST_STATUS}
+                  selectedValues={requestStatus}
+                  onChange={onChange}
+                />
+              </Accordion>
+              {titleLevelRequestsFeatureEnabled && (
+                <RequestLevelFilter
+                  activeValues={requestLevels}
+                  onChange={onChange}
+                  onClear={onClear}
+                />
+              )}
+              <Accordion
+                displayClearButton={!isEmpty(tags)}
+                id={requestFilterTypes.TAGS}
+                header={FilterAccordionHeader}
+                label={<FormattedMessage id="ui-requests.requestMeta.tags" />}
+                name={requestFilterTypes.TAGS}
+                separator={false}
+                onClearFilter={() => onClear(requestFilterTypes.TAGS)}
+              >
+                <MultiSelectionFilter
+                  dataOptions={this.transformTagsOptions()}
+                  name={requestFilterTypes.TAGS}
+                  selectedValues={tags}
+                  onChange={onChange}
+                  ariaLabelledBy={requestFilterTypes.TAGS}
+                />
+              </Accordion>
 
-        <PickupServicePointFilter
-          activeValues={pickupServicePoints}
-          servicePoints={this.props.resources?.servicePoints?.records}
-          onChange={onChange}
-          onClear={onClear}
-        />
-      </AccordionSet>
+              <PickupServicePointFilter
+                activeValues={pickupServicePoints}
+                servicePoints={this.props.resources?.servicePoints?.records}
+                onChange={onChange}
+                onClear={onClear}
+              />
+            </AccordionSet>
+          </AccordionStatus>
+        </HasCommand>
+      </>
     );
   }
 }

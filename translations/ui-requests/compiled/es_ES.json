@@ -1,0 +1,1641 @@
+{
+  "actions.cancelNewRequest": [
+    {
+      "type": 0,
+      "value": "Cancelar"
+    }
+  ],
+  "actions.closeNewRequest": [
+    {
+      "type": 0,
+      "value": "Cerrar Nueva Solicitud"
+    }
+  ],
+  "actions.createNewRequest": [
+    {
+      "type": 0,
+      "value": "Crear Nueva Solicitud"
+    }
+  ],
+  "actions.duplicateRequest": [
+    {
+      "type": 0,
+      "value": "Duplicar"
+    }
+  ],
+  "actions.edit": [
+    {
+      "type": 0,
+      "value": "Editar"
+    }
+  ],
+  "actions.editRequest": [
+    {
+      "type": 0,
+      "value": "Editar solicitud"
+    }
+  ],
+  "actions.editRequestLink": [
+    {
+      "type": 0,
+      "value": "Editar Diálogo de Solicitud"
+    }
+  ],
+  "actions.label": [
+    {
+      "type": 0,
+      "value": "Actions"
+    }
+  ],
+  "actions.loading": [
+    {
+      "type": 0,
+      "value": "Cargando..."
+    }
+  ],
+  "actions.moveRequest": [
+    {
+      "type": 0,
+      "value": "Mover reserva"
+    }
+  ],
+  "actions.newRequest": [
+    {
+      "type": 0,
+      "value": "Nueva solicitud"
+    }
+  ],
+  "actions.reorderQueue": [
+    {
+      "type": 0,
+      "value": "Reordenar cola"
+    }
+  ],
+  "actions.selectAddressType": [
+    {
+      "type": 0,
+      "value": "Seleccionar el tipo de dirección"
+    }
+  ],
+  "actions.selectPickupLoc": [
+    {
+      "type": 0,
+      "value": "Seleccione lugar de recogida"
+    }
+  ],
+  "actions.selectPickupSp": [
+    {
+      "type": 0,
+      "value": "Seleccionar punto de servicio de recogida"
+    }
+  ],
+  "actions.viewRequestsInQueue": [
+    {
+      "type": 0,
+      "value": "Ver cola de reservas"
+    }
+  ],
+  "additionalReasons": [
+    {
+      "type": 0,
+      "value": "Ver detalles de bloqueo para ver las razones adicionales para bloquear..."
+    }
+  ],
+  "barcode": [
+    {
+      "type": 0,
+      "value": "Código de barras"
+    }
+  ],
+  "blockModal": [
+    {
+      "type": 0,
+      "value": "Patrón bloqueado para préstamo"
+    }
+  ],
+  "blockedLabel": [
+    {
+      "type": 0,
+      "value": "Motivo del bloqueo"
+    }
+  ],
+  "cancel.additionalInfoLabel": [
+    {
+      "type": 0,
+      "value": "Información adicional"
+    },
+    {
+      "type": 1,
+      "value": "required"
+    }
+  ],
+  "cancel.additionalInfoPlaceholderOptional": [
+    {
+      "type": 0,
+      "value": "Introducir más información acerca de la cancelación (opcional)"
+    }
+  ],
+  "cancel.additionalInfoPlaceholderRequired": [
+    {
+      "type": 0,
+      "value": "Introducir más información acerca de la cancelación (requerido)"
+    }
+  ],
+  "cancel.cancelRequest": [
+    {
+      "type": 0,
+      "value": "Cancelar solicitud"
+    }
+  ],
+  "cancel.modalLabel": [
+    {
+      "type": 0,
+      "value": "Confirmar cancelación de solicitud"
+    }
+  ],
+  "cancel.notifyLabel": [
+    {
+      "type": 0,
+      "value": "Notificar al usuario"
+    }
+  ],
+  "cancel.reasonLabel": [
+    {
+      "type": 0,
+      "value": "Razón de la cancelación"
+    }
+  ],
+  "cancel.requestWillBeCancelled": [
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "title"
+        }
+      ],
+      "type": 8,
+      "value": "b"
+    },
+    {
+      "type": 0,
+      "value": " será "
+    },
+    {
+      "children": [
+        {
+          "type": 0,
+          "value": "cancelado"
+        }
+      ],
+      "type": 8,
+      "value": "b"
+    }
+  ],
+  "cancellationAdditionalInformation": [
+    {
+      "type": 0,
+      "value": "Información adicional para el usuario"
+    }
+  ],
+  "cancellationReason": [
+    {
+      "type": 0,
+      "value": "Motivo de la cancelación"
+    }
+  ],
+  "close": [
+    {
+      "type": 0,
+      "value": "Cerrar"
+    }
+  ],
+  "common.cancel": [
+    {
+      "type": 0,
+      "value": "Cancelar"
+    }
+  ],
+  "common.saveAndClose": [
+    {
+      "type": 0,
+      "value": "Guardar & cerrar"
+    }
+  ],
+  "csvReportInProgress": [
+    {
+      "type": 0,
+      "value": "A CSV results report is being generated. This may take some time for larger result sets. Please be patient."
+    }
+  ],
+  "csvReportPending": [
+    {
+      "type": 0,
+      "value": "csvReportPending"
+    }
+  ],
+  "deliveryAddress": [
+    {
+      "type": 0,
+      "value": "Dirección de entrega"
+    }
+  ],
+  "detailsButton": [
+    {
+      "type": 0,
+      "value": "Ver detalles del bloqueo"
+    }
+  ],
+  "enter": [
+    {
+      "type": 0,
+      "value": "Introducir"
+    }
+  ],
+  "errorModal.message": [
+    {
+      "type": 1,
+      "value": "title"
+    },
+    {
+      "type": 0,
+      "value": " ("
+    },
+    {
+      "type": 1,
+      "value": "materialType"
+    },
+    {
+      "type": 0,
+      "value": ") (Código de barras: "
+    },
+    {
+      "type": 1,
+      "value": "barcode"
+    },
+    {
+      "type": 0,
+      "value": ") tienes el estado de ejemplar "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "itemStatus"
+        }
+      ],
+      "type": 8,
+      "value": "strong"
+    },
+    {
+      "type": 0,
+      "value": " y no se puede solicitar."
+    }
+  ],
+  "errorModal.title": [
+    {
+      "type": 0,
+      "value": "No se puede solicitar el ejemplar"
+    }
+  ],
+  "errors.instanceUuidOrHridDoesNotExist": [
+    {
+      "type": 0,
+      "value": "Instance with this HRID or UUID does not exist"
+    }
+  ],
+  "errors.itemBarcodeDoesNotExist": [
+    {
+      "type": 0,
+      "value": "El artículo con este código de barras no existe"
+    }
+  ],
+  "errors.onlyCheckedOutForHold": [
+    {
+      "type": 0,
+      "value": "Sólo se pueden retener los artículos desprotegidos"
+    }
+  ],
+  "errors.onlyCheckedOutForRecall": [
+    {
+      "type": 0,
+      "value": "Sólo se pueden retirar los artículos desprotegidos"
+    }
+  ],
+  "errors.selectInstanceRequired": [
+    {
+      "type": 0,
+      "value": "Please select an instance and hit enter"
+    }
+  ],
+  "errors.selectItem": [
+    {
+      "type": 0,
+      "value": "Por favor seleccione un artículo"
+    }
+  ],
+  "errors.selectItemRequired": [
+    {
+      "type": 0,
+      "value": "Please select an item and hit enter"
+    }
+  ],
+  "errors.selectUser": [
+    {
+      "type": 0,
+      "value": "Por favor seleccione un solicitante"
+    }
+  ],
+  "errors.sync.requestQueueBody": [
+    {
+      "type": 0,
+      "value": "This request queue has been updated by another person or process and may be out of synch."
+    }
+  ],
+  "errors.sync.requestQueueLabel": [
+    {
+      "type": 0,
+      "value": "Request queue is out of sync"
+    }
+  ],
+  "errors.unknown.requestQueueBody": [
+    {
+      "type": 0,
+      "value": "Request queue reorder failed"
+    }
+  ],
+  "errors.unknown.requestQueueLabel": [
+    {
+      "type": 0,
+      "value": "Request queue error"
+    }
+  ],
+  "errors.userBarcodeDoesNotExist": [
+    {
+      "type": 0,
+      "value": "El usuario con este código de barras no existe"
+    }
+  ],
+  "exportExpiredHoldShelfToCsv": [
+    {
+      "type": 0,
+      "value": "Export hold shelf clearance report for "
+    },
+    {
+      "type": 1,
+      "value": "currentServicePoint"
+    }
+  ],
+  "exportSearchResultsToCsv": [
+    {
+      "type": 0,
+      "value": "Exportar resultados de búsqueda a CSV"
+    }
+  ],
+  "filters.requestLevel.item": [
+    {
+      "type": 0,
+      "value": "Item"
+    }
+  ],
+  "filters.requestLevel.title": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ],
+  "filters.requestStatus.awaitingDelivery": [
+    {
+      "type": 0,
+      "value": "Abierto - Entrega en espera"
+    }
+  ],
+  "filters.requestStatus.awaitingPickup": [
+    {
+      "type": 0,
+      "value": "Abierto - Recogida en espera"
+    }
+  ],
+  "filters.requestStatus.cancelled": [
+    {
+      "type": 0,
+      "value": "Cerrado - Cancelado"
+    }
+  ],
+  "filters.requestStatus.filled": [
+    {
+      "type": 0,
+      "value": "Cerrado - Cumplimentado"
+    }
+  ],
+  "filters.requestStatus.inTransit": [
+    {
+      "type": 0,
+      "value": "Abierto - En tránsito"
+    }
+  ],
+  "filters.requestStatus.notYetFilled": [
+    {
+      "type": 0,
+      "value": "Abierto - No rellenado todavía"
+    }
+  ],
+  "filters.requestStatus.pickupExpired": [
+    {
+      "type": 0,
+      "value": "Cerrado - Recogida expirada"
+    }
+  ],
+  "filters.requestStatus.unfilled": [
+    {
+      "type": 0,
+      "value": "Cerrado - No cumplimentado"
+    }
+  ],
+  "filters.requestType.holds": [
+    {
+      "type": 0,
+      "value": "Reservas"
+    }
+  ],
+  "filters.requestType.pages": [
+    {
+      "type": 0,
+      "value": "Páginas"
+    }
+  ],
+  "filters.requestType.recalls": [
+    {
+      "type": 0,
+      "value": "Avisos"
+    }
+  ],
+  "fulfilmentPreference": [
+    {
+      "type": 0,
+      "value": "Preferencia de cumplimentado de la reserva"
+    }
+  ],
+  "holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "Fecha de expiración de la reserva de estantería"
+    }
+  ],
+  "holdShelfExpirationTime": [
+    {
+      "type": 0,
+      "value": "holdShelfExpirationTime"
+    }
+  ],
+  "instance.contributorNames": [
+    {
+      "type": 0,
+      "value": "Contributor"
+    }
+  ],
+  "instance.information": [
+    {
+      "type": 0,
+      "value": "Title information"
+    }
+  ],
+  "instance.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "Enter HRID or UUID"
+    }
+  ],
+  "instance.title": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ],
+  "instance.value": [
+    {
+      "type": 0,
+      "value": "Instance HRID or UUID"
+    }
+  ],
+  "item.barcode": [
+    {
+      "type": 0,
+      "value": "Código de barras del artículo"
+    }
+  ],
+  "item.callNumber": [
+    {
+      "type": 0,
+      "value": "Número de llamada"
+    }
+  ],
+  "item.callNumberComponents.callNumber": [
+    {
+      "type": 0,
+      "value": "Número de llamada efectivo"
+    }
+  ],
+  "item.callNumberComponents.prefix": [
+    {
+      "type": 0,
+      "value": "Prefijo de número de llamada efectivo"
+    }
+  ],
+  "item.callNumberComponents.suffix": [
+    {
+      "type": 0,
+      "value": "Sufijo de número de llamada efectivo"
+    }
+  ],
+  "item.chronology": [
+    {
+      "type": 0,
+      "value": "Cronología"
+    }
+  ],
+  "item.contributorNames": [
+    {
+      "type": 0,
+      "value": "Colaborador"
+    }
+  ],
+  "item.copyNumber": [
+    {
+      "type": 0,
+      "value": "Copiar"
+    }
+  ],
+  "item.copyNumbers": [
+    {
+      "type": 0,
+      "value": "Número de copia"
+    }
+  ],
+  "item.dueDate": [
+    {
+      "type": 0,
+      "value": "Fecha de vencimiento actual"
+    }
+  ],
+  "item.effectiveLocation": [
+    {
+      "type": 0,
+      "value": "Localización efectiva"
+    }
+  ],
+  "item.enumeration": [
+    {
+      "type": 0,
+      "value": "Enumeración"
+    }
+  ],
+  "item.id": [
+    {
+      "type": 0,
+      "value": "ID de ítem"
+    }
+  ],
+  "item.information": [
+    {
+      "type": 0,
+      "value": "Información del artículo"
+    }
+  ],
+  "item.location.code": [
+    {
+      "type": 0,
+      "value": "Código de localización de estantería"
+    }
+  ],
+  "item.location.libraryName": [
+    {
+      "type": 0,
+      "value": "Biblioteca"
+    }
+  ],
+  "item.location.name": [
+    {
+      "type": 0,
+      "value": "Localización"
+    }
+  ],
+  "item.noInformation": [
+    {
+      "type": 0,
+      "value": "There is no item information for this request."
+    }
+  ],
+  "item.numRequests": [
+    {
+      "type": 0,
+      "value": "Solicitudes"
+    }
+  ],
+  "item.requestsOnItem": [
+    {
+      "type": 0,
+      "value": "Reservas del ítem"
+    }
+  ],
+  "item.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "Escanear o introducir el código de barras del artículo"
+    }
+  ],
+  "item.status": [
+    {
+      "type": 0,
+      "value": "Estado del artículo"
+    }
+  ],
+  "item.title": [
+    {
+      "type": 0,
+      "value": "Título"
+    }
+  ],
+  "item.volume": [
+    {
+      "type": 0,
+      "value": "Volumen"
+    }
+  ],
+  "itemLevel": [
+    {
+      "type": 0,
+      "value": "Item"
+    }
+  ],
+  "items": [
+    {
+      "type": 1,
+      "value": "number"
+    },
+    {
+      "type": 0,
+      "value": " items"
+    }
+  ],
+  "items.instanceItems": [
+    {
+      "type": 0,
+      "value": "Other items in "
+    },
+    {
+      "type": 1,
+      "value": "title"
+    }
+  ],
+  "items.instanceItems.notFound": [
+    {
+      "type": 0,
+      "value": "No items found"
+    }
+  ],
+  "items.selectItem": [
+    {
+      "type": 0,
+      "value": "Select item"
+    }
+  ],
+  "loan.dueDate": [
+    {
+      "type": 0,
+      "value": "Fecha de vencimiento actual"
+    }
+  ],
+  "loanType": [
+    {
+      "type": 0,
+      "value": "Tipo de préstamo"
+    }
+  ],
+  "location": [
+    {
+      "type": 0,
+      "value": "Localización"
+    }
+  ],
+  "materialType": [
+    {
+      "type": 0,
+      "value": "Tipo de material"
+    }
+  ],
+  "meta.title": [
+    {
+      "type": 0,
+      "value": "Reservas"
+    }
+  ],
+  "moveRequest.chooseRequestMessage": [
+    {
+      "type": 0,
+      "value": "Por favor, seleccionar un tipo permitido"
+    }
+  ],
+  "moveRequest.confirm": [
+    {
+      "type": 0,
+      "value": "Confirmar"
+    }
+  ],
+  "moveRequest.requestTypeChangeHeading": [
+    {
+      "type": 0,
+      "value": "Tipo de reservas actuales no permitidas para el ítem seleccionado"
+    }
+  ],
+  "moveRequest.requestTypeChangeMessage": [
+    {
+      "type": 0,
+      "value": "La reserva se convertirá en "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "requestType"
+        }
+      ],
+      "type": 8,
+      "value": "strong"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "moveRequest.secondPositionMessage": [
+    {
+      "type": 0,
+      "value": "Las reservas no se pueden mover más arriba, aunque la anterior no esté aún cumplimentada. Esta reserva se moverá a la posición 2 en la cola de reservas."
+    }
+  ],
+  "moveRequest.secondPositionTitle": [
+    {
+      "type": 0,
+      "value": "Reserva movida a la posición 2 de la cola"
+    }
+  ],
+  "moveRequest.success": [
+    {
+      "type": 0,
+      "value": "La reserva se movió correctamente"
+    }
+  ],
+  "noRequestTypesAvailable": [
+    {
+      "type": 0,
+      "value": "No hay tipos de reserva disponibles para el ítem seleccionado"
+    }
+  ],
+  "noServicePoint.errorMessage": [
+    {
+      "type": 0,
+      "value": "Debe iniciar sesión en un punto de servicio para acceder al informe de aprobación de estantería en espera. Agregue uno o más puntos de servicio a su registro de usuario en la aplicación Usuarios. Póngase en contacto con un administrador si no tiene la capacidad de agregar puntos de servicio a su registro."
+    }
+  ],
+  "noServicePoint.label": [
+    {
+      "type": 0,
+      "value": "Ningún punto de servicio seleccionado"
+    }
+  ],
+  "notes.assigned.for": [
+    {
+      "type": 0,
+      "value": "For: "
+    },
+    {
+      "type": 1,
+      "value": "instanceLink"
+    },
+    {
+      "type": 0,
+      "value": " ("
+    },
+    {
+      "type": 1,
+      "value": "itemLink"
+    },
+    {
+      "type": 0,
+      "value": ")"
+    }
+  ],
+  "notes.assigned.requestDate": [
+    {
+      "type": 0,
+      "value": "Request date: "
+    },
+    {
+      "type": 1,
+      "value": "requestCreateDate"
+    }
+  ],
+  "notes.assigned.requester": [
+    {
+      "type": 0,
+      "value": "Requester: "
+    },
+    {
+      "type": 1,
+      "value": "requesterName"
+    }
+  ],
+  "notes.entityType.request": [
+    {
+      "type": 0,
+      "value": "Request"
+    }
+  ],
+  "notes.entityType.request.pluralized": [
+    {
+      "type": 1,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "one": {
+          "value": [
+            {
+              "type": 0,
+              "value": "request"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "requests"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "notes.newStaffNote": [
+    {
+      "type": 0,
+      "value": "New staff note"
+    }
+  ],
+  "notes.staffNotes": [
+    {
+      "type": 0,
+      "value": "Staff notes"
+    }
+  ],
+  "override": [
+    {
+      "type": 0,
+      "value": "Override"
+    }
+  ],
+  "patronComments": [
+    {
+      "type": 0,
+      "value": "Patron comments"
+    }
+  ],
+  "permission.all": [
+    {
+      "type": 0,
+      "value": "Solicitudes: Todos los permisos"
+    }
+  ],
+  "permission.create": [
+    {
+      "type": 0,
+      "value": "Solicitudes: Ver, crear"
+    }
+  ],
+  "permission.edit": [
+    {
+      "type": 0,
+      "value": "Solicitudes: Ver, editar, cancelar"
+    }
+  ],
+  "permission.moveRequest": [
+    {
+      "type": 0,
+      "value": "Solicitudes: mover a un ejemplar nuevo, reordenar la cola"
+    }
+  ],
+  "permission.reorderQueue": [
+    {
+      "type": 0,
+      "value": "Solicitudes: Reordenar la cola"
+    }
+  ],
+  "permission.view": [
+    {
+      "type": 0,
+      "value": "Solicitudes: Ver"
+    }
+  ],
+  "pickSlipsLoading": [
+    {
+      "type": 0,
+      "value": "Pick slips are loading, please wait"
+    }
+  ],
+  "pickupServicePoint.name": [
+    {
+      "type": 0,
+      "value": "Punto de servicio de recogida"
+    }
+  ],
+  "position": [
+    {
+      "type": 0,
+      "value": "Posición en la cola"
+    }
+  ],
+  "printInProgress": [
+    {
+      "type": 0,
+      "value": "Las opciones de impresión se están cargando. Puede que lleve unos segundos, por favor, ten paciencia."
+    }
+  ],
+  "printPickSlips": [
+    {
+      "type": 0,
+      "value": "Imprimir recibos para "
+    },
+    {
+      "type": 1,
+      "value": "sp"
+    }
+  ],
+  "proxy.barcode": [
+    {
+      "type": 0,
+      "value": "Código de barras del proxy del solicitante"
+    }
+  ],
+  "proxy.name": [
+    {
+      "type": 0,
+      "value": "Nombre del proxy del solicitante"
+    }
+  ],
+  "requestDate": [
+    {
+      "type": 0,
+      "value": "requestDate"
+    }
+  ],
+  "requestExpirationDate": [
+    {
+      "type": 0,
+      "value": "Fecha de expiración de la reserva"
+    }
+  ],
+  "requestLevel": [
+    {
+      "type": 0,
+      "value": "Request level"
+    }
+  ],
+  "requestMeta.detailLabel": [
+    {
+      "type": 0,
+      "value": "Detalle de la solicitud"
+    }
+  ],
+  "requestMeta.expirationDate": [
+    {
+      "type": 0,
+      "value": "Fecha de vencimiento de la solicitud"
+    }
+  ],
+  "requestMeta.fulfilment.delivery": [
+    {
+      "type": 0,
+      "value": "Entrega"
+    }
+  ],
+  "requestMeta.fulfilment.holdShelf": [
+    {
+      "type": 0,
+      "value": "Reserva en estantería"
+    }
+  ],
+  "requestMeta.holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "Mantener la fecha de vencimiento de estantería"
+    }
+  ],
+  "requestMeta.information": [
+    {
+      "type": 0,
+      "value": "Solicitar información"
+    }
+  ],
+  "requestMeta.queuePosition": [
+    {
+      "type": 0,
+      "value": "Posición en cola"
+    }
+  ],
+  "requestMeta.status": [
+    {
+      "type": 0,
+      "value": "Estado de la solicitud"
+    }
+  ],
+  "requestMeta.tags": [
+    {
+      "type": 0,
+      "value": "Etiquetas"
+    }
+  ],
+  "requestMeta.type": [
+    {
+      "type": 0,
+      "value": "Tipo de Solicitud"
+    }
+  ],
+  "requestMeta.type.hold": [
+    {
+      "type": 0,
+      "value": "Reserva"
+    }
+  ],
+  "requestMeta.type.holds": [
+    {
+      "type": 0,
+      "value": "Reservas"
+    }
+  ],
+  "requestMeta.type.page": [
+    {
+      "type": 0,
+      "value": "Página"
+    }
+  ],
+  "requestMeta.type.pages": [
+    {
+      "type": 0,
+      "value": "Páginas"
+    }
+  ],
+  "requestMeta.type.recall": [
+    {
+      "type": 0,
+      "value": "Aviso"
+    }
+  ],
+  "requestMeta.type.recalls": [
+    {
+      "type": 0,
+      "value": "Avisos"
+    }
+  ],
+  "requestNotAllowed": [
+    {
+      "type": 0,
+      "value": "Solicitud no permitida"
+    }
+  ],
+  "requestQueue": [
+    {
+      "type": 0,
+      "value": "Cola de petición"
+    }
+  ],
+  "requestQueue.chronology": [
+    {
+      "type": 0,
+      "value": "Chronology"
+    }
+  ],
+  "requestQueue.confirmReorder.cancel": [
+    {
+      "type": 0,
+      "value": "Dejar en la posición actual"
+    }
+  ],
+  "requestQueue.confirmReorder.confirm": [
+    {
+      "type": 0,
+      "value": "Confirmar"
+    }
+  ],
+  "requestQueue.confirmReorder.message1": [
+    {
+      "type": 0,
+      "value": "Las reservas no pueden ser desplazadas de la posición 1 cuando el cumplimiento ha comenzado. Esta reserva se moverá a la posición 2 en la cola de reservas"
+    }
+  ],
+  "requestQueue.confirmReorder.message2": [
+    {
+      "type": 0,
+      "value": "Las reservas no se pueden mover más arriba, aunque la anterior no esté aún cumplimentada. Esta reserva se moverá a la posición 2 en la cola de reservas."
+    }
+  ],
+  "requestQueue.confirmReorder.title": [
+    {
+      "type": 0,
+      "value": "La solicitud se ha movido a la posición 2 de la cola"
+    }
+  ],
+  "requestQueue.deliveryType": [
+    {
+      "type": 0,
+      "value": "Entrega: "
+    },
+    {
+      "type": 1,
+      "value": "type"
+    }
+  ],
+  "requestQueue.description": [
+    {
+      "type": 0,
+      "value": "Instance: "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "title"
+        },
+        {
+          "type": 0,
+          "value": " /"
+        },
+        {
+          "type": 1,
+          "value": "author"
+        },
+        {
+          "type": 0,
+          "value": "."
+        }
+      ],
+      "type": 8,
+      "value": "instanceLink"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "publisher"
+        },
+        {
+          "type": 0,
+          "value": ", "
+        },
+        {
+          "type": 1,
+          "value": "publicationDate"
+        }
+      ],
+      "type": 8,
+      "value": "i"
+    }
+  ],
+  "requestQueue.enumeration": [
+    {
+      "type": 0,
+      "value": "Enumeration"
+    }
+  ],
+  "requestQueue.fulfillmentInProgressSectionTitle": [
+    {
+      "type": 0,
+      "value": "Fulfillment in progress"
+    }
+  ],
+  "requestQueue.fulfillmentStatus": [
+    {
+      "type": 0,
+      "value": "Status"
+    }
+  ],
+  "requestQueue.heading": [
+    {
+      "type": 0,
+      "value": "Request queue on instance • "
+    },
+    {
+      "type": 1,
+      "value": "title"
+    },
+    {
+      "type": 0,
+      "value": " /"
+    },
+    {
+      "type": 1,
+      "value": "author"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "requestQueue.holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "Caducidad de la reserva en estantería"
+    }
+  ],
+  "requestQueue.itemBarcode": [
+    {
+      "type": 0,
+      "value": "Item barcode"
+    }
+  ],
+  "requestQueue.noDataForFulfillment": [
+    {
+      "type": 0,
+      "value": "There are no requests in fulfillment."
+    }
+  ],
+  "requestQueue.notYetFilledRequests.noData": [
+    {
+      "type": 0,
+      "value": "No requests found"
+    }
+  ],
+  "requestQueue.notYetFilledSectionTitle": [
+    {
+      "type": 0,
+      "value": "Open - Not yet filled"
+    }
+  ],
+  "requestQueue.order": [
+    {
+      "type": 0,
+      "value": "Order"
+    }
+  ],
+  "requestQueue.patronComments": [
+    {
+      "type": 0,
+      "value": "Patron comments"
+    }
+  ],
+  "requestQueue.patronGroup": [
+    {
+      "type": 0,
+      "value": "Grupo de usuarios"
+    }
+  ],
+  "requestQueue.pickup": [
+    {
+      "type": 0,
+      "value": "Recogida/Entrega"
+    }
+  ],
+  "requestQueue.refresh": [
+    {
+      "type": 0,
+      "value": "Refresh queue"
+    }
+  ],
+  "requestQueue.reorderSuccess": [
+    {
+      "type": 0,
+      "value": "La cola se actualizó correctamente"
+    }
+  ],
+  "requestQueue.requestDate": [
+    {
+      "type": 0,
+      "value": "Fecha de solicitud"
+    }
+  ],
+  "requestQueue.requestExpirationDate": [
+    {
+      "type": 0,
+      "value": "Solicitar vencimiento"
+    }
+  ],
+  "requestQueue.requestInProgress": [
+    {
+      "type": 0,
+      "value": "In progress"
+    }
+  ],
+  "requestQueue.requestType": [
+    {
+      "type": 0,
+      "value": "Tipo"
+    }
+  ],
+  "requestQueue.requesterBarcode": [
+    {
+      "type": 0,
+      "value": "Código de barras del solicitante"
+    }
+  ],
+  "requestQueue.requesterName": [
+    {
+      "type": 0,
+      "value": "Solicitante"
+    }
+  ],
+  "requestQueue.status": [
+    {
+      "type": 0,
+      "value": "Request status"
+    }
+  ],
+  "requestQueue.volume": [
+    {
+      "type": 0,
+      "value": "Volume"
+    }
+  ],
+  "requestType": [
+    {
+      "type": 0,
+      "value": "Tipo de reserva"
+    }
+  ],
+  "requestType.message": [
+    {
+      "type": 0,
+      "value": "Seleccionar ítem para ver los tipos de reserva disponibles"
+    }
+  ],
+  "requester.barcode": [
+    {
+      "type": 0,
+      "value": "Código de barras del solicitante"
+    }
+  ],
+  "requester.findUserPluginLabel": [
+    {
+      "type": 0,
+      "value": "Búsqueda del solicitante"
+    }
+  ],
+  "requester.firstName": [
+    {
+      "type": 0,
+      "value": "Nombre del solicitante"
+    }
+  ],
+  "requester.fulfilmentPref": [
+    {
+      "type": 0,
+      "value": "Preferencia de cumplimiento"
+    }
+  ],
+  "requester.information": [
+    {
+      "type": 0,
+      "value": "Información del solicitante"
+    }
+  ],
+  "requester.name": [
+    {
+      "type": 0,
+      "value": "Nombre"
+    }
+  ],
+  "requester.patronGroup.group": [
+    {
+      "type": 0,
+      "value": "Grupo de usuarios solicitante"
+    }
+  ],
+  "requester.pickupLocation": [
+    {
+      "type": 0,
+      "value": "Lugar de recogida"
+    }
+  ],
+  "requester.proxy": [
+    {
+      "type": 0,
+      "value": "Proxy del solicitante"
+    }
+  ],
+  "requester.requester": [
+    {
+      "type": 0,
+      "value": "Solicitante"
+    }
+  ],
+  "requester.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "Escanear o introducir el código de barras del solicitante"
+    }
+  ],
+  "requester.username": [
+    {
+      "type": 0,
+      "value": "Nombre de usuario"
+    }
+  ],
+  "requests.createTitleLevelRequest": [
+    {
+      "type": 0,
+      "value": "Create title level request"
+    }
+  ],
+  "requests.itemBarcode": [
+    {
+      "type": 0,
+      "value": "Código de barras del ítem"
+    }
+  ],
+  "requests.proxy": [
+    {
+      "type": 0,
+      "value": "Proxy (tutor)"
+    }
+  ],
+  "requests.queuePosition": [
+    {
+      "type": 0,
+      "value": "Queue position"
+    }
+  ],
+  "requests.requestDate": [
+    {
+      "type": 0,
+      "value": "Fecha de reserva"
+    }
+  ],
+  "requests.requester": [
+    {
+      "type": 0,
+      "value": "Solicitante"
+    }
+  ],
+  "requests.requesterBarcode": [
+    {
+      "type": 0,
+      "value": "Código de barras del solicitante"
+    }
+  ],
+  "requests.status": [
+    {
+      "type": 0,
+      "value": "Estado de la reserva"
+    }
+  ],
+  "requests.title": [
+    {
+      "type": 0,
+      "value": "Título"
+    }
+  ],
+  "requests.type": [
+    {
+      "type": 0,
+      "value": "Tipo"
+    }
+  ],
+  "requests.year": [
+    {
+      "type": 0,
+      "value": "Year"
+    }
+  ],
+  "resultCount": [
+    {
+      "style": null,
+      "type": 2,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "one": {
+          "value": [
+            {
+              "type": 0,
+              "value": "Record found"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "Records found"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "routingError": [
+    {
+      "type": 0,
+      "value": "Cómo obtuviste este "
+    },
+    {
+      "type": 1,
+      "value": "pathname"
+    },
+    {
+      "type": 0,
+      "value": "?"
+    }
+  ],
+  "routingErrorOops": [
+    {
+      "type": 0,
+      "value": "Uh-oh!"
+    }
+  ],
+  "showTags": [
+    {
+      "type": 0,
+      "value": "Mostrar etiquetas"
+    }
+  ],
+  "status": [
+    {
+      "type": 0,
+      "value": "Estado de la reserva"
+    }
+  ],
+  "tags.tagList": [
+    {
+      "type": 0,
+      "value": "Etiquetas"
+    }
+  ],
+  "title.information": [
+    {
+      "type": 0,
+      "value": "Title information"
+    }
+  ],
+  "titleInformation.contributors": [
+    {
+      "type": 0,
+      "value": "Contributor"
+    }
+  ],
+  "titleInformation.editions": [
+    {
+      "type": 0,
+      "value": "Edition"
+    }
+  ],
+  "titleInformation.identifiers": [
+    {
+      "type": 0,
+      "value": "ISBN(s)"
+    }
+  ],
+  "titleInformation.publicationsDate": [
+    {
+      "type": 0,
+      "value": "Publication date"
+    }
+  ],
+  "titleInformation.title": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ],
+  "titleInformation.titleLevelRequests": [
+    {
+      "type": 0,
+      "value": "Title level requests"
+    }
+  ],
+  "titleLevel": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ]
+}

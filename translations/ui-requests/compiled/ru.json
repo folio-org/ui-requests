@@ -1,0 +1,1657 @@
+{
+  "actions.cancelNewRequest": [
+    {
+      "type": 0,
+      "value": "Отмена"
+    }
+  ],
+  "actions.closeNewRequest": [
+    {
+      "type": 0,
+      "value": "Закрыть новый запрос"
+    }
+  ],
+  "actions.createNewRequest": [
+    {
+      "type": 0,
+      "value": "Создать новый запрос"
+    }
+  ],
+  "actions.duplicateRequest": [
+    {
+      "type": 0,
+      "value": "Дубликат"
+    }
+  ],
+  "actions.edit": [
+    {
+      "type": 0,
+      "value": "Редактировать"
+    }
+  ],
+  "actions.editRequest": [
+    {
+      "type": 0,
+      "value": "Редактировать запрос"
+    }
+  ],
+  "actions.editRequestLink": [
+    {
+      "type": 0,
+      "value": "Диалог Редактирования Запроса "
+    }
+  ],
+  "actions.label": [
+    {
+      "type": 0,
+      "value": "Actions"
+    }
+  ],
+  "actions.loading": [
+    {
+      "type": 0,
+      "value": "Загрузка..."
+    }
+  ],
+  "actions.moveRequest": [
+    {
+      "type": 0,
+      "value": "Переместить запрос"
+    }
+  ],
+  "actions.newRequest": [
+    {
+      "type": 0,
+      "value": "Новый запрос"
+    }
+  ],
+  "actions.reorderQueue": [
+    {
+      "type": 0,
+      "value": "Переупорядочить очередь"
+    }
+  ],
+  "actions.selectAddressType": [
+    {
+      "type": 0,
+      "value": "Выберите тип адреса"
+    }
+  ],
+  "actions.selectPickupLoc": [
+    {
+      "type": 0,
+      "value": "Выберите пункт выдачи"
+    }
+  ],
+  "actions.selectPickupSp": [
+    {
+      "type": 0,
+      "value": "Выберите пункт выдачи"
+    }
+  ],
+  "actions.viewRequestsInQueue": [
+    {
+      "type": 0,
+      "value": "Просмотр запросов в очереди"
+    }
+  ],
+  "additionalReasons": [
+    {
+      "type": 0,
+      "value": "Просмотреть детали блока, чтобы увидеть дополнительные причины для блока ..."
+    }
+  ],
+  "barcode": [
+    {
+      "type": 0,
+      "value": "Штрихкод"
+    }
+  ],
+  "blockModal": [
+    {
+      "type": 0,
+      "value": "Читатель заблокирован от запроса"
+    }
+  ],
+  "blockedLabel": [
+    {
+      "type": 0,
+      "value": "Причина блокировки"
+    }
+  ],
+  "cancel.additionalInfoLabel": [
+    {
+      "type": 0,
+      "value": "Дополнительная информация для читателя "
+    },
+    {
+      "type": 1,
+      "value": "required"
+    }
+  ],
+  "cancel.additionalInfoPlaceholderOptional": [
+    {
+      "type": 0,
+      "value": "Введите дополнительную информацию об отмене (необязательно)"
+    }
+  ],
+  "cancel.additionalInfoPlaceholderRequired": [
+    {
+      "type": 0,
+      "value": "Введите дополнительную информацию об отмене (обязательно)"
+    }
+  ],
+  "cancel.cancelRequest": [
+    {
+      "type": 0,
+      "value": "Отменить запрос"
+    }
+  ],
+  "cancel.modalLabel": [
+    {
+      "type": 0,
+      "value": "Подтвердите отмену запроса"
+    }
+  ],
+  "cancel.notifyLabel": [
+    {
+      "type": 0,
+      "value": "Уведомить читателя"
+    }
+  ],
+  "cancel.reasonLabel": [
+    {
+      "type": 0,
+      "value": "Причина отмены"
+    }
+  ],
+  "cancel.requestWillBeCancelled": [
+    {
+      "children": [
+        {
+          "type": 0,
+          "value": " "
+        },
+        {
+          "type": 1,
+          "value": "title"
+        },
+        {
+          "type": 0,
+          "value": " "
+        }
+      ],
+      "type": 8,
+      "value": "b"
+    },
+    {
+      "type": 0,
+      "value": " будет "
+    },
+    {
+      "children": [
+        {
+          "type": 0,
+          "value": " отменен "
+        }
+      ],
+      "type": 8,
+      "value": "b"
+    }
+  ],
+  "cancellationAdditionalInformation": [
+    {
+      "type": 0,
+      "value": "Дополнительная информация для читателя"
+    }
+  ],
+  "cancellationReason": [
+    {
+      "type": 0,
+      "value": "Причина отмены"
+    }
+  ],
+  "close": [
+    {
+      "type": 0,
+      "value": "Закрыть"
+    }
+  ],
+  "common.cancel": [
+    {
+      "type": 0,
+      "value": "Cancel"
+    }
+  ],
+  "common.saveAndClose": [
+    {
+      "type": 0,
+      "value": "Save & close"
+    }
+  ],
+  "csvReportInProgress": [
+    {
+      "type": 0,
+      "value": "A CSV results report is being generated. This may take some time for larger result sets. Please be patient."
+    }
+  ],
+  "csvReportPending": [
+    {
+      "type": 0,
+      "value": "csvReportPending"
+    }
+  ],
+  "deliveryAddress": [
+    {
+      "type": 0,
+      "value": "Адрес доставки"
+    }
+  ],
+  "detailsButton": [
+    {
+      "type": 0,
+      "value": "Посмотреть детали блока"
+    }
+  ],
+  "enter": [
+    {
+      "type": 0,
+      "value": "Введите"
+    }
+  ],
+  "errorModal.message": [
+    {
+      "type": 1,
+      "value": "title"
+    },
+    {
+      "type": 0,
+      "value": " ("
+    },
+    {
+      "type": 1,
+      "value": "materialType"
+    },
+    {
+      "type": 0,
+      "value": ") (Штрихкод: "
+    },
+    {
+      "type": 1,
+      "value": "barcode"
+    },
+    {
+      "type": 0,
+      "value": ") имеет статус экземпляра "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "itemStatus"
+        }
+      ],
+      "type": 8,
+      "value": "strong"
+    },
+    {
+      "type": 0,
+      "value": " и не может быть заказан."
+    }
+  ],
+  "errorModal.title": [
+    {
+      "type": 0,
+      "value": "Экземпляр не может быть заказан"
+    }
+  ],
+  "errors.instanceUuidOrHridDoesNotExist": [
+    {
+      "type": 0,
+      "value": "Instance with this HRID or UUID does not exist"
+    }
+  ],
+  "errors.itemBarcodeDoesNotExist": [
+    {
+      "type": 0,
+      "value": "Экземпляр с таким штрихкодом не существует"
+    }
+  ],
+  "errors.onlyCheckedOutForHold": [
+    {
+      "type": 0,
+      "value": "Только проверенные элементы могут быть удержаны"
+    }
+  ],
+  "errors.onlyCheckedOutForRecall": [
+    {
+      "type": 0,
+      "value": "Только проверенные товары могут быть отозваны"
+    }
+  ],
+  "errors.selectInstanceRequired": [
+    {
+      "type": 0,
+      "value": "Please select an instance and hit enter"
+    }
+  ],
+  "errors.selectItem": [
+    {
+      "type": 0,
+      "value": "Пожалуйста, выберите элемент"
+    }
+  ],
+  "errors.selectItemRequired": [
+    {
+      "type": 0,
+      "value": "Пожалуйста, выберите экземпляр и нажмите Enter"
+    }
+  ],
+  "errors.selectUser": [
+    {
+      "type": 0,
+      "value": "Пожалуйста, выберите заявителя"
+    }
+  ],
+  "errors.sync.requestQueueBody": [
+    {
+      "type": 0,
+      "value": "This request queue has been updated by another person or process and may be out of synch."
+    }
+  ],
+  "errors.sync.requestQueueLabel": [
+    {
+      "type": 0,
+      "value": "Request queue is out of sync"
+    }
+  ],
+  "errors.unknown.requestQueueBody": [
+    {
+      "type": 0,
+      "value": "Request queue reorder failed"
+    }
+  ],
+  "errors.unknown.requestQueueLabel": [
+    {
+      "type": 0,
+      "value": "Request queue error"
+    }
+  ],
+  "errors.userBarcodeDoesNotExist": [
+    {
+      "type": 0,
+      "value": "Пользователь с таким штрихкодом не существует"
+    }
+  ],
+  "exportExpiredHoldShelfToCsv": [
+    {
+      "type": 0,
+      "value": "Export hold shelf clearance report for "
+    },
+    {
+      "type": 1,
+      "value": "currentServicePoint"
+    }
+  ],
+  "exportSearchResultsToCsv": [
+    {
+      "type": 0,
+      "value": "Export search results to CSV"
+    }
+  ],
+  "filters.requestLevel.item": [
+    {
+      "type": 0,
+      "value": "Item"
+    }
+  ],
+  "filters.requestLevel.title": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ],
+  "filters.requestStatus.awaitingDelivery": [
+    {
+      "type": 0,
+      "value": "Open - Awaiting delivery"
+    }
+  ],
+  "filters.requestStatus.awaitingPickup": [
+    {
+      "type": 0,
+      "value": "Open - Awaiting pickup"
+    }
+  ],
+  "filters.requestStatus.cancelled": [
+    {
+      "type": 0,
+      "value": "Closed - Cancelled"
+    }
+  ],
+  "filters.requestStatus.filled": [
+    {
+      "type": 0,
+      "value": "Closed - Filled"
+    }
+  ],
+  "filters.requestStatus.inTransit": [
+    {
+      "type": 0,
+      "value": "Open - In transit"
+    }
+  ],
+  "filters.requestStatus.notYetFilled": [
+    {
+      "type": 0,
+      "value": "Open - Not yet filled"
+    }
+  ],
+  "filters.requestStatus.pickupExpired": [
+    {
+      "type": 0,
+      "value": "Closed - Pickup expired"
+    }
+  ],
+  "filters.requestStatus.unfilled": [
+    {
+      "type": 0,
+      "value": "Closed - Unfilled"
+    }
+  ],
+  "filters.requestType.holds": [
+    {
+      "type": 0,
+      "value": "Holds"
+    }
+  ],
+  "filters.requestType.pages": [
+    {
+      "type": 0,
+      "value": "Pages"
+    }
+  ],
+  "filters.requestType.recalls": [
+    {
+      "type": 0,
+      "value": "Recalls"
+    }
+  ],
+  "fulfilmentPreference": [
+    {
+      "type": 0,
+      "value": "Предпочтительное выполнение запроса"
+    }
+  ],
+  "holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "Дата окончания нахождения на бронеполке"
+    }
+  ],
+  "holdShelfExpirationTime": [
+    {
+      "type": 0,
+      "value": "holdShelfExpirationTime"
+    }
+  ],
+  "instance.contributorNames": [
+    {
+      "type": 0,
+      "value": "Contributor"
+    }
+  ],
+  "instance.information": [
+    {
+      "type": 0,
+      "value": "Title information"
+    }
+  ],
+  "instance.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "Enter HRID or UUID"
+    }
+  ],
+  "instance.title": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ],
+  "instance.value": [
+    {
+      "type": 0,
+      "value": "Instance HRID or UUID"
+    }
+  ],
+  "item.barcode": [
+    {
+      "type": 0,
+      "value": "Штрихкод экземпляра"
+    }
+  ],
+  "item.callNumber": [
+    {
+      "type": 0,
+      "value": "Строка актуального шифра хранения"
+    }
+  ],
+  "item.callNumberComponents.callNumber": [
+    {
+      "type": 0,
+      "value": "Актуальный шифр хранения"
+    }
+  ],
+  "item.callNumberComponents.prefix": [
+    {
+      "type": 0,
+      "value": "Актуальный префикс шифра хранения"
+    }
+  ],
+  "item.callNumberComponents.suffix": [
+    {
+      "type": 0,
+      "value": "Актуальный суффикс шифра хранения"
+    }
+  ],
+  "item.chronology": [
+    {
+      "type": 0,
+      "value": "Chronology"
+    }
+  ],
+  "item.contributorNames": [
+    {
+      "type": 0,
+      "value": "Автор"
+    }
+  ],
+  "item.copyNumber": [
+    {
+      "type": 0,
+      "value": "Копировать"
+    }
+  ],
+  "item.copyNumbers": [
+    {
+      "type": 0,
+      "value": "Номер копии"
+    }
+  ],
+  "item.dueDate": [
+    {
+      "type": 0,
+      "value": "Текущая дата платежа"
+    }
+  ],
+  "item.effectiveLocation": [
+    {
+      "type": 0,
+      "value": "Effective location"
+    }
+  ],
+  "item.enumeration": [
+    {
+      "type": 0,
+      "value": "Перечисление"
+    }
+  ],
+  "item.id": [
+    {
+      "type": 0,
+      "value": "Идентификатор элемента"
+    }
+  ],
+  "item.information": [
+    {
+      "type": 0,
+      "value": "Информация об элементе"
+    }
+  ],
+  "item.location.code": [
+    {
+      "type": 0,
+      "value": "Код постоянного хранения"
+    }
+  ],
+  "item.location.libraryName": [
+    {
+      "type": 0,
+      "value": "Библиотека"
+    }
+  ],
+  "item.location.name": [
+    {
+      "type": 0,
+      "value": "Постоянное хранение"
+    }
+  ],
+  "item.noInformation": [
+    {
+      "type": 0,
+      "value": "There is no item information for this request."
+    }
+  ],
+  "item.numRequests": [
+    {
+      "type": 0,
+      "value": "Запросы"
+    }
+  ],
+  "item.requestsOnItem": [
+    {
+      "type": 0,
+      "value": "Запросы по пункту"
+    }
+  ],
+  "item.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "Сканирование или ввод штрихкода"
+    }
+  ],
+  "item.status": [
+    {
+      "type": 0,
+      "value": "Состояние элемента"
+    }
+  ],
+  "item.title": [
+    {
+      "type": 0,
+      "value": "Заголовок"
+    }
+  ],
+  "item.volume": [
+    {
+      "type": 0,
+      "value": "Том"
+    }
+  ],
+  "itemLevel": [
+    {
+      "type": 0,
+      "value": "Item"
+    }
+  ],
+  "items": [
+    {
+      "type": 1,
+      "value": "number"
+    },
+    {
+      "type": 0,
+      "value": " items"
+    }
+  ],
+  "items.instanceItems": [
+    {
+      "type": 0,
+      "value": "Other items in "
+    },
+    {
+      "type": 1,
+      "value": "title"
+    }
+  ],
+  "items.instanceItems.notFound": [
+    {
+      "type": 0,
+      "value": "No items found"
+    }
+  ],
+  "items.selectItem": [
+    {
+      "type": 0,
+      "value": "Select item"
+    }
+  ],
+  "loan.dueDate": [
+    {
+      "type": 0,
+      "value": "Текущая дата платежа"
+    }
+  ],
+  "loanType": [
+    {
+      "type": 0,
+      "value": "Тип книговыдачи"
+    }
+  ],
+  "location": [
+    {
+      "type": 0,
+      "value": "Расположение"
+    }
+  ],
+  "materialType": [
+    {
+      "type": 0,
+      "value": "Тип материала"
+    }
+  ],
+  "meta.title": [
+    {
+      "type": 0,
+      "value": "Запросы"
+    }
+  ],
+  "moveRequest.chooseRequestMessage": [
+    {
+      "type": 0,
+      "value": "Пожалуйста, выберите допустимый тип"
+    }
+  ],
+  "moveRequest.confirm": [
+    {
+      "type": 0,
+      "value": "Подтвердить"
+    }
+  ],
+  "moveRequest.requestTypeChangeHeading": [
+    {
+      "type": 0,
+      "value": "Тип текущего запроса не разрешен для выбранного элемента"
+    }
+  ],
+  "moveRequest.requestTypeChangeMessage": [
+    {
+      "type": 0,
+      "value": "Запрос будет преобразован в "
+    },
+    {
+      "children": [
+        {
+          "type": 0,
+          "value": " "
+        },
+        {
+          "type": 1,
+          "value": "requestType"
+        },
+        {
+          "type": 0,
+          "value": " "
+        }
+      ],
+      "type": 8,
+      "value": "strong"
+    },
+    {
+      "type": 0,
+      "value": " ."
+    }
+  ],
+  "moveRequest.secondPositionMessage": [
+    {
+      "type": 0,
+      "value": "Запросы нельзя перемещать выше запросов страниц, даже если их выполнение еще не началось. Этот запрос будет перемещен в позицию 2 в очереди запросов."
+    }
+  ],
+  "moveRequest.secondPositionTitle": [
+    {
+      "type": 0,
+      "value": "Запрос перемещен в положение 2 очереди"
+    }
+  ],
+  "moveRequest.success": [
+    {
+      "type": 0,
+      "value": "Запрос был успешно перемещен"
+    }
+  ],
+  "noRequestTypesAvailable": [
+    {
+      "type": 0,
+      "value": "Для выбранного экземпляра нет доступных типов заказов"
+    }
+  ],
+  "noServicePoint.errorMessage": [
+    {
+      "type": 0,
+      "value": "Вы должны войти в сервисную точку, чтобы получить доступ к отчету об очистке полки. Добавьте одну или несколько точек обслуживания в свою запись пользователя в приложении «Пользователи». Обратитесь к администратору, если у вас нет возможности добавлять точки обслуживания в вашу запись."
+    }
+  ],
+  "noServicePoint.label": [
+    {
+      "type": 0,
+      "value": "Точка обслуживания не выбрана"
+    }
+  ],
+  "notes.assigned.for": [
+    {
+      "type": 0,
+      "value": "Для: "
+    },
+    {
+      "type": 1,
+      "value": "instanceLink"
+    },
+    {
+      "type": 0,
+      "value": " ("
+    },
+    {
+      "type": 1,
+      "value": "itemLink"
+    },
+    {
+      "type": 0,
+      "value": ")"
+    }
+  ],
+  "notes.assigned.requestDate": [
+    {
+      "type": 0,
+      "value": "Дата запроса: "
+    },
+    {
+      "type": 1,
+      "value": "requestCreateDate"
+    }
+  ],
+  "notes.assigned.requester": [
+    {
+      "type": 0,
+      "value": "Requester: "
+    },
+    {
+      "type": 1,
+      "value": "requesterName"
+    }
+  ],
+  "notes.entityType.request": [
+    {
+      "type": 0,
+      "value": "Запрос"
+    }
+  ],
+  "notes.entityType.request.pluralized": [
+    {
+      "type": 1,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "one": {
+          "value": [
+            {
+              "type": 0,
+              "value": "запрос"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "запросы"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "notes.newStaffNote": [
+    {
+      "type": 0,
+      "value": "Новая служебная заметка"
+    }
+  ],
+  "notes.staffNotes": [
+    {
+      "type": 0,
+      "value": "Служебные примечания"
+    }
+  ],
+  "override": [
+    {
+      "type": 0,
+      "value": "Override"
+    }
+  ],
+  "patronComments": [
+    {
+      "type": 0,
+      "value": "Patron comments"
+    }
+  ],
+  "permission.all": [
+    {
+      "type": 0,
+      "value": "Заказы: Все разрешения"
+    }
+  ],
+  "permission.create": [
+    {
+      "type": 0,
+      "value": "Заказы: Просматривать, создавать"
+    }
+  ],
+  "permission.edit": [
+    {
+      "type": 0,
+      "value": "Заказы: Просматривать, редактировать, отменять"
+    }
+  ],
+  "permission.moveRequest": [
+    {
+      "type": 0,
+      "value": "Заказы: Переходить к следующему экземпляру, изменять очередь"
+    }
+  ],
+  "permission.reorderQueue": [
+    {
+      "type": 0,
+      "value": "Заказы: Изменять очередь"
+    }
+  ],
+  "permission.view": [
+    {
+      "type": 0,
+      "value": "Заказы: Просматривать"
+    }
+  ],
+  "pickSlipsLoading": [
+    {
+      "type": 0,
+      "value": "Pick slips are loading, please wait"
+    }
+  ],
+  "pickupServicePoint.name": [
+    {
+      "type": 0,
+      "value": "Пункт выдачи"
+    }
+  ],
+  "position": [
+    {
+      "type": 0,
+      "value": "Позиция в очереди"
+    }
+  ],
+  "printInProgress": [
+    {
+      "type": 0,
+      "value": "Print options loading in progress. It might take a few seconds, please be patient."
+    }
+  ],
+  "printPickSlips": [
+    {
+      "type": 0,
+      "value": "Распечатать бланк выдачи для "
+    },
+    {
+      "type": 1,
+      "value": "sp"
+    }
+  ],
+  "proxy.barcode": [
+    {
+      "type": 0,
+      "value": "Штрихкод представителя заказчика"
+    }
+  ],
+  "proxy.name": [
+    {
+      "type": 0,
+      "value": "Имя представителя заказчика"
+    }
+  ],
+  "requestDate": [
+    {
+      "type": 0,
+      "value": "requestDate"
+    }
+  ],
+  "requestExpirationDate": [
+    {
+      "type": 0,
+      "value": "Дата окончания запроса"
+    }
+  ],
+  "requestLevel": [
+    {
+      "type": 0,
+      "value": "Request level"
+    }
+  ],
+  "requestMeta.detailLabel": [
+    {
+      "type": 0,
+      "value": "Детали запроса "
+    }
+  ],
+  "requestMeta.expirationDate": [
+    {
+      "type": 0,
+      "value": "Дата окончания запроса"
+    }
+  ],
+  "requestMeta.fulfilment.delivery": [
+    {
+      "type": 0,
+      "value": "Доставка"
+    }
+  ],
+  "requestMeta.fulfilment.holdShelf": [
+    {
+      "type": 0,
+      "value": "Бронеполка"
+    }
+  ],
+  "requestMeta.holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "Дата окончания нахождения на бронеполке"
+    }
+  ],
+  "requestMeta.information": [
+    {
+      "type": 0,
+      "value": "Информация о запросе"
+    }
+  ],
+  "requestMeta.queuePosition": [
+    {
+      "type": 0,
+      "value": "Позиция в очереди"
+    }
+  ],
+  "requestMeta.status": [
+    {
+      "type": 0,
+      "value": "Статус запроса"
+    }
+  ],
+  "requestMeta.tags": [
+    {
+      "type": 0,
+      "value": "Tags"
+    }
+  ],
+  "requestMeta.type": [
+    {
+      "type": 0,
+      "value": "Тип запроса"
+    }
+  ],
+  "requestMeta.type.hold": [
+    {
+      "type": 0,
+      "value": "Hold"
+    }
+  ],
+  "requestMeta.type.holds": [
+    {
+      "type": 0,
+      "value": "Holds"
+    }
+  ],
+  "requestMeta.type.page": [
+    {
+      "type": 0,
+      "value": "Страница"
+    }
+  ],
+  "requestMeta.type.pages": [
+    {
+      "type": 0,
+      "value": "Страницы"
+    }
+  ],
+  "requestMeta.type.recall": [
+    {
+      "type": 0,
+      "value": "Отзыв"
+    }
+  ],
+  "requestMeta.type.recalls": [
+    {
+      "type": 0,
+      "value": "Recalls"
+    }
+  ],
+  "requestNotAllowed": [
+    {
+      "type": 0,
+      "value": "Запрос не разрешен"
+    }
+  ],
+  "requestQueue": [
+    {
+      "type": 0,
+      "value": "Очередь запросов"
+    }
+  ],
+  "requestQueue.chronology": [
+    {
+      "type": 0,
+      "value": "Chronology"
+    }
+  ],
+  "requestQueue.confirmReorder.cancel": [
+    {
+      "type": 0,
+      "value": "Оставить в текущей позиции"
+    }
+  ],
+  "requestQueue.confirmReorder.confirm": [
+    {
+      "type": 0,
+      "value": "Подтвердить"
+    }
+  ],
+  "requestQueue.confirmReorder.message1": [
+    {
+      "type": 0,
+      "value": "Ваш запрос будет выполнен в порядке существующей очереди. Выполняется предыдущий запрос."
+    }
+  ],
+  "requestQueue.confirmReorder.message2": [
+    {
+      "type": 0,
+      "value": "Ваш запрос будет выполнен в порядке существующей очереди"
+    }
+  ],
+  "requestQueue.confirmReorder.title": [
+    {
+      "type": 0,
+      "value": "Запрос перемещен в положение 2 очереди"
+    }
+  ],
+  "requestQueue.deliveryType": [
+    {
+      "type": 0,
+      "value": "Доставка: "
+    },
+    {
+      "type": 1,
+      "value": "type"
+    }
+  ],
+  "requestQueue.description": [
+    {
+      "type": 0,
+      "value": "Instance: "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "title"
+        },
+        {
+          "type": 0,
+          "value": " /"
+        },
+        {
+          "type": 1,
+          "value": "author"
+        },
+        {
+          "type": 0,
+          "value": "."
+        }
+      ],
+      "type": 8,
+      "value": "instanceLink"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "publisher"
+        },
+        {
+          "type": 0,
+          "value": ", "
+        },
+        {
+          "type": 1,
+          "value": "publicationDate"
+        }
+      ],
+      "type": 8,
+      "value": "i"
+    }
+  ],
+  "requestQueue.enumeration": [
+    {
+      "type": 0,
+      "value": "Enumeration"
+    }
+  ],
+  "requestQueue.fulfillmentInProgressSectionTitle": [
+    {
+      "type": 0,
+      "value": "Fulfillment in progress"
+    }
+  ],
+  "requestQueue.fulfillmentStatus": [
+    {
+      "type": 0,
+      "value": "Status"
+    }
+  ],
+  "requestQueue.heading": [
+    {
+      "type": 0,
+      "value": "Request queue on instance • "
+    },
+    {
+      "type": 1,
+      "value": "title"
+    },
+    {
+      "type": 0,
+      "value": " /"
+    },
+    {
+      "type": 1,
+      "value": "author"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "requestQueue.holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "Дата окончания нахождения на бронеполке"
+    }
+  ],
+  "requestQueue.itemBarcode": [
+    {
+      "type": 0,
+      "value": "Item barcode"
+    }
+  ],
+  "requestQueue.noDataForFulfillment": [
+    {
+      "type": 0,
+      "value": "There are no requests in fulfillment."
+    }
+  ],
+  "requestQueue.notYetFilledRequests.noData": [
+    {
+      "type": 0,
+      "value": "No requests found"
+    }
+  ],
+  "requestQueue.notYetFilledSectionTitle": [
+    {
+      "type": 0,
+      "value": "Open - Not yet filled"
+    }
+  ],
+  "requestQueue.order": [
+    {
+      "type": 0,
+      "value": "Order"
+    }
+  ],
+  "requestQueue.patronComments": [
+    {
+      "type": 0,
+      "value": "Patron comments"
+    }
+  ],
+  "requestQueue.patronGroup": [
+    {
+      "type": 0,
+      "value": "Группа читателей"
+    }
+  ],
+  "requestQueue.pickup": [
+    {
+      "type": 0,
+      "value": "Самовывоз / Доставка"
+    }
+  ],
+  "requestQueue.refresh": [
+    {
+      "type": 0,
+      "value": "Refresh queue"
+    }
+  ],
+  "requestQueue.reorderSuccess": [
+    {
+      "type": 0,
+      "value": "Очередь была успешно обновлена"
+    }
+  ],
+  "requestQueue.requestDate": [
+    {
+      "type": 0,
+      "value": "Дата запроса"
+    }
+  ],
+  "requestQueue.requestExpirationDate": [
+    {
+      "type": 0,
+      "value": "Окончание запроса"
+    }
+  ],
+  "requestQueue.requestInProgress": [
+    {
+      "type": 0,
+      "value": "In progress"
+    }
+  ],
+  "requestQueue.requestType": [
+    {
+      "type": 0,
+      "value": "Тип"
+    }
+  ],
+  "requestQueue.requesterBarcode": [
+    {
+      "type": 0,
+      "value": "Штрихкод заявителя"
+    }
+  ],
+  "requestQueue.requesterName": [
+    {
+      "type": 0,
+      "value": "Заявитель"
+    }
+  ],
+  "requestQueue.status": [
+    {
+      "type": 0,
+      "value": "Request status"
+    }
+  ],
+  "requestQueue.volume": [
+    {
+      "type": 0,
+      "value": "Volume"
+    }
+  ],
+  "requestType": [
+    {
+      "type": 0,
+      "value": "Тип запроса"
+    }
+  ],
+  "requestType.message": [
+    {
+      "type": 0,
+      "value": "Выберите элемент для просмотра доступных типов запросов"
+    }
+  ],
+  "requester.barcode": [
+    {
+      "type": 0,
+      "value": "Запрос штрихкода"
+    }
+  ],
+  "requester.findUserPluginLabel": [
+    {
+      "type": 0,
+      "value": "Поиск заявителя"
+    }
+  ],
+  "requester.firstName": [
+    {
+      "type": 0,
+      "value": "Имя заявителя"
+    }
+  ],
+  "requester.fulfilmentPref": [
+    {
+      "type": 0,
+      "value": "Предпочтение выполнения"
+    }
+  ],
+  "requester.information": [
+    {
+      "type": 0,
+      "value": "Информация о заявителе"
+    }
+  ],
+  "requester.name": [
+    {
+      "type": 0,
+      "value": "Имя заявителя"
+    }
+  ],
+  "requester.patronGroup.group": [
+    {
+      "type": 0,
+      "value": "Группа читателя-заявителя"
+    }
+  ],
+  "requester.pickupLocation": [
+    {
+      "type": 0,
+      "value": "Место доставки "
+    }
+  ],
+  "requester.proxy": [
+    {
+      "type": 0,
+      "value": "Представитель заказчика"
+    }
+  ],
+  "requester.requester": [
+    {
+      "type": 0,
+      "value": "Заявитель"
+    }
+  ],
+  "requester.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "Сканирование или введите штрихкод запроса"
+    }
+  ],
+  "requester.username": [
+    {
+      "type": 0,
+      "value": "Имя пользователя"
+    }
+  ],
+  "requests.createTitleLevelRequest": [
+    {
+      "type": 0,
+      "value": "Create title level request"
+    }
+  ],
+  "requests.itemBarcode": [
+    {
+      "type": 0,
+      "value": "Штрихкод экземпляра"
+    }
+  ],
+  "requests.proxy": [
+    {
+      "type": 0,
+      "value": "Представитель"
+    }
+  ],
+  "requests.queuePosition": [
+    {
+      "type": 0,
+      "value": "Queue position"
+    }
+  ],
+  "requests.requestDate": [
+    {
+      "type": 0,
+      "value": "Дата запроса"
+    }
+  ],
+  "requests.requester": [
+    {
+      "type": 0,
+      "value": "Заявитель"
+    }
+  ],
+  "requests.requesterBarcode": [
+    {
+      "type": 0,
+      "value": "Штрихкод заявителя"
+    }
+  ],
+  "requests.status": [
+    {
+      "type": 0,
+      "value": "Статус запроса"
+    }
+  ],
+  "requests.title": [
+    {
+      "type": 0,
+      "value": "Название"
+    }
+  ],
+  "requests.type": [
+    {
+      "type": 0,
+      "value": "Тип"
+    }
+  ],
+  "requests.year": [
+    {
+      "type": 0,
+      "value": "Year"
+    }
+  ],
+  "resultCount": [
+    {
+      "style": null,
+      "type": 2,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "one": {
+          "value": [
+            {
+              "type": 0,
+              "value": "Record found"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "Records found"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "routingError": [
+    {
+      "type": 0,
+      "value": "Как вы попали в "
+    },
+    {
+      "type": 1,
+      "value": "pathname"
+    },
+    {
+      "type": 0,
+      "value": " ?"
+    }
+  ],
+  "routingErrorOops": [
+    {
+      "type": 0,
+      "value": "Ой-ой!"
+    }
+  ],
+  "showTags": [
+    {
+      "type": 0,
+      "value": "Показать теги"
+    }
+  ],
+  "status": [
+    {
+      "type": 0,
+      "value": "Статус запроса"
+    }
+  ],
+  "tags.tagList": [
+    {
+      "type": 0,
+      "value": "Теги"
+    }
+  ],
+  "title.information": [
+    {
+      "type": 0,
+      "value": "Title information"
+    }
+  ],
+  "titleInformation.contributors": [
+    {
+      "type": 0,
+      "value": "Contributor"
+    }
+  ],
+  "titleInformation.editions": [
+    {
+      "type": 0,
+      "value": "Edition"
+    }
+  ],
+  "titleInformation.identifiers": [
+    {
+      "type": 0,
+      "value": "ISBN(s)"
+    }
+  ],
+  "titleInformation.publicationsDate": [
+    {
+      "type": 0,
+      "value": "Publication date"
+    }
+  ],
+  "titleInformation.title": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ],
+  "titleInformation.titleLevelRequests": [
+    {
+      "type": 0,
+      "value": "Title level requests"
+    }
+  ],
+  "titleLevel": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ]
+}

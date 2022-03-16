@@ -1,0 +1,1653 @@
+{
+  "actions.cancelNewRequest": [
+    {
+      "type": 0,
+      "value": "Abbrechen"
+    }
+  ],
+  "actions.closeNewRequest": [
+    {
+      "type": 0,
+      "value": "Neue Bestandsanfrage schließen"
+    }
+  ],
+  "actions.createNewRequest": [
+    {
+      "type": 0,
+      "value": "Neue Bestandsanfrage erstellen"
+    }
+  ],
+  "actions.duplicateRequest": [
+    {
+      "type": 0,
+      "value": "Duplizieren"
+    }
+  ],
+  "actions.edit": [
+    {
+      "type": 0,
+      "value": "Bearbeiten"
+    }
+  ],
+  "actions.editRequest": [
+    {
+      "type": 0,
+      "value": "Bestandsanfrage bearbeiten"
+    }
+  ],
+  "actions.editRequestLink": [
+    {
+      "type": 0,
+      "value": "Bestandsanfragendialog bearbeiten"
+    }
+  ],
+  "actions.label": [
+    {
+      "type": 0,
+      "value": "Aktionen"
+    }
+  ],
+  "actions.loading": [
+    {
+      "type": 0,
+      "value": "Wird geladen..."
+    }
+  ],
+  "actions.moveRequest": [
+    {
+      "type": 0,
+      "value": "Bestandsanfrage verschieben"
+    }
+  ],
+  "actions.newRequest": [
+    {
+      "type": 0,
+      "value": "Neue Bestandsanfrage"
+    }
+  ],
+  "actions.reorderQueue": [
+    {
+      "type": 0,
+      "value": "Warteliste neu anordnen"
+    }
+  ],
+  "actions.selectAddressType": [
+    {
+      "type": 0,
+      "value": "Adresstyp auswählen"
+    }
+  ],
+  "actions.selectPickupLoc": [
+    {
+      "type": 0,
+      "value": "Abholstandort auswählen"
+    }
+  ],
+  "actions.selectPickupSp": [
+    {
+      "type": 0,
+      "value": "Abholservicestelle auswählen"
+    }
+  ],
+  "actions.viewRequestsInQueue": [
+    {
+      "type": 0,
+      "value": "Bestandsanfragen in Warteliste anzeigen"
+    }
+  ],
+  "additionalReasons": [
+    {
+      "type": 0,
+      "value": "Details der Sperre anzeigen, um zusätzliche Gründe für die Sperre anzuzeigen..."
+    }
+  ],
+  "barcode": [
+    {
+      "type": 0,
+      "value": "Barcode"
+    }
+  ],
+  "blockModal": [
+    {
+      "type": 0,
+      "value": "Benutzer/-in für Bestandsanfragen gesperrt"
+    }
+  ],
+  "blockedLabel": [
+    {
+      "type": 0,
+      "value": "Grund für Sperre"
+    }
+  ],
+  "cancel.additionalInfoLabel": [
+    {
+      "type": 0,
+      "value": "Zusätzliche Informationen für Benutzer/-in "
+    },
+    {
+      "type": 1,
+      "value": "required"
+    }
+  ],
+  "cancel.additionalInfoPlaceholderOptional": [
+    {
+      "type": 0,
+      "value": "Weitere Informationen zur Stornierung eingeben (optional)"
+    }
+  ],
+  "cancel.additionalInfoPlaceholderRequired": [
+    {
+      "type": 0,
+      "value": "Weitere Informationen zur Stornierung eingeben (erforderlich)"
+    }
+  ],
+  "cancel.cancelRequest": [
+    {
+      "type": 0,
+      "value": "Bestandsanfrage stornieren"
+    }
+  ],
+  "cancel.modalLabel": [
+    {
+      "type": 0,
+      "value": "Stornierung der Bestandsanfrage bestätigen"
+    }
+  ],
+  "cancel.notifyLabel": [
+    {
+      "type": 0,
+      "value": "Benutzer/-in benachrichtigen"
+    }
+  ],
+  "cancel.reasonLabel": [
+    {
+      "type": 0,
+      "value": "Stornierungsgrund"
+    }
+  ],
+  "cancel.requestWillBeCancelled": [
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "title"
+        },
+        {
+          "type": 0,
+          "value": " "
+        }
+      ],
+      "type": 8,
+      "value": "b"
+    },
+    {
+      "type": 0,
+      "value": "wird "
+    },
+    {
+      "children": [
+        {
+          "type": 0,
+          "value": "storniert"
+        }
+      ],
+      "type": 8,
+      "value": "b"
+    }
+  ],
+  "cancellationAdditionalInformation": [
+    {
+      "type": 0,
+      "value": "Zusätzliche Informationen für Benutzer/-in"
+    }
+  ],
+  "cancellationReason": [
+    {
+      "type": 0,
+      "value": "Stornierungsgrund"
+    }
+  ],
+  "close": [
+    {
+      "type": 0,
+      "value": "Schließen"
+    }
+  ],
+  "common.cancel": [
+    {
+      "type": 0,
+      "value": "Abbrechen"
+    }
+  ],
+  "common.saveAndClose": [
+    {
+      "type": 0,
+      "value": "Speichern & schließen"
+    }
+  ],
+  "csvReportInProgress": [
+    {
+      "type": 0,
+      "value": "CSV Ergebnisbericht wird generiert. Dies kann bei größeren Ergebnismengen einige Zeit dauern. Bitte geduldig sein."
+    }
+  ],
+  "csvReportPending": [
+    {
+      "type": 0,
+      "value": "CSV Bericht wird generiert. Bitte warten"
+    }
+  ],
+  "deliveryAddress": [
+    {
+      "type": 0,
+      "value": "Lieferadresse"
+    }
+  ],
+  "detailsButton": [
+    {
+      "type": 0,
+      "value": "Details der Sperre anzeigen"
+    }
+  ],
+  "enter": [
+    {
+      "type": 0,
+      "value": "Eingabe"
+    }
+  ],
+  "errorModal.message": [
+    {
+      "type": 1,
+      "value": "title"
+    },
+    {
+      "type": 0,
+      "value": " ("
+    },
+    {
+      "type": 1,
+      "value": "materialType"
+    },
+    {
+      "type": 0,
+      "value": ") (Barcode: "
+    },
+    {
+      "type": 1,
+      "value": "barcode"
+    },
+    {
+      "type": 0,
+      "value": ") hat den Exemplarstatus "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "itemStatus"
+        }
+      ],
+      "type": 8,
+      "value": "strong"
+    },
+    {
+      "type": 0,
+      "value": " und kann nicht vorgemerkt werden."
+    }
+  ],
+  "errorModal.title": [
+    {
+      "type": 0,
+      "value": "Exemplar kann nicht bestellt werden."
+    }
+  ],
+  "errors.instanceUuidOrHridDoesNotExist": [
+    {
+      "type": 0,
+      "value": "Instance with this HRID or UUID does not exist"
+    }
+  ],
+  "errors.itemBarcodeDoesNotExist": [
+    {
+      "type": 0,
+      "value": "Exemplar mit diesem Barcode existiert nicht"
+    }
+  ],
+  "errors.onlyCheckedOutForHold": [
+    {
+      "type": 0,
+      "value": "Nur ausgeliehene Exemplare können vorgemerkt werden"
+    }
+  ],
+  "errors.onlyCheckedOutForRecall": [
+    {
+      "type": 0,
+      "value": "Nur ausgeliehene Exemplare können zurückgerufen werden"
+    }
+  ],
+  "errors.selectInstanceRequired": [
+    {
+      "type": 0,
+      "value": "Please select an instance and hit enter"
+    }
+  ],
+  "errors.selectItem": [
+    {
+      "type": 0,
+      "value": "Bitte ein Exemplar auswählen"
+    }
+  ],
+  "errors.selectItemRequired": [
+    {
+      "type": 0,
+      "value": "Bitte ein Exemplar auswählen und Enter drücken"
+    }
+  ],
+  "errors.selectUser": [
+    {
+      "type": 0,
+      "value": "Bitte Informationen zum Bestellenden ausfüllen, um fortzufahren"
+    }
+  ],
+  "errors.sync.requestQueueBody": [
+    {
+      "type": 0,
+      "value": "Diese Bestandsanfrage-Warteliste wurde durch eine andere Person oder Prozess aktualisiert und ist möglicherweise nicht mehr synchron."
+    }
+  ],
+  "errors.sync.requestQueueLabel": [
+    {
+      "type": 0,
+      "value": "Bestandsanfrage-Warteliste ist nicht synchronisiert"
+    }
+  ],
+  "errors.unknown.requestQueueBody": [
+    {
+      "type": 0,
+      "value": "Neuordnung der Bestandsanfrage-Warteliste fehlgeschlagen"
+    }
+  ],
+  "errors.unknown.requestQueueLabel": [
+    {
+      "type": 0,
+      "value": "Fehler Bestandsanfrage-Warteliste"
+    }
+  ],
+  "errors.userBarcodeDoesNotExist": [
+    {
+      "type": 0,
+      "value": "Person mit diesem Barcode existiert nicht"
+    }
+  ],
+  "exportExpiredHoldShelfToCsv": [
+    {
+      "type": 0,
+      "value": "Abräumliste für das Abholregal "
+    },
+    {
+      "type": 1,
+      "value": "currentServicePoint"
+    },
+    {
+      "type": 0,
+      "value": " exportieren"
+    }
+  ],
+  "exportSearchResultsToCsv": [
+    {
+      "type": 0,
+      "value": "Suchergebnisse in CSV exportieren"
+    }
+  ],
+  "filters.requestLevel.item": [
+    {
+      "type": 0,
+      "value": "Item"
+    }
+  ],
+  "filters.requestLevel.title": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ],
+  "filters.requestStatus.awaitingDelivery": [
+    {
+      "type": 0,
+      "value": "Offen - Lieferung"
+    }
+  ],
+  "filters.requestStatus.awaitingPickup": [
+    {
+      "type": 0,
+      "value": "Offen - Abholregal"
+    }
+  ],
+  "filters.requestStatus.cancelled": [
+    {
+      "type": 0,
+      "value": "Geschlossen - storniert"
+    }
+  ],
+  "filters.requestStatus.filled": [
+    {
+      "type": 0,
+      "value": "Geschlossen - erfüllt"
+    }
+  ],
+  "filters.requestStatus.inTransit": [
+    {
+      "type": 0,
+      "value": "Offen - Im Transport"
+    }
+  ],
+  "filters.requestStatus.notYetFilled": [
+    {
+      "type": 0,
+      "value": "Offen - noch nicht erfüllt"
+    }
+  ],
+  "filters.requestStatus.pickupExpired": [
+    {
+      "type": 0,
+      "value": "Geschlossen - abgelaufen"
+    }
+  ],
+  "filters.requestStatus.unfilled": [
+    {
+      "type": 0,
+      "value": "Geschlossen - unerfüllt"
+    }
+  ],
+  "filters.requestType.holds": [
+    {
+      "type": 0,
+      "value": "Vormerkungen"
+    }
+  ],
+  "filters.requestType.pages": [
+    {
+      "type": 0,
+      "value": "Ausleihbestellungen"
+    }
+  ],
+  "filters.requestType.recalls": [
+    {
+      "type": 0,
+      "value": "Rückrufe"
+    }
+  ],
+  "fulfilmentPreference": [
+    {
+      "type": 0,
+      "value": "Bestandsanfrage Bereitstellungspräferenz"
+    }
+  ],
+  "holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "Abholregal-Ablaufdatum"
+    }
+  ],
+  "holdShelfExpirationTime": [
+    {
+      "type": 0,
+      "value": "Abholregal-Ablaufdatum"
+    }
+  ],
+  "instance.contributorNames": [
+    {
+      "type": 0,
+      "value": "Mitwirkende/-r"
+    }
+  ],
+  "instance.information": [
+    {
+      "type": 0,
+      "value": "Title information"
+    }
+  ],
+  "instance.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "Enter HRID or UUID"
+    }
+  ],
+  "instance.title": [
+    {
+      "type": 0,
+      "value": "Haupttitel"
+    }
+  ],
+  "instance.value": [
+    {
+      "type": 0,
+      "value": "Instance HRID or UUID"
+    }
+  ],
+  "item.barcode": [
+    {
+      "type": 0,
+      "value": "Exemplarbarcode"
+    }
+  ],
+  "item.callNumber": [
+    {
+      "type": 0,
+      "value": "Effektive Signatur"
+    }
+  ],
+  "item.callNumberComponents.callNumber": [
+    {
+      "type": 0,
+      "value": "Effektive Signatur"
+    }
+  ],
+  "item.callNumberComponents.prefix": [
+    {
+      "type": 0,
+      "value": "Effektive Signatur Präfix"
+    }
+  ],
+  "item.callNumberComponents.suffix": [
+    {
+      "type": 0,
+      "value": "Effektive Signatur Suffix"
+    }
+  ],
+  "item.chronology": [
+    {
+      "type": 0,
+      "value": "Chronologie"
+    }
+  ],
+  "item.contributorNames": [
+    {
+      "type": 0,
+      "value": "Mitwirkende/-r"
+    }
+  ],
+  "item.copyNumber": [
+    {
+      "type": 0,
+      "value": "Exemplarnummer"
+    }
+  ],
+  "item.copyNumbers": [
+    {
+      "type": 0,
+      "value": "Exemplarnummer"
+    }
+  ],
+  "item.dueDate": [
+    {
+      "type": 0,
+      "value": "Aktuelles Fälligkeitsdatum"
+    }
+  ],
+  "item.effectiveLocation": [
+    {
+      "type": 0,
+      "value": "Effektiver Standort"
+    }
+  ],
+  "item.enumeration": [
+    {
+      "type": 0,
+      "value": "Zählung"
+    }
+  ],
+  "item.id": [
+    {
+      "type": 0,
+      "value": "Exemplar-ID"
+    }
+  ],
+  "item.information": [
+    {
+      "type": 0,
+      "value": "Exemplar-Informationen"
+    }
+  ],
+  "item.location.code": [
+    {
+      "type": 0,
+      "value": "Effektiver Standortcode"
+    }
+  ],
+  "item.location.libraryName": [
+    {
+      "type": 0,
+      "value": "Bibliothek"
+    }
+  ],
+  "item.location.name": [
+    {
+      "type": 0,
+      "value": "Effektiver Standort"
+    }
+  ],
+  "item.noInformation": [
+    {
+      "type": 0,
+      "value": "There is no item information for this request."
+    }
+  ],
+  "item.numRequests": [
+    {
+      "type": 0,
+      "value": "Bestandsanfragen"
+    }
+  ],
+  "item.requestsOnItem": [
+    {
+      "type": 0,
+      "value": "Bestandsanfragen für Exemplar"
+    }
+  ],
+  "item.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "Exemplarbarcode scannen oder eingeben"
+    }
+  ],
+  "item.status": [
+    {
+      "type": 0,
+      "value": "Exemplarstatus"
+    }
+  ],
+  "item.title": [
+    {
+      "type": 0,
+      "value": "Titel"
+    }
+  ],
+  "item.volume": [
+    {
+      "type": 0,
+      "value": "Band"
+    }
+  ],
+  "itemLevel": [
+    {
+      "type": 0,
+      "value": "Item"
+    }
+  ],
+  "items": [
+    {
+      "type": 1,
+      "value": "number"
+    },
+    {
+      "type": 0,
+      "value": " items"
+    }
+  ],
+  "items.instanceItems": [
+    {
+      "type": 0,
+      "value": "Andere Exemplare in "
+    },
+    {
+      "type": 1,
+      "value": "title"
+    }
+  ],
+  "items.instanceItems.notFound": [
+    {
+      "type": 0,
+      "value": "Keine Exemplare gefunden"
+    }
+  ],
+  "items.selectItem": [
+    {
+      "type": 0,
+      "value": "Exemplar auswählen"
+    }
+  ],
+  "loan.dueDate": [
+    {
+      "type": 0,
+      "value": "Aktuelles Fälligkeitsdatum"
+    }
+  ],
+  "loanType": [
+    {
+      "type": 0,
+      "value": "Ausleihtyp"
+    }
+  ],
+  "location": [
+    {
+      "type": 0,
+      "value": "Standort"
+    }
+  ],
+  "materialType": [
+    {
+      "type": 0,
+      "value": "Materialtyp"
+    }
+  ],
+  "meta.title": [
+    {
+      "type": 0,
+      "value": "Bestandsanfragen"
+    }
+  ],
+  "moveRequest.chooseRequestMessage": [
+    {
+      "type": 0,
+      "value": "Bitte zulässigen Typ auswählen"
+    }
+  ],
+  "moveRequest.confirm": [
+    {
+      "type": 0,
+      "value": "Bestätigen"
+    }
+  ],
+  "moveRequest.requestTypeChangeHeading": [
+    {
+      "type": 0,
+      "value": "Aktueller Bestandsanfragentyp für ausgewähltes Exemplar nicht zulässig"
+    }
+  ],
+  "moveRequest.requestTypeChangeMessage": [
+    {
+      "type": 0,
+      "value": "Bestandsanfrage wird in "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "requestType"
+        }
+      ],
+      "type": 8,
+      "value": "strong"
+    },
+    {
+      "type": 0,
+      "value": " umgewandelt."
+    }
+  ],
+  "moveRequest.secondPositionMessage": [
+    {
+      "type": 0,
+      "value": "Bestandsanfragen können nicht über die Ausleihbestellung verschoben werden, auch wenn die Bereitstellung noch nicht begonnen hat. Diese Bestandsanfrage wird in Position 2 in der Warteliste verschoben."
+    }
+  ],
+  "moveRequest.secondPositionTitle": [
+    {
+      "type": 0,
+      "value": "Bestandsanfrage an Position 2 der Warteliste verschieben"
+    }
+  ],
+  "moveRequest.success": [
+    {
+      "type": 0,
+      "value": "Bestandsanfrage wurde erfolgreich verschoben"
+    }
+  ],
+  "noRequestTypesAvailable": [
+    {
+      "type": 0,
+      "value": "Kein Bestandsanfragentyp für ausgewähltes Exemplar verfügbar"
+    }
+  ],
+  "noServicePoint.errorMessage": [
+    {
+      "type": 0,
+      "value": "Sie müssen an einer Servicestelle angemeldet sein, um auf den Abräumliste für das Abholregal zugreifen zu können. Bitte fügen Sie Ihrem Konto in der Personen-App einen oder mehrere Servicestellen hinzu. Wenden Sie sich an einen Administrator, wenn Sie nicht in der Lage sind, Ihrem Datensatz Servicestellen hinzuzufügen."
+    }
+  ],
+  "noServicePoint.label": [
+    {
+      "type": 0,
+      "value": "Keine Servicestelle ausgewählt"
+    }
+  ],
+  "notes.assigned.for": [
+    {
+      "type": 0,
+      "value": "Für: "
+    },
+    {
+      "type": 1,
+      "value": "instanceLink"
+    },
+    {
+      "type": 0,
+      "value": " ("
+    },
+    {
+      "type": 1,
+      "value": "itemLink"
+    },
+    {
+      "type": 0,
+      "value": ")"
+    }
+  ],
+  "notes.assigned.requestDate": [
+    {
+      "type": 0,
+      "value": "Datum der Bestandsanfrage: "
+    },
+    {
+      "type": 1,
+      "value": "requestCreateDate"
+    }
+  ],
+  "notes.assigned.requester": [
+    {
+      "type": 0,
+      "value": "Bestandsanfrage für: "
+    },
+    {
+      "type": 1,
+      "value": "requesterName"
+    }
+  ],
+  "notes.entityType.request": [
+    {
+      "type": 0,
+      "value": "Bestandsanfrage"
+    }
+  ],
+  "notes.entityType.request.pluralized": [
+    {
+      "type": 1,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "one": {
+          "value": [
+            {
+              "type": 0,
+              "value": "Bestandsanfrage"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "Bestandsanfragen"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "notes.newStaffNote": [
+    {
+      "type": 0,
+      "value": "Neue Personalnotizen"
+    }
+  ],
+  "notes.staffNotes": [
+    {
+      "type": 0,
+      "value": "Personalnotizen"
+    }
+  ],
+  "override": [
+    {
+      "type": 0,
+      "value": "Spezielle Zustimmung"
+    }
+  ],
+  "patronComments": [
+    {
+      "type": 0,
+      "value": "Kommentar Benutzer/-in"
+    }
+  ],
+  "permission.all": [
+    {
+      "type": 0,
+      "value": "Bestandsanfragen: Alle Berechtigungen"
+    }
+  ],
+  "permission.create": [
+    {
+      "type": 0,
+      "value": "Bestandsanfragen: Anzeigen, erstellen"
+    }
+  ],
+  "permission.edit": [
+    {
+      "type": 0,
+      "value": "Bestandsanfragen: Anzeigen, bearbeiten, stornieren"
+    }
+  ],
+  "permission.moveRequest": [
+    {
+      "type": 0,
+      "value": "Bestandsanfragen: Verschieben zu neuem Exemplar, Warteliste neu anordnen"
+    }
+  ],
+  "permission.reorderQueue": [
+    {
+      "type": 0,
+      "value": "Bestandsanfragen: Warteliste neu anordnen"
+    }
+  ],
+  "permission.view": [
+    {
+      "type": 0,
+      "value": "Bestandsanfragen: Anzeigen"
+    }
+  ],
+  "pickSlipsLoading": [
+    {
+      "type": 0,
+      "value": "Entnahmezettel wird geladen, bitte warten."
+    }
+  ],
+  "pickupServicePoint.name": [
+    {
+      "type": 0,
+      "value": "Abholservicestelle"
+    }
+  ],
+  "position": [
+    {
+      "type": 0,
+      "value": "Position in Warteliste"
+    }
+  ],
+  "printInProgress": [
+    {
+      "type": 0,
+      "value": "Druckoptionen werden gerade geladen. Dieses kann einige Sekunden dauern. Bitte geduldig sein."
+    }
+  ],
+  "printPickSlips": [
+    {
+      "type": 0,
+      "value": "Entnahmezettel für "
+    },
+    {
+      "type": 1,
+      "value": "sp"
+    },
+    {
+      "type": 0,
+      "value": " drucken"
+    }
+  ],
+  "proxy.barcode": [
+    {
+      "type": 0,
+      "value": "Barcode Vollmachtnehmer/-in"
+    }
+  ],
+  "proxy.name": [
+    {
+      "type": 0,
+      "value": "Name Vollmachtnehmer/-in"
+    }
+  ],
+  "requestDate": [
+    {
+      "type": 0,
+      "value": "Datum der Bestandsanfrage"
+    }
+  ],
+  "requestExpirationDate": [
+    {
+      "type": 0,
+      "value": "Ablaufdatum Bestandsanfrage"
+    }
+  ],
+  "requestLevel": [
+    {
+      "type": 0,
+      "value": "Request level"
+    }
+  ],
+  "requestMeta.detailLabel": [
+    {
+      "type": 0,
+      "value": "Detail der Bestandsanfrage"
+    }
+  ],
+  "requestMeta.expirationDate": [
+    {
+      "type": 0,
+      "value": "Ablaufdatum Bestandsanfrage"
+    }
+  ],
+  "requestMeta.fulfilment.delivery": [
+    {
+      "type": 0,
+      "value": "Lieferung"
+    }
+  ],
+  "requestMeta.fulfilment.holdShelf": [
+    {
+      "type": 0,
+      "value": "Abholregal"
+    }
+  ],
+  "requestMeta.holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "Abholregal-Ablaufdatum"
+    }
+  ],
+  "requestMeta.information": [
+    {
+      "type": 0,
+      "value": "Informationen zur Bestandsanfrage"
+    }
+  ],
+  "requestMeta.queuePosition": [
+    {
+      "type": 0,
+      "value": "Position in Warteliste"
+    }
+  ],
+  "requestMeta.status": [
+    {
+      "type": 0,
+      "value": "Status der Bestandsanfrage"
+    }
+  ],
+  "requestMeta.tags": [
+    {
+      "type": 0,
+      "value": "Tags"
+    }
+  ],
+  "requestMeta.type": [
+    {
+      "type": 0,
+      "value": "Bestandsanfragetyp"
+    }
+  ],
+  "requestMeta.type.hold": [
+    {
+      "type": 0,
+      "value": "Vormerkung"
+    }
+  ],
+  "requestMeta.type.holds": [
+    {
+      "type": 0,
+      "value": "Vormerkungen"
+    }
+  ],
+  "requestMeta.type.page": [
+    {
+      "type": 0,
+      "value": "Ausleihbestellung"
+    }
+  ],
+  "requestMeta.type.pages": [
+    {
+      "type": 0,
+      "value": "Ausleihbestellungen"
+    }
+  ],
+  "requestMeta.type.recall": [
+    {
+      "type": 0,
+      "value": "Rückruf"
+    }
+  ],
+  "requestMeta.type.recalls": [
+    {
+      "type": 0,
+      "value": "Rückrufe"
+    }
+  ],
+  "requestNotAllowed": [
+    {
+      "type": 0,
+      "value": "Bestandsanfrage nicht erlaubt"
+    }
+  ],
+  "requestQueue": [
+    {
+      "type": 0,
+      "value": "Bestandsanfrage-Warteliste"
+    }
+  ],
+  "requestQueue.chronology": [
+    {
+      "type": 0,
+      "value": "Chronology"
+    }
+  ],
+  "requestQueue.confirmReorder.cancel": [
+    {
+      "type": 0,
+      "value": "In aktueller Position belassen"
+    }
+  ],
+  "requestQueue.confirmReorder.confirm": [
+    {
+      "type": 0,
+      "value": "Nach Position 2 verschieben"
+    }
+  ],
+  "requestQueue.confirmReorder.message1": [
+    {
+      "type": 0,
+      "value": "Bestandsanfragen können nicht von Position 1 verschoben werden, wenn Bereitstellung begonnen hat."
+    }
+  ],
+  "requestQueue.confirmReorder.message2": [
+    {
+      "type": 0,
+      "value": "Bestandsanfragen können nicht über die Ausleihbestellung verschoben werden, auch wenn die Bereitstellung noch nicht begonnen hat."
+    }
+  ],
+  "requestQueue.confirmReorder.title": [
+    {
+      "type": 0,
+      "value": "Bestandsanfrage an Position 2 der Warteliste verschoben"
+    }
+  ],
+  "requestQueue.deliveryType": [
+    {
+      "type": 0,
+      "value": "Bereitstellung: "
+    },
+    {
+      "type": 1,
+      "value": "type"
+    }
+  ],
+  "requestQueue.description": [
+    {
+      "type": 0,
+      "value": "Instance: "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "title"
+        },
+        {
+          "type": 0,
+          "value": " /"
+        },
+        {
+          "type": 1,
+          "value": "author"
+        },
+        {
+          "type": 0,
+          "value": "."
+        }
+      ],
+      "type": 8,
+      "value": "instanceLink"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "publisher"
+        },
+        {
+          "type": 0,
+          "value": ", "
+        },
+        {
+          "type": 1,
+          "value": "publicationDate"
+        }
+      ],
+      "type": 8,
+      "value": "i"
+    }
+  ],
+  "requestQueue.enumeration": [
+    {
+      "type": 0,
+      "value": "Enumeration"
+    }
+  ],
+  "requestQueue.fulfillmentInProgressSectionTitle": [
+    {
+      "type": 0,
+      "value": "Fulfillment in progress"
+    }
+  ],
+  "requestQueue.fulfillmentStatus": [
+    {
+      "type": 0,
+      "value": "Status"
+    }
+  ],
+  "requestQueue.heading": [
+    {
+      "type": 0,
+      "value": "Request queue on instance • "
+    },
+    {
+      "type": 1,
+      "value": "title"
+    },
+    {
+      "type": 0,
+      "value": " /"
+    },
+    {
+      "type": 1,
+      "value": "author"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "requestQueue.holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "Abholregal-Ablaufdatum"
+    }
+  ],
+  "requestQueue.itemBarcode": [
+    {
+      "type": 0,
+      "value": "Item barcode"
+    }
+  ],
+  "requestQueue.noDataForFulfillment": [
+    {
+      "type": 0,
+      "value": "There are no requests in fulfillment."
+    }
+  ],
+  "requestQueue.notYetFilledRequests.noData": [
+    {
+      "type": 0,
+      "value": "No requests found"
+    }
+  ],
+  "requestQueue.notYetFilledSectionTitle": [
+    {
+      "type": 0,
+      "value": "Open - Not yet filled"
+    }
+  ],
+  "requestQueue.order": [
+    {
+      "type": 0,
+      "value": "Order"
+    }
+  ],
+  "requestQueue.patronComments": [
+    {
+      "type": 0,
+      "value": "Patron comments"
+    }
+  ],
+  "requestQueue.patronGroup": [
+    {
+      "type": 0,
+      "value": "Personengruppe"
+    }
+  ],
+  "requestQueue.pickup": [
+    {
+      "type": 0,
+      "value": "Abholung / Lieferung"
+    }
+  ],
+  "requestQueue.refresh": [
+    {
+      "type": 0,
+      "value": "Warteliste aktualisieren"
+    }
+  ],
+  "requestQueue.reorderSuccess": [
+    {
+      "type": 0,
+      "value": "Warteliste wurde erfolgreich aktualisiert"
+    }
+  ],
+  "requestQueue.requestDate": [
+    {
+      "type": 0,
+      "value": "Datum der Bestandsanfrage"
+    }
+  ],
+  "requestQueue.requestExpirationDate": [
+    {
+      "type": 0,
+      "value": "Ablaufdatum Bestandsanfrage"
+    }
+  ],
+  "requestQueue.requestInProgress": [
+    {
+      "type": 0,
+      "value": "In progress"
+    }
+  ],
+  "requestQueue.requestType": [
+    {
+      "type": 0,
+      "value": "Typ"
+    }
+  ],
+  "requestQueue.requesterBarcode": [
+    {
+      "type": 0,
+      "value": "Barcode Benutzer/-in"
+    }
+  ],
+  "requestQueue.requesterName": [
+    {
+      "type": 0,
+      "value": "Bestandsanfrage für"
+    }
+  ],
+  "requestQueue.status": [
+    {
+      "type": 0,
+      "value": "Request status"
+    }
+  ],
+  "requestQueue.volume": [
+    {
+      "type": 0,
+      "value": "Volume"
+    }
+  ],
+  "requestType": [
+    {
+      "type": 0,
+      "value": "Bestandsanfragetyp"
+    }
+  ],
+  "requestType.message": [
+    {
+      "type": 0,
+      "value": "Exemplar auswählen, um verfügbare Bestandsanfragentypen anzuzeigen"
+    }
+  ],
+  "requester.barcode": [
+    {
+      "type": 0,
+      "value": "Barcode Benutzer/-in"
+    }
+  ],
+  "requester.findUserPluginLabel": [
+    {
+      "type": 0,
+      "value": "Personensuche"
+    }
+  ],
+  "requester.firstName": [
+    {
+      "type": 0,
+      "value": "Vorname Benutzer/-in"
+    }
+  ],
+  "requester.fulfilmentPref": [
+    {
+      "type": 0,
+      "value": "Bereitstellungspräferenz"
+    }
+  ],
+  "requester.information": [
+    {
+      "type": 0,
+      "value": "Informationen über Benutzer/-in"
+    }
+  ],
+  "requester.name": [
+    {
+      "type": 0,
+      "value": "Name Benutzer- in"
+    }
+  ],
+  "requester.patronGroup.group": [
+    {
+      "type": 0,
+      "value": "Personengruppe"
+    }
+  ],
+  "requester.pickupLocation": [
+    {
+      "type": 0,
+      "value": "Abholstandort"
+    }
+  ],
+  "requester.proxy": [
+    {
+      "type": 0,
+      "value": "Vollmachtnehmer/-in "
+    }
+  ],
+  "requester.requester": [
+    {
+      "type": 0,
+      "value": "Bestandsanfrage für"
+    }
+  ],
+  "requester.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "Barcode Benutzer/-in scannen oder eingeben"
+    }
+  ],
+  "requester.username": [
+    {
+      "type": 0,
+      "value": "Kennung"
+    }
+  ],
+  "requests.createTitleLevelRequest": [
+    {
+      "type": 0,
+      "value": "Create title level request"
+    }
+  ],
+  "requests.itemBarcode": [
+    {
+      "type": 0,
+      "value": "Exemplarbarcode"
+    }
+  ],
+  "requests.proxy": [
+    {
+      "type": 0,
+      "value": "Vollmachtnehmer/-in"
+    }
+  ],
+  "requests.queuePosition": [
+    {
+      "type": 0,
+      "value": "Queue position"
+    }
+  ],
+  "requests.requestDate": [
+    {
+      "type": 0,
+      "value": "Datum der Bestandsanfrage"
+    }
+  ],
+  "requests.requester": [
+    {
+      "type": 0,
+      "value": "Bestandsanfrage für"
+    }
+  ],
+  "requests.requesterBarcode": [
+    {
+      "type": 0,
+      "value": "Barcode Benutzer/-in"
+    }
+  ],
+  "requests.status": [
+    {
+      "type": 0,
+      "value": "Status der Bestandsanfrage"
+    }
+  ],
+  "requests.title": [
+    {
+      "type": 0,
+      "value": "Titel"
+    }
+  ],
+  "requests.type": [
+    {
+      "type": 0,
+      "value": "Typ"
+    }
+  ],
+  "requests.year": [
+    {
+      "type": 0,
+      "value": "Year"
+    }
+  ],
+  "resultCount": [
+    {
+      "style": null,
+      "type": 2,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "one": {
+          "value": [
+            {
+              "type": 0,
+              "value": "Datensatz gefunden"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "Datensätze gefunden"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "routingError": [
+    {
+      "type": 0,
+      "value": "Wie sind Sie zu "
+    },
+    {
+      "type": 1,
+      "value": "pathname"
+    },
+    {
+      "type": 0,
+      "value": " gekommen?"
+    }
+  ],
+  "routingErrorOops": [
+    {
+      "type": 0,
+      "value": "Uh-oh!"
+    }
+  ],
+  "showTags": [
+    {
+      "type": 0,
+      "value": "Tags anzeigen"
+    }
+  ],
+  "status": [
+    {
+      "type": 0,
+      "value": "Status der Bestandsanfrage"
+    }
+  ],
+  "tags.tagList": [
+    {
+      "type": 0,
+      "value": "Tags"
+    }
+  ],
+  "title.information": [
+    {
+      "type": 0,
+      "value": "Title information"
+    }
+  ],
+  "titleInformation.contributors": [
+    {
+      "type": 0,
+      "value": "Mitwirkende/-r"
+    }
+  ],
+  "titleInformation.editions": [
+    {
+      "type": 0,
+      "value": "Ausgabe"
+    }
+  ],
+  "titleInformation.identifiers": [
+    {
+      "type": 0,
+      "value": "ISBN"
+    }
+  ],
+  "titleInformation.publicationsDate": [
+    {
+      "type": 0,
+      "value": "Erscheinungsdatum"
+    }
+  ],
+  "titleInformation.title": [
+    {
+      "type": 0,
+      "value": "Haupttitel"
+    }
+  ],
+  "titleInformation.titleLevelRequests": [
+    {
+      "type": 0,
+      "value": "Bestandsanfragen auf Titelebene"
+    }
+  ],
+  "titleLevel": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ]
+}

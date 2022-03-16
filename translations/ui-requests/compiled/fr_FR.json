@@ -1,0 +1,1665 @@
+{
+  "actions.cancelNewRequest": [
+    {
+      "type": 0,
+      "value": "Annuler"
+    }
+  ],
+  "actions.closeNewRequest": [
+    {
+      "type": 0,
+      "value": "Fermer la nouvelle demande"
+    }
+  ],
+  "actions.createNewRequest": [
+    {
+      "type": 0,
+      "value": "Créer une nouvelle demande"
+    }
+  ],
+  "actions.duplicateRequest": [
+    {
+      "type": 0,
+      "value": "Dupliquer"
+    }
+  ],
+  "actions.edit": [
+    {
+      "type": 0,
+      "value": "Modifier"
+    }
+  ],
+  "actions.editRequest": [
+    {
+      "type": 0,
+      "value": "Modifier la demande"
+    }
+  ],
+  "actions.editRequestLink": [
+    {
+      "type": 0,
+      "value": "Boîte de dialogue Modifier la demande"
+    }
+  ],
+  "actions.label": [
+    {
+      "type": 0,
+      "value": "Actions"
+    }
+  ],
+  "actions.loading": [
+    {
+      "type": 0,
+      "value": "Chargement..."
+    }
+  ],
+  "actions.moveRequest": [
+    {
+      "type": 0,
+      "value": "Déplacer la demande"
+    }
+  ],
+  "actions.newRequest": [
+    {
+      "type": 0,
+      "value": "Nouvelle demande"
+    }
+  ],
+  "actions.reorderQueue": [
+    {
+      "type": 0,
+      "value": "Réorganiser la file d'attente"
+    }
+  ],
+  "actions.selectAddressType": [
+    {
+      "type": 0,
+      "value": "Sélectionner le type d'adresse"
+    }
+  ],
+  "actions.selectPickupLoc": [
+    {
+      "type": 0,
+      "value": "Sélectionnez l'emplacement de collecte"
+    }
+  ],
+  "actions.selectPickupSp": [
+    {
+      "type": 0,
+      "value": "Sélectionnez le point de retrait"
+    }
+  ],
+  "actions.viewRequestsInQueue": [
+    {
+      "type": 0,
+      "value": "Afficher les demandes / réservations en file d'attente"
+    }
+  ],
+  "additionalReasons": [
+    {
+      "type": 0,
+      "value": "Afficher les détails pour voir les raisons supplémentaires de la suspension..."
+    }
+  ],
+  "barcode": [
+    {
+      "type": 0,
+      "value": "Code-barres"
+    }
+  ],
+  "blockModal": [
+    {
+      "type": 0,
+      "value": "Utilisateur bloqué"
+    }
+  ],
+  "blockedLabel": [
+    {
+      "type": 0,
+      "value": "Raison de la suspension"
+    }
+  ],
+  "cancel.additionalInfoLabel": [
+    {
+      "type": 0,
+      "value": "Informations supplémentaires pour l'utilisateur "
+    },
+    {
+      "type": 1,
+      "value": "required"
+    }
+  ],
+  "cancel.additionalInfoPlaceholderOptional": [
+    {
+      "type": 0,
+      "value": "Saisir davantage d'informations sur l'annulation (facultatif)"
+    }
+  ],
+  "cancel.additionalInfoPlaceholderRequired": [
+    {
+      "type": 0,
+      "value": "Saisir davantage d'informations sur l'annulation (obligatoire)"
+    }
+  ],
+  "cancel.cancelRequest": [
+    {
+      "type": 0,
+      "value": "Annuler la demande"
+    }
+  ],
+  "cancel.modalLabel": [
+    {
+      "type": 0,
+      "value": "Confirmer l'annulation de la demande"
+    }
+  ],
+  "cancel.notifyLabel": [
+    {
+      "type": 0,
+      "value": "Notifier l'utilisateur"
+    }
+  ],
+  "cancel.reasonLabel": [
+    {
+      "type": 0,
+      "value": "Raison de l'annulation"
+    }
+  ],
+  "cancel.requestWillBeCancelled": [
+    {
+      "children": [
+        {
+          "type": 0,
+          "value": " "
+        },
+        {
+          "type": 1,
+          "value": "title"
+        },
+        {
+          "type": 0,
+          "value": " "
+        }
+      ],
+      "type": 8,
+      "value": "b"
+    },
+    {
+      "type": 0,
+      "value": " sera "
+    },
+    {
+      "children": [
+        {
+          "type": 0,
+          "value": " annulé(e) "
+        }
+      ],
+      "type": 8,
+      "value": "b"
+    }
+  ],
+  "cancellationAdditionalInformation": [
+    {
+      "type": 0,
+      "value": "Informations complémentaires sur l'utilisateur"
+    }
+  ],
+  "cancellationReason": [
+    {
+      "type": 0,
+      "value": "Motif de l'annulation"
+    }
+  ],
+  "close": [
+    {
+      "type": 0,
+      "value": "Fermer"
+    }
+  ],
+  "common.cancel": [
+    {
+      "type": 0,
+      "value": "Annuler"
+    }
+  ],
+  "common.saveAndClose": [
+    {
+      "type": 0,
+      "value": "Sauvegarder et fermer"
+    }
+  ],
+  "csvReportInProgress": [
+    {
+      "type": 0,
+      "value": "Un rapport de résultats CSV est en cours de création. Cela peut prendre un certain temps pour des ensembles de résultats plus volumineux. Merci de votre patience."
+    }
+  ],
+  "csvReportPending": [
+    {
+      "type": 0,
+      "value": "csvReportPending"
+    }
+  ],
+  "deliveryAddress": [
+    {
+      "type": 0,
+      "value": "Adresse de livraison"
+    }
+  ],
+  "detailsButton": [
+    {
+      "type": 0,
+      "value": "Voir les détails"
+    }
+  ],
+  "enter": [
+    {
+      "type": 0,
+      "value": "Valider"
+    }
+  ],
+  "errorModal.message": [
+    {
+      "type": 1,
+      "value": "title"
+    },
+    {
+      "type": 0,
+      "value": " ( "
+    },
+    {
+      "type": 1,
+      "value": "materialType"
+    },
+    {
+      "type": 0,
+      "value": " ) (Code-barres: "
+    },
+    {
+      "type": 1,
+      "value": "barcode"
+    },
+    {
+      "type": 0,
+      "value": " ) a comme statut "
+    },
+    {
+      "children": [
+        {
+          "type": 0,
+          "value": " "
+        },
+        {
+          "type": 1,
+          "value": "itemStatus"
+        },
+        {
+          "type": 0,
+          "value": " "
+        }
+      ],
+      "type": 8,
+      "value": "strong"
+    },
+    {
+      "type": 0,
+      "value": " et ne peut pas être réservé."
+    }
+  ],
+  "errorModal.title": [
+    {
+      "type": 0,
+      "value": "L'exemplaire ne peut pas être demandé"
+    }
+  ],
+  "errors.instanceUuidOrHridDoesNotExist": [
+    {
+      "type": 0,
+      "value": "Instance with this HRID or UUID does not exist"
+    }
+  ],
+  "errors.itemBarcodeDoesNotExist": [
+    {
+      "type": 0,
+      "value": "L'article avec ce code-barres n'existe pas"
+    }
+  ],
+  "errors.onlyCheckedOutForHold": [
+    {
+      "type": 0,
+      "value": "Seuls les articles empruntés peuvent être conservés"
+    }
+  ],
+  "errors.onlyCheckedOutForRecall": [
+    {
+      "type": 0,
+      "value": "Seuls les articles empruntés peuvent être rappelés"
+    }
+  ],
+  "errors.selectInstanceRequired": [
+    {
+      "type": 0,
+      "value": "Please select an instance and hit enter"
+    }
+  ],
+  "errors.selectItem": [
+    {
+      "type": 0,
+      "value": "Merci de sélectionner un élément"
+    }
+  ],
+  "errors.selectItemRequired": [
+    {
+      "type": 0,
+      "value": "Veuillez sélectionner un élément et appuyez sur Entrée"
+    }
+  ],
+  "errors.selectUser": [
+    {
+      "type": 0,
+      "value": "Veuillez remplir les informations du demandeur pour continuer"
+    }
+  ],
+  "errors.sync.requestQueueBody": [
+    {
+      "type": 0,
+      "value": "Cette file d'attente a été mise à jour par une autre personne ou un autre processus et peut être désynchronisée."
+    }
+  ],
+  "errors.sync.requestQueueLabel": [
+    {
+      "type": 0,
+      "value": "La file d'attente des réservations n'est pas synchronisée"
+    }
+  ],
+  "errors.unknown.requestQueueBody": [
+    {
+      "type": 0,
+      "value": "La réorganisation de la file d'attente de la demande/réservation a échoué"
+    }
+  ],
+  "errors.unknown.requestQueueLabel": [
+    {
+      "type": 0,
+      "value": "Erreur de file d'attente de la demande/réservation"
+    }
+  ],
+  "errors.userBarcodeDoesNotExist": [
+    {
+      "type": 0,
+      "value": "L'utilisateur avec ce code-barres n'existe pas"
+    }
+  ],
+  "exportExpiredHoldShelfToCsv": [
+    {
+      "type": 0,
+      "value": "Exporter le rapport pour "
+    },
+    {
+      "type": 1,
+      "value": "currentServicePoint"
+    }
+  ],
+  "exportSearchResultsToCsv": [
+    {
+      "type": 0,
+      "value": "Exporter les résultats au format CSV"
+    }
+  ],
+  "filters.requestLevel.item": [
+    {
+      "type": 0,
+      "value": "Exemplaire"
+    }
+  ],
+  "filters.requestLevel.title": [
+    {
+      "type": 0,
+      "value": "Titre"
+    }
+  ],
+  "filters.requestStatus.awaitingDelivery": [
+    {
+      "type": 0,
+      "value": "Ouvert - En attente de livraison"
+    }
+  ],
+  "filters.requestStatus.awaitingPickup": [
+    {
+      "type": 0,
+      "value": "Ouvert - En attente de retrait"
+    }
+  ],
+  "filters.requestStatus.cancelled": [
+    {
+      "type": 0,
+      "value": "Fermé - Annulé"
+    }
+  ],
+  "filters.requestStatus.filled": [
+    {
+      "type": 0,
+      "value": "Fermé - Fourni"
+    }
+  ],
+  "filters.requestStatus.inTransit": [
+    {
+      "type": 0,
+      "value": "Ouvert - En transit"
+    }
+  ],
+  "filters.requestStatus.notYetFilled": [
+    {
+      "type": 0,
+      "value": "Ouvert - Pas encore servi/fourni"
+    }
+  ],
+  "filters.requestStatus.pickupExpired": [
+    {
+      "type": 0,
+      "value": "Fermé - Retrait échu"
+    }
+  ],
+  "filters.requestStatus.unfilled": [
+    {
+      "type": 0,
+      "value": "Fermé - Non fourni"
+    }
+  ],
+  "filters.requestType.holds": [
+    {
+      "type": 0,
+      "value": "Demandes/Réservations"
+    }
+  ],
+  "filters.requestType.pages": [
+    {
+      "type": 0,
+      "value": "Demandes (réserver, obtenir)"
+    }
+  ],
+  "filters.requestType.recalls": [
+    {
+      "type": 0,
+      "value": "Rappels"
+    }
+  ],
+  "fulfilmentPreference": [
+    {
+      "type": 0,
+      "value": "Préférence de distribution de la demande"
+    }
+  ],
+  "holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "Date d'expiration en rayon d'attente"
+    }
+  ],
+  "holdShelfExpirationTime": [
+    {
+      "type": 0,
+      "value": "holdShelfExpirationTime"
+    }
+  ],
+  "instance.contributorNames": [
+    {
+      "type": 0,
+      "value": "Contributeur / auteur"
+    }
+  ],
+  "instance.information": [
+    {
+      "type": 0,
+      "value": "Title information"
+    }
+  ],
+  "instance.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "Enter HRID or UUID"
+    }
+  ],
+  "instance.title": [
+    {
+      "type": 0,
+      "value": "Titre"
+    }
+  ],
+  "instance.value": [
+    {
+      "type": 0,
+      "value": "Instance HRID or UUID"
+    }
+  ],
+  "item.barcode": [
+    {
+      "type": 0,
+      "value": "Code-barres du document"
+    }
+  ],
+  "item.callNumber": [
+    {
+      "type": 0,
+      "value": "Chaîne de caractères de la cote"
+    }
+  ],
+  "item.callNumberComponents.callNumber": [
+    {
+      "type": 0,
+      "value": "Chaîne de caractères de la cote"
+    }
+  ],
+  "item.callNumberComponents.prefix": [
+    {
+      "type": 0,
+      "value": "Préfixe de la cote"
+    }
+  ],
+  "item.callNumberComponents.suffix": [
+    {
+      "type": 0,
+      "value": "Suffixe de la cote"
+    }
+  ],
+  "item.chronology": [
+    {
+      "type": 0,
+      "value": "Chronologie"
+    }
+  ],
+  "item.contributorNames": [
+    {
+      "type": 0,
+      "value": "Contributeur"
+    }
+  ],
+  "item.copyNumber": [
+    {
+      "type": 0,
+      "value": "Copie de l'élément"
+    }
+  ],
+  "item.copyNumbers": [
+    {
+      "type": 0,
+      "value": "Numéro d'exemplaire"
+    }
+  ],
+  "item.dueDate": [
+    {
+      "type": 0,
+      "value": "Date d'échéance actuelle"
+    }
+  ],
+  "item.effectiveLocation": [
+    {
+      "type": 0,
+      "value": "Emplacement"
+    }
+  ],
+  "item.enumeration": [
+    {
+      "type": 0,
+      "value": "Tomaison"
+    }
+  ],
+  "item.id": [
+    {
+      "type": 0,
+      "value": "ID de l'exemplaire"
+    }
+  ],
+  "item.information": [
+    {
+      "type": 0,
+      "value": "Informations sur le document"
+    }
+  ],
+  "item.location.code": [
+    {
+      "type": 0,
+      "value": "Code de l'emplacement"
+    }
+  ],
+  "item.location.libraryName": [
+    {
+      "type": 0,
+      "value": "Bibliothèque"
+    }
+  ],
+  "item.location.name": [
+    {
+      "type": 0,
+      "value": "Emplacement"
+    }
+  ],
+  "item.noInformation": [
+    {
+      "type": 0,
+      "value": "There is no item information for this request."
+    }
+  ],
+  "item.numRequests": [
+    {
+      "type": 0,
+      "value": "Réservations"
+    }
+  ],
+  "item.requestsOnItem": [
+    {
+      "type": 0,
+      "value": "Réservations pour ce document"
+    }
+  ],
+  "item.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "Scanner ou saisir le code-barres de l'exemplaire"
+    }
+  ],
+  "item.status": [
+    {
+      "type": 0,
+      "value": "Statut du document"
+    }
+  ],
+  "item.title": [
+    {
+      "type": 0,
+      "value": "Titre"
+    }
+  ],
+  "item.volume": [
+    {
+      "type": 0,
+      "value": "Volume"
+    }
+  ],
+  "itemLevel": [
+    {
+      "type": 0,
+      "value": "Item"
+    }
+  ],
+  "items": [
+    {
+      "type": 1,
+      "value": "number"
+    },
+    {
+      "type": 0,
+      "value": " items"
+    }
+  ],
+  "items.instanceItems": [
+    {
+      "type": 0,
+      "value": "Other items in "
+    },
+    {
+      "type": 1,
+      "value": "title"
+    }
+  ],
+  "items.instanceItems.notFound": [
+    {
+      "type": 0,
+      "value": "No items found"
+    }
+  ],
+  "items.selectItem": [
+    {
+      "type": 0,
+      "value": "Select item"
+    }
+  ],
+  "loan.dueDate": [
+    {
+      "type": 0,
+      "value": "Date d'échéance actuelle"
+    }
+  ],
+  "loanType": [
+    {
+      "type": 0,
+      "value": "Type de prêt"
+    }
+  ],
+  "location": [
+    {
+      "type": 0,
+      "value": "Emplacement"
+    }
+  ],
+  "materialType": [
+    {
+      "type": 0,
+      "value": "Type de ressource"
+    }
+  ],
+  "meta.title": [
+    {
+      "type": 0,
+      "value": "Réservations"
+    }
+  ],
+  "moveRequest.chooseRequestMessage": [
+    {
+      "type": 0,
+      "value": "Merci de sélectionner le type autorisé"
+    }
+  ],
+  "moveRequest.confirm": [
+    {
+      "type": 0,
+      "value": "Confirmer"
+    }
+  ],
+  "moveRequest.requestTypeChangeHeading": [
+    {
+      "type": 0,
+      "value": "Le type de réservation actuel n'est pas autorisé pour le document sélectionné"
+    }
+  ],
+  "moveRequest.requestTypeChangeMessage": [
+    {
+      "type": 0,
+      "value": "La demande sera convertie en "
+    },
+    {
+      "children": [
+        {
+          "type": 0,
+          "value": " "
+        },
+        {
+          "type": 1,
+          "value": "requestType"
+        },
+        {
+          "type": 0,
+          "value": " "
+        }
+      ],
+      "type": 8,
+      "value": "strong"
+    },
+    {
+      "type": 0,
+      "value": " ."
+    }
+  ],
+  "moveRequest.secondPositionMessage": [
+    {
+      "type": 0,
+      "value": "Requests cannot be moved above page requests, even when fulfillment has not begun. This request will be moved to position 2 in the request queue."
+    }
+  ],
+  "moveRequest.secondPositionTitle": [
+    {
+      "type": 0,
+      "value": "Demande déplacée en position 2 de la file d'attente"
+    }
+  ],
+  "moveRequest.success": [
+    {
+      "type": 0,
+      "value": "La demande a été déplacée avec succès"
+    }
+  ],
+  "noRequestTypesAvailable": [
+    {
+      "type": 0,
+      "value": "Aucun type de réservation disponible pour le document sélectionné"
+    }
+  ],
+  "noServicePoint.errorMessage": [
+    {
+      "type": 0,
+      "value": "Vous devez être connecté à un point de service pour accéder au rapport du rayon d'attente. Veuillez ajouter un ou plusieurs points de service à votre fiche utilisateur dans l'application Utilisateurs. Contactez un administrateur si vous n'avez pas la possibilité d'ajouter des points de service à votre dossier."
+    }
+  ],
+  "noServicePoint.label": [
+    {
+      "type": 0,
+      "value": "Aucune unité de services sélectionnée"
+    }
+  ],
+  "notes.assigned.for": [
+    {
+      "type": 0,
+      "value": "Pour: "
+    },
+    {
+      "type": 1,
+      "value": "instanceLink"
+    },
+    {
+      "type": 0,
+      "value": " ( "
+    },
+    {
+      "type": 1,
+      "value": "itemLink"
+    },
+    {
+      "type": 0,
+      "value": " )"
+    }
+  ],
+  "notes.assigned.requestDate": [
+    {
+      "type": 0,
+      "value": "Date de la demande: "
+    },
+    {
+      "type": 1,
+      "value": "requestCreateDate"
+    }
+  ],
+  "notes.assigned.requester": [
+    {
+      "type": 0,
+      "value": "Demandeur: "
+    },
+    {
+      "type": 1,
+      "value": "requesterName"
+    }
+  ],
+  "notes.entityType.request": [
+    {
+      "type": 0,
+      "value": "Demande"
+    }
+  ],
+  "notes.entityType.request.pluralized": [
+    {
+      "type": 1,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "one": {
+          "value": [
+            {
+              "type": 0,
+              "value": " demande "
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": " demandes "
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "notes.newStaffNote": [
+    {
+      "type": 0,
+      "value": "Nouvelle note du personnel"
+    }
+  ],
+  "notes.staffNotes": [
+    {
+      "type": 0,
+      "value": "Notes du personnel"
+    }
+  ],
+  "override": [
+    {
+      "type": 0,
+      "value": "Substituer"
+    }
+  ],
+  "patronComments": [
+    {
+      "type": 0,
+      "value": "Commentaires utilisateur"
+    }
+  ],
+  "permission.all": [
+    {
+      "type": 0,
+      "value": "Demandes/réservations: toutes les autorisations"
+    }
+  ],
+  "permission.create": [
+    {
+      "type": 0,
+      "value": "Demandes/réservations: afficher, créer"
+    }
+  ],
+  "permission.edit": [
+    {
+      "type": 0,
+      "value": "Demandes/Réservations: afficher, modifier, annuler"
+    }
+  ],
+  "permission.moveRequest": [
+    {
+      "type": 0,
+      "value": "Demandes/réservations: déplacer vers un nouvel élément, réorganiser la file d'attente"
+    }
+  ],
+  "permission.reorderQueue": [
+    {
+      "type": 0,
+      "value": "Demandes/réservations: réorganiser la file d'attente"
+    }
+  ],
+  "permission.view": [
+    {
+      "type": 0,
+      "value": "Demandes/réservations: Afficher"
+    }
+  ],
+  "pickSlipsLoading": [
+    {
+      "type": 0,
+      "value": "Les bordereaux de prélèvement sont en cours de chargement, veuillez patienter"
+    }
+  ],
+  "pickupServicePoint.name": [
+    {
+      "type": 0,
+      "value": "Point de retrait"
+    }
+  ],
+  "position": [
+    {
+      "type": 0,
+      "value": "Position en liste d'attente"
+    }
+  ],
+  "printInProgress": [
+    {
+      "type": 0,
+      "value": "Chargement des options d'impression en cours. Cela peut prendre quelques secondes, merci de patienter."
+    }
+  ],
+  "printPickSlips": [
+    {
+      "type": 0,
+      "value": "Imprimer les bordereaux de prélèvement pour "
+    },
+    {
+      "type": 1,
+      "value": "sp"
+    }
+  ],
+  "proxy.barcode": [
+    {
+      "type": 0,
+      "value": "Code-barres du mandataire du demandeur"
+    }
+  ],
+  "proxy.name": [
+    {
+      "type": 0,
+      "value": "Nom du mandataire du demandeur"
+    }
+  ],
+  "requestDate": [
+    {
+      "type": 0,
+      "value": "requestDate"
+    }
+  ],
+  "requestExpirationDate": [
+    {
+      "type": 0,
+      "value": "Date d'expiration de la demande"
+    }
+  ],
+  "requestLevel": [
+    {
+      "type": 0,
+      "value": "Request level"
+    }
+  ],
+  "requestMeta.detailLabel": [
+    {
+      "type": 0,
+      "value": "Détail de la demande"
+    }
+  ],
+  "requestMeta.expirationDate": [
+    {
+      "type": 0,
+      "value": "Date d'expiration de la demande"
+    }
+  ],
+  "requestMeta.fulfilment.delivery": [
+    {
+      "type": 0,
+      "value": "Livraison"
+    }
+  ],
+  "requestMeta.fulfilment.holdShelf": [
+    {
+      "type": 0,
+      "value": "Rayon d'attente"
+    }
+  ],
+  "requestMeta.holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "Date d'expiration en rayon"
+    }
+  ],
+  "requestMeta.information": [
+    {
+      "type": 0,
+      "value": "Informations sur la réservation"
+    }
+  ],
+  "requestMeta.queuePosition": [
+    {
+      "type": 0,
+      "value": "Position en liste d'attente"
+    }
+  ],
+  "requestMeta.status": [
+    {
+      "type": 0,
+      "value": "Statut de la réservation"
+    }
+  ],
+  "requestMeta.tags": [
+    {
+      "type": 0,
+      "value": "Mots-clés"
+    }
+  ],
+  "requestMeta.type": [
+    {
+      "type": 0,
+      "value": "Type de réservation"
+    }
+  ],
+  "requestMeta.type.hold": [
+    {
+      "type": 0,
+      "value": "Réservation"
+    }
+  ],
+  "requestMeta.type.holds": [
+    {
+      "type": 0,
+      "value": "Réservations"
+    }
+  ],
+  "requestMeta.type.page": [
+    {
+      "type": 0,
+      "value": "Page"
+    }
+  ],
+  "requestMeta.type.pages": [
+    {
+      "type": 0,
+      "value": "Pages"
+    }
+  ],
+  "requestMeta.type.recall": [
+    {
+      "type": 0,
+      "value": "Rappel"
+    }
+  ],
+  "requestMeta.type.recalls": [
+    {
+      "type": 0,
+      "value": "Rappels"
+    }
+  ],
+  "requestNotAllowed": [
+    {
+      "type": 0,
+      "value": "Demande non autorisée"
+    }
+  ],
+  "requestQueue": [
+    {
+      "type": 0,
+      "value": "File d'attente"
+    }
+  ],
+  "requestQueue.chronology": [
+    {
+      "type": 0,
+      "value": "Chronologie"
+    }
+  ],
+  "requestQueue.confirmReorder.cancel": [
+    {
+      "type": 0,
+      "value": "Laisser en position actuelle"
+    }
+  ],
+  "requestQueue.confirmReorder.confirm": [
+    {
+      "type": 0,
+      "value": "Déplacer en position 2"
+    }
+  ],
+  "requestQueue.confirmReorder.message1": [
+    {
+      "type": 0,
+      "value": "Les demandes ne peuvent pas être déplacées de la position 1 lorsque l'exécution a commencé."
+    }
+  ],
+  "requestQueue.confirmReorder.message2": [
+    {
+      "type": 0,
+      "value": "Les demandes ne peuvent pas être déplacées au-dessus des demandes de page, même si leur traitement n'a pas commencé."
+    }
+  ],
+  "requestQueue.confirmReorder.title": [
+    {
+      "type": 0,
+      "value": "Demande déplacée en position 2 de la file d'attente"
+    }
+  ],
+  "requestQueue.deliveryType": [
+    {
+      "type": 0,
+      "value": "Livraison: "
+    },
+    {
+      "type": 1,
+      "value": "type"
+    }
+  ],
+  "requestQueue.description": [
+    {
+      "type": 0,
+      "value": "Instance: "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "title"
+        },
+        {
+          "type": 0,
+          "value": " /"
+        },
+        {
+          "type": 1,
+          "value": "author"
+        },
+        {
+          "type": 0,
+          "value": "."
+        }
+      ],
+      "type": 8,
+      "value": "instanceLink"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "publisher"
+        },
+        {
+          "type": 0,
+          "value": ", "
+        },
+        {
+          "type": 1,
+          "value": "publicationDate"
+        }
+      ],
+      "type": 8,
+      "value": "i"
+    }
+  ],
+  "requestQueue.enumeration": [
+    {
+      "type": 0,
+      "value": "Enumeration"
+    }
+  ],
+  "requestQueue.fulfillmentInProgressSectionTitle": [
+    {
+      "type": 0,
+      "value": "Fulfillment in progress"
+    }
+  ],
+  "requestQueue.fulfillmentStatus": [
+    {
+      "type": 0,
+      "value": "Statut"
+    }
+  ],
+  "requestQueue.heading": [
+    {
+      "type": 0,
+      "value": "Request queue on instance • "
+    },
+    {
+      "type": 1,
+      "value": "title"
+    },
+    {
+      "type": 0,
+      "value": " /"
+    },
+    {
+      "type": 1,
+      "value": "author"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "requestQueue.holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "Expiration rayon d'attente"
+    }
+  ],
+  "requestQueue.itemBarcode": [
+    {
+      "type": 0,
+      "value": "Code-barres de l'exemplaire"
+    }
+  ],
+  "requestQueue.noDataForFulfillment": [
+    {
+      "type": 0,
+      "value": "There are no requests in fulfillment."
+    }
+  ],
+  "requestQueue.notYetFilledRequests.noData": [
+    {
+      "type": 0,
+      "value": "No requests found"
+    }
+  ],
+  "requestQueue.notYetFilledSectionTitle": [
+    {
+      "type": 0,
+      "value": "Open - Not yet filled"
+    }
+  ],
+  "requestQueue.order": [
+    {
+      "type": 0,
+      "value": "Commande"
+    }
+  ],
+  "requestQueue.patronComments": [
+    {
+      "type": 0,
+      "value": "Patron comments"
+    }
+  ],
+  "requestQueue.patronGroup": [
+    {
+      "type": 0,
+      "value": "Groupe/Catégorie d'utilisateurs"
+    }
+  ],
+  "requestQueue.pickup": [
+    {
+      "type": 0,
+      "value": "Retrait / livraison"
+    }
+  ],
+  "requestQueue.refresh": [
+    {
+      "type": 0,
+      "value": "Rafraîchir la file d'attente"
+    }
+  ],
+  "requestQueue.reorderSuccess": [
+    {
+      "type": 0,
+      "value": "La file d'attente a été mise à jour avec succès"
+    }
+  ],
+  "requestQueue.requestDate": [
+    {
+      "type": 0,
+      "value": "Date de la demande"
+    }
+  ],
+  "requestQueue.requestExpirationDate": [
+    {
+      "type": 0,
+      "value": "Expiration de la demande"
+    }
+  ],
+  "requestQueue.requestInProgress": [
+    {
+      "type": 0,
+      "value": "En cours"
+    }
+  ],
+  "requestQueue.requestType": [
+    {
+      "type": 0,
+      "value": "Type"
+    }
+  ],
+  "requestQueue.requesterBarcode": [
+    {
+      "type": 0,
+      "value": "Code-barres du demandeur"
+    }
+  ],
+  "requestQueue.requesterName": [
+    {
+      "type": 0,
+      "value": "Demandeur"
+    }
+  ],
+  "requestQueue.status": [
+    {
+      "type": 0,
+      "value": "Statut de la réservation"
+    }
+  ],
+  "requestQueue.volume": [
+    {
+      "type": 0,
+      "value": "Volume"
+    }
+  ],
+  "requestType": [
+    {
+      "type": 0,
+      "value": "Type de réservation"
+    }
+  ],
+  "requestType.message": [
+    {
+      "type": 0,
+      "value": "Sélectionnez un élément pour afficher les types de demande disponibles"
+    }
+  ],
+  "requester.barcode": [
+    {
+      "type": 0,
+      "value": "Code-barres du demandeur"
+    }
+  ],
+  "requester.findUserPluginLabel": [
+    {
+      "type": 0,
+      "value": "Recherche du demandeur"
+    }
+  ],
+  "requester.firstName": [
+    {
+      "type": 0,
+      "value": "Prénom du demandeur"
+    }
+  ],
+  "requester.fulfilmentPref": [
+    {
+      "type": 0,
+      "value": "Préférence de distribution"
+    }
+  ],
+  "requester.information": [
+    {
+      "type": 0,
+      "value": "Informations sur le demandeur"
+    }
+  ],
+  "requester.name": [
+    {
+      "type": 0,
+      "value": "Nom du demandeur"
+    }
+  ],
+  "requester.patronGroup.group": [
+    {
+      "type": 0,
+      "value": "Groupe utilisateur du demandeur"
+    }
+  ],
+  "requester.pickupLocation": [
+    {
+      "type": 0,
+      "value": "Emplacement du point de retrait"
+    }
+  ],
+  "requester.proxy": [
+    {
+      "type": 0,
+      "value": "Procuration du demandeur"
+    }
+  ],
+  "requester.requester": [
+    {
+      "type": 0,
+      "value": "Demandeur"
+    }
+  ],
+  "requester.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "Scanner ou saisir le code-barres du demandeur"
+    }
+  ],
+  "requester.username": [
+    {
+      "type": 0,
+      "value": "Nom d'utilisateur"
+    }
+  ],
+  "requests.createTitleLevelRequest": [
+    {
+      "type": 0,
+      "value": "Create title level request"
+    }
+  ],
+  "requests.itemBarcode": [
+    {
+      "type": 0,
+      "value": "Code-barres du document"
+    }
+  ],
+  "requests.proxy": [
+    {
+      "type": 0,
+      "value": "Procuration"
+    }
+  ],
+  "requests.queuePosition": [
+    {
+      "type": 0,
+      "value": "Queue position"
+    }
+  ],
+  "requests.requestDate": [
+    {
+      "type": 0,
+      "value": "Date de la demande"
+    }
+  ],
+  "requests.requester": [
+    {
+      "type": 0,
+      "value": "Demandeur"
+    }
+  ],
+  "requests.requesterBarcode": [
+    {
+      "type": 0,
+      "value": "Code-barres du demandeur"
+    }
+  ],
+  "requests.status": [
+    {
+      "type": 0,
+      "value": "Statut de la réservation"
+    }
+  ],
+  "requests.title": [
+    {
+      "type": 0,
+      "value": "Titre"
+    }
+  ],
+  "requests.type": [
+    {
+      "type": 0,
+      "value": "Type"
+    }
+  ],
+  "requests.year": [
+    {
+      "type": 0,
+      "value": "Year"
+    }
+  ],
+  "resultCount": [
+    {
+      "style": null,
+      "type": 2,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "one": {
+          "value": [
+            {
+              "type": 0,
+              "value": " enregistrement trouvé "
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": " enregistrements trouvés "
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "routingError": [
+    {
+      "type": 0,
+      "value": "Comment êtes-vous arrivé à "
+    },
+    {
+      "type": 1,
+      "value": "pathname"
+    },
+    {
+      "type": 0,
+      "value": " ?"
+    }
+  ],
+  "routingErrorOops": [
+    {
+      "type": 0,
+      "value": "Ahem!"
+    }
+  ],
+  "showTags": [
+    {
+      "type": 0,
+      "value": "Afficher les mots-clés"
+    }
+  ],
+  "status": [
+    {
+      "type": 0,
+      "value": "Statut de la réservation"
+    }
+  ],
+  "tags.tagList": [
+    {
+      "type": 0,
+      "value": "Mots-clés"
+    }
+  ],
+  "title.information": [
+    {
+      "type": 0,
+      "value": "Informations sur le titre"
+    }
+  ],
+  "titleInformation.contributors": [
+    {
+      "type": 0,
+      "value": "Contributeur / auteur"
+    }
+  ],
+  "titleInformation.editions": [
+    {
+      "type": 0,
+      "value": "Edition"
+    }
+  ],
+  "titleInformation.identifiers": [
+    {
+      "type": 0,
+      "value": "ISBN"
+    }
+  ],
+  "titleInformation.publicationsDate": [
+    {
+      "type": 0,
+      "value": "Date de publication"
+    }
+  ],
+  "titleInformation.title": [
+    {
+      "type": 0,
+      "value": "Titre"
+    }
+  ],
+  "titleInformation.titleLevelRequests": [
+    {
+      "type": 0,
+      "value": "Title level requests"
+    }
+  ],
+  "titleLevel": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ]
+}

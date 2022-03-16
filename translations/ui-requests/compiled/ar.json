@@ -1,0 +1,1645 @@
+{
+  "actions.cancelNewRequest": [
+    {
+      "type": 0,
+      "value": "إلغاء"
+    }
+  ],
+  "actions.closeNewRequest": [
+    {
+      "type": 0,
+      "value": "إغلاق الطلب الجديد"
+    }
+  ],
+  "actions.createNewRequest": [
+    {
+      "type": 0,
+      "value": "إنشاء طلب جديد"
+    }
+  ],
+  "actions.duplicateRequest": [
+    {
+      "type": 0,
+      "value": "تكرار"
+    }
+  ],
+  "actions.edit": [
+    {
+      "type": 0,
+      "value": "تحرير"
+    }
+  ],
+  "actions.editRequest": [
+    {
+      "type": 0,
+      "value": "تحرير الطلب"
+    }
+  ],
+  "actions.editRequestLink": [
+    {
+      "type": 0,
+      "value": "مربع حوار تحرير الطلب"
+    }
+  ],
+  "actions.label": [
+    {
+      "type": 0,
+      "value": "الإجراءات"
+    }
+  ],
+  "actions.loading": [
+    {
+      "type": 0,
+      "value": "جاري التحميل..."
+    }
+  ],
+  "actions.moveRequest": [
+    {
+      "type": 0,
+      "value": "نقل الطلب"
+    }
+  ],
+  "actions.newRequest": [
+    {
+      "type": 0,
+      "value": "طلب جديد"
+    }
+  ],
+  "actions.reorderQueue": [
+    {
+      "type": 0,
+      "value": "إعادة ترتيب الصف"
+    }
+  ],
+  "actions.selectAddressType": [
+    {
+      "type": 0,
+      "value": "تحديد نوع العنوان"
+    }
+  ],
+  "actions.selectPickupLoc": [
+    {
+      "type": 0,
+      "value": "تحديد موقع الالتقاط"
+    }
+  ],
+  "actions.selectPickupSp": [
+    {
+      "type": 0,
+      "value": "قم بتحديد نقطة خدمة الالتقاط"
+    }
+  ],
+  "actions.viewRequestsInQueue": [
+    {
+      "type": 0,
+      "value": "عرض الطلبات في الصف"
+    }
+  ],
+  "additionalReasons": [
+    {
+      "type": 0,
+      "value": "عرض تفاصيل الحظر لمعرفة المزيد من أسباب الحظر..."
+    }
+  ],
+  "barcode": [
+    {
+      "type": 0,
+      "value": "الباركود"
+    }
+  ],
+  "blockModal": [
+    {
+      "type": 0,
+      "value": "تم حظرالمستفيد من الطلب"
+    }
+  ],
+  "blockedLabel": [
+    {
+      "type": 0,
+      "value": "سبب الحظر"
+    }
+  ],
+  "cancel.additionalInfoLabel": [
+    {
+      "type": 0,
+      "value": "بيانات إضافية للمستفيد "
+    },
+    {
+      "type": 1,
+      "value": "required"
+    }
+  ],
+  "cancel.additionalInfoPlaceholderOptional": [
+    {
+      "type": 0,
+      "value": "قم بإدخال مزيد من المعلومات حول الإلغاء (اختياري)"
+    }
+  ],
+  "cancel.additionalInfoPlaceholderRequired": [
+    {
+      "type": 0,
+      "value": "قم بإدخال مزيد من المعلومات حول الإلغاء (مطلوب)"
+    }
+  ],
+  "cancel.cancelRequest": [
+    {
+      "type": 0,
+      "value": "إلغاء الطلب"
+    }
+  ],
+  "cancel.modalLabel": [
+    {
+      "type": 0,
+      "value": "تأكيد إلغاء الطلب"
+    }
+  ],
+  "cancel.notifyLabel": [
+    {
+      "type": 0,
+      "value": "إخطار المستفيد"
+    }
+  ],
+  "cancel.reasonLabel": [
+    {
+      "type": 0,
+      "value": "سبب الإلغاء"
+    }
+  ],
+  "cancel.requestWillBeCancelled": [
+    {
+      "type": 0,
+      "value": "سيتم "
+    },
+    {
+      "children": [
+        {
+          "type": 0,
+          "value": "إلغاء"
+        }
+      ],
+      "type": 8,
+      "value": "b"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "title"
+        }
+      ],
+      "type": 8,
+      "value": "b"
+    }
+  ],
+  "cancellationAdditionalInformation": [
+    {
+      "type": 0,
+      "value": "بيانات إضافية للمستفيد"
+    }
+  ],
+  "cancellationReason": [
+    {
+      "type": 0,
+      "value": "سبب الإلغاء"
+    }
+  ],
+  "close": [
+    {
+      "type": 0,
+      "value": "إغلاق"
+    }
+  ],
+  "common.cancel": [
+    {
+      "type": 0,
+      "value": "إلغاء"
+    }
+  ],
+  "common.saveAndClose": [
+    {
+      "type": 0,
+      "value": "حفظ وإغلاق"
+    }
+  ],
+  "csvReportInProgress": [
+    {
+      "type": 0,
+      "value": "جاري توليد تقرير نتائج بتنسيق CSV. قد يستغرق هذا بعض الوقت لمجموعات النتائج الأكبر. شكراً لانتظارك."
+    }
+  ],
+  "csvReportPending": [
+    {
+      "type": 0,
+      "value": "جاري توليد تقرير نتائج بتنسيق CSV. يرجى الانتظار."
+    }
+  ],
+  "deliveryAddress": [
+    {
+      "type": 0,
+      "value": "عنوان التوصيل"
+    }
+  ],
+  "detailsButton": [
+    {
+      "type": 0,
+      "value": "عرض تفاصيل الحظر"
+    }
+  ],
+  "enter": [
+    {
+      "type": 0,
+      "value": "إدخال"
+    }
+  ],
+  "errorModal.message": [
+    {
+      "type": 1,
+      "value": "title"
+    },
+    {
+      "type": 0,
+      "value": " ("
+    },
+    {
+      "type": 1,
+      "value": "materialType"
+    },
+    {
+      "type": 0,
+      "value": ") (باركود: "
+    },
+    {
+      "type": 1,
+      "value": "barcode"
+    },
+    {
+      "type": 0,
+      "value": ") له حالة المادة "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "itemStatus"
+        }
+      ],
+      "type": 8,
+      "value": "strong"
+    },
+    {
+      "type": 0,
+      "value": " ولا يمكن طلبه"
+    }
+  ],
+  "errorModal.title": [
+    {
+      "type": 0,
+      "value": "لا يمكن طلب المادة"
+    }
+  ],
+  "errors.instanceUuidOrHridDoesNotExist": [
+    {
+      "type": 0,
+      "value": "لا يوجد وعاء برقم التعريف القابل للقراءة بشريًا أو المعرّف الفريد العمومي هذا"
+    }
+  ],
+  "errors.itemBarcodeDoesNotExist": [
+    {
+      "type": 0,
+      "value": "لا توجد مادة بهذا الباركود"
+    }
+  ],
+  "errors.onlyCheckedOutForHold": [
+    {
+      "type": 0,
+      "value": "يمكن حجز المواد المعارة فقط"
+    }
+  ],
+  "errors.onlyCheckedOutForRecall": [
+    {
+      "type": 0,
+      "value": "يمكن طلب استعادة المواد المعارة فقط"
+    }
+  ],
+  "errors.selectInstanceRequired": [
+    {
+      "type": 0,
+      "value": "يرجى تحديد وعاء والضغط على إدخال"
+    }
+  ],
+  "errors.selectItem": [
+    {
+      "type": 0,
+      "value": "يرجى تحديد مادة"
+    }
+  ],
+  "errors.selectItemRequired": [
+    {
+      "type": 0,
+      "value": "يرجى تحديد مادة والضغط على إدخال"
+    }
+  ],
+  "errors.selectUser": [
+    {
+      "type": 0,
+      "value": "يرجى ملء بيانات مقدم الطلب للمتابعة"
+    }
+  ],
+  "errors.sync.requestQueueBody": [
+    {
+      "type": 0,
+      "value": "تم تحديث صف الطلبات هذا بواسطة شخص آخر أو عملية أخرى وقد يكون غير متزامن."
+    }
+  ],
+  "errors.sync.requestQueueLabel": [
+    {
+      "type": 0,
+      "value": "صف الطلبات غير متزامن"
+    }
+  ],
+  "errors.unknown.requestQueueBody": [
+    {
+      "type": 0,
+      "value": "فشلت إعادة ترتيب صف الطلبات"
+    }
+  ],
+  "errors.unknown.requestQueueLabel": [
+    {
+      "type": 0,
+      "value": "خطأ في صف الطلبات"
+    }
+  ],
+  "errors.userBarcodeDoesNotExist": [
+    {
+      "type": 0,
+      "value": "لا يوجد مستخدم بهذا الباركود"
+    }
+  ],
+  "exportExpiredHoldShelfToCsv": [
+    {
+      "type": 0,
+      "value": "تصدير تقرير مسح رف الحجوزات لـ "
+    },
+    {
+      "type": 1,
+      "value": "currentServicePoint"
+    }
+  ],
+  "exportSearchResultsToCsv": [
+    {
+      "type": 0,
+      "value": "تصدير نتائج البحث إلى ملف CSV"
+    }
+  ],
+  "filters.requestLevel.item": [
+    {
+      "type": 0,
+      "value": "المادة"
+    }
+  ],
+  "filters.requestLevel.title": [
+    {
+      "type": 0,
+      "value": "العنوان"
+    }
+  ],
+  "filters.requestStatus.awaitingDelivery": [
+    {
+      "type": 0,
+      "value": "مفتوح - في انتظار التوصيل"
+    }
+  ],
+  "filters.requestStatus.awaitingPickup": [
+    {
+      "type": 0,
+      "value": "مفتوح - في انتظار الالتقاط"
+    }
+  ],
+  "filters.requestStatus.cancelled": [
+    {
+      "type": 0,
+      "value": "مغلق -ملغي"
+    }
+  ],
+  "filters.requestStatus.filled": [
+    {
+      "type": 0,
+      "value": "مغلق - مملوء"
+    }
+  ],
+  "filters.requestStatus.inTransit": [
+    {
+      "type": 0,
+      "value": "مفتوح - في النقل"
+    }
+  ],
+  "filters.requestStatus.notYetFilled": [
+    {
+      "type": 0,
+      "value": "مفتوح - غير مملوء بعد"
+    }
+  ],
+  "filters.requestStatus.pickupExpired": [
+    {
+      "type": 0,
+      "value": "مغلق - انتهت صلاحية الالتقاط"
+    }
+  ],
+  "filters.requestStatus.unfilled": [
+    {
+      "type": 0,
+      "value": "مغلق - غير مملوء"
+    }
+  ],
+  "filters.requestType.holds": [
+    {
+      "type": 0,
+      "value": "حجوزات"
+    }
+  ],
+  "filters.requestType.pages": [
+    {
+      "type": 0,
+      "value": "تنبيهات للالتقاط"
+    }
+  ],
+  "filters.requestType.recalls": [
+    {
+      "type": 0,
+      "value": "طلبات استعادة المادة"
+    }
+  ],
+  "fulfilmentPreference": [
+    {
+      "type": 0,
+      "value": "مفضلات استيفاء الطلب"
+    }
+  ],
+  "holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "تاريخ انتهاء الحجز على الرف"
+    }
+  ],
+  "holdShelfExpirationTime": [
+    {
+      "type": 0,
+      "value": "holdShelfExpirationTime"
+    }
+  ],
+  "instance.contributorNames": [
+    {
+      "type": 0,
+      "value": "المساهم"
+    }
+  ],
+  "instance.information": [
+    {
+      "type": 0,
+      "value": "معلومات العنوان"
+    }
+  ],
+  "instance.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "قم بإدخال رقم التعريف القابل للقراءة بشريًا أو المعرّف الفريد العمومي"
+    }
+  ],
+  "instance.title": [
+    {
+      "type": 0,
+      "value": "العنوان"
+    }
+  ],
+  "instance.value": [
+    {
+      "type": 0,
+      "value": "رقم التعريف القابل للقراءة بشريًا أو المعرّف الفريد العمومي للوعاء"
+    }
+  ],
+  "item.barcode": [
+    {
+      "type": 0,
+      "value": "باركود المادة"
+    }
+  ],
+  "item.callNumber": [
+    {
+      "type": 0,
+      "value": "مقطع رقم الاستدعاء النشط"
+    }
+  ],
+  "item.callNumberComponents.callNumber": [
+    {
+      "type": 0,
+      "value": "رقم الاستدعاء النشط"
+    }
+  ],
+  "item.callNumberComponents.prefix": [
+    {
+      "type": 0,
+      "value": "بادئة رقم الاستدعاء النشط"
+    }
+  ],
+  "item.callNumberComponents.suffix": [
+    {
+      "type": 0,
+      "value": "لاحقة رقم الاستدعاء النشط"
+    }
+  ],
+  "item.chronology": [
+    {
+      "type": 0,
+      "value": "التسلسل الزمني"
+    }
+  ],
+  "item.contributorNames": [
+    {
+      "type": 0,
+      "value": "المساهم"
+    }
+  ],
+  "item.copyNumber": [
+    {
+      "type": 0,
+      "value": "نسخة المادة"
+    }
+  ],
+  "item.copyNumbers": [
+    {
+      "type": 0,
+      "value": "رقم النسخة"
+    }
+  ],
+  "item.dueDate": [
+    {
+      "type": 0,
+      "value": "تاريخ الاستحقاق الحالي"
+    }
+  ],
+  "item.effectiveLocation": [
+    {
+      "type": 0,
+      "value": "الموقع النشط"
+    }
+  ],
+  "item.enumeration": [
+    {
+      "type": 0,
+      "value": "الترقيم"
+    }
+  ],
+  "item.id": [
+    {
+      "type": 0,
+      "value": "معرّف المادة"
+    }
+  ],
+  "item.information": [
+    {
+      "type": 0,
+      "value": "معلومات المادة"
+    }
+  ],
+  "item.location.code": [
+    {
+      "type": 0,
+      "value": "رمز الموقع النشط"
+    }
+  ],
+  "item.location.libraryName": [
+    {
+      "type": 0,
+      "value": "المكتبة"
+    }
+  ],
+  "item.location.name": [
+    {
+      "type": 0,
+      "value": "الموقع النشط"
+    }
+  ],
+  "item.noInformation": [
+    {
+      "type": 0,
+      "value": "لا توجد معلومات مادة لهذا الطلب."
+    }
+  ],
+  "item.numRequests": [
+    {
+      "type": 0,
+      "value": "الطلبات"
+    }
+  ],
+  "item.requestsOnItem": [
+    {
+      "type": 0,
+      "value": "طلبات على المادة"
+    }
+  ],
+  "item.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "قم بمسح باركود المادة ضوئيًا أو إدخاله يدويًا"
+    }
+  ],
+  "item.status": [
+    {
+      "type": 0,
+      "value": "حالة المادة"
+    }
+  ],
+  "item.title": [
+    {
+      "type": 0,
+      "value": "العنوان"
+    }
+  ],
+  "item.volume": [
+    {
+      "type": 0,
+      "value": "المجلد"
+    }
+  ],
+  "itemLevel": [
+    {
+      "type": 0,
+      "value": "المادة"
+    }
+  ],
+  "items": [
+    {
+      "type": 1,
+      "value": "number"
+    },
+    {
+      "type": 0,
+      "value": " مادة"
+    }
+  ],
+  "items.instanceItems": [
+    {
+      "type": 0,
+      "value": "مواد أخرى في "
+    },
+    {
+      "type": 1,
+      "value": "title"
+    }
+  ],
+  "items.instanceItems.notFound": [
+    {
+      "type": 0,
+      "value": "لم يتم العثور على مواد"
+    }
+  ],
+  "items.selectItem": [
+    {
+      "type": 0,
+      "value": "تحديد مادة"
+    }
+  ],
+  "loan.dueDate": [
+    {
+      "type": 0,
+      "value": "تاريخ الاستحقاق الحالي"
+    }
+  ],
+  "loanType": [
+    {
+      "type": 0,
+      "value": "نوع الإعارة"
+    }
+  ],
+  "location": [
+    {
+      "type": 0,
+      "value": "الموقع"
+    }
+  ],
+  "materialType": [
+    {
+      "type": 0,
+      "value": "نوع المادة"
+    }
+  ],
+  "meta.title": [
+    {
+      "type": 0,
+      "value": "الطلبات"
+    }
+  ],
+  "moveRequest.chooseRequestMessage": [
+    {
+      "type": 0,
+      "value": "يرجى تحديد النوع المسموح به"
+    }
+  ],
+  "moveRequest.confirm": [
+    {
+      "type": 0,
+      "value": "تأكيد"
+    }
+  ],
+  "moveRequest.requestTypeChangeHeading": [
+    {
+      "type": 0,
+      "value": "نوع الطلبات الحالي غير مسموح به للمادة المحددة"
+    }
+  ],
+  "moveRequest.requestTypeChangeMessage": [
+    {
+      "type": 0,
+      "value": "سيتم تحويل الطلب إلى "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "requestType"
+        }
+      ],
+      "type": 8,
+      "value": "strong"
+    }
+  ],
+  "moveRequest.secondPositionMessage": [
+    {
+      "type": 0,
+      "value": "لا يمكن نقل الطلبات أعلى طلبات الصفحة، حتى في حالة عدم بدء استيفائها. سيتم نقل هذا الطلب إلى الموضع 2 في صف الطلبات."
+    }
+  ],
+  "moveRequest.secondPositionTitle": [
+    {
+      "type": 0,
+      "value": "تم نقل الطلب إلى الموضع 2 في الصف"
+    }
+  ],
+  "moveRequest.success": [
+    {
+      "type": 0,
+      "value": "تم نقل الطلب بنجاح"
+    }
+  ],
+  "noRequestTypesAvailable": [
+    {
+      "type": 0,
+      "value": "لا تتوافر أنواع طلب للمادة المحددة"
+    }
+  ],
+  "noServicePoint.errorMessage": [
+    {
+      "type": 0,
+      "value": "يجب عليك تسجيل الدخول إلى نقطة خدمة للوصول إلى تقرير تصفية رف الحجوزات. يرجى إضافة نقطة خدمة أو أكثر إلى تسجيلة المستخدم الخاصة بك في تطبيق المستخدمين. قم بالاتصال بأحد المشرفين إذا لم قادرًا على إضافة نقاط خدمة إلى تسجيلتك."
+    }
+  ],
+  "noServicePoint.label": [
+    {
+      "type": 0,
+      "value": "لم يتم تحديد نقطة خدمة"
+    }
+  ],
+  "notes.assigned.for": [
+    {
+      "type": 0,
+      "value": "لـ: "
+    },
+    {
+      "type": 1,
+      "value": "instanceLink"
+    },
+    {
+      "type": 0,
+      "value": " ("
+    },
+    {
+      "type": 1,
+      "value": "itemLink"
+    },
+    {
+      "type": 0,
+      "value": ")"
+    }
+  ],
+  "notes.assigned.requestDate": [
+    {
+      "type": 0,
+      "value": "تاريخ الطلب: "
+    },
+    {
+      "type": 1,
+      "value": "requestCreateDate"
+    }
+  ],
+  "notes.assigned.requester": [
+    {
+      "type": 0,
+      "value": "مقدم الطلب: "
+    },
+    {
+      "type": 1,
+      "value": "requesterName"
+    }
+  ],
+  "notes.entityType.request": [
+    {
+      "type": 0,
+      "value": "طلب"
+    }
+  ],
+  "notes.entityType.request.pluralized": [
+    {
+      "type": 1,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "one": {
+          "value": [
+            {
+              "type": 0,
+              "value": "طلب"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "طلباً"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "notes.newStaffNote": [
+    {
+      "type": 0,
+      "value": "ملاحظة موظف جديدة"
+    }
+  ],
+  "notes.staffNotes": [
+    {
+      "type": 0,
+      "value": "ملاحظات الموظفين"
+    }
+  ],
+  "override": [
+    {
+      "type": 0,
+      "value": "تخطي"
+    }
+  ],
+  "patronComments": [
+    {
+      "type": 0,
+      "value": "تعليقات المستفيد"
+    }
+  ],
+  "permission.all": [
+    {
+      "type": 0,
+      "value": "الطلبات: كل الصلاحيات"
+    }
+  ],
+  "permission.create": [
+    {
+      "type": 0,
+      "value": "الطلبات: اعرض، أنشئ"
+    }
+  ],
+  "permission.edit": [
+    {
+      "type": 0,
+      "value": "الطلبات: اعرض، حرّر، الغ"
+    }
+  ],
+  "permission.moveRequest": [
+    {
+      "type": 0,
+      "value": "الطلبات: انقل إلى مادة جديدة، أعد ترتيب الصف"
+    }
+  ],
+  "permission.reorderQueue": [
+    {
+      "type": 0,
+      "value": "الطلبات: أعد ترتيب الصف"
+    }
+  ],
+  "permission.view": [
+    {
+      "type": 0,
+      "value": "الطلبات: اعرض"
+    }
+  ],
+  "pickSlipsLoading": [
+    {
+      "type": 0,
+      "value": "جاري تحميل قسائم الالتقاط، يرجى الانتظار"
+    }
+  ],
+  "pickupServicePoint.name": [
+    {
+      "type": 0,
+      "value": "نقطة خدمة الالتقاط"
+    }
+  ],
+  "position": [
+    {
+      "type": 0,
+      "value": "الموضع في الصف"
+    }
+  ],
+  "printInProgress": [
+    {
+      "type": 0,
+      "value": "تحميل خيارات الطباعة قيد التقدم. قد يستغرق الأمر بضع ثوان، يرجى الانتظار."
+    }
+  ],
+  "printPickSlips": [
+    {
+      "type": 0,
+      "value": "طباعة كعوب الالتقاط لـ "
+    },
+    {
+      "type": 1,
+      "value": "sp"
+    }
+  ],
+  "proxy.barcode": [
+    {
+      "type": 0,
+      "value": "باركود وكيل مقدم الطلب"
+    }
+  ],
+  "proxy.name": [
+    {
+      "type": 0,
+      "value": "اسم وكيل مقدم الطلب"
+    }
+  ],
+  "requestDate": [
+    {
+      "type": 0,
+      "value": "requestDate"
+    }
+  ],
+  "requestExpirationDate": [
+    {
+      "type": 0,
+      "value": "تاريخ انتهاء الطلب"
+    }
+  ],
+  "requestLevel": [
+    {
+      "type": 0,
+      "value": "مستوى الطلب"
+    }
+  ],
+  "requestMeta.detailLabel": [
+    {
+      "type": 0,
+      "value": "تفاصيل الطلب"
+    }
+  ],
+  "requestMeta.expirationDate": [
+    {
+      "type": 0,
+      "value": "تاريخ انتهاء الطلب"
+    }
+  ],
+  "requestMeta.fulfilment.delivery": [
+    {
+      "type": 0,
+      "value": "التوصيل"
+    }
+  ],
+  "requestMeta.fulfilment.holdShelf": [
+    {
+      "type": 0,
+      "value": "رف الحجز"
+    }
+  ],
+  "requestMeta.holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "تاريخ انتهاء الحجز"
+    }
+  ],
+  "requestMeta.information": [
+    {
+      "type": 0,
+      "value": "معلومات الطلب"
+    }
+  ],
+  "requestMeta.queuePosition": [
+    {
+      "type": 0,
+      "value": "الموضع في الصف"
+    }
+  ],
+  "requestMeta.status": [
+    {
+      "type": 0,
+      "value": "حالة الطلب"
+    }
+  ],
+  "requestMeta.tags": [
+    {
+      "type": 0,
+      "value": "وسوم"
+    }
+  ],
+  "requestMeta.type": [
+    {
+      "type": 0,
+      "value": "نوع الطلب"
+    }
+  ],
+  "requestMeta.type.hold": [
+    {
+      "type": 0,
+      "value": "حجز"
+    }
+  ],
+  "requestMeta.type.holds": [
+    {
+      "type": 0,
+      "value": "الحجوزات"
+    }
+  ],
+  "requestMeta.type.page": [
+    {
+      "type": 0,
+      "value": "تنبيه للالتقاط"
+    }
+  ],
+  "requestMeta.type.pages": [
+    {
+      "type": 0,
+      "value": "تنبيهات للالتقاط"
+    }
+  ],
+  "requestMeta.type.recall": [
+    {
+      "type": 0,
+      "value": "طلب استعادة مادة"
+    }
+  ],
+  "requestMeta.type.recalls": [
+    {
+      "type": 0,
+      "value": "طلبات استعادة المادة"
+    }
+  ],
+  "requestNotAllowed": [
+    {
+      "type": 0,
+      "value": "غير مسموح بالطلب"
+    }
+  ],
+  "requestQueue": [
+    {
+      "type": 0,
+      "value": "صف الطلبات"
+    }
+  ],
+  "requestQueue.chronology": [
+    {
+      "type": 0,
+      "value": "التسلسل الزمني"
+    }
+  ],
+  "requestQueue.confirmReorder.cancel": [
+    {
+      "type": 0,
+      "value": "اتركه في الموضع الحالي"
+    }
+  ],
+  "requestQueue.confirmReorder.confirm": [
+    {
+      "type": 0,
+      "value": "انتقل إلى الموضع 2"
+    }
+  ],
+  "requestQueue.confirmReorder.message1": [
+    {
+      "type": 0,
+      "value": "لا يمكن نقل الطلبات من الموضع 1 عند بدء الاستيفاء."
+    }
+  ],
+  "requestQueue.confirmReorder.message2": [
+    {
+      "type": 0,
+      "value": "لا يمكن نقل الطلبات أعلى طلبات الصفحة، حتى في حالة عدم بدء استيفائها."
+    }
+  ],
+  "requestQueue.confirmReorder.title": [
+    {
+      "type": 0,
+      "value": "تم نقل الطلب إلى الموضع 2 في الصف"
+    }
+  ],
+  "requestQueue.deliveryType": [
+    {
+      "type": 0,
+      "value": "التوصيل:"
+    },
+    {
+      "type": 1,
+      "value": "type"
+    }
+  ],
+  "requestQueue.description": [
+    {
+      "type": 0,
+      "value": "الوعاء: "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "title"
+        },
+        {
+          "type": 0,
+          "value": " /"
+        },
+        {
+          "type": 1,
+          "value": "author"
+        },
+        {
+          "type": 0,
+          "value": "."
+        }
+      ],
+      "type": 8,
+      "value": "instanceLink"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "children": [
+        {
+          "type": 1,
+          "value": "publisher"
+        },
+        {
+          "type": 0,
+          "value": ", "
+        },
+        {
+          "type": 1,
+          "value": "publicationDate"
+        }
+      ],
+      "type": 8,
+      "value": "i"
+    }
+  ],
+  "requestQueue.enumeration": [
+    {
+      "type": 0,
+      "value": "الترقيم"
+    }
+  ],
+  "requestQueue.fulfillmentInProgressSectionTitle": [
+    {
+      "type": 0,
+      "value": "الاستيفاء قيد التقدم"
+    }
+  ],
+  "requestQueue.fulfillmentStatus": [
+    {
+      "type": 0,
+      "value": "الحالة"
+    }
+  ],
+  "requestQueue.heading": [
+    {
+      "type": 0,
+      "value": "ضف الطلبات على الوعاء • "
+    },
+    {
+      "type": 1,
+      "value": "title"
+    },
+    {
+      "type": 0,
+      "value": " /"
+    },
+    {
+      "type": 1,
+      "value": "author"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "requestQueue.holdShelfExpirationDate": [
+    {
+      "type": 0,
+      "value": "انتهاء صلاحية الحجز على الرف"
+    }
+  ],
+  "requestQueue.itemBarcode": [
+    {
+      "type": 0,
+      "value": "باركود المادة"
+    }
+  ],
+  "requestQueue.noDataForFulfillment": [
+    {
+      "type": 0,
+      "value": "لا توجد طلبات قيد الاستيفاء."
+    }
+  ],
+  "requestQueue.notYetFilledRequests.noData": [
+    {
+      "type": 0,
+      "value": "لم يتم العثور على طلبات"
+    }
+  ],
+  "requestQueue.notYetFilledSectionTitle": [
+    {
+      "type": 0,
+      "value": "مفتوح - غير مملوء بعد"
+    }
+  ],
+  "requestQueue.order": [
+    {
+      "type": 0,
+      "value": "طلبية"
+    }
+  ],
+  "requestQueue.patronComments": [
+    {
+      "type": 0,
+      "value": "تعليقات المستفيد"
+    }
+  ],
+  "requestQueue.patronGroup": [
+    {
+      "type": 0,
+      "value": "مجموعة المستفيدين"
+    }
+  ],
+  "requestQueue.pickup": [
+    {
+      "type": 0,
+      "value": "الالتقاط/التوصيل"
+    }
+  ],
+  "requestQueue.refresh": [
+    {
+      "type": 0,
+      "value": "تحديث الصف"
+    }
+  ],
+  "requestQueue.reorderSuccess": [
+    {
+      "type": 0,
+      "value": "تم تحديث الصف بنجاح."
+    }
+  ],
+  "requestQueue.requestDate": [
+    {
+      "type": 0,
+      "value": "تاريخ الطلب"
+    }
+  ],
+  "requestQueue.requestExpirationDate": [
+    {
+      "type": 0,
+      "value": "انتهاء صلاحية الطلب"
+    }
+  ],
+  "requestQueue.requestInProgress": [
+    {
+      "type": 0,
+      "value": "قيد التقدم"
+    }
+  ],
+  "requestQueue.requestType": [
+    {
+      "type": 0,
+      "value": "النوع"
+    }
+  ],
+  "requestQueue.requesterBarcode": [
+    {
+      "type": 0,
+      "value": "باركود مقدم الطلب"
+    }
+  ],
+  "requestQueue.requesterName": [
+    {
+      "type": 0,
+      "value": "مقدم الطلب"
+    }
+  ],
+  "requestQueue.status": [
+    {
+      "type": 0,
+      "value": "حالة الطلب"
+    }
+  ],
+  "requestQueue.volume": [
+    {
+      "type": 0,
+      "value": "المجلد"
+    }
+  ],
+  "requestType": [
+    {
+      "type": 0,
+      "value": "نوع الطلب"
+    }
+  ],
+  "requestType.message": [
+    {
+      "type": 0,
+      "value": "حدد مادة لعرض أنواع الطلب المتاحة"
+    }
+  ],
+  "requester.barcode": [
+    {
+      "type": 0,
+      "value": "باركود مقدم الطلب"
+    }
+  ],
+  "requester.findUserPluginLabel": [
+    {
+      "type": 0,
+      "value": "بحث مقدم الطلب"
+    }
+  ],
+  "requester.firstName": [
+    {
+      "type": 0,
+      "value": "الاسم الأول لمقدم الطلب"
+    }
+  ],
+  "requester.fulfilmentPref": [
+    {
+      "type": 0,
+      "value": "مفضلات الاستيفاء"
+    }
+  ],
+  "requester.information": [
+    {
+      "type": 0,
+      "value": "بيانات مقدم الطلب"
+    }
+  ],
+  "requester.name": [
+    {
+      "type": 0,
+      "value": "اسم مقدم الطلب"
+    }
+  ],
+  "requester.patronGroup.group": [
+    {
+      "type": 0,
+      "value": "مجموعة المستفيد الخاصة بمقدم الطلب"
+    }
+  ],
+  "requester.pickupLocation": [
+    {
+      "type": 0,
+      "value": "موقع الالتقاط"
+    }
+  ],
+  "requester.proxy": [
+    {
+      "type": 0,
+      "value": "وكيل مقدم الطلب"
+    }
+  ],
+  "requester.requester": [
+    {
+      "type": 0,
+      "value": "مقدم الطلب"
+    }
+  ],
+  "requester.scanOrEnterBarcode": [
+    {
+      "type": 0,
+      "value": "قم بمسح باركود مقدم الطلب ضوئيًا أو إدخاله يدويًا"
+    }
+  ],
+  "requester.username": [
+    {
+      "type": 0,
+      "value": "اسم المستخدم"
+    }
+  ],
+  "requests.createTitleLevelRequest": [
+    {
+      "type": 0,
+      "value": "إنشاء طلب على مستوى العنوان"
+    }
+  ],
+  "requests.itemBarcode": [
+    {
+      "type": 0,
+      "value": "باركود المادة"
+    }
+  ],
+  "requests.proxy": [
+    {
+      "type": 0,
+      "value": "الوكيل"
+    }
+  ],
+  "requests.queuePosition": [
+    {
+      "type": 0,
+      "value": "الموضع في الصف"
+    }
+  ],
+  "requests.requestDate": [
+    {
+      "type": 0,
+      "value": "تاريخ الطلب"
+    }
+  ],
+  "requests.requester": [
+    {
+      "type": 0,
+      "value": "مقدم الطلب"
+    }
+  ],
+  "requests.requesterBarcode": [
+    {
+      "type": 0,
+      "value": "باركود مقدم الطلب"
+    }
+  ],
+  "requests.status": [
+    {
+      "type": 0,
+      "value": "حالة الطلب"
+    }
+  ],
+  "requests.title": [
+    {
+      "type": 0,
+      "value": "العنوان"
+    }
+  ],
+  "requests.type": [
+    {
+      "type": 0,
+      "value": "النوع"
+    }
+  ],
+  "requests.year": [
+    {
+      "type": 0,
+      "value": "السنة"
+    }
+  ],
+  "resultCount": [
+    {
+      "type": 0,
+      "value": "تم العثور على "
+    },
+    {
+      "style": null,
+      "type": 2,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "one": {
+          "value": [
+            {
+              "type": 0,
+              "value": " تسجيلة "
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": " تسجيلة "
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "routingError": [
+    {
+      "type": 0,
+      "value": "كيف وصلت إلى "
+    },
+    {
+      "type": 1,
+      "value": "pathname"
+    },
+    {
+      "type": 0,
+      "value": " ؟"
+    }
+  ],
+  "routingErrorOops": [
+    {
+      "type": 0,
+      "value": "أوه!"
+    }
+  ],
+  "showTags": [
+    {
+      "type": 0,
+      "value": "عرض الوسوم"
+    }
+  ],
+  "status": [
+    {
+      "type": 0,
+      "value": "حالة الطلب"
+    }
+  ],
+  "tags.tagList": [
+    {
+      "type": 0,
+      "value": "الوسوم"
+    }
+  ],
+  "title.information": [
+    {
+      "type": 0,
+      "value": "معلومات العنوان"
+    }
+  ],
+  "titleInformation.contributors": [
+    {
+      "type": 0,
+      "value": "المساهم"
+    }
+  ],
+  "titleInformation.editions": [
+    {
+      "type": 0,
+      "value": "الطبعة"
+    }
+  ],
+  "titleInformation.identifiers": [
+    {
+      "type": 0,
+      "value": "أرقام ردمك"
+    }
+  ],
+  "titleInformation.publicationsDate": [
+    {
+      "type": 0,
+      "value": "تاريخ النشر"
+    }
+  ],
+  "titleInformation.title": [
+    {
+      "type": 0,
+      "value": "العنوان"
+    }
+  ],
+  "titleInformation.titleLevelRequests": [
+    {
+      "type": 0,
+      "value": "طلبات على مستوى العنوان"
+    }
+  ],
+  "titleLevel": [
+    {
+      "type": 0,
+      "value": "العنوان"
+    }
+  ]
+}

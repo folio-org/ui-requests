@@ -48,8 +48,26 @@ import {
   TextField,
   Timepicker,
   Checkbox,
+  HasCommand,
+  checkScope,
+  AccordionStatus,
+  collapseAllSections,
+  expandAllSections,
 } from '@folio/stripes/components';
 import stripesForm from '@folio/stripes/form';
+
+import {
+  handleKeyCommand,
+  toUserAddress,
+  getPatronGroup,
+  getRequestTypeOptions,
+  isDelivery,
+  hasNonRequestableStatus,
+  parseErrorMessage,
+  getTlrSettings,
+  getRequestLevelValue,
+  getInstanceRequestTypeOptions,
+} from './utils';
 
 import CancelRequestDialog from './CancelRequestDialog';
 import UserForm from './UserForm';
@@ -70,17 +88,7 @@ import {
   createModes,
   REQUEST_LEVEL_TYPES,
 } from './constants';
-import {
-  toUserAddress,
-  getPatronGroup,
-  getRequestTypeOptions,
-  isDelivery,
-  hasNonRequestableStatus,
-  parseErrorMessage,
-  getTlrSettings,
-  getRequestLevelValue,
-  getInstanceRequestTypeOptions,
-} from './utils';
+
 
 import css from './requests.css';
 
@@ -168,12 +176,6 @@ class RequestForm extends React.Component {
     const { titleLevelRequestsFeatureEnabled } = this.getTlrSettings();
 
     this.state = {
-      accordions: {
-        'new-request-info': true,
-        'new-instance-info': true,
-        'new-item-info': true,
-        'new-requester-info': true,
-      },
       proxy: {},
       selectedInstance: instance,
       selectedItem: item,
@@ -195,13 +197,13 @@ class RequestForm extends React.Component {
     this.onInstanceClick = this.onInstanceClick.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onSelectUser = this.onSelectUser.bind(this);
-    this.onToggleSection = this.onToggleSection.bind(this);
     this.onSelectProxy = this.onSelectProxy.bind(this);
     this.onUserClick = this.onUserClick.bind(this);
     this.onClose = this.onClose.bind(this);
     this.itemBarcodeRef = React.createRef();
     this.instanceValueRef = React.createRef();
     this.requesterBarcodeRef = React.createRef();
+    this.accordionStatusRef = React.createRef();
   }
 
   componentDidMount() {
@@ -346,14 +348,6 @@ class RequestForm extends React.Component {
     return !hasDelivery
       ? fulfilmentTypeOptions.filter(option => option.value !== fulfilmentTypeMap.DELIVERY)
       : fulfilmentTypeOptions;
-  }
-
-  onToggleSection({ id }) {
-    this.setState((curState) => {
-      const newState = cloneDeep(curState);
-      newState.accordions[id] = !curState.accordions[id];
-      return newState;
-    });
   }
 
   onClose() {
@@ -1105,7 +1099,6 @@ class RequestForm extends React.Component {
     } = this.props;
 
     const {
-      accordions,
       blocked,
       selectedUser,
       selectedItem,
@@ -1188,486 +1181,521 @@ class RequestForm extends React.Component {
         : isBlockedAndOverriden;
     };
 
+    const handleCancelAndClose = () => {
+      const keepEditBtn = document.getElementById('clickable-cancel-editing-confirmation-confirm');
+      if (isItemsDialogOpen) handleKeyCommand(this.handleItemsDialogClose);
+      else if (errorMessage) handleKeyCommand(this.onClose);
+      else if (keepEditBtn) keepEditBtn.click();
+      else onCancel();
+    };
+
+    const keyCommands = [
+      {
+        name: 'save',
+        handler: handleKeyCommand(handleSubmit(this.onSave), { disabled: this.isSubmittingButtonDisabled() }),
+      },
+      {
+        name: 'expandAllSections',
+        handler: (e) => expandAllSections(e, this.accordionStatusRef),
+      },
+      {
+        name: 'collapseAllSections',
+        handler: (e) => collapseAllSections(e, this.accordionStatusRef),
+      },
+      {
+        name: 'cancel',
+        shortcut: 'esc',
+        handler: handleKeyCommand(handleCancelAndClose),
+      }
+    ];
+
     return (
-      <Paneset isRoot>
-        <form
-          id="form-requests"
-          className={css.requestForm}
-          onSubmit={handleSubmit(this.onSave)}
-          data-test-requests-form
+      <>
+        <HasCommand
+          commands={keyCommands}
+          isWithinScope={checkScope}
+          scope={document.body}
         >
-          <Pane
-            id="request"
-            defaultWidth="100%"
-            height="100%"
-            firstMenu={this.renderAddRequestFirstMenu()}
-            paneTitle={
-              isEditForm
-                ? <FormattedMessage id="ui-requests.actions.editRequest" />
-                : <FormattedMessage id="ui-requests.actions.newRequest" />
-            }
-            footer={
-              <PaneFooter>
-                <div className={css.footerContent}>
-                  <Button
-                    id="clickable-cancel-request-changes"
-                    marginBottom0
-                    buttonStyle="default mega"
-                    onClick={onCancel}
-                  >
-                    <FormattedMessage id="ui-requests.common.cancel" />
-                  </Button>
-                  <Button
-                    id="clickable-save-request"
-                    type="submit"
-                    marginBottom0
-                    buttonStyle="primary mega"
-                    disabled={this.isSubmittingButtonDisabled()}
-                  >
-                    <FormattedMessage id="ui-requests.common.saveAndClose" />
-                  </Button>
-                </div>
-              </PaneFooter>
-            }
-          >
-            {
-              errorMessage &&
-              <ErrorModal
-                onClose={this.onClose}
-                label={<FormattedMessage id="ui-requests.requestNotAllowed" />}
-                errorMessage={parseErrorMessage(errorMessage)}
-              />
-            }
-            {
-              this.state.titleLevelRequestsFeatureEnabled && !isEditForm &&
-              <div
-                className={css.tlrCheckbox}
-              >
-                <Row>
-                  <Col xs={12}>
-                    <Field
-                      data-testid="tlrCheckbox"
-                      name="createTitleLevelRequest"
-                      type="checkbox"
-                      label={formatMessage({ id: 'ui-requests.requests.createTitleLevelRequest' })}
-                      component={Checkbox}
-                      disabled={!this.state.titleLevelRequestsFeatureEnabled || isItemOrInstanceLoading}
-                      onChange={this.handleTlrCheckboxChange}
-                    />
-                  </Col>
-                </Row>
-              </div>
-            }
-            <AccordionSet
-              accordionStatus={accordions}
-              onToggle={this.onToggleSection}
+          <Paneset isRoot>
+            <form
+              id="form-requests"
+              className={css.requestForm}
+              onSubmit={handleSubmit(this.onSave)}
+              data-test-requests-form
             >
-              {
-                createTitleLevelRequest || (request?.requestLevel === REQUEST_LEVEL_TYPES.TITLE)
-                  ? (
-                    <Accordion
-                      id="new-instance-info"
-                      label={
-                        <FormattedMessage id="ui-requests.instance.information">
-                          {message => message + labelAsterisk}
-                        </FormattedMessage>
-                      }
-                    >
-                      <div
-                        data-testid="instanceInfoSection"
-                        id="section-instance-info"
+              <Pane
+                id="request"
+                defaultWidth="100%"
+                height="100%"
+                firstMenu={this.renderAddRequestFirstMenu()}
+                paneTitle={
+                  isEditForm
+                    ? <FormattedMessage id="ui-requests.actions.editRequest" />
+                    : <FormattedMessage id="ui-requests.actions.newRequest" />
+                }
+                footer={
+                  <PaneFooter>
+                    <div className={css.footerContent}>
+                      <Button
+                        id="clickable-cancel-request-changes"
+                        marginBottom0
+                        buttonStyle="default mega"
+                        onClick={onCancel}
                       >
-                        <Row>
-                          <Col xs={12}>
-                            {
-                              !isEditForm &&
-                              <Row>
-                                <Col xs={9}>
-                                  <FormattedMessage id="ui-requests.instance.scanOrEnterBarcode">
-                                    {placeholder => (
-                                      <Field
-                                        name="instance.hrid"
-                                        placeholder={placeholder}
-                                        aria-label={<FormattedMessage id="ui-requests.instance.value" />}
-                                        fullWidth
-                                        component={TextField}
-                                        forwardRef
-                                        ref={this.instanceValueRef}
-                                        onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.INSTANCE)}
-                                        validate={this.requireEnterInstance}
-                                      />
-                                    )}
-                                  </FormattedMessage>
-                                </Col>
-                                <Col xs={3}>
-                                  <Button
-                                    buttonStyle="primary noRadius"
-                                    fullWidth
-                                    onClick={this.onInstanceClick}
-                                    disabled={submitting}
-                                  >
-                                    <FormattedMessage id="ui-requests.enter" />
-                                  </Button>
-                                </Col>
-                              </Row>
-                            }
-                            {
-                              isItemOrInstanceLoading && <Icon icon="spinner-ellipsis" width="10px" />
-                            }
-                            {
-                              selectedInstance && !isItemOrInstanceLoading &&
-                              <TitleInformation
-                                instanceId={request?.instanceId || selectedInstance.id || instanceId}
-                                titleLevelRequestsCount={request?.titleRequestCount || instanceRequestCount}
-                                title={selectedInstance.title}
-                                contributors={selectedInstance.contributors || selectedInstance.contributorNames}
-                                publications={selectedInstance.publication}
-                                editions={selectedInstance.editions}
-                                identifiers={selectedInstance.identifiers}
-                              />
-                            }
-                          </Col>
-                        </Row>
-                      </div>
-                    </Accordion>
-                  )
-                  : (
-                    <Accordion
-                      id="new-item-info"
-                      label={
-                        <FormattedMessage id="ui-requests.item.information">
-                          {message => message + labelAsterisk}
-                        </FormattedMessage>
-                      }
-                    >
-                      <div id="section-item-info">
-                        <Row>
-                          <Col xs={12}>
-                            {
-                              !isEditForm &&
-                              <Row>
-                                <Col xs={9}>
-                                  <FormattedMessage id="ui-requests.item.scanOrEnterBarcode">
-                                    {placeholder => (
-                                      <Field
-                                        name="item.barcode"
-                                        placeholder={placeholder}
-                                        aria-label={<FormattedMessage id="ui-requests.item.barcode" />}
-                                        fullWidth
-                                        component={TextField}
-                                        forwardRef
-                                        ref={this.itemBarcodeRef}
-                                        onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.ITEM)}
-                                        validate={this.requireEnterItem}
-                                      />
-                                    )}
-                                  </FormattedMessage>
-                                </Col>
-                                <Col xs={3}>
-                                  <Button
-                                    id="clickable-select-item"
-                                    buttonStyle="primary noRadius"
-                                    fullWidth
-                                    onClick={this.onItemClick}
-                                    disabled={submitting}
-                                  >
-                                    <FormattedMessage id="ui-requests.enter" />
-                                  </Button>
-                                </Col>
-                              </Row>
-                            }
-                            {
-                              isItemOrInstanceLoading && <Icon icon="spinner-ellipsis" width="10px" />
-                            }
-                            {
-                            selectedItem &&
-                              <ItemDetail
-                                request={request}
-                                currentInstanceId={instanceId}
-                                item={selectedItem}
-                                loan={selectedLoan}
-                                requestCount={itemRequestCount}
-                              />
-                            }
-                          </Col>
-                        </Row>
-                      </div>
-                    </Accordion>
-                  )
-              }
-              <Accordion
-                id="new-request-info"
-                label={<FormattedMessage id="ui-requests.requestMeta.information" />}
-              >
-                {isEditForm && request && request.metadata &&
-                  <Col xs={12}>
-                    <this.props.metadataDisplay metadata={request.metadata} />
-                  </Col> }
-                <Row>
-                  <Col xs={12}>
-                    <Row>
-                      <Col
-                        data-test-request-type
-                        xs={3}
+                        <FormattedMessage id="ui-requests.common.cancel" />
+                      </Button>
+                      <Button
+                        id="clickable-save-request"
+                        type="submit"
+                        marginBottom0
+                        buttonStyle="primary mega"
+                        disabled={this.isSubmittingButtonDisabled()}
                       >
-                        {!isEditForm && !requestTypeOptions?.length && !requestTypeError &&
-                          <span data-test-request-type-message>
-                            <KeyValue
-                              label={<FormattedMessage id="ui-requests.requestType" />}
-                              value={<FormattedMessage id="ui-requests.requestType.message" />}
-                            />
-                          </span> }
-                        {multiRequestTypesVisible &&
-                          <Field
-                            label={<FormattedMessage id="ui-requests.requestType" />}
-                            name="requestType"
-                            component={Select}
-                            fullWidth
-                            disabled={isEditForm}
-                          >
-                            {requestTypeOptions.map(({ id, value }) => (
-                              <FormattedMessage id={id} key={id}>
-                                {translatedLabel => (
-                                  <option
-                                    value={value}
-                                  >
-                                    {translatedLabel}
-                                  </option>
-                                )}
-                              </FormattedMessage>
-                            ))}
-                          </Field> }
-                        {singleRequestTypeVisible &&
-                          <KeyValue
-                            label={<FormattedMessage id="ui-requests.requestType" />}
-                            value={
-                              <span data-test-request-type-text>
-                                <FormattedMessage id={requestTypeOptions[0].id} />
-                              </span>
-                            }
-                          /> }
-                        {isEditForm &&
-                          <KeyValue
-                            label={<FormattedMessage id="ui-requests.requestType" />}
-                            value={request.requestType}
-                          /> }
-                        {requestTypeError &&
-                          <KeyValue
-                            label={<FormattedMessage id="ui-requests.requestType" />}
-                            value={<FormattedMessage id="ui-requests.noRequestTypesAvailable" />}
-                          /> }
-                      </Col>
-                      <Col xs={2}>
-                        {isEditForm &&
-                          <KeyValue
-                            label={<FormattedMessage id="ui-requests.status" />}
-                            value={request.status}
-                          /> }
-                      </Col>
-                      <Col xs={2}>
-                        <Field
-                          name="requestExpirationDate"
-                          label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
-                          aria-label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
-                          component={Datepicker}
-                          dateFormat="YYYY-MM-DD"
-                          id="requestExpirationDate"
-                        />
-                      </Col>
-                      <Col
-                        data-test-request-patron-comments
-                        xsOffset={1}
-                        xs={4}
-                      >
-                        {isEditForm
-                          ? (
-                            <KeyValue
-                              label={<FormattedMessage id="ui-requests.patronComments" />}
-                              value={request.patronComments}
-                            />
-                          )
-                          : (
-                            <Field
-                              name="patronComments"
-                              label={<FormattedMessage id="ui-requests.patronComments" />}
-                              id="patronComments"
-                              component={TextArea}
-                            />
-                          )
-                        }
-                      </Col>
-                    </Row>
-                    <Row>
-                      {isEditForm && request.status === requestStatuses.AWAITING_PICKUP &&
-                        <>
-                          <Col xs={3}>
-                            <Field
-                              name="holdShelfExpirationDate"
-                              label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
-                              aria-label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
-                              component={Datepicker}
-                              dateFormat="YYYY-MM-DD"
-                            />
-                          </Col>
-                          <Col xs={3}>
-                            <Field
-                              name="holdShelfExpirationTime"
-                              label={<FormattedMessage id="ui-requests.holdShelfExpirationTime" />}
-                              aria-label={<FormattedMessage id="ui-requests.holdShelfExpirationTime" />}
-                              component={Timepicker}
-                              timeZone="UTC"
-                            />
-                          </Col>
-                        </>
-                      }
-                      {isEditForm && request.status !== requestStatuses.AWAITING_PICKUP &&
-                        <Col xs={3}>
-                          <KeyValue
-                            label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
-                            value={holdShelfExpireDate}
-                          />
-                        </Col> }
-                    </Row>
-                    {isEditForm &&
-                      <Row>
-                        <Col xs={3}>
-                          <KeyValue
-                            label={<FormattedMessage id="ui-requests.position" />}
-                            value={
-                              <PositionLink
-                                request={request}
-                                isTlrEnabled={isTlrEnabledOnEditPage}
-                              />
-                          }
-                          />
-                        </Col>
-                      </Row> }
-                  </Col>
-                </Row>
-              </Accordion>
-              <Accordion
-                id="new-requester-info"
-                label={
-                  <FormattedMessage id="ui-requests.requester.information">
-                    {message => message + labelAsterisk}
-                  </FormattedMessage>
+                        <FormattedMessage id="ui-requests.common.saveAndClose" />
+                      </Button>
+                    </div>
+                  </PaneFooter>
                 }
               >
-                <div id="section-requester-info">
-                  <Row>
-                    <Col xs={12}>
-                      {!isEditForm &&
-                        <Row>
-                          <Col xs={9}>
-                            <FormattedMessage id="ui-requests.requester.scanOrEnterBarcode">
-                              {placeholder => (
-                                <Field
-                                  name="requester.barcode"
-                                  placeholder={placeholder}
-                                  aria-label={<FormattedMessage id="ui-requests.requester.barcode" />}
-                                  fullWidth
-                                  component={TextField}
-                                  forwardRef
-                                  ref={this.requesterBarcodeRef}
-                                  onKeyDown={e => this.onKeyDown(e, 'requester')}
-                                  validate={this.requireUser}
-                                />
-                              )}
-                            </FormattedMessage>
-                            <Pluggable
-                              aria-haspopup="true"
-                              type="find-user"
-                              searchLabel={<FormattedMessage id="ui-requests.requester.findUserPluginLabel" />}
-                              marginTop0
-                              searchButtonStyle="link"
-                              {...this.props}
-                              dataKey="users"
-                              selectUser={this.onSelectUser}
-                              disableRecordCreation={disableRecordCreation}
-                              visibleColumns={['active', 'name', 'patronGroup', 'username', 'barcode']}
-                              columnMapping={columnMapping}
-                            />
-                          </Col>
-                          <Col xs={3}>
-                            <Button
-                              id="clickable-select-requester"
-                              buttonStyle="primary noRadius"
-                              fullWidth
-                              onClick={this.onUserClick}
-                              disabled={submitting}
-                            >
-                              <FormattedMessage id="ui-requests.enter" />
-                            </Button>
-                          </Col>
-
-                        </Row> }
-                      {(selectedUser?.id || request?.requester) &&
-                        <UserForm
-                          user={request ? request.requester : selectedUser}
-                          stripes={this.props.stripes}
-                          request={request}
-                          patronGroup={patronGroup?.group}
-                          deliverySelected={deliverySelected}
-                          fulfilmentPreference={fulfilmentPreference}
-                          deliveryAddress={addressDetail}
-                          deliveryLocations={deliveryLocations}
-                          fulfilmentTypeOptions={this.getFulfilmentTypeOptions()}
-                          onChangeAddress={this.onChangeAddress}
-                          onChangeFulfilment={this.onChangeFulfilment}
-                          proxy={this.getProxy()}
-                          servicePoints={servicePoints}
-                          onSelectProxy={this.onSelectProxy}
-                          onCloseProxy={() => { this.setState({ selectedUser: null, proxy: null }); }}
-                        />
-                      }
-                      {isUserLoading && <Icon icon="spinner-ellipsis" width="10px" />}
-                    </Col>
-                  </Row>
-                </div>
-              </Accordion>
-            </AccordionSet>
-            <this.connectedCancelRequestDialog
-              open={isCancellingRequest}
-              onCancelRequest={this.onCancelRequest}
-              onClose={() => this.setState({ isCancellingRequest: false })}
-              request={request}
-              stripes={this.props.stripes}
-            />
-            <PatronBlockModal
-              open={getPatronBlockModalOpenStatus()}
-              onClose={this.onCloseBlockedModal}
-              onOverride={this.overridePatronBlocks}
-              viewUserPath={() => this.onViewUserPath(selectedUser, patronGroup)}
-              patronBlocks={patronBlocks || []}
-              automatedPatronBlocks={automatedPatronBlocks}
-            />
-            <ItemsDialog
-              onClose={this.handleItemsDialogClose}
-              onRowClick={this.handleInstanceItemClick}
-              instanceId={selectedInstance?.id}
-              title={selectedInstance?.title}
-              open={isItemsDialogOpen}
-            />
-            {isErrorModalOpen &&
-              <ErrorModal
-                id={`${itemStatus}-modal`}
-                onClose={this.hideErrorModal}
-                label={<FormattedMessage id="ui-requests.errorModal.title" />}
-                errorMessage={
-                  <FormattedMessage
-                    id="ui-requests.errorModal.message"
-                    values={{
-                      title: instance?.title,
-                      barcode: selectedItem.barcode,
-                      materialType: get(selectedItem, 'materialType.name', ''),
-                      itemStatus,
-                    }}
+                {
+                  errorMessage &&
+                  <ErrorModal
+                    onClose={this.onClose}
+                    label={<FormattedMessage id="ui-requests.requestNotAllowed" />}
+                    errorMessage={parseErrorMessage(errorMessage)}
                   />
                 }
-              /> }
-          </Pane>
-        </form>
-      </Paneset>
+                {
+                  this.state.titleLevelRequestsFeatureEnabled && !isEditForm &&
+                  <div
+                    className={css.tlrCheckbox}
+                  >
+                    <Row>
+                      <Col xs={12}>
+                        <Field
+                          data-testid="tlrCheckbox"
+                          name="createTitleLevelRequest"
+                          type="checkbox"
+                          label={formatMessage({ id: 'ui-requests.requests.createTitleLevelRequest' })}
+                          component={Checkbox}
+                          disabled={!this.state.titleLevelRequestsFeatureEnabled || isItemOrInstanceLoading}
+                          onChange={this.handleTlrCheckboxChange}
+                        />
+                      </Col>
+                    </Row>
+                  </div>
+                }
+                <AccordionStatus ref={this.accordionStatusRef}>
+                  <AccordionSet>
+                    {
+                      createTitleLevelRequest || (request?.requestLevel === REQUEST_LEVEL_TYPES.TITLE)
+                        ? (
+                          <Accordion
+                            id="new-instance-info"
+                            label={
+                              <FormattedMessage id="ui-requests.instance.information">
+                                {message => message + labelAsterisk}
+                              </FormattedMessage>
+                            }
+                          >
+                            <div
+                              data-testid="instanceInfoSection"
+                              id="section-instance-info"
+                            >
+                              <Row>
+                                <Col xs={12}>
+                                  {
+                                    !isEditForm &&
+                                    <Row>
+                                      <Col xs={9}>
+                                        <FormattedMessage id="ui-requests.instance.scanOrEnterBarcode">
+                                          {placeholder => (
+                                            <Field
+                                              name="instance.hrid"
+                                              placeholder={placeholder}
+                                              aria-label={<FormattedMessage id="ui-requests.instance.value" />}
+                                              fullWidth
+                                              component={TextField}
+                                              forwardRef
+                                              ref={this.instanceValueRef}
+                                              onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.INSTANCE)}
+                                              validate={this.requireEnterInstance}
+                                            />
+                                          )}
+                                        </FormattedMessage>
+                                      </Col>
+                                      <Col xs={3}>
+                                        <Button
+                                          buttonStyle="primary noRadius"
+                                          fullWidth
+                                          onClick={this.onInstanceClick}
+                                          disabled={submitting}
+                                        >
+                                          <FormattedMessage id="ui-requests.enter" />
+                                        </Button>
+                                      </Col>
+                                    </Row>
+                                  }
+                                  {
+                                    isItemOrInstanceLoading && <Icon icon="spinner-ellipsis" width="10px" />
+                                  }
+                                  {
+                                    selectedInstance && !isItemOrInstanceLoading &&
+                                    <TitleInformation
+                                      instanceId={request?.instanceId || selectedInstance.id || instanceId}
+                                      titleLevelRequestsCount={request?.titleRequestCount || instanceRequestCount}
+                                      title={selectedInstance.title}
+                                      contributors={selectedInstance.contributors || selectedInstance.contributorNames}
+                                      publications={selectedInstance.publication}
+                                      editions={selectedInstance.editions}
+                                      identifiers={selectedInstance.identifiers}
+                                    />
+                                  }
+                                </Col>
+                              </Row>
+                            </div>
+                          </Accordion>
+                        )
+                        : (
+                          <Accordion
+                            id="new-item-info"
+                            label={
+                              <FormattedMessage id="ui-requests.item.information">
+                                {message => message + labelAsterisk}
+                              </FormattedMessage>
+                            }
+                          >
+                            <div id="section-item-info">
+                              <Row>
+                                <Col xs={12}>
+                                  {
+                                    !isEditForm &&
+                                    <Row>
+                                      <Col xs={9}>
+                                        <FormattedMessage id="ui-requests.item.scanOrEnterBarcode">
+                                          {placeholder => (
+                                            <Field
+                                              name="item.barcode"
+                                              placeholder={placeholder}
+                                              aria-label={<FormattedMessage id="ui-requests.item.barcode" />}
+                                              fullWidth
+                                              component={TextField}
+                                              forwardRef
+                                              ref={this.itemBarcodeRef}
+                                              onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.ITEM)}
+                                              validate={this.requireEnterItem}
+                                            />
+                                          )}
+                                        </FormattedMessage>
+                                      </Col>
+                                      <Col xs={3}>
+                                        <Button
+                                          id="clickable-select-item"
+                                          buttonStyle="primary noRadius"
+                                          fullWidth
+                                          onClick={this.onItemClick}
+                                          disabled={submitting}
+                                        >
+                                          <FormattedMessage id="ui-requests.enter" />
+                                        </Button>
+                                      </Col>
+                                    </Row>
+                                  }
+                                  {
+                                    isItemOrInstanceLoading && <Icon icon="spinner-ellipsis" width="10px" />
+                                  }
+                                  {
+                                  selectedItem &&
+                                    <ItemDetail
+                                      request={request}
+                                      currentInstanceId={instanceId}
+                                      item={selectedItem}
+                                      loan={selectedLoan}
+                                      requestCount={itemRequestCount}
+                                    />
+                                  }
+                                </Col>
+                              </Row>
+                            </div>
+                          </Accordion>
+                        )
+                    }
+                    <Accordion
+                      id="new-request-info"
+                      label={<FormattedMessage id="ui-requests.requestMeta.information" />}
+                    >
+                      {isEditForm && request && request.metadata &&
+                        <Col xs={12}>
+                          <this.props.metadataDisplay metadata={request.metadata} />
+                        </Col> }
+                      <Row>
+                        <Col xs={12}>
+                          <Row>
+                            <Col
+                              data-test-request-type
+                              xs={3}
+                            >
+                              {!isEditForm && !requestTypeOptions?.length && !requestTypeError &&
+                                <span data-test-request-type-message>
+                                  <KeyValue
+                                    label={<FormattedMessage id="ui-requests.requestType" />}
+                                    value={<FormattedMessage id="ui-requests.requestType.message" />}
+                                  />
+                                </span> }
+                              {multiRequestTypesVisible &&
+                                <Field
+                                  label={<FormattedMessage id="ui-requests.requestType" />}
+                                  name="requestType"
+                                  component={Select}
+                                  fullWidth
+                                  disabled={isEditForm}
+                                >
+                                  {requestTypeOptions.map(({ id, value }) => (
+                                    <FormattedMessage id={id} key={id}>
+                                      {translatedLabel => (
+                                        <option
+                                          value={value}
+                                        >
+                                          {translatedLabel}
+                                        </option>
+                                      )}
+                                    </FormattedMessage>
+                                  ))}
+                                </Field> }
+                              {singleRequestTypeVisible &&
+                                <KeyValue
+                                  label={<FormattedMessage id="ui-requests.requestType" />}
+                                  value={
+                                    <span data-test-request-type-text>
+                                      <FormattedMessage id={requestTypeOptions[0].id} />
+                                    </span>
+                                  }
+                                /> }
+                              {isEditForm &&
+                                <KeyValue
+                                  label={<FormattedMessage id="ui-requests.requestType" />}
+                                  value={request.requestType}
+                                /> }
+                              {requestTypeError &&
+                                <KeyValue
+                                  label={<FormattedMessage id="ui-requests.requestType" />}
+                                  value={<FormattedMessage id="ui-requests.noRequestTypesAvailable" />}
+                                /> }
+                            </Col>
+                            <Col xs={2}>
+                              {isEditForm &&
+                                <KeyValue
+                                  label={<FormattedMessage id="ui-requests.status" />}
+                                  value={request.status}
+                                /> }
+                            </Col>
+                            <Col xs={2}>
+                              <Field
+                                name="requestExpirationDate"
+                                label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
+                                aria-label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
+                                component={Datepicker}
+                                dateFormat="YYYY-MM-DD"
+                                id="requestExpirationDate"
+                              />
+                            </Col>
+                            <Col
+                              data-test-request-patron-comments
+                              xsOffset={1}
+                              xs={4}
+                            >
+                              {isEditForm
+                                ? (
+                                  <KeyValue
+                                    label={<FormattedMessage id="ui-requests.patronComments" />}
+                                    value={request.patronComments}
+                                  />
+                                )
+                                : (
+                                  <Field
+                                    name="patronComments"
+                                    label={<FormattedMessage id="ui-requests.patronComments" />}
+                                    id="patronComments"
+                                    component={TextArea}
+                                  />
+                                )
+                              }
+                            </Col>
+                          </Row>
+                          <Row>
+                            {isEditForm && request.status === requestStatuses.AWAITING_PICKUP &&
+                              <>
+                                <Col xs={3}>
+                                  <Field
+                                    name="holdShelfExpirationDate"
+                                    label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
+                                    aria-label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
+                                    component={Datepicker}
+                                    dateFormat="YYYY-MM-DD"
+                                  />
+                                </Col>
+                                <Col xs={3}>
+                                  <Field
+                                    name="holdShelfExpirationTime"
+                                    label={<FormattedMessage id="ui-requests.holdShelfExpirationTime" />}
+                                    aria-label={<FormattedMessage id="ui-requests.holdShelfExpirationTime" />}
+                                    component={Timepicker}
+                                    timeZone="UTC"
+                                  />
+                                </Col>
+                              </>
+                            }
+                            {isEditForm && request.status !== requestStatuses.AWAITING_PICKUP &&
+                              <Col xs={3}>
+                                <KeyValue
+                                  label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
+                                  value={holdShelfExpireDate}
+                                />
+                              </Col> }
+                          </Row>
+                          {isEditForm &&
+                            <Row>
+                              <Col xs={3}>
+                                <KeyValue
+                                  label={<FormattedMessage id="ui-requests.position" />}
+                                  value={
+                                    <PositionLink
+                                      request={request}
+                                      isTlrEnabled={isTlrEnabledOnEditPage}
+                                    />
+                                }
+                                />
+                              </Col>
+                            </Row> }
+                        </Col>
+                      </Row>
+                    </Accordion>
+                    <Accordion
+                      id="new-requester-info"
+                      label={
+                        <FormattedMessage id="ui-requests.requester.information">
+                          {message => message + labelAsterisk}
+                        </FormattedMessage>
+                      }
+                    >
+                      <div id="section-requester-info">
+                        <Row>
+                          <Col xs={12}>
+                            {!isEditForm &&
+                              <Row>
+                                <Col xs={9}>
+                                  <FormattedMessage id="ui-requests.requester.scanOrEnterBarcode">
+                                    {placeholder => (
+                                      <Field
+                                        name="requester.barcode"
+                                        placeholder={placeholder}
+                                        aria-label={<FormattedMessage id="ui-requests.requester.barcode" />}
+                                        fullWidth
+                                        component={TextField}
+                                        forwardRef
+                                        ref={this.requesterBarcodeRef}
+                                        onKeyDown={e => this.onKeyDown(e, 'requester')}
+                                        validate={this.requireUser}
+                                      />
+                                    )}
+                                  </FormattedMessage>
+                                  <Pluggable
+                                    aria-haspopup="true"
+                                    type="find-user"
+                                    searchLabel={<FormattedMessage id="ui-requests.requester.findUserPluginLabel" />}
+                                    marginTop0
+                                    searchButtonStyle="link"
+                                    {...this.props}
+                                    dataKey="users"
+                                    selectUser={this.onSelectUser}
+                                    disableRecordCreation={disableRecordCreation}
+                                    visibleColumns={['active', 'name', 'patronGroup', 'username', 'barcode']}
+                                    columnMapping={columnMapping}
+                                  />
+                                </Col>
+                                <Col xs={3}>
+                                  <Button
+                                    id="clickable-select-requester"
+                                    buttonStyle="primary noRadius"
+                                    fullWidth
+                                    onClick={this.onUserClick}
+                                    disabled={submitting}
+                                  >
+                                    <FormattedMessage id="ui-requests.enter" />
+                                  </Button>
+                                </Col>
+
+                              </Row> }
+                            {(selectedUser?.id || request?.requester) &&
+                              <UserForm
+                                user={request ? request.requester : selectedUser}
+                                stripes={this.props.stripes}
+                                request={request}
+                                patronGroup={patronGroup?.group}
+                                deliverySelected={deliverySelected}
+                                fulfilmentPreference={fulfilmentPreference}
+                                deliveryAddress={addressDetail}
+                                deliveryLocations={deliveryLocations}
+                                fulfilmentTypeOptions={this.getFulfilmentTypeOptions()}
+                                onChangeAddress={this.onChangeAddress}
+                                onChangeFulfilment={this.onChangeFulfilment}
+                                proxy={this.getProxy()}
+                                servicePoints={servicePoints}
+                                onSelectProxy={this.onSelectProxy}
+                                onCloseProxy={() => { this.setState({ selectedUser: null, proxy: null }); }}
+                              />
+                            }
+                            {isUserLoading && <Icon icon="spinner-ellipsis" width="10px" />}
+                          </Col>
+                        </Row>
+                      </div>
+                    </Accordion>
+                  </AccordionSet>
+                </AccordionStatus>
+                <this.connectedCancelRequestDialog
+                  open={isCancellingRequest}
+                  onCancelRequest={this.onCancelRequest}
+                  onClose={() => this.setState({ isCancellingRequest: false })}
+                  request={request}
+                  stripes={this.props.stripes}
+                />
+                <PatronBlockModal
+                  open={getPatronBlockModalOpenStatus()}
+                  onClose={this.onCloseBlockedModal}
+                  onOverride={this.overridePatronBlocks}
+                  viewUserPath={() => this.onViewUserPath(selectedUser, patronGroup)}
+                  patronBlocks={patronBlocks || []}
+                  automatedPatronBlocks={automatedPatronBlocks}
+                />
+                <ItemsDialog
+                  onClose={this.handleItemsDialogClose}
+                  onRowClick={this.handleInstanceItemClick}
+                  instanceId={selectedInstance?.id}
+                  title={selectedInstance?.title}
+                  open={isItemsDialogOpen}
+                />
+                {isErrorModalOpen &&
+                  <ErrorModal
+                    id={`${itemStatus}-modal`}
+                    onClose={this.hideErrorModal}
+                    label={<FormattedMessage id="ui-requests.errorModal.title" />}
+                    errorMessage={
+                      <FormattedMessage
+                        id="ui-requests.errorModal.message"
+                        values={{
+                          title: instance?.title,
+                          barcode: selectedItem.barcode,
+                          materialType: get(selectedItem, 'materialType.name', ''),
+                          itemStatus,
+                        }}
+                      />
+                    }
+                  /> }
+              </Pane>
+            </form>
+          </Paneset>
+        </HasCommand>
+      </>
     );
   }
 }

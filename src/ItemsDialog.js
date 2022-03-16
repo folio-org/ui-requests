@@ -158,7 +158,7 @@ const ItemsDialog = ({
   return (
     <Modal
       data-test-move-request-modal
-      label={formatMessage({ id: 'ui-requests.items.selectItem' })}
+      label={formatMessage({ id: 'ui-requests.items.selectItem' }, { title: '' })}
       open={open}
       contentClass={css.content}
       onClose={onClose}
@@ -180,14 +180,14 @@ const ItemsDialog = ({
             : <MultiColumnList
               id="instance-items-list"
               interactive
-              ariaLabel={formatMessage({ id: 'ui-requests.items.instanceItems' })}
+              ariaLabel={formatMessage({ id: 'ui-requests.items.instanceItems' }, { title: '' })}
               contentData={contentData}
               visibleColumns={COLUMN_NAMES}
               columnMapping={COLUMN_MAP}
               columnWidths={COLUMN_WIDTHS}
               formatter={formatter}
               maxHeight={MAX_HEIGHT}
-              isEmptyMessage={formatMessage({ id: 'ui-requests.items.instanceItems.notFound' })}
+              isEmptyMessage={formatMessage({ id: 'ui-requests.items.instanceItems.notFound' }, { title: '' })}
               onRowClick={onRowClick}
             />
           }

@@ -66,6 +66,7 @@ import {
   RequestsFiltersConfig,
 } from '../components/RequestsFilters';
 import { getFormattedYears } from './utils';
+import RequestShortcutsWrapper from '../components/RequestShortcutsWrapper/RequestShortcutsWrapper';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -861,6 +862,7 @@ class RequestsRoute extends React.Component {
       mutator,
       stripes,
       history,
+      location,
       intl,
       stripes: {
         timezone,
@@ -997,77 +999,79 @@ class RequestsRoute extends React.Component {
     };
 
     return (
-      <>
-        {
-          isEmpty(errorModalData) ||
-          <ErrorModal
-            onClose={this.errorModalClose}
-            label={intl.formatMessage({ id: errorModalData.label })}
-            errorMessage={intl.formatMessage({ id: errorModalData.errorMessage })}
+      <RequestShortcutsWrapper location={location} history={history} stripes={stripes}>
+        <>
+          {
+            isEmpty(errorModalData) ||
+            <ErrorModal
+              onClose={this.errorModalClose}
+              label={intl.formatMessage({ id: errorModalData.label })}
+              errorMessage={intl.formatMessage({ id: errorModalData.errorMessage })}
+            />
+          }
+          <div data-test-request-instances>
+            <SearchAndSort
+              columnManagerProps={columnManagerProps}
+              hasNewButton={false}
+              actionMenu={actionMenu}
+              packageInfo={packageInfo}
+              objectName="request"
+              initialResultCount={INITIAL_RESULT_COUNT}
+              resultCountIncrement={RESULT_COUNT_INCREMENT}
+              viewRecordComponent={ViewRequest}
+              editRecordComponent={RequestForm}
+              getHelperResourcePath={this.getHelperResourcePath}
+              columnWidths={{
+                requestDate: { max: 165 },
+                title: { max: 300 },
+                year: { max: 58 },
+                position: { max: 150 },
+                requestType: { max: 101 },
+                itemBarcode: { max: 140 },
+                type: { max: 100 },
+              }}
+              columnMapping={this.columnLabels}
+              resultsFormatter={resultsFormatter}
+              newRecordInitialValues={initialValues}
+              massageNewRecord={this.massageNewRecord}
+              onCreate={this.create}
+              onCloseNewRecord={this.handleCloseNewRecord}
+              parentResources={resources}
+              parentMutator={mutator}
+              detailProps={{
+                onChangePatron: this.onChangePatron,
+                stripes,
+                history,
+                errorMessage,
+                findResource: this.findResource,
+                toggleModal: this.toggleModal,
+                joinRequest: this.addRequestFields,
+                optionLists: {
+                  addressTypes,
+                  fulfilmentTypes,
+                  servicePoints,
+                  cancellationReasons,
+                },
+                patronGroups,
+                query: resources.query,
+                onDuplicate: this.onDuplicate,
+                buildRecordsForHoldsShelfReport: this.buildRecordsForHoldsShelfReport,
+              }}
+              viewRecordPerms="ui-requests.view"
+              newRecordPerms="ui-requests.create"
+              renderFilters={this.renderFilters}
+              onFilterChange={this.handleFilterChange}
+              pageAmount={100}
+              pagingType="click"
+            />
+          </div>
+          <PrintContent
+            ref={this.printContentRef}
+            template={printTemplate}
+            dataSource={pickSlipsData}
           />
-        }
-        <div data-test-request-instances>
-          <SearchAndSort
-            columnManagerProps={columnManagerProps}
-            hasNewButton={false}
-            actionMenu={actionMenu}
-            packageInfo={packageInfo}
-            objectName="request"
-            initialResultCount={INITIAL_RESULT_COUNT}
-            resultCountIncrement={RESULT_COUNT_INCREMENT}
-            viewRecordComponent={ViewRequest}
-            editRecordComponent={RequestForm}
-            getHelperResourcePath={this.getHelperResourcePath}
-            columnWidths={{
-              requestDate: { max: 165 },
-              title: { max: 300 },
-              year: { max: 58 },
-              position: { max: 150 },
-              requestType: { max: 101 },
-              itemBarcode: { max: 140 },
-              type: { max: 100 },
-            }}
-            columnMapping={this.columnLabels}
-            resultsFormatter={resultsFormatter}
-            newRecordInitialValues={initialValues}
-            massageNewRecord={this.massageNewRecord}
-            onCreate={this.create}
-            onCloseNewRecord={this.handleCloseNewRecord}
-            parentResources={resources}
-            parentMutator={mutator}
-            detailProps={{
-              onChangePatron: this.onChangePatron,
-              stripes,
-              history,
-              errorMessage,
-              findResource: this.findResource,
-              toggleModal: this.toggleModal,
-              joinRequest: this.addRequestFields,
-              optionLists: {
-                addressTypes,
-                fulfilmentTypes,
-                servicePoints,
-                cancellationReasons,
-              },
-              patronGroups,
-              query: resources.query,
-              onDuplicate: this.onDuplicate,
-              buildRecordsForHoldsShelfReport: this.buildRecordsForHoldsShelfReport,
-            }}
-            viewRecordPerms="ui-requests.view"
-            newRecordPerms="ui-requests.create"
-            renderFilters={this.renderFilters}
-            onFilterChange={this.handleFilterChange}
-            pageAmount={100}
-            pagingType="click"
-          />
-        </div>
-        <PrintContent
-          ref={this.printContentRef}
-          template={printTemplate}
-          dataSource={pickSlipsData}
-        />
-      </>
+        </>
+      </RequestShortcutsWrapper>
     );
   }
 }
