@@ -199,6 +199,11 @@ class ViewRequest extends React.Component {
   }
 
   update(record) {
+    const {
+      firstName,
+      lastName,
+    } = record.requester.personal;
+
     const updatedRecord = record;
 
     // Remove the "enhanced record" fields that aren't part of the request schema (and thus can't)
@@ -218,6 +223,19 @@ class ViewRequest extends React.Component {
 
     this.props.mutator.selectedRequest.PUT(updatedRecord).then(() => {
       this.props.onCloseEdit();
+      this.callout.current.sendCallout({
+        message: (
+          <FormattedMessage
+            id="ui-requests.editRequest.success"
+            values={{ requester: `${lastName}, ${firstName}` }}
+          />
+        ),
+      });
+    }).catch(() => {
+      this.callout.current.sendCallout({
+        message: <FormattedMessage id="ui-requests.editRequest.fail" />,
+        type: 'error',
+      });
     });
   }
 
@@ -753,7 +771,6 @@ class ViewRequest extends React.Component {
               request={request}
               stripes={stripes}
             />
-
             {moveRequest &&
               <MoveRequestManager
                 onMove={this.onMove}
@@ -787,11 +804,16 @@ class ViewRequest extends React.Component {
   render() {
     const request = this.getRequest();
 
-    if (!request) {
-      return this.renderSpinner();
-    }
+    const content = request
+      ? this.renderLayer(request) || this.renderRequest(request)
+      : this.renderSpinner();
 
-    return this.renderLayer(request) || this.renderRequest(request);
+    return (
+      <>
+        {content}
+        <Callout ref={this.callout} />
+      </>
+    );
   }
 }
 

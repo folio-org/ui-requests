@@ -96,6 +96,7 @@ const RESOURCE_TYPES = {
   USER: 'user',
   HOLDING: 'holding',
 };
+const INSTANCE_SEGMENT_FOR_PLUGIN = 'instances';
 
 class RequestForm extends React.Component {
   static propTypes = {
@@ -470,6 +471,7 @@ class RequestForm extends React.Component {
           const state = { selectedUser };
           onChangePatron(selectedUser);
           change('requesterId', selectedUser.id);
+          change('requester', selectedUser);
 
           this.setState(state);
           this.findRequestPreferences(selectedUser.id);
