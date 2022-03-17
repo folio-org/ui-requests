@@ -684,26 +684,31 @@ class RequestsRoute extends React.Component {
       .then(() => {
         this.closeLayer();
 
-        if (!isDuplicateMode(mode)) {
-          this.context.sendCallout({
-            message: (
+        this.context.sendCallout({
+          message: isDuplicateMode(mode)
+            ? (
+              <FormattedMessage
+                id="ui-requests.duplicateRequest.success"
+                values={{ requester: `${lastName}, ${firstName}` }}
+              />
+            )
+            : (
               <FormattedMessage
                 id="ui-requests.createRequest.success"
                 values={{ requester: `${lastName}, ${firstName}` }}
               />
             ),
-          });
-        }
+        });
       })
       .catch(resp => {
         this.processError(resp);
 
-        if (!isDuplicateMode(mode)) {
-          this.context.sendCallout({
-            message: <FormattedMessage id="ui-requests.createRequest.fail" />,
-            type: 'error',
-          });
-        }
+        this.context.sendCallout({
+          message: isDuplicateMode(mode)
+            ? <FormattedMessage id="ui-requests.duplicateRequest.fail" />
+            : <FormattedMessage id="ui-requests.createRequest.fail" />,
+          type: 'error',
+        });
       });
   };
 
