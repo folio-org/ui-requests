@@ -7,6 +7,7 @@
 * Replace `SafeHTMLMessage` with `FormattedMessage`. Refs UIREQ-610.
 * Move page requests to first accordion of unified queue when reordering. Refs UIREQ-728.
 * Add title look-up to new request form. Refs UIREQ-675.
+* Add success toast to Requests. Refs UIREQ-722.
 
 ## [7.0.0](https://github.com/folio-org/ui-requests/tree/v7.0.0) (2022-02-25)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v6.0.2...v7.0.0)
