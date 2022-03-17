@@ -11,8 +11,8 @@ import {
   Accordion,
   AccordionSet,
   FilterAccordionHeader,
-  HasCommand,
-  AccordionStatus,
+  // HasCommand,
+  // AccordionStatus,
   collapseAllSections,
   expandAllSections,
 } from '@folio/stripes/components';
@@ -20,6 +20,9 @@ import {
   CheckboxFilter,
   MultiSelectionFilter,
 } from '@folio/stripes/smart-components';
+
+import HasCommand from '@folio/stripes-components/lib/Commander/HasCommand';
+import AccordionStatus from '@folio/stripes-components/lib/Accordion/AccordionStatus';
 
 import {
   requestFilterTypes,
@@ -29,6 +32,8 @@ import {
 
 import { PickupServicePointFilter } from './PickupServicePointFilter';
 import { RequestLevelFilter } from './RequestLevelFilter';
+
+
 
 export default class RequestsFilters extends React.Component {
   static propTypes = {

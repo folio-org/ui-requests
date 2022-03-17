@@ -66,7 +66,7 @@ import {
   RequestsFiltersConfig,
 } from '../components/RequestsFilters';
 import { getFormattedYears } from './utils';
-import RequestShortcutsWrapper from '../components/RequestShortcutsWrapper/RequestShortcutsWrapper';
+import RequestsRouteShortcutsWrapper from '../components/RequestsRouteShortcutsWrapper';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -999,7 +999,11 @@ class RequestsRoute extends React.Component {
     };
 
     return (
-      <RequestShortcutsWrapper location={location} history={history} stripes={stripes}>
+      <RequestsRouteShortcutsWrapper
+        history={history}
+        location={location}
+        stripes={stripes}
+      >
         <>
           {
             isEmpty(errorModalData) ||
@@ -1008,7 +1012,7 @@ class RequestsRoute extends React.Component {
               label={intl.formatMessage({ id: errorModalData.label })}
               errorMessage={intl.formatMessage({ id: errorModalData.errorMessage })}
             />
-          }
+            }
           <div data-test-request-instances>
             <SearchAndSort
               columnManagerProps={columnManagerProps}
@@ -1071,7 +1075,7 @@ class RequestsRoute extends React.Component {
             dataSource={pickSlipsData}
           />
         </>
-      </RequestShortcutsWrapper>
+      </RequestsRouteShortcutsWrapper>
     );
   }
 }

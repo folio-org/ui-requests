@@ -7,13 +7,16 @@ import moment from 'moment-timezone';
 
 import '../test/jest/__mock__';
 
-import {
-  Pane,
-} from '@folio/stripes/components';
+import { Pane } from '@folio/stripes/components';
+
+import { CommandList, defaultKeyboardShortcuts } from '@folio/stripes-components';
 
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
 import { requestStatuses, REQUEST_LEVEL_TYPES } from './constants';
+import { duplicateRecordShortcut, openEditShortcut } from '../test/jest/helpers/shortcuts';
+
+jest.mock('@folio/stripes/smart-components', () => ({ ...jest.requireActual('@folio/stripes/smart-components') }), { virtual: true });
 
 jest.mock('./RequestForm', () => jest.fn(() => null));
 jest.mock('./MoveRequestManager', () => jest.fn(() => null));
@@ -29,9 +32,11 @@ Pane.mockImplementation(({ children, actionMenu }) => (
   </div>
 ));
 
+
 describe('ViewRequest', () => {
   const labelIds = {
     duplicateRequest: 'ui-requests.actions.duplicateRequest',
+    editRequest: 'ui-requests.actions.edit',
   };
   const mockedRequest = {
     instance: {
@@ -58,18 +63,23 @@ describe('ViewRequest', () => {
       { value: '{"titleLevelRequestsFeatureEnabled":true}' },
     ],
   };
+  const mockedHistory = {
+    push: jest.fn(),
+  };
+  const mockDuplicateRequest = jest.fn();
+  const mockOpenEdit = jest.fn();
   const defaultProps = {
     location: mockedLocation,
-    history: {
-      push: jest.fn(),
-    },
+    history: mockedHistory,
     joinRequest: jest.fn(() => new Promise((resolve) => {
       resolve({ id: 'id' });
     })),
     findResource: jest.fn(),
     mutator: {},
     onClose: jest.fn(),
+    onEdit: mockOpenEdit,
     onCloseEdit: jest.fn(),
+    onDuplicate: mockDuplicateRequest,
     buildRecordsForHoldsShelfReport: jest.fn(),
     optionLists: {
       cancellationReasons: [
@@ -107,7 +117,9 @@ describe('ViewRequest', () => {
 
   beforeEach(() => {
     render(
-      <ViewRequest {...defaultProps} />
+      <CommandList commands={defaultKeyboardShortcuts}>
+        <ViewRequest {...defaultProps} />
+      </CommandList>
     );
   });
 
@@ -157,6 +169,32 @@ describe('ViewRequest', () => {
 
       it('should not render `Duplicate` button', () => {
         expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('When keyboard shortcut keys for', () => {
+    beforeAll(() => {
+      mockedLocation.search = null;
+      mockedConfig.records[0].value = '{"titleLevelRequestsFeatureEnabled":true}';
+    });
+    describe('duplicate pressed', () => {
+      beforeAll(() => {
+      });
+      it('should call onDuplicate function', () => {
+        const duplicateButton = screen.queryByText(labelIds.duplicateRequest);
+        duplicateRecordShortcut(duplicateButton);
+        expect(mockDuplicateRequest).toHaveBeenCalled();
+      });
+    });
+
+    describe('edit pressed and request status is closed', () => {
+      beforeAll(() => {
+        mockedConfig.records[0].value = '{"titleLevelRequestsFeatureEnabled":true}';
+      });
+      it('should not call Edit', () => {
+        openEditShortcut(document.body);
+        expect(mockOpenEdit).not.toHaveBeenCalled();
       });
     });
   });

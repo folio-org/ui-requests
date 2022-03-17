@@ -27,7 +27,7 @@ const RequestShortcutsWrapper = ({
     {
       name: 'new',
       handler: handleKeyCommand(() => {
-        if (stripes.hasPerm('ui-requests.create')) history.push(`${location.pathname}?layer=create`);
+        if (stripes?.hasPerm('ui-requests.create')) history.push(`${location.pathname}?layer=create`);
       }),
     },
     {

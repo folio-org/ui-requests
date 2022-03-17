@@ -22,6 +22,7 @@ import {
   AccordionStatus,
   expandAllSections,
   collapseAllSections,
+  checkScope,
 } from '@folio/stripes/components';
 import { AppIcon } from '@folio/stripes/core';
 
@@ -72,7 +73,7 @@ class RequestQueueView extends React.Component {
   constructor(props) {
     super(props);
 
-    const { data: {
+    const { onClose, data: {
       notYetFilledRequests,
     } } = props;
     const requestsPositionsForReorder = notYetFilledRequests.map(r => r.position);
@@ -85,6 +86,11 @@ class RequestQueueView extends React.Component {
     this.accordionStatusRef = React.createRef();
 
     this.keyCommands = [
+      {
+        name: 'cancel',
+        shortcut: 'esc',
+        handler: onClose
+      },
       {
         name: 'expandAllSections',
         handler: (e) => expandAllSections(e, this.accordionStatusRef),
@@ -267,7 +273,11 @@ class RequestQueueView extends React.Component {
 
     return (
       <>
-        <HasCommand commands={this.keyCommands}>
+        <HasCommand
+          commands={this.keyCommands}
+          isWithinScope={checkScope}
+          scope={document.body}
+        >
           <Paneset isRoot>
             <Pane
               id="request-queue"

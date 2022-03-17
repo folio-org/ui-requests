@@ -48,13 +48,11 @@ import {
   TextField,
   Timepicker,
   Checkbox,
-  HasCommand,
-  checkScope,
   AccordionStatus,
-  collapseAllSections,
-  expandAllSections,
 } from '@folio/stripes/components';
 import stripesForm from '@folio/stripes/form';
+
+import RequestFormShortcutsWrapper from './components/RequestFormShortcutsWrapper';
 
 import {
   handleKeyCommand,
@@ -1183,38 +1181,21 @@ class RequestForm extends React.Component {
 
     const handleCancelAndClose = () => {
       const keepEditBtn = document.getElementById('clickable-cancel-editing-confirmation-confirm');
-      if (isItemsDialogOpen) handleKeyCommand(this.handleItemsDialogClose);
+      const closeShortcutsModalBtn = document.getElementById('keyboard-shortcuts-modal-close');
+      if (closeShortcutsModalBtn) closeShortcutsModalBtn.click();
+      else if (isItemsDialogOpen) handleKeyCommand(this.handleItemsDialogClose);
       else if (errorMessage) handleKeyCommand(this.onClose);
       else if (keepEditBtn) keepEditBtn.click();
       else onCancel();
     };
 
-    const keyCommands = [
-      {
-        name: 'save',
-        handler: handleKeyCommand(handleSubmit(this.onSave), { disabled: this.isSubmittingButtonDisabled() }),
-      },
-      {
-        name: 'expandAllSections',
-        handler: (e) => expandAllSections(e, this.accordionStatusRef),
-      },
-      {
-        name: 'collapseAllSections',
-        handler: (e) => collapseAllSections(e, this.accordionStatusRef),
-      },
-      {
-        name: 'cancel',
-        shortcut: 'esc',
-        handler: handleKeyCommand(handleCancelAndClose),
-      }
-    ];
-
     return (
       <>
-        <HasCommand
-          commands={keyCommands}
-          isWithinScope={checkScope}
-          scope={document.body}
+        <RequestFormShortcutsWrapper
+          onSubmit={handleSubmit(this.onSave)}
+          onCancel={handleCancelAndClose}
+          accordionStatusRef={this.accordionStatusRef}
+          isSubmittingDisabled={this.isSubmittingButtonDisabled()}
         >
           <Paneset isRoot>
             <form
@@ -1694,7 +1675,7 @@ class RequestForm extends React.Component {
               </Pane>
             </form>
           </Paneset>
-        </HasCommand>
+        </RequestFormShortcutsWrapper>
       </>
     );
   }
