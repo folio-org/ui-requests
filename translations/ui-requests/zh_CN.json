@@ -231,5 +231,12 @@
     "filters.requestLevel.item": "单件",
     "filters.requestLevel.title": "题名",
     "requests.queuePosition": "队列位置",
-    "requestQueue.heading": "实例 {title} / {author} 上的请求队列。"
+    "requestQueue.heading": "实例 {title} / {author} 上的请求队列。",
+    "titleLookupPlugin": "Title look-up",
+    "createRequest.success": "Request has been successfully created for {requester}",
+    "createRequest.fail": "This request was not placed successfully",
+    "editRequest.success": "Request has been successfully edited for {requester}",
+    "editRequest.fail": "This request was not saved successfully",
+    "duplicateRequest.success": "Request has been successfully created for {requester}",
+    "duplicateRequest.fail": "This request was not placed successfully"
 }

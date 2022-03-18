@@ -230,6 +230,13 @@
     "requestQueue.notYetFilledRequests.noData": "No requests found",
     "filters.requestLevel.item": "Exemplaire",
     "filters.requestLevel.title": "Titre",
-    "requests.queuePosition": "Queue position",
-    "requestQueue.heading": "Request queue on instance • {title} /{author}."
+    "requests.queuePosition": "Position en file d'attente",
+    "requestQueue.heading": "Request queue on instance • {title} /{author}.",
+    "titleLookupPlugin": "Title look-up",
+    "createRequest.success": "Request has been successfully created for {requester}",
+    "createRequest.fail": "This request was not placed successfully",
+    "editRequest.success": "Request has been successfully edited for {requester}",
+    "editRequest.fail": "This request was not saved successfully",
+    "duplicateRequest.success": "Request has been successfully created for {requester}",
+    "duplicateRequest.fail": "This request was not placed successfully"
 }
