@@ -55,7 +55,7 @@ describe('Edit Request page', () => {
     });
   });
 
-  xdescribe('updating existing request', function () {
+  describe('updating existing request', function () {
     beforeEach(async function () {
       await EditRequestInteractor.chooseServicePoint('Circ Desk 2');
       await EditRequestInteractor.clickUpdate();
