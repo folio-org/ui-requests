@@ -12,6 +12,7 @@ import {
   getRequestLevelValue,
   getInstanceRequestTypeOptions,
   getInstanceQueryString,
+  generateUserName,
 } from './utils';
 
 import {
@@ -245,6 +246,21 @@ describe('getInstanceQueryString', () => {
   });
 });
 
+describe('generateUserName', () => {
+  it('Should return full name', () => {
+    const firstName = 'Bob';
+    const lastName = 'Marley';
+
+    expect(generateUserName(firstName, lastName)).toEqual(`${lastName}, ${firstName}`);
+  });
+
+  it('Should return last name', () => {
+    const firstName = undefined;
+    const lastName = 'Marley';
+
+    expect(generateUserName(firstName, lastName)).toEqual(lastName);
+  });
+});
 
 
 

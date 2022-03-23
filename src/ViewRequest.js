@@ -57,6 +57,7 @@ import {
   isDelivery,
   getFullName,
   getTlrSettings,
+  generateUserName,
 } from './utils';
 import urls from './routes/urls';
 
@@ -229,7 +230,7 @@ class ViewRequest extends React.Component {
         message: (
           <FormattedMessage
             id="ui-requests.editRequest.success"
-            values={{ requester: `${lastName}, ${firstName}` }}
+            values={{ requester: generateUserName(firstName, lastName) }}
           />
         ),
       });

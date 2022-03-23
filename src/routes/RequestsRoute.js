@@ -53,6 +53,7 @@ import {
   getTlrSettings,
   getInstanceQueryString,
   isDuplicateMode,
+  generateUserName,
 } from '../utils';
 import packageInfo from '../../package';
 import {
@@ -689,13 +690,13 @@ class RequestsRoute extends React.Component {
             ? (
               <FormattedMessage
                 id="ui-requests.duplicateRequest.success"
-                values={{ requester: `${lastName}, ${firstName}` }}
+                values={{ requester: generateUserName(firstName, lastName) }}
               />
             )
             : (
               <FormattedMessage
                 id="ui-requests.createRequest.success"
-                values={{ requester: `${lastName}, ${firstName}` }}
+                values={{ requester: generateUserName(firstName, lastName) }}
               />
             ),
         });
