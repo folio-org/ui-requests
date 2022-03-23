@@ -50,7 +50,7 @@ SearchAndSort.mockImplementation(jest.fn(({
 jest.mock('../ViewRequest', () => jest.fn());
 jest.mock('../RequestForm', () => jest.fn());
 
-describe.skip('RequestsRoute', () => {
+describe('RequestsRoute', () => {
   const mockedUpdateFunc = jest.fn();
   const mockedRequest = {
     requestLevel: REQUEST_LEVEL_TYPES.ITEM,
