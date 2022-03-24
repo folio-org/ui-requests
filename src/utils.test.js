@@ -108,7 +108,6 @@ describe('duplicateRequest', () => {
       'proxyUserId',
       'requestCount',
       'requester',
-      'requesterId',
       'status',
     ];
 

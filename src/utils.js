@@ -120,7 +120,6 @@ export function duplicateRequest(request) {
     'proxyUserId',
     'requestCount',
     'requester',
-    'requesterId',
     'status',
   ]);
 }
