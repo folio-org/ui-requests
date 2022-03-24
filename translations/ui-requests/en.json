@@ -2,7 +2,6 @@
   "routingErrorOops": "Uh-oh!",
   "routingError": "How did you get to {pathname}?",
 
-  "items": "{number} items",
   "meta.title": "Requests",
   "appMenu.keyboardShortcuts": "Keyboard shortcuts",
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
@@ -34,6 +33,7 @@
 
   "itemLevel": "Item",
   "titleLevel": "Title",
+  "requests": "{number} requests",
   "requests.title": "Title",
   "requests.year": "Year",
   "requests.type": "Type",

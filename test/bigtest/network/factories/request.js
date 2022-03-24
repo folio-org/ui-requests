@@ -41,8 +41,6 @@ export default Factory.extend({
       itemId: item.id,
       requesterId: user.id,
       requester: {
-        lastName: user.personal.lastName,
-        firstName: user.personal.firstName,
         barcode: user.barcode,
         patronGroup: {
           id: user.patronGroup,
@@ -50,6 +48,10 @@ export default Factory.extend({
           desc: 'test',
         },
         patronGroupId: user.patronGroup,
+        personal: {
+          lastName: user.personal.lastName,
+          firstName: user.personal.firstName,
+        },
       },
       metadata: {
         createdDate: '2020-07-07T03:56:29.238+0000',
@@ -82,13 +84,15 @@ export default Factory.extend({
         itemId: item.id,
         requesterId: user.id,
         requester: {
-          lastName: user.personal.lastName,
-          firstName: user.personal.firstName,
           barcode: user.barcode,
           patronGroup: {
             id: user.patronGroup,
             group: 'test',
             desc: 'test',
+          },
+          personal: {
+            lastName: user.personal.lastName,
+            firstName: user.personal.firstName,
           },
           patronGroupId: user.patronGroup,
         },

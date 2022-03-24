@@ -142,7 +142,7 @@ describe('ViewRequest', () => {
           ...mockedRequest,
         },
       };
-      screen.debug();
+
       expect(RequestForm).toHaveBeenCalledWith(expect.objectContaining(expectedResult), {});
     });
   });
