@@ -10,6 +10,7 @@
 * Add success toast to Requests. Refs UIREQ-722.
 * Add success toast to duplicated Requests. Refs UIREQ-747.
 * Change queue position message from "items" to "requests". Refs UIREQ-755.
+* Use all "open" filters for "view requests in queue" link. Refs UIREQ-756.
 
 ## [7.0.0](https://github.com/folio-org/ui-requests/tree/v7.0.0) (2022-02-25)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v6.0.2...v7.0.0)
