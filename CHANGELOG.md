@@ -8,7 +8,7 @@
 * Move page requests to first accordion of unified queue when reordering. Refs UIREQ-728.
 * Add title look-up to new request form. Refs UIREQ-675.
 * Add success toast to Requests. Refs UIREQ-722.
-* Add success toast to duplicated Requests. Refs UIREQ-747. 
+* Add success toast to duplicated Requests. Refs UIREQ-747.
 * Change queue position message from "items" to "requests". Refs UIREQ-755.
 * Fix defect with first name of success toast to Requests. Refs UIREQ-753.
 

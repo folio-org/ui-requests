@@ -273,6 +273,15 @@ describe('generateUserName', () => {
     expect(generateUserName({ firstName, lastName, middleName }))
       .toEqual(lastName);
   });
+
+  it('Should return last name only if lastName and middleName presented', () => {
+    const firstName = undefined;
+    const lastName = 'Marley';
+    const middleName = 'Test';
+
+    expect(generateUserName({ firstName, lastName, middleName }))
+      .toEqual(lastName);
+  });
 });
 
 
