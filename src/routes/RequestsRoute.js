@@ -674,10 +674,6 @@ class RequestsRoute extends React.Component {
   };
 
   create = (data) => {
-    const {
-      firstName,
-      lastName,
-    } = data.requester.personal;
     const query = new URLSearchParams(this.props.location.search);
     const mode = query.get('mode');
 
@@ -690,13 +686,13 @@ class RequestsRoute extends React.Component {
             ? (
               <FormattedMessage
                 id="ui-requests.duplicateRequest.success"
-                values={{ requester: generateUserName(firstName, lastName) }}
+                values={{ requester: generateUserName(data.requester.personal) }}
               />
             )
             : (
               <FormattedMessage
                 id="ui-requests.createRequest.success"
-                values={{ requester: generateUserName(firstName, lastName) }}
+                values={{ requester: generateUserName(data.requester.personal) }}
               />
             ),
         });
