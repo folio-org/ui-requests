@@ -85,7 +85,7 @@ SortableList.propTypes = {
   rowFormatter: PropTypes.func,
   isRowDraggable: PropTypes.func,
   rowProps: PropTypes.object,
-  visibleColumns: PropTypes.array.isRequired,
+  visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
   columnWidths: PropTypes.object.isRequired,
   columnMapping: PropTypes.object.isRequired,
   formatter: PropTypes.object.isRequired,
