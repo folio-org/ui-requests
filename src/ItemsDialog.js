@@ -135,10 +135,15 @@ const ItemsDialog = ({
     }
 
     return () => setItems([]);
-  }, [
-    open,
-    instanceId,
-  ]);
+  },
+  // The deps react-hooks complains about here are the fetch* functions
+  // but both the suggestions (making them deps, moving them inside this
+  // function) cause test failures. I ... don't really understand the
+  // details of the problem, beyond the fact that it's obviously some kind
+  // of bad interaction between hooks and stripes-connect.
+  //
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [instanceId, open]);
 
   const contentData = useMemo(() => {
     let resultItems = items;
@@ -149,8 +154,7 @@ const ItemsDialog = ({
     }
 
     // items with status available must go first
-    // eslint-disable-next-line no-confusing-arrow
-    return resultItems.sort((a) => a.status.name === itemStatuses.AVAILABLE ? -1 : 1);
+    return resultItems.sort((a) => (a.status.name === itemStatuses.AVAILABLE ? -1 : 1));
   }, [items, skippedItemId]);
 
   const itemsAmount = contentData.length;
