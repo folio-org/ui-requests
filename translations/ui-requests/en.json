@@ -2,7 +2,6 @@
   "routingErrorOops": "Uh-oh!",
   "routingError": "How did you get to {pathname}?",
 
-  "items": "{number} items",
   "meta.title": "Requests",
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
   "barcode": "Barcode",
@@ -33,6 +32,7 @@
 
   "itemLevel": "Item",
   "titleLevel": "Title",
+  "requests": "{number} requests",
   "requests.title": "Title",
   "requests.year": "Year",
   "requests.type": "Type",
@@ -170,6 +170,15 @@
   "moveRequest.success": "Request has been moved successfully",
   "moveRequest.secondPositionTitle": "Request moved to position 2 of the queue",
   "moveRequest.secondPositionMessage": "Requests cannot be moved above page requests, even when fulfillment has not begun. This request will be moved to position 2 in the request queue.",
+
+  "createRequest.success": "Request has been successfully created for {requester}",
+  "createRequest.fail": "This request was not placed successfully",
+
+  "editRequest.success": "Request has been successfully edited for {requester}",
+  "editRequest.fail": "This request was not saved successfully",
+
+  "duplicateRequest.success": "Request has been successfully created for {requester}",
+  "duplicateRequest.fail": "This request was not placed successfully",
 
   "exportExpiredHoldShelfToCsv": "Export hold shelf clearance report for {currentServicePoint}",
   "exportSearchResultsToCsv": "Export search results to CSV",
