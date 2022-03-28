@@ -240,3 +240,5 @@ export const REQUEST_TYPES = {
 export const MISSING_VALUE_SYMBOL = '-';
 
 export const DEFAULT_DISPLAYED_YEARS_AMOUNT = 3;
+
+export const MAX_RECORDS = '10000';

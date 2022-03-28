@@ -44,6 +44,7 @@ import {
   REQUEST_LEVEL_TYPES,
   DEFAULT_DISPLAYED_YEARS_AMOUNT,
   requestStatuses,
+  MAX_RECORDS,
 } from '../constants';
 import {
   buildUrl,
@@ -99,11 +100,18 @@ const urls = {
     return `circulation/loans?${query}`;
   },
   requestsForItem: (value) => {
-    const query = stringify({ query: `(itemId=="${value}" and status=Open)` });
+    const query = stringify({
+      query: `(itemId=="${value}" and status=Open)`,
+      limit: MAX_RECORDS,
+    });
+
     return `circulation/requests?${query}`;
   },
   requestsForInstance: (value) => {
-    const query = stringify({ query: `(instanceId=="${value}" and status=Open)` });
+    const query = stringify({
+      query: `(instanceId=="${value}" and status=Open)`,
+      limit: MAX_RECORDS,
+    });
 
     return `circulation/requests?${query}`;
   },
