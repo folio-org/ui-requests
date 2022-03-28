@@ -1,5 +1,10 @@
 # Change history for ui-requests
 
+## [7.0.1](https://github.com/folio-org/ui-requests/tree/v7.0.1) (2022-03-31)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.0.0...v7.0.1)
+
+* Request details `# items` showing incorrect number. Refs UIREQ-754.
+
 ## [7.0.0](https://github.com/folio-org/ui-requests/tree/v7.0.0) (2022-02-25)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v6.0.2...v7.0.0)
 
