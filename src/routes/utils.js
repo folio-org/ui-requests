@@ -32,9 +32,5 @@ export const getFormattedContributors = (contributors) => (
 );
 
 export const isReorderableRequest = request => {
-  if (request.status === requestStatuses.NOT_YET_FILLED && request.requestType !== requestTypesMap.PAGE) {
-    return true;
-  }
-
-  return false;
+  return request.status === requestStatuses.NOT_YET_FILLED && request.requestType !== requestTypesMap.PAGE;
 };
