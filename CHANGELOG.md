@@ -4,6 +4,7 @@
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.0.0...v7.0.1)
 
 * Request details `# items` showing incorrect number. Refs UIREQ-754.
+* Use all "open" filters for "view requests in queue" link. Refs UIREQ-756.
 
 ## [7.0.0](https://github.com/folio-org/ui-requests/tree/v7.0.0) (2022-02-25)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v6.0.2...v7.0.0)
