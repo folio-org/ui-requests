@@ -12,6 +12,7 @@
 * Change queue position message from "items" to "requests". Refs UIREQ-755.
 * Request details `# items` showing incorrect number. Refs UIREQ-754.
 * Use all "open" filters for "view requests in queue" link. Refs UIREQ-756.
+* Fix defect with first name of success toast to Requests. Refs UIREQ-753.
 
 ## [7.0.0](https://github.com/folio-org/ui-requests/tree/v7.0.0) (2022-02-25)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v6.0.2...v7.0.0)
