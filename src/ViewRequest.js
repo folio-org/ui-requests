@@ -430,7 +430,6 @@ class ViewRequest extends React.Component {
       requestLevel,
       item,
     } = request;
-    console.log(accordions);
 
     const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');
