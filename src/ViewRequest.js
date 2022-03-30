@@ -141,7 +141,7 @@ class ViewRequest extends React.Component {
         'title-info': true,
         'item-info': true,
         'requester-info': true,
-        'staff-notes': true,
+        'staff-notes': false,
       },
       moveRequest: false,
       titleLevelRequestsFeatureEnabled,
@@ -430,6 +430,7 @@ class ViewRequest extends React.Component {
       requestLevel,
       item,
     } = request;
+    console.log(accordions);
 
     const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');
