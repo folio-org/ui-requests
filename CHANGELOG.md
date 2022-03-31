@@ -12,13 +12,13 @@
 * Change queue position message from "items" to "requests". Refs UIREQ-755.
 * Fix defect with first name of success toast to Requests. Refs UIREQ-753.
 * Ensure Request details # (# requests) shows correct data. Refs UIREQ-757.
+* Notes Accordion is Not Closed After Deleting a Note. Refs UIREQ-759.
 
 ## [7.0.1](https://github.com/folio-org/ui-requests/tree/v7.0.1) (2022-03-31)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.0.0...v7.0.1)
 
 * Request details `# items` showing incorrect number. Refs UIREQ-754.
 * Use all "open" filters for "view requests in queue" link. Refs UIREQ-756.
-* Notes Accordion is Not Closed After Deleting a Note. Refs UIREQ-759.
 
 ## [7.0.0](https://github.com/folio-org/ui-requests/tree/v7.0.0) (2022-02-25)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v6.0.2...v7.0.0)
