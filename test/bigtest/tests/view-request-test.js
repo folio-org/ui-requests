@@ -133,6 +133,7 @@ describe('View request page', () => {
 
     describe('when click new button in staff notes accordion', () => {
       beforeEach(async () => {
+        await viewRequest.staffNotesAccordion.toggleAccordion();
         await viewRequest.staffNotesAccordion.clickNewButton();
       });
 
@@ -177,6 +178,7 @@ describe('View request page', () => {
 
     describe('when click assign / unassign button', () => {
       beforeEach(async () => {
+        await viewRequest.staffNotesAccordion.toggleAccordion();
         await viewRequest.staffNotesAccordion.clickAssignButton();
       });
 
