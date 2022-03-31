@@ -344,3 +344,15 @@ export const getInstanceRequestTypeOptions = (items) => {
 };
 
 export const getInstanceQueryString = (hrid, id) => `("hrid"=="${hrid}" or "id"=="${id || hrid}")`;
+
+export const generateUserName = (user) => {
+  const {
+    firstName,
+    lastName,
+    middleName,
+  } = user;
+
+  const shownMiddleName = middleName ? ` ${middleName}` : '';
+
+  return `${lastName}${firstName ? ', ' + firstName + shownMiddleName : ''}`;
+};

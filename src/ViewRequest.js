@@ -57,6 +57,7 @@ import {
   isDelivery,
   getFullName,
   getTlrSettings,
+  generateUserName,
 } from './utils';
 import urls from './routes/urls';
 
@@ -201,11 +202,6 @@ class ViewRequest extends React.Component {
   }
 
   update(record) {
-    const {
-      firstName,
-      lastName,
-    } = record.requester.personal;
-
     const updatedRecord = record;
 
     // Remove the "enhanced record" fields that aren't part of the request schema (and thus can't)
@@ -220,7 +216,7 @@ class ViewRequest extends React.Component {
     delete updatedRecord.itemStatus;
     delete updatedRecord.titleRequestCount;
     delete updatedRecord.itemRequestCount;
-    delete updatedRecord.numberOfNotYetFilledRequests;
+    delete updatedRecord.numberOfReorderableRequests;
     delete updatedRecord.holdShelfExpirationTime;
 
     this.props.mutator.selectedRequest.PUT(updatedRecord).then(() => {
@@ -229,7 +225,7 @@ class ViewRequest extends React.Component {
         message: (
           <FormattedMessage
             id="ui-requests.editRequest.success"
-            values={{ requester: `${lastName}, ${firstName}` }}
+            values={{ requester: generateUserName(record.requester.personal) }}
           />
         ),
       });

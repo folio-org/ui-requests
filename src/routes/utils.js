@@ -1,3 +1,8 @@
+import {
+  requestStatuses,
+  requestTypesMap,
+} from '../constants';
+
 const YEAR_SEPARATOR = ', ';
 const YEAR_REGEX = /^([1-9][0-9]{0,3})$/;
 
@@ -25,3 +30,7 @@ export const getFormattedPublishers = (publications) => (
 export const getFormattedContributors = (contributors) => (
   contributors?.find(({ name }) => !!name)?.name ?? ''
 );
+
+export const isReorderableRequest = request => {
+  return request.status === requestStatuses.NOT_YET_FILLED && request.requestType !== requestTypesMap.PAGE;
+};

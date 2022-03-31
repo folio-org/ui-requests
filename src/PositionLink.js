@@ -6,9 +6,10 @@ import { useIntl } from 'react-intl';
 
 import { NoValue } from '@folio/stripes-components';
 
+import { openRequestStatusFilters } from './utils';
+
 import {
   requestOpenStatuses,
-  requestStatuses,
   REQUEST_DATE,
 } from './constants';
 
@@ -19,13 +20,13 @@ export default function PositionLink({
   const { formatMessage } = useIntl();
   const queuePosition = get(request, 'position');
   const id = request[isTlrEnabled ? 'instanceId' : 'itemId'];
-  const openRequestsPath = `/requests?filters=requestStatus.${requestStatuses.NOT_YET_FILLED}&query=${id}&sort=${REQUEST_DATE}`;
+  const openRequestsPath = `/requests?filters=${openRequestStatusFilters}&query=${id}&sort=${REQUEST_DATE}`;
 
   return requestOpenStatuses.includes(request.status)
     ? (
       <div>
         <span>
-          {`${queuePosition} (${formatMessage({ id: 'ui-requests.requests' }, { number: request.numberOfNotYetFilledRequests })})`}
+          {`${queuePosition} (${formatMessage({ id: 'ui-requests.requests' }, { number: request.numberOfReorderableRequests })})`}
           &nbsp;
         </span>
         <Link to={openRequestsPath}>
