@@ -201,7 +201,6 @@
     "titleInformation.identifiers": "أرقام ردمك",
     "instance.title": "العنوان",
     "instance.contributorNames": "المساهم",
-    "items": "{number} مادة",
     "requestLevel": "مستوى الطلب",
     "itemLevel": "المادة",
     "titleLevel": "العنوان",
@@ -231,5 +230,13 @@
     "filters.requestLevel.item": "المادة",
     "filters.requestLevel.title": "العنوان",
     "requests.queuePosition": "الموضع في الصف",
-    "requestQueue.heading": "ضف الطلبات على الوعاء • {title} /{author}."
+    "requestQueue.heading": "ضف الطلبات على الوعاء • {title} /{author}.",
+    "titleLookupPlugin": "بحث العنوان",
+    "createRequest.success": "تم إنشاء الطلب بنجاح لـ {requester}",
+    "createRequest.fail": "لم يتم وضع هذا الطلب بنجاح",
+    "editRequest.success": "تم تحرير الطلب بنجاح لـ {requester}",
+    "editRequest.fail": "لم يتم حفظ هذا الطلب بنجاح",
+    "duplicateRequest.success": "تم إنشاء الطلب بنجاح لـ {requester}",
+    "duplicateRequest.fail": "لم يتم وضع هذا الطلب بنجاح",
+    "requests": "{number} طلباً"
 }
