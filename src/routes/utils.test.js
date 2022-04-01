@@ -1,7 +1,12 @@
 import {
+  requestStatuses,
+  requestTypesMap,
+} from '../constants';
+import {
   getFormattedYears,
   getFormattedPublishers,
   getFormattedContributors,
+  isReorderableRequest,
 } from './utils';
 
 describe('utils', () => {
@@ -102,6 +107,35 @@ describe('utils', () => {
       }, {
         name: 'Alina',
       }])).toBe('Pavel');
+    });
+  });
+
+  describe('isReorderableRequest', () => {
+    it('should return false if requestType is "Page"', () => {
+      const request = {
+        requestType: requestTypesMap.PAGE,
+        status: requestStatuses.NOT_YET_FILLED,
+      };
+
+      expect(isReorderableRequest(request)).toBe(false);
+    });
+
+    it('should return false if status is not "Open - Not yet filled"', () => {
+      const request = {
+        requestType: requestTypesMap.HOLD,
+        status: requestStatuses.AWAITING_PICKUP,
+      };
+
+      expect(isReorderableRequest(request)).toBe(false);
+    });
+
+    it('should return true if requestType is not "Page" and status is "Open - Not yet filled"', () => {
+      const request = {
+        requestType: requestTypesMap.HOLD,
+        status: requestStatuses.NOT_YET_FILLED,
+      };
+
+      expect(isReorderableRequest(request)).toBe(true);
     });
   });
 });

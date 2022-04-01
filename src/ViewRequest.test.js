@@ -179,9 +179,8 @@ describe('ViewRequest', () => {
       mockedConfig.records[0].value = '{"titleLevelRequestsFeatureEnabled":true}';
     });
     describe('duplicate pressed', () => {
-      beforeAll(() => {
-      });
       it('should call onDuplicate function', () => {
+        screen.logTestingPlaygroundURL();
         const duplicateButton = screen.queryByText(labelIds.duplicateRequest);
         duplicateRecordShortcut(duplicateButton);
         expect(mockDuplicateRequest).toHaveBeenCalled();

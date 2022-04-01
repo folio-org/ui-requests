@@ -26,7 +26,7 @@ export default function PositionLink({
     ? (
       <div>
         <span>
-          {`${queuePosition} (${formatMessage({ id: 'ui-requests.requests' }, { number: request.numberOfNotYetFilledRequests })})`}
+          {`${queuePosition} (${formatMessage({ id: 'ui-requests.requests' }, { number: request.numberOfReorderableRequests })})`}
           &nbsp;
         </span>
         <Link to={openRequestsPath}>
