@@ -34,10 +34,6 @@ import {
   Pane,
   PaneMenu,
   Row,
-  HasCommand,
-  expandAllSections,
-  collapseAllSections,
-  checkScope,
 } from '@folio/stripes/components';
 import {
   ViewMetaData,
@@ -61,13 +57,10 @@ import {
   isDelivery,
   getFullName,
   getTlrSettings,
-<<<<<<< HEAD
-  handleKeyCommand,
-=======
   generateUserName,
->>>>>>> 9a4b79a11371ef914d329daf5f2a98ca2b0293bf
 } from './utils';
 import urls from './routes/urls';
+import ViewRequestShortcutsWrapper from './components/ViewRequestShortcutsWrapper';
 
 class ViewRequest extends React.Component {
   static manifest = {
@@ -566,35 +559,17 @@ class ViewRequest extends React.Component {
       requestCreateDate: request.metadata.createdDate,
     };
 
-    const keyCommands = [
-      {
-        name: 'edit',
-        handler: handleKeyCommand(() => {
-          if (stripes.hasPerm('ui-requests.edit')) this.props.onEdit();
-        }, { disabled: isRequestClosed }),
-      },
-      {
-        name: 'duplicateRecord',
-        handler: handleKeyCommand(() => {
-          if (stripes.hasPerm('ui-requests.create')) this.props.onDuplicate(request);
-        }, { disabled: request.requestLevel === REQUEST_LEVEL_TYPES.TITLE && !this.state.titleLevelRequestsFeatureEnabled }),
-      },
-      {
-        name: 'expandAllSections',
-        handler: (e) => expandAllSections(e, this.accordionStatusRef),
-      },
-      {
-        name: 'collapseAllSections',
-        handler: (e) => collapseAllSections(e, this.accordionStatusRef),
-      },
-    ];
+    const isDuplicatingDisabled = request.requestLevel === REQUEST_LEVEL_TYPES.TITLE && !this.state.titleLevelRequestsFeatureEnabled;
 
     return (
       <>
-        <HasCommand
-          commands={keyCommands}
-          isWithinScope={checkScope}
-          scope={document.body}
+        <ViewRequestShortcutsWrapper
+          onDuplicate={() => this.props.onDuplicate(request)}
+          onEdit={this.props.onEdit}
+          accordionStatusRef={this.accordionStatusRef}
+          isDuplicatingDisabled={isDuplicatingDisabled}
+          isEditingDisabled={isRequestClosed}
+          stripes={stripes}
         >
           <Pane
             id="instance-details"
@@ -778,7 +753,7 @@ class ViewRequest extends React.Component {
               /> }
             <Callout ref={this.callout} />
           </Pane>
-        </HasCommand>
+        </ViewRequestShortcutsWrapper>
       </>
     );
   }
