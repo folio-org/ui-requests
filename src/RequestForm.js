@@ -995,7 +995,7 @@ class RequestForm extends React.Component {
     unset(requestData, 'itemRequestCount');
     unset(requestData, 'titleRequestCount');
     unset(requestData, 'createTitleLevelRequest');
-    unset(requestData, 'numberOfNotYetFilledRequests');
+    unset(requestData, 'numberOfReorderableRequests');
     unset(requestData, RESOURCE_TYPES.INSTANCE);
 
     return this.props.onSubmit(requestData);

@@ -43,7 +43,7 @@ import {
   requestTypesTranslations,
   REQUEST_LEVEL_TYPES,
   DEFAULT_DISPLAYED_YEARS_AMOUNT,
-  requestStatuses,
+  MAX_RECORDS,
 } from '../constants';
 import {
   buildUrl,
@@ -53,6 +53,7 @@ import {
   getTlrSettings,
   getInstanceQueryString,
   isDuplicateMode,
+  generateUserName,
 } from '../utils';
 import packageInfo from '../../package';
 import {
@@ -66,8 +67,11 @@ import {
   RequestsFilters,
   RequestsFiltersConfig,
 } from '../components/RequestsFilters';
-import { getFormattedYears } from './utils';
 import RequestsRouteShortcutsWrapper from '../components/RequestsRouteShortcutsWrapper';
+import {
+  isReorderableRequest,
+  getFormattedYears,
+} from './utils';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -99,11 +103,18 @@ const urls = {
     return `circulation/loans?${query}`;
   },
   requestsForItem: (value) => {
-    const query = stringify({ query: `(itemId=="${value}" and status=Open)` });
+    const query = stringify({
+      query: `(itemId=="${value}" and status=Open)`,
+      limit: MAX_RECORDS,
+    });
+
     return `circulation/requests?${query}`;
   },
   requestsForInstance: (value) => {
-    const query = stringify({ query: `(instanceId=="${value}" and status=Open)` });
+    const query = stringify({
+      query: `(instanceId=="${value}" and status=Open)`,
+      limit: MAX_RECORDS,
+    });
 
     return `circulation/requests?${query}`;
   },
@@ -644,9 +655,9 @@ class RequestsRoute extends React.Component {
       const requester = get(users, 'users[0]', null);
       const titleRequestCount = get(titleRequests, 'totalRecords', 0);
       const dynamicProperties = {};
-      const requestsForFilter = titleLevelRequestsFeatureEnabled ? titleRequests : itemRequests;
+      const requestsForFilter = titleLevelRequestsFeatureEnabled ? titleRequests.requests : itemRequests.requests;
 
-      dynamicProperties.numberOfNotYetFilledRequests = requestsForFilter.requests.filter(currentRequest => currentRequest.status === requestStatuses.NOT_YET_FILLED).length;
+      dynamicProperties.numberOfReorderableRequests = requestsForFilter.filter(currentRequest => isReorderableRequest(currentRequest)).length;
 
       if (itemId) {
         dynamicProperties.itemRequestCount = get(itemRequests, 'totalRecords', 0);
@@ -674,10 +685,6 @@ class RequestsRoute extends React.Component {
   };
 
   create = (data) => {
-    const {
-      firstName,
-      lastName,
-    } = data.requester.personal;
     const query = new URLSearchParams(this.props.location.search);
     const mode = query.get('mode');
 
@@ -690,13 +697,13 @@ class RequestsRoute extends React.Component {
             ? (
               <FormattedMessage
                 id="ui-requests.duplicateRequest.success"
-                values={{ requester: `${lastName}, ${firstName}` }}
+                values={{ requester: generateUserName(data.requester.personal) }}
               />
             )
             : (
               <FormattedMessage
                 id="ui-requests.createRequest.success"
-                values={{ requester: `${lastName}, ${firstName}` }}
+                values={{ requester: generateUserName(data.requester.personal) }}
               />
             ),
         });

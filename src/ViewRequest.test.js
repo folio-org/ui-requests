@@ -12,7 +12,10 @@ import { Pane, CommandList, defaultKeyboardShortcuts } from '@folio/stripes/comp
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
 import { requestStatuses, REQUEST_LEVEL_TYPES } from './constants';
+<<<<<<< HEAD
 import { duplicateRecordShortcut, openEditShortcut } from '../test/jest/helpers';
+=======
+>>>>>>> 547f5a5d6dab9a2d22bf4fdd4c677a9b0fd22603
 
 // jest.mock('@folio/stripes/smart-components', () => ({ ...jest.requireActual('@folio/stripes/smart-components') }), { virtual: true });
 
@@ -64,8 +67,7 @@ describe('ViewRequest', () => {
   const mockedHistory = {
     push: jest.fn(),
   };
-  const mockDuplicateRequest = jest.fn();
-  const mockOpenEdit = jest.fn();
+
   const defaultProps = {
     location: mockedLocation,
     history: mockedHistory,
@@ -75,9 +77,7 @@ describe('ViewRequest', () => {
     findResource: jest.fn(),
     mutator: {},
     onClose: jest.fn(),
-    onEdit: mockOpenEdit,
     onCloseEdit: jest.fn(),
-    onDuplicate: mockDuplicateRequest,
     buildRecordsForHoldsShelfReport: jest.fn(),
     optionLists: {
       cancellationReasons: [
@@ -170,6 +170,7 @@ describe('ViewRequest', () => {
       });
     });
   });
+<<<<<<< HEAD
 
   describe('When keyboard shortcut keys for', () => {
     beforeAll(() => {
@@ -194,4 +195,6 @@ describe('ViewRequest', () => {
       });
     });
   });
+=======
+>>>>>>> 547f5a5d6dab9a2d22bf4fdd4c677a9b0fd22603
 });

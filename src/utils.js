@@ -357,3 +357,14 @@ export const handleKeyCommand = (handler, { disabled } = {}) => {
   };
 };
 
+export const generateUserName = (user) => {
+  const {
+    firstName,
+    lastName,
+    middleName,
+  } = user;
+
+  const shownMiddleName = middleName ? ` ${middleName}` : '';
+
+  return `${lastName}${firstName ? ', ' + firstName + shownMiddleName : ''}`;
+};
