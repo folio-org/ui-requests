@@ -12,10 +12,6 @@ import { Pane, CommandList, defaultKeyboardShortcuts } from '@folio/stripes/comp
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
 import { requestStatuses, REQUEST_LEVEL_TYPES } from './constants';
-<<<<<<< HEAD
-import { duplicateRecordShortcut, openEditShortcut } from '../test/jest/helpers';
-=======
->>>>>>> 547f5a5d6dab9a2d22bf4fdd4c677a9b0fd22603
 
 // jest.mock('@folio/stripes/smart-components', () => ({ ...jest.requireActual('@folio/stripes/smart-components') }), { virtual: true });
 
@@ -170,31 +166,4 @@ describe('ViewRequest', () => {
       });
     });
   });
-<<<<<<< HEAD
-
-  describe('When keyboard shortcut keys for', () => {
-    beforeAll(() => {
-      mockedLocation.search = null;
-      mockedConfig.records[0].value = '{"titleLevelRequestsFeatureEnabled":true}';
-    });
-    describe('duplicate pressed', () => {
-      it('should call onDuplicate function', () => {
-        const duplicateButton = screen.queryByText(labelIds.duplicateRequest);
-        duplicateRecordShortcut(duplicateButton);
-        expect(mockDuplicateRequest).toHaveBeenCalled();
-      });
-    });
-
-    describe('edit pressed and request status is closed', () => {
-      beforeAll(() => {
-        mockedConfig.records[0].value = '{"titleLevelRequestsFeatureEnabled":true}';
-      });
-      it('should not call Edit', () => {
-        openEditShortcut(document.body);
-        expect(mockOpenEdit).not.toHaveBeenCalled();
-      });
-    });
-  });
-=======
->>>>>>> 547f5a5d6dab9a2d22bf4fdd4c677a9b0fd22603
 });
