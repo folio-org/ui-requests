@@ -14,7 +14,7 @@ import {
   NavList,
   NavListItem,
   NavListSection,
-} from '@folio/stripes-components';
+} from '@folio/stripes/components';
 
 import {
   NoteCreateRoute,

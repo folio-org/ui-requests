@@ -7,16 +7,14 @@ import moment from 'moment-timezone';
 
 import '../test/jest/__mock__';
 
-import { Pane } from '@folio/stripes/components';
-
-import { CommandList, defaultKeyboardShortcuts } from '@folio/stripes-components';
+import { Pane, CommandList, defaultKeyboardShortcuts } from '@folio/stripes/components';
 
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
 import { requestStatuses, REQUEST_LEVEL_TYPES } from './constants';
-import { duplicateRecordShortcut, openEditShortcut } from '../test/jest/helpers/shortcuts';
+import { duplicateRecordShortcut, openEditShortcut } from '../test/jest/helpers';
 
-jest.mock('@folio/stripes/smart-components', () => ({ ...jest.requireActual('@folio/stripes/smart-components') }), { virtual: true });
+// jest.mock('@folio/stripes/smart-components', () => ({ ...jest.requireActual('@folio/stripes/smart-components') }), { virtual: true });
 
 jest.mock('./RequestForm', () => jest.fn(() => null));
 jest.mock('./MoveRequestManager', () => jest.fn(() => null));
@@ -179,8 +177,6 @@ describe('ViewRequest', () => {
       mockedConfig.records[0].value = '{"titleLevelRequestsFeatureEnabled":true}';
     });
     describe('duplicate pressed', () => {
-      beforeAll(() => {
-      });
       it('should call onDuplicate function', () => {
         const duplicateButton = screen.queryByText(labelIds.duplicateRequest);
         duplicateRecordShortcut(duplicateButton);
