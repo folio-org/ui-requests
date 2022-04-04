@@ -1,93 +1,45 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { get } from 'lodash';
+import {
+  get,
+  isEqual,
+} from 'lodash';
 import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
 import {
-  Col,
+  Accordion,
+  AccordionSet,
   Callout,
   ConfirmationModal,
   ErrorModal,
-  FormattedDate,
-  FormattedTime,
-  KeyValue,
   Pane,
   PaneHeaderIconButton,
   PaneMenu,
   Paneset,
-  Row,
 } from '@folio/stripes/components';
 import { AppIcon } from '@folio/stripes/core';
-import { effectiveCallNumber } from '@folio/stripes/util';
 
 import {
   iconTypes,
   errorMessages,
 } from '../constants';
 import {
-  getFullName,
   isNotYetFilled,
   isPageRequest,
 } from '../utils';
+import { Loading } from '../components';
+import FulfillmentRequestsData from './components/FulfillmentRequestsData';
+import NotYetFilledRequestsData from './components/NotYetFilledRequestsData';
+
 import {
-  SortableList,
-  Loading,
-} from '../components';
+  getFormattedYears,
+  getFormattedPublishers,
+  getFormattedContributors,
+} from '../routes/utils';
 
 import css from './RequestQueueView.css';
-
-const COLUMN_NAMES = [
-  'position',
-  'status',
-  'pickup',
-  'requester',
-  'requesterBarcode',
-  'patronGroup',
-  'requestDate',
-  'requestType',
-  'requestExpirationDate',
-  'holdShelfExpireDate',
-];
-
-const COLUMN_WIDTHS = {
-  position: { max: 74 },
-  requestType: { max: 101 },
-  status: { max: 198 },
-  pickup: { max: 133 },
-  requester: { max: 223 },
-  requesterBarcode: { max: 178 },
-  patronGroup: { max: 190 },
-  requestDate: { max: 180 },
-  requestExpirationDate: '8%',
-  holdShelfExpireDate: '13%',
-};
-
-const COLUMN_MAP = {
-  position: <FormattedMessage id="ui-requests.requestQueue.position" />,
-  requestType: <FormattedMessage id="ui-requests.requestQueue.requestType" />,
-  status: <FormattedMessage id="ui-requests.requestQueue.requestStatus" />,
-  pickup: <FormattedMessage id="ui-requests.requestQueue.pickup" />,
-  requester: <FormattedMessage id="ui-requests.requestQueue.requesterName" />,
-  requesterBarcode: <FormattedMessage id="ui-requests.requestQueue.requesterBarcode" />,
-  patronGroup: <FormattedMessage id="ui-requests.requestQueue.patronGroup" />,
-  requestDate: <FormattedMessage id="ui-requests.requestQueue.requestDate" />,
-  requestExpirationDate: <FormattedMessage id="ui-requests.requestQueue.requestExpirationDate" />,
-  holdShelfExpireDate: <FormattedMessage id="ui-requests.requestQueue.holdShelfExpirationDate" />,
-};
-
-const formatter = {
-  position: r => (<AppIcon size="small" app="requests">{r.position}</AppIcon>),
-  pickup: r => get(r, 'pickupServicePoint.name') ||
-    ((r.deliveryType) ? <FormattedMessage id="ui-requests.requestQueue.deliveryType" values={{ type: r.deliveryType }} /> : '-'),
-  requester: r => getFullName(r.requester),
-  requesterBarcode: r => r?.requester?.barcode || '-',
-  patronGroup: r => r?.requester?.patronGroup?.group || '-',
-  requestDate: r => (<FormattedTime value={r.requestDate} day="numeric" month="numeric" year="numeric" />),
-  requestExpirationDate: r => (r.requestExpirationDate ? <FormattedDate value={r.requestExpirationDate} /> : '-'),
-  holdShelfExpireDate: r => (r.holdShelfExpirationDate ? <FormattedDate value={r.holdShelfExpirationDate} /> : '-'),
-};
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -100,33 +52,34 @@ const reorder = (list, startIndex, endIndex) => {
 class RequestQueueView extends React.Component {
   static propTypes = {
     data: PropTypes.shape({
-      requests: PropTypes.arrayOf(PropTypes.object),
+      notYetFilledRequests: PropTypes.arrayOf(PropTypes.object).isRequired,
+      inProgressRequests: PropTypes.arrayOf(PropTypes.object).isRequired,
       item: PropTypes.object,
       holding: PropTypes.object,
       request: PropTypes.object,
     }),
+    isTlrEnabled: PropTypes.bool.isRequired,
     onClose: PropTypes.func,
     onReorder: PropTypes.func,
     isLoading: PropTypes.bool,
     location: ReactRouterPropTypes.location,
   };
 
-  static getDerivedStateFromProps(props, state) {
-    const { data: { requests } } = props;
-
-    if (!state.reorder) {
-      return { requests };
-    }
-
-    return null;
-  }
-
   constructor(props) {
     super(props);
 
+    const { data: {
+      notYetFilledRequests,
+    } } = props;
+    const requestsPositionsForReorder = notYetFilledRequests.map(r => r.position);
+
     this.state = {
-      requests: [],
-      reorder: false,
+      notYetFilledRequests,
+      requestsPositionsForReorder,
+      accordions: {
+        'fulfillment-in-progress': true,
+        'not-yet-filled': true,
+      },
     };
   }
 
@@ -138,6 +91,21 @@ class RequestQueueView extends React.Component {
       this.showCallout(
         'ui-requests.moveRequest.success',
       );
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { notYetFilledRequests: prevNotYetFilledRequests } = prevProps.data;
+    const { notYetFilledRequests } = this.props.data;
+
+    if (!isEqual(prevNotYetFilledRequests, notYetFilledRequests)) {
+      const requestsPositionsForReorder = notYetFilledRequests.map(r => r.position);
+
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        notYetFilledRequests,
+        requestsPositionsForReorder,
+      });
     }
   }
 
@@ -153,21 +121,18 @@ class RequestQueueView extends React.Component {
       return;
     }
 
-    const { requests } = this.state;
+    const { notYetFilledRequests } = this.state;
+    const { isTlrEnabled } = this.props;
     const destIndex = destination.index;
     const sourceIndex = source.index;
-    const destRequest = requests[destIndex];
+    const destRequest = notYetFilledRequests[destIndex];
     let confirmMessage;
 
     if (sourceIndex === destIndex) {
       return;
     }
 
-    if (destIndex === 0 && !isNotYetFilled(destRequest)) {
-      confirmMessage = 'ui-requests.requestQueue.confirmReorder.message1';
-    }
-
-    if (destIndex === 0 && isPageRequest(destRequest)) {
+    if (destIndex === 0 && isPageRequest(destRequest) && !isTlrEnabled) {
       confirmMessage = 'ui-requests.requestQueue.confirmReorder.message2';
     }
 
@@ -183,18 +148,29 @@ class RequestQueueView extends React.Component {
   }
 
   reorderRequests = (sourceIndex, destIndex) => {
-    const data = this.state.requests;
+    const {
+      notYetFilledRequests,
+      requestsPositionsForReorder,
+    } = this.state;
+    const {
+      data: {
+        inProgressRequests,
+      },
+    } = this.props;
+
     const requests = reorder(
-      data,
+      notYetFilledRequests,
       sourceIndex,
       destIndex
-    ).map((r, index) => ({ ...r, position: index + 1 }));
+    ).map((r, index) => ({ ...r, position: requestsPositionsForReorder[index] }));
 
     this.setState({
       confirmMessage: null,
-      reorder: true, // eslint-disable-line react/no-unused-state
-      requests,
-    }, () => this.finishReorder(requests));
+      notYetFilledRequests: requests,
+    }, () => this.finishReorder([
+      ...requests,
+      ...inProgressRequests,
+    ]));
   }
 
   processError = (err) => {
@@ -254,29 +230,44 @@ class RequestQueueView extends React.Component {
       (isNotYetFilled(request) && !isPageRequest(request));
   }
 
+  handleToggleSection = ({ id }) => {
+    const { accordions } = this.state;
+
+    this.setState({
+      accordions: {
+        ...accordions,
+        [id]: !accordions[id],
+      },
+    });
+  }
+
   render() {
     const {
       isLoading,
       onClose,
       data: {
-        item,
         request,
+        inProgressRequests,
       },
     } = this.props;
     const {
-      requests,
       confirmMessage,
       error,
+      accordions,
+      notYetFilledRequests,
     } = this.state;
-    const count = requests.length;
-    const { title } = request?.instance || {};
-    const itemLink = (item.barcode)
-      ? (<Link to={`/inventory/view/${get(request, 'instanceId')}/${get(request, 'holdingsRecordId')}/${item.id}`}>{item.barcode}</Link>)
-      : '-';
+    const {
+      title,
+      publication,
+      contributorNames,
+    } = request?.instance || {};
+    const count = inProgressRequests.length + notYetFilledRequests.length;
+    const formattedContributors = getFormattedContributors(contributorNames);
 
     return (
       <Paneset isRoot>
         <Pane
+          id="request-queue"
           defaultWidth="100%"
           height="100%"
           firstMenu={
@@ -293,62 +284,65 @@ class RequestQueueView extends React.Component {
               </FormattedMessage>
             </PaneMenu>
           }
-          paneTitle={<FormattedMessage id="ui-requests.requestQueue.title" values={{ title }} />}
+          paneTitle={
+            <AppIcon size="small" app="requests">
+              <FormattedMessage
+                id="ui-requests.requestQueue.heading"
+                values={{
+                  title,
+                  author: formattedContributors,
+                }}
+              />
+            </AppIcon>
+          }
           paneSub={<FormattedMessage id="ui-requests.resultCount" values={{ count }} />}
         >
-          <div className={css.section}>
-            <Row>
-              <Col xs={1}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.item.barcode" />}
-                  value={itemLink}
-                />
-              </Col>
-              <Col xs={2}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.item.status" />}
-                  value={get(item, 'status.name', '-')}
-                />
-              </Col>
-              <Col xs={2}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.item.dueDate" />}
-                  value={get(request, 'loan.dueDate') ? <FormattedDate value={request.loan.dueDate} /> : '-'}
-                />
-              </Col>
-              <Col xs={2}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.item.location.name" />}
-                  value={get(item, 'effectiveLocation.name', '-')}
-                />
-              </Col>
-              <Col
-                data-test-item-call-number
-                xs={4}
-              >
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.item.callNumber" />}
-                  value={effectiveCallNumber(item)}
-                />
-              </Col>
-            </Row>
+          <div className={css.description}>
+            <FormattedMessage
+              id="ui-requests.requestQueue.description"
+              values={{
+                title,
+                author: formattedContributors,
+                publisher: getFormattedPublishers(publication),
+                publicationDate: getFormattedYears(publication),
+                instanceLink: (chunks) => <Link to={`/inventory/view/${get(request, 'instanceId')}`}>{chunks}</Link>,
+                i: (chunks) => <i>{chunks}</i>,
+              }}
+            />
           </div>
-          {isLoading ?
-            <Loading /> :
-            <SortableList
-              id="requests-list"
-              onDragEnd={this.onDragEnd}
-              isRowDraggable={this.isRowDraggable}
-              contentData={requests}
-              visibleColumns={COLUMN_NAMES}
-              columnMapping={COLUMN_MAP}
-              columnWidths={COLUMN_WIDTHS}
-              formatter={formatter}
-              height="70vh"
-              isEmptyMessage={
-                <FormattedMessage id="ui-requests.requestQueue.requests.notFound" />
-              }
-            /> }
+          {
+          isLoading
+            ? <Loading />
+            : (
+              <AccordionSet
+                accordionStatus={accordions}
+                onToggle={this.handleToggleSection}
+              >
+                <Accordion
+                  id="fulfillment-in-progress"
+                  label={
+                    <FormattedMessage id="ui-requests.requestQueue.fulfillmentInProgressSectionTitle" />
+                  }
+                >
+                  <FulfillmentRequestsData
+                    contentData={inProgressRequests}
+                  />
+                </Accordion>
+                <Accordion
+                  id="not-yet-filled"
+                  label={
+                    <FormattedMessage id="ui-requests.requestQueue.notYetFilledSectionTitle" />
+                  }
+                >
+                  <NotYetFilledRequestsData
+                    onDragEnd={this.onDragEnd}
+                    isRowDraggable={this.isRowDraggable}
+                    contentData={notYetFilledRequests}
+                  />
+                </Accordion>
+              </AccordionSet>
+            )
+          }
         </Pane>
         <Callout ref={this.callout} />
         <ConfirmationModal

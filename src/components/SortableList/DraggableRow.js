@@ -7,7 +7,7 @@ import css from './DraggableRow.css';
 const getItemStyle = (draggableStyle) => {
   return {
     userSelect: 'none',
-    ...draggableStyle
+    ...draggableStyle,
   };
 };
 
@@ -16,16 +16,21 @@ export default function DraggableRow(props) {
     snapshot,
     provided,
     rowIndex,
+    rowProps: {
+      additionalClasses,
+    },
     rowClass,
     cells,
   } = props;
 
   const usePortal = snapshot.isDragging;
-  const classNames = [rowClass];
+  let classNames = [...additionalClasses, rowClass];
 
   if (usePortal) {
     classNames.push(css.DraggableRow);
   }
+
+  classNames = classNames.join(' ');
 
   const Row = (
     <div

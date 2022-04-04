@@ -1,6 +1,8 @@
 import { Factory, trait } from 'miragejs';
 import faker from 'faker';
 
+import { REQUEST_LEVEL_TYPES } from '../../../../src/constants';
+
 export default Factory.extend({
   id: (i) => 'requestId' + i,
   // requestType: () => faker.random.arrayElement(['Hold', 'Page', 'Recall']),
@@ -11,7 +13,7 @@ export default Factory.extend({
   requestDate: () => faker.date.past().toISOString().substring(0, 10),
   status: () => 'Open - Not yet filled',
   position: (i) => i + 1,
-  requestCount: (i) => i + 1,
+  itemRequestCount: (i) => i + 1,
   fulfilmentPreference: 'Hold Shelf',
   pickupServicePointId: 'servicepointId1',
   holdShelfExpirationDate: '2017-01-20',
@@ -25,6 +27,7 @@ export default Factory.extend({
     const item = instance.holdings.models[0].items.models[0].attrs;
 
     request.update({
+      requestLevel: REQUEST_LEVEL_TYPES.ITEM,
       holdingsRecordId: item.holdingsRecordId,
       instanceId: item.instanceId,
       instance: {
@@ -38,8 +41,6 @@ export default Factory.extend({
       itemId: item.id,
       requesterId: user.id,
       requester: {
-        lastName: user.personal.lastName,
-        firstName: user.personal.firstName,
         barcode: user.barcode,
         patronGroup: {
           id: user.patronGroup,
@@ -47,6 +48,10 @@ export default Factory.extend({
           desc: 'test',
         },
         patronGroupId: user.patronGroup,
+        personal: {
+          lastName: user.personal.lastName,
+          firstName: user.personal.firstName,
+        },
       },
       metadata: {
         createdDate: '2020-07-07T03:56:29.238+0000',
@@ -65,6 +70,7 @@ export default Factory.extend({
       const item = instance.holdings.models[0].items.models[0].attrs;
 
       request.update({
+        requestLevel: REQUEST_LEVEL_TYPES.ITEM,
         holdingsRecordId: item.holdingsRecordId,
         instanceId: item.instanceId,
         instance: {
@@ -78,13 +84,15 @@ export default Factory.extend({
         itemId: item.id,
         requesterId: user.id,
         requester: {
-          lastName: user.personal.lastName,
-          firstName: user.personal.firstName,
           barcode: user.barcode,
           patronGroup: {
             id: user.patronGroup,
             group: 'test',
             desc: 'test',
+          },
+          personal: {
+            lastName: user.personal.lastName,
+            firstName: user.personal.firstName,
           },
           patronGroupId: user.patronGroup,
         },
@@ -107,6 +115,7 @@ export default Factory.extend({
       });
 
       request.update({
+        requestLevel: REQUEST_LEVEL_TYPES.ITEM,
         holdingsRecordId: item.holdingsRecordId,
         instanceId: item.instanceId,
         instance: {

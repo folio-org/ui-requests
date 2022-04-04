@@ -1,11 +1,32 @@
 # Change history for ui-requests
 
-## IN PROGRESS
+## 7.1.0 IN PROGRESS
 
-* Fix the issue when proxy pop-up and block pop-up appear at the same time for requests. Refs UIREQ-668.
-* Fix the issue when `block` modal appears even if no manual blocks and vice versa. Refs UIREQ-670
+* Add id for Pane component. Refs UIREQ-742.
+* Add pull request template. Refs UIREQ-746.
+* Replace `SafeHTMLMessage` with `FormattedMessage`. Refs UIREQ-610.
+* Move page requests to first accordion of unified queue when reordering. Refs UIREQ-728.
+* Add title look-up to new request form. Refs UIREQ-675.
+* Add success toast to Requests. Refs UIREQ-722.
+* Add success toast to duplicated Requests. Refs UIREQ-747.
+* Fix defect with first name of success toast to Requests. Refs UIREQ-753.
+* Ensure Request details # (# requests) shows correct data. Refs UIREQ-757.
+
+## [7.0.2](https://github.com/folio-org/ui-requests/tree/v7.0.2) (2022-04-04)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.0.1...v7.0.2)
+
+* Change queue position message from "items" to "requests". Refs UIREQ-755.
+
+## [7.0.1](https://github.com/folio-org/ui-requests/tree/v7.0.1) (2022-03-31)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.0.0...v7.0.1)
+
+* Request details `# items` showing incorrect number. Refs UIREQ-754.
+* Use all "open" filters for "view requests in queue" link. Refs UIREQ-756.
+
+## [7.0.0](https://github.com/folio-org/ui-requests/tree/v7.0.0) (2022-02-25)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v6.0.2...v7.0.0)
+
 * Move reusable part of `move request dialog box` to reusable component. Refs UIREQ-660.
-* When newly added patron is deleted after making and canceling request, requests page is unstable. Refs UIREQ-672.
 * Import `stripes-core` components via `@folio/stripes`. Refs UIREQ-609.
 * Create reusable component for render title level information. Refs UIREQ-654.
 * Add preferred name to Requests UI. Refs UIREQ-605.
@@ -18,6 +39,47 @@
 * BREAKING: TLR - data migration, move `holdingsRecordId`. Refs UIREQ-685.
 * BREAKING: TLR - depend on okapi interface `circulation` `12`. Refs UIREQ-685.
 * BREAKING: TLR - depend on okapi interface `request-storage` `4.0`. Refs UIREQ-685, UIREQ-708, FOLIO-3376.
+* Create title level request checkbox. Refs UIREQ-655.
+* Update request results page. Refs UIREQ-614.
+* Update request details pane. Refs UIREQ-613.
+* Closed TLR should not be able to be duplicated when TLR is disabled. Refs UIREQ-691.
+* Update form for posibility of `Title` level requests. Refs UIREQ-620.
+* Unchecking the Title level request box when it is automatically checked. Refs UIREQ-633.
+* Turn an item level request into a title level request. Refs UIREQ-635.
+* View & reorder requests (first accordion). Refs UIREQ-630.
+* View & reorder requests (second accordion). Refs UIREQ-644.
+* Migrate requests queue/reorder page on new end-points. Refs UIREQ-695.
+* Create new request filter. Refs UIREQ-612.
+* Change render dependency for item link and information from `requestLevel` to `item`. Refs UIREQ-704.
+* Fixed behavior of `hyperlinks` related to `TLR`. Refs UIREQ-702.
+* Disable validation on reordering for `Page` requests for `TLR` feature. Refs UIREQ-706.
+* Add all required attributes for the `position` field in request info. Refs UIREQ-707.
+* The user is redirected to the `Request queue` where the request queue is not displayed. Refs UIREQ-709.
+* Select item modal should display all items in the Instance when user uncheck box. Refs UIREQ-700.
+* Header and Subhead do not match the given form in Request queue page. Refs UIREQ-713.
+* Fulfillment in progress accordion should have position column in Request queue page. Refs UIREQ-705.
+* Upgrade `circulation` to `13.0`. Refs UIREQ-717.
+* Fix the issue when user is not redirected to "Item page". Refs UIREQ-714.
+* Fix unnecessary add of the `numberOfNotYetFilledRequests` field to the request data. Refs UIREQ-726.
+* Make translation keys more specific. Refs UIREQ-715.
+* Fulfillment Preference field not respecting user fulfillment preferences in edit mode. Refs UIREQ-658.
+* Fix `view requests in queue` link behaviour. Refs UIREQ-727.
+* Add link for `Requests on item` field if level of request is `Title`. Refs UIREQ-730.
+* Add `circulation.requests.queue.collection.get` permission. Refs UIREQ-734.
+* When scrolling, a white background appears and the blue focus indicator is cut off. Refs UIREQ-733.
+* The item requested is duplicated in the queue. Refs UIREQ-737.
+* Requester name displayed incorrectly in hold shelf clearance report. Refs UIREQ-729.
+
+## [6.0.2](https://github.com/folio-org/ui-requests/tree/v6.0.2) (2021-11-12)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v6.0.1...v6.0.2)
+
+* When newly added patron is deleted after making and canceling request, requests page is unstable. Refs UIREQ-672.
+
+## [6.0.1](https://github.com/folio-org/ui-requests/tree/v6.0.1) (2021-11-12)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v6.0.0...v6.0.1)
+
+* Fix the issue when proxy pop-up and block pop-up appear at the same time for requests. Refs UIREQ-668.
+* Fix the issue when `block` modal appears even if no manual blocks and vice versa. Refs UIREQ-670
 
 ## [6.0.0](https://github.com/folio-org/ui-requests/tree/v6.0.0) (2021-10-05)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v5.1.0...v6.0.0)

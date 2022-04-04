@@ -1,10 +1,15 @@
-import get from 'lodash/get';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
-import { Col, KeyValue, Row, FormattedDate } from '@folio/stripes/components';
+import {
+  Col,
+  KeyValue,
+  Row,
+  FormattedDate,
+  NoValue,
+} from '@folio/stripes/components';
 import { effectiveCallNumber } from '@folio/stripes/util';
 import {
   ClipCopy,
@@ -12,20 +17,39 @@ import {
 
 import { openRequestStatusFilters } from './utils';
 
-const ItemDetail = ({ item, loan, requestCount }) => {
-  if (!item.id && !item.barcode) {
+const DEFAULT_COUNT_VALUE = 0;
+
+const ItemDetail = ({
+  currentInstanceId,
+  request,
+  item,
+  loan,
+  requestCount,
+}) => {
+  const itemId = request?.itemId || item.id;
+
+  if (!itemId && !item.barcode) {
     return <FormattedMessage id="ui-requests.actions.loading" />;
   }
 
-  const recordLink = item ? <Link to={`/inventory/view/${item.instanceId}/${item.holdingsRecordId}/${item.id}`}>{item.barcode || item.id}</Link> : '-';
-  const status = get(item, 'status.name') || get(item, 'status');
-  const contributor = get(item, ['contributorNames', '0', 'name'], '-');
+  const instanceId = request?.instanceId || currentInstanceId;
+  const holdingsRecordId = request?.holdingsRecordId || item.holdingsRecordId;
+  const title = request?.instance.title || item.title || <NoValue />;
+  const contributor = request?.instance.contributorNames?.[0]?.name || item.contributorNames?.[0]?.name || <NoValue />;
+  const count = request?.itemRequestCount || requestCount || DEFAULT_COUNT_VALUE;
+  const status = item.status.name || item.status || <NoValue />;
+  const effectiveLocationName = item.effectiveLocation?.name || item.location?.name || <NoValue />;
+  const dueDate = loan?.dueDate ? <FormattedDate value={loan.dueDate} /> : <NoValue />;
 
-  const positionLink = (
-    <Link to={`/requests?filters=${openRequestStatusFilters}&query=${item.id}&sort=Request Date`}>
-      {requestCount}
-    </Link>
-  );
+  const effectiveCallNumberString = effectiveCallNumber(item);
+  const recordLink = itemId ? <Link to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}>{item.barcode || itemId}</Link> : <NoValue />;
+  const positionLink = count
+    ? (
+      <Link to={`/requests?filters=${openRequestStatusFilters}&query=${itemId}&sort=Request Date`}>
+        {count}
+      </Link>
+    )
+    : count;
   const itemLabel = item.barcode ? 'ui-requests.item.barcode' : 'ui-requests.item.id';
 
   return (
@@ -43,7 +67,7 @@ const ItemDetail = ({ item, loan, requestCount }) => {
         </Col>
         <Col xs={4}>
           <KeyValue label={<FormattedMessage id="ui-requests.item.title" />}>
-            {get(item, ['title'], '-')}
+            {title}
           </KeyValue>
         </Col>
         <Col xs={4}>
@@ -55,33 +79,34 @@ const ItemDetail = ({ item, loan, requestCount }) => {
       <Row>
         <Col xs={4}>
           <KeyValue label={<FormattedMessage id="ui-requests.item.effectiveLocation" />}>
-            {get(item, 'effectiveLocation.name') || get(item, 'location.name') || ''}
+            {effectiveLocationName}
           </KeyValue>
         </Col>
         <Col xs={8}>
           <KeyValue label={<FormattedMessage id="ui-requests.item.callNumber" />}>
-            {effectiveCallNumber(item)}
+            {effectiveCallNumberString}
           </KeyValue>
         </Col>
       </Row>
       <Row>
         <Col xs={4}>
           <KeyValue label={<FormattedMessage id="ui-requests.item.status" />}>
-            {status || '-'}
+            {status}
           </KeyValue>
         </Col>
         <Col xs={4}>
           <KeyValue label={<FormattedMessage id="ui-requests.item.dueDate" />}>
-            {loan && loan.dueDate ? <FormattedDate value={loan.dueDate} /> : '-'}
+            {dueDate}
           </KeyValue>
         </Col>
         <Col
           data-test-requests-on-item
           xs={4}
         >
-          <KeyValue label={<FormattedMessage id="ui-requests.item.requestsOnItem" />}>
-            {positionLink}
-          </KeyValue>
+          <KeyValue
+            label={<FormattedMessage id="ui-requests.item.requestsOnItem" />}
+            value={positionLink}
+          />
         </Col>
       </Row>
     </>
@@ -89,7 +114,9 @@ const ItemDetail = ({ item, loan, requestCount }) => {
 };
 
 ItemDetail.propTypes = {
-  item: PropTypes.object,
+  currentInstanceId: PropTypes.string,
+  request: PropTypes.object,
+  item: PropTypes.object.isRequired,
   loan: PropTypes.object,
   requestCount: PropTypes.number,
 };

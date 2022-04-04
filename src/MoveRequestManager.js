@@ -8,7 +8,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { stripesConnect } from '@folio/stripes/core';
 
-import MoveRequestDialog from './MoveRequestDialog';
+import ItemsDialog from './ItemsDialog';
 import ChooseRequestTypeDialog from './ChooseRequestTypeDialog';
 import ErrorModal from './components/ErrorModal';
 import { requestTypesByItemStatus } from './constants';
@@ -17,7 +17,7 @@ class MoveRequestManager extends React.Component {
   static propTypes = {
     onCancelMove: PropTypes.func,
     onMove: PropTypes.func,
-    request: PropTypes.object,
+    request: PropTypes.object.isRequired,
     mutator: PropTypes.shape({
       move: PropTypes.shape({
         POST: PropTypes.func.isRequired,
@@ -79,7 +79,6 @@ class MoveRequestManager extends React.Component {
   confirmChoosingRequestType = (selectedRequestType) => {
     this.setState({
       selectedRequestType,
-      chooseRequestType: false
     }, () => this.execSteps(1));
   }
 
@@ -106,6 +105,10 @@ class MoveRequestManager extends React.Component {
     try {
       const movedRequest = await POST(data);
       this.props.onMove(movedRequest);
+
+      this.setState({
+        chooseRequestType: false,
+      });
     } catch (resp) {
       this.processError(resp);
     } finally {
@@ -171,18 +174,21 @@ class MoveRequestManager extends React.Component {
 
     return (
       <>
-        <MoveRequestDialog
-          open={moveRequest || moveInProgress}
-          request={request}
-          moveInProgress={moveInProgress}
+        <ItemsDialog
+          open={moveRequest}
+          instanceId={request.instanceId}
+          title={request.instance.title}
+          isLoading={moveInProgress}
           onClose={onCancelMove}
-          onItemSelected={this.onItemSelected}
+          skippedItemId={request.itemId}
+          onRowClick={(_, item) => this.onItemSelected(item)}
         />
         {chooseRequestType &&
           <ChooseRequestTypeDialog
             open={chooseRequestType}
             data-test-choose-request-type-modal
             item={selectedItem}
+            isLoading={moveInProgress}
             onConfirm={this.confirmChoosingRequestType}
             onCancel={this.cancelMoveRequest}
           /> }

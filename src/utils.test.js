@@ -1,40 +1,25 @@
-import React from 'react';
-
 import {
   escape,
 } from 'lodash';
 import '../test/jest/__mock__';
 
 import {
-  // buildLocaleDateAndTime,
   buildTemplate,
-  // buildUrl,
-  // convertToSlipData,
   createUserHighlightBoxLink,
   duplicateRequest,
   escapeValue,
-  // formatNoteReferrerEntityData,
-  // getFullName,
-  // getPatronGroup,
-  // getRequestTypeOptions,
-  // hasNonRequestableStatus,
-  // isDelivery,
-  // isNotYetFilled,
-  // isPagedItem,
-  // isPageRequest,
-  // parseErrorMessage,
-  // toUserAddress,
-  // userHighlightBox,
+  getTlrSettings,
+  getRequestLevelValue,
+  getInstanceRequestTypeOptions,
+  getInstanceQueryString,
+  generateUserName,
 } from './utils';
 
 import {
-  // requestTypesByItemStatus,
-  // requestTypeOptionMap,
   itemStatuses,
-  // fulfilmentTypeMap,
-  // requestStatuses,
   requestTypesMap,
-  // requestTypes,
+  REQUEST_LEVEL_TYPES,
+  REQUEST_TYPES,
 } from './constants';
 
 describe('escapeValue', () => {
@@ -138,7 +123,7 @@ describe('duplicateRequest', () => {
       const r = {
         monkey: 'bagel',
         requestType: requestTypesMap.RECALL,
-        item: { status: itemStatuses.CHECKED_OUT }
+        item: { status: itemStatuses.CHECKED_OUT },
       };
       const duped = duplicateRequest(r);
       expect(duped.requestType).toBe(requestTypesMap.RECALL);
@@ -148,7 +133,7 @@ describe('duplicateRequest', () => {
       const r = {
         monkey: 'bagel',
         requestType: requestTypesMap.RECALL,
-        item: { status: itemStatuses.AVAILABLE }
+        item: { status: itemStatuses.AVAILABLE },
       };
       const duped = duplicateRequest(r);
       expect(duped.requestType).toBe(requestTypesMap.PAGE);
@@ -158,7 +143,7 @@ describe('duplicateRequest', () => {
       const r = {
         monkey: 'bagel',
         requestType: requestTypesMap.RECALL,
-        item: { status: itemStatuses.AGED_TO_LOST }
+        item: { status: itemStatuses.AGED_TO_LOST },
       };
       const duped = duplicateRequest(r);
       expect(duped.requestType).toBeUndefined();
@@ -166,6 +151,138 @@ describe('duplicateRequest', () => {
   });
 });
 
+describe('getTlrSettings', () => {
+  const defaultSettings = {
+    titleLevelRequestsFeatureEnabled: true,
+    createTitleLevelRequestsByDefault: false,
+  };
+
+  it('should return parsed settings', () => {
+    expect(getTlrSettings(JSON.stringify(defaultSettings))).toEqual(defaultSettings);
+  });
+
+  it('should return empty object if nothing passed', () => {
+    expect(getTlrSettings()).toEqual({});
+  });
+
+  it('should return empty object if invalid settings passed', () => {
+    expect(getTlrSettings("{'foo': 1}")).toEqual({});
+  });
+});
+
+describe('getRequestLevelValue', () => {
+  it('should return `Title` if true is passed', () => {
+    expect(getRequestLevelValue(true)).toBe(REQUEST_LEVEL_TYPES.TITLE);
+  });
+
+  it('should return `Item` if false is passed', () => {
+    expect(getRequestLevelValue(false)).toBe(REQUEST_LEVEL_TYPES.ITEM);
+  });
+});
+
+describe('getInstanceRequestTypeOptions', () => {
+  const missedItem = {
+    status: {
+      name: itemStatuses.MISSING,
+    },
+  };
+  const availableItem = {
+    status: {
+      name: itemStatuses.AVAILABLE,
+    },
+  };
+  const checkedOutItem = {
+    status: {
+      name: itemStatuses.CHECKED_OUT,
+    },
+  };
+
+  it('should return `Page` request type if at least one available item is present', () => {
+    const expectedResult = [
+      REQUEST_TYPES[requestTypesMap.PAGE],
+    ];
+
+    expect(getInstanceRequestTypeOptions([missedItem, availableItem, checkedOutItem])).toEqual(expectedResult);
+  });
+
+  it('should return `Hold` request type if only missing items is present', () => {
+    const expectedResult = [
+      REQUEST_TYPES[requestTypesMap.HOLD],
+    ];
+
+    expect(getInstanceRequestTypeOptions([missedItem])).toEqual(expectedResult);
+  });
+
+  it('should return `Hold` and `Recall` request types if no available items and not all of them are missing', () => {
+    const expectedResult = [
+      REQUEST_TYPES[requestTypesMap.HOLD],
+      REQUEST_TYPES[requestTypesMap.RECALL],
+    ];
+
+    expect(getInstanceRequestTypeOptions([missedItem, checkedOutItem])).toEqual(expectedResult);
+  });
+});
+
+describe('getInstanceQueryString', () => {
+  const hrid = 'hrid';
+  const id = 'instanceId';
+
+  it('should return correct query string if both values are passed', () => {
+    const expectedResult = `("hrid"=="${hrid}" or "id"=="${id}")`;
+
+    expect(getInstanceQueryString(hrid, id)).toBe(expectedResult);
+  });
+
+  it('should return correct query string if only `hrid` value is passed', () => {
+    const expectedResult = `("hrid"=="${hrid}" or "id"=="${hrid}")`;
+
+    expect(getInstanceQueryString(hrid)).toBe(expectedResult);
+  });
+
+  it('should return correct query string if only `id` value is passed', () => {
+    const expectedResult = `("hrid"=="${id}" or "id"=="${id}")`;
+
+    expect(getInstanceQueryString(id)).toBe(expectedResult);
+  });
+});
+
+describe('generateUserName', () => {
+  it('Should return full name', () => {
+    const firstName = 'Bob';
+    const lastName = 'Marley';
+    const middleName = 'Test';
+
+    expect(generateUserName({ firstName, lastName, middleName }))
+      .toEqual(`${lastName}, ${firstName} ${middleName}`);
+  });
+
+  it('Should return last name and first name', () => {
+    const firstName = 'Bob';
+    const lastName = 'Marley';
+    const middleName = undefined;
+
+    expect(generateUserName({ firstName, lastName, middleName }))
+      .toEqual(`${lastName}, ${firstName}`);
+  });
+
+  it('Should return last name only', () => {
+    const firstName = undefined;
+    const lastName = 'Marley';
+    const middleName = undefined;
+
+    expect(generateUserName({ firstName, lastName, middleName }))
+      .toEqual(lastName);
+  });
+
+  it('Should return last name only if lastName and middleName presented', () => {
+    const firstName = undefined;
+    const lastName = 'Marley';
+    const middleName = 'Test';
+
+    expect(generateUserName({ firstName, lastName, middleName }))
+      .toEqual(lastName);
+  });
+});
 
 
 

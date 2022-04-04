@@ -1,6 +1,7 @@
 import {
   get,
   isEmpty,
+  isArray,
 } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -42,12 +43,19 @@ import {
   createModes,
   requestStatusesTranslations,
   requestTypesTranslations,
+  REQUEST_LEVEL_TYPES,
+  DEFAULT_DISPLAYED_YEARS_AMOUNT,
+  MAX_RECORDS,
 } from '../constants';
 import {
   buildUrl,
   getFullName,
   duplicateRequest,
   convertToSlipData,
+  getTlrSettings,
+  getInstanceQueryString,
+  isDuplicateMode,
+  generateUserName,
 } from '../utils';
 import packageInfo from '../../package';
 import {
@@ -61,6 +69,10 @@ import {
   RequestsFilters,
   RequestsFiltersConfig,
 } from '../components/RequestsFilters';
+import {
+  getFormattedYears,
+  isReorderableRequest,
+} from './utils';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -71,16 +83,41 @@ const urls = {
     return `users?${query}`;
   },
   item: (value, idType) => {
-    const query = stringify({ query: `(${idType}=="${value}")` });
+    let query;
+
+    if (isArray(value)) {
+      query = `(${value.map((valueItem) => `${idType}=="${valueItem}"`).join(' or ')})`;
+    } else {
+      query = `(${idType}=="${value}")`;
+    }
+
+    query = stringify({ query });
     return `inventory/items?${query}`;
+  },
+  instance: (value) => {
+    const query = stringify({ query: getInstanceQueryString(value) });
+
+    return `inventory/instances?${query}`;
   },
   loan: (value) => {
     const query = stringify({ query: `(itemId=="${value}") and status=Open` });
     return `circulation/loans?${query}`;
   },
   requestsForItem: (value) => {
-    const query = stringify({ query: `(itemId=="${value}" and status=Open)` });
-    return `request-storage/requests?${query}`;
+    const query = stringify({
+      query: `(itemId=="${value}" and status=Open)`,
+      limit: MAX_RECORDS,
+    });
+
+    return `circulation/requests?${query}`;
+  },
+  requestsForInstance: (value) => {
+    const query = stringify({
+      query: `(instanceId=="${value}" and status=Open)`,
+      limit: MAX_RECORDS,
+    });
+
+    return `circulation/requests?${query}`;
   },
   requestPreferences: (value) => {
     const query = stringify({ query: `(userId=="${value}")` });
@@ -90,6 +127,21 @@ const urls = {
     const query = stringify({ query: `(${idType}=="${value}")` });
     return `holdings-storage/holdings?${query}`;
   },
+};
+
+export const buildHoldRecords = (records) => {
+  return records.map(record => {
+    if (record.requester) {
+      const {
+        firstName,
+        lastName,
+      } = record.requester;
+
+      record.requester.name = [lastName, firstName].filter(namePart => namePart).join(', ');
+    }
+
+    return record;
+  });
 };
 
 class RequestsRoute extends React.Component {
@@ -121,6 +173,7 @@ class RequestsRoute extends React.Component {
             {
               'title': 'instance.title',
               'instanceId': 'instanceId',
+              'publication': 'instance.publication',
               'itemBarcode': 'item.barcode',
               'type': 'requestType',
               'requester': 'requester.lastName requester.firstName',
@@ -171,6 +224,13 @@ class RequestsRoute extends React.Component {
       records: 'users',
       accumulate: 'true',
       path: 'users',
+      fetch: false,
+    },
+    instanceUniquenessValidator: {
+      type: 'okapi',
+      records: 'instances',
+      accumulate: true,
+      path: 'inventory/instances',
       fetch: false,
     },
     patronBlocks: {
@@ -228,6 +288,14 @@ class RequestsRoute extends React.Component {
       path: 'proxiesfor',
       accumulate: true,
       fetch: false,
+    },
+    configs: {
+      type: 'okapi',
+      records: 'configs',
+      path: 'configurations/entries',
+      params: {
+        query: '(module==SETTINGS and configName==TLR)',
+      },
     },
   };
 
@@ -293,6 +361,10 @@ class RequestsRoute extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object).isRequired,
         isPending: PropTypes.bool,
       }),
+      configs: PropTypes.shape({
+        hasLoaded: PropTypes.bool.isRequired,
+        records: PropTypes.arrayOf(PropTypes.object).isRequired,
+      }),
     }).isRequired,
     stripes: PropTypes.shape({
       connect: PropTypes.func.isRequired,
@@ -319,6 +391,10 @@ class RequestsRoute extends React.Component {
     super(props);
 
     const { intl: { formatMessage } } = props;
+    const {
+      titleLevelRequestsFeatureEnabled = false,
+      createTitleLevelRequestsByDefault = false,
+    } = getTlrSettings(props.resources.configs.records[0]?.value);
 
     this.okapiUrl = props.stripes.okapi.url;
     this.httpHeaders = {
@@ -330,10 +406,11 @@ class RequestsRoute extends React.Component {
     this.columnLabels = {
       requestDate: formatMessage({ id: 'ui-requests.requests.requestDate' }),
       title: formatMessage({ id: 'ui-requests.requests.title' }),
+      year: formatMessage({ id: 'ui-requests.requests.year' }),
       itemBarcode: formatMessage({ id: 'ui-requests.requests.itemBarcode' }),
       type: formatMessage({ id: 'ui-requests.requests.type' }),
       requestStatus: formatMessage({ id: 'ui-requests.requests.status' }),
-      position: formatMessage({ id: 'ui-requests.requests.position' }),
+      position: formatMessage({ id: 'ui-requests.requests.queuePosition' }),
       requester: formatMessage({ id: 'ui-requests.requests.requester' }),
       requesterBarcode: formatMessage({ id: 'ui-requests.requests.requesterBarcode' }),
       proxy: formatMessage({ id: 'ui-requests.requests.proxy' }),
@@ -358,6 +435,8 @@ class RequestsRoute extends React.Component {
       servicePointId: '',
       requests: [],
       selectedId: '',
+      titleLevelRequestsFeatureEnabled,
+      createTitleLevelRequestsByDefault,
     };
 
     this.printContentRef = React.createRef();
@@ -384,6 +463,8 @@ class RequestsRoute extends React.Component {
     const expired = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
     const { id: currentServicePointId } = this.getCurrentServicePointInfo();
     const prevStateServicePointId = get(prevProps.resources.currentServicePoint, 'id');
+    const { configs: prevConfigs } = prevProps.resources;
+    const { configs } = this.props.resources;
 
     if (prevExpired.length > 0 && expired.length === 0) {
       // eslint-disable-next-line react/no-did-update-set-state
@@ -401,6 +482,19 @@ class RequestsRoute extends React.Component {
 
     if (prevStateServicePointId !== currentServicePointId) {
       this.setCurrentServicePointId();
+    }
+
+    if (prevConfigs.hasLoaded !== configs.hasLoaded && configs.hasLoaded) {
+      const {
+        titleLevelRequestsFeatureEnabled = false,
+        createTitleLevelRequestsByDefault = false,
+      } = getTlrSettings(configs.records[0]?.value);
+
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        titleLevelRequestsFeatureEnabled,
+        createTitleLevelRequestsByDefault,
+      });
     }
   }
 
@@ -541,21 +635,43 @@ class RequestsRoute extends React.Component {
   }
 
   // Called as a map function
-  addRequestFields(r) {
+  addRequestFields(request) {
+    const {
+      requesterId,
+      instanceId,
+      itemId,
+    } = request;
+    const { titleLevelRequestsFeatureEnabled } = this.state;
+
     return Promise.all(
       [
-        this.findResource('user', r.requesterId),
-        this.findResource('requestsForItem', r.itemId),
+        this.findResource('user', requesterId),
+        this.findResource('requestsForInstance', instanceId),
+        ...(itemId
+          ? [
+            this.findResource('requestsForItem', itemId),
+          ]
+          : []),
       ],
-    ).then(([users, requests]) => {
+    ).then(([users, titleRequests, itemRequests]) => {
       // Each element of the promises array returns an array of results, but in
       // this case, there should only ever be one result for each.
       const requester = get(users, 'users[0]', null);
-      const requestCount = get(requests, 'totalRecords', 0);
+      const titleRequestCount = get(titleRequests, 'totalRecords', 0);
+      const dynamicProperties = {};
+      const requestsForFilter = titleLevelRequestsFeatureEnabled ? titleRequests.requests : itemRequests.requests;
+
+      dynamicProperties.numberOfReorderableRequests = requestsForFilter.filter(currentRequest => isReorderableRequest(currentRequest)).length;
+
+      if (itemId) {
+        dynamicProperties.itemRequestCount = get(itemRequests, 'totalRecords', 0);
+      }
+
       return {
-        ...r,
+        ...request,
         requester,
-        requestCount,
+        titleRequestCount,
+        ...dynamicProperties,
       };
     });
   }
@@ -596,9 +712,39 @@ class RequestsRoute extends React.Component {
   };
 
   create = (data) => {
+    const query = new URLSearchParams(this.props.location.search);
+    const mode = query.get('mode');
+
     return this.props.mutator.records.POST(data)
-      .then(() => this.closeLayer())
-      .catch(resp => this.processError(resp));
+      .then(() => {
+        this.closeLayer();
+
+        this.context.sendCallout({
+          message: isDuplicateMode(mode)
+            ? (
+              <FormattedMessage
+                id="ui-requests.duplicateRequest.success"
+                values={{ requester: generateUserName(data.requester.personal) }}
+              />
+            )
+            : (
+              <FormattedMessage
+                id="ui-requests.createRequest.success"
+                values={{ requester: generateUserName(data.requester.personal) }}
+              />
+            ),
+        });
+      })
+      .catch(resp => {
+        this.processError(resp);
+
+        this.context.sendCallout({
+          message: isDuplicateMode(mode)
+            ? <FormattedMessage id="ui-requests.duplicateRequest.fail" />
+            : <FormattedMessage id="ui-requests.createRequest.fail" />,
+          type: 'error',
+        });
+      });
   };
 
   processError(resp) {
@@ -635,6 +781,7 @@ class RequestsRoute extends React.Component {
       itemBarcode: null,
       userBarcode: null,
       itemId: null,
+      instanceId: null,
       query: null,
     });
 
@@ -644,14 +791,20 @@ class RequestsRoute extends React.Component {
   onDuplicate = (request) => {
     const dupRequest = duplicateRequest(request);
 
-    this.setState({ dupRequest });
-    this.props.mutator.query.update({
+    const newRequestData = {
       layer: 'create',
-      itemBarcode: request.item.barcode,
-      itemId: request.itemId,
+      instanceId: request.instanceId,
       userBarcode: request.requester.barcode,
       mode: createModes.DUPLICATE,
-    });
+    };
+
+    if (request.requestLevel === REQUEST_LEVEL_TYPES.ITEM) {
+      newRequestData.itemBarcode = request.item.barcode;
+      newRequestData.itemId = request.itemId;
+    }
+
+    this.setState({ dupRequest });
+    this.props.mutator.query.update(newRequestData);
   };
 
   buildRecordsForHoldsShelfReport = async () => {
@@ -701,25 +854,10 @@ class RequestsRoute extends React.Component {
       return;
     }
 
-    const recordsToCSV = this.buildHoldRecords(requests);
+    const recordsToCSV = buildHoldRecords(requests);
     exportCsv(recordsToCSV, {
       onlyFields: this.expiredHoldsReportColumnHeaders,
       excludeFields: ['id'],
-    });
-  };
-
-  buildHoldRecords = (records) => {
-    return records.map(record => {
-      if (record.requester) {
-        const {
-          firstName,
-          lastName,
-        } = record.requester;
-
-        record.requester.name = [firstName, lastName].filter(e => e).join(',');
-      }
-
-      return record;
     });
   };
 
@@ -773,12 +911,16 @@ class RequestsRoute extends React.Component {
   }
 
   renderFilters = (onChange) => {
+    const { resources } = this.props;
+    const { titleLevelRequestsFeatureEnabled } = this.state;
+
     return (
       <RequestsFilters
         activeFilters={this.getActiveFilters()}
-        resources={this.props.resources}
+        resources={resources}
         onChange={onChange}
         onClear={(name) => onChange({ name, values: [] })}
+        titleLevelRequestsFeatureEnabled={titleLevelRequestsFeatureEnabled}
       />
     );
   };
@@ -804,6 +946,7 @@ class RequestsRoute extends React.Component {
       requests,
       servicePointId,
       holdsShelfReportPending,
+      createTitleLevelRequestsByDefault,
     } = this.state;
     const { name: servicePointName } = this.getCurrentServicePointInfo();
     const pickSlips = get(resources, 'pickSlips.records', []);
@@ -813,7 +956,11 @@ class RequestsRoute extends React.Component {
     const cancellationReasons = get(resources, 'cancellationReasons.records', []);
     const requestCount = get(resources, 'records.other.totalRecords', 0);
     const initialValues = dupRequest ||
-      { requestType: 'Hold', fulfilmentPreference: 'Hold Shelf' };
+      {
+        requestType: 'Hold',
+        fulfilmentPreference: 'Hold Shelf',
+        createTitleLevelRequest: createTitleLevelRequestsByDefault,
+      };
 
     const pickSlipsArePending = resources?.pickSlips?.isPending;
     const requestsEmpty = isEmpty(requests);
@@ -834,6 +981,7 @@ class RequestsRoute extends React.Component {
       'requestStatus': rq => <FormattedMessage id={requestStatusesTranslations[rq.status]} />,
       'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
       'title': rq => <TextLink to={this.getRowURL(rq.id)} onClick={() => this.setURL(rq.id)}>{(rq.instance ? rq.instance.title : '')}</TextLink>,
+      'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
     };
 
     const actionMenu = ({ onToggle, renderColumnsMenu }) => (
@@ -943,9 +1091,10 @@ class RequestsRoute extends React.Component {
             columnWidths={{
               requestDate: { max: 165 },
               title: { max: 300 },
-              position: { max: 100 },
+              year: { max: 58 },
+              position: { max: 150 },
               requestType: { max: 101 },
-              itemBarcode: { max: 115 },
+              itemBarcode: { max: 140 },
               type: { max: 100 },
             }}
             columnMapping={this.columnLabels}
