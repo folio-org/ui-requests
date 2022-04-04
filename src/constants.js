@@ -83,6 +83,7 @@ export const itemStatuses = {
   UNAVAILABLE: 'Unavailable',
   UNKNOWN: 'Unknown',
   WITHDRAWN: 'Withdrawn',
+  RESTRICTED: 'Restricted',
 };
 
 export const requestTypesMap = {

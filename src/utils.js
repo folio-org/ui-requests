@@ -151,6 +151,7 @@ export function hasNonRequestableStatus(item) {
     itemStatuses.UNAVAILABLE,
     itemStatuses.UNKNOWN,
     itemStatuses.WITHDRAWN,
+    itemStatuses.RESTRICTED,
   ], item?.status?.name);
 }
 
