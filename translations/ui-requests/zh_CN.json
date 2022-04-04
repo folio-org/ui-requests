@@ -201,7 +201,6 @@
     "titleInformation.identifiers": "ISBN",
     "instance.title": "题名",
     "instance.contributorNames": "添加贡献者",
-    "items": "{number}单件",
     "requestLevel": "请求级别",
     "itemLevel": "单件",
     "titleLevel": "题名",
@@ -231,5 +230,13 @@
     "filters.requestLevel.item": "单件",
     "filters.requestLevel.title": "题名",
     "requests.queuePosition": "队列位置",
-    "requestQueue.heading": "实例 {title} / {author} 上的请求队列。"
+    "requestQueue.heading": "实例 {title} / {author} 上的请求队列。",
+    "titleLookupPlugin": "题名查询",
+    "createRequest.success": "已为{requester}成功创建请求",
+    "createRequest.fail": "此请求未成功放置",
+    "editRequest.success": "已为{requester}成功编辑请求",
+    "editRequest.fail": "此请求未成功保存",
+    "duplicateRequest.success": "已为{requester}成功创建请求",
+    "duplicateRequest.fail": "此请求未成功放置",
+    "requests": "{number}请求"
 }
