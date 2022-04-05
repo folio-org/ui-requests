@@ -29,6 +29,7 @@ const nonRequestableItemStatuses = [
   'Unavailable',
   'Unknown',
   'Withdrawn',
+  'Restricted',
 ];
 
 const patronComment = 'I really need this in the next three days';
@@ -179,7 +180,7 @@ describe('New Request page', () => {
       });
     });
 
-    describe('creating new request for item with status "Restricted"', () => {
+    describe('creating new request for item with status "Available"', () => {
       beforeEach(async function () {
         this.server.create('item', {
           barcode: '9676761472500',
@@ -187,7 +188,7 @@ describe('New Request page', () => {
           materialType: {
             name: 'book',
           },
-          status: { name: 'Restricted' },
+          status: { name: 'Available' },
         });
 
         const user = this.server.create('user', { barcode: '9676761472501' });
