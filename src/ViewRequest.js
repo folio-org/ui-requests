@@ -142,7 +142,7 @@ class ViewRequest extends React.Component {
         'title-info': true,
         'item-info': true,
         'requester-info': true,
-        'staff-notes': true,
+        'staff-notes': false,
       },
       moveRequest: false,
       titleLevelRequestsFeatureEnabled,
