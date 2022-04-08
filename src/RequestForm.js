@@ -1183,10 +1183,8 @@ class RequestForm extends React.Component {
 
     const handleCancelAndClose = () => {
       const keepEditBtn = document.getElementById('clickable-cancel-editing-confirmation-confirm');
-      const closeShortcutsModalBtn = document.getElementById('keyboard-shortcuts-modal-close');
-      if (closeShortcutsModalBtn) closeShortcutsModalBtn.click();
-      else if (isItemsDialogOpen) handleKeyCommand(this.handleItemsDialogClose);
-      else if (errorMessage) handleKeyCommand(this.onClose);
+      if (isItemsDialogOpen) handleKeyCommand(this.handleItemsDialogClose);
+      else if (errorMessage) this.onClose();
       else if (keepEditBtn) keepEditBtn.click();
       else onCancel();
     };

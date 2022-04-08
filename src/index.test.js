@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 
 import '../test/jest/__mock__';
 
@@ -20,7 +20,6 @@ const renderRequest = () => {
 
 describe('UI Requests', () => {
   it('should render', () => {
-    screen.debug();
     expect(renderRequest()).toBeDefined();
   });
 });

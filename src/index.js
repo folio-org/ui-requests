@@ -3,17 +3,9 @@ import { Route, Switch } from 'react-router-dom';
 import { hot } from 'react-hot-loader';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
-import { FormattedMessage } from 'react-intl';
-
-import { AppContextMenu } from '@folio/stripes/core';
 import {
   CommandList,
   defaultKeyboardShortcuts as keyboardCommands,
-  HasCommand,
-  KeyboardShortcutsModal,
-  NavList,
-  NavListItem,
-  NavListSection,
 } from '@folio/stripes/components';
 
 import {
@@ -25,69 +17,27 @@ import {
 } from './routes';
 
 const RequestsRouting = (props) => {
-  const [isShortcutsModalOpen, setIsShortcutsModalOpen] = React.useState(false);
-  const { match: { path } } = props;
-
-  const toggleModal = () => setIsShortcutsModalOpen(prev => !prev);
-
-  const keyCommands = [
-    {
-      name: 'openShortcutModal',
-      handler: toggleModal,
-    },
-  ];
+  const {
+    match: { path },
+  } = props;
 
   return (
     <>
       <CommandList commands={keyboardCommands}>
-        <HasCommand commands={keyCommands}>
-          <AppContextMenu>
-            {(handleToggle) => (
-              <NavList>
-                <NavListSection>
-                  <NavListItem
-                    id="keyboard-shortcuts-item"
-                    onClick={() => {
-                      handleToggle();
-                      toggleModal();
-                    }}
-                  >
-                    <FormattedMessage id="ui-requests.appMenu.keyboardShortcuts" />
-                  </NavListItem>
-                </NavListSection>
-              </NavList>
-            )}
-          </AppContextMenu>
-          <Switch>
-            <Route
-              path={`${path}/view/:requestId/:id/reorder`}
-              component={RequestQueueRoute}
-            />
-            <Route
-              path={`${path}/notes/new`}
-              component={NoteCreateRoute}
-            />
-            <Route
-              path={`${path}/notes/:noteId/edit`}
-              component={NoteEditRoute}
-            />
-            <Route
-              path={`${path}/notes/:noteId`}
-              component={NoteViewRoute}
-            />
-            <Route
-              path={path}
-              render={() => <RequestsRoute {...props} />}
-            />
-          </Switch>
-        </HasCommand>
+        <Switch>
+          <Route
+            path={`${path}/view/:requestId/:id/reorder`}
+            component={RequestQueueRoute}
+          />
+          <Route path={`${path}/notes/new`} component={NoteCreateRoute} />
+          <Route
+            path={`${path}/notes/:noteId/edit`}
+            component={NoteEditRoute}
+          />
+          <Route path={`${path}/notes/:noteId`} component={NoteViewRoute} />
+          <Route path={path} render={() => <RequestsRoute {...props} />} />
+        </Switch>
       </CommandList>
-      {isShortcutsModalOpen && (
-        <KeyboardShortcutsModal
-          allCommands={keyboardCommands}
-          onClose={toggleModal}
-        />
-      )}
     </>
   );
 };
