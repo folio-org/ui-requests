@@ -1,7 +1,6 @@
 import {
   get,
   isEqual,
-  cloneDeep,
   keyBy,
 } from 'lodash';
 import React from 'react';
@@ -25,6 +24,7 @@ import {
   Button,
   Accordion,
   AccordionSet,
+  AccordionStatus,
   Col,
   Callout,
   Icon,
@@ -60,6 +60,7 @@ import {
   generateUserName,
 } from './utils';
 import urls from './routes/urls';
+import ViewRequestShortcutsWrapper from './components/ViewRequestShortcutsWrapper';
 
 class ViewRequest extends React.Component {
   static manifest = {
@@ -137,13 +138,6 @@ class ViewRequest extends React.Component {
 
     this.state = {
       request: {},
-      accordions: {
-        'request-info': true,
-        'title-info': true,
-        'item-info': true,
-        'requester-info': true,
-        'staff-notes': false,
-      },
       moveRequest: false,
       titleLevelRequestsFeatureEnabled,
     };
@@ -152,10 +146,10 @@ class ViewRequest extends React.Component {
 
     this.cViewMetaData = connect(ViewMetaData);
     this.connectedCancelRequestDialog = connect(CancelRequestDialog);
-    this.onToggleSection = this.onToggleSection.bind(this);
     this.cancelRequest = this.cancelRequest.bind(this);
     this.update = this.update.bind(this);
     this.callout = React.createRef();
+    this.accordionStatusRef = React.createRef();
   }
 
   componentDidMount() {
@@ -292,14 +286,6 @@ class ViewRequest extends React.Component {
     history.push(`${urls.requestQueueView(request.id, idForHistory)}${search}`, { request });
   }
 
-  onToggleSection({ id }) {
-    this.setState((curState) => {
-      const newState = cloneDeep(curState);
-      newState.accordions[id] = !curState.accordions[id];
-      return newState;
-    });
-  }
-
   getRequest() {
     const { resources, match: { params: { id } } } = this.props;
     const selRequest = (resources.selectedRequest || {}).records || [];
@@ -417,7 +403,6 @@ class ViewRequest extends React.Component {
       optionLists: { cancellationReasons },
     } = this.props;
     const {
-      accordions,
       isCancellingRequest,
       moveRequest,
       titleLevelRequestsFeatureEnabled,
@@ -574,188 +559,202 @@ class ViewRequest extends React.Component {
       requestCreateDate: request.metadata.createdDate,
     };
 
+    const isDuplicatingDisabled = request.requestLevel === REQUEST_LEVEL_TYPES.TITLE && !this.state.titleLevelRequestsFeatureEnabled;
+
     return (
-      <Pane
-        id="instance-details"
-        data-test-instance-details
-        defaultWidth={this.props.paneWidth}
-        paneTitle={<FormattedMessage id="ui-requests.requestMeta.detailLabel" />}
-        lastMenu={this.renderDetailMenu(request)}
-        dismissible
-        {... (showActionMenu ? { actionMenu } : {})}
-        onClose={this.props.onClose}
-      >
-        <TitleManager record={get(request, ['instance', 'title'])} />
-        <AccordionSet accordionStatus={accordions} onToggle={this.onToggleSection}>
-          <Accordion
-            id="title-info"
-            label={
-              <FormattedMessage
-                id="ui-requests.title.information"
-              />
-            }
+      <>
+        <ViewRequestShortcutsWrapper
+          onDuplicate={() => this.props.onDuplicate(request)}
+          onEdit={this.props.onEdit}
+          accordionStatusRef={this.accordionStatusRef}
+          isDuplicatingDisabled={isDuplicatingDisabled}
+          isEditingDisabled={isRequestClosed}
+          stripes={stripes}
+        >
+          <Pane
+            id="instance-details"
+            data-test-instance-details
+            defaultWidth={this.props.paneWidth}
+            paneTitle={<FormattedMessage id="ui-requests.requestMeta.detailLabel" />}
+            lastMenu={this.renderDetailMenu(request)}
+            dismissible
+            {... (showActionMenu ? { actionMenu } : {})}
+            onClose={this.props.onClose}
           >
-            <TitleInformation
-              instanceId={request.instanceId}
-              titleLevelRequestsCount={request.titleRequestCount}
-              title={request.instance.title}
-              contributors={request.instance.contributorNames}
-              publications={request.instance.publication}
-              editions={request.instance.editions}
-              identifiers={request.instance.identifiers}
-              titleLevelRequestsLink={false}
-            />
-          </Accordion>
-          <Accordion
-            id="item-info"
-            label={
-              <FormattedMessage
-                id="ui-requests.item.information"
-              />
-            }
-          >
-            { item
-              ? (
-                <ItemDetail
-                  request={request}
-                  item={request.item}
-                  loan={request.loan}
-                  requestCount={request.requestCount}
-                />
-              )
-              : (
-                <FormattedMessage
-                  id="ui-requests.item.noInformation"
-                />
-              )
-            }
-          </Accordion>
-          <Accordion
-            id="request-info"
-            label={<FormattedMessage id="ui-requests.requestMeta.information" />}
-          >
-            <Row>
-              <Col xs={12}>
-                {request.metadata && <this.cViewMetaData metadata={request.metadata} />}
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={3}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.requestType" />}
-                  value={get(request, ['requestType'], '-')}
-                />
-              </Col>
-              <Col xs={3}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.status" />}
-                  value={get(request, ['status'], '-')}
-                />
-              </Col>
-              <Col xs={3}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
-                  value={expirationDate}
-                />
-              </Col>
-              <Col xs={3}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
-                  value={holdShelfExpireDate}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={3}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.position" />}
-                  value={
-                    <PositionLink
-                      request={request}
-                      isTlrEnabled={titleLevelRequestsFeatureEnabled}
+            <TitleManager record={get(request, ['instance', 'title'])} />
+            <AccordionStatus ref={this.accordionStatusRef}>
+              <AccordionSet>
+                <Accordion
+                  id="title-info"
+                  label={
+                    <FormattedMessage
+                      id="ui-requests.title.information"
                     />
                   }
-                />
-              </Col>
-              <Col xs={3}>
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.requestLevel" />}
-                  value={<FormattedMessage id={`ui-requests.${requestLevel.toLowerCase()}Level`} />}
-                />
-              </Col>
-              {request.cancellationReasonId &&
-                <Col xs={3}>
-                  <KeyValue
-                    label={<FormattedMessage id="ui-requests.cancellationReason" />}
-                    value={get(cancellationReasonMap[request.cancellationReasonId], 'name', '-')}
+                >
+                  <TitleInformation
+                    instanceId={request.instanceId}
+                    titleLevelRequestsCount={request.titleRequestCount}
+                    title={request.instance.title}
+                    contributors={request.instance.contributorNames}
+                    publications={request.instance.publication}
+                    editions={request.instance.editions}
+                    identifiers={request.instance.identifiers}
+                    titleLevelRequestsLink={false}
                   />
-                </Col> }
-              {request.cancellationAdditionalInformation &&
-                <Col xs={6}>
-                  <KeyValue
-                    label={<FormattedMessage id="ui-requests.cancellationAdditionalInformation" />}
-                    value={request.cancellationAdditionalInformation}
+                </Accordion>
+                <Accordion
+                  id="item-info"
+                  label={
+                    <FormattedMessage
+                      id="ui-requests.item.information"
+                    />
+                  }
+                >
+                  { item
+                    ? (
+                      <ItemDetail
+                        request={request}
+                        item={request.item}
+                        loan={request.loan}
+                        requestCount={request.requestCount}
+                      />
+                    )
+                    : (
+                      <FormattedMessage
+                        id="ui-requests.item.noInformation"
+                      />
+                    )
+                  }
+                </Accordion>
+                <Accordion
+                  id="request-info"
+                  label={<FormattedMessage id="ui-requests.requestMeta.information" />}
+                >
+                  <Row>
+                    <Col xs={12}>
+                      {request.metadata && <this.cViewMetaData metadata={request.metadata} />}
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={3}>
+                      <KeyValue
+                        label={<FormattedMessage id="ui-requests.requestType" />}
+                        value={get(request, ['requestType'], '-')}
+                      />
+                    </Col>
+                    <Col xs={3}>
+                      <KeyValue
+                        label={<FormattedMessage id="ui-requests.status" />}
+                        value={get(request, ['status'], '-')}
+                      />
+                    </Col>
+                    <Col xs={3}>
+                      <KeyValue
+                        label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
+                        value={expirationDate}
+                      />
+                    </Col>
+                    <Col xs={3}>
+                      <KeyValue
+                        label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
+                        value={holdShelfExpireDate}
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={3}>
+                      <KeyValue
+                        label={<FormattedMessage id="ui-requests.position" />}
+                        value={
+                          <PositionLink
+                            request={request}
+                            isTlrEnabled={titleLevelRequestsFeatureEnabled}
+                          />
+                        }
+                      />
+                    </Col>
+                    <Col xs={3}>
+                      <KeyValue
+                        label={<FormattedMessage id="ui-requests.requestLevel" />}
+                        value={<FormattedMessage id={`ui-requests.${requestLevel.toLowerCase()}Level`} />}
+                      />
+                    </Col>
+                    {request.cancellationReasonId &&
+                      <Col xs={3}>
+                        <KeyValue
+                          label={<FormattedMessage id="ui-requests.cancellationReason" />}
+                          value={get(cancellationReasonMap[request.cancellationReasonId], 'name', '-')}
+                        />
+                      </Col> }
+                    {request.cancellationAdditionalInformation &&
+                      <Col xs={6}>
+                        <KeyValue
+                          label={<FormattedMessage id="ui-requests.cancellationAdditionalInformation" />}
+                          value={request.cancellationAdditionalInformation}
+                        />
+                      </Col> }
+                    <Col
+                      data-test-request-patron-comments
+                      xsOffset={3}
+                      xs={6}
+                    >
+                      <KeyValue
+                        label={<FormattedMessage id="ui-requests.patronComments" />}
+                        value={request.patronComments}
+                      />
+                    </Col>
+                  </Row>
+                </Accordion>
+                <Accordion
+                  id="requester-info"
+                  label={
+                    <FormattedMessage id="ui-requests.requester.information">
+                      {message => message}
+                    </FormattedMessage>
+                  }
+                >
+                  <UserDetail
+                    user={request.requester}
+                    proxy={request.proxy}
+                    stripes={stripes}
+                    patronGroups={patronGroups}
+                    request={request}
+                    selectedDelivery={selectedDelivery}
+                    deliveryAddress={deliveryAddressDetail}
+                    pickupServicePoint={getPickupServicePointName}
                   />
-                </Col> }
-              <Col
-                data-test-request-patron-comments
-                xsOffset={3}
-                xs={6}
-              >
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.patronComments" />}
-                  value={request.patronComments}
+                </Accordion>
+                <NotesSmartAccordion
+                  domainName="requests"
+                  entityId={request.id}
+                  entityName={request.instance.title}
+                  entityType="request"
+                  referredRecordData={referredRecordData}
+                  id="staff-notes"
+                  label={<FormattedMessage id="ui-requests.notes.staffNotes" />}
+                  pathToNoteCreate="/requests/notes/new"
+                  pathToNoteDetails="/requests/notes"
                 />
-              </Col>
-            </Row>
-          </Accordion>
-          <Accordion
-            id="requester-info"
-            label={
-              <FormattedMessage id="ui-requests.requester.information">
-                {message => message}
-              </FormattedMessage>
-            }
-          >
-            <UserDetail
-              user={request.requester}
-              proxy={request.proxy}
-              stripes={stripes}
-              patronGroups={patronGroups}
+              </AccordionSet>
+            </AccordionStatus>
+            <this.connectedCancelRequestDialog
+              open={isCancellingRequest}
+              onCancelRequest={this.cancelRequest}
+              onClose={() => this.setState({ isCancellingRequest: false })}
               request={request}
-              selectedDelivery={selectedDelivery}
-              deliveryAddress={deliveryAddressDetail}
-              pickupServicePoint={getPickupServicePointName}
+              stripes={stripes}
             />
-          </Accordion>
-          <NotesSmartAccordion
-            domainName="requests"
-            entityId={request.id}
-            entityName={request.instance.title}
-            entityType="request"
-            referredRecordData={referredRecordData}
-            id="staff-notes"
-            label={<FormattedMessage id="ui-requests.notes.staffNotes" />}
-            pathToNoteCreate="/requests/notes/new"
-            pathToNoteDetails="/requests/notes"
-          />
-        </AccordionSet>
-
-        <this.connectedCancelRequestDialog
-          open={isCancellingRequest}
-          onCancelRequest={this.cancelRequest}
-          onClose={() => this.setState({ isCancellingRequest: false })}
-          request={request}
-          stripes={stripes}
-        />
-
-        {moveRequest &&
-          <MoveRequestManager
-            onMove={this.onMove}
-            onCancelMove={this.closeMoveRequest}
-            request={request}
-          /> }
-      </Pane>
+            {moveRequest &&
+              <MoveRequestManager
+                onMove={this.onMove}
+                onCancelMove={this.closeMoveRequest}
+                request={request}
+              /> }
+            <Callout ref={this.callout} />
+          </Pane>
+        </ViewRequestShortcutsWrapper>
+      </>
     );
   }
 

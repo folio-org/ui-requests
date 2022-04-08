@@ -143,6 +143,7 @@
   "scripts": {
     "start": "stripes serve",
     "lint": "eslint .",
+    "lintfix": "eslint . --fix",
     "test": "yarn run test:jest && yarn run test:bigtest ",
     "test:bigtest": "stripes test karma",
     "test:jest": "jest --ci --coverage --colors",

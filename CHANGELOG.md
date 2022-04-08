@@ -12,6 +12,7 @@
 * Fix defect with first name of success toast to Requests. Refs UIREQ-753.
 * Ensure Request details # (# requests) shows correct data. Refs UIREQ-757.
 * Notes Accordion is Not Closed After Deleting a Note. Refs UIREQ-759.
+* Implement baseline shortcut keys. Refs UIREQ-588.
 
 ## [7.0.2](https://github.com/folio-org/ui-requests/tree/v7.0.2) (2022-04-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.0.1...v7.0.2)

@@ -9,6 +9,8 @@ import '../test/jest/__mock__';
 
 import {
   Pane,
+  CommandList,
+  defaultKeyboardShortcuts
 } from '@folio/stripes/components';
 
 import ViewRequest from './ViewRequest';
@@ -107,7 +109,9 @@ describe('ViewRequest', () => {
 
   beforeEach(() => {
     render(
-      <ViewRequest {...defaultProps} />
+      <CommandList commands={defaultKeyboardShortcuts}>
+        <ViewRequest {...defaultProps} />
+      </CommandList>
     );
   });
 
