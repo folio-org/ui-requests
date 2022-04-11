@@ -4,17 +4,16 @@ import PropTypes from 'prop-types';
 import {
   checkScope,
   HasCommand,
-  expandAllSections,
-  collapseAllSections,
 } from '@folio/stripes/components';
 import { handleKeyCommand } from '../../utils';
 
-const RequestShortcutsWrapper = ({
+const ViewRequestShortcutsWrapper = ({
   children,
   onEdit,
   onDuplicate,
   stripes,
-  accordionStatusRef,
+  expandAllAccordions,
+  collapseAllAccordions,
   isEditingDisabled,
   isDuplicatingDisabled,
 }) => {
@@ -33,11 +32,11 @@ const RequestShortcutsWrapper = ({
     },
     {
       name: 'expandAllSections',
-      handler: (e) => expandAllSections(e, accordionStatusRef),
+      handler: expandAllAccordions,
     },
     {
       name: 'collapseAllSections',
-      handler: (e) => collapseAllSections(e, accordionStatusRef),
+      handler: collapseAllAccordions,
     },
   ];
 
@@ -52,7 +51,7 @@ const RequestShortcutsWrapper = ({
   );
 };
 
-RequestShortcutsWrapper.propTypes = {
+ViewRequestShortcutsWrapper.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
@@ -60,10 +59,8 @@ RequestShortcutsWrapper.propTypes = {
   ]).isRequired,
   onEdit: PropTypes.func.isRequired,
   onDuplicate: PropTypes.func.isRequired,
-  accordionStatusRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) })
-  ]),
+  expandAllAccordions: PropTypes.func.isRequired,
+  collapseAllAccordions: PropTypes.func.isRequired,
   isEditingDisabled: PropTypes.bool.isRequired,
   isDuplicatingDisabled: PropTypes.bool.isRequired,
   stripes: PropTypes.shape({
@@ -71,4 +68,4 @@ RequestShortcutsWrapper.propTypes = {
   }).isRequired,
 };
 
-export default RequestShortcutsWrapper;
+export default ViewRequestShortcutsWrapper;
