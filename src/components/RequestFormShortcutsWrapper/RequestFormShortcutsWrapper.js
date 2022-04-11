@@ -9,7 +9,7 @@ import {
 } from '@folio/stripes/components';
 import { handleKeyCommand } from '../../utils';
 
-const RequestShortcutsWrapper = ({
+const RequestFormShortcutsWrapper = ({
   children,
   onSubmit,
   onCancel,
@@ -47,7 +47,7 @@ const RequestShortcutsWrapper = ({
   );
 };
 
-RequestShortcutsWrapper.propTypes = {
+RequestFormShortcutsWrapper.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
@@ -62,4 +62,4 @@ RequestShortcutsWrapper.propTypes = {
   isSubmittingDisabled: PropTypes.bool.isRequired,
 };
 
-export default RequestShortcutsWrapper;
+export default RequestFormShortcutsWrapper;

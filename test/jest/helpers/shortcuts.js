@@ -1,6 +1,6 @@
 import { fireEvent } from '@testing-library/react';
 
-export const openEditShortcut = element => {
+export const editRecordShortcut = element => {
   fireEvent.keyDown(element, {
     key: 'Ctrl',
     code: 'CtrlLeft',
@@ -156,4 +156,5 @@ export const expandSectionsShortcut = element => {
     ctrlKey: true,
   });
 };
+
 

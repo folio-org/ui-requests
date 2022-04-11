@@ -8,16 +8,10 @@ import {
   defaultKeyboardShortcuts,
 } from '@folio/stripes-components';
 import ViewRequestShortcutsWrapper from './ViewRequestShortcutsWrapper';
-import { duplicateRecordShortcut, collapseSectionsShortcut, expandSectionsShortcut, openEditShortcut } from '../../../test/jest/helpers/shortcuts';
+import { duplicateRecordShortcut, collapseSectionsShortcut, expandSectionsShortcut, editRecordShortcut } from '../../../test/jest/helpers/shortcuts';
 
 const mockOnEdit = jest.fn();
 const mockOnDuplicate = jest.fn();
-const mockAccordionStatusRef = () => ({
-  current: {
-    state: {},
-    setStatus: jest.fn(),
-  },
-});
 
 const mockStripes = {
   hasPerm: jest.fn(() => true),
@@ -68,7 +62,7 @@ describe('ViewRequestShortcutsWrapper component', () => {
   describe('when isEditingDisabled is true', () => {
     it('Save shortcut should not work', () => {
       renderViewRequestShortcuts({ isDuplicatingDisabled: false, isEditingDisabled: true });
-      openEditShortcut(document.body);
+      editRecordShortcut(document.body);
       expect(mockOnEdit).not.toHaveBeenCalled();
     });
   });
@@ -76,7 +70,7 @@ describe('ViewRequestShortcutsWrapper component', () => {
   describe('when isEditingDisabled is false', () => {
     it('Save shortcut should work', () => {
       renderViewRequestShortcuts(notDisbaled);
-      openEditShortcut(document.body);
+      editRecordShortcut(document.body);
       expect(mockOnEdit).toHaveBeenCalled();
     });
   });
@@ -108,6 +102,24 @@ describe('ViewRequestShortcutsWrapper component', () => {
       renderViewRequestShortcuts(notDisbaled);
       expandSectionsShortcut(document.body);
       expect(mockExpandAllAccordions).toHaveBeenCalled();
+    });
+  });
+
+  describe('when user has no permission for editing', () => {
+    it('should not call onEdit function', () => {
+      mockStripes.hasPerm.mockReturnValue(false);
+      renderViewRequestShortcuts(notDisbaled);
+      editRecordShortcut(document.body);
+      expect(mockOnEdit).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('when user has no permission for duplicating', () => {
+    it('should not call onDuplicate function', () => {
+      mockStripes.hasPerm.mockReturnValue(false);
+      renderViewRequestShortcuts(notDisbaled);
+      duplicateRecordShortcut(document.body);
+      expect(mockOnDuplicate).not.toHaveBeenCalled();
     });
   });
 });

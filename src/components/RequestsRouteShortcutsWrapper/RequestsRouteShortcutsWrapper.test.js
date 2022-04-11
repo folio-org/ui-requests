@@ -51,18 +51,31 @@ describe('RequestsRouteShortcutsWrapper component', () => {
 
     expect(getByTestId('childElement')).toBeInTheDocument();
   });
+
   describe('when openNewRecord shortcut is pressed', () => {
-    it('should call history.push', () => {
+    it('history.push & stripes.hasPerm should be called', () => {
       renderRequestsRouteShortcutsWrapper();
       openNewRecordShortcut(document.body);
+      expect(stripes.hasPerm).toHaveBeenCalled();
       expect(history.push).toHaveBeenCalled();
     });
   });
+
   describe('when focusSearchField shortcut is pressed', () => {
-    it('should focuse search field', () => {
+    it('focusSearchField is pressed, search field should be focused', () => {
       const { getByTestId } = renderRequestsRouteShortcutsWrapper();
       focusSearchFieldShortcut(document.body);
       expect(getByTestId('childElement')).toHaveFocus();
+    });
+  });
+
+  describe('when user has not permission to create request', () => {
+    it('openNewRecord shortcut should not work', () => {
+      stripes.hasPerm = jest.fn(() => false);
+      renderRequestsRouteShortcutsWrapper();
+      openNewRecordShortcut(document.body);
+      expect(stripes.hasPerm).toHaveBeenCalled();
+      expect(history.push).not.toHaveBeenCalled();
     });
   });
 });

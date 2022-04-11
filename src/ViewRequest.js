@@ -1,4 +1,9 @@
-import { get, isEqual, cloneDeep, keyBy } from 'lodash';
+import {
+  get,
+  isEqual,
+  cloneDeep,
+  keyBy,
+} from 'lodash';
 import React from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
@@ -11,7 +16,11 @@ import {
 } from 'react-intl';
 import moment from 'moment-timezone';
 
-import { IfPermission, IntlConsumer, TitleManager } from '@folio/stripes/core';
+import {
+  IfPermission,
+  IntlConsumer,
+  TitleManager,
+} from '@folio/stripes/core';
 import {
   Button,
   Accordion,
@@ -32,7 +41,7 @@ import {
   NotesSmartAccordion,
 } from '@folio/stripes/smart-components';
 
-import ViewRequestShortcutsWrapper from './components/ViewRequestShortcutsWrapper/ViewRequestShortcutsWrapper';
+import ViewRequestShortcutsWrapper from './components/ViewRequestShortcutsWrapper';
 import CancelRequestDialog from './CancelRequestDialog';
 import ItemDetail from './ItemDetail';
 import TitleInformation from './components/TitleInformation';
@@ -40,7 +49,10 @@ import UserDetail from './UserDetail';
 import RequestForm from './RequestForm';
 import PositionLink from './PositionLink';
 import MoveRequestManager from './MoveRequestManager';
-import { requestStatuses, REQUEST_LEVEL_TYPES } from './constants';
+import {
+  requestStatuses,
+  REQUEST_LEVEL_TYPES,
+} from './constants';
 import {
   toUserAddress,
   isDelivery,
@@ -117,15 +129,13 @@ class ViewRequest extends React.Component {
   static defaultProps = {
     editLink: '',
     paneWidth: '50%',
-    onEdit: () => {},
+    onEdit: () => { },
   };
 
   constructor(props) {
     super(props);
 
-    const { titleLevelRequestsFeatureEnabled } = getTlrSettings(
-      props.parentResources.configs.records[0]?.value
-    );
+    const { titleLevelRequestsFeatureEnabled } = getTlrSettings(props.parentResources.configs.records[0]?.value);
 
     this.state = {
       request: {},
@@ -140,9 +150,7 @@ class ViewRequest extends React.Component {
       titleLevelRequestsFeatureEnabled,
     };
 
-    const {
-      stripes: { connect },
-    } = props;
+    const { stripes: { connect } } = props;
 
     this.cViewMetaData = connect(ViewMetaData);
     this.connectedCancelRequestDialog = connect(CancelRequestDialog);
@@ -166,19 +174,17 @@ class ViewRequest extends React.Component {
     const prevRQ = prevProps.resources.selectedRequest;
     const currentRQ = this.props.resources.selectedRequest;
     const prevSettings = prevProps.parentResources.configs.records[0]?.value;
-    const currentSettings =
-      this.props.parentResources.configs.records[0]?.value;
+    const currentSettings = this.props.parentResources.configs.records[0]?.value;
 
     // Only update if actually needed (otherwise, this gets called way too often)
     if (prevRQ && currentRQ && currentRQ.hasLoaded) {
-      if (!isEqual(prevRQ.records[0], currentRQ.records[0])) {
+      if ((!isEqual(prevRQ.records[0], currentRQ.records[0]))) {
         this.loadFullRequest(currentRQ.records[0]);
       }
     }
 
     if (prevSettings !== currentSettings) {
-      const { titleLevelRequestsFeatureEnabled } =
-        getTlrSettings(currentSettings);
+      const { titleLevelRequestsFeatureEnabled } = getTlrSettings(currentSettings);
 
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ titleLevelRequestsFeatureEnabled });
@@ -190,7 +196,7 @@ class ViewRequest extends React.Component {
   }
 
   loadFullRequest(basicRequest) {
-    return this.props.joinRequest(basicRequest).then((request) => {
+    return this.props.joinRequest(basicRequest).then(request => {
       if (this._isMounted) {
         this.setState({ request });
       }
@@ -215,32 +221,31 @@ class ViewRequest extends React.Component {
     delete updatedRecord.numberOfReorderableRequests;
     delete updatedRecord.holdShelfExpirationTime;
 
-    this.props.mutator.selectedRequest
-      .PUT(updatedRecord)
-      .then(() => {
-        this.props.onCloseEdit();
-        this.callout.current.sendCallout({
-          message: (
-            <FormattedMessage
-              id="ui-requests.editRequest.success"
-              values={{
-                requester: generateUserName(record.requester.personal),
-              }}
-            />
-          ),
-        });
-      })
-      .catch(() => {
-        this.callout.current.sendCallout({
-          message: <FormattedMessage id="ui-requests.editRequest.fail" />,
-          type: 'error',
-        });
+    this.props.mutator.selectedRequest.PUT(updatedRecord).then(() => {
+      this.props.onCloseEdit();
+      this.callout.current.sendCallout({
+        message: (
+          <FormattedMessage
+            id="ui-requests.editRequest.success"
+            values={{ requester: generateUserName(record.requester.personal) }}
+          />
+        ),
       });
+    }).catch(() => {
+      this.callout.current.sendCallout({
+        message: <FormattedMessage id="ui-requests.editRequest.fail" />,
+        type: 'error',
+      });
+    });
   }
 
   cancelRequest(cancellationInfo) {
-    const { resources, mutator, onCloseEdit, buildRecordsForHoldsShelfReport } =
-      this.props;
+    const {
+      resources,
+      mutator,
+      onCloseEdit,
+      buildRecordsForHoldsShelfReport,
+    } = this.props;
 
     // Get the initial request data, mix in the cancellation info, PUT,
     // and then close cancel/edit modes since cancelled requests can't be edited.
@@ -263,24 +268,20 @@ class ViewRequest extends React.Component {
       location: { search },
     } = this.props;
     const { titleLevelRequestsFeatureEnabled } = this.state;
-    const id = titleLevelRequestsFeatureEnabled
-      ? request.instanceId
-      : request.itemId;
+    const id = titleLevelRequestsFeatureEnabled ? request.instanceId : request.itemId;
 
     this.loadFullRequest(request);
 
-    history.push(`${urls.requestQueueView(request.id, id)}${search}`, {
-      afterMove: true,
-    });
-  };
+    history.push(`${urls.requestQueueView(request.id, id)}${search}`, { afterMove: true });
+  }
 
   closeMoveRequest = () => {
     this.setState({ moveRequest: false });
-  };
+  }
 
   openMoveRequest = () => {
     this.setState({ moveRequest: true });
-  };
+  }
 
   onReorderRequest = (request) => {
     const {
@@ -288,15 +289,10 @@ class ViewRequest extends React.Component {
       history,
     } = this.props;
     const { titleLevelRequestsFeatureEnabled } = this.state;
-    const idForHistory = titleLevelRequestsFeatureEnabled
-      ? request.instanceId
-      : request.itemId;
+    const idForHistory = titleLevelRequestsFeatureEnabled ? request.instanceId : request.itemId;
 
-    history.push(
-      `${urls.requestQueueView(request.id, idForHistory)}${search}`,
-      { request }
-    );
-  };
+    history.push(`${urls.requestQueueView(request.id, idForHistory)}${search}`, { request });
+  }
 
   onToggleSection({ id }) {
     this.setState((curState) => {
@@ -315,31 +311,20 @@ class ViewRequest extends React.Component {
   }
 
   getRequest() {
-    const {
-      resources,
-      match: {
-        params: { id },
-      },
-    } = this.props;
+    const { resources, match: { params: { id } } } = this.props;
     const selRequest = (resources.selectedRequest || {}).records || [];
     if (!id || selRequest.length === 0) return null;
-    const curRequest = selRequest.find((r) => r.id === id);
+    const curRequest = selRequest.find(r => r.id === id);
 
     if (!curRequest) return null;
 
-    return curRequest.id === this.state.request.id
-      ? this.state.request
-      : curRequest;
+    return (curRequest.id === this.state.request.id) ? this.state.request : curRequest;
   }
 
   getPickupServicePointName(request) {
     if (!request) return '';
-    const {
-      optionLists: { servicePoints },
-    } = this.props;
-    const servicePoint = servicePoints.find(
-      (sp) => sp.id === request.pickupServicePointId
-    );
+    const { optionLists: { servicePoints } } = this.props;
+    const servicePoint = servicePoints.find(sp => (sp.id === request.pickupServicePointId));
 
     return get(servicePoint, ['name'], '');
   }
@@ -354,7 +339,9 @@ class ViewRequest extends React.Component {
       patronGroups,
       parentMutator,
     } = this.props;
-    const { titleLevelRequestsFeatureEnabled } = this.state;
+    const {
+      titleLevelRequestsFeatureEnabled,
+    } = this.state;
 
     const query = location.search ? queryString.parse(location.search) : {};
 
@@ -363,22 +350,17 @@ class ViewRequest extends React.Component {
       // but it's exposed in the UI as separate date- and time-picker components.
       let momentDate;
       if (request.holdShelfExpirationDate) {
-        momentDate = moment.tz(
-          request.holdShelfExpirationDate,
-          this.props.intl.timeZone
-        );
+        momentDate = moment.tz(request.holdShelfExpirationDate, this.props.intl.timeZone);
       } else {
         momentDate = moment();
       }
 
       return (
         <IntlConsumer>
-          {(intl) => (
+          {intl => (
             <Layer
               isOpen
-              contentLabel={intl.formatMessage({
-                id: 'ui-requests.actions.editRequestLink',
-              })}
+              contentLabel={intl.formatMessage({ id: 'ui-requests.actions.editRequestLink' })}
             >
               <RequestForm
                 stripes={stripes}
@@ -391,9 +373,7 @@ class ViewRequest extends React.Component {
                 }}
                 request={request}
                 metadataDisplay={this.cViewMetaData}
-                onSubmit={(record) => {
-                  this.update(record);
-                }}
+                onSubmit={(record) => { this.update(record); }}
                 onCancel={onCloseEdit}
                 onCancelRequest={this.cancelRequest}
                 optionLists={optionLists}
@@ -404,7 +384,7 @@ class ViewRequest extends React.Component {
                 isTlrEnabledOnEditPage={titleLevelRequestsFeatureEnabled}
               />
             </Layer>
-          )}
+          ) }
         </IntlConsumer>
       );
     }
@@ -413,15 +393,19 @@ class ViewRequest extends React.Component {
   }
 
   renderDetailMenu(request) {
-    const { tagsEnabled, tagsToggle } = this.props;
+    const {
+      tagsEnabled,
+      tagsToggle,
+    } = this.props;
 
     const tags = ((request && request.tags) || {}).tagList || [];
 
     return (
       <PaneMenu>
-        {tagsEnabled && (
+        {
+          tagsEnabled &&
           <FormattedMessage id="ui-requests.showTags">
-            {(ariaLabel) => (
+            {ariaLabel => (
               <PaneHeaderIconButton
                 icon="tag"
                 id="clickable-show-tags"
@@ -431,7 +415,7 @@ class ViewRequest extends React.Component {
               />
             )}
           </FormattedMessage>
-        )}
+        }
       </PaneMenu>
     );
   }
@@ -448,7 +432,10 @@ class ViewRequest extends React.Component {
       moveRequest,
       titleLevelRequestsFeatureEnabled,
     } = this.state;
-    const { requestLevel, item } = request;
+    const {
+      requestLevel,
+      item,
+    } = request;
 
     const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');
@@ -467,46 +454,27 @@ class ViewRequest extends React.Component {
       if (deliveryAddressType) {
         const addresses = get(request, 'requester.personal.addresses', []);
         const deliveryLocations = keyBy(addresses, 'addressTypeId');
-        deliveryAddressDetail = toUserAddress(
-          deliveryLocations[deliveryAddressType]
-        );
+        deliveryAddressDetail = toUserAddress(deliveryLocations[deliveryAddressType]);
       }
     }
 
-    const holdShelfExpireDate =
-      get(request, 'holdShelfExpirationDate', '') &&
-      [
-        requestStatuses.AWAITING_PICKUP,
-        requestStatuses.PICKUP_EXPIRED,
-      ].includes(get(request, ['status'], '')) ? (
-        <FormattedTime
-          value={request.holdShelfExpirationDate}
-          day="numeric"
-          month="numeric"
-          year="numeric"
-        />
-        ) : (
-          '-'
-        );
+    const holdShelfExpireDate = get(request, 'holdShelfExpirationDate', '') &&
+      [requestStatuses.AWAITING_PICKUP, requestStatuses.PICKUP_EXPIRED].includes(get(request, ['status'], ''))
+      ? <FormattedTime value={request.holdShelfExpirationDate} day="numeric" month="numeric" year="numeric" />
+      : '-';
 
-    const expirationDate = get(request, 'requestExpirationDate', '') ? (
-      <FormattedDate value={request.requestExpirationDate} />
-    ) : (
-      '-'
-    );
+    const expirationDate = (get(request, 'requestExpirationDate', ''))
+      ? <FormattedDate value={request.requestExpirationDate} />
+      : '-';
 
-    const showActionMenu =
-      stripes.hasPerm('ui-requests.create') ||
-      stripes.hasPerm('ui-requests.edit') ||
-      stripes.hasPerm('ui-requests.moveRequest') ||
-      stripes.hasPerm('ui-requests.reorderQueue');
+    const showActionMenu = stripes.hasPerm('ui-requests.create')
+      || stripes.hasPerm('ui-requests.edit')
+      || stripes.hasPerm('ui-requests.moveRequest')
+      || stripes.hasPerm('ui-requests.reorderQueue');
 
     const actionMenu = ({ onToggle }) => {
       if (isRequestClosed) {
-        if (
-          request.requestLevel === REQUEST_LEVEL_TYPES.TITLE &&
-          !this.state.titleLevelRequestsFeatureEnabled
-        ) {
+        if (request.requestLevel === REQUEST_LEVEL_TYPES.TITLE && !this.state.titleLevelRequestsFeatureEnabled) {
           return null;
         }
 
@@ -571,7 +539,7 @@ class ViewRequest extends React.Component {
               </Icon>
             </Button>
           </IfPermission>
-          {requestLevel === REQUEST_LEVEL_TYPES.ITEM && isRequestNotFilled && (
+          {requestLevel === REQUEST_LEVEL_TYPES.ITEM && isRequestNotFilled &&
             <IfPermission perm="ui-requests.moveRequest">
               <Button
                 id="move-request"
@@ -585,9 +553,8 @@ class ViewRequest extends React.Component {
                   <FormattedMessage id="ui-requests.actions.moveRequest" />
                 </Icon>
               </Button>
-            </IfPermission>
-          )}
-          {isRequestOpen && (
+            </IfPermission> }
+          {isRequestOpen &&
             <IfPermission perm="ui-requests.reorderQueue">
               <Button
                 id="reorder-queue"
@@ -601,8 +568,7 @@ class ViewRequest extends React.Component {
                   <FormattedMessage id="ui-requests.actions.reorderQueue" />
                 </Icon>
               </Button>
-            </IfPermission>
-          )}
+            </IfPermission> }
         </>
       );
     };
@@ -619,21 +585,19 @@ class ViewRequest extends React.Component {
     };
 
     const isDuplicatingDisabled =
-      isRequestClosed &&
-      request.requestLevel === REQUEST_LEVEL_TYPES.TITLE &&
-      !this.state.titleLevelRequestsFeatureEnabled;
+    isRequestClosed &&
+    request.requestLevel === REQUEST_LEVEL_TYPES.TITLE &&
+    !this.state.titleLevelRequestsFeatureEnabled;
 
     return (
       <Pane
         id="instance-details"
         data-test-instance-details
         defaultWidth={this.props.paneWidth}
-        paneTitle={
-          <FormattedMessage id="ui-requests.requestMeta.detailLabel" />
-        }
+        paneTitle={<FormattedMessage id="ui-requests.requestMeta.detailLabel" />}
         lastMenu={this.renderDetailMenu(request)}
         dismissible
-        {...(showActionMenu ? { actionMenu } : {})}
+        {... (showActionMenu ? { actionMenu } : {})}
         onClose={this.props.onClose}
       >
         <ViewRequestShortcutsWrapper
@@ -646,13 +610,14 @@ class ViewRequest extends React.Component {
           stripes={stripes}
         >
           <TitleManager record={get(request, ['instance', 'title'])} />
-          <AccordionSet
-            accordionStatus={accordions}
-            onToggle={this.onToggleSection}
-          >
+          <AccordionSet accordionStatus={accordions} onToggle={this.onToggleSection}>
             <Accordion
               id="title-info"
-              label={<FormattedMessage id="ui-requests.title.information" />}
+              label={
+                <FormattedMessage
+                  id="ui-requests.title.information"
+                />
+            }
             >
               <TitleInformation
                 instanceId={request.instanceId}
@@ -667,30 +632,35 @@ class ViewRequest extends React.Component {
             </Accordion>
             <Accordion
               id="item-info"
-              label={<FormattedMessage id="ui-requests.item.information" />}
-            >
-              {item ? (
-                <ItemDetail
-                  request={request}
-                  item={request.item}
-                  loan={request.loan}
-                  requestCount={request.requestCount}
+              label={
+                <FormattedMessage
+                  id="ui-requests.item.information"
                 />
-              ) : (
-                <FormattedMessage id="ui-requests.item.noInformation" />
-              )}
+            }
+            >
+              { item
+                ? (
+                  <ItemDetail
+                    request={request}
+                    item={request.item}
+                    loan={request.loan}
+                    requestCount={request.requestCount}
+                  />
+                )
+                : (
+                  <FormattedMessage
+                    id="ui-requests.item.noInformation"
+                  />
+                )
+            }
             </Accordion>
             <Accordion
               id="request-info"
-              label={
-                <FormattedMessage id="ui-requests.requestMeta.information" />
-              }
+              label={<FormattedMessage id="ui-requests.requestMeta.information" />}
             >
               <Row>
                 <Col xs={12}>
-                  {request.metadata && (
-                    <this.cViewMetaData metadata={request.metadata} />
-                  )}
+                  {request.metadata && <this.cViewMetaData metadata={request.metadata} />}
                 </Col>
               </Row>
               <Row>
@@ -708,17 +678,13 @@ class ViewRequest extends React.Component {
                 </Col>
                 <Col xs={3}>
                   <KeyValue
-                    label={
-                      <FormattedMessage id="ui-requests.requestExpirationDate" />
-                    }
+                    label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
                     value={expirationDate}
                   />
                 </Col>
                 <Col xs={3}>
                   <KeyValue
-                    label={
-                      <FormattedMessage id="ui-requests.holdShelfExpirationDate" />
-                    }
+                    label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
                     value={holdShelfExpireDate}
                   />
                 </Col>
@@ -732,44 +698,34 @@ class ViewRequest extends React.Component {
                         request={request}
                         isTlrEnabled={titleLevelRequestsFeatureEnabled}
                       />
-                    }
+                  }
                   />
                 </Col>
                 <Col xs={3}>
                   <KeyValue
                     label={<FormattedMessage id="ui-requests.requestLevel" />}
-                    value={
-                      <FormattedMessage
-                        id={`ui-requests.${requestLevel.toLowerCase()}Level`}
-                      />
-                    }
+                    value={<FormattedMessage id={`ui-requests.${requestLevel.toLowerCase()}Level`} />}
                   />
                 </Col>
-                {request.cancellationReasonId && (
-                  <Col xs={3}>
-                    <KeyValue
-                      label={
-                        <FormattedMessage id="ui-requests.cancellationReason" />
-                      }
-                      value={get(
-                        cancellationReasonMap[request.cancellationReasonId],
-                        'name',
-                        '-'
-                      )}
-                    />
-                  </Col>
-                )}
-                {request.cancellationAdditionalInformation && (
-                  <Col xs={6}>
-                    <KeyValue
-                      label={
-                        <FormattedMessage id="ui-requests.cancellationAdditionalInformation" />
-                      }
-                      value={request.cancellationAdditionalInformation}
-                    />
-                  </Col>
-                )}
-                <Col data-test-request-patron-comments xsOffset={3} xs={6}>
+                {request.cancellationReasonId &&
+                <Col xs={3}>
+                  <KeyValue
+                    label={<FormattedMessage id="ui-requests.cancellationReason" />}
+                    value={get(cancellationReasonMap[request.cancellationReasonId], 'name', '-')}
+                  />
+                </Col> }
+                {request.cancellationAdditionalInformation &&
+                <Col xs={6}>
+                  <KeyValue
+                    label={<FormattedMessage id="ui-requests.cancellationAdditionalInformation" />}
+                    value={request.cancellationAdditionalInformation}
+                  />
+                </Col> }
+                <Col
+                  data-test-request-patron-comments
+                  xsOffset={3}
+                  xs={6}
+                >
                   <KeyValue
                     label={<FormattedMessage id="ui-requests.patronComments" />}
                     value={request.patronComments}
@@ -781,9 +737,9 @@ class ViewRequest extends React.Component {
               id="requester-info"
               label={
                 <FormattedMessage id="ui-requests.requester.information">
-                  {(message) => message}
+                  {message => message}
                 </FormattedMessage>
-              }
+            }
             >
               <UserDetail
                 user={request.requester}
@@ -817,13 +773,12 @@ class ViewRequest extends React.Component {
             stripes={stripes}
           />
 
-          {moveRequest && (
-            <MoveRequestManager
-              onMove={this.onMove}
-              onCancelMove={this.closeMoveRequest}
-              request={request}
-            />
-          )}
+          {moveRequest &&
+          <MoveRequestManager
+            onMove={this.onMove}
+            onCancelMove={this.closeMoveRequest}
+            request={request}
+          /> }
         </ViewRequestShortcutsWrapper>
       </Pane>
     );
@@ -834,9 +789,7 @@ class ViewRequest extends React.Component {
       <Pane
         id="request-details"
         defaultWidth={this.props.paneWidth}
-        paneTitle={
-          <FormattedMessage id="ui-requests.requestMeta.detailLabel" />
-        }
+        paneTitle={<FormattedMessage id="ui-requests.requestMeta.detailLabel" />}
         lastMenu={this.renderDetailMenu()}
         dismissible
         onClose={this.props.onClose}
@@ -864,4 +817,6 @@ class ViewRequest extends React.Component {
   }
 }
 
-export default compose(withTags)(injectIntl(ViewRequest));
+export default compose(
+  withTags,
+)(injectIntl(ViewRequest));

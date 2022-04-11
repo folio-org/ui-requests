@@ -7,7 +7,7 @@ import {
 } from '@folio/stripes/components';
 import { handleKeyCommand } from '../../utils';
 
-const RequestShortcutsWrapper = ({
+const RequestsRouteShortcutsWrapper = ({
   children,
   history,
   location,
@@ -47,7 +47,7 @@ const RequestShortcutsWrapper = ({
   );
 };
 
-RequestShortcutsWrapper.propTypes = {
+RequestsRouteShortcutsWrapper.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
@@ -66,4 +66,4 @@ RequestShortcutsWrapper.propTypes = {
   }).isRequired,
 };
 
-export default RequestShortcutsWrapper;
+export default RequestsRouteShortcutsWrapper;
