@@ -23,10 +23,8 @@ const mockStripes = {
   hasPerm: jest.fn(() => true),
 };
 
-mockAccordionStatusRef.current = {
-  state: {},
-  setStatus: jest.fn(),
-};
+const mockExpandAllAccordions = jest.fn();
+const mockCollapseAllAccordions = jest.fn();
 
 const renderViewRequestShortcuts = ({ isDuplicatingDisabled, isEditingDisabled }) => {
   const childElement = <input data-testid="childElement" id="input-request-search" />;
@@ -36,7 +34,8 @@ const renderViewRequestShortcuts = ({ isDuplicatingDisabled, isEditingDisabled }
       <ViewRequestShortcutsWrapper
         onEdit={mockOnEdit}
         onDuplicate={mockOnDuplicate}
-        accordionStatusRef={mockAccordionStatusRef}
+        expandAllAccordions={mockExpandAllAccordions}
+        collapseAllAccordions={mockCollapseAllAccordions}
         isDuplicatingDisabled={isDuplicatingDisabled}
         isEditingDisabled={isEditingDisabled}
         stripes={mockStripes}
@@ -56,7 +55,8 @@ describe('ViewRequestShortcutsWrapper component', () => {
     mockOnEdit.mockClear();
     mockOnDuplicate.mockClear();
     mockStripes.hasPerm.mockClear();
-    mockAccordionStatusRef.current.setStatus.mockClear();
+    mockExpandAllAccordions.mockClear();
+    mockCollapseAllAccordions.mockClear();
   });
 
   it('should render children correctly', () => {
@@ -97,17 +97,17 @@ describe('ViewRequestShortcutsWrapper component', () => {
     });
   });
 
-  describe('when accordionStatusRef is defined', () => {
+  describe('when shortcut for accordions pressed ', () => {
     it('collapseSectionsShortcut should be executed', () => {
       renderViewRequestShortcuts(notDisbaled);
       collapseSectionsShortcut(document.body);
-      expect(mockAccordionStatusRef.current.setStatus).toHaveBeenCalled();
+      expect(mockCollapseAllAccordions).toHaveBeenCalled();
     });
 
     it('expandSectionsShortcut should be executed', () => {
       renderViewRequestShortcuts(notDisbaled);
       expandSectionsShortcut(document.body);
-      expect(mockAccordionStatusRef.current.setStatus).toHaveBeenCalled();
+      expect(mockExpandAllAccordions).toHaveBeenCalled();
     });
   });
 });
