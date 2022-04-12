@@ -584,10 +584,7 @@ class ViewRequest extends React.Component {
       requestCreateDate: request.metadata.createdDate,
     };
 
-    const isDuplicatingDisabled =
-    isRequestClosed &&
-    request.requestLevel === REQUEST_LEVEL_TYPES.TITLE &&
-    !this.state.titleLevelRequestsFeatureEnabled;
+    const isDuplicatingDisabled = isRequestClosed && (request.requestLevel === REQUEST_LEVEL_TYPES.TITLE) && !this.state.titleLevelRequestsFeatureEnabled;
 
     return (
       <Pane
