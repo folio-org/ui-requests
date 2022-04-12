@@ -343,8 +343,13 @@ describe('handlekeycommand', () => {
     expect(handler).not.toHaveBeenCalled();
     expect(event.preventDefault).toHaveBeenCalled();
   });
-});
 
+  it('should not call preventDefault when event is not passed', () => {
+    handleKeyCommand(handler)();
+    expect(handler).toHaveBeenCalled();
+    expect(event.preventDefault).not.toHaveBeenCalled();
+  });
+});
 
 
 // see ui-checkin/src/util.test.js for a template

@@ -19,31 +19,32 @@ const locationProp = {
   pathname: '',
 };
 const stripes = buildStripes();
+const mockButtonClick = jest.fn();
 
 stripes.hasPerm = jest.fn(() => true);
 
-const renderRequestsRouteShortcutsWrapper = () => {
-  const childElement = <input data-testid="childElement" id="input-request-search" />;
-
-  const component = () => (
-    <CommandList commands={defaultKeyboardShortcuts}>
-      <RequestsRouteShortcutsWrapper
-        history={history}
-        location={locationProp}
-        stripes={stripes}
-      >
-        <span>{childElement}</span>
-      </RequestsRouteShortcutsWrapper>
-    </CommandList>
-  );
-
-  return render(component());
-};
-
 describe('RequestsRouteShortcutsWrapper component', () => {
+  let childElement = <input data-testid="childElement" id="input-request-search" />;
+  const renderRequestsRouteShortcutsWrapper = () => {
+    const component = () => (
+      <CommandList commands={defaultKeyboardShortcuts}>
+        <RequestsRouteShortcutsWrapper
+          history={history}
+          location={locationProp}
+          stripes={stripes}
+        >
+          <span>{childElement}</span>
+        </RequestsRouteShortcutsWrapper>
+      </CommandList>
+    );
+
+    return render(component());
+  };
+
   afterEach(() => {
     history.push.mockClear();
     stripes.hasPerm.mockClear();
+    mockButtonClick.mockClear();
   });
 
   it('should render children correctly', () => {
@@ -69,6 +70,16 @@ describe('RequestsRouteShortcutsWrapper component', () => {
     });
   });
 
+  describe('when input is not visible on the screen', () => {
+    it('should click no result message button', () => {
+      childElement = <button onClick={mockButtonClick} type="button" className="noResultsMessageButton---itbez">Click me</button>;
+      renderRequestsRouteShortcutsWrapper();
+
+      focusSearchFieldShortcut(document.body);
+      expect(mockButtonClick).toHaveBeenCalled();
+    });
+  });
+
   describe('when user has not permission to create request', () => {
     it('openNewRecord shortcut should not work', () => {
       stripes.hasPerm = jest.fn(() => false);
@@ -79,3 +90,4 @@ describe('RequestsRouteShortcutsWrapper component', () => {
     });
   });
 });
+
