@@ -12,13 +12,21 @@ import { duplicateRecordShortcut, collapseSectionsShortcut, expandSectionsShortc
 
 const mockOnEdit = jest.fn();
 const mockOnDuplicate = jest.fn();
+const mockAccordionStatusRef = () => ({
+  current: {
+    state: {},
+    setStatus: jest.fn(),
+  },
+});
 
 const mockStripes = {
   hasPerm: jest.fn(() => true),
 };
 
-const mockExpandAllAccordions = jest.fn();
-const mockCollapseAllAccordions = jest.fn();
+mockAccordionStatusRef.current = {
+  state: {},
+  setStatus: jest.fn(),
+};
 
 const renderViewRequestShortcuts = ({ isDuplicatingDisabled, isEditingDisabled }) => {
   const childElement = <input data-testid="childElement" id="input-request-search" />;
@@ -28,8 +36,7 @@ const renderViewRequestShortcuts = ({ isDuplicatingDisabled, isEditingDisabled }
       <ViewRequestShortcutsWrapper
         onEdit={mockOnEdit}
         onDuplicate={mockOnDuplicate}
-        expandAllAccordions={mockExpandAllAccordions}
-        collapseAllAccordions={mockCollapseAllAccordions}
+        accordionStatusRef={mockAccordionStatusRef}
         isDuplicatingDisabled={isDuplicatingDisabled}
         isEditingDisabled={isEditingDisabled}
         stripes={mockStripes}
@@ -49,8 +56,7 @@ describe('ViewRequestShortcutsWrapper component', () => {
     mockOnEdit.mockClear();
     mockOnDuplicate.mockClear();
     mockStripes.hasPerm.mockClear();
-    mockExpandAllAccordions.mockClear();
-    mockCollapseAllAccordions.mockClear();
+    mockAccordionStatusRef.current.setStatus.mockClear();
   });
 
   it('should render children correctly', () => {
@@ -91,17 +97,17 @@ describe('ViewRequestShortcutsWrapper component', () => {
     });
   });
 
-  describe('when shortcut for accordions pressed ', () => {
+  describe('when accordionStatusRef is defined', () => {
     it('collapseSectionsShortcut should be executed', () => {
       renderViewRequestShortcuts(notDisbaled);
       collapseSectionsShortcut(document.body);
-      expect(mockCollapseAllAccordions).toHaveBeenCalled();
+      expect(mockAccordionStatusRef.current.setStatus).toHaveBeenCalled();
     });
 
     it('expandSectionsShortcut should be executed', () => {
       renderViewRequestShortcuts(notDisbaled);
       expandSectionsShortcut(document.body);
-      expect(mockExpandAllAccordions).toHaveBeenCalled();
+      expect(mockAccordionStatusRef.current.setStatus).toHaveBeenCalled();
     });
   });
 

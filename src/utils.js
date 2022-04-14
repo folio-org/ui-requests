@@ -368,13 +368,3 @@ export const handleKeyCommand = (handler, { disabled } = {}) => {
     }
   };
 };
-
-export function toggleAllAccordionTo(value) {
-  this.setState((curState) => {
-    const newState = cloneDeep(curState);
-    Object.keys(newState.accordions).forEach((key) => {
-      newState.accordions[key] = value;
-    });
-    return newState;
-  });
-}

@@ -14,7 +14,6 @@ import {
   getInstanceQueryString,
   generateUserName,
   handleKeyCommand,
-  toggleAllAccordionTo,
 } from './utils';
 
 import {
@@ -283,41 +282,6 @@ describe('generateUserName', () => {
 
     expect(generateUserName({ firstName, lastName, middleName }))
       .toEqual(lastName);
-  });
-});
-
-describe('toggleAccordionsTo', () => {
-  const component = {
-    state: {
-      accordions: {
-        'accordion-1': false,
-        'accordion-2': false,
-        'accordion-3': false,
-      }
-    },
-
-    setState(callback) {
-      const updatedState = callback(this.state);
-      component.state = { ...component.state, ...updatedState };
-    },
-  };
-
-  it('Should toggle accordions to true', () => {
-    toggleAllAccordionTo.call(component, true);
-    expect(component.state.accordions).toEqual({
-      'accordion-1': true,
-      'accordion-2': true,
-      'accordion-3': true,
-    });
-  });
-
-  it('Should toggle accordions to false', () => {
-    toggleAllAccordionTo.call(component, false);
-    expect(component.state.accordions).toEqual({
-      'accordion-1': false,
-      'accordion-2': false,
-      'accordion-3': false,
-    });
   });
 });
 

@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import {
   checkScope,
   HasCommand,
+  expandAllSections,
+  collapseAllSections,
 } from '@folio/stripes/components';
 import { handleKeyCommand } from '../../utils';
 
@@ -12,8 +14,7 @@ const ViewRequestShortcutsWrapper = ({
   onEdit,
   onDuplicate,
   stripes,
-  expandAllAccordions,
-  collapseAllAccordions,
+  accordionStatusRef,
   isEditingDisabled,
   isDuplicatingDisabled,
 }) => {
@@ -32,11 +33,11 @@ const ViewRequestShortcutsWrapper = ({
     },
     {
       name: 'expandAllSections',
-      handler: expandAllAccordions,
+      handler: (e) => expandAllSections(e, accordionStatusRef),
     },
     {
       name: 'collapseAllSections',
-      handler: collapseAllAccordions,
+      handler: (e) => collapseAllSections(e, accordionStatusRef),
     },
   ];
 
@@ -59,8 +60,10 @@ ViewRequestShortcutsWrapper.propTypes = {
   ]).isRequired,
   onEdit: PropTypes.func.isRequired,
   onDuplicate: PropTypes.func.isRequired,
-  expandAllAccordions: PropTypes.func.isRequired,
-  collapseAllAccordions: PropTypes.func.isRequired,
+  accordionStatusRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) })
+  ]),
   isEditingDisabled: PropTypes.bool.isRequired,
   isDuplicatingDisabled: PropTypes.bool.isRequired,
   stripes: PropTypes.shape({
