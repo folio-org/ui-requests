@@ -29,13 +29,22 @@ const RequestsRouting = (props) => {
             path={`${path}/view/:requestId/:id/reorder`}
             component={RequestQueueRoute}
           />
-          <Route path={`${path}/notes/new`} component={NoteCreateRoute} />
+          <Route
+            path={`${path}/notes/new`}
+            component={NoteCreateRoute}
+          />
           <Route
             path={`${path}/notes/:noteId/edit`}
             component={NoteEditRoute}
           />
-          <Route path={`${path}/notes/:noteId`} component={NoteViewRoute} />
-          <Route path={path} render={() => <RequestsRoute {...props} />} />
+          <Route
+            path={`${path}/notes/:noteId`}
+            component={NoteViewRoute}
+          />
+          <Route
+            path={path}
+            render={() => <RequestsRoute {...props} />}
+          />
         </Switch>
       </CommandList>
     </>
