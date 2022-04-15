@@ -70,6 +70,7 @@ class ViewRequest extends React.Component {
         const { path } = action.meta;
         return refresh || (path && path.match(/link/));
       },
+      throwErrors: false,
     },
   };
 
@@ -254,6 +255,12 @@ class ViewRequest extends React.Component {
     };
 
     mutator.selectedRequest.PUT(cancelledRequest).then(() => {
+    }).catch(() => {
+      this.callout.current.sendCallout({
+        message: "Stop, hammer time! This request has already been closed. You can't touch this!",
+        type: 'error',
+      });
+    }).finally(() => {
       this.setState({ isCancellingRequest: false });
       onCloseEdit();
       buildRecordsForHoldsShelfReport();
