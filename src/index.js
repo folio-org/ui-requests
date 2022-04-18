@@ -22,32 +22,30 @@ const RequestsRouting = (props) => {
   } = props;
 
   return (
-    <>
-      <CommandList commands={keyboardCommands}>
-        <Switch>
-          <Route
-            path={`${path}/view/:requestId/:id/reorder`}
-            component={RequestQueueRoute}
-          />
-          <Route
-            path={`${path}/notes/new`}
-            component={NoteCreateRoute}
-          />
-          <Route
-            path={`${path}/notes/:noteId/edit`}
-            component={NoteEditRoute}
-          />
-          <Route
-            path={`${path}/notes/:noteId`}
-            component={NoteViewRoute}
-          />
-          <Route
-            path={path}
-            render={() => <RequestsRoute {...props} />}
-          />
-        </Switch>
-      </CommandList>
-    </>
+    <CommandList commands={keyboardCommands}>
+      <Switch>
+        <Route
+          path={`${path}/view/:requestId/:id/reorder`}
+          component={RequestQueueRoute}
+        />
+        <Route
+          path={`${path}/notes/new`}
+          component={NoteCreateRoute}
+        />
+        <Route
+          path={`${path}/notes/:noteId/edit`}
+          component={NoteEditRoute}
+        />
+        <Route
+          path={`${path}/notes/:noteId`}
+          component={NoteViewRoute}
+        />
+        <Route
+          path={path}
+          render={() => <RequestsRoute {...props} />}
+        />
+      </Switch>
+    </CommandList>
   );
 };
 
