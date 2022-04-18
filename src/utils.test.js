@@ -13,6 +13,7 @@ import {
   getInstanceRequestTypeOptions,
   getInstanceQueryString,
   generateUserName,
+  handleKeyCommand,
 } from './utils';
 
 import {
@@ -284,6 +285,35 @@ describe('generateUserName', () => {
   });
 });
 
+describe('handlekeycommand', () => {
+  const event = {
+    preventDefault: jest.fn(),
+  };
+  const handler = jest.fn();
+
+  afterEach(() => {
+    event.preventDefault.mockClear();
+    handler.mockClear();
+  });
+
+  it('should call handler function and preventDefault', () => {
+    handleKeyCommand(handler)(event);
+    expect(handler).toHaveBeenCalled();
+    expect(event.preventDefault).toHaveBeenCalled();
+  });
+
+  it('should not call handler function when disabled is true', () => {
+    handleKeyCommand(handler, { disabled: true })(event);
+    expect(handler).not.toHaveBeenCalled();
+    expect(event.preventDefault).toHaveBeenCalled();
+  });
+
+  it('should not call preventDefault when event is not passed', () => {
+    handleKeyCommand(handler)();
+    expect(handler).toHaveBeenCalled();
+    expect(event.preventDefault).not.toHaveBeenCalled();
+  });
+});
 
 
 // see ui-checkin/src/util.test.js for a template

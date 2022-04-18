@@ -9,11 +9,14 @@ import '../test/jest/__mock__';
 
 import {
   Pane,
+  CommandList,
+  defaultKeyboardShortcuts
 } from '@folio/stripes/components';
 
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
 import { requestStatuses, REQUEST_LEVEL_TYPES } from './constants';
+import { duplicateRecordShortcut, editRecordShortcut } from '../test/jest/helpers/shortcuts';
 
 jest.mock('./RequestForm', () => jest.fn(() => null));
 jest.mock('./MoveRequestManager', () => jest.fn(() => null));
@@ -107,7 +110,9 @@ describe('ViewRequest', () => {
 
   beforeEach(() => {
     render(
-      <ViewRequest {...defaultProps} />
+      <CommandList commands={defaultKeyboardShortcuts}>
+        <ViewRequest {...defaultProps} />
+      </CommandList>
     );
   });
 
@@ -158,6 +163,18 @@ describe('ViewRequest', () => {
       it('should not render `Duplicate` button', () => {
         expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
       });
+    });
+  });
+
+  describe('Keyboard shortcuts', () => {
+    it('should check permission when duplicating', () => {
+      duplicateRecordShortcut(document.body);
+      expect(defaultProps.stripes.hasPerm).toHaveBeenCalled();
+    });
+
+    it('should check permission on edit', () => {
+      editRecordShortcut(document.body);
+      expect(defaultProps.stripes.hasPerm).toHaveBeenCalled();
     });
   });
 });

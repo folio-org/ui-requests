@@ -13,6 +13,8 @@ import { Field } from 'redux-form';
 import {
   Checkbox,
   TextField,
+  CommandList,
+  defaultKeyboardShortcuts
 } from '@folio/stripes/components';
 
 import RequestForm from './RequestForm';
@@ -99,9 +101,11 @@ describe('RequestForm', () => {
     };
 
     render(
-      <RequestForm
-        {...props}
-      />
+      <CommandList commands={defaultKeyboardShortcuts}>
+        <RequestForm
+          {...props}
+        />
+      </CommandList>
     );
   };
 
