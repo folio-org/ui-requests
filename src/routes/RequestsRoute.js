@@ -179,7 +179,7 @@ class RequestsRoute extends React.Component {
               'requestStatus': 'status',
               'requesterBarcode': 'requester.barcode',
               'requestDate': 'requestDate',
-              'position': 'position',
+              'position': 'position/number',
               'proxy': 'proxy',
             },
             RequestsFiltersConfig,
