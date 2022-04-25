@@ -83,6 +83,7 @@ export const itemStatuses = {
   UNAVAILABLE: 'Unavailable',
   UNKNOWN: 'Unknown',
   WITHDRAWN: 'Withdrawn',
+  RESTRICTED: 'Restricted',
 };
 
 export const requestTypesMap = {
@@ -104,15 +105,16 @@ export const requestTypeOptionMap = {
 };
 
 export const requestTypesByItemStatus = {
-  'Checked out': ['Hold', 'Recall'],
-  'Available': ['Page'],
-  'Awaiting pickup': ['Hold', 'Recall'],
-  'Awaiting delivery': ['Hold', 'Recall'],
-  'In transit': ['Hold', 'Recall'],
-  'Missing': ['Hold'],
-  'Paged': ['Hold', 'Recall'],
-  'On order': ['Hold', 'Recall'],
-  'In process': ['Hold', 'Recall'],
+  [itemStatuses.CHECKED_OUT]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
+  [itemStatuses.AVAILABLE]: [requestTypesMap.PAGE],
+  [itemStatuses.AWAITING_PICKUP]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
+  [itemStatuses.AWAITING_DELIVERY]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
+  [itemStatuses.IN_TRANSIT]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
+  [itemStatuses.MISSING]: [requestTypesMap.HOLD],
+  [itemStatuses.PAGED]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
+  [itemStatuses.ON_ORDER]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
+  [itemStatuses.IN_PROCESS]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
+  [itemStatuses.RESTRICTED]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
 };
 
 export const reportHeaders = [
