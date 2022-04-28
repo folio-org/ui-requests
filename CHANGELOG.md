@@ -13,6 +13,7 @@
 * Ensure Request details # (# requests) shows correct data. Refs UIREQ-757.
 * Notes Accordion is Not Closed After Deleting a Note. Refs UIREQ-759.
 * Implement baseline shortcut keys. Refs UIREQ-588.
+* Fix the issue when user can't select request type when item have status 'Restricted'. Refs UIREQ-772.
 * Sort queue-position numerically. Refs UIREQ-750.
 
 ## [7.0.2](https://github.com/folio-org/ui-requests/tree/v7.0.2) (2022-04-04)
