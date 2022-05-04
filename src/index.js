@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { hot } from 'react-hot-loader';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
 import {
@@ -53,4 +52,4 @@ RequestsRouting.propTypes = {
   match: ReactRouterPropTypes.match,
 };
 
-export default hot(module)(RequestsRouting);
+export default RequestsRouting;
