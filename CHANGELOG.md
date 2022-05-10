@@ -11,6 +11,11 @@
 * Add success toast to duplicated Requests. Refs UIREQ-747.
 * Fix defect with first name of success toast to Requests. Refs UIREQ-753.
 * Ensure Request details # (# requests) shows correct data. Refs UIREQ-757.
+* Notes Accordion is Not Closed After Deleting a Note. Refs UIREQ-759.
+* Implement baseline shortcut keys. Refs UIREQ-588.
+* Fix the issue when user can't select request type when item have status 'Restricted'. Refs UIREQ-772.
+* Sort queue-position numerically. Refs UIREQ-750.
+* Remove react-hot-loader. Refs UIREQ-758.
 
 ## [7.0.2](https://github.com/folio-org/ui-requests/tree/v7.0.2) (2022-04-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.0.1...v7.0.2)

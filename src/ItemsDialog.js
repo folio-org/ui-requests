@@ -182,17 +182,17 @@ const ItemsDialog = ({
           {isLoading || areItemsBeingLoaded
             ? <Loading data-testid="loading" />
             : <MultiColumnList
-              id="instance-items-list"
-              interactive
-              ariaLabel={formatMessage({ id: 'ui-requests.items.instanceItems' })}
-              contentData={contentData}
-              visibleColumns={COLUMN_NAMES}
-              columnMapping={COLUMN_MAP}
-              columnWidths={COLUMN_WIDTHS}
-              formatter={formatter}
-              maxHeight={MAX_HEIGHT}
-              isEmptyMessage={formatMessage({ id: 'ui-requests.items.instanceItems.notFound' })}
-              onRowClick={onRowClick}
+                id="instance-items-list"
+                interactive
+                ariaLabel={formatMessage({ id: 'ui-requests.items.instanceItems' })}
+                contentData={contentData}
+                visibleColumns={COLUMN_NAMES}
+                columnMapping={COLUMN_MAP}
+                columnWidths={COLUMN_WIDTHS}
+                formatter={formatter}
+                maxHeight={MAX_HEIGHT}
+                isEmptyMessage={formatMessage({ id: 'ui-requests.items.instanceItems.notFound' })}
+                onRowClick={onRowClick}
             />
           }
         </Pane>
