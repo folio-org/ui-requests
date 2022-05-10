@@ -23,6 +23,8 @@ import {
   filters2cql,
   FormattedTime,
   MenuSection,
+  TextLink,
+  DefaultMCLRowFormatter,
 } from '@folio/stripes/components';
 import {
   deparseFilters,
@@ -383,6 +385,7 @@ class RequestsRoute extends React.Component {
     }).isRequired,
     history: PropTypes.object,
     location: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -414,6 +417,7 @@ class RequestsRoute extends React.Component {
       proxy: formatMessage({ id: 'ui-requests.requests.proxy' }),
     };
 
+    this.getRowURL = this.getRowURL.bind(this);
     this.addRequestFields = this.addRequestFields.bind(this);
     this.processError = this.processError.bind(this);
     this.create = this.create.bind(this);
@@ -431,6 +435,7 @@ class RequestsRoute extends React.Component {
       errorModalData: {},
       servicePointId: '',
       requests: [],
+      selectedId: '',
       titleLevelRequestsFeatureEnabled,
       createTitleLevelRequestsByDefault,
     };
@@ -669,6 +674,29 @@ class RequestsRoute extends React.Component {
         titleRequestCount,
         ...dynamicProperties,
       };
+    });
+  }
+
+  getRowURL(id) {
+    const {
+      match: { path },
+      location: { search },
+    } = this.props;
+
+    return `${path}/view/${id}${search}`;
+  }
+
+  setURL(id) {
+    this.setState({
+      selectedId: id
+    });
+  }
+
+  resultIsSelected = ({ item }) => item.id === this.state.selectedId;
+
+  viewRecordOnCollapse = () => {
+    this.setState({
+      selectedId: null
     });
   }
 
@@ -954,7 +982,7 @@ class RequestsRoute extends React.Component {
       'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : ''),
       'requestStatus': rq => <FormattedMessage id={requestStatusesTranslations[rq.status]} />,
       'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
-      'title': rq => (rq.instance ? rq.instance.title : ''),
+      'title': rq => <TextLink to={this.getRowURL(rq.id)} onClick={() => this.setURL(rq.id)}>{(rq.instance ? rq.instance.title : '')}</TextLink>,
       'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
     };
 
@@ -1077,7 +1105,9 @@ class RequestsRoute extends React.Component {
                 type: { max: 100 },
               }}
               columnMapping={this.columnLabels}
+              resultsRowClickHandlers={false}
               resultsFormatter={resultsFormatter}
+              resultRowFormatter={DefaultMCLRowFormatter}
               newRecordInitialValues={initialValues}
               massageNewRecord={this.massageNewRecord}
               onCreate={this.create}
@@ -1103,9 +1133,11 @@ class RequestsRoute extends React.Component {
                 onDuplicate: this.onDuplicate,
                 buildRecordsForHoldsShelfReport: this.buildRecordsForHoldsShelfReport,
               }}
+              viewRecordOnCollapse={this.viewRecordOnCollapse}
               viewRecordPerms="ui-requests.view"
               newRecordPerms="ui-requests.create"
               renderFilters={this.renderFilters}
+              resultIsSelected={this.resultIsSelected}
               onFilterChange={this.handleFilterChange}
               pageAmount={100}
               pagingType="click"
