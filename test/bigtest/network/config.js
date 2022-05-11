@@ -4,6 +4,8 @@ import CQLParser, { CQLBoolean } from './cql';
 // typical mirage config export
 // http://www.ember-cli-mirage.com/docs/v0.4.x/configuration/
 export default function config() {
+  this.timing = 0;
+
   // okapi endpoints
   this.get('/_/version', () => '0.0.0');
 
