@@ -16,6 +16,7 @@
 * Fix the issue when user can't select request type when item have status 'Restricted'. Refs UIREQ-772.
 * Sort queue-position numerically. Refs UIREQ-750.
 * Remove react-hot-loader. Refs UIREQ-758.
+* Create/Edit Request: required is not read. Refs UIREQ-775.
 
 ## [7.0.2](https://github.com/folio-org/ui-requests/tree/v7.0.2) (2022-04-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.0.1...v7.0.2)

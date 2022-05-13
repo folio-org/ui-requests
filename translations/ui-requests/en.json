@@ -158,8 +158,8 @@
   "cancel.additionalInfoLabel": "Additional information for patron {required}",
   "cancel.additionalInfoPlaceholderRequired": "Enter more information about the cancellation (required)",
   "cancel.additionalInfoPlaceholderOptional": "Enter more information about the cancellation (optional)",
-  
-  "items.selectItem": "Select item", 
+
+  "items.selectItem": "Select item",
   "items.instanceItems": "Other items in {title}",
   "items.instanceItems.notFound": "No items found",
 
@@ -259,5 +259,6 @@
   "titleInformation.contributors": "Contributor",
   "titleInformation.publicationsDate": "Publication date",
   "titleInformation.editions": "Edition",
-  "titleInformation.identifiers": "ISBN(s)"
+  "titleInformation.identifiers": "ISBN(s)",
+  "required": "required"
 }

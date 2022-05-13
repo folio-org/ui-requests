@@ -59,6 +59,7 @@ import ItemDetail from './ItemDetail';
 import PatronBlockModal from './PatronBlockModal';
 import PositionLink from './PositionLink';
 import {
+  Asterisk,
   ErrorModal,
   TitleInformation,
 } from './components';
@@ -1129,7 +1130,7 @@ class RequestForm extends React.Component {
 
     const labelAsterisk = isEditForm
       ? ''
-      : ' *';
+      : <Asterisk />;
 
     const disableRecordCreation = true;
 
@@ -1270,9 +1271,10 @@ class RequestForm extends React.Component {
                     <Accordion
                       id="new-instance-info"
                       label={
-                        <FormattedMessage id="ui-requests.instance.information">
-                          {message => message + labelAsterisk}
-                        </FormattedMessage>
+                        <>
+                          <FormattedMessage id="ui-requests.instance.information" />
+                          {labelAsterisk}
+                        </>
                       }
                     >
                       <div
@@ -1298,6 +1300,7 @@ class RequestForm extends React.Component {
                                           ref={this.instanceValueRef}
                                           onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.INSTANCE)}
                                           validate={this.requireEnterInstance}
+                                          required
                                         />
                                       )}
                                     </FormattedMessage>
@@ -1352,9 +1355,10 @@ class RequestForm extends React.Component {
                     <Accordion
                       id="new-item-info"
                       label={
-                        <FormattedMessage id="ui-requests.item.information">
-                          {message => message + labelAsterisk}
-                        </FormattedMessage>
+                        <>
+                          <FormattedMessage id="ui-requests.item.information" />
+                          {labelAsterisk}
+                        </>
                       }
                     >
                       <div id="section-item-info">
@@ -1376,6 +1380,7 @@ class RequestForm extends React.Component {
                                         ref={this.itemBarcodeRef}
                                         onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.ITEM)}
                                         validate={this.requireEnterItem}
+                                        required
                                       />
                                     )}
                                   </FormattedMessage>
@@ -1565,10 +1570,11 @@ class RequestForm extends React.Component {
                   <Accordion
                     id="new-requester-info"
                     label={
-                      <FormattedMessage id="ui-requests.requester.information">
-                        {message => message + labelAsterisk}
-                      </FormattedMessage>
-                }
+                      <>
+                        <FormattedMessage id="ui-requests.requester.information" />
+                        {labelAsterisk}
+                      </>
+                    }
                   >
                     <div id="section-requester-info">
                       <Row>
@@ -1588,6 +1594,7 @@ class RequestForm extends React.Component {
                                     ref={this.requesterBarcodeRef}
                                     onKeyDown={e => this.onKeyDown(e, 'requester')}
                                     validate={this.requireUser}
+                                    required
                                   />
                                 )}
                               </FormattedMessage>
