@@ -23,7 +23,7 @@ import {
 } from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
 
-import { itemStatuses } from './constants';
+import { itemStatuses, itemStatusesTranslations } from './constants';
 import { Loading } from './components';
 
 import css from './ItemsDialog.css';
@@ -154,7 +154,15 @@ const ItemsDialog = ({
     }
 
     // items with status available must go first
-    return resultItems.sort((a) => (a.status.name === itemStatuses.AVAILABLE ? -1 : 1));
+    return resultItems
+      .sort((a) => (a.status.name === itemStatuses.AVAILABLE ? -1 : 1))
+      .map(item => ({
+        ...item,
+        status: {
+          ...item.status,
+          name: <FormattedMessage id={itemStatusesTranslations[item.status.name]} />
+        }
+      }));
   }, [items, skippedItemId]);
 
   const itemsAmount = contentData.length;

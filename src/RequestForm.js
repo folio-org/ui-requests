@@ -71,6 +71,8 @@ import {
   fulfilmentTypeMap,
   createModes,
   REQUEST_LEVEL_TYPES,
+  requestTypesTranslations,
+  requestStatusesTranslations,
 } from './constants';
 import {
   handleKeyCommand,
@@ -1186,6 +1188,9 @@ class RequestForm extends React.Component {
       else onCancel();
     };
 
+    const requestTypeMessageKey = requestTypesTranslations[request?.requestType];
+    const requestStatusMessageKey = requestStatusesTranslations[request?.status];
+
     return (
       <Paneset isRoot>
         <RequestFormShortcutsWrapper
@@ -1466,7 +1471,7 @@ class RequestForm extends React.Component {
                             {isEditForm &&
                             <KeyValue
                               label={<FormattedMessage id="ui-requests.requestType" />}
-                              value={request.requestType}
+                              value={<FormattedMessage id={requestTypeMessageKey} />}
                             /> }
                             {requestTypeError &&
                             <KeyValue
@@ -1478,7 +1483,7 @@ class RequestForm extends React.Component {
                             {isEditForm &&
                             <KeyValue
                               label={<FormattedMessage id="ui-requests.status" />}
-                              value={request.status}
+                              value={<FormattedMessage id={requestStatusMessageKey} />}
                             /> }
                           </Col>
                           <Col xs={2}>

@@ -63,6 +63,35 @@ export const requestStatusesTranslations = {
   'Open - Not yet filled': 'ui-requests.filters.requestStatus.notYetFilled',
 };
 
+// map from API's enum-value to translation key
+export const itemStatusesTranslations = {
+  'Aged to lost': 'ui-requests.item.status.agedToLost',
+  'Available': 'ui-requests.item.status.available',
+  'Awaiting delivery': 'ui-requests.item.status.awaitingDelivery',
+  'Awaiting pickup': 'ui-requests.item.status.awaitingPickup',
+  'Checked out': 'ui-requests.item.status.checkedOut',
+  'Claimed returned': 'ui-requests.item.status.claimedReturned',
+  'Declared lost': 'ui-requests.item.status.declaredLost',
+  'In process': 'ui-requests.item.status.inProcess',
+  'In process (not requestable)': 'ui-requests.item.status.inProcessNotRequestable',
+  'In transit': 'ui-requests.item.status.inTransit',
+  'Intellectual item': 'ui-requests.item.status.intellectualItem',
+  'Long missing': 'ui-requests.item.status.longMissing',
+  'Lost and paid': 'ui-requests.item.status.lostAndPaid',
+  'Missing': 'ui-requests.item.status.missing',
+  'On order': 'ui-requests.item.status.onOrder',
+  'Paged': 'ui-requests.item.status.paged',
+  'Unavailable': 'ui-requests.item.status.unavailable',
+  'Unknown': 'ui-requests.item.status.unknown',
+  'Withdrawn': 'ui-requests.item.status.withdrawn',
+  'Recently returned': 'ui-requests.item.status.recentlyReturned',
+  'Available in ASR': 'ui-requests.item.status.availableInASR',
+  'Retrieving from ASR': 'ui-requests.item.status.retrievingFromASR',
+  'Missing from ASR': 'ui-requests.item.status.missingFromASR',
+  'Order closed': 'ui-requests.item.status.orderClosed',
+  'Restricted': 'ui-requests.item.status.restricted',
+};
+
 export const itemStatuses = {
   AGED_TO_LOST: 'Aged to lost',
   AVAILABLE: 'Available',

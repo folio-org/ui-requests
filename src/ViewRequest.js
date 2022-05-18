@@ -52,6 +52,8 @@ import MoveRequestManager from './MoveRequestManager';
 import {
   requestStatuses,
   REQUEST_LEVEL_TYPES,
+  requestTypesTranslations,
+  requestStatusesTranslations,
 } from './constants';
 import {
   toUserAddress,
@@ -563,7 +565,10 @@ class ViewRequest extends React.Component {
       isRequestClosed &&
       request.requestLevel === REQUEST_LEVEL_TYPES.TITLE &&
       !this.state.titleLevelRequestsFeatureEnabled;
-
+    const requestTypeMessageKey = requestTypesTranslations[request?.requestType];
+    const requestTypeMessage = requestTypeMessageKey ? <FormattedMessage id={requestTypeMessageKey} /> : '-';
+    const requestStatusMessageKey = requestStatusesTranslations[request?.status];
+    const requestStatusMessage = requestStatusMessageKey ? <FormattedMessage id={requestStatusMessageKey} /> : '-';
 
     return (
       <Pane
@@ -643,13 +648,13 @@ class ViewRequest extends React.Component {
                   <Col xs={3}>
                     <KeyValue
                       label={<FormattedMessage id="ui-requests.requestType" />}
-                      value={get(request, ['requestType'], '-')}
+                      value={requestTypeMessage}
                     />
                   </Col>
                   <Col xs={3}>
                     <KeyValue
                       label={<FormattedMessage id="ui-requests.status" />}
-                      value={get(request, ['status'], '-')}
+                      value={requestStatusMessage}
                     />
                   </Col>
                   <Col xs={3}>

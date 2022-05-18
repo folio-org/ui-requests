@@ -24,6 +24,8 @@ import { AppIcon } from '@folio/stripes/core';
 import {
   iconTypes,
   errorMessages,
+  requestTypesTranslations,
+  requestStatusesTranslations,
 } from '../constants';
 import {
   isNotYetFilled,
@@ -325,7 +327,11 @@ class RequestQueueView extends React.Component {
                   }
                 >
                   <FulfillmentRequestsData
-                    contentData={inProgressRequests}
+                    contentData={inProgressRequests.map(item => ({
+                      ...item,
+                      requestType: <FormattedMessage id={requestTypesTranslations[item.requestType]} />,
+                      status: <FormattedMessage id={requestStatusesTranslations[item.status]} />
+                    }))}
                   />
                 </Accordion>
                 <Accordion
@@ -337,7 +343,10 @@ class RequestQueueView extends React.Component {
                   <NotYetFilledRequestsData
                     onDragEnd={this.onDragEnd}
                     isRowDraggable={this.isRowDraggable}
-                    contentData={notYetFilledRequests}
+                    contentData={notYetFilledRequests.map(item => ({
+                      ...item,
+                      requestType: <FormattedMessage id={requestTypesTranslations[item.requestType]} />,
+                    }))}
                   />
                 </Accordion>
               </AccordionSet>
