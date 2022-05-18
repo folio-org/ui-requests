@@ -160,10 +160,10 @@ const ItemsDialog = ({
         ...item,
         status: {
           ...item.status,
-          name: <FormattedMessage id={itemStatusesTranslations[item.status.name]} />
+          name: formatMessage({ id: itemStatusesTranslations[item.status.name] }),
         }
       }));
-  }, [items, skippedItemId]);
+  }, [items, skippedItemId, formatMessage]);
 
   const itemsAmount = contentData.length;
 
