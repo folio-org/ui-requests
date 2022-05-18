@@ -1468,7 +1468,7 @@ class RequestForm extends React.Component {
                             {isEditForm &&
                             <KeyValue
                               label={<FormattedMessage id="ui-requests.requestType" />}
-                              value={<FormattedMessage id={requestTypesTranslations[request?.requestType]} />}
+                              value={request?.requestType ? <FormattedMessage id={requestTypesTranslations[request?.requestType]} /> : request?.requestType}
                             /> }
                             {requestTypeError &&
                             <KeyValue
@@ -1480,7 +1480,7 @@ class RequestForm extends React.Component {
                             {isEditForm &&
                             <KeyValue
                               label={<FormattedMessage id="ui-requests.status" />}
-                              value={<FormattedMessage id={requestStatusesTranslations[request?.status]} />}
+                              value={request?.status ? <FormattedMessage id={requestStatusesTranslations[request?.status]} /> : request?.status}
                             /> }
                           </Col>
                           <Col xs={2}>
