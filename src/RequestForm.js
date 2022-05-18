@@ -1188,9 +1188,6 @@ class RequestForm extends React.Component {
       else onCancel();
     };
 
-    const requestTypeMessageKey = requestTypesTranslations[request?.requestType];
-    const requestStatusMessageKey = requestStatusesTranslations[request?.status];
-
     return (
       <Paneset isRoot>
         <RequestFormShortcutsWrapper
@@ -1471,7 +1468,7 @@ class RequestForm extends React.Component {
                             {isEditForm &&
                             <KeyValue
                               label={<FormattedMessage id="ui-requests.requestType" />}
-                              value={<FormattedMessage id={requestTypeMessageKey} />}
+                              value={<FormattedMessage id={requestTypesTranslations[request?.requestType]} />}
                             /> }
                             {requestTypeError &&
                             <KeyValue
@@ -1483,7 +1480,7 @@ class RequestForm extends React.Component {
                             {isEditForm &&
                             <KeyValue
                               label={<FormattedMessage id="ui-requests.status" />}
-                              value={<FormattedMessage id={requestStatusMessageKey} />}
+                              value={<FormattedMessage id={requestStatusesTranslations[request?.status]} />}
                             /> }
                           </Col>
                           <Col xs={2}>
