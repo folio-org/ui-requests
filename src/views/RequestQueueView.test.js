@@ -11,9 +11,20 @@ import {
   Loading,
 } from '../components';
 import FulfillmentRequestsData from './components/FulfillmentRequestsData';
-import { requestStatuses } from '../constants';
+import {
+  requestStatuses,
+  requestStatusesTranslations,
+  requestTypesMap,
+  requestTypesTranslations,
+} from '../constants';
 
-jest.mock('./components/FulfillmentRequestsData', () => jest.fn(() => null));
+jest.mock('./components/FulfillmentRequestsData', () => jest.fn(({ contentData }) => contentData
+  .map(({ status, requestType }) => (
+    <>
+      <span>{ status }</span>
+      <span>{ requestType }</span>
+    </>
+  ))));
 jest.mock('../components', () => ({
   SortableList: jest.fn(() => null),
   Loading: jest.fn(() => null),
@@ -23,12 +34,15 @@ describe('RequestQueueView', () => {
   const inProgressRequests = [
     {
       status: requestStatuses.AWAITING_DELIVERY,
+      requestType: requestTypesMap.HOLD,
     },
     {
       status: requestStatuses.AWAITING_PICKUP,
+      requestType: requestTypesMap.PAGE,
     },
     {
       status: requestStatuses.IN_TRANSIT,
+      requestType: requestTypesMap.RECALL,
     },
   ];
   const notYetFilledRequests = [
@@ -48,8 +62,10 @@ describe('RequestQueueView', () => {
   });
 
   describe('when all data is already loaded', () => {
+    let container;
+
     beforeEach(() => {
-      render(
+      container = render(
         <RequestQueueView
           data={mockedData}
           isLoading={false}
@@ -57,12 +73,16 @@ describe('RequestQueueView', () => {
       );
     });
 
-    it('should execute `FulfillmentRequestsData` with correct requests collection', () => {
-      const expectedResult = {
-        contentData: inProgressRequests,
-      };
+    it('`FulfillmentRequestsData` should correctly handle requests collection and render appropriate statuses', () => {
+      expect(container.getByText(requestStatusesTranslations[requestStatuses.AWAITING_DELIVERY])).toBeInTheDocument();
+      expect(container.getByText(requestStatusesTranslations[requestStatuses.AWAITING_PICKUP])).toBeInTheDocument();
+      expect(container.getByText(requestStatusesTranslations[requestStatuses.IN_TRANSIT])).toBeInTheDocument();
+    });
 
-      expect(FulfillmentRequestsData).toHaveBeenCalledWith(expectedResult, {});
+    it('`FulfillmentRequestsData` should correctly handle requests collection and render appropriate requestTypes', () => {
+      expect(container.getByText(requestTypesTranslations[requestTypesMap.HOLD])).toBeInTheDocument();
+      expect(container.getByText(requestTypesTranslations[requestTypesMap.PAGE])).toBeInTheDocument();
+      expect(container.getByText(requestTypesTranslations[requestTypesMap.RECALL])).toBeInTheDocument();
     });
   });
 
