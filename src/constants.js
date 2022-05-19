@@ -73,7 +73,7 @@ export const itemStatusesTranslations = {
   'Claimed returned': 'ui-requests.item.status.claimedReturned',
   'Declared lost': 'ui-requests.item.status.declaredLost',
   'In process': 'ui-requests.item.status.inProcess',
-  'In process (non-requestable)': 'ui-requests.item.status.inProcessNotRequestable',
+  'In process (non-requestable)': 'ui-requests.item.status.inProcessNonRequestable',
   'In transit': 'ui-requests.item.status.inTransit',
   'Intellectual item': 'ui-requests.item.status.intellectualItem',
   'Long missing': 'ui-requests.item.status.longMissing',

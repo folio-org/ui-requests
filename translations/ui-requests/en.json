@@ -130,7 +130,7 @@
   "item.status.claimedReturned": "Claimed returned",
   "item.status.declaredLost": "Declared lost",
   "item.status.inProcess": "In process",
-  "item.status.inProcessNotRequestable": "In process (not requestable)",
+  "item.status.inProcessNonRequestable": "In process (non-requestable)",
   "item.status.inTransit": "In transit",
   "item.status.intellectualItem": "Intellectual item",
   "item.status.longMissing": "Long missing",
