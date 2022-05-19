@@ -565,9 +565,9 @@ class ViewRequest extends React.Component {
       isRequestClosed &&
       request.requestLevel === REQUEST_LEVEL_TYPES.TITLE &&
       !this.state.titleLevelRequestsFeatureEnabled;
-    const requestTypeMessageKey = requestTypesTranslations[request?.requestType];
+    const requestTypeMessageKey = requestTypesTranslations[request.requestType];
     const requestTypeMessage = requestTypeMessageKey ? <FormattedMessage id={requestTypeMessageKey} /> : '-';
-    const requestStatusMessageKey = requestStatusesTranslations[request?.status];
+    const requestStatusMessageKey = requestStatusesTranslations[request.status];
     const requestStatusMessage = requestStatusMessageKey ? <FormattedMessage id={requestStatusMessageKey} /> : '-';
 
     return (
