@@ -22,7 +22,7 @@ const nonRequestableItemStatuses = [
   'Aged to lost',
   'Claimed returned',
   'Declared lost',
-  'In process (non-requestable)',
+  'In process (not requestable)',
   'Intellectual item',
   'Long missing',
   'Lost and paid',
