@@ -73,6 +73,7 @@ import {
   REQUEST_LEVEL_TYPES,
   requestTypesTranslations,
   requestStatusesTranslations,
+  itemStatusesTranslations,
 } from './constants';
 import {
   handleKeyCommand,
@@ -1168,6 +1169,7 @@ class RequestForm extends React.Component {
     const patronGroup = getPatronGroup(selectedUser, patronGroups);
     const requestTypeError = hasNonRequestableStatus(selectedItem);
     const itemStatus = selectedItem?.status?.name;
+    const itemStatusMessage = <FormattedMessage id={itemStatusesTranslations[itemStatus]} />;
     const getPatronBlockModalOpenStatus = () => {
       if (isAwaitingForProxySelection) {
         return false;
@@ -1680,7 +1682,7 @@ class RequestForm extends React.Component {
                       title: instance?.title,
                       barcode: selectedItem.barcode,
                       materialType: get(selectedItem, 'materialType.name', ''),
-                      itemStatus,
+                      itemStatus: itemStatusMessage,
                     }}
                   />
                 }
