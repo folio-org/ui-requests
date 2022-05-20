@@ -154,15 +154,14 @@ const ItemsDialog = ({
     }
 
     // items with status available must go first
-    return resultItems
-      .sort((a) => (a.status.name === itemStatuses.AVAILABLE ? -1 : 1))
-      .map(item => ({
-        ...item,
-        status: {
-          ...item.status,
-          name: formatMessage({ id: itemStatusesTranslations[item.status.name] }),
-        }
-      }));
+    resultItems.sort((a) => (a.status.name === itemStatuses.AVAILABLE ? -1 : 1));
+    return resultItems.map(item => ({
+      ...item,
+      status: {
+        ...item.status,
+        name: formatMessage({ id: itemStatusesTranslations[item.status.name] }),
+      }
+    }));
   }, [items, skippedItemId, formatMessage]);
 
   const itemsAmount = contentData.length;
