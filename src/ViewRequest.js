@@ -34,6 +34,7 @@ import {
   Pane,
   PaneMenu,
   Row,
+  NoValue,
 } from '@folio/stripes/components';
 import {
   ViewMetaData,
@@ -565,10 +566,10 @@ class ViewRequest extends React.Component {
       isRequestClosed &&
       request.requestLevel === REQUEST_LEVEL_TYPES.TITLE &&
       !this.state.titleLevelRequestsFeatureEnabled;
-    const requestTypeMessageKey = requestTypesTranslations[get(request, 'requestType')];
-    const requestTypeMessage = requestTypeMessageKey ? <FormattedMessage id={requestTypeMessageKey} /> : '-';
-    const requestStatusMessageKey = requestStatusesTranslations[get(request, 'status')];
-    const requestStatusMessage = requestStatusMessageKey ? <FormattedMessage id={requestStatusMessageKey} /> : '-';
+    const requestTypeMessageKey = requestTypesTranslations[request.requestType];
+    const requestTypeMessage = requestTypeMessageKey ? <FormattedMessage id={requestTypeMessageKey} /> : <NoValue />;
+    const requestStatusMessageKey = requestStatusesTranslations[request.status];
+    const requestStatusMessage = requestStatusMessageKey ? <FormattedMessage id={requestStatusMessageKey} /> : <NoValue />;
 
     return (
       <Pane

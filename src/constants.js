@@ -63,35 +63,6 @@ export const requestStatusesTranslations = {
   'Open - Not yet filled': 'ui-requests.filters.requestStatus.notYetFilled',
 };
 
-// map from API's enum-value to translation key
-export const itemStatusesTranslations = {
-  'Aged to lost': 'ui-requests.item.status.agedToLost',
-  'Available': 'ui-requests.item.status.available',
-  'Awaiting delivery': 'ui-requests.item.status.awaitingDelivery',
-  'Awaiting pickup': 'ui-requests.item.status.awaitingPickup',
-  'Checked out': 'ui-requests.item.status.checkedOut',
-  'Claimed returned': 'ui-requests.item.status.claimedReturned',
-  'Declared lost': 'ui-requests.item.status.declaredLost',
-  'In process': 'ui-requests.item.status.inProcess',
-  'In process (non-requestable)': 'ui-requests.item.status.inProcessNonRequestable',
-  'In transit': 'ui-requests.item.status.inTransit',
-  'Intellectual item': 'ui-requests.item.status.intellectualItem',
-  'Long missing': 'ui-requests.item.status.longMissing',
-  'Lost and paid': 'ui-requests.item.status.lostAndPaid',
-  'Missing': 'ui-requests.item.status.missing',
-  'On order': 'ui-requests.item.status.onOrder',
-  'Paged': 'ui-requests.item.status.paged',
-  'Unavailable': 'ui-requests.item.status.unavailable',
-  'Unknown': 'ui-requests.item.status.unknown',
-  'Withdrawn': 'ui-requests.item.status.withdrawn',
-  'Recently returned': 'ui-requests.item.status.recentlyReturned',
-  'Available in ASR': 'ui-requests.item.status.availableInASR',
-  'Retrieving from ASR': 'ui-requests.item.status.retrievingFromASR',
-  'Missing from ASR': 'ui-requests.item.status.missingFromASR',
-  'Order closed': 'ui-requests.item.status.orderClosed',
-  'Restricted': 'ui-requests.item.status.restricted',
-};
-
 export const itemStatuses = {
   AGED_TO_LOST: 'Aged to lost',
   AVAILABLE: 'Available',
@@ -112,7 +83,41 @@ export const itemStatuses = {
   UNAVAILABLE: 'Unavailable',
   UNKNOWN: 'Unknown',
   WITHDRAWN: 'Withdrawn',
+  RECENTLY_RETURNED: 'Recently returned',
+  AVAILABLE_IN_ASR: 'Available in ASR',
+  RETRIEVING_FROM_ASR: 'Retrieving from ASR',
+  MISSING_FROM_ASR: 'Missing from ASR',
+  ORDER_CLOSED: 'Order closed',
   RESTRICTED: 'Restricted',
+};
+
+// map from API's enum-value to translation key
+export const itemStatusesTranslations = {
+  [itemStatuses.AGED_TO_LOST]: 'ui-requests.item.status.agedToLost',
+  [itemStatuses.AVAILABLE]: 'ui-requests.item.status.available',
+  [itemStatuses.AWAITING_DELIVERY]: 'ui-requests.item.status.awaitingDelivery',
+  [itemStatuses.AWAITING_PICKUP]: 'ui-requests.item.status.awaitingPickup',
+  [itemStatuses.CHECKED_OUT]: 'ui-requests.item.status.checkedOut',
+  [itemStatuses.CLAIMED_RETURNED]: 'ui-requests.item.status.claimedReturned',
+  [itemStatuses.DECLARED_LOST]: 'ui-requests.item.status.declaredLost',
+  [itemStatuses.IN_PROCESS]: 'ui-requests.item.status.inProcess',
+  [itemStatuses.IN_PROCESS_NON_REQUESTABLE]: 'ui-requests.item.status.inProcessNonRequestable',
+  [itemStatuses.IN_TRANSIT]: 'ui-requests.item.status.inTransit',
+  [itemStatuses.INTELLECTUAL_ITEM]: 'ui-requests.item.status.intellectualItem',
+  [itemStatuses.LONG_MISSING]: 'ui-requests.item.status.longMissing',
+  [itemStatuses.LOST_AND_PAID]: 'ui-requests.item.status.lostAndPaid',
+  [itemStatuses.MISSING]: 'ui-requests.item.status.missing',
+  [itemStatuses.ON_ORDER]: 'ui-requests.item.status.onOrder',
+  [itemStatuses.PAGED]: 'ui-requests.item.status.paged',
+  [itemStatuses.UNAVAILABLE]: 'ui-requests.item.status.unavailable',
+  [itemStatuses.UNKNOWN]: 'ui-requests.item.status.unknown',
+  [itemStatuses.WITHDRAWN]: 'ui-requests.item.status.withdrawn',
+  [itemStatuses.RECENTLY_RETURNED]: 'ui-requests.item.status.recentlyReturned',
+  [itemStatuses.AVAILABLE_IN_ASR]: 'ui-requests.item.status.availableInASR',
+  [itemStatuses.RETRIEVING_FROM_ASR]: 'ui-requests.item.status.retrievingFromASR',
+  [itemStatuses.MISSING_FROM_ASR]: 'ui-requests.item.status.missingFromASR',
+  [itemStatuses.ORDER_CLOSED]: 'ui-requests.item.status.orderClosed',
+  [itemStatuses.RESTRICTED]: 'ui-requests.item.status.restricted',
 };
 
 export const requestTypesMap = {

@@ -23,7 +23,10 @@ import {
 } from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
 
-import { itemStatuses, itemStatusesTranslations } from './constants';
+import {
+  itemStatuses,
+  itemStatusesTranslations,
+} from './constants';
 import { Loading } from './components';
 
 import css from './ItemsDialog.css';

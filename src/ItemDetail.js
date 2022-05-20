@@ -38,7 +38,7 @@ const ItemDetail = ({
   const title = request?.instance.title || item.title || <NoValue />;
   const contributor = request?.instance.contributorNames?.[0]?.name || item.contributorNames?.[0]?.name || <NoValue />;
   const count = request?.itemRequestCount || requestCount || DEFAULT_COUNT_VALUE;
-  const status = item.status.name || item.status;
+  const status = item.status?.name || item.status;
   const statusMessage = status ? <FormattedMessage id={itemStatusesTranslations[status]} /> : <NoValue />;
   const effectiveLocationName = item.effectiveLocation?.name || item.location?.name || <NoValue />;
   const dueDate = loan?.dueDate ? <FormattedDate value={loan.dueDate} /> : <NoValue />;

@@ -13,7 +13,10 @@ import {
   Paneset,
 } from '@folio/stripes/components';
 
-import { itemStatuses, itemStatusesTranslations } from './constants';
+import {
+  itemStatuses,
+  itemStatusesTranslations,
+} from './constants';
 import { Loading } from './components';
 import ItemsDialog, {
   COLUMN_NAMES,
