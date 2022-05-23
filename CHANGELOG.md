@@ -16,6 +16,7 @@
 * Fix the issue when user can't select request type when item have status 'Restricted'. Refs UIREQ-772.
 * Sort queue-position numerically. Refs UIREQ-750.
 * Remove react-hot-loader. Refs UIREQ-758.
+* Add Move request to Action list when item is attached to title level request for fulfillment. Refs UIREQ-767.
 * Localize enumeration values. Refs UIREQ-624.
 
 ## [7.0.2](https://github.com/folio-org/ui-requests/tree/v7.0.2) (2022-04-04)

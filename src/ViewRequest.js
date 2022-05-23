@@ -517,7 +517,7 @@ class ViewRequest extends React.Component {
               </Icon>
             </Button>
           </IfPermission>
-          {requestLevel === REQUEST_LEVEL_TYPES.ITEM && isRequestNotFilled &&
+          {item && isRequestNotFilled &&
             <IfPermission perm="ui-requests.moveRequest">
               <Button
                 id="move-request"

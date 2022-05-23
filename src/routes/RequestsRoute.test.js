@@ -72,6 +72,10 @@ describe('RequestsRoute', () => {
       currentServicePoint: {
         update: jest.fn(),
       },
+      expiredHolds: {
+        GET: jest.fn(() => ({})),
+        reset: jest.fn(),
+      },
       proxy: {
         reset: jest.fn(),
         GET: jest.fn(),
