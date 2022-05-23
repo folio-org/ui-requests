@@ -257,6 +257,8 @@ describe('RequestForm', () => {
         instance : mockedInstance,
         id : 'testId',
         instanceId : 'instanceId',
+        requestType: 'Hold',
+        status: 'Open - Awaiting delivery',
       };
 
       it('should not render `TLR` checkbox section', () => {

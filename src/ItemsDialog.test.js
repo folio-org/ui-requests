@@ -13,7 +13,10 @@ import {
   Paneset,
 } from '@folio/stripes/components';
 
-import { itemStatuses } from './constants';
+import {
+  itemStatuses,
+  itemStatusesTranslations,
+} from './constants';
 import { Loading } from './components';
 import ItemsDialog, {
   COLUMN_NAMES,
@@ -233,19 +236,19 @@ describe('ItemsDialog', () => {
             contentData: [{
               id: '2',
               status: {
-                name: itemStatuses.AVAILABLE,
+                name: itemStatusesTranslations[itemStatuses.AVAILABLE],
               },
               requestQueue: 1,
             }, {
               id: '1',
               status: {
-                name: itemStatuses.IN_PROCESS,
+                name: itemStatusesTranslations[itemStatuses.IN_PROCESS],
               },
               requestQueue: 2,
             }, {
               id: '3',
               status: {
-                name: itemStatuses.IN_TRANSIT,
+                name: itemStatusesTranslations[itemStatuses.IN_TRANSIT],
               },
               requestQueue: 0,
             }],

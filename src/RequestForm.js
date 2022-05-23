@@ -71,6 +71,9 @@ import {
   fulfilmentTypeMap,
   createModes,
   REQUEST_LEVEL_TYPES,
+  requestTypesTranslations,
+  requestStatusesTranslations,
+  itemStatusesTranslations,
 } from './constants';
 import {
   handleKeyCommand,
@@ -1166,6 +1169,7 @@ class RequestForm extends React.Component {
     const patronGroup = getPatronGroup(selectedUser, patronGroups);
     const requestTypeError = hasNonRequestableStatus(selectedItem);
     const itemStatus = selectedItem?.status?.name;
+    const itemStatusMessage = <FormattedMessage id={itemStatusesTranslations[itemStatus]} />;
     const getPatronBlockModalOpenStatus = () => {
       if (isAwaitingForProxySelection) {
         return false;
@@ -1466,7 +1470,7 @@ class RequestForm extends React.Component {
                             {isEditForm &&
                             <KeyValue
                               label={<FormattedMessage id="ui-requests.requestType" />}
-                              value={request.requestType}
+                              value={<FormattedMessage id={requestTypesTranslations[request.requestType]} />}
                             /> }
                             {requestTypeError &&
                             <KeyValue
@@ -1478,7 +1482,7 @@ class RequestForm extends React.Component {
                             {isEditForm &&
                             <KeyValue
                               label={<FormattedMessage id="ui-requests.status" />}
-                              value={request.status}
+                              value={<FormattedMessage id={requestStatusesTranslations[request.status]} />}
                             /> }
                           </Col>
                           <Col xs={2}>
@@ -1678,7 +1682,7 @@ class RequestForm extends React.Component {
                       title: instance?.title,
                       barcode: selectedItem.barcode,
                       materialType: get(selectedItem, 'materialType.name', ''),
-                      itemStatus,
+                      itemStatus: itemStatusMessage,
                     }}
                   />
                 }
