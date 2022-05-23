@@ -102,16 +102,16 @@ class RequestQueueRoute extends React.Component {
     location: ReactRouterPropTypes.location,
     resources: PropTypes.shape({
       items: PropTypes.shape({
-        records: PropTypes.array,
+        records: PropTypes.arrayOf(PropTypes.object),
       }),
       request: PropTypes.shape({
-        records: PropTypes.array,
+        records: PropTypes.arrayOf(PropTypes.object),
       }),
       requests: PropTypes.shape({
-        records: PropTypes.array,
+        records: PropTypes.arrayOf(PropTypes.object),
       }).isRequired,
       configs: PropTypes.shape({
-        records: PropTypes.array.isRequired,
+        records: PropTypes.arrayOf(PropTypes.object).isRequired,
         hasLoaded: PropTypes.bool.isRequired,
       }).isRequired,
     }),

@@ -151,7 +151,8 @@
     "formatjs-compile": "formatjs compile-folder --ast --format simple ./translations/ui-requests ./translations/ui-requests/compiled"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.15.0",
+    "@babel/core": "^7.17.12",
+    "@babel/eslint-parser": "^7.17.0",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/plugin-proposal-decorators": "^7.13.5",
     "@babel/plugin-transform-runtime": "^7.13.10",
@@ -167,7 +168,6 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.1.10",
-    "babel-eslint": "^10.0.3",
     "babel-jest": "^26.6.3",
     "chai": "^4.2.0",
     "core-js": "^3.6.4",

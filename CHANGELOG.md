@@ -18,6 +18,7 @@
 * Remove react-hot-loader. Refs UIREQ-758.
 * Add Move request to Action list when item is attached to title level request for fulfillment. Refs UIREQ-767.
 * Localize enumeration values. Refs UIREQ-624.
+* Replace babel-eslint with @babel/eslint-parser. Refs UIREQ-770.
 
 ## [7.0.2](https://github.com/folio-org/ui-requests/tree/v7.0.2) (2022-04-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.0.1...v7.0.2)
