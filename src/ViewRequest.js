@@ -4,7 +4,6 @@ import {
   keyBy,
 } from 'lodash';
 import React from 'react';
-import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import {
@@ -47,7 +46,7 @@ import CancelRequestDialog from './CancelRequestDialog';
 import ItemDetail from './ItemDetail';
 import TitleInformation from './components/TitleInformation';
 import UserDetail from './UserDetail';
-import RequestForm from './RequestForm';
+import RequestFormContainer from './RequestFormContainer';
 import PositionLink from './PositionLink';
 import MoveRequestManager from './MoveRequestManager';
 import {
@@ -341,7 +340,7 @@ class ViewRequest extends React.Component {
               isOpen
               contentLabel={intl.formatMessage({ id: 'ui-requests.actions.editRequestLink' })}
             >
-              <RequestForm
+              <RequestFormContainer
                 stripes={stripes}
                 initialValues={{
                   requestExpirationDate: null,
@@ -799,6 +798,4 @@ class ViewRequest extends React.Component {
   }
 }
 
-export default compose(
-  withTags,
-)(injectIntl(ViewRequest));
+export default withTags(injectIntl(ViewRequest));

@@ -10,6 +10,7 @@ import setupApplication from '../helpers/setup-application';
 import NewRequest from '../interactors/new-request';
 import ViewRequest from '../interactors/view-request';
 import ErrorModal from '../interactors/error-modal';
+import wait from '../helpers/wait';
 
 const RequestForm = new NewRequest();
 const ViewRequestPage = new ViewRequest();
@@ -68,8 +69,8 @@ describe('Override patron block', () => {
 
     describe('enter patrons barcode', () => {
       beforeEach(async () => {
+        await wait();
         await RequestForm
-          .whenServicePointIsPresent()
           .chooseServicePoint(servicePoint.name)
           .clickNewRequest();
         await ViewRequestPage.isPresent;

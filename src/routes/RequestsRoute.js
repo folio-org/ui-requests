@@ -11,7 +11,6 @@ import {
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
-import { SubmissionError } from 'redux-form';
 import {
   AppIcon,
   stripesConnect,
@@ -34,7 +33,8 @@ import {
 import { exportCsv } from '@folio/stripes/util';
 
 import ViewRequest from '../ViewRequest';
-import RequestForm from '../RequestForm';
+import RequestFormContainer from '../RequestFormContainer';
+
 import {
   reportHeaders,
   fulfilmentTypes,
@@ -737,14 +737,14 @@ class RequestsRoute extends React.Component {
         });
       })
       .catch(resp => {
-        this.processError(resp);
-
         this.context.sendCallout({
           message: isDuplicateMode(mode)
             ? <FormattedMessage id="ui-requests.duplicateRequest.fail" />
             : <FormattedMessage id="ui-requests.createRequest.fail" />,
           type: 'error',
         });
+
+        return this.processError(resp);
       });
   };
 
@@ -759,7 +759,7 @@ class RequestsRoute extends React.Component {
 
   handleTextError(error) {
     const item = { barcode: error };
-    throw new SubmissionError({ item });
+    return { item };
   }
 
   handleJsonError({ errors }) {
@@ -1093,7 +1093,7 @@ class RequestsRoute extends React.Component {
               initialResultCount={INITIAL_RESULT_COUNT}
               resultCountIncrement={RESULT_COUNT_INCREMENT}
               viewRecordComponent={ViewRequest}
-              editRecordComponent={RequestForm}
+              editRecordComponent={RequestFormContainer}
               getHelperResourcePath={this.getHelperResourcePath}
               columnWidths={{
                 requestDate: { max: 165 },

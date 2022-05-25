@@ -278,3 +278,10 @@ export const MISSING_VALUE_SYMBOL = '-';
 export const DEFAULT_DISPLAYED_YEARS_AMOUNT = 3;
 
 export const MAX_RECORDS = '10000';
+
+export const RESOURCE_TYPES = {
+  ITEM: 'item',
+  INSTANCE: 'instance',
+  USER: 'user',
+  HOLDING: 'holding',
+};

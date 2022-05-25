@@ -1,4 +1,6 @@
 import React from 'react';
+import { Router } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
 import {
   render,
   screen,
@@ -8,11 +10,10 @@ import {
 
 import '../test/jest/__mock__';
 
-import { Field } from 'redux-form';
+import { Field } from 'react-final-form';
 
 import {
   Checkbox,
-  TextField,
   CommandList,
   defaultKeyboardShortcuts,
 } from '@folio/stripes/components';
@@ -30,11 +31,12 @@ jest.mock('./utils', () => ({
   getTlrSettings: jest.fn(() => (mockedTlrSettings)),
   getRequestLevelValue: jest.fn(),
 }));
-jest.mock('@folio/stripes/form', () => () => jest.fn((component) => component));
-jest.mock('redux-form', () => ({
+
+jest.mock('@folio/stripes/final-form', () => () => jest.fn((component) => component));
+jest.mock('react-final-form', () => ({
+  ...jest.requireActual('react-final-form'),
   // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
   Field: jest.fn(({ onChange, ...rest }) => <div onClick={onChange} {...rest} />),
-  getFormValues: jest.fn((formName) => (state) => state[formName]),
 }));
 jest.mock('./PatronBlockModal', () => jest.fn(() => null));
 jest.mock('./CancelRequestDialog', () => jest.fn(() => null));
@@ -58,12 +60,26 @@ describe('RequestForm', () => {
     instanceHrid: 2,
   };
   const mockedChangeFunction = jest.fn();
+  const valuesMock = {
+    deliveryAddressTypeId: '',
+    pickupServicePointId: '',
+    createTitleLevelRequest: '',
+  };
 
   const renderComponent = (passedProps = {}) => {
     const {
       mockedRequestForm = {},
       mockedRequest = {},
       mockedQuery = {},
+      history = createMemoryHistory(),
+      values = valuesMock,
+      selectedItem,
+      selectedUser,
+      selectedInstance,
+      isPatronBlocksOverridden = false,
+      isErrorModalOpen = false,
+      instanceId = '',
+      blocked = false,
     } = passedProps;
 
     const props = {
@@ -75,7 +91,10 @@ describe('RequestForm', () => {
           }),
         },
       },
-      change: mockedChangeFunction,
+      form: {
+        change: mockedChangeFunction,
+      },
+      values,
       handleSubmit: jest.fn(),
       asyncValidate: jest.fn(),
       findResource: jest.fn(() => new Promise((resolve) => resolve())),
@@ -98,13 +117,35 @@ describe('RequestForm', () => {
           records: [],
         },
       },
+      intl: {
+        formatMessage: ({ id }) => id,
+      },
+      selectedItem,
+      selectedUser,
+      selectedInstance,
+      isPatronBlocksOverridden,
+      isErrorModalOpen,
+      instanceId,
+      blocked,
+      onGetPatronManualBlocks: jest.fn(),
+      onGetAutomatedPatronBlocks: jest.fn(),
+      onSetSelectedInstance: jest.fn(),
+      onSetSelectedItem: jest.fn(),
+      onSetSelectedUser: jest.fn(),
+      onSetInstanceId: jest.fn(),
+      onSetIsPatronBlocksOverridden: jest.fn(),
+      onSetBlocked: jest.fn(),
+      onShowErrorModal: jest.fn(),
+      onHideErrorModal: jest.fn(),
     };
 
     render(
       <CommandList commands={defaultKeyboardShortcuts}>
-        <RequestForm
-          {...props}
-        />
+        <Router history={history}>
+          <RequestForm
+            {...props}
+          />
+        </Router>
       </CommandList>
     );
   };
@@ -207,7 +248,7 @@ describe('RequestForm', () => {
 
         it('should render Accordion with `Instance` information', () => {
           renderComponent({
-            mockedRequestForm,
+            values: mockedRequestForm,
           });
 
           expect(screen.getByText(new RegExp(labelIds.instanceInformation))).toBeVisible();
@@ -215,13 +256,15 @@ describe('RequestForm', () => {
 
         it('should render search filed for instance', () => {
           renderComponent({
-            mockedRequestForm,
+            values: mockedRequestForm,
           });
 
           const instanceSection = screen.getByTestId(testIds.instanceInfoSection);
           const expectedResult = {
             name: 'instance.hrid',
-            component: TextField,
+            children: expect.any(Function),
+            validateFields: [],
+            validate: expect.any(Function),
           };
 
           expect(Field).toHaveBeenNthCalledWith(fieldCallOrder.instanceHrid, expect.objectContaining(expectedResult), {});
@@ -236,7 +279,7 @@ describe('RequestForm', () => {
 
         it('should not render Accordion with `Instance` information', () => {
           renderComponent({
-            mockedRequestForm,
+            values: mockedRequestForm,
           });
 
           expect(screen.queryByText(new RegExp(labelIds.instanceInformation))).not.toBeInTheDocument();
@@ -276,6 +319,7 @@ describe('RequestForm', () => {
               ...mockedRequest,
               requestLevel: REQUEST_LEVEL_TYPES.TITLE,
             },
+            selectedInstance: mockedInstance,
           });
 
           const expectedResult = {
@@ -307,6 +351,7 @@ describe('RequestForm', () => {
 
           renderComponent({
             mockedRequest: newMockedRequest,
+            selectedItem: mockedItem,
           });
 
           const expectedResult = {

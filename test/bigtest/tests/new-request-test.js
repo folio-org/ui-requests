@@ -11,6 +11,7 @@ import { expect } from 'chai';
 import { Button } from '@folio/stripes/components';
 
 import setupApplication from '../helpers/setup-application';
+import wait from '../helpers/wait';
 import ErrorModal from '../interactors/error-modal';
 import NewRequest from '../interactors/new-request';
 import RequestsInteractor from '../interactors/requests-interactor';
@@ -122,8 +123,14 @@ describe('New Request page', () => {
           },
         });
 
-        this.server.create('user', {
+        const user = this.server.create('user', {
           barcode: '9676761472501',
+        });
+
+        this.server.create('request-preference', {
+          userId: user.id,
+          fulfillment: 'Hold Shelf',
+          defaultServicePointId: 'servicepointId1',
         });
 
         await newRequest
@@ -159,6 +166,16 @@ describe('New Request page', () => {
           materialType: {
             name: 'book',
           },
+        });
+
+        const user = this.server.create('user', {
+          id: '123',
+        });
+
+        this.server.create('request-preference', {
+          userId: user.id,
+          fulfillment: 'Hold Shelf',
+          defaultServicePointId: 'servicepointId1',
         });
 
         await newRequest.whenReady();
@@ -231,6 +248,7 @@ describe('New Request page', () => {
           userId: user.id,
           delivery: true,
           holdShelf: true,
+          defaultDeliveryAddressTypeId: user.personal.addresses[0].addressTypeId,
         });
         const address = this.server.create('address', { addressTypeId: 'Type1' });
         const personal = this.server.create('user-personal');
@@ -518,11 +536,16 @@ describe('New Request page', () => {
           id: '123',
           barcode: '',
         });
-        this.server.create('user', {
+        const user = this.server.create('user', {
           barcode: '9676761472504',
         });
+        this.server.create('request-preference', {
+          userId: user.id,
+          fulfillment: 'Hold Shelf',
+          defaultServicePointId: 'servicepointId1',
+        });
         this.visit('/requests/view/?layer=create&userBarcode=9676761472504&itemId=123');
-
+        await wait();
         await newRequest.chooseServicePoint('Circ Desk 2');
         await newRequest.clickNewRequest();
       });
