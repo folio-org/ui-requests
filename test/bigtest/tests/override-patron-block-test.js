@@ -40,6 +40,12 @@ describe('Override patron block', () => {
 
     servicePoint = this.server.create('service-point');
 
+    this.server.create('request-preference', {
+      userId: user.id,
+      fulfillment: 'Hold Shelf',
+      defaultServicePointId: 'servicepointId1',
+    });
+
     this.visit('/requests?layer=create');
 
     await RequestForm
@@ -87,8 +93,8 @@ describe('Override patron block', () => {
       const errorRequestIsNotAllowed = 'Hold requests are not allowed for this patron and item combination';
 
       beforeEach(async function () {
+        await wait();
         await RequestForm
-          .whenServicePointIsPresent()
           .chooseServicePoint(servicePoint.name)
           .clickNewRequest();
 
