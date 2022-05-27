@@ -143,6 +143,7 @@ describe('New Request page', () => {
 
         await newRequest.patronComments.fillAndBlur(patronComment);
         await newRequest.chooseFulfillmentPreference('Hold Shelf');
+        await wait();
         await newRequest.chooseServicePoint('Circ Desk 2');
         await newRequest.clickNewRequest();
         await viewRequest.isPresent;
@@ -184,7 +185,7 @@ describe('New Request page', () => {
           .clickItemEnterBtn();
         await newRequest.clickAddUser();
         await newRequest.chooseFulfillmentPreference('Hold Shelf');
-        await newRequest.whenServicePointIsPresent();
+        await wait(500);
         await newRequest.chooseServicePoint('Circ Desk 2');
         await newRequest.clickNewRequest();
         await viewRequest.isPresent;
@@ -222,6 +223,7 @@ describe('New Request page', () => {
           .fillUserBarcode('9676761472501')
           .clickUserEnterBtn();
 
+        await wait();
         await newRequest.chooseServicePoint('Circ Desk 1');
         await newRequest.clickNewRequest();
         await viewRequest.isPresent;
@@ -264,6 +266,7 @@ describe('New Request page', () => {
           .clickUserEnterBtn();
 
         await newRequest.chooseFulfillmentPreference('Delivery');
+        await (100);
         await newRequest.chooseDeliveryAddress('Claim');
         await newRequest.clickNewRequest();
         await viewRequest.isPresent;

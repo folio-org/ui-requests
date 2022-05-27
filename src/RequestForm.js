@@ -481,6 +481,9 @@ class RequestForm extends React.Component {
       onSetBlocked,
     } = this.props;
 
+    if (fieldName === 'barcode') {
+      form.change('requester.barcode', value);
+    }
     onSetSelectedUser(null);
     this.setState({
       proxy: null,

@@ -75,7 +75,7 @@ describe('Override patron block', () => {
 
     describe('enter patrons barcode', () => {
       beforeEach(async () => {
-        await wait();
+        await wait(1100);
         await RequestForm
           .chooseServicePoint(servicePoint.name)
           .clickNewRequest();
@@ -93,7 +93,7 @@ describe('Override patron block', () => {
       const errorRequestIsNotAllowed = 'Hold requests are not allowed for this patron and item combination';
 
       beforeEach(async function () {
-        await wait();
+        await wait(1100);
         await RequestForm
           .chooseServicePoint(servicePoint.name)
           .clickNewRequest();
