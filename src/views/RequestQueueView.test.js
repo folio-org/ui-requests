@@ -62,6 +62,7 @@ describe('RequestQueueView', () => {
         contentData: inProgressRequests,
       };
 
+
       expect(FulfillmentRequestsData).toHaveBeenCalledWith(expectedResult, {});
     });
   });
