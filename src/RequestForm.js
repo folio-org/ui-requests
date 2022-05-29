@@ -387,10 +387,14 @@ class RequestForm extends React.Component {
     if (!user) return;
 
     const {
+      onSetSelectedUser,
+    } = this.props;
+    const {
       id,
       barcode,
     } = user;
 
+    onSetSelectedUser(null);
     if (barcode) {
       this.findUser('barcode', barcode);
     } else {
@@ -481,10 +485,6 @@ class RequestForm extends React.Component {
       onSetBlocked,
     } = this.props;
 
-    if (fieldName === 'barcode') {
-      form.change('requester.barcode', value);
-    }
-    onSetSelectedUser(null);
     this.setState({
       proxy: null,
       isUserLoading: true,
@@ -1174,7 +1174,14 @@ class RequestForm extends React.Component {
       isUserBarcodeClicked,
       isInstanceIdClicked,
     } = this.state;
-    const { createTitleLevelRequest } = values;
+    const {
+      createTitleLevelRequest,
+      keyOfItemBarcodeField,
+      keyOfUserBarcodeField,
+      keyOfInstanceIdField,
+      deliveryAddressTypeId,
+      pickupServicePointId,
+    } = values;
     const patronBlocks = onGetPatronManualBlocks(parentResources);
     const automatedPatronBlocks = onGetAutomatedPatronBlocks(parentResources);
     const {
@@ -1345,31 +1352,36 @@ class RequestForm extends React.Component {
                                 <Row>
                                   <Col xs={9}>
                                     <FormattedMessage id="ui-requests.instance.scanOrEnterBarcode">
-                                      {placeholder => (
-                                        <Field
-                                          key={values.keyOfInstanceIdField ?? 0}
-                                          name="instance.hrid"
-                                          validate={this.validateInstanceId}
-                                          validateFields={[]}
-                                        >
-                                          {({ input, meta }) => {
-                                            const selectInstanceError = meta.touched && meta.error;
-                                            const instanceDoesntExistError = isInstanceIdClicked && meta.error;
+                                      {placeholder => {
+                                        const name = 'instance.hrid';
+                                        const key = keyOfInstanceIdField ?? 0;
 
-                                            return (
-                                              <TextField
-                                                {...input}
-                                                placeholder={placeholder}
-                                                aria-label={<FormattedMessage id="ui-requests.instance.value" />}
-                                                error={selectInstanceError || instanceDoesntExistError || undefined}
-                                                onChange={this.handleChangeInstanceId}
-                                                onBlur={this.enableBlurForEmptyValueOnly(input)}
-                                                onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.INSTANCE)}
-                                              />
-                                            );
-                                          }}
-                                        </Field>
-                                      )}
+                                        return (
+                                          <Field
+                                            key={key}
+                                            name={name}
+                                            validate={this.validateInstanceId(name, key)}
+                                            validateFields={[]}
+                                          >
+                                            {({ input, meta }) => {
+                                              const selectInstanceError = meta.touched && meta.error;
+                                              const instanceDoesntExistError = isInstanceIdClicked && meta.error;
+
+                                              return (
+                                                <TextField
+                                                  {...input}
+                                                  placeholder={placeholder}
+                                                  aria-label={<FormattedMessage id="ui-requests.instance.value" />}
+                                                  error={selectInstanceError || instanceDoesntExistError || undefined}
+                                                  onChange={this.handleChangeInstanceId}
+                                                  onBlur={this.enableBlurForEmptyValueOnly(input)}
+                                                  onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.INSTANCE)}
+                                                />
+                                              );
+                                            }}
+                                          </Field>
+                                        );
+                                      }}
                                     </FormattedMessage>
                                   </Col>
                                   <Col xs={3}>
@@ -1435,31 +1447,37 @@ class RequestForm extends React.Component {
                               <Row>
                                 <Col xs={9}>
                                   <FormattedMessage id="ui-requests.item.scanOrEnterBarcode">
-                                    {placeholder => (
-                                      <Field
-                                        key={values.keyOfItemBarcodeField ?? 0}
-                                        name="item.barcode"
-                                        validate={this.validateItemBarcode}
-                                        validateFields={[]}
-                                      >
-                                        {({ input, meta }) => {
-                                          const selectItemError = meta.touched && meta.error;
-                                          const itemDoesntExistError = isItemBarcodeClicked && meta.error;
+                                    {placeholder => {
+                                      const name = 'item.barcode';
+                                      const key = keyOfItemBarcodeField ?? 0;
 
-                                          return (
-                                            <TextField
-                                              {...input}
-                                              placeholder={placeholder}
-                                              aria-label={<FormattedMessage id="ui-requests.item.barcode" />}
-                                              error={meta.submitError || selectItemError || itemDoesntExistError || undefined}
-                                              onChange={this.handleChangeItemBarcode}
-                                              onBlur={this.enableBlurForEmptyValueOnly(input)}
-                                              onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.ITEM)}
-                                            />
-                                          );
-                                        }}
-                                      </Field>
-                                    )}
+                                      return (
+                                        <Field
+                                          data-testid="itemBarcodeField"
+                                          key={key}
+                                          name={name}
+                                          validate={this.validateItemBarcode(name, key)}
+                                          validateFields={[]}
+                                        >
+                                          {({ input, meta }) => {
+                                            const selectItemError = meta.touched && meta.error;
+                                            const itemDoesntExistError = isItemBarcodeClicked && meta.error;
+
+                                            return (
+                                              <TextField
+                                                {...input}
+                                                placeholder={placeholder}
+                                                aria-label={<FormattedMessage id="ui-requests.item.barcode" />}
+                                                error={meta.submitError || selectItemError || itemDoesntExistError || undefined}
+                                                onChange={this.handleChangeItemBarcode}
+                                                onBlur={this.enableBlurForEmptyValueOnly(input)}
+                                                onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.ITEM)}
+                                              />
+                                            );
+                                          }}
+                                        </Field>
+                                      );
+                                    }}
                                   </FormattedMessage>
                                 </Col>
                                 <Col xs={3}>
@@ -1659,31 +1677,36 @@ class RequestForm extends React.Component {
                           <Row>
                             <Col xs={9}>
                               <FormattedMessage id="ui-requests.requester.scanOrEnterBarcode">
-                                {placeholder => (
-                                  <Field
-                                    key={values.keyOfUserBarcodeField ?? 0}
-                                    name="requester.barcode"
-                                    validate={this.validateRequesterBarcode}
-                                    validateFields={[]}
-                                  >
-                                    {({ input, meta }) => {
-                                      const selectUserError = meta.touched && meta.error;
-                                      const userDoesntExistError = isUserBarcodeClicked && meta.error;
+                                {placeholder => {
+                                  const name = 'requester.barcode';
+                                  const key = keyOfUserBarcodeField ?? 0;
 
-                                      return (
-                                        <TextField
-                                          {...input}
-                                          placeholder={placeholder}
-                                          aria-label={<FormattedMessage id="ui-requests.requester.barcode" />}
-                                          error={selectUserError || userDoesntExistError || undefined}
-                                          onChange={this.handleChangeUserBarcode}
-                                          onBlur={this.enableBlurForEmptyValueOnly(input)}
-                                          onKeyDown={e => this.onKeyDown(e, 'requester')}
-                                        />
-                                      );
-                                    }}
-                                  </Field>
-                                )}
+                                  return (
+                                    <Field
+                                      key={key}
+                                      name={name}
+                                      validate={this.validateRequesterBarcode(name, key)}
+                                      validateFields={[]}
+                                    >
+                                      {({ input, meta }) => {
+                                        const selectUserError = meta.touched && meta.error;
+                                        const userDoesntExistError = isUserBarcodeClicked && meta.error;
+
+                                        return (
+                                          <TextField
+                                            {...input}
+                                            placeholder={placeholder}
+                                            aria-label={<FormattedMessage id="ui-requests.requester.barcode" />}
+                                            error={selectUserError || userDoesntExistError || undefined}
+                                            onChange={this.handleChangeUserBarcode}
+                                            onBlur={this.enableBlurForEmptyValueOnly(input)}
+                                            onKeyDown={e => this.onKeyDown(e, 'requester')}
+                                          />
+                                        );
+                                      }}
+                                    </Field>
+                                  );
+                                }}
                               </FormattedMessage>
                               <Pluggable
                                 aria-haspopup="true"
@@ -1718,8 +1741,8 @@ class RequestForm extends React.Component {
                             stripes={this.props.stripes}
                             request={request}
                             patronGroup={patronGroup?.group}
-                            deliverySelected={!!values.deliveryAddressTypeId}
-                            holdShelfSelected={!!values.pickupServicePointId}
+                            deliverySelected={!!deliveryAddressTypeId}
+                            holdShelfSelected={!!pickupServicePointId}
                             fulfilmentPreference={fulfilmentPreference}
                             deliveryAddress={addressDetail}
                             deliveryLocations={deliveryLocations}

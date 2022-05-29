@@ -56,6 +56,7 @@ import BlockModalInteractor from './patron-block-modal';
 
   chooseFulfillmentPreference = selectable('[name="fulfilmentPreference"]');
   chooseDeliveryAddress = selectable('[name="deliveryAddressTypeId"]');
+  deliveryAddressPresent = isPresent('[name="deliveryAddressTypeId"]');
   fulfillmentPreferenceValue = value('[name="fulfilmentPreference"]');
   deliveryAddressTypeIdValue = value('[name="deliveryAddressTypeId"]');
   pickupServicePointIdValue = value('[name="pickupServicePointId"]');
@@ -81,6 +82,10 @@ import BlockModalInteractor from './patron-block-modal';
 
   whenServicePointIsPresent() {
     return this.when(() => this.servicePointPresent, 5000);
+  }
+
+  whenDeliveryAddressPresent() {
+    return this.when(() => this.deliveryAddressPresent);
   }
 }
 
