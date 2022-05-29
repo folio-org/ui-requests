@@ -78,9 +78,9 @@ const RequestFormContainer = ({
   };
 
   const getPatronManualBlocks = (resources) => {
-    let patronBlocks = get(resources, ['patronBlocks', 'records'], []).filter(b => b.requests === true);
-    patronBlocks = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
-    return patronBlocks;
+    return (resources?.patronBlocks?.records || [])
+      .filter(b => b.requests === true)
+      .filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
   };
 
   const getAutomatedPatronBlocks = (resources) => {
@@ -92,6 +92,15 @@ const RequestFormContainer = ({
 
       return blocks;
     }, []);
+  };
+
+  const processBlocking = () => {
+    const [block = {}] = getPatronManualBlocks(parentResources);
+    const automatedPatronBlocks = getAutomatedPatronBlocks(parentResources);
+
+    if ((block?.userId === selectedUser.id || !isEmpty(automatedPatronBlocks)) && !isPatronBlocksOverridden) {
+      return setIsBlocked(true);
+    }
   };
 
   const handleSubmit = (data) => {
@@ -114,12 +123,7 @@ const RequestFormContainer = ({
       return showErrorModal();
     }
 
-    const [block = {}] = getPatronManualBlocks(parentResources);
-    const automatedPatronBlocks = getAutomatedPatronBlocks(parentResources);
-
-    if ((get(block, 'userId') === selectedUser.id || !isEmpty(automatedPatronBlocks)) && !isPatronBlocksOverridden) {
-      return setIsBlocked(true);
-    }
+    processBlocking();
 
     if (!requestExpirationDate) {
       unset(requestData, 'requestExpirationDate');
