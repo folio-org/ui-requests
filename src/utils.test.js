@@ -356,7 +356,7 @@ describe('memoizeValidation', () => {
         expect(result).toBe(result1);
       });
     });
-  })
+  });
 });
 
 

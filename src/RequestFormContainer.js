@@ -6,7 +6,6 @@ import {
 } from 'react-intl';
 import {
   cloneDeep,
-  get,
   isEmpty,
   isString,
   unset,
@@ -101,6 +100,8 @@ const RequestFormContainer = ({
     if ((block?.userId === selectedUser.id || !isEmpty(automatedPatronBlocks)) && !isPatronBlocksOverridden) {
       return setIsBlocked(true);
     }
+
+    return undefined;
   };
 
   const handleSubmit = (data) => {
