@@ -14,6 +14,7 @@ import {
   getInstanceQueryString,
   generateUserName,
   handleKeyCommand,
+  memoizeValidation,
 } from './utils';
 
 import {
@@ -313,6 +314,49 @@ describe('handlekeycommand', () => {
     expect(handler).toHaveBeenCalled();
     expect(event.preventDefault).not.toHaveBeenCalled();
   });
+});
+
+describe('memoizeValidation', () => {
+  const result1 = 'result 1';
+  const fn = jest.fn(() => result1);
+  const fieldName = 'item.barcode';
+  const key1 = 0;
+  const key2 = 1;
+  const arg = '123';
+
+  beforeEach(() => {
+    fn.mockClear();
+  });
+
+  describe('memoized function', () => {
+    it('should be invoked when the `arg !== lastArg`', () => {
+      memoizeValidation(fn)(fieldName, key1)(arg);
+      expect(fn).toBeCalledWith(arg);
+    });
+
+    it('should be invoked when the `key !== lastKey && arg === lastArg`', () => {
+      memoizeValidation(fn)(fieldName, key2)(arg);
+      expect(fn).toBeCalledWith(arg);
+    });
+
+    describe('when `key === lastKey && arg === lastArg`', () => {
+      let result;
+
+      beforeEach(() => {
+        const returnedFunc = memoizeValidation(fn);
+        returnedFunc(fieldName, key1)(arg);
+        result = returnedFunc(fieldName, key1)(arg);
+      });
+
+      it('should be invoked one time only', () => {
+        expect(fn).toBeCalledTimes(1);
+      });
+
+      it('should return the cashed result', () => {
+        expect(result).toBe(result1);
+      });
+    });
+  })
 });
 
 
