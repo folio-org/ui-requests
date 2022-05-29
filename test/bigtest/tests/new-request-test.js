@@ -11,7 +11,6 @@ import { expect } from 'chai';
 import { Button } from '@folio/stripes/components';
 
 import setupApplication from '../helpers/setup-application';
-import wait from '../helpers/wait';
 import ErrorModal from '../interactors/error-modal';
 import NewRequest from '../interactors/new-request';
 import RequestsInteractor from '../interactors/requests-interactor';
@@ -143,7 +142,7 @@ describe('New Request page', () => {
 
         await newRequest.patronComments.fillAndBlur(patronComment);
         await newRequest.chooseFulfillmentPreference('Hold Shelf');
-        await wait();
+        await newRequest.whenServicePointIsPresent();
         await newRequest.chooseServicePoint('Circ Desk 2');
         await newRequest.clickNewRequest();
         await viewRequest.isPresent;
@@ -185,7 +184,7 @@ describe('New Request page', () => {
           .clickItemEnterBtn();
         await newRequest.clickAddUser();
         await newRequest.chooseFulfillmentPreference('Hold Shelf');
-        await wait(500);
+        await newRequest.whenServicePointIsPresent();
         await newRequest.chooseServicePoint('Circ Desk 2');
         await newRequest.clickNewRequest();
         await viewRequest.isPresent;
@@ -223,7 +222,7 @@ describe('New Request page', () => {
           .fillUserBarcode('9676761472501')
           .clickUserEnterBtn();
 
-        await wait();
+        await newRequest.whenServicePointIsPresent();
         await newRequest.chooseServicePoint('Circ Desk 1');
         await newRequest.clickNewRequest();
         await viewRequest.isPresent;
@@ -266,7 +265,7 @@ describe('New Request page', () => {
           .clickUserEnterBtn();
 
         await newRequest.chooseFulfillmentPreference('Delivery');
-        await (100);
+        await newRequest.whenDeliveryAddressPresent();
         await newRequest.chooseDeliveryAddress('Claim');
         await newRequest.clickNewRequest();
         await viewRequest.isPresent;
@@ -548,7 +547,7 @@ describe('New Request page', () => {
           defaultServicePointId: 'servicepointId1',
         });
         this.visit('/requests/view/?layer=create&userBarcode=9676761472504&itemId=123');
-        await wait();
+        await newRequest.whenServicePointIsPresent();
         await newRequest.chooseServicePoint('Circ Desk 2');
         await newRequest.clickNewRequest();
       });

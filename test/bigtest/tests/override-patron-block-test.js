@@ -10,7 +10,6 @@ import setupApplication from '../helpers/setup-application';
 import NewRequest from '../interactors/new-request';
 import ViewRequest from '../interactors/view-request';
 import ErrorModal from '../interactors/error-modal';
-import wait from '../helpers/wait';
 
 const RequestForm = new NewRequest();
 const ViewRequestPage = new ViewRequest();
@@ -75,7 +74,6 @@ describe('Override patron block', () => {
 
     describe('enter patrons barcode', () => {
       beforeEach(async () => {
-        await wait(1100);
         await RequestForm
           .chooseServicePoint(servicePoint.name)
           .clickNewRequest();
@@ -93,11 +91,6 @@ describe('Override patron block', () => {
       const errorRequestIsNotAllowed = 'Hold requests are not allowed for this patron and item combination';
 
       beforeEach(async function () {
-        await wait(1100);
-        await RequestForm
-          .chooseServicePoint(servicePoint.name)
-          .clickNewRequest();
-
         this.server.post('circulation/requests', () => {
           return new Response(422, { 'Content-Type': 'application/json' }, {
             errors: [{
@@ -125,6 +118,9 @@ describe('Override patron block', () => {
           });
         });
 
+        await RequestForm
+          .chooseServicePoint(servicePoint.name)
+          .clickNewRequest();
         await ErrorModalInteractor.whenModalIsPresent();
       });
 
