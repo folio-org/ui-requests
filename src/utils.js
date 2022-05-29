@@ -370,15 +370,23 @@ export const handleKeyCommand = (handler, { disabled } = {}) => {
 };
 
 export const memoizeValidation = (fn) => {
-  let lastArg;
-  let lastResult;
+  const lastArgs = {};
+  const lastKeys = {};
+  const lastResults = {};
 
-  return arg => {
-    if (arg !== lastArg || arg === undefined) {
-      lastArg = arg;
-      lastResult = fn(arg);
+  return (fieldName, key) => arg => {
+    const lastArg = lastArgs[fieldName];
+    const lastKey = lastKeys[fieldName];
+
+    if (
+      arg !== lastArg ||
+      (key !== lastKey && arg === lastArg)
+    ) {
+      lastArgs[fieldName] = arg;
+      lastKeys[fieldName] = key;
+      lastResults[fieldName] = fn(arg);
     }
 
-    return lastResult;
+    return lastResults[fieldName];
   };
 };
