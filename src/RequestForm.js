@@ -1057,7 +1057,8 @@ class RequestForm extends React.Component {
     onSetBlocked(false);
   }
 
-  handleTlrCheckboxChange = (event, newValue) => {
+  handleTlrCheckboxChange = (event) => {
+    const isCreateTlr = event.target.checked;
     const {
       form,
       selectedItem,
@@ -1066,11 +1067,12 @@ class RequestForm extends React.Component {
       onSetSelectedInstance,
     } = this.props;
 
+    form.change('createTitleLevelRequest', isCreateTlr);
     form.change('item.barcode', null);
     form.change('instance.hrid', null);
     form.change('instanceId', null);
 
-    if (newValue) {
+    if (isCreateTlr) {
       onSetSelectedItem(undefined);
       this.setState({
         requestTypeOptions: [],
