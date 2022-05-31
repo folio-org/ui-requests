@@ -21,7 +21,7 @@ import {
 @interactor class InstanceList {
   static defaultScope = '#list-requests';
   size = count('[role=row] a');
-  items = collection('[role=row] a', ItemInteractor);
+  items = collection('[role=rowgroup] [role=row]', ItemInteractor);
   headers = collection('[role=columnheader]', HeaderInteractor);
 }
 

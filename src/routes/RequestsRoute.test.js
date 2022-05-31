@@ -11,6 +11,9 @@ import {
   SearchAndSort,
 } from '@folio/stripes/smart-components';
 
+
+import { CommandList, defaultKeyboardShortcuts } from '@folio/stripes/components';
+
 import RequestsRoute, {
   buildHoldRecords,
 } from './RequestsRoute';
@@ -69,6 +72,10 @@ describe('RequestsRoute', () => {
       currentServicePoint: {
         update: jest.fn(),
       },
+      expiredHolds: {
+        GET: jest.fn(() => ({})),
+        reset: jest.fn(),
+      },
       proxy: {
         reset: jest.fn(),
         GET: jest.fn(),
@@ -120,6 +127,14 @@ describe('RequestsRoute', () => {
     fulfilmentPreference: 'Hold Shelf',
   };
 
+  const renderComponent = (props = defaultProps) => {
+    render(
+      <CommandList commands={defaultKeyboardShortcuts}>
+        <RequestsRoute {...props} />,
+      </CommandList>,
+    );
+  };
+
   afterEach(() => {
     getTlrSettings.mockClear();
   });
@@ -128,9 +143,7 @@ describe('RequestsRoute', () => {
     getTlrSettings.mockReturnValueOnce({ createTitleLevelRequestsByDefault: true });
 
     beforeEach(() => {
-      render(
-        <RequestsRoute {...defaultProps} />
-      );
+      renderComponent(defaultProps);
     });
 
     it('should execute "SearchAndSort" with "createTitleLevelRequest" equal true', () => {
@@ -173,9 +186,7 @@ describe('RequestsRoute', () => {
 
       mockedRequest.requestLevel = REQUEST_LEVEL_TYPES.ITEM;
 
-      render(
-        <RequestsRoute {...defaultProps} />
-      );
+      renderComponent(defaultProps);
 
       fireEvent.click(screen.getByTestId('searchAndSort'));
 
@@ -186,11 +197,7 @@ describe('RequestsRoute', () => {
     it('should pass correct props if `requestLevel` is `Title`', () => {
       mockedRequest.requestLevel = REQUEST_LEVEL_TYPES.TITLE;
 
-      render(
-        <RequestsRoute
-          {...defaultProps}
-        />
-      );
+      renderComponent(defaultProps);
 
       fireEvent.click(screen.getByTestId('searchAndSort'));
 

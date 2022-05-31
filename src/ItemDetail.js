@@ -16,6 +16,7 @@ import {
 } from '@folio/stripes/smart-components';
 
 import { openRequestStatusFilters } from './utils';
+import { itemStatusesTranslations } from './constants';
 
 const DEFAULT_COUNT_VALUE = 0;
 
@@ -37,7 +38,8 @@ const ItemDetail = ({
   const title = request?.instance.title || item.title || <NoValue />;
   const contributor = request?.instance.contributorNames?.[0]?.name || item.contributorNames?.[0]?.name || <NoValue />;
   const count = request?.itemRequestCount || requestCount || DEFAULT_COUNT_VALUE;
-  const status = item.status.name || item.status || <NoValue />;
+  const status = item.status?.name || item.status;
+  const statusMessage = status ? <FormattedMessage id={itemStatusesTranslations[status]} /> : <NoValue />;
   const effectiveLocationName = item.effectiveLocation?.name || item.location?.name || <NoValue />;
   const dueDate = loan?.dueDate ? <FormattedDate value={loan.dueDate} /> : <NoValue />;
 
@@ -91,7 +93,7 @@ const ItemDetail = ({
       <Row>
         <Col xs={4}>
           <KeyValue label={<FormattedMessage id="ui-requests.item.status" />}>
-            {status}
+            {statusMessage}
           </KeyValue>
         </Col>
         <Col xs={4}>

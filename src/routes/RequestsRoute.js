@@ -23,6 +23,8 @@ import {
   filters2cql,
   FormattedTime,
   MenuSection,
+  TextLink,
+  DefaultMCLRowFormatter,
 } from '@folio/stripes/components';
 import {
   deparseFilters,
@@ -67,9 +69,10 @@ import {
   RequestsFilters,
   RequestsFiltersConfig,
 } from '../components/RequestsFilters';
+import RequestsRouteShortcutsWrapper from '../components/RequestsRouteShortcutsWrapper';
 import {
-  getFormattedYears,
   isReorderableRequest,
+  getFormattedYears,
 } from './utils';
 
 const INITIAL_RESULT_COUNT = 30;
@@ -178,7 +181,7 @@ class RequestsRoute extends React.Component {
               'requestStatus': 'status',
               'requesterBarcode': 'requester.barcode',
               'requestDate': 'requestDate',
-              'position': 'position',
+              'position': 'position/number',
               'proxy': 'proxy',
             },
             RequestsFiltersConfig,
@@ -382,6 +385,7 @@ class RequestsRoute extends React.Component {
     }).isRequired,
     history: PropTypes.object,
     location: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -413,6 +417,7 @@ class RequestsRoute extends React.Component {
       proxy: formatMessage({ id: 'ui-requests.requests.proxy' }),
     };
 
+    this.getRowURL = this.getRowURL.bind(this);
     this.addRequestFields = this.addRequestFields.bind(this);
     this.processError = this.processError.bind(this);
     this.create = this.create.bind(this);
@@ -430,6 +435,7 @@ class RequestsRoute extends React.Component {
       errorModalData: {},
       servicePointId: '',
       requests: [],
+      selectedId: '',
       titleLevelRequestsFeatureEnabled,
       createTitleLevelRequestsByDefault,
     };
@@ -671,6 +677,29 @@ class RequestsRoute extends React.Component {
     });
   }
 
+  getRowURL(id) {
+    const {
+      match: { path },
+      location: { search },
+    } = this.props;
+
+    return `${path}/view/${id}${search}`;
+  }
+
+  setURL(id) {
+    this.setState({
+      selectedId: id
+    });
+  }
+
+  resultIsSelected = ({ item }) => item.id === this.state.selectedId;
+
+  viewRecordOnCollapse = () => {
+    this.setState({
+      selectedId: null
+    });
+  }
+
   getHelperResourcePath = (helper, id) => `circulation/requests/${id}`;
 
   massageNewRecord = (requestData) => {
@@ -903,6 +932,7 @@ class RequestsRoute extends React.Component {
       mutator,
       stripes,
       history,
+      location,
       intl,
       stripes: {
         timezone,
@@ -952,7 +982,7 @@ class RequestsRoute extends React.Component {
       'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : ''),
       'requestStatus': rq => <FormattedMessage id={requestStatusesTranslations[rq.status]} />,
       'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
-      'title': rq => (rq.instance ? rq.instance.title : ''),
+      'title': rq => <TextLink to={this.getRowURL(rq.id)} onClick={() => this.setURL(rq.id)}>{(rq.instance ? rq.instance.title : '')}</TextLink>,
       'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
     };
 
@@ -1039,77 +1069,87 @@ class RequestsRoute extends React.Component {
     };
 
     return (
-      <>
-        {
-          isEmpty(errorModalData) ||
-          <ErrorModal
-            onClose={this.errorModalClose}
-            label={intl.formatMessage({ id: errorModalData.label })}
-            errorMessage={intl.formatMessage({ id: errorModalData.errorMessage })}
+      <RequestsRouteShortcutsWrapper
+        history={history}
+        location={location}
+        stripes={stripes}
+      >
+        <>
+          {
+            isEmpty(errorModalData) ||
+            <ErrorModal
+              onClose={this.errorModalClose}
+              label={intl.formatMessage({ id: errorModalData.label })}
+              errorMessage={intl.formatMessage({ id: errorModalData.errorMessage })}
+            />
+            }
+          <div data-test-request-instances>
+            <SearchAndSort
+              columnManagerProps={columnManagerProps}
+              hasNewButton={false}
+              actionMenu={actionMenu}
+              packageInfo={packageInfo}
+              objectName="request"
+              initialResultCount={INITIAL_RESULT_COUNT}
+              resultCountIncrement={RESULT_COUNT_INCREMENT}
+              viewRecordComponent={ViewRequest}
+              editRecordComponent={RequestForm}
+              getHelperResourcePath={this.getHelperResourcePath}
+              columnWidths={{
+                requestDate: { max: 165 },
+                title: { max: 300 },
+                year: { max: 58 },
+                position: { max: 150 },
+                requestType: { max: 101 },
+                itemBarcode: { max: 140 },
+                type: { max: 100 },
+              }}
+              columnMapping={this.columnLabels}
+              resultsRowClickHandlers={false}
+              resultsFormatter={resultsFormatter}
+              resultRowFormatter={DefaultMCLRowFormatter}
+              newRecordInitialValues={initialValues}
+              massageNewRecord={this.massageNewRecord}
+              onCreate={this.create}
+              onCloseNewRecord={this.handleCloseNewRecord}
+              parentResources={resources}
+              parentMutator={mutator}
+              detailProps={{
+                onChangePatron: this.onChangePatron,
+                stripes,
+                history,
+                errorMessage,
+                findResource: this.findResource,
+                toggleModal: this.toggleModal,
+                joinRequest: this.addRequestFields,
+                optionLists: {
+                  addressTypes,
+                  fulfilmentTypes,
+                  servicePoints,
+                  cancellationReasons,
+                },
+                patronGroups,
+                query: resources.query,
+                onDuplicate: this.onDuplicate,
+                buildRecordsForHoldsShelfReport: this.buildRecordsForHoldsShelfReport,
+              }}
+              viewRecordOnCollapse={this.viewRecordOnCollapse}
+              viewRecordPerms="ui-requests.view"
+              newRecordPerms="ui-requests.create"
+              renderFilters={this.renderFilters}
+              resultIsSelected={this.resultIsSelected}
+              onFilterChange={this.handleFilterChange}
+              pageAmount={100}
+              pagingType="click"
+            />
+          </div>
+          <PrintContent
+            ref={this.printContentRef}
+            template={printTemplate}
+            dataSource={pickSlipsData}
           />
-        }
-        <div data-test-request-instances>
-          <SearchAndSort
-            columnManagerProps={columnManagerProps}
-            hasNewButton={false}
-            actionMenu={actionMenu}
-            packageInfo={packageInfo}
-            objectName="request"
-            initialResultCount={INITIAL_RESULT_COUNT}
-            resultCountIncrement={RESULT_COUNT_INCREMENT}
-            viewRecordComponent={ViewRequest}
-            editRecordComponent={RequestForm}
-            getHelperResourcePath={this.getHelperResourcePath}
-            columnWidths={{
-              requestDate: { max: 165 },
-              title: { max: 300 },
-              year: { max: 58 },
-              position: { max: 150 },
-              requestType: { max: 101 },
-              itemBarcode: { max: 140 },
-              type: { max: 100 },
-            }}
-            columnMapping={this.columnLabels}
-            resultsFormatter={resultsFormatter}
-            newRecordInitialValues={initialValues}
-            massageNewRecord={this.massageNewRecord}
-            onCreate={this.create}
-            onCloseNewRecord={this.handleCloseNewRecord}
-            parentResources={resources}
-            parentMutator={mutator}
-            detailProps={{
-              onChangePatron: this.onChangePatron,
-              stripes,
-              history,
-              errorMessage,
-              findResource: this.findResource,
-              toggleModal: this.toggleModal,
-              joinRequest: this.addRequestFields,
-              optionLists: {
-                addressTypes,
-                fulfilmentTypes,
-                servicePoints,
-                cancellationReasons,
-              },
-              patronGroups,
-              query: resources.query,
-              onDuplicate: this.onDuplicate,
-              buildRecordsForHoldsShelfReport: this.buildRecordsForHoldsShelfReport,
-            }}
-            viewRecordPerms="ui-requests.view"
-            newRecordPerms="ui-requests.create"
-            renderFilters={this.renderFilters}
-            onFilterChange={this.handleFilterChange}
-            pageAmount={100}
-            pagingType="click"
-          />
-        </div>
-        <PrintContent
-          ref={this.printContentRef}
-          template={printTemplate}
-          dataSource={pickSlipsData}
-        />
-      </>
+        </>
+      </RequestsRouteShortcutsWrapper>
     );
   }
 }

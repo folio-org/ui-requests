@@ -8,7 +8,11 @@ import { AppIcon } from '@folio/stripes/core';
 import ItemLink from './components/ItemLink';
 import RequesterLink from './components/RequesterLink';
 import { getFullName } from '../utils';
-import { MISSING_VALUE_SYMBOL } from '../constants';
+import {
+  MISSING_VALUE_SYMBOL,
+  requestStatusesTranslations,
+  requestTypesTranslations,
+} from '../constants';
 
 export const COLUMN_MAP = {
   position: <FormattedMessage id="ui-requests.requestQueue.order" />,
@@ -49,10 +53,12 @@ export const formatter = {
   position: request => (<AppIcon size="small" app="requests">{request.position}</AppIcon>),
   itemBarcode: request => <ItemLink request={request} />,
   requestDate: request => <FormattedDate value={request.requestDate} day="numeric" month="numeric" year="numeric" hour="numeric" minute="numeric" />,
+  status: request => <FormattedMessage id={requestStatusesTranslations[request.status]} />,
   pickupDelivery: request => request.pickupServicePoint?.name || (request.deliveryType ? <FormattedMessage id="ui-requests.requestQueue.deliveryType" values={{ type: request.deliveryType }} /> : MISSING_VALUE_SYMBOL),
   requester: (request) => getFullName(request.requester),
   requesterBarcode: request => <RequesterLink request={request} />,
   patronGroup: request => request?.requester?.patronGroup?.group || MISSING_VALUE_SYMBOL,
+  requestType: request => <FormattedMessage id={requestTypesTranslations[request.requestType]} />,
   enumeration: request => request.item?.enumeration || MISSING_VALUE_SYMBOL,
   chronology: request => request.item?.chronology || MISSING_VALUE_SYMBOL,
   volume: request => request.item?.volume || MISSING_VALUE_SYMBOL,

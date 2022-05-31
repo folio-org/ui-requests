@@ -83,6 +83,41 @@ export const itemStatuses = {
   UNAVAILABLE: 'Unavailable',
   UNKNOWN: 'Unknown',
   WITHDRAWN: 'Withdrawn',
+  RECENTLY_RETURNED: 'Recently returned',
+  AVAILABLE_IN_ASR: 'Available in ASR',
+  RETRIEVING_FROM_ASR: 'Retrieving from ASR',
+  MISSING_FROM_ASR: 'Missing from ASR',
+  ORDER_CLOSED: 'Order closed',
+  RESTRICTED: 'Restricted',
+};
+
+// map from API's enum-value to translation key
+export const itemStatusesTranslations = {
+  [itemStatuses.AGED_TO_LOST]: 'ui-requests.item.status.agedToLost',
+  [itemStatuses.AVAILABLE]: 'ui-requests.item.status.available',
+  [itemStatuses.AWAITING_DELIVERY]: 'ui-requests.item.status.awaitingDelivery',
+  [itemStatuses.AWAITING_PICKUP]: 'ui-requests.item.status.awaitingPickup',
+  [itemStatuses.CHECKED_OUT]: 'ui-requests.item.status.checkedOut',
+  [itemStatuses.CLAIMED_RETURNED]: 'ui-requests.item.status.claimedReturned',
+  [itemStatuses.DECLARED_LOST]: 'ui-requests.item.status.declaredLost',
+  [itemStatuses.IN_PROCESS]: 'ui-requests.item.status.inProcess',
+  [itemStatuses.IN_PROCESS_NON_REQUESTABLE]: 'ui-requests.item.status.inProcessNonRequestable',
+  [itemStatuses.IN_TRANSIT]: 'ui-requests.item.status.inTransit',
+  [itemStatuses.INTELLECTUAL_ITEM]: 'ui-requests.item.status.intellectualItem',
+  [itemStatuses.LONG_MISSING]: 'ui-requests.item.status.longMissing',
+  [itemStatuses.LOST_AND_PAID]: 'ui-requests.item.status.lostAndPaid',
+  [itemStatuses.MISSING]: 'ui-requests.item.status.missing',
+  [itemStatuses.ON_ORDER]: 'ui-requests.item.status.onOrder',
+  [itemStatuses.PAGED]: 'ui-requests.item.status.paged',
+  [itemStatuses.UNAVAILABLE]: 'ui-requests.item.status.unavailable',
+  [itemStatuses.UNKNOWN]: 'ui-requests.item.status.unknown',
+  [itemStatuses.WITHDRAWN]: 'ui-requests.item.status.withdrawn',
+  [itemStatuses.RECENTLY_RETURNED]: 'ui-requests.item.status.recentlyReturned',
+  [itemStatuses.AVAILABLE_IN_ASR]: 'ui-requests.item.status.availableInASR',
+  [itemStatuses.RETRIEVING_FROM_ASR]: 'ui-requests.item.status.retrievingFromASR',
+  [itemStatuses.MISSING_FROM_ASR]: 'ui-requests.item.status.missingFromASR',
+  [itemStatuses.ORDER_CLOSED]: 'ui-requests.item.status.orderClosed',
+  [itemStatuses.RESTRICTED]: 'ui-requests.item.status.restricted',
 };
 
 export const requestTypesMap = {
@@ -104,15 +139,16 @@ export const requestTypeOptionMap = {
 };
 
 export const requestTypesByItemStatus = {
-  'Checked out': ['Hold', 'Recall'],
-  'Available': ['Page'],
-  'Awaiting pickup': ['Hold', 'Recall'],
-  'Awaiting delivery': ['Hold', 'Recall'],
-  'In transit': ['Hold', 'Recall'],
-  'Missing': ['Hold'],
-  'Paged': ['Hold', 'Recall'],
-  'On order': ['Hold', 'Recall'],
-  'In process': ['Hold', 'Recall'],
+  [itemStatuses.CHECKED_OUT]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
+  [itemStatuses.AVAILABLE]: [requestTypesMap.PAGE],
+  [itemStatuses.AWAITING_PICKUP]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
+  [itemStatuses.AWAITING_DELIVERY]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
+  [itemStatuses.IN_TRANSIT]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
+  [itemStatuses.MISSING]: [requestTypesMap.HOLD],
+  [itemStatuses.PAGED]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
+  [itemStatuses.ON_ORDER]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
+  [itemStatuses.IN_PROCESS]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
+  [itemStatuses.RESTRICTED]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
 };
 
 export const reportHeaders = [

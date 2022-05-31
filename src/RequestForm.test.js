@@ -13,6 +13,8 @@ import { Field } from 'redux-form';
 import {
   Checkbox,
   TextField,
+  CommandList,
+  defaultKeyboardShortcuts,
 } from '@folio/stripes/components';
 
 import RequestForm from './RequestForm';
@@ -76,7 +78,7 @@ describe('RequestForm', () => {
       change: mockedChangeFunction,
       handleSubmit: jest.fn(),
       asyncValidate: jest.fn(),
-      findResource: jest.fn(() => new Promise((resolve) => resolve({}))),
+      findResource: jest.fn(() => new Promise((resolve) => resolve())),
       request: mockedRequest || {},
       initialValues: {},
       location: {
@@ -99,9 +101,11 @@ describe('RequestForm', () => {
     };
 
     render(
-      <RequestForm
-        {...props}
-      />
+      <CommandList commands={defaultKeyboardShortcuts}>
+        <RequestForm
+          {...props}
+        />
+      </CommandList>
     );
   };
 
@@ -253,6 +257,8 @@ describe('RequestForm', () => {
         instance : mockedInstance,
         id : 'testId',
         instanceId : 'instanceId',
+        requestType: 'Hold',
+        status: 'Open - Awaiting delivery',
       };
 
       it('should not render `TLR` checkbox section', () => {

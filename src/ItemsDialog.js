@@ -23,7 +23,10 @@ import {
 } from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
 
-import { itemStatuses } from './constants';
+import {
+  itemStatuses,
+  itemStatusesTranslations,
+} from './constants';
 import { Loading } from './components';
 
 import css from './ItemsDialog.css';
@@ -154,8 +157,15 @@ const ItemsDialog = ({
     }
 
     // items with status available must go first
-    return resultItems.sort((a) => (a.status.name === itemStatuses.AVAILABLE ? -1 : 1));
-  }, [items, skippedItemId]);
+    resultItems.sort((a) => (a.status.name === itemStatuses.AVAILABLE ? -1 : 1));
+    return resultItems.map(item => ({
+      ...item,
+      status: {
+        ...item.status,
+        name: formatMessage({ id: itemStatusesTranslations[item.status.name] }),
+      }
+    }));
+  }, [items, skippedItemId, formatMessage]);
 
   const itemsAmount = contentData.length;
 
@@ -182,17 +192,17 @@ const ItemsDialog = ({
           {isLoading || areItemsBeingLoaded
             ? <Loading data-testid="loading" />
             : <MultiColumnList
-              id="instance-items-list"
-              interactive
-              ariaLabel={formatMessage({ id: 'ui-requests.items.instanceItems' })}
-              contentData={contentData}
-              visibleColumns={COLUMN_NAMES}
-              columnMapping={COLUMN_MAP}
-              columnWidths={COLUMN_WIDTHS}
-              formatter={formatter}
-              maxHeight={MAX_HEIGHT}
-              isEmptyMessage={formatMessage({ id: 'ui-requests.items.instanceItems.notFound' })}
-              onRowClick={onRowClick}
+                id="instance-items-list"
+                interactive
+                ariaLabel={formatMessage({ id: 'ui-requests.items.instanceItems' })}
+                contentData={contentData}
+                visibleColumns={COLUMN_NAMES}
+                columnMapping={COLUMN_MAP}
+                columnWidths={COLUMN_WIDTHS}
+                formatter={formatter}
+                maxHeight={MAX_HEIGHT}
+                isEmptyMessage={formatMessage({ id: 'ui-requests.items.instanceItems.notFound' })}
+                onRowClick={onRowClick}
             />
           }
         </Pane>
