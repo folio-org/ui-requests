@@ -275,6 +275,7 @@ class RequestForm extends React.Component {
     if (query?.mode === createModes.DUPLICATE &&
       item && !selectedItem) {
       onSetSelectedItem(item);
+      this.triggerItemBarcodeValidation();
     }
 
     if (prevQuery.userBarcode !== query.userBarcode) {
@@ -821,10 +822,18 @@ class RequestForm extends React.Component {
     return instance;
   }
 
+  triggerItemBarcodeValidation = () => {
+    const {
+      form,
+      values,
+    } = this.props;
+
+    form.change('keyOfItemBarcodeField', values.keyOfItemBarcodeField ? 0 : 1);
+  };
+
   onItemClick() {
     const {
       values,
-      form,
       onSetSelectedItem,
     } = this.props;
     const barcode = values.item?.barcode;
@@ -834,7 +843,7 @@ class RequestForm extends React.Component {
       this.setState(({
         isItemBarcodeClicked: true,
       }));
-      form.change('keyOfItemBarcodeField', values.keyOfItemBarcodeField ? 0 : 1);
+      this.triggerItemBarcodeValidation();
     }
   }
 
