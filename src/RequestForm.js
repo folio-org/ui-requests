@@ -489,8 +489,8 @@ class RequestForm extends React.Component {
       proxy: null,
       isUserLoading: true,
     });
-    form.change('pickupServicePointId', '');
-    form.change('deliveryAddressTypeId', '');
+    form.change('pickupServicePointId', undefined);
+    form.change('deliveryAddressTypeId', undefined);
 
     return findResource(RESOURCE_TYPES.USER, value, fieldName)
       .then((result) => {
@@ -1163,6 +1163,7 @@ class RequestForm extends React.Component {
       itemRequestCount,
       instanceRequestCount,
       selectedAddressTypeId,
+      deliverySelected,
       isCancellingRequest,
       isUserLoading,
       isItemOrInstanceLoading,
@@ -1736,13 +1737,13 @@ class RequestForm extends React.Component {
 
                           </Row> }
                           {(selectedUser?.id || request?.requester) &&
+                          (deliveryAddressTypeId !== undefined || pickupServicePointId !== undefined) &&
                           <UserForm
                             user={request ? request.requester : selectedUser}
                             stripes={this.props.stripes}
                             request={request}
                             patronGroup={patronGroup?.group}
-                            deliverySelected={!!deliveryAddressTypeId}
-                            holdShelfSelected={!!pickupServicePointId}
+                            deliverySelected={deliverySelected}
                             fulfilmentPreference={fulfilmentPreference}
                             deliveryAddress={addressDetail}
                             deliveryLocations={deliveryLocations}

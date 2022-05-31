@@ -142,7 +142,6 @@ describe('New Request page', () => {
 
         await newRequest.patronComments.fillAndBlur(patronComment);
         await newRequest.chooseFulfillmentPreference('Hold Shelf');
-        await newRequest.whenServicePointIsPresent();
         await newRequest.chooseServicePoint('Circ Desk 2');
         await newRequest.clickNewRequest();
         await viewRequest.isPresent;
@@ -222,7 +221,6 @@ describe('New Request page', () => {
           .fillUserBarcode('9676761472501')
           .clickUserEnterBtn();
 
-        await newRequest.whenServicePointIsPresent();
         await newRequest.chooseServicePoint('Circ Desk 1');
         await newRequest.clickNewRequest();
         await viewRequest.isPresent;
@@ -265,7 +263,6 @@ describe('New Request page', () => {
           .clickUserEnterBtn();
 
         await newRequest.chooseFulfillmentPreference('Delivery');
-        await newRequest.whenDeliveryAddressPresent();
         await newRequest.chooseDeliveryAddress('Claim');
         await newRequest.clickNewRequest();
         await viewRequest.isPresent;
@@ -547,7 +544,6 @@ describe('New Request page', () => {
           defaultServicePointId: 'servicepointId1',
         });
         this.visit('/requests/view/?layer=create&userBarcode=9676761472504&itemId=123');
-        await newRequest.whenServicePointIsPresent();
         await newRequest.chooseServicePoint('Circ Desk 2');
         await newRequest.clickNewRequest();
       });

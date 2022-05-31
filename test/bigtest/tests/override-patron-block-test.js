@@ -75,6 +75,7 @@ describe('Override patron block', () => {
     describe('enter patrons barcode', () => {
       beforeEach(async () => {
         await RequestForm
+          .whenServicePointIsPresent()
           .chooseServicePoint(servicePoint.name)
           .clickNewRequest();
         await ViewRequestPage.isPresent;

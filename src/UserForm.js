@@ -33,7 +33,6 @@ class UserForm extends React.Component {
     deliverySelected: PropTypes.bool,
     servicePoints: PropTypes.arrayOf(PropTypes.object),
     request: PropTypes.object,
-    holdShelfSelected: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -108,7 +107,6 @@ class UserForm extends React.Component {
       deliverySelected,
       fulfilmentPreference,
       fulfilmentTypeOptions,
-      holdShelfSelected,
       onChangeFulfilment,
       request,
     } = this.props;
@@ -167,8 +165,8 @@ class UserForm extends React.Component {
           </Col>
           <Col xs={4}>
             {
-              (holdShelfSelected && this.renderPickupServicePointSelect()) ||
-              (deliverySelected && deliveryLocations && this.renderDeliveryAddressSelect())
+              (!deliverySelected && this.renderPickupServicePointSelect()) ||
+              (deliveryLocations && this.renderDeliveryAddressSelect())
             }
           </Col>
         </Row>
