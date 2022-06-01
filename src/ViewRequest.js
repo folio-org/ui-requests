@@ -65,13 +65,23 @@ import {
 } from './utils';
 import urls from './routes/urls';
 
+const CREATE_SUCCESS = 'CREATE_SUCCESS';
+
 class ViewRequest extends React.Component {
   static manifest = {
     selectedRequest: {
       type: 'okapi',
       path: 'circulation/requests/:{id}',
       shouldRefresh: (resource, action, refresh) => {
-        const { path } = action.meta;
+        const {
+          path,
+          originatingActionType,
+        } = action.meta;
+
+        if (originatingActionType.includes(CREATE_SUCCESS)) {
+          return false;
+        }
+
         return refresh || (path && path.match(/link/));
       },
     },
