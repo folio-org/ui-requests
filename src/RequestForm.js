@@ -454,7 +454,7 @@ class RequestForm extends React.Component {
     if (!user) {
       this.setState({ isAwaitingForProxySelection: false });
 
-      return undefined;
+      return null;
     }
 
     const { parentMutator: mutator } = this.props;
@@ -680,6 +680,7 @@ class RequestForm extends React.Component {
   findItem(key, value) {
     const {
       findResource,
+      form,
       onSetSelectedItem,
       onShowErrorModal,
     } = this.props;
@@ -702,10 +703,10 @@ class RequestForm extends React.Component {
         const item = result.items[0];
         const options = getRequestTypeOptions(item);
 
-        this.props.form.change('itemId', item.id);
-        this.props.form.change('item.barcode', item.barcode);
+        form.change('itemId', item.id);
+        form.change('item.barcode', item.barcode);
         if (options.length >= 1) {
-          this.props.form.change('requestType', options[0].value);
+          form.change('requestType', options[0].value);
         }
 
         // Setting state here is redundant with what follows, but it lets us
@@ -1384,7 +1385,7 @@ class RequestForm extends React.Component {
                                                   {...input}
                                                   placeholder={placeholder}
                                                   aria-label={<FormattedMessage id="ui-requests.instance.value" />}
-                                                  error={selectInstanceError || instanceDoesntExistError || undefined}
+                                                  error={selectInstanceError || instanceDoesntExistError || null}
                                                   onChange={this.handleChangeInstanceId}
                                                   onBlur={this.enableBlurForEmptyValueOnly(input)}
                                                   onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.INSTANCE)}
@@ -1480,7 +1481,7 @@ class RequestForm extends React.Component {
                                                 {...input}
                                                 placeholder={placeholder}
                                                 aria-label={<FormattedMessage id="ui-requests.item.barcode" />}
-                                                error={meta.submitError || selectItemError || itemDoesntExistError || undefined}
+                                                error={meta.submitError || selectItemError || itemDoesntExistError || null}
                                                 onChange={this.handleChangeItemBarcode}
                                                 onBlur={this.enableBlurForEmptyValueOnly(input)}
                                                 onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.ITEM)}
@@ -1709,7 +1710,7 @@ class RequestForm extends React.Component {
                                             {...input}
                                             placeholder={placeholder}
                                             aria-label={<FormattedMessage id="ui-requests.requester.barcode" />}
-                                            error={selectUserError || userDoesntExistError || undefined}
+                                            error={selectUserError || userDoesntExistError || null}
                                             onChange={this.handleChangeUserBarcode}
                                             onBlur={this.enableBlurForEmptyValueOnly(input)}
                                             onKeyDown={e => this.onKeyDown(e, 'requester')}

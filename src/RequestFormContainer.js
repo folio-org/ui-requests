@@ -84,6 +84,7 @@ const RequestFormContainer = ({
 
   const getAutomatedPatronBlocks = (resources) => {
     const automatedPatronBlocks = resources?.automatedPatronBlocks?.records || [];
+
     return automatedPatronBlocks.reduce((blocks, block) => {
       if (block.blockRequests) {
         blocks.push(block.message);
@@ -93,15 +94,17 @@ const RequestFormContainer = ({
     }, []);
   };
 
-  const processBlocking = () => {
+  const hasBlocking = () => {
     const [block = {}] = getPatronManualBlocks(parentResources);
     const automatedPatronBlocks = getAutomatedPatronBlocks(parentResources);
+    const isBlocked = (
+      (block?.userId === selectedUser.id || !isEmpty(automatedPatronBlocks)) &&
+      !isPatronBlocksOverridden
+    );
 
-    if ((block?.userId === selectedUser.id || !isEmpty(automatedPatronBlocks)) && !isPatronBlocksOverridden) {
-      return setIsBlocked(true);
-    }
+    setIsBlocked(isBlocked);
 
-    return undefined;
+    return isBlocked;
   };
 
   const handleSubmit = (data) => {
@@ -124,7 +127,7 @@ const RequestFormContainer = ({
       return showErrorModal();
     }
 
-    processBlocking();
+    if (hasBlocking()) return undefined;
 
     if (!requestExpirationDate) {
       unset(requestData, 'requestExpirationDate');
