@@ -1,2 +1,11 @@
 /** @param {import('karma').Config} config */
-module.exports = config => config.set({ client: { captureConsole: false } });
+module.exports = function(config) {
+  config.set({ client: { captureConsole: false } });
+  config.set({
+    client: {
+      mocha: {
+        timeout : 6000,
+      },
+    },
+  });
+};
