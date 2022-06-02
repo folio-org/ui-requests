@@ -22,6 +22,7 @@
 * Update NodeJS to v16 in GitHub Actions. Refs UIREQ-780.
 * Fix HTTP request duplication when making request. Refs UIREQ-779.
 * Disable request detail action menu when hardcoded UID is present. Refs UIREQ-783.
+* Disable item and instance links in request detail when hardcoded UID is present. Refs UIREQ-784.
  
 ## [7.0.2](https://github.com/folio-org/ui-requests/tree/v7.0.2) (2022-04-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.0.1...v7.0.2)
