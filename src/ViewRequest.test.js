@@ -10,13 +10,20 @@ import '../test/jest/__mock__';
 import {
   Pane,
   CommandList,
-  defaultKeyboardShortcuts
+  defaultKeyboardShortcuts,
 } from '@folio/stripes/components';
 
 import ViewRequest from './ViewRequest';
 import RequestForm from './RequestForm';
-import { requestStatuses, REQUEST_LEVEL_TYPES } from './constants';
-import { duplicateRecordShortcut, editRecordShortcut } from '../test/jest/helpers/shortcuts';
+import {
+  INVALID_REQUEST_HARDCODED_ID,
+  requestStatuses,
+  REQUEST_LEVEL_TYPES,
+} from './constants';
+import {
+  duplicateRecordShortcut,
+  editRecordShortcut,
+} from '../test/jest/helpers/shortcuts';
 
 jest.mock('./RequestForm', () => jest.fn(() => null));
 jest.mock('./MoveRequestManager', () => jest.fn(() => null));
@@ -35,6 +42,10 @@ Pane.mockImplementation(({ children, actionMenu }) => (
 describe('ViewRequest', () => {
   const labelIds = {
     duplicateRequest: 'ui-requests.actions.duplicateRequest',
+    cancelRequest: 'ui-requests.cancel.cancelRequest',
+    edit: 'ui-requests.actions.edit',
+    moveRequest: 'ui-requests.actions.moveRequest',
+    reorderQueue: 'ui-requests.actions.reorderQueue',
   };
   const mockedRequest = {
     instance: {
@@ -125,7 +136,7 @@ describe('ViewRequest', () => {
       mockedLocation.search = '?layer=edit';
     });
 
-    it('should set `createTitleLevelRequest` to false when try to edit existed request', () => {
+    it('should set "createTitleLevelRequest" to false when try to edit existed request', () => {
       const expectedResult = {
         initialValues : {
           requestExpirationDate: null,
@@ -145,23 +156,125 @@ describe('ViewRequest', () => {
       mockedLocation.search = null;
     });
 
-    describe('when current request is closed and TLR in enabled', () => {
-      beforeAll(() => {
-        mockedConfig.records[0].value = '{"titleLevelRequestsFeatureEnabled":true}';
+    describe('when current request is closed', () => {
+      describe('request is valid', () => {
+        describe('TLR in enabled', () => {
+          beforeAll(() => {
+            mockedConfig.records[0].value = '{"titleLevelRequestsFeatureEnabled":true}';
+          });
+
+          it('should render "Duplicate" button', () => {
+            expect(screen.getByText(labelIds.duplicateRequest)).toBeInTheDocument();
+          });
+        });
+
+        describe('TLR in disabled', () => {
+          beforeAll(() => {
+            mockedConfig.records[0].value = '{"titleLevelRequestsFeatureEnabled":false}';
+          });
+
+          it('should not render "Duplicate" button', () => {
+            expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
+          });
+        });
       });
 
-      it('should render `Duplicate` button', () => {
-        expect(screen.getByText(labelIds.duplicateRequest)).toBeInTheDocument();
+      describe('request is not valid', () => {
+        const closedInvalidRequest = {
+          ...mockedRequest,
+          instanceId: INVALID_REQUEST_HARDCODED_ID,
+          holdingsRecordId: INVALID_REQUEST_HARDCODED_ID,
+        };
+        const props = {
+          ...defaultProps,
+          resources: {
+            selectedRequest: {
+              hasLoaded: true,
+              records: [closedInvalidRequest],
+            },
+          },
+        };
+
+        beforeEach(() => {
+          render(
+            <CommandList commands={defaultKeyboardShortcuts}>
+              <ViewRequest {...props} />
+            </CommandList>
+          );
+        });
+
+        it('should not render "Dublicate" button', () => {
+          expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
+        });
       });
     });
 
-    describe('when current request is closed and TLR in disabled', () => {
-      beforeAll(() => {
-        mockedConfig.records[0].value = '{"titleLevelRequestsFeatureEnabled":false}';
+    describe('when current request is open', () => {
+      const openValidRequest = {
+        ...mockedRequest,
+        status: requestStatuses.NOT_YET_FILLED,
+      };
+
+      describe('when request is valid', () => {
+        const props = {
+          ...defaultProps,
+          resources: {
+            selectedRequest: {
+              hasLoaded: true,
+              records: [openValidRequest],
+            },
+          },
+        };
+
+        beforeEach(() => {
+          render(
+            <CommandList commands={defaultKeyboardShortcuts}>
+              <ViewRequest {...props} />
+            </CommandList>
+          );
+        });
+
+        it('actions menu should show all possible actions', () => {
+          expect(screen.getByText(labelIds.cancelRequest)).toBeInTheDocument();
+          expect(screen.getByText(labelIds.edit)).toBeInTheDocument();
+          expect(screen.getByText(labelIds.duplicateRequest)).toBeInTheDocument();
+          expect(screen.getByText(labelIds.moveRequest)).toBeInTheDocument();
+          expect(screen.getByText(labelIds.reorderQueue)).toBeInTheDocument();
+        });
       });
 
-      it('should not render `Duplicate` button', () => {
-        expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
+      describe('when request is invalid', () => {
+        const props = {
+          ...defaultProps,
+          resources: {
+            selectedRequest: {
+              hasLoaded: true,
+              records: [
+                {
+                  ...openValidRequest,
+                  instanceId: INVALID_REQUEST_HARDCODED_ID,
+                  holdingsRecordId: INVALID_REQUEST_HARDCODED_ID,
+                },
+              ],
+            },
+          },
+        };
+
+        beforeEach(() => {
+          render(
+            <CommandList commands={defaultKeyboardShortcuts}>
+              <ViewRequest {...props} />
+            </CommandList>
+          );
+        });
+
+        it('should render action menu with only "Cancel request" button', () => {
+          expect(screen.getByText(labelIds.cancelRequest)).toBeInTheDocument();
+          expect(screen.queryByText(labelIds.edit)).not.toBeInTheDocument();
+          expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
+          expect(screen.queryByText(labelIds.moveRequest)).not.toBeInTheDocument();
+          expect(screen.queryByText(labelIds.reorderQueue)).not.toBeInTheDocument();
+        });
       });
     });
   });
