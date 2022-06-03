@@ -15,7 +15,10 @@ import {
   REQUEST_DATE,
   REQUEST_LEVEL_TYPES,
 } from '../../constants';
-import { openRequestStatusFilters } from '../../utils';
+import {
+  isValidRequest,
+  openRequestStatusFilters,
+} from '../../utils';
 
 export const TEXT_SEPARATOR = ', ';
 export const CONTRIBUTOR_SEPARATOR = '; ';
@@ -41,6 +44,8 @@ const TitleInformation = (props) => {
       formatMessage,
     },
   } = props;
+  const titleLevelRequestsCountValue = titleLevelRequestsLink ? getURL(instanceId, titleLevelRequestsCount) : titleLevelRequestsCount;
+  const titleValue = isValidRequest({ instanceId }) ? getTitleURL(instanceId, title) : title;
 
   return (
     <>
@@ -48,16 +53,13 @@ const TitleInformation = (props) => {
         <Col xs={4}>
           <KeyValue
             label={formatMessage({ id: 'ui-requests.titleInformation.titleLevelRequests' })}
-            value={titleLevelRequestsLink
-              ? getURL(instanceId, titleLevelRequestsCount)
-              : titleLevelRequestsCount
-            }
+            value={titleLevelRequestsCountValue}
           />
         </Col>
         <Col xs={4}>
           <KeyValue
             label={formatMessage({ id: 'ui-requests.titleInformation.title' })}
-            value={getTitleURL(instanceId, title)}
+            value={titleValue}
           />
         </Col>
         <Col xs={4}>
