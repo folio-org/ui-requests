@@ -32,6 +32,7 @@ import {
   REQUEST_LEVEL_TYPES,
   REQUEST_TYPES,
   createModes,
+  INVALID_REQUEST_HARDCODED_ID,
 } from './constants';
 
 import css from './requests.css';
@@ -368,3 +369,8 @@ export const handleKeyCommand = (handler, { disabled } = {}) => {
     }
   };
 };
+
+export const isValidRequest = ({
+  instanceId,
+  holdingsRecordId,
+}) => instanceId !== INVALID_REQUEST_HARDCODED_ID && holdingsRecordId !== INVALID_REQUEST_HARDCODED_ID;

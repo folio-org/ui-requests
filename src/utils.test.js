@@ -14,9 +14,11 @@ import {
   getInstanceQueryString,
   generateUserName,
   handleKeyCommand,
+  isValidRequest,
 } from './utils';
 
 import {
+  INVALID_REQUEST_HARDCODED_ID,
   itemStatuses,
   requestTypesMap,
   REQUEST_LEVEL_TYPES,
@@ -312,6 +314,44 @@ describe('handlekeycommand', () => {
     handleKeyCommand(handler)();
     expect(handler).toHaveBeenCalled();
     expect(event.preventDefault).not.toHaveBeenCalled();
+  });
+});
+
+describe('isValidRequest', () => {
+  it('should return true if request is valid', () => {
+    const request = {
+      instanceId: 'testInstanceId',
+      holdingsRecordId: 'testHoldingRecordId',
+    };
+
+    expect(isValidRequest(request)).toBe(true);
+  });
+
+  it('should return false if "instanceId" in request have hardcoded invalid value', () => {
+    const request = {
+      instanceId: INVALID_REQUEST_HARDCODED_ID,
+      holdingsRecordId: 'testHoldingRecordId',
+    };
+
+    expect(isValidRequest(request)).toBe(false);
+  });
+
+  it('should return false if "holdingsRecordId" in request have hardcoded invalid value', () => {
+    const request = {
+      instanceId: 'testInstanceId',
+      holdingsRecordId: INVALID_REQUEST_HARDCODED_ID,
+    };
+
+    expect(isValidRequest(request)).toBe(false);
+  });
+
+  it('should return false if "instanceId" and "holdingsRecordId" in request have hardcoded invalid value', () => {
+    const request = {
+      instanceId: INVALID_REQUEST_HARDCODED_ID,
+      holdingsRecordId: INVALID_REQUEST_HARDCODED_ID,
+    };
+
+    expect(isValidRequest(request)).toBe(false);
   });
 });
 
