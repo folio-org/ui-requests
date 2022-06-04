@@ -3,6 +3,7 @@ import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
 import RequestsInteractor from '../interactors/requests-interactor';
+import { DEFAULT_TIMEOUT } from '../constants';
 
 const servicePoint = {
   id: 'servicepointId2',
@@ -20,7 +21,7 @@ describe('Requests', function () {
     },
   });
 
-  const requests = new RequestsInteractor();
+  const requests = new RequestsInteractor({ timeout: DEFAULT_TIMEOUT });
 
   beforeEach(async function () {
     this.visit('/requests');

@@ -3,8 +3,8 @@ import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
 import RequestsInteractor from '../interactors/requests-interactor';
-
 import translations from '../../../translations/ui-requests/en';
+import { DEFAULT_TIMEOUT } from '../constants';
 
 const servicePoint = {
   id: 'servicepointId2',
@@ -23,7 +23,7 @@ describe('Export to CSV', () => {
       },
     });
 
-    const requests = new RequestsInteractor();
+    const requests = new RequestsInteractor({ timeout: DEFAULT_TIMEOUT });
 
     beforeEach(async function () {
       this.visit('/requests');

@@ -10,10 +10,11 @@ import setupApplication from '../helpers/setup-application';
 import NewRequest from '../interactors/new-request';
 import ViewRequest from '../interactors/view-request';
 import ErrorModal from '../interactors/error-modal';
+import { DEFAULT_TIMEOUT } from '../constants';
 
-const RequestForm = new NewRequest();
-const ViewRequestPage = new ViewRequest();
-const ErrorModalInteractor = new ErrorModal('#OverlayContainer');
+const RequestForm = new NewRequest({ timeout: DEFAULT_TIMEOUT });
+const ViewRequestPage = new ViewRequest({ timeout: DEFAULT_TIMEOUT });
+const ErrorModalInteractor = new ErrorModal({ scope: '#OverlayContainer', timeout: DEFAULT_TIMEOUT });
 
 describe('Override patron block', () => {
   let user;
