@@ -151,6 +151,8 @@ export const requestTypesByItemStatus = {
   [itemStatuses.RESTRICTED]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
 };
 
+export const requestableItemStatuses = Object.keys(requestTypesByItemStatus);
+
 export const reportHeaders = [
   'requestType',
   'status',
