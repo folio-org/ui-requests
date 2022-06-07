@@ -90,8 +90,9 @@ jest.mock('@folio/stripes/components', () => ({
     label,
     children,
     value,
+    'data-testid': testId,
   }) => (
-    <div>
+    <div data-testid={testId}>
       <div>
         {label}
       </div>

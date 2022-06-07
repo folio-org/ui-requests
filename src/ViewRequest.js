@@ -61,6 +61,7 @@ import {
   getFullName,
   getTlrSettings,
   generateUserName,
+  isValidRequest,
 } from './utils';
 import urls from './routes/urls';
 
@@ -430,6 +431,7 @@ class ViewRequest extends React.Component {
     const isRequestNotFilled = requestStatus === requestStatuses.NOT_YET_FILLED;
     const isRequestOpen = requestStatus.startsWith('Open');
     const cancellationReasonMap = keyBy(cancellationReasons, 'id');
+    const isRequestValid = isValidRequest(request);
 
     let deliveryAddressDetail;
     let selectedDelivery = false;
@@ -461,7 +463,7 @@ class ViewRequest extends React.Component {
 
     const actionMenu = ({ onToggle }) => {
       if (isRequestClosed) {
-        if (request.requestLevel === REQUEST_LEVEL_TYPES.TITLE && !this.state.titleLevelRequestsFeatureEnabled) {
+        if (!isRequestValid || (requestLevel === REQUEST_LEVEL_TYPES.TITLE && !titleLevelRequestsFeatureEnabled)) {
           return null;
         }
 
@@ -486,19 +488,22 @@ class ViewRequest extends React.Component {
       return (
         <>
           <IfPermission perm="ui-requests.edit">
-            <Button
-              buttonStyle="dropdownItem"
-              id="clickable-edit-request"
-              href={this.props.editLink}
-              onClick={() => {
-                this.props.onEdit();
-                onToggle();
-              }}
-            >
-              <Icon icon="edit">
-                <FormattedMessage id="ui-requests.actions.edit" />
-              </Icon>
-            </Button>
+            {
+              isRequestValid &&
+              <Button
+                buttonStyle="dropdownItem"
+                id="clickable-edit-request"
+                href={this.props.editLink}
+                onClick={() => {
+                  this.props.onEdit();
+                  onToggle();
+                }}
+              >
+                <Icon icon="edit">
+                  <FormattedMessage id="ui-requests.actions.edit" />
+                </Icon>
+              </Button>
+            }
             <Button
               buttonStyle="dropdownItem"
               id="clickable-cancel-request"
@@ -512,21 +517,24 @@ class ViewRequest extends React.Component {
               </Icon>
             </Button>
           </IfPermission>
-          <IfPermission perm="ui-requests.create">
-            <Button
-              id="duplicate-request"
-              onClick={() => {
-                onToggle();
-                this.props.onDuplicate(request);
-              }}
-              buttonStyle="dropdownItem"
-            >
-              <Icon icon="duplicate">
-                <FormattedMessage id="ui-requests.actions.duplicateRequest" />
-              </Icon>
-            </Button>
-          </IfPermission>
-          {item && isRequestNotFilled &&
+          {
+            isRequestValid &&
+            <IfPermission perm="ui-requests.create">
+              <Button
+                id="duplicate-request"
+                onClick={() => {
+                  onToggle();
+                  this.props.onDuplicate(request);
+                }}
+                buttonStyle="dropdownItem"
+              >
+                <Icon icon="duplicate">
+                  <FormattedMessage id="ui-requests.actions.duplicateRequest" />
+                </Icon>
+              </Button>
+            </IfPermission>
+          }
+          {item && isRequestNotFilled && isRequestValid &&
             <IfPermission perm="ui-requests.moveRequest">
               <Button
                 id="move-request"
@@ -541,7 +549,7 @@ class ViewRequest extends React.Component {
                 </Icon>
               </Button>
             </IfPermission> }
-          {isRequestOpen &&
+          {isRequestOpen && isRequestValid &&
             <IfPermission perm="ui-requests.reorderQueue">
               <Button
                 id="reorder-queue"

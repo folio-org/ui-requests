@@ -8,12 +8,13 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import NoteViewInteractor from '../interactors/note-view';
 import ViewRequestInteractor from '../interactors/view-request';
+import { DEFAULT_TIMEOUT } from '../constants';
 
 describe('Note View page', () => {
   setupApplication();
 
-  const viewRequest = new ViewRequestInteractor();
-  const noteView = new NoteViewInteractor();
+  const viewRequest = new ViewRequestInteractor({ timeout: DEFAULT_TIMEOUT });
+  const noteView = new NoteViewInteractor({ timeout: DEFAULT_TIMEOUT });
   let request;
 
   describe('when there are Notes assigned to a request', () => {

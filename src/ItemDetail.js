@@ -15,7 +15,10 @@ import {
   ClipCopy,
 } from '@folio/stripes/smart-components';
 
-import { openRequestStatusFilters } from './utils';
+import {
+  isValidRequest,
+  openRequestStatusFilters,
+} from './utils';
 import { itemStatusesTranslations } from './constants';
 
 const DEFAULT_COUNT_VALUE = 0;
@@ -44,7 +47,6 @@ const ItemDetail = ({
   const dueDate = loan?.dueDate ? <FormattedDate value={loan.dueDate} /> : <NoValue />;
 
   const effectiveCallNumberString = effectiveCallNumber(item);
-  const recordLink = itemId ? <Link to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}>{item.barcode || itemId}</Link> : <NoValue />;
   const positionLink = count
     ? (
       <Link to={`/requests?filters=${openRequestStatusFilters}&query=${itemId}&sort=Request Date`}>
@@ -53,13 +55,26 @@ const ItemDetail = ({
     )
     : count;
   const itemLabel = item.barcode ? 'ui-requests.item.barcode' : 'ui-requests.item.id';
+  const isRequestValid = isValidRequest({ instanceId, holdingsRecordId });
+  const recordLink = () => {
+    if (itemId) {
+      return isRequestValid
+        ? <Link to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}>{item.barcode || itemId}</Link>
+        : (item.barcode || itemId);
+    }
+
+    return <NoValue />;
+  };
 
   return (
     <>
       <Row>
         <Col xs={4}>
-          <KeyValue label={<FormattedMessage id={itemLabel} />}>
-            {recordLink}
+          <KeyValue
+            data-testid="itemBarcodeLink"
+            label={<FormattedMessage id={itemLabel} />}
+          >
+            {recordLink()}
             {
               Boolean(item.barcode) && (
                 <ClipCopy text={item.barcode} />

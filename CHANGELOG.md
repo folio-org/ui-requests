@@ -21,6 +21,10 @@
 * Replace babel-eslint with @babel/eslint-parser. Refs UIREQ-770.
 * Update NodeJS to v16 in GitHub Actions. Refs UIREQ-780.
 * Fix HTTP request duplication when making request. Refs UIREQ-779.
+* Disable request detail action menu when hardcoded UID is present. Refs UIREQ-783.
+* Disable item and instance links in request detail when hardcoded UID is present. Refs UIREQ-784.
+* Fix "Timeout of 2000ms exceeded. For async tests and hooks, ensure “done()” is called" big tests errors. Refs UIREQ-785.
+* Fix big tests errors related to interactors small default timeout. Refs UIREQ-786.
 * Refactor forms to use final-form. Refs UIREQ-419.
  
 ## [7.0.2](https://github.com/folio-org/ui-requests/tree/v7.0.2) (2022-04-04)

@@ -17,6 +17,7 @@ import TitleInformation, {
   getEditions,
   getIdentifiers,
 } from './TitleInformation';
+import { INVALID_REQUEST_HARDCODED_ID } from '../../constants';
 
 KeyValue.mockImplementation(jest.fn(() => null));
 
@@ -167,6 +168,29 @@ describe('TitleInformation', () => {
       expect(KeyValue).toHaveBeenNthCalledWith(
         orderOfKeyValueCall.titleLevelRequests,
         expectedProps,
+        {}
+      );
+    });
+  });
+
+  describe('when request is not valid', () => {
+    beforeEach(() => {
+      render(
+        <TitleInformation
+          {...defaultProps}
+          instanceId={INVALID_REQUEST_HARDCODED_ID}
+        />
+      );
+    });
+
+    it('should render "instanceId" not as a link', () => {
+      const expectedProps = {
+        value: title,
+      };
+
+      expect(KeyValue).toHaveBeenNthCalledWith(
+        orderOfKeyValueCall.title,
+        expect.objectContaining(expectedProps),
         {}
       );
     });

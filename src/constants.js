@@ -279,6 +279,8 @@ export const DEFAULT_DISPLAYED_YEARS_AMOUNT = 3;
 
 export const MAX_RECORDS = '10000';
 
+export const INVALID_REQUEST_HARDCODED_ID = '00000000-0000-4000-8000-000000000000';
+
 export const RESOURCE_TYPES = {
   ITEM: 'item',
   INSTANCE: 'instance',

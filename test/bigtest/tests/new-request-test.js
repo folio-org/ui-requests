@@ -15,8 +15,8 @@ import ErrorModal from '../interactors/error-modal';
 import NewRequest from '../interactors/new-request';
 import RequestsInteractor from '../interactors/requests-interactor';
 import ViewRequest from '../interactors/view-request';
-
 import translations from '../../../translations/ui-requests/en';
+import { DEFAULT_TIMEOUT } from '../constants';
 
 const nonRequestableItemStatuses = [
   'Aged to lost',
@@ -52,10 +52,10 @@ describe('New Request page', () => {
     }],
   });
 
-  const errorModalInteractor = new ErrorModal('#OverlayContainer');
-  const newRequest = new NewRequest('[data-test-requests-form]');
-  const requests = new RequestsInteractor();
-  const viewRequest = new ViewRequest();
+  const errorModalInteractor = new ErrorModal({ scope: '#OverlayContainer', timeout: DEFAULT_TIMEOUT });
+  const newRequest = new NewRequest({ scope: '[data-test-requests-form]', timeout: DEFAULT_TIMEOUT });
+  const requests = new RequestsInteractor({ timeout: DEFAULT_TIMEOUT });
+  const viewRequest = new ViewRequest({ timeout: DEFAULT_TIMEOUT });
 
   describe('New request without prefilled user and item', function () {
     beforeEach(function () {
