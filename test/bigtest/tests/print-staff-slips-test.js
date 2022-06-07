@@ -3,13 +3,14 @@ import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
 import RequestsInteractor from '../interactors/requests-interactor';
+import { DEFAULT_TIMEOUT } from '../constants';
 
 const servicePoint = {
   id: 'servicepointId1',
   name: 'Circ Desc 1',
 };
 
-const requests = new RequestsInteractor();
+const requests = new RequestsInteractor({ timeout: DEFAULT_TIMEOUT });
 
 describe('Print pick slips', () => {
   describe('print pick slips', () => {
