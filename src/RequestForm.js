@@ -853,8 +853,10 @@ class RequestForm extends React.Component {
     return undefined;
   }
 
-  requireEnterItem = () => {
-    if (this.state.selectedItem === undefined) {
+  requireEnterItem = (value) => {
+    const values = this.getCurrentFormValues();
+
+    if (!value && !values?.itemId) {
       return <FormattedMessage id="ui-requests.errors.selectItemRequired" />;
     }
 
