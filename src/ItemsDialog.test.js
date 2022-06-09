@@ -16,6 +16,7 @@ import {
 import {
   itemStatuses,
   itemStatusesTranslations,
+  requestableItemStatuses,
 } from './constants';
 import { Loading } from './components';
 import ItemsDialog, {
@@ -261,6 +262,102 @@ describe('ItemsDialog', () => {
             onRowClick,
           }, {}
         );
+      });
+
+      describe('when "items" responce contains non-requestable items', () => {
+        const getProcessedItem = (status) => ({
+          id: status,
+          requestQueue: 0,
+          status: {
+            name: itemStatusesTranslations[status],
+          },
+        });
+        const allItemStatuses = Object.values(itemStatuses);
+        const newMutator = {
+          ...testMutator,
+          items: {
+            GET: jest.fn(() => (new Promise((resolve) => {
+              setTimeout(() => {
+                resolve(
+                  allItemStatuses.map(status => ({
+                    id: status,
+                    status: {
+                      name: status,
+                    },
+                  })),
+                );
+              });
+            }))),
+            reset: jest.fn(),
+          },
+          requests: {
+            GET: jest.fn(() => (new Promise((resolve) => {
+              setTimeout(() => {
+                resolve([]);
+              });
+            }))),
+            reset: jest.fn(),
+          },
+        };
+
+        describe('within "move request" action', () => {
+          beforeEach(async () => {
+            render(
+              <ItemsDialog
+                {...defaultTestProps}
+                mutator={newMutator}
+                open
+                skippedItemId="testSkippedItem"
+              />
+            );
+
+            await new Promise((resolve) => setTimeout(resolve, 500));
+          });
+
+          it('should show only items with requestable statuses', () => {
+            const requestableItems = requestableItemStatuses.map(getProcessedItem);
+
+            expect(MultiColumnList).toHaveBeenLastCalledWith(expect.objectContaining({
+              contentData: expect.arrayContaining(requestableItems),
+            }), {});
+          });
+
+          it('should not show items with non-requestable statuses', () => {
+            const nonRequestableItems = allItemStatuses.map(status => {
+              if (requestableItemStatuses.includes(status)) {
+                return null;
+              }
+
+              return getProcessedItem(status);
+            });
+
+            expect(MultiColumnList).toHaveBeenLastCalledWith(expect.objectContaining({
+              contentData: expect.not.arrayContaining(nonRequestableItems),
+            }), {});
+          });
+        });
+
+        describe('within switching from instance-level to item-level request', () => {
+          beforeEach(async () => {
+            render(
+              <ItemsDialog
+                {...defaultTestProps}
+                mutator={newMutator}
+                open
+              />
+            );
+
+            await new Promise((resolve) => setTimeout(resolve, 500));
+          });
+
+          it('should show items with all possible statuses', () => {
+            const expectedResult = allItemStatuses.map(getProcessedItem);
+
+            expect(MultiColumnList).toHaveBeenLastCalledWith(expect.objectContaining({
+              contentData: expect.arrayContaining(expectedResult),
+            }), {});
+          });
+        });
       });
     });
   });

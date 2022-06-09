@@ -26,6 +26,7 @@ import { stripesConnect } from '@folio/stripes/core';
 import {
   itemStatuses,
   itemStatusesTranslations,
+  requestableItemStatuses,
 } from './constants';
 import { Loading } from './components';
 
@@ -124,6 +125,11 @@ const ItemsDialog = ({
 
       const holdings = await fetchHoldings();
       let itemsList = await fetchItems(holdings);
+
+      if (skippedItemId) {
+        itemsList = itemsList.filter(item => requestableItemStatuses.includes(item.status?.name));
+      }
+
       const requests = await fetchRequests(itemsList);
       const requestMap = countBy(requests, 'itemId');
 
@@ -163,7 +169,7 @@ const ItemsDialog = ({
       status: {
         ...item.status,
         name: formatMessage({ id: itemStatusesTranslations[item.status.name] }),
-      }
+      },
     }));
   }, [items, skippedItemId, formatMessage]);
 
