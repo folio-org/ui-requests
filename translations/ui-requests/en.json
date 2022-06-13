@@ -76,6 +76,7 @@
   "errors.sync.requestQueueBody": "This request queue has been updated by another person or process and may be out of synch.",
   "errors.unknown.requestQueueLabel": "Request queue error",
   "errors.unknown.requestQueueBody": "Request queue reorder failed",
+  "errors.closingAlreadyClosedRequest": "Error: The Request has already been closed.",
 
   "actions.label": "Actions",
   "actions.edit": "Edit",
