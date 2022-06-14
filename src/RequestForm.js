@@ -1132,10 +1132,6 @@ class RequestForm extends React.Component {
 
     const isEditForm = this.isEditForm();
 
-    const labelAsterisk = isEditForm
-      ? ''
-      : ' *';
-
     const disableRecordCreation = true;
 
     let deliveryLocations;
@@ -1202,6 +1198,7 @@ class RequestForm extends React.Component {
         >
           <form
             id="form-requests"
+            noValidate
             className={css.requestForm}
             onSubmit={handleSubmit(this.onSave)}
             data-test-requests-form
@@ -1275,11 +1272,7 @@ class RequestForm extends React.Component {
                   ? (
                     <Accordion
                       id="new-instance-info"
-                      label={
-                        <FormattedMessage id="ui-requests.instance.information">
-                          {message => message + labelAsterisk}
-                        </FormattedMessage>
-                      }
+                      label={<FormattedMessage id="ui-requests.instance.information" />}
                     >
                       <div
                         data-testid="instanceInfoSection"
@@ -1297,26 +1290,29 @@ class RequestForm extends React.Component {
                                         <Field
                                           name="instance.hrid"
                                           placeholder={placeholder}
-                                          aria-label={<FormattedMessage id="ui-requests.instance.value" />}
+                                          label={<FormattedMessage id="ui-requests.instance.value" />}
                                           fullWidth
                                           component={TextField}
                                           forwardRef
                                           ref={this.instanceValueRef}
                                           onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.INSTANCE)}
                                           validate={this.requireEnterInstance}
+                                          required
                                         />
                                       )}
                                     </FormattedMessage>
                                   </Col>
                                   <Col xs={3}>
-                                    <Button
-                                      buttonStyle="primary noRadius"
-                                      fullWidth
-                                      onClick={this.onInstanceClick}
-                                      disabled={submitting}
-                                    >
-                                      <FormattedMessage id="ui-requests.enter" />
-                                    </Button>
+                                    <div className={css.buttonFieldWrapper}>
+                                      <Button
+                                        buttonStyle="primary noRadius"
+                                        fullWidth
+                                        onClick={this.onInstanceClick}
+                                        disabled={submitting}
+                                      >
+                                        <FormattedMessage id="ui-requests.enter" />
+                                      </Button>
+                                    </div>
                                   </Col>
                                 </Row>
                                 <Row>
@@ -1357,11 +1353,7 @@ class RequestForm extends React.Component {
                   : (
                     <Accordion
                       id="new-item-info"
-                      label={
-                        <FormattedMessage id="ui-requests.item.information">
-                          {message => message + labelAsterisk}
-                        </FormattedMessage>
-                      }
+                      label={<FormattedMessage id="ui-requests.item.information" />}
                     >
                       <div id="section-item-info">
                         <Row>
@@ -1375,27 +1367,30 @@ class RequestForm extends React.Component {
                                       <Field
                                         name="item.barcode"
                                         placeholder={placeholder}
-                                        aria-label={<FormattedMessage id="ui-requests.item.barcode" />}
+                                        label={<FormattedMessage id="ui-requests.item.barcode" />}
                                         fullWidth
                                         component={TextField}
                                         forwardRef
                                         ref={this.itemBarcodeRef}
                                         onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.ITEM)}
                                         validate={this.requireEnterItem}
+                                        required
                                       />
                                     )}
                                   </FormattedMessage>
                                 </Col>
                                 <Col xs={3}>
-                                  <Button
-                                    id="clickable-select-item"
-                                    buttonStyle="primary noRadius"
-                                    fullWidth
-                                    onClick={this.onItemClick}
-                                    disabled={submitting}
-                                  >
-                                    <FormattedMessage id="ui-requests.enter" />
-                                  </Button>
+                                  <div className={css.buttonFieldWrapper}>
+                                    <Button
+                                      id="clickable-select-item"
+                                      buttonStyle="primary noRadius"
+                                      fullWidth
+                                      onClick={this.onItemClick}
+                                      disabled={submitting}
+                                    >
+                                      <FormattedMessage id="ui-requests.enter" />
+                                    </Button>
+                                  </div>
                                 </Col>
                               </Row>
                             }
@@ -1570,11 +1565,7 @@ class RequestForm extends React.Component {
                   </Accordion>
                   <Accordion
                     id="new-requester-info"
-                    label={
-                      <FormattedMessage id="ui-requests.requester.information">
-                        {message => message + labelAsterisk}
-                      </FormattedMessage>
-                }
+                    label={<FormattedMessage id="ui-requests.requester.information" />}
                   >
                     <div id="section-requester-info">
                       <Row>
@@ -1587,13 +1578,14 @@ class RequestForm extends React.Component {
                                   <Field
                                     name="requester.barcode"
                                     placeholder={placeholder}
-                                    aria-label={<FormattedMessage id="ui-requests.requester.barcode" />}
+                                    label={<FormattedMessage id="ui-requests.requester.barcode" />}
                                     fullWidth
                                     component={TextField}
                                     forwardRef
                                     ref={this.requesterBarcodeRef}
                                     onKeyDown={e => this.onKeyDown(e, 'requester')}
                                     validate={this.requireUser}
+                                    required
                                   />
                                 )}
                               </FormattedMessage>
@@ -1612,17 +1604,18 @@ class RequestForm extends React.Component {
                               />
                             </Col>
                             <Col xs={3}>
-                              <Button
-                                id="clickable-select-requester"
-                                buttonStyle="primary noRadius"
-                                fullWidth
-                                onClick={this.onUserClick}
-                                disabled={submitting}
-                              >
-                                <FormattedMessage id="ui-requests.enter" />
-                              </Button>
+                              <div className={css.buttonFieldWrapper}>
+                                <Button
+                                  id="clickable-select-requester"
+                                  buttonStyle="primary noRadius"
+                                  fullWidth
+                                  onClick={this.onUserClick}
+                                  disabled={submitting}
+                                >
+                                  <FormattedMessage id="ui-requests.enter" />
+                                </Button>
+                              </div>
                             </Col>
-
                           </Row> }
                           {(selectedUser?.id || request?.requester) &&
                           <UserForm

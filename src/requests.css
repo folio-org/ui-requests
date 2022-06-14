@@ -26,3 +26,8 @@
   margin-bottom: 0.5em;
   user-select: none;
 }
+
+.buttonFieldWrapper {
+  height: 100%;
+  margin-top: 25px;
+}
