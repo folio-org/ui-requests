@@ -27,6 +27,7 @@
 * Fix big tests errors related to interactors small default timeout. Refs UIREQ-786.
 * Create/Edit Request: required is not read. Refs UIREQ-775.
 * Filter the items list on "move request" action from items with non-requestable statuses. Refs UIREQ-787.
+* Fix validation issue of item barcode field. Refs UIREQ-694.
 
 ## [7.0.2](https://github.com/folio-org/ui-requests/tree/v7.0.2) (2022-04-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.0.1...v7.0.2)
