@@ -55,6 +55,7 @@ import {
   REQUEST_LEVEL_TYPES,
   requestTypesTranslations,
   requestStatusesTranslations,
+  errorMessageLabels,
 } from './constants';
 import {
   toUserAddress,
@@ -85,6 +86,7 @@ class ViewRequest extends React.Component {
 
         return refresh || (path && path.match(/link/));
       },
+      throwErrors: false,
     },
   };
 
@@ -251,6 +253,9 @@ class ViewRequest extends React.Component {
       mutator,
       onCloseEdit,
       buildRecordsForHoldsShelfReport,
+      intl: {
+        formatMessage,
+      },
     } = this.props;
 
     // Get the initial request data, mix in the cancellation info, PUT,
@@ -261,11 +266,24 @@ class ViewRequest extends React.Component {
       ...cancellationInfo,
     };
 
-    mutator.selectedRequest.PUT(cancelledRequest).then(() => {
-      this.setState({ isCancellingRequest: false });
-      onCloseEdit();
-      buildRecordsForHoldsShelfReport();
-    });
+
+    mutator.selectedRequest.PUT(cancelledRequest)
+      .catch(resp => {
+        resp.json()
+          .then(res => {
+            res.errors.forEach(error => {
+              this.callout.current.sendCallout({
+                message: errorMessageLabels[error.message] ? formatMessage({ id: errorMessageLabels[error.message] }) : error.message,
+                type: 'error',
+              });
+            });
+          });
+      })
+      .finally(() => {
+        this.setState({ isCancellingRequest: false });
+        onCloseEdit();
+        buildRecordsForHoldsShelfReport();
+      });
   }
 
   onMove = async (request) => {
