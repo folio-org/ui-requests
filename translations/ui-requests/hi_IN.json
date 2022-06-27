@@ -263,5 +263,6 @@
     "item.status.retrievingFromASR": "Retrieving from ASR",
     "item.status.missingFromASR": "Missing from ASR",
     "item.status.orderClosed": "Order closed",
-    "item.status.restricted": "Restricted"
+    "item.status.restricted": "Restricted",
+    "errors.closingAlreadyClosedRequest": "Error: The Request has already been closed."
 }
