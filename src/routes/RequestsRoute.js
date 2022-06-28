@@ -660,7 +660,7 @@ class RequestsRoute extends React.Component {
       // Each element of the promises array returns an array of results, but in
       // this case, there should only ever be one result for each.
       const requester = get(users, 'users[0]', null);
-      const titleRequestCount = get(titleRequests, 'totalRecords', 0);
+      const titleRequestCount = titleRequests?.requests.filter(r => r.requestLevel === REQUEST_LEVEL_TYPES.TITLE).length || 0;
       const dynamicProperties = {};
       const requestsForFilter = titleLevelRequestsFeatureEnabled ? titleRequests.requests : itemRequests.requests;
 
@@ -690,7 +690,7 @@ class RequestsRoute extends React.Component {
 
   setURL(id) {
     this.setState({
-      selectedId: id
+      selectedId: id,
     });
   }
 
@@ -698,7 +698,7 @@ class RequestsRoute extends React.Component {
 
   viewRecordOnCollapse = () => {
     this.setState({
-      selectedId: null
+      selectedId: null,
     });
   }
 
@@ -960,11 +960,11 @@ class RequestsRoute extends React.Component {
     const cancellationReasons = get(resources, 'cancellationReasons.records', []);
     const requestCount = get(resources, 'records.other.totalRecords', 0);
     const initialValues = dupRequest ||
-      {
-        requestType: 'Hold',
-        fulfilmentPreference: 'Hold Shelf',
-        createTitleLevelRequest: createTitleLevelRequestsByDefault,
-      };
+    {
+      requestType: 'Hold',
+      fulfilmentPreference: 'Hold Shelf',
+      createTitleLevelRequest: createTitleLevelRequestsByDefault,
+    };
 
     const pickSlipsArePending = resources?.pickSlips?.isPending;
     const requestsEmpty = isEmpty(requests);
@@ -1001,7 +1001,7 @@ class RequestsRoute extends React.Component {
               <FormattedMessage id="stripes-smart-components.new" />
             </Button>
           </IfPermission>
-          { csvReportPending ?
+          {csvReportPending ?
             <LoadingButton>
               <FormattedMessage id="ui-requests.csvReportPending" />
             </LoadingButton> :
@@ -1084,7 +1084,7 @@ class RequestsRoute extends React.Component {
               label={intl.formatMessage({ id: errorModalData.label })}
               errorMessage={intl.formatMessage({ id: errorModalData.errorMessage })}
             />
-            }
+          }
           <div data-test-request-instances>
             <SearchAndSort
               columnManagerProps={columnManagerProps}
