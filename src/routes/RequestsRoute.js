@@ -567,7 +567,10 @@ class RequestsRoute extends React.Component {
   };
 
   setCurrentServicePointId = () => {
-    const { mutator, resources }  = this.props;
+    const {
+      mutator,
+      resources,
+    }  = this.props;
     const { id } = this.getCurrentServicePointInfo();
 
     if (resources.currentServicePoint?.id !== id) {
@@ -818,7 +821,6 @@ class RequestsRoute extends React.Component {
           GET,
         },
       },
-      stripes: { user },
     } = this.props;
 
     this.setState({
