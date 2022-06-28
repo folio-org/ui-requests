@@ -174,7 +174,7 @@
     "notes.entityType.request.pluralized": "{count} {count, plural, one {request} other {requests}}",
     "errors.selectItemRequired": "Please select an item and hit enter",
     "notes.assigned.for": "For: {instanceLink} ({itemLink})",
-    "notes.assigned.requester": "Requester: {requesterName}",
+    "notes.assigned.requester": "Solicitante: {requesterName}",
     "notes.assigned.requestDate": "Request date: {requestCreateDate}",
     "pickSlipsLoading": "Pick slips are loading, please wait",
     "printInProgress": "Las opciones de impresión se están cargando. Puede que lleve unos segundos, por favor, ten paciencia.",
@@ -204,7 +204,7 @@
     "requestLevel": "Request level",
     "itemLevel": "Item",
     "titleLevel": "Title",
-    "requests.year": "Year",
+    "requests.year": "Año",
     "requests.createTitleLevelRequest": "Create title level request",
     "errors.instanceUuidOrHridDoesNotExist": "Instance with this HRID or UUID does not exist",
     "errors.selectInstanceRequired": "Please select an instance and hit enter",
@@ -228,7 +228,7 @@
     "requestQueue.noDataForFulfillment": "There are no requests in fulfillment.",
     "requestQueue.notYetFilledRequests.noData": "No requests found",
     "filters.requestLevel.item": "Item",
-    "filters.requestLevel.title": "Title",
+    "filters.requestLevel.title": "Título",
     "requests.queuePosition": "Queue position",
     "requestQueue.heading": "Request queue on instance • {title} /{author}.",
     "titleLookupPlugin": "Title look-up",
@@ -263,5 +263,6 @@
     "item.status.retrievingFromASR": "Retrieving from ASR",
     "item.status.missingFromASR": "Missing from ASR",
     "item.status.orderClosed": "Pedido cerrado",
-    "item.status.restricted": "Restricted"
+    "item.status.restricted": "Restricted",
+    "errors.closingAlreadyClosedRequest": "Error: la solicitud ya ha sido cerrada"
 }
