@@ -36,7 +36,7 @@ class MoveRequestManager extends React.Component {
       },
       fetch: false,
       throwErrors: false,
-    }
+    },
   };
 
   constructor(props) {
@@ -51,7 +51,7 @@ class MoveRequestManager extends React.Component {
         validate: this.shouldChooseRequestTypeDialogBeShown,
         exec: () => this.setState({
           chooseRequestType: true,
-          moveRequest: false
+          moveRequest: false,
         }),
       },
     ];
@@ -126,7 +126,10 @@ class MoveRequestManager extends React.Component {
   }
 
   handleError(errorMessage) {
-    this.setState({ errorMessage });
+    this.setState({
+      chooseRequestType: false,
+      errorMessage,
+    });
   }
 
   getPossibleRequestTypes(item) {
@@ -152,8 +155,10 @@ class MoveRequestManager extends React.Component {
     const requestTypes = this.getPossibleRequestTypes(selectedItem);
     const state = { errorMessage: null };
 
-    if (requestTypes && requestTypes.length) {
+    if (requestTypes && requestTypes.length > 1) {
       state.chooseRequestType = true;
+    } else {
+      state.moveRequest = true;
     }
 
     this.setState(state);
