@@ -570,7 +570,7 @@ class RequestsRoute extends React.Component {
     const {
       mutator,
       resources,
-    }  = this.props;
+    } = this.props;
     const { id } = this.getCurrentServicePointInfo();
 
     if (resources.currentServicePoint?.id !== id) {
