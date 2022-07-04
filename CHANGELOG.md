@@ -35,6 +35,7 @@
 * Fix validation issue of item barcode field. Refs UIREQ-694.
 * Deleting already-deleted request causes ungraceful error. Refs UIREQ-344.
 * Fix the number of title-level requests. Refs UIREQ-790.
+* Fix problem with double call of end-point for hold shelf report. Refs UIREQ-778.
 
 ## [7.0.2](https://github.com/folio-org/ui-requests/tree/v7.0.2) (2022-04-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.0.1...v7.0.2)

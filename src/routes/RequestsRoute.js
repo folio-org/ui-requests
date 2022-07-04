@@ -567,11 +567,16 @@ class RequestsRoute extends React.Component {
   };
 
   setCurrentServicePointId = () => {
-    const { mutator } = this.props;
+    const {
+      mutator,
+      resources,
+    } = this.props;
     const { id } = this.getCurrentServicePointInfo();
 
-    mutator.currentServicePoint.update({ id });
-    this.buildRecordsForHoldsShelfReport();
+    if (resources.currentServicePoint?.id !== id) {
+      mutator.currentServicePoint.update({ id });
+      this.buildRecordsForHoldsShelfReport();
+    }
   };
 
   getColumnHeaders = (headers) => {
@@ -816,7 +821,6 @@ class RequestsRoute extends React.Component {
           GET,
         },
       },
-      stripes: { user },
     } = this.props;
 
     this.setState({
@@ -825,12 +829,12 @@ class RequestsRoute extends React.Component {
 
     reset();
 
-    const servicePointId = get(user, 'user.curServicePoint.id', '');
-    const path = `circulation/requests-reports/hold-shelf-clearance/${servicePointId}`;
+    const { id } = this.getCurrentServicePointInfo();
+    const path = `circulation/requests-reports/hold-shelf-clearance/${id}`;
     const { requests } = await GET({ path });
 
     this.setState({
-      servicePointId,
+      servicePointId: id,
       requests,
       holdsShelfReportPending: false,
     });
