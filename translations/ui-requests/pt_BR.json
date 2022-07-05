@@ -264,5 +264,5 @@
     "item.status.missingFromASR": "Desaparecido da ASR",
     "item.status.orderClosed": "Pedido fechado",
     "item.status.restricted": "Restrito",
-    "errors.closingAlreadyClosedRequest": "Error: The Request has already been closed."
+    "errors.closingAlreadyClosedRequest": "Erro: A solicitação já foi fechada."
 }
