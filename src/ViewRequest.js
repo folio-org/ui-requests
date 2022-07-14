@@ -408,6 +408,9 @@ class ViewRequest extends React.Component {
 
     const tags = ((request && request.tags) || {}).tagList || [];
 
+    const requestStatus = get(request, ['status'], '-');
+    const isRequestClosed = requestStatus.startsWith('Closed');
+
     return (
       <PaneMenu>
         {
@@ -420,6 +423,7 @@ class ViewRequest extends React.Component {
                 onClick={tagsToggle}
                 badgeCount={tags.length}
                 ariaLabel={ariaLabel}
+                disabled={isRequestClosed}
               />
             )}
           </FormattedMessage>
