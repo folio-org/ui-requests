@@ -409,7 +409,8 @@ class ViewRequest extends React.Component {
     const tags = ((request && request.tags) || {}).tagList || [];
 
     const requestStatus = get(request, ['status'], '-');
-    const isRequestClosed = requestStatus.startsWith('Closed');
+    const closedStatuses = [requestStatuses.CANCELLED, requestStatuses.FILLED, requestStatuses.PICKUP_EXPIRED, requestStatuses.UNFILLED];
+    const isRequestClosed = closedStatuses.includes(requestStatus);
 
     return (
       <PaneMenu>
