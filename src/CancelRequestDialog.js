@@ -10,12 +10,17 @@ import {
   Button,
 } from '@folio/stripes/components';
 
+import { MAX_RECORDS } from './constants';
 class CancelRequestDialog extends React.Component {
   static manifest = {
     cancellationReasons: {
       type: 'okapi',
       path: 'cancellation-reason-storage/cancellation-reasons',
       records: 'cancellationReasons',
+      params: {
+        query: 'cql.allRecords=1 sortby name',
+        limit: MAX_RECORDS,
+      },
     },
   }
 
