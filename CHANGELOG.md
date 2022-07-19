@@ -4,6 +4,7 @@
 
 * Fix modal loop when move item on request fails due to policy. Refs UIREQ-662.
 * Сannot add tags to record in the Requests app. Refs UIREQ-794.
+* Retrieve up to `MAX_RECORDS` cancellation-reasons. Refs UIREQ-795.
 
 ## [7.1.0](https://github.com/folio-org/ui-requests/tree/v7.1.0) (2022-06-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.0.2...v7.1.0)
