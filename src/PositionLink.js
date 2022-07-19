@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 
-import { NoValue } from '@folio/stripes-components';
+import { NoValue } from '@folio/stripes/components';
 
 import { openRequestStatusFilters } from './utils';
 
