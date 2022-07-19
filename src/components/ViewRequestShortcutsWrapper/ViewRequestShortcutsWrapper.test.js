@@ -6,9 +6,14 @@ import '../../../test/jest/__mock__';
 import {
   CommandList,
   defaultKeyboardShortcuts,
-} from '@folio/stripes-components';
+} from '@folio/stripes/components';
 import ViewRequestShortcutsWrapper from './ViewRequestShortcutsWrapper';
-import { duplicateRecordShortcut, collapseSectionsShortcut, expandSectionsShortcut, editRecordShortcut } from '../../../test/jest/helpers/shortcuts';
+import {
+  duplicateRecordShortcut,
+  collapseSectionsShortcut,
+  expandSectionsShortcut,
+  editRecordShortcut,
+} from '../../../test/jest/helpers/shortcuts';
 
 const mockOnEdit = jest.fn();
 const mockOnDuplicate = jest.fn();
@@ -50,7 +55,10 @@ const renderViewRequestShortcuts = ({ isDuplicatingDisabled, isEditingDisabled }
 };
 
 describe('ViewRequestShortcutsWrapper component', () => {
-  const notDisbaled = { isDuplicatingDisabled: false, isEditingDisabled: false };
+  const notDisbaled = {
+    isDuplicatingDisabled: false,
+    isEditingDisabled: false,
+  };
 
   afterEach(() => {
     mockOnEdit.mockClear();

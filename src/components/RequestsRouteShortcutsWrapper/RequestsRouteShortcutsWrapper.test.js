@@ -5,11 +5,14 @@ import '../../../test/jest/__mock__';
 
 import {
   CommandList,
-  defaultKeyboardShortcuts
-} from '@folio/stripes-components';
+  defaultKeyboardShortcuts,
+} from '@folio/stripes/components';
 import RequestsRouteShortcutsWrapper from './RequestsRouteShortcutsWrapper';
 import { buildStripes } from '../../../test/jest/helpers';
-import { openNewRecordShortcut, focusSearchFieldShortcut } from '../../../test/jest/helpers/shortcuts';
+import {
+  openNewRecordShortcut,
+  focusSearchFieldShortcut,
+} from '../../../test/jest/helpers/shortcuts';
 
 const history = {
   push: jest.fn(),
