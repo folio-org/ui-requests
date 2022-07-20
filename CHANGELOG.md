@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## IN PROGRESS
+## [7.1.1](https://github.com/folio-org/ui-requests/tree/v7.1.1) (2022-07-20)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.1.0...v7.1.1)
 
 * Сannot add tags to record in the Requests app. Refs UIREQ-794.
 * Retrieve up to `MAX_RECORDS` cancellation-reasons. Refs UIREQ-795.
