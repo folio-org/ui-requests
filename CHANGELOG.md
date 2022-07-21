@@ -1,5 +1,10 @@
 # Change history for ui-requests
 
+## [7.1.2](https://github.com/folio-org/ui-requests/tree/v7.1.2) (2022-07-27)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.1.1...v7.1.2)
+
+* Add title to modal message for non requested status. Refs UIREQ-797.
+
 ## [7.1.1](https://github.com/folio-org/ui-requests/tree/v7.1.1) (2022-07-20)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.1.0...v7.1.1)
 
