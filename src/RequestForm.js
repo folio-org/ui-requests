@@ -1127,7 +1127,6 @@ class RequestForm extends React.Component {
     const automatedPatronBlocks = this.getAutomatedPatronBlocks(parentResources);
     const {
       fulfilmentPreference,
-      instance,
     } = request || {};
 
     const isEditForm = this.isEditForm();
@@ -1674,7 +1673,7 @@ class RequestForm extends React.Component {
                     <FormattedMessage
                       id="ui-requests.errorModal.message"
                       values={{
-                        title: instance?.title,
+                        title: selectedItem?.title,
                         barcode: selectedItem.barcode,
                         materialType: get(selectedItem, 'materialType.name', ''),
                         itemStatus: itemStatusMessage,
