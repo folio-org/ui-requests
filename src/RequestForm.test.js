@@ -76,7 +76,7 @@ describe('RequestForm', () => {
       change: mockedChangeFunction,
       handleSubmit: jest.fn(),
       asyncValidate: jest.fn(),
-      findResource: jest.fn(() => new Promise((resolve) => resolve({}))),
+      findResource: jest.fn(() => new Promise((resolve) => resolve())),
       request: mockedRequest || {},
       initialValues: {},
       location: {

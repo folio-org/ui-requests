@@ -10,6 +10,7 @@ import setupApplication from '../helpers/setup-application';
 import EditRequest from '../interactors/edit-request';
 import ViewRequest from '../interactors/view-request';
 import { requestStatuses } from '../../../src/constants';
+import { DEFAULT_TIMEOUT } from '../constants';
 
 import translations from '../../../translations/ui-requests/en';
 
@@ -18,8 +19,8 @@ describe('Edit Request page', () => {
 
   const requestsOnItemValue = '2';
 
-  const EditRequestInteractor = new EditRequest();
-  const ViewRequestInteractor = new ViewRequest();
+  const EditRequestInteractor = new EditRequest({ timeout: DEFAULT_TIMEOUT });
+  const ViewRequestInteractor = new ViewRequest({ timeout: DEFAULT_TIMEOUT });
 
   beforeEach(async function () {
     const request = this.server.create('request', { itemRequestCount: requestsOnItemValue });

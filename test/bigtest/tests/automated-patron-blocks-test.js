@@ -8,13 +8,14 @@ import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
 import EditRequest from '../interactors/edit-request';
+import { DEFAULT_TIMEOUT } from '../constants';
 
 describe('Automated patron blocks', () => {
   setupApplication({
     scenarios: ['automatedPatronBlocks'],
   });
 
-  const EditRequestInteractor = new EditRequest();
+  const EditRequestInteractor = new EditRequest({ timeout: DEFAULT_TIMEOUT });
 
   beforeEach(async function () {
     this.server.create('user', {

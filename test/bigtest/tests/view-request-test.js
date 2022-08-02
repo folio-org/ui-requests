@@ -10,8 +10,8 @@ import setupApplication from '../helpers/setup-application';
 import ViewRequestInteractor from '../interactors/view-request';
 import NewRequestInteractor from '../interactors/new-request';
 import RequestsInteractor from '../interactors/requests-interactor';
-
 import translations from '../../../translations/ui-requests/en';
+import { DEFAULT_TIMEOUT } from '../constants';
 
 describe('View request page', () => {
   setupApplication();
@@ -26,9 +26,9 @@ describe('View request page', () => {
     pickupLocation: true,
   };
 
-  const viewRequest = new ViewRequestInteractor();
-  const newRequest = new NewRequestInteractor();
-  const requests = new RequestsInteractor();
+  const viewRequest = new ViewRequestInteractor({ timeout: DEFAULT_TIMEOUT });
+  const newRequest = new NewRequestInteractor({ timeout: DEFAULT_TIMEOUT });
+  const requests = new RequestsInteractor({ timeout: DEFAULT_TIMEOUT });
 
   describe('View default request', () => {
     let request;

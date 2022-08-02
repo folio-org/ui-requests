@@ -8,11 +8,12 @@ import { expect } from 'chai';
 
 import setupApplication from '../helpers/setup-application';
 import ViewRequest from '../interactors/view-request';
+import { DEFAULT_TIMEOUT } from '../constants';
 
 describe('Move request', () => {
   setupApplication();
 
-  const viewRequestInteractor = new ViewRequest();
+  const viewRequestInteractor = new ViewRequest({ timeout: DEFAULT_TIMEOUT });
 
   beforeEach(async function () {
     const request = this.server.create('request', 'withPagedItems', { requestType: 'Page' });

@@ -8,11 +8,12 @@ import { expect } from 'chai';
 import setupApplication from '../helpers/setup-application';
 import RequestQueue from '../interactors/request-queue';
 import urls from '../../../src/routes/urls';
+import { DEFAULT_TIMEOUT } from '../constants';
 
 describe('RequestQueue', () => {
   let requests;
 
-  const requestQueue = new RequestQueue();
+  const requestQueue = new RequestQueue({ timeout: DEFAULT_TIMEOUT });
 
   setupApplication({
     scenarios: ['requestQueueScenario'],

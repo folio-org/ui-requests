@@ -146,6 +146,10 @@ class RequestsRoute extends React.Component {
       type: 'okapi',
       path: 'addresstypes',
       records: 'addressTypes',
+      params: {
+        query: 'cql.allRecords=1 sortby addressType',
+        limit: MAX_RECORDS,
+      },
     },
     query: {
       initialValue: { sort: 'requestDate' },
@@ -204,7 +208,11 @@ class RequestsRoute extends React.Component {
     servicePoints: {
       type: 'okapi',
       records: 'servicepoints',
-      path: 'service-points?query=(pickupLocation==true) sortby name&limit=100',
+      path: 'service-points',
+      params: {
+        query: 'query=(pickupLocation==true) sortby name',
+        limit: '100',
+      },
     },
     itemUniquenessValidator: {
       type: 'okapi',
@@ -251,11 +259,20 @@ class RequestsRoute extends React.Component {
       type: 'okapi',
       path: 'cancellation-reason-storage/cancellation-reasons',
       records: 'cancellationReasons',
+      params: {
+        query: 'cql.allRecords=1 sortby name',
+        limit: MAX_RECORDS,
+      },
     },
     staffSlips: {
       type: 'okapi',
       records: 'staffSlips',
-      path: 'staff-slips-storage/staff-slips?limit=100',
+      path: 'staff-slips-storage/staff-slips',
+      params: {
+        query: 'cql.allRecords=1 sortby name',
+        limit: '100',
+      },
+
       throwErrors: false,
     },
     pickSlips: {
@@ -272,7 +289,7 @@ class RequestsRoute extends React.Component {
       path: 'tags',
       params: {
         query: 'cql.allRecords=1 sortby label',
-        limit: '10000',
+        limit: MAX_RECORDS,
       },
       records: 'tags',
     },
