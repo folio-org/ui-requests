@@ -1,6 +1,11 @@
 # Change history for ui-requests
 
-## [7.0.2](https://github.com/folio-org/ui-requests/tree/v7.0.1) (2022-04-04)
+## [7.0.3](https://github.com/folio-org/ui-requests/tree/v7.0.3) (2022-08-02)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.0.2...v7.0.3)
+
+* Retrieve up to `MAX_RECORDS` cancellation-reasons. Refs UIREQ-795.
+
+## [7.0.2](https://github.com/folio-org/ui-requests/tree/v7.0.2) (2022-04-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.0.1...v7.0.2)
 
 * Change queue position message from "items" to "requests". Refs UIREQ-755.
