@@ -42,6 +42,14 @@
 * Fix validation issue of item barcode field. Refs UIREQ-694.
 * Deleting already-deleted request causes ungraceful error. Refs UIREQ-344.
 * Fix the number of title-level requests. Refs UIREQ-790.
+* Fix problem with double call of end-point for hold shelf report. Refs UIREQ-778.
+
+## [7.0.3](https://github.com/folio-org/ui-requests/tree/v7.0.3) (2022-08-02)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.0.2...v7.0.3)
+
+* Retrieve up to `MAX_RECORDS` cancellation-reasons. Refs UIREQ-795.
+* Fix big tests errors related to interactors small default timeout. Refs UIREQ-786.
+* Fix "Timeout of 2000ms exceeded. For async tests and hooks, ensure “done()” is called" big tests errors. Refs UIREQ-785.
 
 ## [7.0.2](https://github.com/folio-org/ui-requests/tree/v7.0.2) (2022-04-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.0.1...v7.0.2)

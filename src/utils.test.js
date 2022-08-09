@@ -184,45 +184,14 @@ describe('getRequestLevelValue', () => {
 });
 
 describe('getInstanceRequestTypeOptions', () => {
-  const missedItem = {
-    status: {
-      name: itemStatuses.MISSING,
-    },
-  };
-  const availableItem = {
-    status: {
-      name: itemStatuses.AVAILABLE,
-    },
-  };
-  const checkedOutItem = {
-    status: {
-      name: itemStatuses.CHECKED_OUT,
-    },
-  };
-
-  it('should return `Page` request type if at least one available item is present', () => {
+  it('should return `Page`, `HOLD` and `RECALL` request type for instance request', () => {
     const expectedResult = [
       REQUEST_TYPES[requestTypesMap.PAGE],
-    ];
-
-    expect(getInstanceRequestTypeOptions([missedItem, availableItem, checkedOutItem])).toEqual(expectedResult);
-  });
-
-  it('should return `Hold` request type if only missing items is present', () => {
-    const expectedResult = [
-      REQUEST_TYPES[requestTypesMap.HOLD],
-    ];
-
-    expect(getInstanceRequestTypeOptions([missedItem])).toEqual(expectedResult);
-  });
-
-  it('should return `Hold` and `Recall` request types if no available items and not all of them are missing', () => {
-    const expectedResult = [
       REQUEST_TYPES[requestTypesMap.HOLD],
       REQUEST_TYPES[requestTypesMap.RECALL],
     ];
 
-    expect(getInstanceRequestTypeOptions([missedItem, checkedOutItem])).toEqual(expectedResult);
+    expect(getInstanceRequestTypeOptions()).toEqual(expectedResult);
   });
 });
 
