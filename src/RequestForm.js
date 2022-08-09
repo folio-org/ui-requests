@@ -768,12 +768,9 @@ class RequestForm extends React.Component {
       return;
     }
 
-    const instanceItems = await this.getInstanceItems(instance.id);
-    const requestTypeOptions = getInstanceRequestTypeOptions(instanceItems);
+    const requestTypeOptions = getInstanceRequestTypeOptions();
 
-    if (requestTypeOptions.length) {
-      this.props.change('requestType', requestTypeOptions[0].value);
-    }
+    this.props.change('requestType', requestTypeOptions[0].value);
 
     this.setState({ requestTypeOptions });
   }

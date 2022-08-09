@@ -11,6 +11,7 @@ import {
 } from '@folio/stripes/components';
 
 import { MAX_RECORDS } from './constants';
+
 class CancelRequestDialog extends React.Component {
   static manifest = {
     cancellationReasons: {
