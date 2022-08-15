@@ -6,9 +6,14 @@ import '../../../test/jest/__mock__';
 import {
   CommandList,
   defaultKeyboardShortcuts,
-} from '@folio/stripes-components';
+} from '@folio/stripes/components';
 import RequestsFormShortcutsWrapper from './RequestFormShortcutsWrapper';
-import { cancelShortcut, saveShortcut, collapseSectionsShortcut, expandSectionsShortcut } from '../../../test/jest/helpers/shortcuts';
+import {
+  cancelShortcut,
+  saveShortcut,
+  collapseSectionsShortcut,
+  expandSectionsShortcut,
+} from '../../../test/jest/helpers/shortcuts';
 
 const mockOnSubmit = jest.fn();
 const mockOnCanel = jest.fn();

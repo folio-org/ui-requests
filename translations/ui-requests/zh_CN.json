@@ -263,5 +263,6 @@
     "item.status.retrievingFromASR": "从ASR中检索",
     "item.status.missingFromASR": "从ASR中遗失",
     "item.status.orderClosed": "订单已关闭",
-    "item.status.restricted": "使用受限"
+    "item.status.restricted": "使用受限",
+    "errors.closingAlreadyClosedRequest": "错误：请求已关闭。"
 }

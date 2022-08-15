@@ -1,6 +1,29 @@
 # Change history for ui-requests
 
-## 7.1.0 IN PROGRESS
+## IN PROGRESS
+
+* Fix modal loop when move item on request fails due to policy. Refs UIREQ-662.
+* Correctly import components from @folio/stripes/* packages. Refs UIREQ-792.
+* Refactor forms to use final-form. Refs UIREQ-419.
+
+## [7.1.3](https://github.com/folio-org/ui-requests/tree/v7.1.3) (2022-08-11)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.1.2...v7.1.3)
+
+* Allow user to choose request type (page, hold, recall) when placing request. Refs UIREQ-815.
+
+## [7.1.2](https://github.com/folio-org/ui-requests/tree/v7.1.2) (2022-07-27)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.1.1...v7.1.2)
+
+* Add title to modal message for non requested status. Refs UIREQ-797.
+
+## [7.1.1](https://github.com/folio-org/ui-requests/tree/v7.1.1) (2022-07-20)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.1.0...v7.1.1)
+
+* Сannot add tags to record in the Requests app. Refs UIREQ-794.
+* Retrieve up to `MAX_RECORDS` cancellation-reasons. Refs UIREQ-795.
+
+## [7.1.0](https://github.com/folio-org/ui-requests/tree/v7.1.0) (2022-06-29)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.0.2...v7.1.0)
 
 * Add id for Pane component. Refs UIREQ-742.
 * Add pull request template. Refs UIREQ-746.
@@ -25,8 +48,20 @@
 * Disable item and instance links in request detail when hardcoded UID is present. Refs UIREQ-784.
 * Fix "Timeout of 2000ms exceeded. For async tests and hooks, ensure “done()” is called" big tests errors. Refs UIREQ-785.
 * Fix big tests errors related to interactors small default timeout. Refs UIREQ-786.
-* Refactor forms to use final-form. Refs UIREQ-419.
- 
+* Create/Edit Request: required is not read. Refs UIREQ-775.
+* Filter the items list on "move request" action from items with non-requestable statuses. Refs UIREQ-787.
+* Fix validation issue of item barcode field. Refs UIREQ-694.
+* Deleting already-deleted request causes ungraceful error. Refs UIREQ-344.
+* Fix the number of title-level requests. Refs UIREQ-790.
+* Fix problem with double call of end-point for hold shelf report. Refs UIREQ-778.
+
+## [7.0.3](https://github.com/folio-org/ui-requests/tree/v7.0.3) (2022-08-02)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.0.2...v7.0.3)
+
+* Retrieve up to `MAX_RECORDS` cancellation-reasons. Refs UIREQ-795.
+* Fix big tests errors related to interactors small default timeout. Refs UIREQ-786.
+* Fix "Timeout of 2000ms exceeded. For async tests and hooks, ensure “done()” is called" big tests errors. Refs UIREQ-785.
+
 ## [7.0.2](https://github.com/folio-org/ui-requests/tree/v7.0.2) (2022-04-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.0.1...v7.0.2)
 

@@ -151,6 +151,8 @@ export const requestTypesByItemStatus = {
   [itemStatuses.RESTRICTED]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
 };
 
+export const requestableItemStatuses = Object.keys(requestTypesByItemStatus);
+
 export const reportHeaders = [
   'requestType',
   'status',
@@ -249,6 +251,11 @@ export const createModes = {
 
 export const errorMessages = {
   REORDER_SYNC_ERROR: 'There is inconsistency between provided reordered queue and item queue.',
+  DELETE_REQUEST_ERROR: 'The Request has already been closed',
+};
+
+export const errorMessageLabels = {
+  [errorMessages.DELETE_REQUEST_ERROR]: 'ui-requests.errors.closingAlreadyClosedRequest',
 };
 
 export const errorCodes = {

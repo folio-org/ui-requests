@@ -263,5 +263,6 @@
     "item.status.retrievingFromASR": "استرجاع من ASR",
     "item.status.missingFromASR": "مفقود من ASR",
     "item.status.orderClosed": "تم إغلاق الطلبية",
-    "item.status.restricted": "مقيدة"
+    "item.status.restricted": "مقيدة",
+    "errors.closingAlreadyClosedRequest": "خطأ: تم إغلاق الطلب بالفعل."
 }

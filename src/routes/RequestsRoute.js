@@ -153,6 +153,10 @@ class RequestsRoute extends React.Component {
       type: 'okapi',
       path: 'addresstypes',
       records: 'addressTypes',
+      params: {
+        query: 'cql.allRecords=1 sortby addressType',
+        limit: MAX_RECORDS,
+      },
     },
     query: {
       initialValue: { sort: 'requestDate' },
@@ -211,7 +215,11 @@ class RequestsRoute extends React.Component {
     servicePoints: {
       type: 'okapi',
       records: 'servicepoints',
-      path: 'service-points?query=(pickupLocation==true) sortby name&limit=100',
+      path: 'service-points',
+      params: {
+        query: 'query=(pickupLocation==true) sortby name',
+        limit: '100',
+      },
     },
     itemUniquenessValidator: {
       type: 'okapi',
@@ -258,11 +266,20 @@ class RequestsRoute extends React.Component {
       type: 'okapi',
       path: 'cancellation-reason-storage/cancellation-reasons',
       records: 'cancellationReasons',
+      params: {
+        query: 'cql.allRecords=1 sortby name',
+        limit: MAX_RECORDS,
+      },
     },
     staffSlips: {
       type: 'okapi',
       records: 'staffSlips',
-      path: 'staff-slips-storage/staff-slips?limit=100',
+      path: 'staff-slips-storage/staff-slips',
+      params: {
+        query: 'cql.allRecords=1 sortby name',
+        limit: '100',
+      },
+
       throwErrors: false,
     },
     pickSlips: {
@@ -279,7 +296,7 @@ class RequestsRoute extends React.Component {
       path: 'tags',
       params: {
         query: 'cql.allRecords=1 sortby label',
-        limit: '10000',
+        limit: MAX_RECORDS,
       },
       records: 'tags',
     },
@@ -567,11 +584,16 @@ class RequestsRoute extends React.Component {
   };
 
   setCurrentServicePointId = () => {
-    const { mutator } = this.props;
+    const {
+      mutator,
+      resources,
+    } = this.props;
     const { id } = this.getCurrentServicePointInfo();
 
-    mutator.currentServicePoint.update({ id });
-    this.buildRecordsForHoldsShelfReport();
+    if (resources.currentServicePoint?.id !== id) {
+      mutator.currentServicePoint.update({ id });
+      this.buildRecordsForHoldsShelfReport();
+    }
   };
 
   getColumnHeaders = (headers) => {
@@ -658,7 +680,7 @@ class RequestsRoute extends React.Component {
       // Each element of the promises array returns an array of results, but in
       // this case, there should only ever be one result for each.
       const requester = get(users, 'users[0]', null);
-      const titleRequestCount = get(titleRequests, 'totalRecords', 0);
+      const titleRequestCount = titleRequests?.requests.filter(r => r.requestLevel === REQUEST_LEVEL_TYPES.TITLE).length || 0;
       const dynamicProperties = {};
       const requestsForFilter = titleLevelRequestsFeatureEnabled ? titleRequests.requests : itemRequests.requests;
 
@@ -688,7 +710,7 @@ class RequestsRoute extends React.Component {
 
   setURL(id) {
     this.setState({
-      selectedId: id
+      selectedId: id,
     });
   }
 
@@ -696,7 +718,7 @@ class RequestsRoute extends React.Component {
 
   viewRecordOnCollapse = () => {
     this.setState({
-      selectedId: null
+      selectedId: null,
     });
   }
 
@@ -816,7 +838,6 @@ class RequestsRoute extends React.Component {
           GET,
         },
       },
-      stripes: { user },
     } = this.props;
 
     this.setState({
@@ -825,12 +846,12 @@ class RequestsRoute extends React.Component {
 
     reset();
 
-    const servicePointId = get(user, 'user.curServicePoint.id', '');
-    const path = `circulation/requests-reports/hold-shelf-clearance/${servicePointId}`;
+    const { id } = this.getCurrentServicePointInfo();
+    const path = `circulation/requests-reports/hold-shelf-clearance/${id}`;
     const { requests } = await GET({ path });
 
     this.setState({
-      servicePointId,
+      servicePointId: id,
       requests,
       holdsShelfReportPending: false,
     });
@@ -958,11 +979,11 @@ class RequestsRoute extends React.Component {
     const cancellationReasons = get(resources, 'cancellationReasons.records', []);
     const requestCount = get(resources, 'records.other.totalRecords', 0);
     const initialValues = dupRequest ||
-      {
-        requestType: 'Hold',
-        fulfilmentPreference: 'Hold Shelf',
-        createTitleLevelRequest: createTitleLevelRequestsByDefault,
-      };
+    {
+      requestType: 'Hold',
+      fulfilmentPreference: 'Hold Shelf',
+      createTitleLevelRequest: createTitleLevelRequestsByDefault,
+    };
 
     const pickSlipsArePending = resources?.pickSlips?.isPending;
     const requestsEmpty = isEmpty(requests);
@@ -999,7 +1020,7 @@ class RequestsRoute extends React.Component {
               <FormattedMessage id="stripes-smart-components.new" />
             </Button>
           </IfPermission>
-          { csvReportPending ?
+          {csvReportPending ?
             <LoadingButton>
               <FormattedMessage id="ui-requests.csvReportPending" />
             </LoadingButton> :
@@ -1082,7 +1103,7 @@ class RequestsRoute extends React.Component {
               label={intl.formatMessage({ id: errorModalData.label })}
               errorMessage={intl.formatMessage({ id: errorModalData.errorMessage })}
             />
-            }
+          }
           <div data-test-request-instances>
             <SearchAndSort
               columnManagerProps={columnManagerProps}

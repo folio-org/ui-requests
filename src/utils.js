@@ -321,24 +321,9 @@ export const getRequestLevelValue = (value) => {
     : REQUEST_LEVEL_TYPES.ITEM;
 };
 
-export const getInstanceRequestTypeOptions = (items) => {
-  const availableItems = items.filter(item => item.status.name === itemStatuses.AVAILABLE);
-
-  if (availableItems.length > 0) {
-    return [
-      REQUEST_TYPES[requestTypesMap.PAGE],
-    ];
-  }
-
-  const missedItems = items.filter(item => item.status.name === itemStatuses.MISSING);
-
-  if (missedItems.length > 0 && items.length === missedItems.length) {
-    return [
-      REQUEST_TYPES[requestTypesMap.HOLD],
-    ];
-  }
-
+export const getInstanceRequestTypeOptions = () => {
   return [
+    REQUEST_TYPES[requestTypesMap.PAGE],
     REQUEST_TYPES[requestTypesMap.HOLD],
     REQUEST_TYPES[requestTypesMap.RECALL],
   ];
