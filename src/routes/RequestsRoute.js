@@ -25,6 +25,7 @@ import {
   MenuSection,
   TextLink,
   DefaultMCLRowFormatter,
+  NoValue,
 } from '@folio/stripes/components';
 import {
   deparseFilters,
@@ -1001,7 +1002,9 @@ class RequestsRoute extends React.Component {
       ),
       'requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
       'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : ''),
-      'requestStatus': rq => <FormattedMessage id={requestStatusesTranslations[rq.status]} />,
+      'requestStatus': rq => (requestStatusesTranslations[rq.status]
+        ? <FormattedMessage id={requestStatusesTranslations[rq.status]} />
+        : <NoValue />),
       'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
       'title': rq => <TextLink to={this.getRowURL(rq.id)} onClick={() => this.setURL(rq.id)}>{(rq.instance ? rq.instance.title : '')}</TextLink>,
       'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),

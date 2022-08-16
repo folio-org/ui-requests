@@ -49,6 +49,7 @@ import {
   Timepicker,
   Checkbox,
   AccordionStatus,
+  NoValue,
 } from '@folio/stripes/components';
 import stripesForm from '@folio/stripes/form';
 
@@ -1475,7 +1476,9 @@ class RequestForm extends React.Component {
                             {isEditForm &&
                               <KeyValue
                                 label={<FormattedMessage id="ui-requests.status" />}
-                                value={<FormattedMessage id={requestStatusesTranslations[request.status]} />}
+                                value={(requestStatusesTranslations[request.status]
+                                  ? <FormattedMessage id={requestStatusesTranslations[request.status]} />
+                                  : <NoValue />)}
                               />}
                           </Col>
                           <Col xs={2}>
