@@ -154,7 +154,7 @@
     "filters.requestStatus.notYetFilled": "Otevřeno - Dosud nevyplněno",
     "noRequestTypesAvailable": "Pro vybranou jednotku nejsou k dispozici žádné typy žádanek",
     "exportExpiredHoldShelfToCsv": "Exportovat zprávu o vyklizení police rezervací pro {currentServicePoint}",
-    "exportSearchResultsToCsv": "Export search results to CSV",
+    "exportSearchResultsToCsv": "Export výsledků vyhledávání do CSV",
     "common.cancel": "Zrušit",
     "item.callNumberComponents.prefix": "Efektivní předvolba volacího čísla",
     "item.callNumberComponents.callNumber": "Efektivní signatura",
