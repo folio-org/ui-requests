@@ -4,6 +4,7 @@
 
 * Fix modal loop when move item on request fails due to policy. Refs UIREQ-662.
 * Correctly import components from @folio/stripes/* packages. Refs UIREQ-792.
+* Render search results as normal and show dash for empty status. Refs UIREQ-818.
 
 ## [7.1.3](https://github.com/folio-org/ui-requests/tree/v7.1.3) (2022-08-11)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.1.2...v7.1.3)
