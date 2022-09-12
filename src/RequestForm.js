@@ -1266,6 +1266,7 @@ class RequestForm extends React.Component {
         >
           <form
             id="form-requests"
+            noValidate
             className={css.requestForm}
             onSubmit={handleSubmit}
             data-test-requests-form
@@ -1371,8 +1372,9 @@ class RequestForm extends React.Component {
                                                   return (
                                                     <TextField
                                                       {...input}
+                                                      required
                                                       placeholder={placeholder}
-                                                      aria-label={<FormattedMessage id="ui-requests.instance.value" />}
+                                                      label={<FormattedMessage id="ui-requests.instance.value" />}
                                                       error={selectInstanceError || instanceDoesntExistError || null}
                                                       onChange={this.handleChangeInstanceId}
                                                       onBlur={this.enableBlurForEmptyValueOnly(input)}
@@ -1386,16 +1388,15 @@ class RequestForm extends React.Component {
                                         </FormattedMessage>
                                       </Col>
                                       <Col xs={3}>
-                                        <div className={css.buttonFieldWrapper}>
-                                          <Button
-                                            buttonStyle="primary noRadius"
-                                            fullWidth
-                                            onClick={this.onInstanceClick}
-                                            disabled={submitting}
-                                          >
-                                            <FormattedMessage id="ui-requests.enter" />
-                                          </Button>
-                                        </div>
+                                        <Button
+                                          buttonStyle="primary noRadius"
+                                          buttonClass={css.enterButton}
+                                          fullWidth
+                                          onClick={this.onInstanceClick}
+                                          disabled={submitting}
+                                        >
+                                          <FormattedMessage id="ui-requests.enter" />
+                                        </Button>
                                       </Col>
                                     </Row>
                                     <Row>
@@ -1465,8 +1466,9 @@ class RequestForm extends React.Component {
                                                 return (
                                                   <TextField
                                                     {...input}
+                                                    required
                                                     placeholder={placeholder}
-                                                    aria-label={<FormattedMessage id="ui-requests.item.barcode" />}
+                                                    label={<FormattedMessage id="ui-requests.item.barcode" />}
                                                     error={meta.submitError || selectItemError || itemDoesntExistError || null}
                                                     onChange={this.handleChangeItemBarcode}
                                                     onBlur={this.enableBlurForEmptyValueOnly(input)}
@@ -1480,17 +1482,16 @@ class RequestForm extends React.Component {
                                       </FormattedMessage>
                                     </Col>
                                     <Col xs={3}>
-                                      <div className={css.buttonFieldWrapper}>
-                                        <Button
-                                          id="clickable-select-item"
-                                          buttonStyle="primary noRadius"
-                                          fullWidth
-                                          onClick={this.onItemClick}
-                                          disabled={submitting}
-                                        >
-                                          <FormattedMessage id="ui-requests.enter" />
-                                        </Button>
-                                      </div>
+                                      <Button
+                                        id="clickable-select-item"
+                                        buttonStyle="primary noRadius"
+                                        buttonClass={css.enterButton}
+                                        fullWidth
+                                        onClick={this.onItemClick}
+                                        disabled={submitting}
+                                      >
+                                        <FormattedMessage id="ui-requests.enter" />
+                                      </Button>
                                     </Col>
                                   </Row>
                                 }
@@ -1692,8 +1693,9 @@ class RequestForm extends React.Component {
                                           return (
                                             <TextField
                                               {...input}
+                                              required
                                               placeholder={placeholder}
-                                              aria-label={<FormattedMessage id="ui-requests.requester.barcode" />}
+                                              label={<FormattedMessage id="ui-requests.requester.barcode" />}
                                               error={selectUserError || userDoesntExistError || null}
                                               onChange={this.handleChangeUserBarcode}
                                               onBlur={this.enableBlurForEmptyValueOnly(input)}
@@ -1720,17 +1722,16 @@ class RequestForm extends React.Component {
                                 />
                               </Col>
                               <Col xs={3}>
-                                <div className={css.buttonFieldWrapper}>
-                                  <Button
-                                    id="clickable-select-requester"
-                                    buttonStyle="primary noRadius"
-                                    fullWidth
-                                    onClick={this.onUserClick}
-                                    disabled={submitting}
-                                  >
-                                    <FormattedMessage id="ui-requests.enter" />
-                                  </Button>
-                                </div>
+                                <Button
+                                  id="clickable-select-requester"
+                                  buttonStyle="primary noRadius"
+                                  buttonClass={css.enterButton}
+                                  fullWidth
+                                  onClick={this.onUserClick}
+                                  disabled={submitting}
+                                >
+                                  <FormattedMessage id="ui-requests.enter" />
+                                </Button>
                               </Col>
                             </Row>}
                           {(selectedUser?.id || request?.requester) &&
