@@ -26,7 +26,6 @@ describe('UI Requests', () => {
 
   it('should render', () => {
     expect(renderRequest()).toBeDefined();
-    screen.debug();
   });
 
   it('should render RequestsRoute', () => {
