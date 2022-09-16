@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import {
   FormattedMessage,
 } from 'react-intl';
-import { Field } from 'redux-form';
+import {
+  Field,
+} from 'react-final-form';
 import { Col, KeyValue, Row, Select } from '@folio/stripes/components';
 import { ProxyManager } from '@folio/stripes/smart-components';
 import { getFullName, userHighlightBox } from './utils';

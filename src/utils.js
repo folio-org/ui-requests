@@ -359,3 +359,25 @@ export const isValidRequest = ({
   instanceId,
   holdingsRecordId,
 }) => instanceId !== INVALID_REQUEST_HARDCODED_ID && holdingsRecordId !== INVALID_REQUEST_HARDCODED_ID;
+
+export const memoizeValidation = (fn) => {
+  const lastArgs = {};
+  const lastKeys = {};
+  const lastResults = {};
+
+  return (fieldName, key) => arg => {
+    const lastArg = lastArgs[fieldName];
+    const lastKey = lastKeys[fieldName];
+
+    if (
+      arg !== lastArg ||
+      (key !== lastKey && arg === lastArg)
+    ) {
+      lastArgs[fieldName] = arg;
+      lastKeys[fieldName] = key;
+      lastResults[fieldName] = fn(arg);
+    }
+
+    return lastResults[fieldName];
+  };
+};
