@@ -3,6 +3,7 @@
   "routingError": "How did you get to {pathname}?",
 
   "meta.title": "Requests",
+  "appMenu.keyboardShortcuts": "Keyboard shortcuts",
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
   "barcode": "Barcode",
   "requestQueue": "Request queue",
@@ -28,7 +29,16 @@
   "enter": "Enter",
   "requestNotAllowed": "Request not allowed",
   "requestLevel": "Request level",
+  "shortcut.createRecord": "Create a new request",
+  "shortcut.editRecord": "Edit a record",
+  "shortcut.duplicateRecord": "Duplicate a record",
+  "shortcut.saveRecord": "Save a record",
+  "shortcut.goToSearchFilter": "Go to Search & Filter pane",
+  "shortcut.openShortcutModal": "View keyboard shortcuts list",
   "titleLookupPlugin": "Title look-up",
+
+  "navigation.app": "Requests app Search",
+  "navigation.keyboardShortcuts": "Keyboard shortcuts",
 
   "itemLevel": "Item",
   "titleLevel": "Title",
