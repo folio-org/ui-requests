@@ -11,6 +11,11 @@ jest.mock('./routes/index', () => ({
   RequestsRoute: () => <h1>RequestsRoute</h1>,
 }));
 
+jest.mock('@folio/stripes/core', () => ({
+  ...jest.requireActual('@folio/stripes/core'),
+  AppContextMenu: () => 'AppContextMenu'
+}));
+
 describe('UI Requests', () => {
   const renderRequest = () => {
     const component = (
@@ -33,5 +38,9 @@ describe('UI Requests', () => {
 
     renderRequest();
     expect(screen.getByText('RequestsRoute')).toBeInTheDocument();
+  });
+
+  it('should render AppContextMenu', () => {
+    expect(screen.getByText('AppContextMenu')).toBeInTheDocument();
   });
 });
