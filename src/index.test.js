@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 
 import '../test/jest/__mock__';
 
@@ -11,9 +11,9 @@ jest.mock('./routes/index', () => ({
   RequestsRoute: () => <h1>RequestsRoute</h1>,
 }));
 
-jest.mock('@folio/stripes/core', () => ({
-  ...jest.requireActual('@folio/stripes/core'),
-  AppContextMenu: () => 'AppContextMenu'
+jest.mock('@folio/stripes/components', () => ({
+  ...jest.requireActual('@folio/stripes/components'),
+  KeyboardShortcutsModal: () => 'KeyboardShortcutsModal'
 }));
 
 describe('UI Requests', () => {
@@ -52,5 +52,13 @@ describe('UI Requests', () => {
 
     renderRequest();
     expect(screen.getByText('ui-requests.appMenu.keyboardShortcuts')).toBeInTheDocument();
+  });
+
+  it('should render keyboard shortcuts modal', () => {
+    window.history.pushState({}, '', '/requests');
+
+    renderRequest();
+    fireEvent.click(screen.getByText('ui-requests.appMenu.keyboardShortcuts'));
+    expect(screen.getByText('stripes-components.shortcut.modalLabel')).toBeInTheDocument();
   });
 });
