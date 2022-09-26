@@ -40,7 +40,17 @@ describe('UI Requests', () => {
     expect(screen.getByText('RequestsRoute')).toBeInTheDocument();
   });
 
-  it('should render AppContextMenu', () => {
-    expect(screen.getByText('AppContextMenu')).toBeInTheDocument();
+  it('should render "Request app Search" nav item', () => {
+    window.history.pushState({}, '', '/requests');
+
+    renderRequest();
+    expect(screen.getByText('ui-requests.navigation.app')).toBeInTheDocument();
+  });
+
+  it('should render "Keyboard shortcuts" nav item', () => {
+    window.history.pushState({}, '', '/requests');
+
+    renderRequest();
+    expect(screen.getByText('ui-requests.appMenu.keyboardShortcuts')).toBeInTheDocument();
   });
 });
