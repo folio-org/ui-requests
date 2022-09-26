@@ -11,11 +11,6 @@ jest.mock('./routes/index', () => ({
   RequestsRoute: () => <h1>RequestsRoute</h1>,
 }));
 
-jest.mock('@folio/stripes/components', () => ({
-  ...jest.requireActual('@folio/stripes/components'),
-  KeyboardShortcutsModal: () => 'KeyboardShortcutsModal'
-}));
-
 describe('UI Requests', () => {
   const renderRequest = () => {
     const component = (
@@ -60,5 +55,15 @@ describe('UI Requests', () => {
     renderRequest();
     fireEvent.click(screen.getByText('ui-requests.appMenu.keyboardShortcuts'));
     expect(screen.getByText('stripes-components.shortcut.modalLabel')).toBeInTheDocument();
+  });
+
+  it('should close keyboard shortcuts modal on clicking close button', () => {
+    window.history.pushState({}, '', '/requests');
+
+    renderRequest();
+    fireEvent.click(screen.getByText('ui-requests.appMenu.keyboardShortcuts'));
+    const button = screen.getByRole('button', { name: /stripes-components.dismissModal/i });
+    fireEvent.click(button);
+    expect(screen.queryByText('stripes-components.shortcut.modalLabel')).not.toBeInTheDocument();
   });
 });
