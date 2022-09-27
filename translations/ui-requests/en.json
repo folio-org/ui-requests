@@ -29,12 +29,6 @@
   "enter": "Enter",
   "requestNotAllowed": "Request not allowed",
   "requestLevel": "Request level",
-  "shortcut.createRecord": "Create a new request",
-  "shortcut.editRecord": "Edit a record",
-  "shortcut.duplicateRecord": "Duplicate a record",
-  "shortcut.saveRecord": "Save a record",
-  "shortcut.goToSearchFilter": "Go to Search & Filter pane",
-  "shortcut.openShortcutModal": "View keyboard shortcuts list",
   "titleLookupPlugin": "Title look-up",
 
   "navigation.app": "Requests app Search",

@@ -12,11 +12,12 @@ import {
   CommandList,
   defaultKeyboardShortcuts as keyboardCommands,
   HasCommand,
-  KeyboardShortcutsModal
+  KeyboardShortcutsModal,
+  importShortcuts,
+  renameShortcutLabels
 } from '@folio/stripes/components';
 
 import pkg from '../package';
-import commands from './commands';
 
 import {
   NoteCreateRoute,
@@ -59,6 +60,18 @@ const RequestsRouting = (props) => {
       handler: setShowKeyboardShortcutsModal
     },
   ];
+
+  const appSpecificShortcuts = importShortcuts(['new', 'edit', 'duplicateRecord', 'save', 'search', 'openShortcutModal']);
+
+  const renamedShortcuts = renameShortcutLabels(appSpecificShortcuts,
+    [
+      { 'shortcut': 'new', 'label': 'Create a new record' },
+      { 'shortcut': 'edit', 'label': 'Edit a record' },
+      { 'shortcut': 'duplicateRecord', 'label': 'Duplicate a record' },
+      { 'shortcut': 'save', 'label': 'Save a record' },
+      { 'shortcut': 'search', 'label': 'Go to Search & Filter pane' },
+      { 'shortcut': 'openShortcutModal', 'label': 'View keyboard shortcuts list' },
+    ]);
 
   return (
     <>
@@ -118,7 +131,7 @@ const RequestsRouting = (props) => {
           <KeyboardShortcutsModal
             open
             onClose={() => { setShowKeyboardShortcutsModal(false); }}
-            allCommands={commands}
+            allCommands={renamedShortcuts}
           />
         )
       }
