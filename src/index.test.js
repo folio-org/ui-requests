@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 
 import '../test/jest/__mock__';
 
@@ -33,5 +33,37 @@ describe('UI Requests', () => {
 
     renderRequest();
     expect(screen.getByText('RequestsRoute')).toBeInTheDocument();
+  });
+
+  it('should render "Request app Search" nav item', () => {
+    window.history.pushState({}, '', '/requests');
+
+    renderRequest();
+    expect(screen.getByText('ui-requests.navigation.app')).toBeInTheDocument();
+  });
+
+  it('should render "Keyboard shortcuts" nav item', () => {
+    window.history.pushState({}, '', '/requests');
+
+    renderRequest();
+    expect(screen.getByText('ui-requests.appMenu.keyboardShortcuts')).toBeInTheDocument();
+  });
+
+  it('should render keyboard shortcuts modal', () => {
+    window.history.pushState({}, '', '/requests');
+
+    renderRequest();
+    fireEvent.click(screen.getByText('ui-requests.appMenu.keyboardShortcuts'));
+    expect(screen.getByText('stripes-components.shortcut.modalLabel')).toBeInTheDocument();
+  });
+
+  it('should close keyboard shortcuts modal on clicking close button', () => {
+    window.history.pushState({}, '', '/requests');
+
+    renderRequest();
+    fireEvent.click(screen.getByText('ui-requests.appMenu.keyboardShortcuts'));
+    const button = screen.getByRole('button', { name: /stripes-components.dismissModal/i });
+    fireEvent.click(button);
+    expect(screen.queryByText('stripes-components.shortcut.modalLabel')).not.toBeInTheDocument();
   });
 });

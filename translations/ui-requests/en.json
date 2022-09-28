@@ -3,6 +3,7 @@
   "routingError": "How did you get to {pathname}?",
 
   "meta.title": "Requests",
+  "appMenu.keyboardShortcuts": "Keyboard shortcuts",
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
   "barcode": "Barcode",
   "requestQueue": "Request queue",
@@ -29,6 +30,9 @@
   "requestNotAllowed": "Request not allowed",
   "requestLevel": "Request level",
   "titleLookupPlugin": "Title look-up",
+
+  "navigation.app": "Requests app Search",
+  "navigation.keyboardShortcuts": "Keyboard shortcuts",
 
   "itemLevel": "Item",
   "titleLevel": "Title",
