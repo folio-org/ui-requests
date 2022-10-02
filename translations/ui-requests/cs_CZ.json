@@ -264,5 +264,8 @@
     "item.status.missingFromASR": "Chybí v ASR",
     "item.status.orderClosed": "Objednávka uzavřena",
     "item.status.restricted": "Omezený",
-    "errors.closingAlreadyClosedRequest": "Chyba: Žádanka byla již uzavřena."
+    "errors.closingAlreadyClosedRequest": "Chyba: Žádanka byla již uzavřena.",
+    "appMenu.keyboardShortcuts": "Keyboard shortcuts",
+    "navigation.app": "Requests app Search",
+    "navigation.keyboardShortcuts": "Keyboard shortcuts"
 }
