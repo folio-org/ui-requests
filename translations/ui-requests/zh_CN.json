@@ -264,5 +264,8 @@
     "item.status.missingFromASR": "从ASR中遗失",
     "item.status.orderClosed": "订单已关闭",
     "item.status.restricted": "使用受限",
-    "errors.closingAlreadyClosedRequest": "错误：请求已关闭。"
+    "errors.closingAlreadyClosedRequest": "错误：请求已关闭。",
+    "appMenu.keyboardShortcuts": "Keyboard shortcuts",
+    "navigation.app": "Requests app Search",
+    "navigation.keyboardShortcuts": "Keyboard shortcuts"
 }
