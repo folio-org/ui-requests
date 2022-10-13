@@ -264,5 +264,8 @@
     "item.status.missingFromASR": "Desaparecido da ASR",
     "item.status.orderClosed": "Pedido fechado",
     "item.status.restricted": "Restrito",
-    "errors.closingAlreadyClosedRequest": "Erro: A solicitação já foi fechada."
+    "errors.closingAlreadyClosedRequest": "Erro: A solicitação já foi fechada.",
+    "appMenu.keyboardShortcuts": "Keyboard shortcuts",
+    "navigation.app": "Requests app Search",
+    "navigation.keyboardShortcuts": "Keyboard shortcuts"
 }
