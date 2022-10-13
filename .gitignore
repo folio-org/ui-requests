@@ -6,6 +6,7 @@ yarn.lock
 ModuleDescriptor.json
 yarn-error.log
 .vscode
+.idea
 artifacts
 junit.xml
 
