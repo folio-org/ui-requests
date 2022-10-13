@@ -826,6 +826,9 @@ class RequestsRoute extends React.Component {
       newRequestData.itemBarcode = request.item.barcode;
       newRequestData.itemId = request.itemId;
     }
+    if (request.requestLevel === REQUEST_LEVEL_TYPES.TITLE) {
+      dupRequest.createTitleLevelRequest = true;
+    }
 
     this.setState({ dupRequest });
     this.props.mutator.query.update(newRequestData);
