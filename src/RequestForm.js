@@ -943,7 +943,7 @@ class RequestForm extends React.Component {
       selectedInstance,
     } = this.props;
 
-    if (isUndefined(selectedInstance)) {
+    if (isUndefined(selectedInstance) || isNil(instanceId)) {
       return <FormattedMessage id="ui-requests.errors.selectInstanceRequired" />;
     }
 
