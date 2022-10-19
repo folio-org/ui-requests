@@ -9,6 +9,7 @@
 * Refactor forms to use final-form. Refs UIREQ-419.
 * Requests: Implement App context menu and keyboard shortcuts modal. refs UIREQ-817.
 * Make title level request box selected when duplicating title level request. Refs UIREQ-827.
+* Prevent request to get instance if there is no `instanceId`. Refs UIREQ-826.
 
 ## [7.1.3](https://github.com/folio-org/ui-requests/tree/v7.1.3) (2022-08-11)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.1.2...v7.1.3)
