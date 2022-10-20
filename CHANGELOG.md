@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## IN PROGRESS
+## [7.2.0](https://github.com/folio-org/ui-requests/tree/v7.2.0) (2022-10-20)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.1.3...v7.2.0)
 
 * Fix modal loop when move item on request fails due to policy. Refs UIREQ-662.
 * Correctly import components from `@folio/stripes/*` packages. Refs UIREQ-792.
