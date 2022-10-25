@@ -20,6 +20,7 @@ import {
   isBoolean,
   isUndefined,
   isNil,
+  isNull,
 } from 'lodash';
 
 import { Pluggable } from '@folio/stripes/core';
@@ -945,6 +946,10 @@ class RequestForm extends React.Component {
 
     if (isUndefined(selectedInstance)) {
       return <FormattedMessage id="ui-requests.errors.selectInstanceRequired" />;
+    }
+
+    if (isNull(instanceId)) {
+      return undefined;
     }
 
     const instance = await this.findInstance(instanceId);
