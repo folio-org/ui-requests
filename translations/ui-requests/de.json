@@ -216,7 +216,7 @@
     "requestQueue.description": "Instanz: <instanceLink>{title} /{author}.</instanceLink> <i>{publisher}, {publicationDate}</i>",
     "requestQueue.fulfillmentInProgressSectionTitle": "Bereitstellung läuft",
     "requestQueue.notYetFilledSectionTitle": "Offen - noch nicht erfüllt",
-    "requestQueue.order": "Order",
+    "requestQueue.order": "Anordnung",
     "requestQueue.fulfillmentStatus": "Status",
     "requestQueue.itemBarcode": "Exemplarbarcode",
     "requestQueue.enumeration": "Zählung",
@@ -254,7 +254,7 @@
     "item.status.lostAndPaid": "Verloren und bezahlt",
     "item.status.missing": "Vermisst",
     "item.status.onOrder": "Im Erwerbungsvorgang",
-    "item.status.paged": "Paged",
+    "item.status.paged": "Bestellt",
     "item.status.unavailable": "Nicht verfügbar",
     "item.status.unknown": "Unbekannt",
     "item.status.withdrawn": "Ausgesondert",
@@ -264,8 +264,8 @@
     "item.status.missingFromASR": "Missing from ASR",
     "item.status.orderClosed": "Bestellung abgeschlossen",
     "item.status.restricted": "Beschränkt",
-    "errors.closingAlreadyClosedRequest": "Error: The Request has already been closed.",
-    "appMenu.keyboardShortcuts": "Keyboard shortcuts",
+    "errors.closingAlreadyClosedRequest": "Fehler: Bestandsanfrage wurde bereits geschlossen",
+    "appMenu.keyboardShortcuts": "Tastenkürzel",
     "navigation.app": "Requests app Search",
-    "navigation.keyboardShortcuts": "Keyboard shortcuts"
+    "navigation.keyboardShortcuts": "Tastenkürzel"
 }

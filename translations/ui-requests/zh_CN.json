@@ -265,7 +265,7 @@
     "item.status.orderClosed": "订单已关闭",
     "item.status.restricted": "使用受限",
     "errors.closingAlreadyClosedRequest": "错误：请求已关闭。",
-    "appMenu.keyboardShortcuts": "Keyboard shortcuts",
-    "navigation.app": "Requests app Search",
-    "navigation.keyboardShortcuts": "Keyboard shortcuts"
+    "appMenu.keyboardShortcuts": "键盘快捷键",
+    "navigation.app": "请求应用程序搜索",
+    "navigation.keyboardShortcuts": "键盘快捷键"
 }
