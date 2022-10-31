@@ -266,6 +266,6 @@
     "item.status.restricted": "Beschränkt",
     "errors.closingAlreadyClosedRequest": "Fehler: Bestandsanfrage wurde bereits geschlossen",
     "appMenu.keyboardShortcuts": "Tastenkürzel",
-    "navigation.app": "Requests app Search",
+    "navigation.app": "Suche in Bestandsanfragen",
     "navigation.keyboardShortcuts": "Tastenkürzel"
 }
