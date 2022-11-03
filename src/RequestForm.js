@@ -82,6 +82,14 @@ import {
   getTlrSettings,
   getInstanceRequestTypeOptions,
   memoizeValidation,
+  getFulfilmentTypeOptions,
+  getDefaultRequestPreferences,
+  getFulfillmentPreference,
+  isDeliverySelected,
+  getSelectedAddressTypeId,
+  getProxy,
+  isSubmittingButtonDisabled,
+  isFormEditing,
 } from './utils';
 
 import css from './requests.css';
@@ -170,7 +178,10 @@ class RequestForm extends React.Component {
   constructor(props) {
     super(props);
 
-    const { request } = props;
+    const {
+      request,
+      initialValues,
+    } = props;
     const {
       loan,
     } = (request || {});
@@ -180,7 +191,7 @@ class RequestForm extends React.Component {
     this.state = {
       proxy: {},
       selectedLoan: loan,
-      ...this.getDefaultRequestPreferences(),
+      ...getDefaultRequestPreferences(request, initialValues),
       isAwaitingForProxySelection: false,
       titleLevelRequestsFeatureEnabled,
       isItemOrInstanceLoading: false,
@@ -229,7 +240,7 @@ class RequestForm extends React.Component {
       this.findInstance(this.props.query.instanceId);
     }
 
-    if (this.isEditForm()) {
+    if (isFormEditing(this.props.request)) {
       this.findRequestPreferences(this.props.initialValues.requesterId);
     }
 
@@ -350,24 +361,6 @@ class RequestForm extends React.Component {
     }
   }
 
-  getFulfilmentTypeOptions() {
-    const { hasDelivery } = this.state;
-    const {
-      fulfilmentTypes = [],
-    } = this.props.optionLists;
-
-    const sortedFulfilmentTypes = sortBy(fulfilmentTypes, ['label']);
-
-    const fulfilmentTypeOptions = sortedFulfilmentTypes.map(({ label, id }) => ({
-      labelTranslationPath: label,
-      value: id,
-    }));
-
-    return !hasDelivery
-      ? fulfilmentTypeOptions.filter(option => option.value !== fulfilmentTypeMap.DELIVERY)
-      : fulfilmentTypeOptions;
-  }
-
   onClose() {
     this.props.toggleModal();
   }
@@ -376,8 +369,8 @@ class RequestForm extends React.Component {
     const selectedFullfillmentPreference = e.target.value;
     const { defaultDeliveryAddressTypeId } = this.state;
 
-    const deliverySelected = this.isDeliverySelected(selectedFullfillmentPreference);
-    const selectedAddressTypeId = this.getSelectedAddressTypeId(deliverySelected, defaultDeliveryAddressTypeId);
+    const deliverySelected = isDeliverySelected(selectedFullfillmentPreference);
+    const selectedAddressTypeId = getSelectedAddressTypeId(deliverySelected, defaultDeliveryAddressTypeId);
 
     this.setState({
       deliverySelected,
@@ -553,33 +546,19 @@ class RequestForm extends React.Component {
     }
   }
 
-  getDefaultRequestPreferences() {
-    const {
-      request,
-      initialValues,
-    } = this.props;
-
-    return {
-      hasDelivery: false,
-      requestPreferencesLoaded: false,
-      defaultDeliveryAddressTypeId: '',
-      defaultServicePointId: request?.pickupServicePointId || '',
-      deliverySelected: isDelivery(initialValues),
-      selectedAddressTypeId: initialValues.deliveryAddressTypeId || '',
-    };
-  }
-
   async findRequestPreferences(userId) {
     const {
       findResource,
       form,
+      request,
+      initialValues,
     } = this.props;
 
     try {
       const { requestPreferences } = await findResource('requestPreferences', userId, 'userId');
       const preferences = requestPreferences[0];
 
-      const defaultPreferences = this.getDefaultRequestPreferences();
+      const defaultPreferences = getDefaultRequestPreferences(request, initialValues);
       const requestPreference = {
         ...defaultPreferences,
         ...pick(preferences, ['defaultDeliveryAddressTypeId', 'defaultServicePointId']),
@@ -589,7 +568,7 @@ class RequestForm extends React.Component {
       // when in edit mode (editing existing request) and defaultServicePointId is present (it was
       // set during creation) just keep it instead of choosing the preferred one.
       // https://issues.folio.org/browse/UIREQ-544
-      if (this.isEditForm() && defaultPreferences.defaultServicePointId) {
+      if (isFormEditing(request) && defaultPreferences.defaultServicePointId) {
         requestPreference.defaultServicePointId = defaultPreferences.defaultServicePointId;
       }
 
@@ -599,12 +578,12 @@ class RequestForm extends React.Component {
         requestPreference.hasDelivery = deliveryIsPredefined;
       }
 
-      const fulfillmentPreference = this.getFullfillmentPreference(preferences);
-      const deliverySelected = this.isDeliverySelected(fulfillmentPreference);
+      const fulfillmentPreference = getFulfillmentPreference(preferences, initialValues);
+      const deliverySelected = isDeliverySelected(fulfillmentPreference);
 
       const selectedAddress = requestPreference.selectedAddressTypeId || requestPreference.defaultDeliveryAddressTypeId;
 
-      const selectedAddressTypeId = this.getSelectedAddressTypeId(deliverySelected, selectedAddress);
+      const selectedAddressTypeId = getSelectedAddressTypeId(deliverySelected, selectedAddress);
 
       this.setState({
         ...requestPreference,
@@ -617,24 +596,11 @@ class RequestForm extends React.Component {
       });
     } catch (e) {
       this.setState({
-        ...this.getDefaultRequestPreferences(),
+        ...getDefaultRequestPreferences(request, initialValues),
         deliverySelected: false,
       }, () => {
         form.change('fulfilmentPreference', fulfilmentTypeMap.HOLD_SHELF);
       });
-    }
-  }
-
-  getFullfillmentPreference(preferences) {
-    const { initialValues } = this.props;
-
-    const requesterId = get(initialValues, 'requesterId');
-    const userId = get(preferences, 'userId');
-
-    if (requesterId === userId) {
-      return get(initialValues, 'fulfilmentPreference');
-    } else {
-      return get(preferences, 'fulfillment', fulfilmentTypeMap.HOLD_SHELF);
     }
   }
 
@@ -668,14 +634,6 @@ class RequestForm extends React.Component {
       }
       form.change('deliveryAddressTypeId', '');
     }
-  }
-
-  isDeliverySelected(fulfillmentPreference) {
-    return fulfillmentPreference === fulfilmentTypeMap.DELIVERY;
-  }
-
-  getSelectedAddressTypeId(deliverySelected, defaultDeliveryAddressTypeId) {
-    return deliverySelected ? defaultDeliveryAddressTypeId : '';
   }
 
   findItemRelatedResources(item) {
@@ -842,19 +800,6 @@ class RequestForm extends React.Component {
         })
         .then(instance => this.setInstanceRequestTypeOptions(instance));
     }
-  }
-
-  getInstanceItems = async (instanceId) => {
-    const { findResource } = this.props;
-
-    const { items } = await findResource(RESOURCE_TYPES.HOLDING, instanceId, 'instanceId')
-      .then(responce => {
-        const holdingRecordIds = responce.holdingsRecords.map(({ id }) => id);
-
-        return findResource(RESOURCE_TYPES.ITEM, holdingRecordIds, 'holdingsRecordId');
-      });
-
-    return items;
   }
 
   setInstanceRequestTypeOptions = async (instance) => {
@@ -1205,34 +1150,6 @@ class RequestForm extends React.Component {
     }
   }
 
-  getProxy() {
-    const { request } = this.props;
-    const { proxy } = this.state;
-    const userProxy = request ? request.proxy : proxy;
-    if (!userProxy) return null;
-
-    const id = proxy?.id || request?.proxyUserId;
-    return {
-      ...userProxy,
-      id,
-    };
-  }
-
-  isEditForm() {
-    const { request } = this.props;
-
-    return !!get(request, 'id');
-  }
-
-  isSubmittingButtonDisabled() {
-    const {
-      pristine,
-      submitting,
-    } = this.props;
-
-    return pristine || submitting;
-  }
-
   renderAddRequestFirstMenu = () => (
     <PaneMenu>
       <FormattedMessage id="ui-requests.actions.closeNewRequest">
@@ -1366,6 +1283,8 @@ class RequestForm extends React.Component {
       onGetPatronManualBlocks,
       onHideErrorModal,
       isTlrEnabledOnEditPage,
+      optionLists,
+      pristine,
     } = this.props;
 
     const {
@@ -1387,6 +1306,7 @@ class RequestForm extends React.Component {
       isUserBarcodeBlur,
       isItemBarcodeBlur,
       isInstanceIdBlur,
+      hasDelivery,
     } = this.state;
     const {
       createTitleLevelRequest,
@@ -1402,7 +1322,7 @@ class RequestForm extends React.Component {
       fulfilmentPreference,
     } = request || {};
 
-    const isEditForm = this.isEditForm();
+    const isEditForm = isFormEditing(request);
 
     const disableRecordCreation = true;
 
@@ -1440,6 +1360,9 @@ class RequestForm extends React.Component {
     const requestTypeError = hasNonRequestableStatus(selectedItem);
     const itemStatus = selectedItem?.status?.name;
     const itemStatusMessage = <FormattedMessage id={itemStatusesTranslations[itemStatus]} />;
+    const fulfilmentTypeOptions = getFulfilmentTypeOptions(hasDelivery, optionLists?.fulfilmentTypes || []);
+    const selectedProxy = getProxy(request, proxy);
+    const isSubmittingDisabled = isSubmittingButtonDisabled(pristine, submitting);
     const getPatronBlockModalOpenStatus = () => {
       if (isAwaitingForProxySelection) {
         return false;
@@ -1466,7 +1389,7 @@ class RequestForm extends React.Component {
           onSubmit={handleSubmit}
           onCancel={handleCancelAndClose}
           accordionStatusRef={this.accordionStatusRef}
-          isSubmittingDisabled={this.isSubmittingButtonDisabled()}
+          isSubmittingDisabled={isSubmittingDisabled}
         >
           <form
             id="form-requests"
@@ -1501,7 +1424,7 @@ class RequestForm extends React.Component {
                       type="submit"
                       marginBottom0
                       buttonStyle="primary mega"
-                      disabled={this.isSubmittingButtonDisabled()}
+                      disabled={isSubmittingDisabled}
                     >
                       <FormattedMessage id="ui-requests.common.saveAndClose" />
                     </Button>
@@ -1954,10 +1877,10 @@ class RequestForm extends React.Component {
                               fulfilmentPreference={fulfilmentPreference}
                               deliveryAddress={addressDetail}
                               deliveryLocations={deliveryLocations}
-                              fulfilmentTypeOptions={this.getFulfilmentTypeOptions()}
+                              fulfilmentTypeOptions={fulfilmentTypeOptions}
                               onChangeAddress={this.onChangeAddress}
                               onChangeFulfilment={this.onChangeFulfilment}
-                              proxy={this.getProxy()}
+                              proxy={selectedProxy}
                               servicePoints={servicePoints}
                               onSelectProxy={this.onSelectProxy}
                               onCloseProxy={this.handleCloseProxy}
