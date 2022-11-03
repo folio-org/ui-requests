@@ -390,9 +390,9 @@ export const getFulfilmentTypeOptions = (hasDelivery, fulfilmentTypes) => {
     value: id,
   }));
 
-  return !hasDelivery
-    ? fulfilmentTypeOptions.filter(option => option.value !== fulfilmentTypeMap.DELIVERY)
-    : fulfilmentTypeOptions;
+  return hasDelivery
+    ? fulfilmentTypeOptions
+    : fulfilmentTypeOptions.filter(option => option.value !== fulfilmentTypeMap.DELIVERY);
 };
 
 export const getDefaultRequestPreferences = (request, initialValues) => {

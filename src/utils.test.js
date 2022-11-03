@@ -16,6 +16,14 @@ import {
   handleKeyCommand,
   isValidRequest,
   memoizeValidation,
+  getFulfilmentTypeOptions,
+  getDefaultRequestPreferences,
+  getFulfillmentPreference,
+  isDeliverySelected,
+  getSelectedAddressTypeId,
+  getProxy,
+  isSubmittingButtonDisabled,
+  isFormEditing, isDelivery,
 } from './utils';
 
 import {
@@ -24,6 +32,7 @@ import {
   requestTypesMap,
   REQUEST_LEVEL_TYPES,
   REQUEST_TYPES,
+  fulfilmentTypeMap,
 } from './constants';
 
 describe('escapeValue', () => {
@@ -364,6 +373,223 @@ describe('memoizeValidation', () => {
       it('should return the cashed result', () => {
         expect(result).toBe(result1);
       });
+    });
+  });
+});
+
+describe('getFulfilmentTypeOptions', () => {
+  const fulfilmentTypes = [
+    {
+      label: 'test',
+      id: 'test',
+    },
+    {
+      label: 'test_2',
+      id: fulfilmentTypeMap.DELIVERY,
+    },
+  ];
+
+  describe('when "hasDelivery" is true', () => {
+    it('should return not filtered "fulfilmentTypeOptions"', () => {
+      const expectedResult = [
+        {
+          labelTranslationPath: fulfilmentTypes[0].label,
+          value: fulfilmentTypes[0].id,
+        },
+        {
+          labelTranslationPath: fulfilmentTypes[1].label,
+          value: fulfilmentTypes[1].id,
+        }
+      ];
+
+      expect(getFulfilmentTypeOptions(true, fulfilmentTypes)).toEqual(expectedResult);
+    });
+  });
+
+  describe('when "hasDelivery" is false', () => {
+    it('should return filtered "fulfilmentTypeOptions"', () => {
+      const expectedResult = [
+        {
+          labelTranslationPath: fulfilmentTypes[0].label,
+          value: fulfilmentTypes[0].id,
+        }
+      ];
+
+      expect(getFulfilmentTypeOptions(false, fulfilmentTypes)).toEqual(expectedResult);
+    });
+  });
+});
+
+describe('getDefaultRequestPreferences', () => {
+  describe('when "pickupServicePointId" and "deliveryAddressTypeId" are presented', () => {
+    it('should return correct data', () => {
+      const request = {
+        pickupServicePointId: 'id',
+      };
+      const initialValues = {
+        deliveryAddressTypeId: 'id',
+      };
+      const expectedResult = {
+        hasDelivery: false,
+        requestPreferencesLoaded: false,
+        defaultDeliveryAddressTypeId: '',
+        defaultServicePointId: request.pickupServicePointId,
+        deliverySelected: false,
+        selectedAddressTypeId: initialValues.deliveryAddressTypeId,
+      };
+
+      expect(getDefaultRequestPreferences(request, initialValues)).toEqual(expectedResult);
+    });
+  });
+
+  describe('when "pickupServicePointId" and "deliveryAddressTypeId" are not presented', () => {
+    it('should return correct data', () => {
+      const expectedResult = {
+        hasDelivery: false,
+        requestPreferencesLoaded: false,
+        defaultDeliveryAddressTypeId: '',
+        defaultServicePointId: '',
+        deliverySelected: false,
+        selectedAddressTypeId: '',
+      };
+
+      expect(getDefaultRequestPreferences({}, {})).toEqual(expectedResult);
+    });
+  });
+});
+
+describe('getFulfillmentPreference', () => {
+  describe('when "requesterId" equals "userId"', () => {
+    const fulfilmentPreference = 'fulfilmentPreference';
+    const initialValues = {
+      requesterId: 'id',
+      fulfilmentPreference,
+    };
+    const preferences = {
+      userId: 'id'
+    };
+
+    it('should return "fulfilmentPreference"', () => {
+      expect(getFulfillmentPreference(preferences, initialValues)).toEqual(fulfilmentPreference);
+    });
+  });
+
+  describe('when "requesterId" is not equal "userId"', () => {
+    const fulfillment = 'fulfillment';
+    const initialValues = {
+      requesterId: 'requesterId',
+    };
+    const preferences = {
+      userId: 'userId',
+      fulfillment,
+    };
+
+    it('should return "fulfillment"', () => {
+      expect(getFulfillmentPreference(preferences, initialValues)).toEqual(fulfillment);
+    });
+  });
+});
+
+describe('isDeliverySelected', () => {
+  it('should return true', () => {
+    expect(isDeliverySelected(fulfilmentTypeMap.DELIVERY)).toBe(true);
+  });
+
+  it('should return false', () => {
+    expect(isDeliverySelected('test')).toBe(false);
+  });
+});
+
+describe('getSelectedAddressTypeId', () => {
+  it('should return "defaultDeliveryAddressTypeId"', () => {
+    const defaultDeliveryAddressTypeId = 'id';
+
+    expect(getSelectedAddressTypeId(true, defaultDeliveryAddressTypeId)).toEqual(defaultDeliveryAddressTypeId);
+  });
+
+  it('should return empty string', () => {
+    expect(getSelectedAddressTypeId(false)).toEqual('');
+  });
+});
+
+describe('getProxy', () => {
+  describe('when "request" and "proxy" are not presented', () => {
+    it('should return null', () => {
+      expect(getProxy()).toBeNull();
+    });
+  });
+
+  describe('when "request" is presented and "proxy" is not presented', () => {
+    const request = {
+      proxy: {
+        test: 'test',
+      },
+      proxyUserId: 'id',
+    };
+
+    it('should return correct data', () => {
+      const expectedResult = {
+        ...request.proxy,
+        id: request.proxyUserId,
+      };
+
+      expect(getProxy(request, {})).toEqual(expectedResult);
+    });
+  });
+
+  describe('when "request" is not presented and "proxy" is presented', () => {
+    const proxy = {
+      test: 'test',
+      id: 'id',
+    };
+
+    it('should return correct data', () => {
+      const expectedResult = {
+        ...proxy,
+        id: proxy.id,
+      };
+
+      expect(getProxy(undefined, proxy)).toEqual(expectedResult);
+    });
+  });
+});
+
+describe('isSubmittingButtonDisabled', () => {
+  describe('when "pristine" is true and "submitting" is false', () => {
+    it('should return true', () => {
+      expect(isSubmittingButtonDisabled(true, false)).toBe(true);
+    });
+  });
+
+  describe('when "pristine" is false and "submitting" is true', () => {
+    it('should return true', () => {
+      expect(isSubmittingButtonDisabled(false, true)).toBe(true);
+    });
+  });
+
+  describe('when "pristine" is true and "submitting" is true', () => {
+    it('should return true', () => {
+      expect(isSubmittingButtonDisabled(true, true)).toBe(true);
+    });
+  });
+
+  describe('when "pristine" is false and "submitting" is false', () => {
+    it('should return true', () => {
+      expect(isSubmittingButtonDisabled(false, false)).toBe(false);
+    });
+  });
+});
+
+describe('isFormEditing', () => {
+  describe('when "id" is presented', () => {
+    it('should return true', () => {
+      expect(isFormEditing({ id: 'id' })).toBe(true);
+    });
+  });
+
+  describe('when "id" is not presented', () => {
+    it('should return true', () => {
+      expect(isFormEditing({})).toBe(false);
     });
   });
 });
