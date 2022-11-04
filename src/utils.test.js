@@ -23,7 +23,7 @@ import {
   getSelectedAddressTypeId,
   getProxy,
   isSubmittingButtonDisabled,
-  isFormEditing, isDelivery,
+  isFormEditing,
 } from './utils';
 
 import {

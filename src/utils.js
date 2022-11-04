@@ -423,7 +423,7 @@ export const isDeliverySelected = (fulfillmentPreference) => {
 
 export const getSelectedAddressTypeId = (deliverySelected, defaultDeliveryAddressTypeId) => {
   return deliverySelected ? defaultDeliveryAddressTypeId : '';
-}
+};
 
 export const getProxy = (request, proxy) => {
   const userProxy = request ? request.proxy : proxy;
@@ -434,7 +434,7 @@ export const getProxy = (request, proxy) => {
     ...userProxy,
     id,
   };
-}
+};
 
 export const isSubmittingButtonDisabled = (pristine, submitting) => {
   return pristine || submitting;
@@ -442,5 +442,4 @@ export const isSubmittingButtonDisabled = (pristine, submitting) => {
 
 export const isFormEditing = (request) => {
   return !!get(request, 'id');
-}
-
+};

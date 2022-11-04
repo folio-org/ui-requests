@@ -1009,7 +1009,6 @@ class RequestForm extends React.Component {
   handleChangeItemBarcode = (event) => {
     const {
       form,
-      onSetSelectedItem,
     } = this.props;
     const {
       isItemBarcodeClicked,
@@ -1028,17 +1027,12 @@ class RequestForm extends React.Component {
       this.setState({ validatedItemBarcode: null });
     }
 
-    //ToDo: Should be removed? Not a clear behavior.
-    if (!barcode) {
-      onSetSelectedItem(undefined);
-    }
     form.change('item.barcode', barcode);
   };
 
   handleChangeUserBarcode = (event) => {
     const {
       form,
-      onSetSelectedUser,
     } = this.props;
     const {
       isUserBarcodeClicked,
@@ -1057,17 +1051,12 @@ class RequestForm extends React.Component {
       this.setState({ validatedUserBarcode: null });
     }
 
-    //ToDo: Should be removed? Not a clear behavior.
-    if (!barcode) {
-      onSetSelectedUser(undefined);
-    }
     form.change('requester.barcode', barcode);
   };
 
   handleChangeInstanceId = (event) => {
     const {
       form,
-      onSetSelectedInstance,
     } = this.props;
     const {
       isInstanceIdClicked,
@@ -1086,10 +1075,6 @@ class RequestForm extends React.Component {
       this.setState({ validatedInstanceId: null });
     }
 
-    //ToDo: Should be removed? Not a clear behavior.
-    if (!instanceId) {
-      onSetSelectedInstance(undefined);
-    }
     form.change('instance.hrid', instanceId);
   }
 
