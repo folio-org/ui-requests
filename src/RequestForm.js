@@ -1528,17 +1528,19 @@ class RequestForm extends React.Component {
                                       </Col>
                                     </Row>
                                     <Row>
-                                      <Pluggable
-                                        searchButtonStyle="link"
-                                        type="find-instance"
-                                        searchLabel={formatMessage({ id: 'ui-requests.titleLookupPlugin' })}
-                                        selectInstance={(instanceFromPlugin) => this.findInstance(instanceFromPlugin.hrid)}
-                                        config={{
-                                          availableSegments: [{
-                                            name: INSTANCE_SEGMENT_FOR_PLUGIN,
-                                          }],
-                                        }}
-                                      />
+                                      <Col xs={12}>
+                                        <Pluggable
+                                          searchButtonStyle="link"
+                                          type="find-instance"
+                                          searchLabel={formatMessage({ id: 'ui-requests.titleLookupPlugin' })}
+                                          selectInstance={(instanceFromPlugin) => this.findInstance(instanceFromPlugin.hrid)}
+                                          config={{
+                                            availableSegments: [{
+                                              name: INSTANCE_SEGMENT_FOR_PLUGIN,
+                                            }],
+                                          }}
+                                        />
+                                      </Col>
                                     </Row>
                                   </>
                                 }
