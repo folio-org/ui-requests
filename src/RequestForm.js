@@ -366,9 +366,11 @@ class RequestForm extends React.Component {
   onChangeFulfilment(e) {
     const selectedFullfillmentPreference = e.target.value;
     const { defaultDeliveryAddressTypeId } = this.state;
-
+    const { form } = this.props;
     const deliverySelected = this.isDeliverySelected(selectedFullfillmentPreference);
     const selectedAddressTypeId = this.getSelectedAddressTypeId(deliverySelected, defaultDeliveryAddressTypeId);
+
+    form.change('fulfilmentPreference', selectedFullfillmentPreference);
 
     this.setState({
       deliverySelected,
@@ -379,9 +381,13 @@ class RequestForm extends React.Component {
   }
 
   onChangeAddress(e) {
+    const { form } = this.props;
+    const selectedAddressTypeId = e.target.value;
+
     this.setState({
-      selectedAddressTypeId: e.target.value,
+      selectedAddressTypeId,
     });
+    form.change('deliveryAddressTypeId', selectedAddressTypeId);
   }
 
   // This function is called from the "search and select user" widget when
