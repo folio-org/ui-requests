@@ -82,7 +82,7 @@ import {
   getTlrSettings,
   getInstanceRequestTypeOptions,
   memoizeValidation,
-  getFulfilmentTypeOptions,
+  getFulfillmentTypeOptions,
   getDefaultRequestPreferences,
   getFulfillmentPreference,
   isDeliverySelected,
@@ -1345,7 +1345,7 @@ class RequestForm extends React.Component {
     const requestTypeError = hasNonRequestableStatus(selectedItem);
     const itemStatus = selectedItem?.status?.name;
     const itemStatusMessage = <FormattedMessage id={itemStatusesTranslations[itemStatus]} />;
-    const fulfilmentTypeOptions = getFulfilmentTypeOptions(hasDelivery, optionLists?.fulfilmentTypes || []);
+    const fulfilmentTypeOptions = getFulfillmentTypeOptions(hasDelivery, optionLists?.fulfilmentTypes || []);
     const selectedProxy = getProxy(request, proxy);
     const isSubmittingDisabled = isSubmittingButtonDisabled(pristine, submitting);
     const getPatronBlockModalOpenStatus = () => {

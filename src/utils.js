@@ -383,7 +383,7 @@ export const memoizeValidation = (fn) => {
   };
 };
 
-export const getFulfilmentTypeOptions = (hasDelivery, fulfilmentTypes) => {
+export const getFulfillmentTypeOptions = (hasDelivery, fulfilmentTypes) => {
   const sortedFulfilmentTypes = sortBy(fulfilmentTypes, ['label']);
   const fulfilmentTypeOptions = sortedFulfilmentTypes.map(({ label, id }) => ({
     labelTranslationPath: label,

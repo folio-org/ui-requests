@@ -16,7 +16,7 @@ import {
   handleKeyCommand,
   isValidRequest,
   memoizeValidation,
-  getFulfilmentTypeOptions,
+  getFulfillmentTypeOptions,
   getDefaultRequestPreferences,
   getFulfillmentPreference,
   isDeliverySelected,
@@ -377,7 +377,7 @@ describe('memoizeValidation', () => {
   });
 });
 
-describe('getFulfilmentTypeOptions', () => {
+describe('getFulfillmentTypeOptions', () => {
   const fulfilmentTypes = [
     {
       label: 'test',
@@ -402,7 +402,7 @@ describe('getFulfilmentTypeOptions', () => {
         }
       ];
 
-      expect(getFulfilmentTypeOptions(true, fulfilmentTypes)).toEqual(expectedResult);
+      expect(getFulfillmentTypeOptions(true, fulfilmentTypes)).toEqual(expectedResult);
     });
   });
 
@@ -415,7 +415,7 @@ describe('getFulfilmentTypeOptions', () => {
         }
       ];
 
-      expect(getFulfilmentTypeOptions(false, fulfilmentTypes)).toEqual(expectedResult);
+      expect(getFulfillmentTypeOptions(false, fulfilmentTypes)).toEqual(expectedResult);
     });
   });
 });
