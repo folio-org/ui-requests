@@ -8,6 +8,7 @@ import {
   cloneDeep,
   pickBy,
   identity,
+  sortBy,
 } from 'lodash';
 import queryString from 'query-string';
 import React from 'react';
@@ -380,4 +381,65 @@ export const memoizeValidation = (fn) => {
 
     return lastResults[fieldName];
   };
+};
+
+export const getFulfillmentTypeOptions = (hasDelivery, fulfilmentTypes) => {
+  const sortedFulfilmentTypes = sortBy(fulfilmentTypes, ['label']);
+  const fulfilmentTypeOptions = sortedFulfilmentTypes.map(({ label, id }) => ({
+    labelTranslationPath: label,
+    value: id,
+  }));
+
+  return hasDelivery
+    ? fulfilmentTypeOptions
+    : fulfilmentTypeOptions.filter(option => option.value !== fulfilmentTypeMap.DELIVERY);
+};
+
+export const getDefaultRequestPreferences = (request, initialValues) => {
+  return {
+    hasDelivery: false,
+    requestPreferencesLoaded: false,
+    defaultDeliveryAddressTypeId: '',
+    defaultServicePointId: request?.pickupServicePointId || '',
+    deliverySelected: isDelivery(initialValues),
+    selectedAddressTypeId: initialValues.deliveryAddressTypeId || '',
+  };
+};
+
+export const getFulfillmentPreference = (preferences, initialValues) => {
+  const requesterId = get(initialValues, 'requesterId');
+  const userId = get(preferences, 'userId');
+
+  if (requesterId === userId) {
+    return get(initialValues, 'fulfilmentPreference');
+  } else {
+    return get(preferences, 'fulfillment', fulfilmentTypeMap.HOLD_SHELF);
+  }
+};
+
+export const isDeliverySelected = (fulfillmentPreference) => {
+  return fulfillmentPreference === fulfilmentTypeMap.DELIVERY;
+};
+
+export const getSelectedAddressTypeId = (deliverySelected, defaultDeliveryAddressTypeId) => {
+  return deliverySelected ? defaultDeliveryAddressTypeId : '';
+};
+
+export const getProxy = (request, proxy) => {
+  const userProxy = request ? request.proxy : proxy;
+  if (!userProxy) return null;
+
+  const id = proxy?.id || request?.proxyUserId;
+  return {
+    ...userProxy,
+    id,
+  };
+};
+
+export const isSubmittingButtonDisabled = (pristine, submitting) => {
+  return pristine || submitting;
+};
+
+export const isFormEditing = (request) => {
+  return !!get(request, 'id');
 };

@@ -51,6 +51,8 @@ import BlockModalInteractor from './patron-block-modal';
   clickCancel = clickable('#clickable-cancel-request-changes');
   containsUserBarcode = value('[name="requester.barcode"]');
   containsItemBarcode = value('[name="item.barcode"]');
+  requestSectionPresent = isPresent('#new-request-info');
+  requesterSectionPresent = isPresent('#new-requester-info');
 
   clickAddUser = clickable('[data-test-plugin-find-user-button]');
 

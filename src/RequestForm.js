@@ -18,7 +18,6 @@ import {
   defer,
   pick,
   isBoolean,
-  isUndefined,
   isNil,
   isNull,
 } from 'lodash';
@@ -83,11 +82,20 @@ import {
   getTlrSettings,
   getInstanceRequestTypeOptions,
   memoizeValidation,
+  getFulfillmentTypeOptions,
+  getDefaultRequestPreferences,
+  getFulfillmentPreference,
+  isDeliverySelected,
+  getSelectedAddressTypeId,
+  getProxy,
+  isSubmittingButtonDisabled,
+  isFormEditing,
 } from './utils';
 
 import css from './requests.css';
 
 const INSTANCE_SEGMENT_FOR_PLUGIN = 'instances';
+const ENTER_EVENT_KEY = 'Enter';
 
 class RequestForm extends React.Component {
   static propTypes = {
@@ -170,7 +178,10 @@ class RequestForm extends React.Component {
   constructor(props) {
     super(props);
 
-    const { request } = props;
+    const {
+      request,
+      initialValues,
+    } = props;
     const {
       loan,
     } = (request || {});
@@ -180,14 +191,23 @@ class RequestForm extends React.Component {
     this.state = {
       proxy: {},
       selectedLoan: loan,
-      ...this.getDefaultRequestPreferences(),
+      ...getDefaultRequestPreferences(request, initialValues),
       isAwaitingForProxySelection: false,
       titleLevelRequestsFeatureEnabled,
       isItemOrInstanceLoading: false,
       isItemsDialogOpen: false,
       isItemBarcodeClicked: false,
+      isItemBarcodeBlur: false,
+      shouldValidateItemBarcode: false,
+      validatedItemBarcode: null,
       isUserBarcodeClicked: false,
+      isUserBarcodeBlur: false,
+      validatedUserBarcode: null,
+      shouldValidateUserBarcode: false,
       isInstanceIdClicked: false,
+      shouldValidateInstanceId: false,
+      isInstanceIdBlur: false,
+      validatedInstanceId: null,
     };
 
     this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
@@ -220,7 +240,7 @@ class RequestForm extends React.Component {
       this.findInstance(this.props.query.instanceId);
     }
 
-    if (this.isEditForm()) {
+    if (isFormEditing(this.props.request)) {
       this.findRequestPreferences(this.props.initialValues.requesterId);
     }
 
@@ -341,24 +361,6 @@ class RequestForm extends React.Component {
     }
   }
 
-  getFulfilmentTypeOptions() {
-    const { hasDelivery } = this.state;
-    const {
-      fulfilmentTypes = [],
-    } = this.props.optionLists;
-
-    const sortedFulfilmentTypes = sortBy(fulfilmentTypes, ['label']);
-
-    const fulfilmentTypeOptions = sortedFulfilmentTypes.map(({ label, id }) => ({
-      labelTranslationPath: label,
-      value: id,
-    }));
-
-    return !hasDelivery
-      ? fulfilmentTypeOptions.filter(option => option.value !== fulfilmentTypeMap.DELIVERY)
-      : fulfilmentTypeOptions;
-  }
-
   onClose() {
     this.props.toggleModal();
   }
@@ -367,8 +369,8 @@ class RequestForm extends React.Component {
     const selectedFullfillmentPreference = e.target.value;
     const { defaultDeliveryAddressTypeId } = this.state;
 
-    const deliverySelected = this.isDeliverySelected(selectedFullfillmentPreference);
-    const selectedAddressTypeId = this.getSelectedAddressTypeId(deliverySelected, defaultDeliveryAddressTypeId);
+    const deliverySelected = isDeliverySelected(selectedFullfillmentPreference);
+    const selectedAddressTypeId = getSelectedAddressTypeId(deliverySelected, defaultDeliveryAddressTypeId);
 
     this.setState({
       deliverySelected,
@@ -433,10 +435,9 @@ class RequestForm extends React.Component {
     this.setState({ isAwaitingForProxySelection: false });
   }
 
-  onUserClick() {
+  onUserClick(eventKey) {
     const {
       values,
-      form,
       onSetSelectedUser,
     } = this.props;
     const barcode = values.requester?.barcode;
@@ -445,10 +446,16 @@ class RequestForm extends React.Component {
 
     if (barcode) {
       onSetSelectedUser(null);
-      this.setState(({
+      this.setState({
         isUserBarcodeClicked: true,
-      }));
-      form.change('keyOfUserBarcodeField', values.keyOfUserBarcodeField ? 0 : 1);
+      });
+      this.findUser('barcode', barcode);
+
+      if (eventKey === ENTER_EVENT_KEY) {
+        this.setState({
+          shouldValidateUserBarcode: true,
+        }, this.triggerUserBarcodeValidation);
+      }
     }
   }
 
@@ -475,7 +482,7 @@ class RequestForm extends React.Component {
     return user;
   }
 
-  findUser(fieldName, value) {
+  findUser(fieldName, value, isValidation = false) {
     const {
       form,
       findResource,
@@ -489,70 +496,69 @@ class RequestForm extends React.Component {
     } = this.props;
 
     this.setState({
-      proxy: null,
       isUserLoading: true,
     });
-    form.change('pickupServicePointId', undefined);
-    form.change('deliveryAddressTypeId', undefined);
 
-    return findResource(RESOURCE_TYPES.USER, value, fieldName)
-      .then((result) => {
-        this.setState({ isAwaitingForProxySelection: true });
+    if (isValidation) {
+      return findResource(RESOURCE_TYPES.USER, value, fieldName)
+        .then((result) => {
+          return result.totalRecords;
+        })
+        .finally(() => {
+          this.setState({ isUserLoading: false });
+        });
+    } else {
+      this.setState({
+        proxy: null,
+      });
+      form.change('pickupServicePointId', undefined);
+      form.change('deliveryAddressTypeId', undefined);
 
-        if (result.totalRecords === 1) {
-          const blocks = onGetPatronManualBlocks(parentResources);
-          const automatedPatronBlocks = onGetAutomatedPatronBlocks(parentResources);
-          const isAutomatedPatronBlocksRequestInPendingState = parentResources.automatedPatronBlocks.isPending;
-          const selectedUser = result.users[0];
-          onChangePatron(selectedUser);
-          form.change('requesterId', selectedUser.id);
-          form.change('requester', selectedUser);
-          onSetSelectedUser(selectedUser);
-          this.findRequestPreferences(selectedUser.id);
+      return findResource(RESOURCE_TYPES.USER, value, fieldName)
+        .then((result) => {
+          this.setState({ isAwaitingForProxySelection: true });
 
-          if ((blocks.length && blocks[0].userId === selectedUser.id) || (!isEmpty(automatedPatronBlocks) && !isAutomatedPatronBlocksRequestInPendingState)) {
-            onSetBlocked(true);
-            onSetIsPatronBlocksOverridden(false);
+          if (result.totalRecords === 1) {
+            const blocks = onGetPatronManualBlocks(parentResources);
+            const automatedPatronBlocks = onGetAutomatedPatronBlocks(parentResources);
+            const isAutomatedPatronBlocksRequestInPendingState = parentResources.automatedPatronBlocks.isPending;
+            const selectedUser = result.users[0];
+            onChangePatron(selectedUser);
+            form.change('requesterId', selectedUser.id);
+            form.change('requester', selectedUser);
+            onSetSelectedUser(selectedUser);
+            this.findRequestPreferences(selectedUser.id);
+
+            if ((blocks.length && blocks[0].userId === selectedUser.id) || (!isEmpty(automatedPatronBlocks) && !isAutomatedPatronBlocksRequestInPendingState)) {
+              onSetBlocked(true);
+              onSetIsPatronBlocksOverridden(false);
+            }
+
+            return selectedUser;
           }
 
-          return selectedUser;
-        }
-
-        return null;
-      })
-      .then(user => this.hasProxies(user))
-      .finally(() => {
-        this.setState({ isUserLoading: false });
-      });
-  }
-
-  getDefaultRequestPreferences() {
-    const {
-      request,
-      initialValues,
-    } = this.props;
-
-    return {
-      hasDelivery: false,
-      requestPreferencesLoaded: false,
-      defaultDeliveryAddressTypeId: '',
-      defaultServicePointId: request?.pickupServicePointId || '',
-      deliverySelected: isDelivery(initialValues),
-      selectedAddressTypeId: initialValues.deliveryAddressTypeId || '',
-    };
+          return null;
+        })
+        .then(user => this.hasProxies(user))
+        .finally(() => {
+          this.setState({ isUserLoading: false });
+        });
+    }
   }
 
   async findRequestPreferences(userId) {
     const {
       findResource,
       form,
+      request,
+      initialValues,
     } = this.props;
 
     try {
       const { requestPreferences } = await findResource('requestPreferences', userId, 'userId');
       const preferences = requestPreferences[0];
 
-      const defaultPreferences = this.getDefaultRequestPreferences();
+      const defaultPreferences = getDefaultRequestPreferences(request, initialValues);
       const requestPreference = {
         ...defaultPreferences,
         ...pick(preferences, ['defaultDeliveryAddressTypeId', 'defaultServicePointId']),
@@ -562,7 +568,7 @@ class RequestForm extends React.Component {
       // when in edit mode (editing existing request) and defaultServicePointId is present (it was
       // set during creation) just keep it instead of choosing the preferred one.
       // https://issues.folio.org/browse/UIREQ-544
-      if (this.isEditForm() && defaultPreferences.defaultServicePointId) {
+      if (isFormEditing(request) && defaultPreferences.defaultServicePointId) {
         requestPreference.defaultServicePointId = defaultPreferences.defaultServicePointId;
       }
 
@@ -572,12 +578,12 @@ class RequestForm extends React.Component {
         requestPreference.hasDelivery = deliveryIsPredefined;
       }
 
-      const fulfillmentPreference = this.getFullfillmentPreference(preferences);
-      const deliverySelected = this.isDeliverySelected(fulfillmentPreference);
+      const fulfillmentPreference = getFulfillmentPreference(preferences, initialValues);
+      const deliverySelected = isDeliverySelected(fulfillmentPreference);
 
       const selectedAddress = requestPreference.selectedAddressTypeId || requestPreference.defaultDeliveryAddressTypeId;
 
-      const selectedAddressTypeId = this.getSelectedAddressTypeId(deliverySelected, selectedAddress);
+      const selectedAddressTypeId = getSelectedAddressTypeId(deliverySelected, selectedAddress);
 
       this.setState({
         ...requestPreference,
@@ -590,24 +596,11 @@ class RequestForm extends React.Component {
       });
     } catch (e) {
       this.setState({
-        ...this.getDefaultRequestPreferences(),
+        ...getDefaultRequestPreferences(request, initialValues),
         deliverySelected: false,
       }, () => {
         form.change('fulfilmentPreference', fulfilmentTypeMap.HOLD_SHELF);
       });
-    }
-  }
-
-  getFullfillmentPreference(preferences) {
-    const { initialValues } = this.props;
-
-    const requesterId = get(initialValues, 'requesterId');
-    const userId = get(preferences, 'userId');
-
-    if (requesterId === userId) {
-      return get(initialValues, 'fulfilmentPreference');
-    } else {
-      return get(preferences, 'fulfillment', fulfilmentTypeMap.HOLD_SHELF);
     }
   }
 
@@ -643,14 +636,6 @@ class RequestForm extends React.Component {
     }
   }
 
-  isDeliverySelected(fulfillmentPreference) {
-    return fulfillmentPreference === fulfilmentTypeMap.DELIVERY;
-  }
-
-  getSelectedAddressTypeId(deliverySelected, defaultDeliveryAddressTypeId) {
-    return deliverySelected ? defaultDeliveryAddressTypeId : '';
-  }
-
   findItemRelatedResources(item) {
     const {
       findResource,
@@ -679,7 +664,7 @@ class RequestForm extends React.Component {
     });
   }
 
-  findItem(key, value) {
+  findItem(key, value, isValidation = false) {
     const {
       findResource,
       form,
@@ -689,44 +674,57 @@ class RequestForm extends React.Component {
 
     this.setState({
       isItemOrInstanceLoading: true,
-      requestTypeOptions: [],
     });
 
-    return findResource(RESOURCE_TYPES.ITEM, value, key)
-      .then((result) => {
-        if (!result || result.totalRecords === 0) {
+    if (isValidation) {
+      return findResource(RESOURCE_TYPES.ITEM, value, key)
+        .then((result) => {
+          return result.totalRecords;
+        })
+        .finally(() => {
+          this.setState({ isItemOrInstanceLoading: false });
+        });
+    } else {
+      this.setState({
+        requestTypeOptions: [],
+      });
+
+      return findResource(RESOURCE_TYPES.ITEM, value, key)
+        .then((result) => {
+          if (!result || result.totalRecords === 0) {
+            this.setState({
+              isItemOrInstanceLoading: false,
+            });
+
+            return null;
+          }
+
+          const item = result.items[0];
+          const options = getRequestTypeOptions(item);
+
+          form.change('itemId', item.id);
+          form.change('item.barcode', item.barcode);
+          if (options.length >= 1) {
+            form.change('requestType', options[0].value);
+          }
+
+          // Setting state here is redundant with what follows, but it lets us
+          // display the matched item as quickly as possible, without waiting for
+          // the slow loan and request lookups
+          onSetSelectedItem(item);
           this.setState({
+            requestTypeOptions: options,
             isItemOrInstanceLoading: false,
           });
 
-          return null;
-        }
+          if (hasNonRequestableStatus(item)) {
+            onShowErrorModal();
+          }
 
-        const item = result.items[0];
-        const options = getRequestTypeOptions(item);
-
-        form.change('itemId', item.id);
-        form.change('item.barcode', item.barcode);
-        if (options.length >= 1) {
-          form.change('requestType', options[0].value);
-        }
-
-        // Setting state here is redundant with what follows, but it lets us
-        // display the matched item as quickly as possible, without waiting for
-        // the slow loan and request lookups
-        onSetSelectedItem(item);
-        this.setState({
-          requestTypeOptions: options,
-          isItemOrInstanceLoading: false,
-        });
-
-        if (hasNonRequestableStatus(item)) {
-          onShowErrorModal();
-        }
-
-        return item;
-      })
-      .then(item => this.findItemRelatedResources(item));
+          return item;
+        })
+        .then(item => this.findItemRelatedResources(item));
+    }
   }
 
   findInstanceRelatedResources(instance) {
@@ -746,7 +744,7 @@ class RequestForm extends React.Component {
       });
   }
 
-  findInstance = async (instanceId, holdingsRecordId) => {
+  findInstance = async (instanceId, holdingsRecordId, isValidation = false) => {
     const {
       findResource,
       form,
@@ -755,53 +753,53 @@ class RequestForm extends React.Component {
 
     this.setState({
       isItemOrInstanceLoading: true,
-      requestTypeOptions: [],
     });
 
     const resultInstanceId = isNil(instanceId)
       ? await findResource(RESOURCE_TYPES.HOLDING, holdingsRecordId).then((holding) => holding.holdingsRecords[0].instanceId)
       : instanceId;
 
-    return findResource(RESOURCE_TYPES.INSTANCE, resultInstanceId)
-      .then((result) => {
-        if (!result || result.totalRecords === 0) {
+    if (isValidation) {
+      return findResource(RESOURCE_TYPES.INSTANCE, resultInstanceId)
+        .then((result) => {
+          return result.totalRecords;
+        })
+        .finally(() => {
+          this.setState({ isItemOrInstanceLoading: false });
+        });
+    } else {
+      this.setState({
+        requestTypeOptions: [],
+      });
+
+      return findResource(RESOURCE_TYPES.INSTANCE, resultInstanceId)
+        .then((result) => {
+          if (!result || result.totalRecords === 0) {
+            this.setState({
+              isItemOrInstanceLoading: false,
+            });
+
+            return null;
+          }
+
+          const instance = result.instances[0];
+
+          form.change('instanceId', instance.id);
+          form.change('instance.hrid', instance.hrid);
+
+          onSetSelectedInstance(instance);
           this.setState({
             isItemOrInstanceLoading: false,
           });
 
-          return null;
-        }
-
-        const instance = result.instances[0];
-
-        form.change('instanceId', instance.id);
-        form.change('instance.hrid', instance.hrid);
-
-        onSetSelectedInstance(instance);
-        this.setState({
-          isItemOrInstanceLoading: false,
-        });
-
-        return instance;
-      })
-      .then(instance => {
-        this.findInstanceRelatedResources(instance);
-        return instance;
-      })
-      .then(instance => this.setInstanceRequestTypeOptions(instance));
-  }
-
-  getInstanceItems = async (instanceId) => {
-    const { findResource } = this.props;
-
-    const { items } = await findResource(RESOURCE_TYPES.HOLDING, instanceId, 'instanceId')
-      .then(responce => {
-        const holdingRecordIds = responce.holdingsRecords.map(({ id }) => id);
-
-        return findResource(RESOURCE_TYPES.ITEM, holdingRecordIds, 'holdingsRecordId');
-      });
-
-    return items;
+          return instance;
+        })
+        .then(instance => {
+          this.findInstanceRelatedResources(instance);
+          return instance;
+        })
+        .then(instance => this.setInstanceRequestTypeOptions(instance));
+    }
   }
 
   setInstanceRequestTypeOptions = async (instance) => {
@@ -831,7 +829,25 @@ class RequestForm extends React.Component {
     form.change('keyOfItemBarcodeField', values.keyOfItemBarcodeField ? 0 : 1);
   };
 
-  onItemClick() {
+  triggerUserBarcodeValidation = () => {
+    const {
+      form,
+      values,
+    } = this.props;
+
+    form.change('keyOfUserBarcodeField', values.keyOfUserBarcodeField ? 0 : 1);
+  };
+
+  triggerInstanceIdValidation = () => {
+    const {
+      form,
+      values,
+    } = this.props;
+
+    form.change('keyOfInstanceIdField', values.keyOfInstanceIdField ? 0 : 1);
+  };
+
+  onItemClick(eventKey) {
     const {
       values,
       onSetSelectedItem,
@@ -843,14 +859,19 @@ class RequestForm extends React.Component {
       this.setState(({
         isItemBarcodeClicked: true,
       }));
-      this.triggerItemBarcodeValidation();
+      this.findItem('barcode', barcode);
+
+      if (eventKey === ENTER_EVENT_KEY) {
+        this.setState({
+          shouldValidateItemBarcode: true,
+        }, this.triggerItemBarcodeValidation);
+      }
     }
   }
 
-  onInstanceClick() {
+  onInstanceClick(eventKey) {
     const {
       values,
-      form,
       onSetSelectedInstance,
     } = this.props;
     const instanceId = values.instance?.hrid;
@@ -860,25 +881,31 @@ class RequestForm extends React.Component {
       this.setState(({
         isInstanceIdClicked: true,
       }));
-      form.change('keyOfInstanceIdField', values.keyOfInstanceIdField ? 0 : 1);
+      this.findInstance(instanceId);
+
+      if (eventKey === ENTER_EVENT_KEY) {
+        this.setState({
+          shouldValidateInstanceId: true,
+        }, this.triggerInstanceIdValidation);
+      }
     }
   }
 
   // This function only exists to enable 'do lookup on enter' for item and
   // user search
   onKeyDown(e, element) {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === ENTER_EVENT_KEY && !e.shiftKey) {
       e.preventDefault();
 
       switch (element) {
         case RESOURCE_TYPES.ITEM:
-          this.onItemClick();
+          this.onItemClick(e.key);
           break;
         case RESOURCE_TYPES.INSTANCE:
-          this.onInstanceClick();
+          this.onInstanceClick(e.key);
           break;
         default:
-          this.onUserClick();
+          this.onUserClick(e.key);
       }
     }
   }
@@ -911,131 +938,201 @@ class RequestForm extends React.Component {
     const {
       selectedItem,
     } = this.props;
+    const {
+      shouldValidateItemBarcode,
+    } = this.state;
 
-    if (selectedItem === undefined) {
+    if (!barcode || (!barcode && !selectedItem?.id)) {
       return <FormattedMessage id="ui-requests.errors.selectItemRequired" />;
     }
 
-    const item = await this.findItem('barcode', barcode);
+    if (barcode && shouldValidateItemBarcode) {
+      this.setState({ shouldValidateItemBarcode: false });
 
-    return item === null
-      ? <FormattedMessage id="ui-requests.errors.itemBarcodeDoesNotExist" />
-      : undefined;
+      const item = await this.findItem('barcode', barcode, true);
+
+      return !item
+        ? <FormattedMessage id="ui-requests.errors.itemBarcodeDoesNotExist" />
+        : undefined;
+    }
+    return undefined;
   });
 
   validateRequesterBarcode = memoizeValidation(async (barcode) => {
     const {
       selectedUser,
     } = this.props;
+    const {
+      shouldValidateUserBarcode,
+    } = this.state;
 
-    if (selectedUser === undefined || (selectedUser && selectedUser.id === undefined)) {
+    if (!barcode || (!barcode && !selectedUser?.id)) {
       return <FormattedMessage id="ui-requests.errors.selectUser" />;
     }
+    if (barcode && shouldValidateUserBarcode) {
+      this.setState({ shouldValidateUserBarcode: false });
 
-    const user = await this.findUser('barcode', barcode);
+      const user = await this.findUser('barcode', barcode, true);
 
-    return !user
-      ? <FormattedMessage id="ui-requests.errors.userBarcodeDoesNotExist" />
-      : undefined;
+      return !user
+        ? <FormattedMessage id="ui-requests.errors.userBarcodeDoesNotExist" />
+        : undefined;
+    }
+
+    return undefined;
   });
 
   validateInstanceId = memoizeValidation(async (instanceId) => {
     const {
       selectedInstance,
     } = this.props;
+    const {
+      shouldValidateInstanceId,
+    } = this.state;
 
-    if (isUndefined(selectedInstance)) {
+    if (!instanceId || (!instanceId && !selectedInstance?.id)) {
       return <FormattedMessage id="ui-requests.errors.selectInstanceRequired" />;
     }
 
-    if (isNull(instanceId)) {
-      return undefined;
+    if (instanceId && shouldValidateInstanceId) {
+      this.setState({ shouldValidateInstanceId: false });
+
+      const instance = await this.findInstance(instanceId, null, true);
+
+      return !instance
+        ? <FormattedMessage id="ui-requests.errors.instanceUuidOrHridDoesNotExist" />
+        : undefined;
     }
-
-    const instance = await this.findInstance(instanceId);
-
-    return !instance
-      ? <FormattedMessage id="ui-requests.errors.instanceUuidOrHridDoesNotExist" />
-      : undefined;
+    return undefined;
   })
 
   handleChangeItemBarcode = (event) => {
     const {
       form,
-      onSetSelectedItem,
     } = this.props;
+    const {
+      isItemBarcodeClicked,
+      isItemBarcodeBlur,
+      validatedItemBarcode,
+    } = this.state;
     const barcode = event.target.value;
 
-    this.setState({ isItemBarcodeClicked: false });
-
-    if (!barcode) {
-      onSetSelectedItem(undefined);
+    if (isItemBarcodeClicked || isItemBarcodeBlur) {
+      this.setState({
+        isItemBarcodeClicked: false,
+        isItemBarcodeBlur: false,
+      });
     }
+    if (!isNull(validatedItemBarcode)) {
+      this.setState({ validatedItemBarcode: null });
+    }
+
     form.change('item.barcode', barcode);
   };
 
   handleChangeUserBarcode = (event) => {
     const {
       form,
-      onSetSelectedUser,
     } = this.props;
+    const {
+      isUserBarcodeClicked,
+      isUserBarcodeBlur,
+      validatedUserBarcode,
+    } = this.state;
     const barcode = event.target.value;
 
-    this.setState({ isUserBarcodeClicked: false });
-
-    if (!barcode) {
-      onSetSelectedUser(undefined);
+    if (isUserBarcodeClicked || isUserBarcodeBlur) {
+      this.setState({
+        isUserBarcodeClicked: false,
+        isUserBarcodeBlur: false,
+      });
     }
+    if (!isNull(validatedUserBarcode)) {
+      this.setState({ validatedUserBarcode: null });
+    }
+
     form.change('requester.barcode', barcode);
   };
 
   handleChangeInstanceId = (event) => {
     const {
       form,
-      onSetSelectedInstance,
     } = this.props;
+    const {
+      isInstanceIdClicked,
+      isInstanceIdBlur,
+      validatedInstanceId,
+    } = this.state;
     const instanceId = event.target.value;
 
-    this.setState({ isInstanceIdClicked: false });
-
-    if (!instanceId) {
-      onSetSelectedInstance(undefined);
+    if (isInstanceIdClicked || isInstanceIdBlur) {
+      this.setState({
+        isInstanceIdClicked: false,
+        isInstanceIdBlur: false,
+      });
     }
+    if (!isNull(validatedInstanceId)) {
+      this.setState({ validatedInstanceId: null });
+    }
+
     form.change('instance.hrid', instanceId);
   }
 
-  enableBlurForEmptyValueOnly = (input) => () => {
-    if (!input.value) {
+  handleBlurUserBarcode = (input) => () => {
+    const {
+      validatedUserBarcode,
+    } = this.state;
+
+    if (input.value && input.value !== validatedUserBarcode) {
+      this.setState({
+        shouldValidateUserBarcode: true,
+        isUserBarcodeBlur: true,
+        validatedUserBarcode: input.value,
+      }, () => {
+        input.onBlur();
+        this.triggerUserBarcodeValidation();
+      });
+    } else if (!input.value) {
       input.onBlur();
     }
-  };
-
-  getProxy() {
-    const { request } = this.props;
-    const { proxy } = this.state;
-    const userProxy = request ? request.proxy : proxy;
-    if (!userProxy) return null;
-
-    const id = proxy?.id || request?.proxyUserId;
-    return {
-      ...userProxy,
-      id,
-    };
   }
 
-  isEditForm() {
-    const { request } = this.props;
-
-    return !!get(request, 'id');
-  }
-
-  isSubmittingButtonDisabled() {
+  handleBlurItemBarcode = (input) => () => {
     const {
-      pristine,
-      submitting,
-    } = this.props;
+      validatedItemBarcode,
+    } = this.state;
 
-    return pristine || submitting;
+    if (input.value && input.value !== validatedItemBarcode) {
+      this.setState({
+        shouldValidateItemBarcode: true,
+        isItemBarcodeBlur: true,
+        validatedItemBarcode: input.value,
+      }, () => {
+        input.onBlur();
+        this.triggerItemBarcodeValidation();
+      });
+    } else if (!input.value) {
+      input.onBlur();
+    }
+  }
+
+  handleBlurInstanceId = (input) => () => {
+    const {
+      validatedInstanceId,
+    } = this.state;
+
+    if (input.value && input.value !== validatedInstanceId) {
+      this.setState({
+        shouldValidateInstanceId: true,
+        isInstanceIdBlur: true,
+        validatedInstanceId: input.value,
+      }, () => {
+        input.onBlur();
+        this.triggerInstanceIdValidation();
+      });
+    } else if (!input.value) {
+      input.onBlur();
+    }
   }
 
   renderAddRequestFirstMenu = () => (
@@ -1171,6 +1268,8 @@ class RequestForm extends React.Component {
       onGetPatronManualBlocks,
       onHideErrorModal,
       isTlrEnabledOnEditPage,
+      optionLists,
+      pristine,
     } = this.props;
 
     const {
@@ -1189,6 +1288,10 @@ class RequestForm extends React.Component {
       isItemBarcodeClicked,
       isUserBarcodeClicked,
       isInstanceIdClicked,
+      isUserBarcodeBlur,
+      isItemBarcodeBlur,
+      isInstanceIdBlur,
+      hasDelivery,
     } = this.state;
     const {
       createTitleLevelRequest,
@@ -1204,7 +1307,7 @@ class RequestForm extends React.Component {
       fulfilmentPreference,
     } = request || {};
 
-    const isEditForm = this.isEditForm();
+    const isEditForm = isFormEditing(request);
 
     const disableRecordCreation = true;
 
@@ -1242,6 +1345,9 @@ class RequestForm extends React.Component {
     const requestTypeError = hasNonRequestableStatus(selectedItem);
     const itemStatus = selectedItem?.status?.name;
     const itemStatusMessage = <FormattedMessage id={itemStatusesTranslations[itemStatus]} />;
+    const fulfilmentTypeOptions = getFulfillmentTypeOptions(hasDelivery, optionLists?.fulfilmentTypes || []);
+    const selectedProxy = getProxy(request, proxy);
+    const isSubmittingDisabled = isSubmittingButtonDisabled(pristine, submitting);
     const getPatronBlockModalOpenStatus = () => {
       if (isAwaitingForProxySelection) {
         return false;
@@ -1268,7 +1374,7 @@ class RequestForm extends React.Component {
           onSubmit={handleSubmit}
           onCancel={handleCancelAndClose}
           accordionStatusRef={this.accordionStatusRef}
-          isSubmittingDisabled={this.isSubmittingButtonDisabled()}
+          isSubmittingDisabled={isSubmittingDisabled}
         >
           <form
             id="form-requests"
@@ -1303,7 +1409,7 @@ class RequestForm extends React.Component {
                       type="submit"
                       marginBottom0
                       buttonStyle="primary mega"
-                      disabled={this.isSubmittingButtonDisabled()}
+                      disabled={isSubmittingDisabled}
                     >
                       <FormattedMessage id="ui-requests.common.saveAndClose" />
                     </Button>
@@ -1373,7 +1479,8 @@ class RequestForm extends React.Component {
                                               >
                                                 {({ input, meta }) => {
                                                   const selectInstanceError = meta.touched && meta.error;
-                                                  const instanceDoesntExistError = isInstanceIdClicked && meta.error;
+                                                  const instanceDoesntExistError = (isInstanceIdClicked || isInstanceIdBlur) && meta.error;
+                                                  const error = selectInstanceError || instanceDoesntExistError || null;
 
                                                   return (
                                                     <TextField
@@ -1381,9 +1488,9 @@ class RequestForm extends React.Component {
                                                       required
                                                       placeholder={placeholder}
                                                       label={<FormattedMessage id="ui-requests.instance.value" />}
-                                                      error={selectInstanceError || instanceDoesntExistError || null}
+                                                      error={error}
                                                       onChange={this.handleChangeInstanceId}
-                                                      onBlur={this.enableBlurForEmptyValueOnly(input)}
+                                                      onBlur={this.handleBlurInstanceId(input)}
                                                       onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.INSTANCE)}
                                                     />
                                                   );
@@ -1406,17 +1513,19 @@ class RequestForm extends React.Component {
                                       </Col>
                                     </Row>
                                     <Row>
-                                      <Pluggable
-                                        searchButtonStyle="link"
-                                        type="find-instance"
-                                        searchLabel={formatMessage({ id: 'ui-requests.titleLookupPlugin' })}
-                                        selectInstance={(instanceFromPlugin) => this.findInstance(instanceFromPlugin.hrid)}
-                                        config={{
-                                          availableSegments: [{
-                                            name: INSTANCE_SEGMENT_FOR_PLUGIN,
-                                          }],
-                                        }}
-                                      />
+                                      <Col xs={12}>
+                                        <Pluggable
+                                          searchButtonStyle="link"
+                                          type="find-instance"
+                                          searchLabel={formatMessage({ id: 'ui-requests.titleLookupPlugin' })}
+                                          selectInstance={(instanceFromPlugin) => this.findInstance(instanceFromPlugin.hrid)}
+                                          config={{
+                                            availableSegments: [{
+                                              name: INSTANCE_SEGMENT_FOR_PLUGIN,
+                                            }],
+                                          }}
+                                        />
+                                      </Col>
                                     </Row>
                                   </>
                                 }
@@ -1467,7 +1576,8 @@ class RequestForm extends React.Component {
                                             >
                                               {({ input, meta }) => {
                                                 const selectItemError = meta.touched && meta.error;
-                                                const itemDoesntExistError = isItemBarcodeClicked && meta.error;
+                                                const itemDoesntExistError = (isItemBarcodeClicked || isItemBarcodeBlur) && meta.error;
+                                                const error = meta.submitError || selectItemError || itemDoesntExistError || null;
 
                                                 return (
                                                   <TextField
@@ -1475,9 +1585,9 @@ class RequestForm extends React.Component {
                                                     required
                                                     placeholder={placeholder}
                                                     label={<FormattedMessage id="ui-requests.item.barcode" />}
-                                                    error={meta.submitError || selectItemError || itemDoesntExistError || null}
+                                                    error={error}
                                                     onChange={this.handleChangeItemBarcode}
-                                                    onBlur={this.enableBlurForEmptyValueOnly(input)}
+                                                    onBlur={this.handleBlurItemBarcode(input)}
                                                     onKeyDown={e => this.onKeyDown(e, RESOURCE_TYPES.ITEM)}
                                                   />
                                                 );
@@ -1696,7 +1806,8 @@ class RequestForm extends React.Component {
                                       >
                                         {({ input, meta }) => {
                                           const selectUserError = meta.touched && meta.error;
-                                          const userDoesntExistError = isUserBarcodeClicked && meta.error;
+                                          const userDoesntExistError = (isUserBarcodeClicked || isUserBarcodeBlur) && meta.error;
+                                          const error = selectUserError || userDoesntExistError || null;
 
                                           return (
                                             <TextField
@@ -1704,9 +1815,9 @@ class RequestForm extends React.Component {
                                               required
                                               placeholder={placeholder}
                                               label={<FormattedMessage id="ui-requests.requester.barcode" />}
-                                              error={selectUserError || userDoesntExistError || null}
+                                              error={error}
                                               onChange={this.handleChangeUserBarcode}
-                                              onBlur={this.enableBlurForEmptyValueOnly(input)}
+                                              onBlur={this.handleBlurUserBarcode(input)}
                                               onKeyDown={e => this.onKeyDown(e, 'requester')}
                                             />
                                           );
@@ -1753,10 +1864,10 @@ class RequestForm extends React.Component {
                               fulfilmentPreference={fulfilmentPreference}
                               deliveryAddress={addressDetail}
                               deliveryLocations={deliveryLocations}
-                              fulfilmentTypeOptions={this.getFulfilmentTypeOptions()}
+                              fulfilmentTypeOptions={fulfilmentTypeOptions}
                               onChangeAddress={this.onChangeAddress}
                               onChangeFulfilment={this.onChangeFulfilment}
-                              proxy={this.getProxy()}
+                              proxy={selectedProxy}
                               servicePoints={servicePoints}
                               onSelectProxy={this.onSelectProxy}
                               onCloseProxy={this.handleCloseProxy}
@@ -1821,5 +1932,4 @@ export default stripesFinalForm({
   subscription: {
     values: true,
   },
-  validateOnBlur: true,
 })(RequestForm);
