@@ -364,9 +364,9 @@ class RequestForm extends React.Component {
   }
 
   onChangeFulfilment(e) {
-    const selectedFullfillmentPreference = e.target.value;
-    const { defaultDeliveryAddressTypeId } = this.state;
     const { form } = this.props;
+    const { defaultDeliveryAddressTypeId } = this.state;
+    const selectedFullfillmentPreference = e.target.value;
     const deliverySelected = this.isDeliverySelected(selectedFullfillmentPreference);
     const selectedAddressTypeId = this.getSelectedAddressTypeId(deliverySelected, defaultDeliveryAddressTypeId);
 
