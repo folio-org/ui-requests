@@ -549,8 +549,8 @@ describe('New Request page', () => {
       });
 
       it('should update prefill user and item', () => {
-        expect(viewRequest.requestSectionPresent).to.be.true;
-        expect(viewRequest.requesterSectionPresent).to.be.true;
+        expect(newRequest.requestSectionPresent).to.be.true;
+        expect(newRequest.requesterSectionPresent).to.be.true;
       });
     });
 
