@@ -415,6 +415,9 @@ describe('RequestForm', () => {
       mockedTlrSettings = {
         titleLevelRequestsFeatureEnabled: false,
       };
+    });
+
+    beforeEach(() => {
       renderComponent();
     });
 
