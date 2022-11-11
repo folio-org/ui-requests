@@ -44,11 +44,32 @@ jest.mock('./components/TitleInformation', () => jest.fn(() => null));
 jest.mock('./ItemDetail', () => jest.fn(() => null));
 jest.mock('./ItemsDialog', () => jest.fn(() => null));
 jest.mock('./PositionLink', () => jest.fn(() => null));
+jest.mock('./UserForm', () => jest.fn(({
+  onChangeAddress,
+  onChangeFulfilment,
+}) => (
+  <>
+    <input
+      data-testid="fulfillmentInput"
+      onChange={onChangeFulfilment}
+    />
+    <input
+      data-testid="addressInput"
+      onChange={onChangeAddress}
+    />
+  </>
+)));
 
 describe('RequestForm', () => {
   const testIds = {
     tlrCheckbox: 'tlrCheckbox',
     instanceInfoSection: 'instanceInfoSection',
+    fulfillmentInput: 'fulfillmentInput',
+    addressInput: 'addressInput'
+  };
+  const formFieldNames = {
+    fulfilmentPreference: 'fulfilmentPreference',
+    deliveryAddressTypeId: 'deliveryAddressTypeId',
   };
   const labelIds = {
     tlrCheckbox: 'ui-requests.requests.createTitleLevelRequest',
@@ -74,7 +95,7 @@ describe('RequestForm', () => {
       history = createMemoryHistory(),
       values = valuesMock,
       selectedItem,
-      selectedUser,
+      selectedUser = { id: 'id' },
       selectedInstance,
       isPatronBlocksOverridden = false,
       isErrorModalOpen = false,
@@ -386,6 +407,48 @@ describe('RequestForm', () => {
       );
 
       expect(mockedChangeFunction).toHaveBeenCalledWith('createTitleLevelRequest', false);
+    });
+  });
+
+  describe('User information', () => {
+    beforeAll(() => {
+      mockedTlrSettings = {
+        titleLevelRequestsFeatureEnabled: false,
+      };
+    });
+
+    beforeEach(() => {
+      renderComponent();
+    });
+
+    describe('Fulfillment preference', () => {
+      it('should trigger `form.change` with correct arguments', () => {
+        const value = 'test';
+        const event = {
+          target: {
+            value,
+          },
+        };
+
+        fireEvent.change(screen.getByTestId(testIds.fulfillmentInput), event);
+
+        expect(mockedChangeFunction).toHaveBeenCalledWith(formFieldNames.fulfilmentPreference, value);
+      });
+    });
+
+    describe('Delivery address', () => {
+      it('should trigger `form.change` with correct arguments', () => {
+        const value = 'test';
+        const event = {
+          target: {
+            value,
+          },
+        };
+
+        fireEvent.change(screen.getByTestId(testIds.addressInput), event);
+
+        expect(mockedChangeFunction).toHaveBeenCalledWith(formFieldNames.deliveryAddressTypeId, value);
+      });
     });
   });
 });
