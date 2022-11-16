@@ -208,7 +208,7 @@ class RequestForm extends React.Component {
       shouldValidateInstanceId: false,
       isInstanceIdBlur: false,
       validatedInstanceId: null,
-      isItemIdRequest: Boolean(this.props.query.itemId),
+      isItemIdRequest: Boolean(this.props.query?.itemId),
     };
 
     this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
