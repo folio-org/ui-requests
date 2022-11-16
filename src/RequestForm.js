@@ -670,7 +670,7 @@ class RequestForm extends React.Component {
     });
   }
 
-  findItem(key, value, isValidation = false, isBarcodeRequired = true) {
+  findItem(key, value, isValidation = false, isBarcodeRequired = false) {
     const {
       findResource,
       form,
@@ -700,7 +700,7 @@ class RequestForm extends React.Component {
 
       return findResource(RESOURCE_TYPES.ITEM, value, key)
         .then((result) => {
-          if (key === 'id' && isBarcodeRequired) {
+          if (key === 'id' && !isBarcodeRequired) {
             this.setState({
               isItemIdRequest: true,
             });
@@ -1244,7 +1244,7 @@ class RequestForm extends React.Component {
     const {
       onSetSelectedInstance,
     } = this.props;
-    let shouldDisableValidation = true;
+    let isBarcodeRequired = false;
 
     onSetSelectedInstance(undefined);
     this.setState({
@@ -1253,13 +1253,13 @@ class RequestForm extends React.Component {
     });
 
     if (item?.barcode) {
-      shouldDisableValidation = false;
+      isBarcodeRequired = true;
       this.setState({
         isItemIdRequest: false,
       });
     }
 
-    this.findItem('id', item.id, false, shouldDisableValidation);
+    this.findItem('id', item.id, false, isBarcodeRequired);
   }
 
   handleCloseProxy = () => {
