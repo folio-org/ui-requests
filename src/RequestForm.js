@@ -208,6 +208,7 @@ class RequestForm extends React.Component {
       shouldValidateInstanceId: false,
       isInstanceIdBlur: false,
       validatedInstanceId: null,
+      isItemIdRequest: Boolean(this.props.query?.itemId),
     };
 
     this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
@@ -669,13 +670,16 @@ class RequestForm extends React.Component {
     });
   }
 
-  findItem(key, value, isValidation = false) {
+  findItem(key, value, isValidation = false, isBarcodeRequired = false) {
     const {
       findResource,
       form,
       onSetSelectedItem,
       onShowErrorModal,
     } = this.props;
+    const {
+      isItemIdRequest,
+    } = this.state;
 
     this.setState({
       isItemOrInstanceLoading: true,
@@ -696,6 +700,16 @@ class RequestForm extends React.Component {
 
       return findResource(RESOURCE_TYPES.ITEM, value, key)
         .then((result) => {
+          if (key === 'id' && !isBarcodeRequired) {
+            this.setState({
+              isItemIdRequest: true,
+            });
+          } else if (key === 'barcode' && isItemIdRequest) {
+            this.setState({
+              isItemIdRequest: false,
+            });
+          }
+
           if (!result || result.totalRecords === 0) {
             this.setState({
               isItemOrInstanceLoading: false,
@@ -945,7 +959,12 @@ class RequestForm extends React.Component {
     } = this.props;
     const {
       shouldValidateItemBarcode,
+      isItemIdRequest,
     } = this.state;
+
+    if (isItemIdRequest && !barcode) {
+      return undefined;
+    }
 
     if (!barcode || (!barcode && !selectedItem?.id)) {
       return <FormattedMessage id="ui-requests.errors.selectItemRequired" />;
@@ -1217,13 +1236,15 @@ class RequestForm extends React.Component {
     this.setState({
       isItemsDialogOpen: false,
       requestTypeOptions: [],
-    });
+      isItemIdRequest: false,
+    }, this.triggerItemBarcodeValidation);
   }
 
   handleInstanceItemClick = (event, item) => {
     const {
       onSetSelectedInstance,
     } = this.props;
+    let isBarcodeRequired = false;
 
     onSetSelectedInstance(undefined);
     this.setState({
@@ -1231,7 +1252,14 @@ class RequestForm extends React.Component {
       requestTypeOptions: [],
     });
 
-    this.findItem('id', item.id);
+    if (item?.barcode) {
+      isBarcodeRequired = true;
+      this.setState({
+        isItemIdRequest: false,
+      });
+    }
+
+    this.findItem('id', item.id, false, isBarcodeRequired);
   }
 
   handleCloseProxy = () => {
