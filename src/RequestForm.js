@@ -670,7 +670,7 @@ class RequestForm extends React.Component {
     });
   }
 
-  findItem(key, value, isValidation = false, disableValidation = true) {
+  findItem(key, value, isValidation = false, isBarcodeRequired = true) {
     const {
       findResource,
       form,
@@ -700,7 +700,7 @@ class RequestForm extends React.Component {
 
       return findResource(RESOURCE_TYPES.ITEM, value, key)
         .then((result) => {
-          if (key === 'id' && disableValidation) {
+          if (key === 'id' && isBarcodeRequired) {
             this.setState({
               isItemIdRequest: true,
             });
