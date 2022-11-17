@@ -107,7 +107,7 @@
     "item.location.code": "Effektiver Standortcode",
     "requestQueue": "Bestandsanfrage-Warteliste",
     "location": "Standort",
-    "materialType": "Materialtyp",
+    "materialType": "Materialart",
     "loanType": "Ausleihtyp",
     "actions.moveRequest": "Bestandsanfrage verschieben",
     "moveRequest.requestTypeChangeHeading": "Aktueller Bestandsanfragentyp für ausgewähltes Exemplar nicht zulässig",
