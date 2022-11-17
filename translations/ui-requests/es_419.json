@@ -262,7 +262,7 @@
     "item.status.availableInASR": "Available in ASR",
     "item.status.retrievingFromASR": "Retrieving from ASR",
     "item.status.missingFromASR": "Missing from ASR",
-    "item.status.orderClosed": "Order closed",
+    "item.status.orderClosed": "Pedido cerrado",
     "item.status.restricted": "Restricted",
     "errors.closingAlreadyClosedRequest": "Error: The Request has already been closed.",
     "appMenu.keyboardShortcuts": "Keyboard shortcuts",
