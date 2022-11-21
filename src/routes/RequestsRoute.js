@@ -5,7 +5,10 @@ import {
 } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { stringify } from 'query-string';
+import {
+  stringify,
+  parse,
+} from 'query-string';
 import moment from 'moment-timezone';
 import {
   FormattedMessage,
@@ -402,7 +405,9 @@ class RequestsRoute extends React.Component {
       locale: PropTypes.string.isRequired,
     }).isRequired,
     history: PropTypes.object,
-    location: PropTypes.object.isRequired,
+    location: PropTypes.shape({
+      search: PropTypes.string,
+    }).isRequired,
     match: PropTypes.object.isRequired,
   };
 
@@ -484,6 +489,7 @@ class RequestsRoute extends React.Component {
     const prevStateServicePointId = get(prevProps.resources.currentServicePoint, 'id');
     const { configs: prevConfigs } = prevProps.resources;
     const { configs } = this.props.resources;
+    const instanceId = parse(this.props.location?.search)?.instanceId;
 
     if (prevExpired.length > 0 && expired.length === 0) {
       // eslint-disable-next-line react/no-did-update-set-state
@@ -514,6 +520,10 @@ class RequestsRoute extends React.Component {
         titleLevelRequestsFeatureEnabled,
         createTitleLevelRequestsByDefault,
       });
+    }
+
+    if (!this.props.resources.query.instanceId && instanceId) {
+      this.props.mutator.query.update({ instanceId });
     }
   }
 
