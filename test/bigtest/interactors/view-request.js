@@ -6,12 +6,8 @@ import {
 } from '@bigtest/interactor';
 import { isEmpty } from 'lodash';
 
-import {
-  NotesAccordion,
-  NotesModal,
-  // eslint-disable-next-line import/no-extraneous-dependencies
-} from '@folio/stripes-smart-components/lib/Notes/NotesSmartAccordion/tests/interactors';
-
+import NotesAccordion from './notes-accordion';
+import NotesModal from './notes-modal';
 import CancelRequestDialog from './cancel-request-dialog';
 import MoveRequestDialog from './move-request-dialog';
 import ChooseRequestTypeDialog from './choose-request-type-dialog';
