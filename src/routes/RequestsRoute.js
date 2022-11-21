@@ -407,6 +407,7 @@ class RequestsRoute extends React.Component {
     history: PropTypes.object,
     location: PropTypes.shape({
       search: PropTypes.string,
+      pathname: PropTypes.string,
     }).isRequired,
     match: PropTypes.object.isRequired,
   };
