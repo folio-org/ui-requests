@@ -1,5 +1,10 @@
 # Change history for ui-requests
 
+## [7.2.2](https://github.com/folio-org/ui-requests/tree/v7.2.2) (2022-11-21)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.2.1...v7.2.2)
+* Make Fulfillment preference and Delivery address selectable. Refs UIREQ-837.
+* Add the possibility to save item request if there is no item barcode. Refs UIREQ-840.
+
 ## [7.2.1](https://github.com/folio-org/ui-requests/tree/v7.2.1) (2022-11-14)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.2.0...v7.2.1)
 * Prevent request to get instance if there is no `instanceId`. Refs UIREQ-826.
