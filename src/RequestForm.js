@@ -313,6 +313,11 @@ class RequestForm extends React.Component {
       this.findItem('id', query.itemId);
     }
 
+    if (prevQuery.instanceId !== query.instanceId) {
+      this.findInstance(query.instanceId);
+      this.setTlrCheckboxInitialState();
+    }
+
     if (!isEqual(blocks, prevBlocks) && blocks.length > 0) {
       const user = selectedUser || {};
       if (user.id === blocks[0].userId) {
