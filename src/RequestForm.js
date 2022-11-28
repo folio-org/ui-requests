@@ -497,6 +497,10 @@ class RequestForm extends React.Component {
     return user;
   }
 
+  shouldSetBlocked = (blocks, selectedUser) => {
+    return blocks.length && blocks[0].userId === selectedUser.id;
+  }
+
   findUser(fieldName, value, isValidation = false) {
     const {
       form,
@@ -549,7 +553,7 @@ class RequestForm extends React.Component {
 
             this.findRequestPreferences(selectedUser.id);
 
-            if ((blocks.length && blocks[0].userId === selectedUser.id) || (!isEmpty(automatedPatronBlocks) && !isAutomatedPatronBlocksRequestInPendingState)) {
+            if (this.shouldSetBlocked(blocks, selectedUser) || (!isEmpty(automatedPatronBlocks) && !isAutomatedPatronBlocksRequestInPendingState)) {
               onSetBlocked(true);
               onSetIsPatronBlocksOverridden(false);
             }
