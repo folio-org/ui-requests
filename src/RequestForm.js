@@ -538,6 +538,11 @@ class RequestForm extends React.Component {
             form.change('requesterId', selectedUser.id);
             form.change('requester', selectedUser);
             onSetSelectedUser(selectedUser);
+
+            if (fieldName === 'id') {
+              this.triggerUserBarcodeValidation();
+            }
+
             this.findRequestPreferences(selectedUser.id);
 
             if ((blocks.length && blocks[0].userId === selectedUser.id) || (!isEmpty(automatedPatronBlocks) && !isAutomatedPatronBlocksRequestInPendingState)) {
@@ -994,6 +999,10 @@ class RequestForm extends React.Component {
     const {
       shouldValidateUserBarcode,
     } = this.state;
+
+    if (selectedUser?.id && !barcode) {
+      return undefined;
+    }
 
     if (!barcode || (!barcode && !selectedUser?.id)) {
       return <FormattedMessage id="ui-requests.errors.selectUser" />;
@@ -1843,7 +1852,7 @@ class RequestForm extends React.Component {
                                         validateFields={[]}
                                       >
                                         {({ input, meta }) => {
-                                          const selectUserError = meta.touched && meta.error;
+                                          const selectUserError = meta.touched && !selectedUser?.id && meta.error;
                                           const userDoesntExistError = (isUserBarcodeClicked || isUserBarcodeBlur) && meta.error;
                                           const error = selectUserError || userDoesntExistError || null;
 
