@@ -102,6 +102,7 @@ describe('RequestsRoute', () => {
       configs: {
         records: [{ value: 'testConfig' }],
       },
+      query: {},
     },
     stripes: {
       connect: jest.fn(),
