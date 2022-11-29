@@ -96,6 +96,10 @@ import css from './requests.css';
 
 const INSTANCE_SEGMENT_FOR_PLUGIN = 'instances';
 const ENTER_EVENT_KEY = 'Enter';
+const RESOURCE_KEYS = {
+  id: 'id',
+  barcode: 'barcode',
+};
 
 class RequestForm extends React.Component {
   static propTypes = {
@@ -226,15 +230,15 @@ class RequestForm extends React.Component {
 
   componentDidMount() {
     if (this.props.query.userBarcode) {
-      this.findUser('barcode', this.props.query.userBarcode);
+      this.findUser(RESOURCE_KEYS.barcode, this.props.query.userBarcode);
     }
 
     if (this.props.query.itemBarcode) {
-      this.findItem('barcode', this.props.query.itemBarcode);
+      this.findItem(RESOURCE_KEYS.barcode, this.props.query.itemBarcode);
     }
 
     if (this.props.query.itemId) {
-      this.findItem('id', this.props.query.itemId);
+      this.findItem(RESOURCE_KEYS.id, this.props.query.itemId);
     }
 
     if (this.props.query.instanceId && !this.props.query.itemBarcode && !this.props.query.itemId) {
@@ -302,15 +306,15 @@ class RequestForm extends React.Component {
     }
 
     if (prevQuery.userBarcode !== query.userBarcode) {
-      this.findUser('barcode', query.userBarcode);
+      this.findUser(RESOURCE_KEYS.barcode, query.userBarcode);
     }
 
     if (prevQuery.itemBarcode !== query.itemBarcode) {
-      this.findItem('barcode', query.itemBarcode);
+      this.findItem(RESOURCE_KEYS.barcode, query.itemBarcode);
     }
 
     if (prevQuery.itemId !== query.itemId) {
-      this.findItem('id', query.itemId);
+      this.findItem(RESOURCE_KEYS.id, query.itemId);
     }
 
     if (prevQuery.instanceId !== query.instanceId) {
@@ -412,9 +416,9 @@ class RequestForm extends React.Component {
 
     onSetSelectedUser(null);
     if (barcode) {
-      this.findUser('barcode', barcode);
+      this.findUser(RESOURCE_KEYS.barcode, barcode);
     } else {
-      this.findUser('id', id);
+      this.findUser(RESOURCE_KEYS.id, id);
     }
   }
 
@@ -460,7 +464,7 @@ class RequestForm extends React.Component {
       this.setState({
         isUserBarcodeClicked: true,
       });
-      this.findUser('barcode', barcode);
+      this.findUser(RESOURCE_KEYS.barcode, barcode);
 
       if (eventKey === ENTER_EVENT_KEY) {
         this.setState({
@@ -491,6 +495,10 @@ class RequestForm extends React.Component {
     }
 
     return user;
+  }
+
+  shouldSetBlocked = (blocks, selectedUser) => {
+    return blocks.length && blocks[0].userId === selectedUser.id;
   }
 
   findUser(fieldName, value, isValidation = false) {
@@ -538,9 +546,14 @@ class RequestForm extends React.Component {
             form.change('requesterId', selectedUser.id);
             form.change('requester', selectedUser);
             onSetSelectedUser(selectedUser);
+
+            if (fieldName === RESOURCE_KEYS.id) {
+              this.triggerUserBarcodeValidation();
+            }
+
             this.findRequestPreferences(selectedUser.id);
 
-            if ((blocks.length && blocks[0].userId === selectedUser.id) || (!isEmpty(automatedPatronBlocks) && !isAutomatedPatronBlocksRequestInPendingState)) {
+            if (this.shouldSetBlocked(blocks, selectedUser) || (!isEmpty(automatedPatronBlocks) && !isAutomatedPatronBlocksRequestInPendingState)) {
               onSetBlocked(true);
               onSetIsPatronBlocksOverridden(false);
             }
@@ -705,11 +718,11 @@ class RequestForm extends React.Component {
 
       return findResource(RESOURCE_TYPES.ITEM, value, key)
         .then((result) => {
-          if (key === 'id' && !isBarcodeRequired) {
+          if (key === RESOURCE_KEYS.id && !isBarcodeRequired) {
             this.setState({
               isItemIdRequest: true,
             });
-          } else if (key === 'barcode' && isItemIdRequest) {
+          } else if (key === RESOURCE_KEYS.barcode && isItemIdRequest) {
             this.setState({
               isItemIdRequest: false,
             });
@@ -883,7 +896,7 @@ class RequestForm extends React.Component {
       this.setState(({
         isItemBarcodeClicked: true,
       }));
-      this.findItem('barcode', barcode);
+      this.findItem(RESOURCE_KEYS.barcode, barcode);
 
       if (eventKey === ENTER_EVENT_KEY) {
         this.setState({
@@ -978,7 +991,7 @@ class RequestForm extends React.Component {
     if (barcode && shouldValidateItemBarcode) {
       this.setState({ shouldValidateItemBarcode: false });
 
-      const item = await this.findItem('barcode', barcode, true);
+      const item = await this.findItem(RESOURCE_KEYS.barcode, barcode, true);
 
       return !item
         ? <FormattedMessage id="ui-requests.errors.itemBarcodeDoesNotExist" />
@@ -995,13 +1008,17 @@ class RequestForm extends React.Component {
       shouldValidateUserBarcode,
     } = this.state;
 
+    if (selectedUser?.id && !barcode) {
+      return undefined;
+    }
+
     if (!barcode || (!barcode && !selectedUser?.id)) {
       return <FormattedMessage id="ui-requests.errors.selectUser" />;
     }
     if (barcode && shouldValidateUserBarcode) {
       this.setState({ shouldValidateUserBarcode: false });
 
-      const user = await this.findUser('barcode', barcode, true);
+      const user = await this.findUser(RESOURCE_KEYS.barcode, barcode, true);
 
       return !user
         ? <FormattedMessage id="ui-requests.errors.userBarcodeDoesNotExist" />
@@ -1264,7 +1281,7 @@ class RequestForm extends React.Component {
       });
     }
 
-    this.findItem('id', item.id, false, isBarcodeRequired);
+    this.findItem(RESOURCE_KEYS.id, item.id, false, isBarcodeRequired);
   }
 
   handleCloseProxy = () => {
@@ -1843,7 +1860,7 @@ class RequestForm extends React.Component {
                                         validateFields={[]}
                                       >
                                         {({ input, meta }) => {
-                                          const selectUserError = meta.touched && meta.error;
+                                          const selectUserError = meta.touched && !selectedUser?.id && meta.error;
                                           const userDoesntExistError = (isUserBarcodeClicked || isUserBarcodeBlur) && meta.error;
                                           const error = selectUserError || userDoesntExistError || null;
 

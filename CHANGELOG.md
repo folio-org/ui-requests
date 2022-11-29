@@ -2,6 +2,7 @@
 
 ## IN PROGRESS
 * Increased the limit for Service points in Request. Refs UIREQ-850.
+* Add the possibility to submit a request if there is no user barcode. Refs UIREQ-849.
 
 ## [7.2.3](https://github.com/folio-org/ui-requests/tree/v7.2.3) (2022-11-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.2.2...v7.2.3)
