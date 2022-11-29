@@ -1,11 +1,11 @@
 # Change history for ui-requests
 
 ## IN PROGRESS
+* Add the possibility to submit a request if there is no user barcode. Refs UIREQ-849.
 
 ## [7.2.3](https://github.com/folio-org/ui-requests/tree/v7.2.3) (2022-11-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.2.2...v7.2.3)
 * Make title info loading when request created from Instance record at the first time. Refs UIREQ-834.
-* Add the possibility to submit a request if there is no user barcode. Refs UIREQ-849.
 
 ## [7.2.2](https://github.com/folio-org/ui-requests/tree/v7.2.2) (2022-11-21)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.2.1...v7.2.2)
