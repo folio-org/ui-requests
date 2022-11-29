@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
 ## IN PROGRESS
+* Increased the limit for Service points in Request. Refs UIREQ-850.
 
 ## [7.2.3](https://github.com/folio-org/ui-requests/tree/v7.2.3) (2022-11-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.2.2...v7.2.3)

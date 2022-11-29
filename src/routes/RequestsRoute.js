@@ -222,7 +222,7 @@ class RequestsRoute extends React.Component {
       path: 'service-points',
       params: {
         query: 'query=(pickupLocation==true) sortby name',
-        limit: '100',
+        limit: MAX_RECORDS,
       },
     },
     itemUniquenessValidator: {
