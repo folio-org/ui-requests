@@ -26,7 +26,14 @@ export default [
     name: 'tags',
     cql: 'tags.tagList',
     values: [],
-    operator: '=',
+    operator: '==',
+    parse: (value) => {
+      if (Array.isArray(value)) {
+        return `tags.tagList==(${value.map(v => {
+          return `"*${v}*"`;
+        }).join(' or ')})`;
+      } else return `tags.tagList=="*${value}*"`;
+    }
   },
   {
     name: requestFilterTypes.PICKUP_SERVICE_POINT,
