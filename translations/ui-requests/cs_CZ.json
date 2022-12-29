@@ -266,6 +266,6 @@
     "item.status.restricted": "Omezený",
     "errors.closingAlreadyClosedRequest": "Chyba: Žádanka byla již uzavřena.",
     "appMenu.keyboardShortcuts": "Klávesové zkratky",
-    "navigation.app": "Vyhledávání v aplikaci Požadavků",
+    "navigation.app": "Vyhledat požadavek",
     "navigation.keyboardShortcuts": "Klávesové zkratky"
 }

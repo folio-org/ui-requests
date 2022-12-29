@@ -148,7 +148,7 @@
     "filters.requestStatus.filled": "Geschlossen - erfüllt",
     "filters.requestStatus.pickupExpired": "Geschlossen - abgelaufen",
     "filters.requestStatus.unfilled": "Geschlossen - unerfüllt",
-    "filters.requestStatus.awaitingDelivery": "Offen - Lieferung",
+    "filters.requestStatus.awaitingDelivery": "Offen - Warten auf Lieferung",
     "filters.requestStatus.awaitingPickup": "Offen - Abholregal",
     "filters.requestStatus.inTransit": "Offen - Im Transport",
     "filters.requestStatus.notYetFilled": "Offen - noch nicht erfüllt",
