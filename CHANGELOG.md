@@ -4,6 +4,7 @@
 * Increased the limit for Service points in Request. Refs UIREQ-850.
 * Cannot search for requests with tags ( or [. Fix UIREQ-846.
 * BREAKING: Change "request-storage" interface version to 5.0. Refs - UIREQ-863.
+* Correctly handle move-request in non-English locales. Refs UIREQ-870.
 
 ## [7.2.4](https://github.com/folio-org/ui-requests/tree/v7.2.4) (2022-11-30)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.2.3...v7.2.4)
