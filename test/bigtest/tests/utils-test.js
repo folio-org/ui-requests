@@ -91,6 +91,7 @@ describe('utils', () => {
       firstName: 'Steven',
       lastName: 'Jones',
       middleName: 'Jacob',
+      preferredFirstName: 'Paul',
       barcode: '5694596854',
       addressLine1: '16 Main St',
       addressLine2: 'Apt 3a',
