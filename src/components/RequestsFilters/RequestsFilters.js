@@ -28,7 +28,13 @@ import { RequestLevelFilter } from './RequestLevelFilter';
 
 export default class RequestsFilters extends React.Component {
   static propTypes = {
-    activeFilters: PropTypes.objectOf(PropTypes.array).isRequired,
+    activeFilters: PropTypes.shape({
+      requestStatus: PropTypes.arrayOf(PropTypes.string),
+      requestLevels: PropTypes.arrayOf(PropTypes.string),
+      requestType: PropTypes.arrayOf(PropTypes.string),
+      tags: PropTypes.arrayOf(PropTypes.string),
+      pickupServicePoints: PropTypes.arrayOf(PropTypes.string),
+    }).isRequired,
     resources: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
     onClear: PropTypes.func.isRequired,
