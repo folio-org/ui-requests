@@ -109,6 +109,7 @@ describe('utils', () => {
       'requester.firstName': 'Steven',
       'requester.lastName': 'Jones',
       'requester.middleName': 'Jacob',
+      'requester.preferredFirstName': 'Paul',
       'requester.addressLine1': '16 Main St',
       'requester.addressLine2': 'Apt 3a',
       'requester.country': 'formatMessage',
