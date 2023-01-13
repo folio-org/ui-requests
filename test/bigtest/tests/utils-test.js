@@ -178,6 +178,24 @@ describe('utils', () => {
 
       expect(convertToSlipData(pickSlipsWithEmptyDate, intl, timeZone, locale)).to.deep.equal(expectSlipDataWithEmptyDate);
     });
+
+    it('should convert to slip data with firstName for preferredFirstName', () => {
+      const requesterWithoutPreferredFirstName = {
+        ...requester,
+        preferredFirstName: null,
+      };
+      const newPickSlips = [{
+        item,
+        request,
+        requesterWithoutPreferredFirstName,
+      }];
+      const newSlipData = {
+        ...slipData,
+        'requester.preferredFirstName': 'Steven',
+      };
+      const newExpectSlipData = [newSlipData];
+      expect(convertToSlipData(newPickSlips, intl, timeZone, locale)).to.deep.equal(newExpectSlipData);
+    });
   });
 
   describe('Format Note referrer entity data', () => {
