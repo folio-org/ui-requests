@@ -597,12 +597,6 @@ describe('isFormEditing', () => {
   });
 });
 
-
-// see ui-checkin/src/util.test.js for a template
-// that can largely be copy-pasted here
-// describe('convertToSlipData', () => {
-// });
-
 describe('convertToSlipData', () => {
   const intl = {
     formatMessage: (o) => o.id,
