@@ -207,12 +207,16 @@ export function buildLocaleDateAndTime(dateTime, timezone, locale) {
 }
 
 export const convertToSlipData = (source, intl, timeZone, locale, slipName = 'Pick slip') => {
+  console.log('source ', source);
+  
   return source.map(pickSlip => {
     const {
       item = {},
       request = {},
       requester = {},
     } = pickSlip;
+
+    console.log('slipName ', slipName);
 
     return {
       'staffSlip.Name': slipName,
