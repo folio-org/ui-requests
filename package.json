@@ -164,7 +164,6 @@
     "@folio/stripes-cli": "^2.4.0",
     "@folio/stripes-components": "^11.0.0",
     "@folio/stripes-core": "^9.0.0",
-    "@folio/stripes-ui": "^1.0.0",
     "@formatjs/cli": "^4.2.20",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
