@@ -1,11 +1,14 @@
 import {
   escape,
+  noop,
 } from 'lodash';
 import '../test/jest/__mock__';
 
 import {
   buildTemplate,
   createUserHighlightBoxLink,
+  convertToSlipData,
+  buildLocaleDateAndTime,
   duplicateRequest,
   escapeValue,
   getTlrSettings,
@@ -594,8 +597,175 @@ describe('isFormEditing', () => {
   });
 });
 
+describe('convertToSlipData', () => {
+  const intl = {
+    formatMessage: (o) => o.id,
+    formatDate: (d, options) => `${d} ${options.timeZone} ${options.locale}`,
+  };
+  const tz = 'America/New_York';
+  const locale = 'en';
 
-// see ui-checkin/src/util.test.js for a template
-// that can largely be copy-pasted here
-// describe('convertToSlipData', () => {
-// });
+  const item = {
+    title: 'The Long Way to a Small, Angry Planet',
+    barcode: '036000291452',
+    status: 'Paged',
+    primaryContributor: 'Chambers, Becky',
+    allContributors: 'Chambers, Becky',
+    enumeration: 'v.70:no.7-12',
+    volume: 'vol.1',
+    chronology: '1984:July-Dec.',
+    yearCaption: '1984; 1985',
+    materialType: 'Book',
+    loanType: 'Can Circulate',
+    copy: 'cp.2',
+    numberOfPieces: '3',
+    descriptionOfPieces: 'Description of three pieces',
+    effectiveLocationSpecific: '3rd Floor',
+    effectiveLocationLibrary: 'Djanogly Learning Resource Centre',
+    effectiveLocationCampus: 'Jubilee Campus',
+    effectiveLocationInstitution: 'Nottingham University',
+    callNumber: '123456',
+    callNumberPrefix: 'PREFIX',
+    callNumberSuffix: 'SUFFIX',
+    lastCheckedInDateTime: '2020-02-17T12:12:33.374Z',
+  };
+  const request = {
+    requestID: 'dd606ca6-a2cb-4723-9a8d-e73b05c42232',
+    servicePointPickup: 'Circ Desk 1',
+    requestExpirationDate: '2019-07-30T00:00:00.000+03:00',
+    holdShelfExpirationDate: '2019-08-31T00:00:00.000+03:00',
+    deliveryAddressType: 'Home',
+    patronComments: 'Please hurry!',
+  };
+  const requester = {
+    firstName: 'Steven',
+    lastName: 'Jones',
+    middleName: 'Jacob',
+    preferredFirstName: 'Paul',
+    barcode: '5694596854',
+    addressLine1: '16 Main St',
+    addressLine2: 'Apt 3a',
+    city: 'Northampton',
+    region: 'MA',
+    postalCode: '01060',
+    countryId: 'US',
+  };
+  const pickSlips = [{
+    item,
+    request,
+    requester,
+  }];
+  const slipData = {
+    'staffSlip.Name': 'Pick slip',
+    'requester.firstName': 'Steven',
+    'requester.lastName': 'Jones',
+    'requester.middleName': 'Jacob',
+    'requester.preferredFirstName': 'Paul',
+    'requester.addressLine1': '16 Main St',
+    'requester.addressLine2': 'Apt 3a',
+    'requester.country': 'stripes-components.countries.US',
+    'requester.city': 'Northampton',
+    'requester.stateProvRegion': 'MA',
+    'requester.zipPostalCode': '01060',
+    'requester.barcode': '5694596854',
+    'requester.barcodeImage': '<Barcode>5694596854</Barcode>',
+    'item.fromServicePoint': undefined,
+    'item.toServicePoint': undefined,
+    'item.title': 'The Long Way to a Small, Angry Planet',
+    'item.primaryContributor': 'Chambers, Becky',
+    'item.allContributors': 'Chambers, Becky',
+    'item.barcode': '036000291452',
+    'item.barcodeImage': '<Barcode>036000291452</Barcode>',
+    'item.callNumber': '123456',
+    'item.callNumberPrefix': 'PREFIX',
+    'item.callNumberSuffix': 'SUFFIX',
+    'item.enumeration': 'v.70:no.7-12',
+    'item.volume': 'vol.1',
+    'item.chronology': '1984:July-Dec.',
+    'item.copy': 'cp.2',
+    'item.yearCaption': '1984; 1985',
+    'item.materialType': 'Book',
+    'item.loanType': 'Can Circulate',
+    'item.numberOfPieces': '3',
+    'item.descriptionOfPieces': 'Description of three pieces',
+    'item.lastCheckedInDateTime': buildLocaleDateAndTime('2020-02-17T12:12:33.374Z', tz, locale),
+    'item.effectiveLocationInstitution': 'Nottingham University',
+    'item.effectiveLocationCampus': 'Jubilee Campus',
+    'item.effectiveLocationLibrary': 'Djanogly Learning Resource Centre',
+    'item.effectiveLocationSpecific': '3rd Floor',
+    'request.servicePointPickup': 'Circ Desk 1',
+    'request.deliveryAddressType': 'Home',
+    'request.requestExpirationDate': '2019-07-30T00:00:00.000+03:00 America/New_York en',
+    'request.holdShelfExpirationDate': '2019-08-31T00:00:00.000+03:00 America/New_York en',
+    'request.requestID': 'dd606ca6-a2cb-4723-9a8d-e73b05c42232',
+    'request.patronComments': 'Please hurry!',
+  };
+  const expectSlipData = [slipData];
+
+  it('substitutes values', () => {
+    expect(convertToSlipData(pickSlips, intl, tz, locale)).toEqual(expectSlipData);
+  });
+
+  it('should convert to slip data wth empty date', () => {
+    const pickSlipsWithEmptyDate = [{
+      item,
+      request: {
+        ...request,
+        requestExpirationDate: '',
+        holdShelfExpirationDate: '',
+      },
+      requester: {
+        ...requester,
+        countryId: '',
+      },
+    }];
+    const expectSlipDataWithEmptyDate = [{
+      ...slipData,
+      'request.requestExpirationDate': '',
+      'request.holdShelfExpirationDate': '',
+      'requester.country': '',
+    }];
+
+    expect(convertToSlipData(pickSlipsWithEmptyDate, intl, tz, locale)).toEqual(expectSlipDataWithEmptyDate);
+  });
+
+  it('handles missing elements', () => {
+    const emptySource = [];
+    const o = convertToSlipData(emptySource, intl, tz, locale);
+
+    expect(o['requester.country']).toBeUndefined();
+    expect(o['request.requestExpirationDate']).toBeUndefined();
+    expect(o['request.holdShelfExpirationDate']).toBeUndefined();
+  });
+
+  it('handles empty requester barcode', () => {
+    const sourceWithoutRequesterBarcode = [{
+      ...pickSlips,
+      requester: {
+        ...pickSlips.requester,
+        barcode: noop(),
+      },
+    }];
+    const o = convertToSlipData(sourceWithoutRequesterBarcode, intl, tz, locale);
+
+    expect(o['requester.barcodeImage']).toBeUndefined();
+  });
+
+  it('should handle preferred first name when preferred first name is null', () => {
+    const pickSlipsWithoutPreferredFirstName = [{
+      item,
+      request,
+      requester: {
+        ...requester,
+        preferredFirstName: null,
+      },
+    }];
+
+    const expectSlipDataWithoutPreferredFirstName = [{
+      ...slipData,
+      'requester.preferredFirstName': 'Steven',
+    }];
+
+    expect(convertToSlipData(pickSlipsWithoutPreferredFirstName, intl, tz, locale)).toEqual(expectSlipDataWithoutPreferredFirstName);
+  });
+});
