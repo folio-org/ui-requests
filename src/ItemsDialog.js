@@ -60,7 +60,7 @@ export const COLUMN_MAP = {
 };
 
 export const formatter = {
-  itemStatus: item => item.status.name,
+  itemStatus: item => <FormattedMessage id={itemStatusesTranslations[item.status.name]} />,
   location: item => get(item, 'effectiveLocation.name', ''),
   materialType: item => item.materialType.name,
   loanType: item => (item.temporaryLoanType ? get(item, 'temporaryLoanType.name', '') : get(item, 'permanentLoanType.name', '')),
@@ -168,10 +168,9 @@ const ItemsDialog = ({
       ...item,
       status: {
         ...item.status,
-        name: formatMessage({ id: itemStatusesTranslations[item.status.name] }),
       },
     }));
-  }, [items, skippedItemId, formatMessage]);
+  }, [items, skippedItemId]);
 
   const itemsAmount = contentData.length;
 
