@@ -15,7 +15,6 @@ import {
 
 import {
   itemStatuses,
-  itemStatusesTranslations,
   requestableItemStatuses,
 } from './constants';
 import { Loading } from './components';
@@ -237,19 +236,19 @@ describe('ItemsDialog', () => {
             contentData: [{
               id: '2',
               status: {
-                name: itemStatusesTranslations[itemStatuses.AVAILABLE],
+                name: itemStatuses.AVAILABLE,
               },
               requestQueue: 1,
             }, {
               id: '1',
               status: {
-                name: itemStatusesTranslations[itemStatuses.IN_PROCESS],
+                name: itemStatuses.IN_PROCESS,
               },
               requestQueue: 2,
             }, {
               id: '3',
               status: {
-                name: itemStatusesTranslations[itemStatuses.IN_TRANSIT],
+                name: itemStatuses.IN_TRANSIT,
               },
               requestQueue: 0,
             }],
@@ -264,12 +263,12 @@ describe('ItemsDialog', () => {
         );
       });
 
-      describe('when "items" responce contains non-requestable items', () => {
+      describe('when "items" response contains non-requestable items', () => {
         const getProcessedItem = (status) => ({
           id: status,
           requestQueue: 0,
           status: {
-            name: itemStatusesTranslations[status],
+            name: status,
           },
         });
         const allItemStatuses = Object.values(itemStatuses);
