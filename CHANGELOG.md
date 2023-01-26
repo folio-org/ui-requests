@@ -8,6 +8,7 @@
 * Correctly handle move-request in non-English locales. Refs UIREQ-870.
 * Bump major versions of several @folio/stripes-* packages. Refs UIREQ-874.
 * Populate the token "requester.patronGroup" in the pick slip, with the data provided by the backend in the ui-requests module. Refs - UIREQ-804.
+* Support `inventory` `13.0` interface version. Refs UIREQ-867.
 
 ## [7.2.4](https://github.com/folio-org/ui-requests/tree/v7.2.4) (2022-11-30)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.2.3...v7.2.4)
