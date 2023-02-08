@@ -8,18 +8,17 @@ import {
   ModalFooter
 } from '@folio/stripes/components';
 
-const ErrorModal = (props) => {
-  const {
-    errorMessage,
-    onClose,
-    label,
-  } = props;
-
+const ErrorModal = ({
+  errorMessage,
+  onClose,
+  label
+}) => {
   const footer = (
     <ModalFooter>
       <Button
         data-test-error-modal-close-button
         onClick={onClose}
+        data-testid="footer-close-button"
       >
         <FormattedMessage id="ui-requests.close" />
       </Button>
@@ -36,7 +35,10 @@ const ErrorModal = (props) => {
       dismissible
       onClose={onClose}
     >
-      <div data-test-error-modal-content>
+      <div
+        data-test-error-modal-content
+        data-testid="error-modal"
+      >
         {errorMessage}
       </div>
     </Modal>

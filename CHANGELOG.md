@@ -10,6 +10,7 @@
 * Populate the token "requester.patronGroup" in the pick slip, with the data provided by the backend in the ui-requests module. Refs - UIREQ-804.
 * Support `inventory` `13.0` interface version. Refs UIREQ-867.
 * Move and upgrade `babel-plugin-module-resolver` to dev-deps, v5. Refs UIREQ-897.
+* UI tests replacement with RTL/Jest for ErrorModal. Refs UIREQ-883.
 
 ## [7.2.4](https://github.com/folio-org/ui-requests/tree/v7.2.4) (2022-11-30)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.2.3...v7.2.4)
