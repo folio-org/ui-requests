@@ -13,8 +13,14 @@ jest.mock('@folio/stripes/components', () => ({
       {children}
     </div>
   )),
-  Button: jest.fn(({ children }) => (
-    <button data-test-button type="button">
+  Button: jest.fn(({
+    children,
+    ...rest
+  }) => (
+    <button
+      type="button"
+      {...rest}
+    >
       <span>
         {children}
       </span>
@@ -41,8 +47,10 @@ jest.mock('@folio/stripes/components', () => ({
   Modal: jest.fn(({
     children,
     footer,
+    label
   }) => (
     <div>
+      {label && label}
       {children}
       {footer}
     </div>
