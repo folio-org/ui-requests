@@ -29,9 +29,9 @@ export default [
     operator: '==',
     parse: (value) => {
       if (Array.isArray(value)) {
-        return `tags.tagList==(${value.map(v => `"*${v}*"`)
+        return `tags.tagList==(${value.map(v => `*"*${v}*"*`)
           .join(' or ')})`;
-      } else return `tags.tagList=="*${value}*"`;
+      } else return `tags.tagList==*"*${value}*"*`;
     }
   },
   {
