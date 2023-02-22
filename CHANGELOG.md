@@ -1,6 +1,10 @@
 # Change history for ui-requests
 
 ## IN PROGRESS
+
+## [8.0.0](https://github.com/folio-org/ui-requests/tree/v8.0.0) (2023-02-22)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.2.4...v8.0.0)
+
 * Increased the limit for Service points in Request. Refs UIREQ-850.
 * Cannot search for requests with tags ( or [. Fix UIREQ-846.
 * BREAKING: Change "request-storage" interface version to 5.0. Refs - UIREQ-863.
