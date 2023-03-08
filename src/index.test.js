@@ -11,6 +11,12 @@ jest.mock('./routes/index', () => ({
   RequestsRoute: () => <h1>RequestsRoute</h1>,
 }));
 
+const labelIds = {
+  navigation: 'ui-requests.navigation.app',
+  keyboardShortcuts: 'ui-requests.appMenu.keyboardShortcuts',
+  shortcutMvodalLabel: 'stripes-components.shortcut.modalLabel',
+};
+
 describe('UI Requests', () => {
   const renderRequest = () => {
     const component = (
@@ -39,29 +45,29 @@ describe('UI Requests', () => {
     window.history.pushState({}, '', '/requests');
 
     renderRequest();
-    expect(screen.getByText('ui-requests.navigation.app')).toBeInTheDocument();
+    expect(screen.getByText(labelIds.navigation)).toBeInTheDocument();
   });
 
   it('should render "Keyboard shortcuts" nav item', () => {
     window.history.pushState({}, '', '/requests');
 
     renderRequest();
-    expect(screen.getByText('ui-requests.appMenu.keyboardShortcuts')).toBeInTheDocument();
+    expect(screen.getByText(labelIds.keyboardShortcuts)).toBeInTheDocument();
   });
 
   it('should render keyboard shortcuts modal', () => {
     window.history.pushState({}, '', '/requests');
 
     renderRequest();
-    fireEvent.click(screen.getByText('ui-requests.appMenu.keyboardShortcuts'));
-    expect(screen.getByText('stripes-components.shortcut.modalLabel')).toBeInTheDocument();
+    fireEvent.click(screen.getByText(labelIds.keyboardShortcuts));
+    expect(screen.getByText(labelIds.shortcutMvodalLabel)).toBeInTheDocument();
   });
 
   it('should close keyboard shortcuts modal on clicking close button', () => {
     window.history.pushState({}, '', '/requests');
 
     renderRequest();
-    fireEvent.click(screen.getByText('ui-requests.appMenu.keyboardShortcuts'));
+    fireEvent.click(screen.getByText(labelIds.keyboardShortcuts));
     const button = screen.getByRole('button', { name: /stripes-components.dismissModal/i });
     fireEvent.click(button);
     expect(screen.queryByText('stripes-components.shortcut.modalLabel')).not.toBeInTheDocument();

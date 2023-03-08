@@ -12,8 +12,8 @@ import ErrorModal from './ErrorModal';
 describe('ErrorModal', () => {
   const closeModal = jest.fn();
   const testIds = {
-    errorModal: 'error-modal',
-    footerCloseButton: 'footer-close-button',
+    errorModal: 'errorModal',
+    footerCloseButton: 'footerCloseButton',
   };
   const labelIds = {
     footerMessageId: 'ui-requests.close',

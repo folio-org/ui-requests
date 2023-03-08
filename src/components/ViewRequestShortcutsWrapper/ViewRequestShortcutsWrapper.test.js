@@ -33,8 +33,12 @@ mockAccordionStatusRef.current = {
   setStatus: jest.fn(),
 };
 
+const testIds = {
+  childElement: 'childElement',
+};
+
 const renderViewRequestShortcuts = ({ isDuplicatingDisabled, isEditingDisabled }) => {
-  const childElement = <input data-testid="childElement" id="input-request-search" />;
+  const childElement = <input data-testid={testIds.childElement} id="input-request-search" />;
 
   const component = () => (
     <CommandList commands={defaultKeyboardShortcuts}>
@@ -70,7 +74,7 @@ describe('ViewRequestShortcutsWrapper component', () => {
   it('should render children correctly', () => {
     const { getByTestId } = renderViewRequestShortcuts(notDisbaled);
 
-    expect(getByTestId('childElement')).toBeInTheDocument();
+    expect(getByTestId(testIds.childElement)).toBeInTheDocument();
   });
 
   describe('when isEditingDisabled is true', () => {

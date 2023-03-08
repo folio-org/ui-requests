@@ -18,7 +18,7 @@ const ErrorModal = ({
       <Button
         data-test-error-modal-close-button
         onClick={onClose}
-        data-testid="footer-close-button"
+        data-testid="footerCloseButton"
       >
         <FormattedMessage id="ui-requests.close" />
       </Button>
@@ -37,7 +37,7 @@ const ErrorModal = ({
     >
       <div
         data-test-error-modal-content
-        data-testid="error-modal"
+        data-testid="errorModal"
       >
         {errorMessage}
       </div>
