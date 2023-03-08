@@ -6,9 +6,19 @@ import {
 import {
   Field,
 } from 'react-final-form';
-import { Col, KeyValue, Row, Select } from '@folio/stripes/components';
+
+import {
+  Col,
+  KeyValue,
+  Row,
+  Select,
+} from '@folio/stripes/components';
 import { ProxyManager } from '@folio/stripes/smart-components';
-import { getFullName, userHighlightBox } from './utils';
+
+import {
+  getFullName,
+  userHighlightBox,
+} from './utils';
 import { requestStatuses } from './constants';
 
 const {

@@ -2,6 +2,8 @@
 
 ## IN PROGRESS
 
+* Made code improvements related to TLR. Refs UIREQ-871.
+
 ## [8.0.0](https://github.com/folio-org/ui-requests/tree/v8.0.0) (2023-02-22)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.2.4...v8.0.0)
 
