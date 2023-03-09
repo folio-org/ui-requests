@@ -63,8 +63,15 @@ const PatronBlockModal = ({
                   <FormattedMessage id="ui-requests.override" />
                 </Button>
               </IfPermission>
-              <Button onClick={onClose}><FormattedMessage id="ui-requests.close" /></Button>
-              <Button buttonStyle="primary" onClick={viewUserPath}><FormattedMessage id="ui-requests.detailsButton" /></Button>
+              <Button onClick={onClose}>
+                <FormattedMessage id="ui-requests.close" />
+              </Button>
+              <Button
+                buttonStyle="primary"
+                onClick={viewUserPath}
+              >
+                <FormattedMessage id="ui-requests.detailsButton" />
+              </Button>
             </Col>
           </Row>
         </Col>

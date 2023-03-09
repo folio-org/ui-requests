@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import { FormattedMessage } from 'react-intl';
+
 import {
   Modal,
   ModalFooter,
@@ -10,7 +11,10 @@ import {
   Button,
 } from '@folio/stripes/components';
 
-import { MAX_RECORDS } from './constants';
+import {
+  MAX_RECORDS,
+  requestStatuses,
+} from './constants';
 
 class CancelRequestDialog extends React.Component {
   static manifest = {
@@ -57,9 +61,11 @@ class CancelRequestDialog extends React.Component {
 
     this.state = {
       reasons: [],
-      reason: { label: '', value: '' },
+      reason: {
+        label: '',
+        value: '',
+      },
       cancelInProgress: false,
-      // notify: false,
     };
   }
 
@@ -101,7 +107,7 @@ class CancelRequestDialog extends React.Component {
       cancellationReasonId: reason.value,
       cancellationAdditionalInformation: additionalInfo,
       cancelledDate: new Date().toISOString(),
-      status: 'Closed - Cancelled',
+      status: requestStatuses.CANCELLED,
     };
 
     onCancelRequest(cancellationInfo);

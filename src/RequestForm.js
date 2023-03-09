@@ -100,6 +100,21 @@ const RESOURCE_KEYS = {
   id: 'id',
   barcode: 'barcode',
 };
+const REQUEST_FORM_FIELD_NAMES = {
+  CREATE_TLR: 'createTitleLevelRequest',
+  FULFILMENT_PREFERENCE: 'fulfilmentPreference',
+  DELIVERY_ADDRESS_TYPE_ID: 'deliveryAddressTypeId',
+  REQUESTER_ID: 'requesterId',
+  REQUESTER: 'requester',
+  PROXY_USER_ID: 'proxyUserId',
+  PICKUP_SERVICE_POINT_ID: 'pickupServicePointId',
+  ITEM_ID: 'itemId',
+  ITEM_BARCODE: 'item.barcode',
+  REQUEST_TYPE: 'requestType',
+  INSTANCE_ID: 'instanceId',
+  INSTANCE_HRID: 'instance.hrid',
+  REQUESTER_BARCODE: 'requester.barcode',
+};
 
 class RequestForm extends React.Component {
   static propTypes = {
@@ -127,7 +142,6 @@ class RequestForm extends React.Component {
     }),
     submitting: PropTypes.bool,
     toggleModal: PropTypes.func,
-    //  okapi: PropTypes.object,
     optionLists: PropTypes.shape({
       addressTypes: PropTypes.arrayOf(PropTypes.object),
       fulfilmentTypes: PropTypes.arrayOf(PropTypes.object),
@@ -360,14 +374,14 @@ class RequestForm extends React.Component {
     } = this.props;
 
     if (this.state.titleLevelRequestsFeatureEnabled === false) {
-      form.change('createTitleLevelRequest', false);
+      form.change(REQUEST_FORM_FIELD_NAMES.CREATE_TLR, false);
       return;
     }
 
     if (this.props.query.itemId || this.props.query.itemBarcode) {
-      form.change('createTitleLevelRequest', false);
+      form.change(REQUEST_FORM_FIELD_NAMES.CREATE_TLR, false);
     } else if (this.props.query.instanceId) {
-      form.change('createTitleLevelRequest', true);
+      form.change(REQUEST_FORM_FIELD_NAMES.CREATE_TLR, true);
     }
   }
 
@@ -382,7 +396,7 @@ class RequestForm extends React.Component {
     const deliverySelected = isDeliverySelected(selectedFullfillmentPreference);
     const selectedAddressTypeId = getSelectedAddressTypeId(deliverySelected, defaultDeliveryAddressTypeId);
 
-    form.change('fulfilmentPreference', selectedFullfillmentPreference);
+    form.change(REQUEST_FORM_FIELD_NAMES.FULFILMENT_PREFERENCE, selectedFullfillmentPreference);
     this.setState({
       deliverySelected,
       selectedAddressTypeId,
@@ -395,7 +409,7 @@ class RequestForm extends React.Component {
     const { form } = this.props;
     const selectedAddressTypeId = e.target.value;
 
-    form.change('deliveryAddressTypeId', selectedAddressTypeId);
+    form.change(REQUEST_FORM_FIELD_NAMES.DELIVERY_ADDRESS_TYPE_ID, selectedAddressTypeId);
     this.setState({
       selectedAddressTypeId,
     });
@@ -436,14 +450,14 @@ class RequestForm extends React.Component {
       this.setState({
         proxy: selectedUser,
       });
-      form.change('requesterId', selectedUser.id);
+      form.change(REQUEST_FORM_FIELD_NAMES.REQUESTER_ID, selectedUser.id);
     } else {
       onSetSelectedUser(selectedUser);
       this.setState({
         proxy,
       });
-      form.change('requesterId', proxy.id);
-      form.change('proxyUserId', selectedUser.id);
+      form.change(REQUEST_FORM_FIELD_NAMES.REQUESTER_ID, proxy.id);
+      form.change(REQUEST_FORM_FIELD_NAMES.PROXY_USER_ID, selectedUser.id);
       this.findRequestPreferences(proxy.id);
     }
 
@@ -530,8 +544,8 @@ class RequestForm extends React.Component {
       this.setState({
         proxy: null,
       });
-      form.change('pickupServicePointId', undefined);
-      form.change('deliveryAddressTypeId', undefined);
+      form.change(REQUEST_FORM_FIELD_NAMES.PICKUP_SERVICE_POINT_ID, undefined);
+      form.change(REQUEST_FORM_FIELD_NAMES.DELIVERY_ADDRESS_TYPE_ID, undefined);
 
       return findResource(RESOURCE_TYPES.USER, value, fieldName)
         .then((result) => {
@@ -543,8 +557,8 @@ class RequestForm extends React.Component {
             const isAutomatedPatronBlocksRequestInPendingState = parentResources.automatedPatronBlocks.isPending;
             const selectedUser = result.users[0];
             onChangePatron(selectedUser);
-            form.change('requesterId', selectedUser.id);
-            form.change('requester', selectedUser);
+            form.change(REQUEST_FORM_FIELD_NAMES.REQUESTER_ID, selectedUser.id);
+            form.change(REQUEST_FORM_FIELD_NAMES.REQUESTER, selectedUser);
             onSetSelectedUser(selectedUser);
 
             if (fieldName === RESOURCE_KEYS.id) {
@@ -614,7 +628,7 @@ class RequestForm extends React.Component {
         deliverySelected,
         selectedAddressTypeId,
       }, () => {
-        form.change('fulfilmentPreference', fulfillmentPreference);
+        form.change(REQUEST_FORM_FIELD_NAMES.FULFILMENT_PREFERENCE, fulfillmentPreference);
 
         this.updateRequestPreferencesFields();
       });
@@ -623,7 +637,7 @@ class RequestForm extends React.Component {
         ...getDefaultRequestPreferences(request, initialValues),
         deliverySelected: false,
       }, () => {
-        form.change('fulfilmentPreference', fulfilmentTypeMap.HOLD_SHELF);
+        form.change(REQUEST_FORM_FIELD_NAMES.FULFILMENT_PREFERENCE, fulfilmentTypeMap.HOLD_SHELF);
       });
     }
   }
@@ -646,17 +660,17 @@ class RequestForm extends React.Component {
     if (deliverySelected) {
       const deliveryAddressTypeId = selectedAddressTypeId || defaultDeliveryAddressTypeId;
 
-      form.change('deliveryAddressTypeId', deliveryAddressTypeId);
-      form.change('pickupServicePointId', '');
+      form.change(REQUEST_FORM_FIELD_NAMES.DELIVERY_ADDRESS_TYPE_ID, deliveryAddressTypeId);
+      form.change(REQUEST_FORM_FIELD_NAMES.PICKUP_SERVICE_POINT_ID, '');
     } else {
       // Only change pickupServicePointId to defaultServicePointId
       // if selected user has changed (by choosing a different user manually)
       // or if the request form is not in a DUPLICATE mode.
       // In DUPLICATE mode the pickupServicePointId from a duplicated request record will be used instead.
       if (requesterId !== selectedUser?.id || this.props?.query?.mode !== createModes.DUPLICATE) {
-        form.change('pickupServicePointId', defaultServicePointId);
+        form.change(REQUEST_FORM_FIELD_NAMES.PICKUP_SERVICE_POINT_ID, defaultServicePointId);
       }
-      form.change('deliveryAddressTypeId', '');
+      form.change(REQUEST_FORM_FIELD_NAMES.DELIVERY_ADDRESS_TYPE_ID, '');
     }
   }
 
@@ -739,10 +753,10 @@ class RequestForm extends React.Component {
           const item = result.items[0];
           const options = getRequestTypeOptions(item);
 
-          form.change('itemId', item.id);
-          form.change('item.barcode', item.barcode);
+          form.change(REQUEST_FORM_FIELD_NAMES.ITEM_ID, item.id);
+          form.change(REQUEST_FORM_FIELD_NAMES.ITEM_BARCODE, item.barcode);
           if (options.length >= 1) {
-            form.change('requestType', options[0].value);
+            form.change(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, options[0].value);
           }
 
           // Setting state here is redundant with what follows, but it lets us
@@ -821,8 +835,8 @@ class RequestForm extends React.Component {
 
           const instance = result.instances[0];
 
-          form.change('instanceId', instance.id);
-          form.change('instance.hrid', instance.hrid);
+          form.change(REQUEST_FORM_FIELD_NAMES.INSTANCE_ID, instance.id);
+          form.change(REQUEST_FORM_FIELD_NAMES.INSTANCE_HRID, instance.hrid);
 
           onSetSelectedInstance(instance);
           this.setState({
@@ -850,7 +864,7 @@ class RequestForm extends React.Component {
 
     const requestTypeOptions = getInstanceRequestTypeOptions();
 
-    form.change('requestType', requestTypeOptions[0].value);
+    form.change(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, requestTypeOptions[0].value);
 
     this.setState({ requestTypeOptions });
 
@@ -1073,7 +1087,7 @@ class RequestForm extends React.Component {
       this.setState({ validatedItemBarcode: null });
     }
 
-    form.change('item.barcode', barcode);
+    form.change(REQUEST_FORM_FIELD_NAMES.ITEM_BARCODE, barcode);
   };
 
   handleChangeUserBarcode = (event) => {
@@ -1097,7 +1111,7 @@ class RequestForm extends React.Component {
       this.setState({ validatedUserBarcode: null });
     }
 
-    form.change('requester.barcode', barcode);
+    form.change(REQUEST_FORM_FIELD_NAMES.REQUESTER_BARCODE, barcode);
   };
 
   handleChangeInstanceId = (event) => {
@@ -1121,7 +1135,7 @@ class RequestForm extends React.Component {
       this.setState({ validatedInstanceId: null });
     }
 
-    form.change('instance.hrid', instanceId);
+    form.change(REQUEST_FORM_FIELD_NAMES.INSTANCE_HRID, instanceId);
   }
 
   handleBlurUserBarcode = (input) => () => {
@@ -1223,10 +1237,10 @@ class RequestForm extends React.Component {
       onSetSelectedInstance,
     } = this.props;
 
-    form.change('createTitleLevelRequest', isCreateTlr);
-    form.change('item.barcode', null);
-    form.change('instance.hrid', null);
-    form.change('instanceId', null);
+    form.change(REQUEST_FORM_FIELD_NAMES.CREATE_TLR, isCreateTlr);
+    form.change(REQUEST_FORM_FIELD_NAMES.ITEM_BARCODE, null);
+    form.change(REQUEST_FORM_FIELD_NAMES.INSTANCE_HRID, null);
+    form.change(REQUEST_FORM_FIELD_NAMES.INSTANCE_ID, null);
 
     if (isCreateTlr) {
       onSetSelectedItem(undefined);
@@ -1489,7 +1503,7 @@ class RequestForm extends React.Component {
                     <Col xs={12}>
                       <Field
                         data-testid="tlrCheckbox"
-                        name="createTitleLevelRequest"
+                        name={REQUEST_FORM_FIELD_NAMES.CREATE_TLR}
                         type="checkbox"
                         label={formatMessage({ id: 'ui-requests.requests.createTitleLevelRequest' })}
                         component={Checkbox}
@@ -1522,14 +1536,13 @@ class RequestForm extends React.Component {
                                       <Col xs={9}>
                                         <FormattedMessage id="ui-requests.instance.scanOrEnterBarcode">
                                           {placeholder => {
-                                            const name = 'instance.hrid';
                                             const key = keyOfInstanceIdField ?? 0;
 
                                             return (
                                               <Field
                                                 key={key}
-                                                name={name}
-                                                validate={this.validateInstanceId(name, key)}
+                                                name={REQUEST_FORM_FIELD_NAMES.INSTANCE_HRID}
+                                                validate={this.validateInstanceId(REQUEST_FORM_FIELD_NAMES.INSTANCE_HRID, key)}
                                                 validateFields={[]}
                                               >
                                                 {({ input, meta }) => {
@@ -1618,15 +1631,14 @@ class RequestForm extends React.Component {
                                     <Col xs={9}>
                                       <FormattedMessage id="ui-requests.item.scanOrEnterBarcode">
                                         {placeholder => {
-                                          const name = 'item.barcode';
                                           const key = keyOfItemBarcodeField ?? 0;
 
                                           return (
                                             <Field
                                               data-testid="itemBarcodeField"
                                               key={key}
-                                              name={name}
-                                              validate={this.validateItemBarcode(name, key)}
+                                              name={REQUEST_FORM_FIELD_NAMES.ITEM_BARCODE}
+                                              validate={this.validateItemBarcode(REQUEST_FORM_FIELD_NAMES.ITEM_BARCODE, key)}
                                               validateFields={[]}
                                             >
                                               {({ input, meta }) => {
@@ -1710,7 +1722,7 @@ class RequestForm extends React.Component {
                             {multiRequestTypesVisible &&
                               <Field
                                 label={<FormattedMessage id="ui-requests.requestType" />}
-                                name="requestType"
+                                name={REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE}
                                 component={Select}
                                 fullWidth
                                 disabled={isEditForm}
@@ -1849,14 +1861,13 @@ class RequestForm extends React.Component {
                               <Col xs={9}>
                                 <FormattedMessage id="ui-requests.requester.scanOrEnterBarcode">
                                   {placeholder => {
-                                    const name = 'requester.barcode';
                                     const key = keyOfUserBarcodeField ?? 0;
 
                                     return (
                                       <Field
                                         key={key}
-                                        name={name}
-                                        validate={this.validateRequesterBarcode(name, key)}
+                                        name={REQUEST_FORM_FIELD_NAMES.REQUESTER_BARCODE}
+                                        validate={this.validateRequesterBarcode(REQUEST_FORM_FIELD_NAMES.REQUESTER_BARCODE, key)}
                                         validateFields={[]}
                                       >
                                         {({ input, meta }) => {
