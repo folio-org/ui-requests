@@ -39,13 +39,17 @@ jest.mock('../components', () => ({
   LoadingButton: jest.fn(() => null),
 }));
 
+const testIds = {
+  searchAndSort: 'searchAndSort',
+};
+
 SearchAndSort.mockImplementation(jest.fn(({
   parentResources: { records: { records } },
   detailProps: { onDuplicate },
 }) => (
   // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
   <div
-    data-testid="searchAndSort"
+    data-testid={testIds.searchAndSort}
     onClick={() => onDuplicate(records[0])}
   />
 )));
@@ -189,7 +193,7 @@ describe('RequestsRoute', () => {
 
       renderComponent(defaultProps);
 
-      fireEvent.click(screen.getByTestId('searchAndSort'));
+      fireEvent.click(screen.getByTestId(testIds.searchAndSort));
 
       expect(duplicateRequest).toHaveBeenCalledWith(mockedRequest);
       expect(mockedUpdateFunc).toHaveBeenCalledWith(expectedResultForUpdate);
@@ -200,7 +204,7 @@ describe('RequestsRoute', () => {
 
       renderComponent(defaultProps);
 
-      fireEvent.click(screen.getByTestId('searchAndSort'));
+      fireEvent.click(screen.getByTestId(testIds.searchAndSort));
 
       expect(duplicateRequest).toHaveBeenCalledWith(mockedRequest);
       expect(mockedUpdateFunc).toHaveBeenCalledWith(defaultExpectedResultForUpdate);

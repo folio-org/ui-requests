@@ -26,8 +26,12 @@ const mockButtonClick = jest.fn();
 
 stripes.hasPerm = jest.fn(() => true);
 
+const testIds = {
+  childElement: 'childElement',
+};
+
 describe('RequestsRouteShortcutsWrapper component', () => {
-  let childElement = <input data-testid="childElement" id="input-request-search" />;
+  let childElement = <input data-testid={testIds.childElement} id="input-request-search" />;
   const renderRequestsRouteShortcutsWrapper = () => {
     const component = () => (
       <CommandList commands={defaultKeyboardShortcuts}>
@@ -53,7 +57,7 @@ describe('RequestsRouteShortcutsWrapper component', () => {
   it('should render children correctly', () => {
     const { getByTestId } = renderRequestsRouteShortcutsWrapper();
 
-    expect(getByTestId('childElement')).toBeInTheDocument();
+    expect(getByTestId(testIds.childElement)).toBeInTheDocument();
   });
 
   describe('when openNewRecord shortcut is pressed', () => {
@@ -69,7 +73,7 @@ describe('RequestsRouteShortcutsWrapper component', () => {
     it('focusSearchField is pressed, search field should be focused', () => {
       const { getByTestId } = renderRequestsRouteShortcutsWrapper();
       focusSearchFieldShortcut(document.body);
-      expect(getByTestId('childElement')).toHaveFocus();
+      expect(getByTestId(testIds.childElement)).toHaveFocus();
     });
   });
 

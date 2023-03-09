@@ -18,10 +18,17 @@ import {
   requestLevelFilters,
 } from '../../../constants';
 
+const testIds = {
+  accordion: 'accordion',
+};
+const labelIds = {
+  requestLevel: 'ui-requests.requestLevel',
+};
+
 Accordion.mockImplementation(({ onClearFilter, children }) => (
   // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
   <div
-    data-testid="accordion"
+    data-testid={testIds.accordion}
     onClick={onClearFilter}
   >
     {children}
@@ -29,10 +36,6 @@ Accordion.mockImplementation(({ onClearFilter, children }) => (
 ));
 
 describe('RequestLevelFilter', () => {
-  const labelIds = {
-    requestLevel: 'ui-requests.requestLevel',
-  };
-
   const testOnClearCallback = jest.fn();
   const testOnChangeCallback = () => {};
   const defaultTestActiveValues = [];
@@ -70,7 +73,7 @@ describe('RequestLevelFilter', () => {
     it('should handle clear filters', () => {
       expect(testOnClearCallback).not.toHaveBeenCalled();
 
-      fireEvent.click(screen.getByTestId('accordion'));
+      fireEvent.click(screen.getByTestId(testIds.accordion));
 
       expect(testOnClearCallback).toHaveBeenCalledWith(requestFilterTypes.REQUEST_LEVELS);
     });

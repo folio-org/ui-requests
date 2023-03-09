@@ -32,13 +32,17 @@ jest.mock('./components', () => ({
   )),
 }));
 
+const testIds = {
+  loading: 'loading',
+};
+const labelIds = {
+  selectItem: 'ui-requests.items.selectItem',
+  instanceItems: 'ui-requests.items.instanceItems',
+  resultCount: 'ui-requests.resultCount',
+  instanceItemsNotFound: 'ui-requests.items.instanceItems.notFound',
+};
+
 describe('ItemsDialog', () => {
-  const labelIds = {
-    selectItem: 'ui-requests.items.selectItem',
-    instanceItems: 'ui-requests.items.instanceItems',
-    resultCount: 'ui-requests.resultCount',
-    instanceItemsNotFound: 'ui-requests.items.instanceItems.notFound',
-  };
   const onClose = jest.fn();
   const onRowClick = jest.fn();
   const testTitle = 'testTitle';
@@ -211,7 +215,7 @@ describe('ItemsDialog', () => {
     });
 
     it('should render Loading when data is being loaded', () => {
-      const loading = screen.queryByTestId('loading');
+      const loading = screen.queryByTestId(testIds.loading);
 
       expect(loading).toBeInTheDocument();
     });
@@ -222,7 +226,7 @@ describe('ItemsDialog', () => {
       });
 
       it('should hide Loading when data is loaded', () => {
-        const loading = screen.queryByTestId('loading');
+        const loading = screen.queryByTestId(testIds.loading);
 
         expect(loading).not.toBeInTheDocument();
       });

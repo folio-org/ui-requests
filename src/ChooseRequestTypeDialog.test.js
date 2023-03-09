@@ -23,10 +23,11 @@ jest.mock('./utils', () => ({
   }])),
 }));
 
+const testIds = {
+  loading: 'loading',
+};
+
 describe('ChooseRequestTypeDialog', () => {
-  const testIds = {
-    loading: 'loading',
-  };
   const buttonCallOrder = {
     confirm: 1,
     cancel: 2,

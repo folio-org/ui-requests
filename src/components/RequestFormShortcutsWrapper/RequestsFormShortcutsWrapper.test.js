@@ -28,8 +28,12 @@ mockAccordionStatusRef.current = {
   setStatus: jest.fn(),
 };
 
+const testIds = {
+  childElement: 'childElement',
+};
+
 const renderRequestsFormShortcuts = (isSubmittingDisabled) => {
-  const childElement = <input data-testid="childElement" id="input-request-search" />;
+  const childElement = <input data-testid={testIds.childElement} id="input-request-search" />;
 
   const component = () => (
     <CommandList commands={defaultKeyboardShortcuts}>
@@ -57,7 +61,7 @@ describe('RequestsFormShortcutsWrapper component', () => {
   it('should render children correctly', () => {
     const { getByTestId } = renderRequestsFormShortcuts(true);
 
-    expect(getByTestId('childElement')).toBeInTheDocument();
+    expect(getByTestId(testIds.childElement)).toBeInTheDocument();
   });
   describe('when isSubmittingDisabled is true', () => {
     it('Save shortcut should not work', () => {
