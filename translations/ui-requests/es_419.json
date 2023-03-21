@@ -265,7 +265,7 @@
     "item.status.orderClosed": "Pedido cerrado",
     "item.status.restricted": "Restricted",
     "errors.closingAlreadyClosedRequest": "Error: The Request has already been closed.",
-    "appMenu.keyboardShortcuts": "Keyboard shortcuts",
-    "navigation.app": "Requests app Search",
-    "navigation.keyboardShortcuts": "Keyboard shortcuts"
+    "appMenu.keyboardShortcuts": "Atajos de teclado",
+    "navigation.app": "Solicitudes app Búsqueda",
+    "navigation.keyboardShortcuts": "Atajos de teclado"
 }
