@@ -738,7 +738,7 @@ class RequestsRoute extends React.Component {
 
   massageNewRecord = (requestData) => {
     const { intl: { timeZone } } = this.props;
-    const isoDate = moment.tz(timeZone).format();
+    const isoDate = moment.tz(timeZone).toISOString();
     Object.assign(requestData, { requestDate: isoDate });
   };
 
