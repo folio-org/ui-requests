@@ -1,7 +1,5 @@
 # Change history for ui-requests
 
-## IN PROGRESS
-
 ## [8.0.1](https://github.com/folio-org/ui-requests/tree/v8.0.1) (2023-03-24)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.0...v8.0.1)
 
