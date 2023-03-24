@@ -2,6 +2,11 @@
 
 ## IN PROGRESS
 
+## [8.0.1](https://github.com/folio-org/ui-requests/tree/v8.0.1) (2023-03-24)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.0...v8.0.1)
+
+* Fix error with proxyUserId when it is not cleared. Refs UIREQ-919.
+
 ## [8.0.0](https://github.com/folio-org/ui-requests/tree/v8.0.0) (2023-02-22)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.2.4...v8.0.0)
 

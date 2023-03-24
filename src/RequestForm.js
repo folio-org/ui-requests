@@ -532,6 +532,7 @@ class RequestForm extends React.Component {
       });
       form.change('pickupServicePointId', undefined);
       form.change('deliveryAddressTypeId', undefined);
+      form.change('proxyUserId', undefined);
 
       return findResource(RESOURCE_TYPES.USER, value, fieldName)
         .then((result) => {
