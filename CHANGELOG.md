@@ -6,6 +6,7 @@
 * Fix error with proxyUserId when it is not cleared. Refs UIREQ-919.
 * Fix incorrect formatting of request date. Refs UIREQ-922.
 * UI tests replacement with RTL/Jest for urls. Refs UIREQ-896.
+* TLR: After editing a request, connection between request and item is no longer visible. Refs UIREQ-920.
 
 ## [8.0.0](https://github.com/folio-org/ui-requests/tree/v8.0.0) (2023-02-22)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.2.4...v8.0.0)
