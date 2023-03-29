@@ -211,7 +211,11 @@ class ViewRequest extends React.Component {
   }
 
   update(record) {
-    const updatedRecord = record;
+    const requestFromProps = this.getRequestFromProps() || {};
+    const updatedRecord = {
+      ...requestFromProps,
+      ...record,
+    };
 
     // Remove the "enhanced record" fields that aren't part of the request schema (and thus can't)
     // be included in the record PUT, or the save will fail
@@ -317,11 +321,26 @@ class ViewRequest extends React.Component {
     history.push(`${urls.requestQueueView(request.id, idForHistory)}${search}`, { request });
   }
 
+  getRequestFromProps = () => {
+    const {
+      resources: {
+        selectedRequest,
+      },
+      match: {
+        params: {
+          id,
+        },
+      },
+    } = this.props;
+    const currentRequest = selectedRequest?.records || [];
+
+    if (!id || currentRequest.length === 0) return null;
+
+    return currentRequest.find(r => r.id === id);
+  }
+
   getRequest() {
-    const { resources, match: { params: { id } } } = this.props;
-    const selRequest = (resources.selectedRequest || {}).records || [];
-    if (!id || selRequest.length === 0) return null;
-    const curRequest = selRequest.find(r => r.id === id);
+    const curRequest = this.getRequestFromProps();
 
     if (!curRequest) return null;
 
