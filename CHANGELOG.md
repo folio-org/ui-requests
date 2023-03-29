@@ -1,5 +1,10 @@
 # Change history for ui-requests
 
+## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)
+
+* TLR: After editing a request, connection between request and item is no longer visible. Refs UIREQ-920.
+
 ## [8.0.1](https://github.com/folio-org/ui-requests/tree/v8.0.1) (2023-03-24)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.0...v8.0.1)
 
