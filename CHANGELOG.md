@@ -4,6 +4,7 @@
 
 * Made code improvements related to TLR. Refs UIREQ-871.
 * UI tests replacement with RTL/Jest for urls. Refs UIREQ-896.
+* Reassign limit variable from hardcoded value to MAX_RECORDS constant for `ItemsDialog.js`. Refs UIREQ-913.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)

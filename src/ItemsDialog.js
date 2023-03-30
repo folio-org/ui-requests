@@ -27,6 +27,7 @@ import {
   itemStatuses,
   itemStatusesTranslations,
   requestableItemStatuses,
+  MAX_RECORDS,
 } from './constants';
 import { Loading } from './components';
 
@@ -93,7 +94,7 @@ const ItemsDialog = ({
     const query = holdings.map(h => `holdingsRecordId==${h.id}`).join(' or ');
     mutator.items.reset();
 
-    return mutator.items.GET({ params: { query, limit: 1000 } });
+    return mutator.items.GET({ params: { query, limit: MAX_RECORDS } });
   };
 
   const fetchRequests = async (itemsList) => {
@@ -111,7 +112,7 @@ const ItemsDialog = ({
 
       mutator.requests.reset();
       // eslint-disable-next-line no-await-in-loop
-      const result = await mutator.requests.GET({ params: { query, limit: 1000 } });
+      const result = await mutator.requests.GET({ params: { query, limit: MAX_RECORDS } });
 
       data.push(...result);
     }
