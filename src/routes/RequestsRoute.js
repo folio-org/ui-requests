@@ -212,7 +212,7 @@ class RequestsRoute extends React.Component {
       path: 'groups',
       params: {
         query: 'cql.allRecords=1 sortby group',
-        limit: '200',
+        limit: MAX_RECORDS,
       },
       records: 'usergroups',
     },
@@ -281,7 +281,7 @@ class RequestsRoute extends React.Component {
       path: 'staff-slips-storage/staff-slips',
       params: {
         query: 'cql.allRecords=1 sortby name',
-        limit: '100',
+        limit: MAX_RECORDS,
       },
 
       throwErrors: false,
