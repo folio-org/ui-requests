@@ -1110,6 +1110,18 @@ class RequestsRoute extends React.Component {
 
     const columnManagerProps = {
       excludeKeys: ['title'],
+      visibleColumns: [
+        'title',
+        'requestDate',
+        'year',
+        'itemBarcode',
+        'type',
+        'requestStatus',
+        'position',
+        'requester',
+        'requesterBarcode',
+        'proxy',
+      ],
     };
 
     return (
