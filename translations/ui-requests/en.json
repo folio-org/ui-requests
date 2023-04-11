@@ -48,6 +48,7 @@
   "requests.queuePosition": "Queue position",
   "requests.itemBarcode": "Item barcode",
   "requests.callNumber": "Effective call number string",
+  "requests.servicePoint": "Pickup service point",
   "requests.createTitleLevelRequest": "Create title level request",
 
   "requestMeta.detailLabel": "Request Detail",
