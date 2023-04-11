@@ -187,6 +187,7 @@ class RequestsRoute extends React.Component {
               'type': 'requestType',
               'requester': 'requester.lastName requester.firstName',
               'requestStatus': 'status',
+              'servicePoint': 'searchIndex.pickupServicePointName',
               'requesterBarcode': 'requester.barcode',
               'requestDate': 'requestDate',
               'position': 'position/number',
@@ -436,6 +437,7 @@ class RequestsRoute extends React.Component {
       type: formatMessage({ id: 'ui-requests.requests.type' }),
       requestStatus: formatMessage({ id: 'ui-requests.requests.status' }),
       position: formatMessage({ id: 'ui-requests.requests.queuePosition' }),
+      servicePoint: formatMessage({ id: 'ui-requests.requests.servicePoint' }),
       requester: formatMessage({ id: 'ui-requests.requests.requester' }),
       requesterBarcode: formatMessage({ id: 'ui-requests.requests.requesterBarcode' }),
       proxy: formatMessage({ id: 'ui-requests.requests.proxy' }),
@@ -1022,6 +1024,7 @@ class RequestsRoute extends React.Component {
       'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
       'title': rq => <TextLink to={this.getRowURL(rq.id)} onClick={() => this.setURL(rq.id)}>{(rq.instance ? rq.instance.title : '')}</TextLink>,
       'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
+      'servicePoint': rq => get(rq, 'pickupServicePoint.name', ''),
     };
 
     const actionMenu = ({ onToggle, renderColumnsMenu }) => (
