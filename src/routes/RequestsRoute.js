@@ -34,7 +34,10 @@ import {
   makeQueryFunction,
   SearchAndSort,
 } from '@folio/stripes/smart-components';
-import { exportCsv } from '@folio/stripes/util';
+import {
+  exportCsv,
+  effectiveCallNumber,
+} from '@folio/stripes/util';
 
 import ViewRequest from '../ViewRequest';
 import RequestFormContainer from '../RequestFormContainer';
@@ -178,12 +181,13 @@ class RequestsRoute extends React.Component {
         params: {
           query: makeQueryFunction(
             'cql.allRecords=1',
-            '(requesterId=="%{query.query}" or requester.barcode="%{query.query}*" or instance.title="%{query.query}*" or instanceId="%{query.query}*" or item.barcode=="%{query.query}*" or itemId=="%{query.query}" or itemIsbn="%{query.query}")',
+            '(requesterId=="%{query.query}" or requester.barcode="%{query.query}*" or instance.title="%{query.query}*" or instanceId="%{query.query}*" or item.barcode=="%{query.query}*" or itemId=="%{query.query}" or itemIsbn="%{query.query}" or searchIndex.callNumberComponents.callNumber=="%{query.query}*" or fullCallNumberIndex=="%{query.query}*")',
             {
               'title': 'instance.title',
               'instanceId': 'instanceId',
               'publication': 'instance.publication',
               'itemBarcode': 'item.barcode',
+              'callNumber': 'searchIndex.shelvingOrder',
               'type': 'requestType',
               'requester': 'requester.lastName requester.firstName',
               'requestStatus': 'status',
@@ -434,6 +438,7 @@ class RequestsRoute extends React.Component {
       title: formatMessage({ id: 'ui-requests.requests.title' }),
       year: formatMessage({ id: 'ui-requests.requests.year' }),
       itemBarcode: formatMessage({ id: 'ui-requests.requests.itemBarcode' }),
+      callNumber: formatMessage({ id: 'ui-requests.requests.callNumber' }),
       type: formatMessage({ id: 'ui-requests.requests.type' }),
       requestStatus: formatMessage({ id: 'ui-requests.requests.status' }),
       position: formatMessage({ id: 'ui-requests.requests.queuePosition' }),
@@ -1024,6 +1029,7 @@ class RequestsRoute extends React.Component {
       'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
       'title': rq => <TextLink to={this.getRowURL(rq.id)} onClick={() => this.setURL(rq.id)}>{(rq.instance ? rq.instance.title : '')}</TextLink>,
       'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
+      'callNumber': rq => effectiveCallNumber(rq.item),
       'servicePoint': rq => get(rq, 'pickupServicePoint.name', ''),
     };
 
@@ -1107,6 +1113,18 @@ class RequestsRoute extends React.Component {
 
     const columnManagerProps = {
       excludeKeys: ['title'],
+      visibleColumns: [
+        'title',
+        'requestDate',
+        'year',
+        'itemBarcode',
+        'type',
+        'requestStatus',
+        'position',
+        'requester',
+        'requesterBarcode',
+        'proxy',
+      ],
     };
 
     return (
