@@ -28,8 +28,10 @@ import {
   itemStatusesTranslations,
   requestableItemStatuses,
   MAX_RECORDS,
+  OPEN_REQUESTS_STATUSES,
 } from './constants';
 import { Loading } from './components';
+import { getStatusQuery } from './routes/utils';
 
 import css from './ItemsDialog.css';
 
@@ -108,7 +110,9 @@ const ItemsDialog = ({
 
     for (const itemChunk of chunkedItems) {
       let query = itemChunk.map(i => `itemId==${i.id}`).join(' or ');
-      query = `(${query}) and (status="Open")`;
+      const statusQuery = getStatusQuery(OPEN_REQUESTS_STATUSES);
+
+      query = `(${query}) and (${statusQuery})")`;
 
       mutator.requests.reset();
       // eslint-disable-next-line no-await-in-loop

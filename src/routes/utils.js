@@ -34,3 +34,5 @@ export const getFormattedContributors = (contributors) => (
 export const isReorderableRequest = request => {
   return request.status === requestStatuses.NOT_YET_FILLED && request.requestType !== requestTypesMap.PAGE;
 };
+
+export const getStatusQuery = (statuses = []) => statuses.reduce((acc, val) => `${acc ? acc + ' or ' : acc}status=="${val}"`, '');
