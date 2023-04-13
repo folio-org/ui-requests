@@ -7,6 +7,7 @@ import {
   getFormattedPublishers,
   getFormattedContributors,
   isReorderableRequest,
+  getStatusQuery,
 } from './utils';
 
 describe('utils', () => {
@@ -136,6 +137,19 @@ describe('utils', () => {
       };
 
       expect(isReorderableRequest(request)).toBe(true);
+    });
+  });
+
+  describe('getStatusQuery', () => {
+    it('should return query string', () => {
+      const statusesList = ['test', 'test_2'];
+      const expectedResult = 'status=="test" or status=="test_2"';
+
+      expect(getStatusQuery(statusesList)).toBe(expectedResult);
+    });
+
+    it('should return empty string', () => {
+      expect(getStatusQuery()).toBe('');
     });
   });
 });

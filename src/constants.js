@@ -27,6 +27,13 @@ export const fulfilmentTypesTranslations = {
   'Hold Shelf': 'ui-requests.requestMeta.fulfilment.holdShelf.',
 };
 
+export const OPEN_REQUESTS_STATUSES = [
+  'Open - Awaiting delivery',
+  'Open - Awaiting pickup',
+  'Open - In transit',
+  'Open - Not yet filled',
+];
+
 // used to perform queries with the backend
 // not used for data display
 export const requestStatuses = {
