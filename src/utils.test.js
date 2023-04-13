@@ -651,13 +651,18 @@ describe('convertToSlipData', () => {
     postalCode: '01060',
     countryId: 'US',
   };
+  const staffSlip = {
+    currentDateTime: '3/18/22, 11:59 AM',
+  };
   const pickSlips = [{
     item,
     request,
     requester,
+    staffSlip,
   }];
   const slipData = {
     'staffSlip.Name': 'Pick slip',
+    'staffSlip.currentDateTime': '3/18/22, 11:59 AM',
     'requester.firstName': 'Steven',
     'requester.lastName': 'Jones',
     'requester.middleName': 'Jacob',
@@ -720,6 +725,7 @@ describe('convertToSlipData', () => {
         ...requester,
         countryId: '',
       },
+      staffSlip,
     }];
     const expectSlipDataWithEmptyDate = [{
       ...slipData,
@@ -761,6 +767,7 @@ describe('convertToSlipData', () => {
         ...requester,
         preferredFirstName: null,
       },
+      staffSlip,
     }];
 
     const expectSlipDataWithoutPreferredFirstName = [{

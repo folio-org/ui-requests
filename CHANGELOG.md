@@ -10,6 +10,7 @@
 * Include "Effective call number string" in display of result list. Refs UIREQ-898.
 * Include call number in Action menu list of fields to display. Refs UIREQ-899.
 * Include pickup service point in Action menu list of fields to display. Refs UIREQ-901.
+* Populate the token "currentDateTime" in the pick slip, with the data provided by the backend in the ui-requests module. Refs UIREQ-807.
 
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
