@@ -266,6 +266,8 @@
     "item.status.restricted": "Restrito",
     "errors.closingAlreadyClosedRequest": "Erro: A solicitação já foi fechada.",
     "appMenu.keyboardShortcuts": "Atalhos do teclado",
-    "navigation.app": "Buscar no aplicativo de Aquisições",
-    "navigation.keyboardShortcuts": "Atalhos do teclado"
+    "navigation.app": "Buscar no aplicativo de Pedidos",
+    "navigation.keyboardShortcuts": "Atalhos do teclado",
+    "requests.servicePoint": "Ponto de serviço para retirada",
+    "requests.callNumber": "Cadeia de número de chamada efetivo"
 }
