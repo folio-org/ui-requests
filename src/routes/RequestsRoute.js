@@ -53,6 +53,7 @@ import {
   REQUEST_LEVEL_TYPES,
   DEFAULT_DISPLAYED_YEARS_AMOUNT,
   MAX_RECORDS,
+  OPEN_REQUESTS_STATUSES,
 } from '../constants';
 import {
   buildUrl,
@@ -80,6 +81,7 @@ import RequestsRouteShortcutsWrapper from '../components/RequestsRouteShortcutsW
 import {
   isReorderableRequest,
   getFormattedYears,
+  getStatusQuery,
 } from './utils';
 
 const INITIAL_RESULT_COUNT = 30;
@@ -108,20 +110,23 @@ const urls = {
     return `inventory/instances?${query}`;
   },
   loan: (value) => {
-    const query = stringify({ query: `(itemId=="${value}") and status=Open` });
+    const query = stringify({ query: `(itemId=="${value}") and status.name==Open` });
+
     return `circulation/loans?${query}`;
   },
   requestsForItem: (value) => {
+    const statusQuery = getStatusQuery(OPEN_REQUESTS_STATUSES);
     const query = stringify({
-      query: `(itemId=="${value}" and status=Open)`,
+      query: `(itemId=="${value}" and (${statusQuery}))`,
       limit: MAX_RECORDS,
     });
 
     return `circulation/requests?${query}`;
   },
   requestsForInstance: (value) => {
+    const statusQuery = getStatusQuery(OPEN_REQUESTS_STATUSES);
     const query = stringify({
-      query: `(instanceId=="${value}" and status=Open)`,
+      query: `(instanceId=="${value}" and (${statusQuery}))`,
       limit: MAX_RECORDS,
     });
 
