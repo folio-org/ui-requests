@@ -100,7 +100,7 @@ describe('utils', () => {
       region: 'MA',
       postalCode: '01060',
       countryId: 'US',
-      departments: ['department1', 'department2'],
+      departments: 'department1; department2',
     };
     const pickSlips = [{
       item,
