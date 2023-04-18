@@ -267,5 +267,7 @@
     "errors.closingAlreadyClosedRequest": "Error: The Request has already been closed.",
     "appMenu.keyboardShortcuts": "Keyboard shortcuts",
     "navigation.app": "Requests app Search",
-    "navigation.keyboardShortcuts": "Keyboard shortcuts"
+    "navigation.keyboardShortcuts": "Keyboard shortcuts",
+    "requests.servicePoint": "Pickup service point",
+    "requests.callNumber": "Effective call number string"
 }

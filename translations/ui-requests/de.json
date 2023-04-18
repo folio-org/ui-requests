@@ -267,5 +267,7 @@
     "errors.closingAlreadyClosedRequest": "Fehler: Bestandsanfrage wurde bereits geschlossen",
     "appMenu.keyboardShortcuts": "Tastenkürzel",
     "navigation.app": "Suche in Bestandsanfragen",
-    "navigation.keyboardShortcuts": "Tastenkürzel"
+    "navigation.keyboardShortcuts": "Tastenkürzel",
+    "requests.servicePoint": "Pickup service point",
+    "requests.callNumber": "Effective call number string"
 }

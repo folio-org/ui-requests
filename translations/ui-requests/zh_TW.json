@@ -267,5 +267,7 @@
     "errors.closingAlreadyClosedRequest": "錯誤: 此請求已關閉",
     "appMenu.keyboardShortcuts": "Keyboard shortcuts",
     "navigation.app": "Requests app Search",
-    "navigation.keyboardShortcuts": "Keyboard shortcuts"
+    "navigation.keyboardShortcuts": "Keyboard shortcuts",
+    "requests.servicePoint": "Pickup service point",
+    "requests.callNumber": "Effective call number string"
 }
