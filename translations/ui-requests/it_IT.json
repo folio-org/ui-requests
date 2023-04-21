@@ -267,5 +267,7 @@
     "errors.closingAlreadyClosedRequest": "Errore: la richiesta è già stata chiusa.",
     "appMenu.keyboardShortcuts": "Scorciatoie da tastiera",
     "navigation.app": "Ricerca nell'app Richieste",
-    "navigation.keyboardShortcuts": "Scorciatoie da tastiera"
+    "navigation.keyboardShortcuts": "Scorciatoie da tastiera",
+    "requests.servicePoint": "Pickup service point",
+    "requests.callNumber": "Effective call number string"
 }
