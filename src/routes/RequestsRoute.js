@@ -56,6 +56,9 @@ import {
   OPEN_REQUESTS_STATUSES,
 } from '../constants';
 import {
+  getHeaderWithCredentials,
+} from './headers';
+import {
   buildUrl,
   getFullName,
   duplicateRequest,
@@ -432,10 +435,12 @@ class RequestsRoute extends React.Component {
     } = getTlrSettings(props.resources.configs.records[0]?.value);
 
     this.okapiUrl = props.stripes.okapi.url;
-    this.httpHeaders = {
-      'X-Okapi-Tenant': props.stripes.okapi.tenant,
-      'X-Okapi-Token': props.stripes.store.getState().okapi.token,
-      'Content-Type': 'application/json',
+
+    this.httpHeadersOptions = {
+      ...getHeaderWithCredentials({
+        tenant: this.props.stripes.okapi.tenant,
+        token: this.props.stripes.store.getState().okapi.token,
+      })
     };
 
     this.columnLabels = {
@@ -673,8 +678,8 @@ class RequestsRoute extends React.Component {
   // idType can be 'id', 'barcode', etc.
   findResource(resource, value, idType = 'id') {
     const query = urls[resource](value, idType);
-    const options = { headers: this.httpHeaders };
-    return fetch(`${this.okapiUrl}/${query}`, options).then(response => response.json());
+
+    return fetch(`${this.okapiUrl}/${query}`, this.httpHeadersOptions).then(response => response.json());
   }
 
   toggleModal() {
