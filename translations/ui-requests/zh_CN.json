@@ -267,5 +267,7 @@
     "errors.closingAlreadyClosedRequest": "错误：请求已关闭。",
     "appMenu.keyboardShortcuts": "键盘快捷键",
     "navigation.app": "请求应用程序搜索",
-    "navigation.keyboardShortcuts": "键盘快捷键"
+    "navigation.keyboardShortcuts": "键盘快捷键",
+    "requests.servicePoint": "Pickup service point",
+    "requests.callNumber": "Effective call number string"
 }
