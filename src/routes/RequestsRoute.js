@@ -37,6 +37,7 @@ import {
 import {
   exportCsv,
   effectiveCallNumber,
+  getHeaderWithCredentials,
 } from '@folio/stripes/util';
 
 import ViewRequest from '../ViewRequest';
@@ -55,9 +56,6 @@ import {
   MAX_RECORDS,
   OPEN_REQUESTS_STATUSES,
 } from '../constants';
-import {
-  getHeaderWithCredentials,
-} from './headers';
 import {
   buildUrl,
   getFullName,
