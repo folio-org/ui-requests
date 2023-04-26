@@ -254,6 +254,7 @@ export const convertToSlipData = (source, intl, timeZone, locale, slipName = 'Pi
       'item.fromServicePoint': item.fromServicePoint,
       'item.toServicePoint': item.toServicePoint,
       'item.effectiveLocationInstitution': item.effectiveLocationInstitution,
+      'item.effectiveLocationPrimaryServicePointName': item.effectiveLocationPrimaryServicePointName,
       'item.effectiveLocationCampus': item.effectiveLocationCampus,
       'item.effectiveLocationLibrary': item.effectiveLocationLibrary,
       'item.effectiveLocationSpecific': item.effectiveLocationSpecific,
