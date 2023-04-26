@@ -17,7 +17,7 @@ import {
   ENTER_EVENT_KEY,
   REQUEST_FORM_FIELD_NAMES,
 } from '../../constants';
-import { TitleInformation } from '../';
+import { TitleInformation } from '..';
 import {
   isFormEditing,
   memoizeValidation,
@@ -187,7 +187,7 @@ class InstanceInformation extends Component {
                           validate={this.validate(REQUEST_FORM_FIELD_NAMES.INSTANCE_HRID, key)}
                           validateFields={[]}
                         >
-                          {({input, meta}) => {
+                          {({ input, meta }) => {
                             const selectInstanceError = meta.touched && meta.error;
                             const instanceDoesntExistError = (isInstanceClicked || isInstanceBlurred) && meta.error;
                             const error = selectInstanceError || instanceDoesntExistError || null;
@@ -197,7 +197,7 @@ class InstanceInformation extends Component {
                                 {...input}
                                 required
                                 placeholder={placeholder}
-                                label={<FormattedMessage id="ui-requests.instance.value"/>}
+                                label={<FormattedMessage id="ui-requests.instance.value" />}
                                 error={error}
                                 onChange={this.handleChange}
                                 onBlur={this.handleBlur(input)}
@@ -218,7 +218,7 @@ class InstanceInformation extends Component {
                     onClick={this.handleClick}
                     disabled={submitting}
                   >
-                    <FormattedMessage id="ui-requests.enter"/>
+                    <FormattedMessage id="ui-requests.enter" />
                   </Button>
                 </Col>
               </Row>
@@ -227,7 +227,7 @@ class InstanceInformation extends Component {
                   <Pluggable
                     searchButtonStyle="link"
                     type="find-instance"
-                    searchLabel={<FormattedMessage id="ui-requests.titleLookupPlugin"/>}
+                    searchLabel={<FormattedMessage id="ui-requests.titleLookupPlugin" />}
                     selectInstance={(instanceFromPlugin) => findInstance(instanceFromPlugin.hrid)}
                     config={{
                       availableSegments: [{
@@ -261,7 +261,7 @@ class InstanceInformation extends Component {
         </Col>
       </Row>
     );
-  };
+  }
 }
 
 export default InstanceInformation;

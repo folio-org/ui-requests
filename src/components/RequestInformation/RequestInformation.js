@@ -1,6 +1,7 @@
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'react-final-form';
 import { get } from 'lodash';
+import PropTypes from 'prop-types';
 
 import {
   Col,
@@ -22,7 +23,6 @@ import {
 } from '../../constants';
 import PositionLink from '../../PositionLink';
 import { isFormEditing } from '../../utils';
-import PropTypes from "prop-types";
 
 const RequestInformation = ({
   request,
@@ -214,7 +214,7 @@ RequestInformation.propTypes = {
   isTlrEnabledOnEditPage: PropTypes.bool.isRequired,
   MetadataDisplay: PropTypes.func.isRequired,
   requestTypeError: PropTypes.bool,
-  requestTypeOptions: PropTypes.array,
+  requestTypeOptions: PropTypes.arrayOf(PropTypes.object),
   request: PropTypes.object,
 };
 
