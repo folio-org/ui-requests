@@ -301,3 +301,26 @@ export const RESOURCE_TYPES = {
   USER: 'user',
   HOLDING: 'holding',
 };
+
+export const ENTER_EVENT_KEY = 'Enter';
+
+export const RESOURCE_KEYS = {
+  id: 'id',
+  barcode: 'barcode',
+};
+
+export const REQUEST_FORM_FIELD_NAMES = {
+  CREATE_TLR: 'createTitleLevelRequest',
+  FULFILMENT_PREFERENCE: 'fulfilmentPreference',
+  DELIVERY_ADDRESS_TYPE_ID: 'deliveryAddressTypeId',
+  REQUESTER_ID: 'requesterId',
+  REQUESTER: 'requester',
+  PROXY_USER_ID: 'proxyUserId',
+  PICKUP_SERVICE_POINT_ID: 'pickupServicePointId',
+  ITEM_ID: 'itemId',
+  ITEM_BARCODE: 'item.barcode',
+  REQUEST_TYPE: 'requestType',
+  INSTANCE_ID: 'instanceId',
+  INSTANCE_HRID: 'instance.hrid',
+  REQUESTER_BARCODE: 'requester.barcode',
+};
