@@ -597,6 +597,20 @@ class RequestForm extends React.Component {
     });
   }
 
+  setItemIdRequest = (key, isBarcodeRequired) => {
+    const { isItemIdRequest } = this.state;
+
+    if (key === RESOURCE_KEYS.id && !isBarcodeRequired) {
+      this.setState({
+        isItemIdRequest: true,
+      });
+    } else if (key === RESOURCE_KEYS.barcode && isItemIdRequest) {
+      this.setState({
+        isItemIdRequest: false,
+      });
+    }
+  };
+
   findItem = (key, value, isValidation = false, isBarcodeRequired = false) => {
     const {
       findResource,
@@ -604,9 +618,6 @@ class RequestForm extends React.Component {
       onSetSelectedItem,
       onShowErrorModal,
     } = this.props;
-    const {
-      isItemIdRequest,
-    } = this.state;
 
     this.setState({
       isItemOrInstanceLoading: true,
@@ -627,15 +638,7 @@ class RequestForm extends React.Component {
 
       return findResource(RESOURCE_TYPES.ITEM, value, key)
         .then((result) => {
-          if (key === RESOURCE_KEYS.id && !isBarcodeRequired) {
-            this.setState({
-              isItemIdRequest: true,
-            });
-          } else if (key === RESOURCE_KEYS.barcode && isItemIdRequest) {
-            this.setState({
-              isItemIdRequest: false,
-            });
-          }
+          this.setItemIdRequest(key, isBarcodeRequired);
 
           if (!result || result.totalRecords === 0) {
             this.setState({
