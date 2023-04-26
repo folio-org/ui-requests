@@ -267,7 +267,15 @@ export const convertToSlipData = (source, intl, timeZone, locale, slipName = 'Pi
         ? intl.formatDate(request.requestDate, { timeZone, locale })
         : request.requestDate,
       'request.holdShelfExpirationDate': request.holdShelfExpirationDate
-        ? intl.formatDate(request.holdShelfExpirationDate, { timeZone, locale })
+        ? intl.formatDate(request.holdShelfExpirationDate, {
+          timeZone,
+          locale,
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric'
+        })
         : request.holdShelfExpirationDate,
       'request.requestID': request.requestID,
       'request.patronComments': request.patronComments,
