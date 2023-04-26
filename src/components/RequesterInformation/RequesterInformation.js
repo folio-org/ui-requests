@@ -245,7 +245,7 @@ class RequesterInformation extends Component {
     } = this.state;
     const isEditForm = isFormEditing(request);
     const { fulfilmentPreference } = request || {};
-    const isAddressSelected = values?.deliveryAddressTypeId !== undefined || values?.pickupServicePointId !== undefined
+    const isAddressSelected = values?.deliveryAddressTypeId !== undefined || values?.pickupServicePointId !== undefined;
 
     return (
       <Row>
