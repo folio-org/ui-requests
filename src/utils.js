@@ -217,7 +217,7 @@ export const convertToSlipData = (source, intl, timeZone, locale, slipName = 'Pi
 
     return {
       'staffSlip.Name': slipName,
-      'staffSlip.currentDateTime': intl.formatDate(currentDateTime, { timeZone, locale }) + ', ' + intl.formatTime(currentDateTime),
+      'staffSlip.currentDateTime': `${intl.formatDate(currentDateTime, { timeZone, locale })}, ${intl.formatTime(currentDateTime)}`,
       'requester.firstName': requester.firstName,
       'requester.lastName': requester.lastName,
       'requester.middleName': requester.middleName,
