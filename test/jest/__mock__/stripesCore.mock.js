@@ -3,8 +3,8 @@ import buildStripes from './stripes.mock';
 
 const mockStripes = buildStripes();
 
-jest.mock('@folio/stripes/core', () => ({
-  ...jest.requireActual('@folio/stripes/core'),
+jest.mock('@folio/stripes-core', () => ({
+  ...jest.requireActual('@folio/stripes-core'),
   AppContextMenu: ({ children }) => (typeof children === 'function' ? children(jest.fn()) : children),
   IntlConsumer: jest.fn(({ children }) => {
     const intl = {
