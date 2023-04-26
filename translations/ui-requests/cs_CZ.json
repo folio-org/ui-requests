@@ -267,5 +267,7 @@
     "errors.closingAlreadyClosedRequest": "Chyba: Žádanka byla již uzavřena.",
     "appMenu.keyboardShortcuts": "Klávesové zkratky",
     "navigation.app": "Vyhledat požadavek",
-    "navigation.keyboardShortcuts": "Klávesové zkratky"
+    "navigation.keyboardShortcuts": "Klávesové zkratky",
+    "requests.servicePoint": "Pult služeb pro vyzvednutí",
+    "requests.callNumber": "Efektivní signatura"
 }

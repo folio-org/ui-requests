@@ -650,6 +650,7 @@ describe('convertToSlipData', () => {
     region: 'MA',
     postalCode: '01060',
     countryId: 'US',
+    departments: 'department1; department2',
   };
   const currentDateTime = '3/18/22, 11:59 AM';
   const pickSlips = [{
@@ -674,6 +675,7 @@ describe('convertToSlipData', () => {
     'requester.zipPostalCode': '01060',
     'requester.barcode': '5694596854',
     'requester.barcodeImage': '<Barcode>5694596854</Barcode>',
+    'requester.departments': 'department1; department2',
     'item.fromServicePoint': undefined,
     'item.toServicePoint': undefined,
     'item.title': 'The Long Way to a Small, Angry Planet',
