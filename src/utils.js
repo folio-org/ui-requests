@@ -231,6 +231,7 @@ export const convertToSlipData = (source, intl, timeZone, locale, slipName = 'Pi
       'requester.zipPostalCode': requester.postalCode,
       'requester.barcode': requester.barcode,
       'requester.barcodeImage': `<Barcode>${requester.barcode}</Barcode>`,
+      'requester.departments': requester.departments,
       'item.title': item.title,
       'item.primaryContributor': item.primaryContributor,
       'item.allContributors': item.allContributors,

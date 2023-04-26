@@ -45,9 +45,9 @@ import {
   ItemInformation,
   InstanceInformation,
   RequestInformation,
+  RequesterInformation,
 } from './components';
 import ItemsDialog from './ItemsDialog';
-import RequesterInformation from './components/RequesterInformation';
 import {
   iconTypes,
   fulfilmentTypeMap,
