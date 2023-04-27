@@ -68,7 +68,7 @@ describe('PositionLink', () => {
         expect(screen.getByText(labelIds.viewRequestsInQueue)).toBeInTheDocument();
       });
 
-      it('should render view requests in queue', () => {
+      it('should create correct href', () => {
         const filters = 'requestStatus.Open - Not yet filled,requestStatus.Open - Awaiting pickup,requestStatus.Open - Awaiting delivery,requestStatus.Open - In transit';
         const href = `/requests?filters=${filters}&query=${isTlrEnabled ? 'instanceId' : 'itemId'}&sort=Request Date`;
 
