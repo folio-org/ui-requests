@@ -24,6 +24,8 @@ import {
 import PositionLink from '../../PositionLink';
 import { isFormEditing } from '../../utils';
 
+const DATE_FORMAT = 'YYYY-MM-DD';
+
 const RequestInformation = ({
   request,
   requestTypeOptions,
@@ -36,7 +38,7 @@ const RequestInformation = ({
   const isEditForm = isFormEditing(request);
   const holdShelfExpireDate = get(request, ['status'], '') === requestStatuses.AWAITING_PICKUP
     ? <FormattedDate value={get(request, ['holdShelfExpirationDate'], '')} />
-    : '-';
+    : <NoValue />;
   const isMetadata = isEditForm && request?.metadata;
   const isRequestTypeMessage = !isEditForm && !requestTypeOptions?.length && !requestTypeError;
   const isExpirationDate = isEditForm && request.status === requestStatuses.AWAITING_PICKUP;
@@ -128,7 +130,7 @@ const RequestInformation = ({
                 label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
                 aria-label={<FormattedMessage id="ui-requests.requestExpirationDate" />}
                 component={Datepicker}
-                dateFormat="YYYY-MM-DD"
+                dateFormat={DATE_FORMAT}
                 id="requestExpirationDate"
               />
             </Col>
@@ -164,7 +166,7 @@ const RequestInformation = ({
                     label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
                     aria-label={<FormattedMessage id="ui-requests.holdShelfExpirationDate" />}
                     component={Datepicker}
-                    dateFormat="YYYY-MM-DD"
+                    dateFormat={DATE_FORMAT}
                   />
                 </Col>
                 <Col xs={3}>

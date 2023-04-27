@@ -27,6 +27,7 @@ import {
   REQUEST_FORM_FIELD_NAMES,
   RESOURCE_KEYS,
   ENTER_EVENT_KEY,
+  BASE_SPINNER_PROPS,
 } from '../../constants';
 
 import css from '../../requests.css';
@@ -48,7 +49,6 @@ class RequesterInformation extends Component {
     submitting: PropTypes.bool.isRequired,
     onSetIsPatronBlocksOverridden: PropTypes.func.isRequired,
     onSetBlocked: PropTypes.func.isRequired,
-    isLoading: PropTypes.bool.isRequired,
     changeDeliveryAddress: PropTypes.func.isRequired,
     onChangeAddress: PropTypes.func.isRequired,
     onSelectProxy: PropTypes.func.isRequired,
@@ -56,6 +56,7 @@ class RequesterInformation extends Component {
     findUser: PropTypes.func.isRequired,
     triggerUserBarcodeValidation: PropTypes.func.isRequired,
     stripes: stripesShape.isRequired,
+    isLoading: PropTypes.bool,
     request: PropTypes.object,
     optionLists: PropTypes.object,
     selectedProxy: PropTypes.object,
@@ -332,11 +333,8 @@ class RequesterInformation extends Component {
               onCloseProxy={handleCloseProxy}
             />
           }
-          {isLoading &&
-            <Icon
-              icon="spinner-ellipsis"
-              width="10px"
-            />
+          {
+            isLoading && <Icon {...BASE_SPINNER_PROPS} />
           }
         </Col>
       </Row>

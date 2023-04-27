@@ -16,6 +16,7 @@ import {
   REQUEST_FORM_FIELD_NAMES,
   RESOURCE_KEYS,
   ENTER_EVENT_KEY,
+  BASE_SPINNER_PROPS,
 } from '../../constants';
 import ItemDetail from '../../ItemDetail';
 import {
@@ -229,11 +230,7 @@ class ItemInformation extends Component {
             </Row>
           }
           {
-            isLoading &&
-              <Icon
-                icon="spinner-ellipsis"
-                width="10px"
-              />
+            isLoading && <Icon {...BASE_SPINNER_PROPS} />
           }
           {
             selectedItem &&

@@ -14,6 +14,7 @@ import {
 import { Pluggable } from '@folio/stripes/core';
 
 import {
+  BASE_SPINNER_PROPS,
   ENTER_EVENT_KEY,
   REQUEST_FORM_FIELD_NAMES,
 } from '../../constants';
@@ -29,7 +30,6 @@ const INSTANCE_SEGMENT_FOR_PLUGIN = 'instances';
 
 class InstanceInformation extends Component {
   static propTypes = {
-    request: PropTypes.object.isRequired,
     triggerValidation: PropTypes.func.isRequired,
     findInstance: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
@@ -37,8 +37,9 @@ class InstanceInformation extends Component {
     values: PropTypes.object.isRequired,
     onSetSelectedInstance: PropTypes.func.isRequired,
     isLoading: PropTypes.bool.isRequired,
-    instanceRequestCount: PropTypes.number.isRequired,
     instanceId: PropTypes.string.isRequired,
+    request: PropTypes.object,
+    instanceRequestCount: PropTypes.number,
     selectedInstance: PropTypes.object,
   };
 
@@ -240,11 +241,7 @@ class InstanceInformation extends Component {
             </>
           }
           {
-            isLoading &&
-              <Icon
-                icon="spinner-ellipsis"
-                width="10px"
-              />
+            isLoading && <Icon {...BASE_SPINNER_PROPS} />
           }
           {
             isTitleInfoVisible &&

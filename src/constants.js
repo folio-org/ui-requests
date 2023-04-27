@@ -324,3 +324,8 @@ export const REQUEST_FORM_FIELD_NAMES = {
   INSTANCE_HRID: 'instance.hrid',
   REQUESTER_BARCODE: 'requester.barcode',
 };
+
+export const BASE_SPINNER_PROPS = {
+  icon: 'spinner-ellipsis',
+  width: '10px',
+};
