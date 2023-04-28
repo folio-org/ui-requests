@@ -111,7 +111,7 @@ describe('utils', () => {
     }];
     const slipData = {
       'staffSlip.Name': 'Pick slip',
-      'staffSlip.currentDateTime': '3/18/22, 11:59 AM',
+      'staffSlip.currentDateTime': buildLocaleDateAndTime(currentDateTime, timeZone, locale),
       'requester.firstName': 'Steven',
       'requester.lastName': 'Jones',
       'requester.middleName': 'Jacob',
