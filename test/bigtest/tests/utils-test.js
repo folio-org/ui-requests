@@ -175,6 +175,7 @@ describe('utils', () => {
           ...requester,
           countryId: '',
         },
+        currentDateTime,
       }];
       const expectSlipDataWithEmptyDate = [{
         ...slipData,
