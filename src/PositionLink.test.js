@@ -49,7 +49,7 @@ describe('PositionLink', () => {
       />
     );
   };
-  const positionLink = (isTlrEnabled) => {
+  const runPositionLinkTestsWithParam = (isTlrEnabled) => {
     describe(`with normal config and TLR ${isTlrEnabled}`, () => {
       beforeEach(() => renderComponent({
         ...normalConfig,
@@ -85,6 +85,6 @@ describe('PositionLink', () => {
     });
   });
 
-  positionLink(true);
-  positionLink(false);
+  runPositionLinkTestsWithParam(true);
+  runPositionLinkTestsWithParam(false);
 });
