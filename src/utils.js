@@ -212,10 +212,12 @@ export const convertToSlipData = (source, intl, timeZone, locale, slipName = 'Pi
       item = {},
       request = {},
       requester = {},
+      currentDateTime = null,
     } = pickSlip;
 
     return {
       'staffSlip.Name': slipName,
+      'staffSlip.currentDateTime': buildLocaleDateAndTime(currentDateTime, timeZone, locale),
       'requester.firstName': requester.firstName,
       'requester.lastName': requester.lastName,
       'requester.middleName': requester.middleName,

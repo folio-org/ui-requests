@@ -70,6 +70,7 @@ export const formatter = {
 };
 
 export const MAX_HEIGHT = 500;
+const CHUNK_SIZE = 40;
 
 const ItemsDialog = ({
   onClose,
@@ -89,23 +90,30 @@ const ItemsDialog = ({
     const query = `instanceId==${instanceId}`;
     mutator.holdings.reset();
 
-    return mutator.holdings.GET({ params: { query } });
+    return mutator.holdings.GET({ params: { query, limit: MAX_RECORDS } });
   };
 
-  const fetchItems = (holdings) => {
-    const query = holdings.map(h => `holdingsRecordId==${h.id}`).join(' or ');
-    mutator.items.reset();
+  const fetchItems = async (holdings) => {
+    const chunkedItems = chunk(holdings, CHUNK_SIZE);
+    const data = [];
 
-    return mutator.items.GET({ params: { query, limit: MAX_RECORDS } });
+    for (const itemChunk of chunkedItems) {
+      const query = itemChunk.map(i => `holdingsRecordId==${i.id}`).join(' or ');
+
+      mutator.items.reset();
+      // eslint-disable-next-line no-await-in-loop
+      const result = await mutator.items.GET({ params: { query, limit: MAX_RECORDS } });
+
+      data.push(...result);
+    }
+
+    return data;
   };
 
   const fetchRequests = async (itemsList) => {
     // Split the list of items into small chunks to create a short enough query string
     // that we can avoid a "414 Request URI Too Long" response from Okapi.
-    const CHUNK_SIZE = 40;
-
     const chunkedItems = chunk(itemsList, CHUNK_SIZE);
-
     const data = [];
 
     for (const itemChunk of chunkedItems) {

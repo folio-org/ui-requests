@@ -652,13 +652,16 @@ describe('convertToSlipData', () => {
     countryId: 'US',
     departments: 'department1; department2',
   };
+  const currentDateTime = '2023-04-28T06:04:54.296Z';
   const pickSlips = [{
     item,
     request,
     requester,
+    currentDateTime,
   }];
   const slipData = {
     'staffSlip.Name': 'Pick slip',
+    'staffSlip.currentDateTime': buildLocaleDateAndTime(currentDateTime, tz, locale),
     'requester.firstName': 'Steven',
     'requester.lastName': 'Jones',
     'requester.middleName': 'Jacob',
@@ -722,6 +725,7 @@ describe('convertToSlipData', () => {
         ...requester,
         countryId: '',
       },
+      currentDateTime,
     }];
     const expectSlipDataWithEmptyDate = [{
       ...slipData,
@@ -763,6 +767,7 @@ describe('convertToSlipData', () => {
         ...requester,
         preferredFirstName: null,
       },
+      currentDateTime,
     }];
 
     const expectSlipDataWithoutPreferredFirstName = [{

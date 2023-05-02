@@ -102,13 +102,16 @@ describe('utils', () => {
       countryId: 'US',
       departments: 'department1; department2',
     };
+    const currentDateTime = '3/18/22, 11:59 AM';
     const pickSlips = [{
       item,
       request,
       requester,
+      currentDateTime,
     }];
     const slipData = {
       'staffSlip.Name': 'Pick slip',
+      'staffSlip.currentDateTime': buildLocaleDateAndTime(currentDateTime, timeZone, locale),
       'requester.firstName': 'Steven',
       'requester.lastName': 'Jones',
       'requester.middleName': 'Jacob',
@@ -172,6 +175,7 @@ describe('utils', () => {
           ...requester,
           countryId: '',
         },
+        currentDateTime,
       }];
       const expectSlipDataWithEmptyDate = [{
         ...slipData,
