@@ -412,4 +412,85 @@ describe('ItemsDialog', () => {
       }
     });
   });
+
+  describe('formatter', () => {
+    const item = {
+      status: {
+        name: 'Aged to lost',
+      },
+      effectiveLocation: {
+        name: 'effective location name',
+      },
+      materialType: {
+        name: 'material type name',
+      },
+      temporaryLoanType: {
+        name: 'temporary loan type name',
+      },
+      permanentLoanType: {
+        name: 'permanent loan type name',
+      },
+    };
+
+    describe('itemStatus', () => {
+      it('should return formatted message', () => {
+        expect(formatter.itemStatus(item).props.id).toEqual('ui-requests.item.status.agedToLost');
+      });
+    });
+
+    describe('location', () => {
+      it('should return effective location name', () => {
+        expect(formatter.location(item)).toEqual('effective location name');
+      });
+
+      it('should return default value for effective location name', () => {
+        expect(formatter.location({
+          ...item,
+          effectiveLocation: {},
+        })).toEqual('');
+      });
+    });
+
+    describe('materialType', () => {
+      it('should return material type', () => {
+        expect(formatter.materialType(item)).toEqual('material type name');
+      });
+    });
+
+    describe('loanType', () => {
+      describe('with temporaryLoanType', () => {
+        it('should return temporary loan type name', () => {
+          expect(formatter.loanType(item)).toEqual('temporary loan type name');
+        });
+
+        it('should return default value for temporary loan type name', () => {
+          expect(formatter.loanType({
+            ...item,
+            temporaryLoanType: {
+              other: '',
+            },
+          })).toEqual('');
+        });
+      });
+
+      describe('without temporaryLoanType', () => {
+        it('should return permanent loan type name', () => {
+          expect(formatter.loanType({
+            ...item,
+            temporaryLoanType: false,
+          })).toEqual('permanent loan type name');
+        });
+
+        it('should return default value for permanent loan type name', () => {
+          expect(formatter.loanType({
+            ...item,
+            temporaryLoanType: false,
+            permanentLoanType: {
+              other: '',
+            },
+          })).toEqual('');
+        });
+      });
+    });
+  });
 });
