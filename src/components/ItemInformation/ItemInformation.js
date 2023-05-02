@@ -57,7 +57,6 @@ class ItemInformation extends Component {
   validate = memoizeValidation(async (barcode) => {
     const {
       isItemIdRequest,
-      selectedItem,
       findItem,
     } = this.props;
     const { shouldValidateBarcode } = this.state;
@@ -66,7 +65,7 @@ class ItemInformation extends Component {
       return undefined;
     }
 
-    if (!barcode || (!barcode && !selectedItem?.id)) {
+    if (!barcode && !isItemIdRequest) {
       return <FormattedMessage id="ui-requests.errors.selectItemRequired" />;
     }
 
