@@ -1,8 +1,8 @@
-import get from 'lodash/get';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
+import get from 'lodash/get';
 
 import { NoValue } from '@folio/stripes/components';
 
@@ -24,7 +24,7 @@ export default function PositionLink({
 
   return requestOpenStatuses.includes(request.status)
     ? (
-      <div>
+      <div data-testid="positionLink">
         <span>
           {`${queuePosition} (${formatMessage({ id: 'ui-requests.requests' }, { number: request.numberOfReorderableRequests })})`}
           &nbsp;

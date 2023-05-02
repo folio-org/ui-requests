@@ -268,6 +268,6 @@
     "appMenu.keyboardShortcuts": "键盘快捷键",
     "navigation.app": "请求应用程序搜索",
     "navigation.keyboardShortcuts": "键盘快捷键",
-    "requests.servicePoint": "Pickup service point",
-    "requests.callNumber": "Effective call number string"
+    "requests.servicePoint": "取件服务点",
+    "requests.callNumber": "有效的索书号字符串"
 }
