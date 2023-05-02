@@ -15,6 +15,7 @@
 * UI tests replacement with RTL/Jest for src/PositionLink.js. Refs UIREQ-879.
 * Populate the token "currentDateTime" in the pick slip, with the data provided by the backend in the ui-requests module. Refs UIREQ-807.
 * Requests for Items on Instances with more than 10 holdings do not allow a user to move a request to all requestable items. Refs UIREQ-929.
+* Split RequestForm component into three smaller parts. Refs UIREQ-836.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)
