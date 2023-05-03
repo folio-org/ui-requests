@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import {
   Field,
 } from 'react-final-form';
-
 import {
   FormattedMessage,
 } from 'react-intl';
+import { parse } from 'query-string';
 
 import {
   sortBy,
@@ -178,7 +178,7 @@ class RequestForm extends React.Component {
       titleLevelRequestsFeatureEnabled,
       isItemOrInstanceLoading: false,
       isItemsDialogOpen: false,
-      isItemIdRequest: Boolean(this.props.query?.itemId),
+      isItemIdRequest: this.isItemIdProvided(),
     };
 
     this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
@@ -308,6 +308,16 @@ class RequestForm extends React.Component {
         this.setTlrCheckboxInitialState(),
       );
     }
+  }
+
+  isItemIdProvided = () => {
+    const {
+      query,
+      location,
+    } = this.props;
+    const itemId = query?.itemId || parse(location.search)?.itemId;
+
+    return Boolean(itemId);
   }
 
   getTlrSettings() {
