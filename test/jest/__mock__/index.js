@@ -6,3 +6,4 @@ import './stripesComponents.mock';
 import './stripesIcon.mock';
 import './stripesCore.mock';
 import './stripesSmartComponents.mock';
+import './reactToPrint.mock';

@@ -17,6 +17,7 @@
 * Requests for Items on Instances with more than 10 holdings do not allow a user to move a request to all requestable items. Refs UIREQ-929.
 * Split RequestForm component into three smaller parts. Refs UIREQ-836.
 * Cannot save item request from item with status On Order, because need a barcode. Refs UIREQ-924.
+* Cover `src/components/PrintButton/PrintButton.js` file by RTL/Jest tests. Refs UIREQ-886.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)
