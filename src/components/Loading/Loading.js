@@ -8,11 +8,15 @@ const Loading = () => {
   const spinnerStyle = { maxWidth: '15rem', height: '8rem' };
 
   return (
-    <Layout className="centered full" style={spinnerStyle}>
+    <Layout
+      data-testid="loading"
+      className="centered full"
+      style={spinnerStyle}
+    >
       <div className={css.spinner}>
         <div className={css.bounce1} />
         <div className={css.bounce2} />
-        <div className={css.bounce3} />
+        <div />
       </div>
     </Layout>
   );
