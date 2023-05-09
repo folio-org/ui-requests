@@ -129,7 +129,7 @@ describe('RequestsRoute', () => {
 
   const defaultExpectedProps = {
     requestType: 'Hold',
-    fulfilmentPreference: 'Hold Shelf',
+    fulfillmentPreference: 'Hold Shelf',
   };
 
   const renderComponent = (props = defaultProps) => {

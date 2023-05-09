@@ -14,7 +14,7 @@ export default Factory.extend({
   status: () => 'Open - Not yet filled',
   position: (i) => i + 1,
   itemRequestCount: (i) => i + 1,
-  fulfilmentPreference: 'Hold Shelf',
+  fulfillmentPreference: 'Hold Shelf',
   pickupServicePointId: 'servicepointId1',
   holdShelfExpirationDate: '2017-01-20',
   loan: {

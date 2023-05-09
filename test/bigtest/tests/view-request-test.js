@@ -190,7 +190,7 @@ describe('View request page', () => {
     let requester;
     beforeEach(function () {
       const request = this.server.create('request', {
-        fulfilmentPreference: 'Delivery'
+        fulfillmentPreference: 'Delivery'
       });
 
       requester = this.server.schema.users.find(request.requesterId);
@@ -210,7 +210,7 @@ describe('View request page', () => {
       });
 
       const request = this.server.create('request', {
-        fulfilmentPreference: 'Delivery',
+        fulfillmentPreference: 'Delivery',
         cancellationReasonId: cancellationReason.id,
         cancellationAdditionalInformation: 'Item not found',
         status: 'Closed - Cancelled',

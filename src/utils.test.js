@@ -35,7 +35,7 @@ import {
   requestTypesMap,
   REQUEST_LEVEL_TYPES,
   REQUEST_TYPES,
-  fulfilmentTypeMap,
+  fulfillmentTypeMap,
 } from './constants';
 
 describe('escapeValue', () => {
@@ -381,44 +381,44 @@ describe('memoizeValidation', () => {
 });
 
 describe('getFulfillmentTypeOptions', () => {
-  const fulfilmentTypes = [
+  const fulfillmentTypes = [
     {
       label: 'test',
       id: 'test',
     },
     {
       label: 'test_2',
-      id: fulfilmentTypeMap.DELIVERY,
+      id: fulfillmentTypeMap.DELIVERY,
     },
   ];
 
   describe('when "hasDelivery" is true', () => {
-    it('should return not filtered "fulfilmentTypeOptions"', () => {
+    it('should return not filtered "fulfillmentTypeOptions"', () => {
       const expectedResult = [
         {
-          labelTranslationPath: fulfilmentTypes[0].label,
-          value: fulfilmentTypes[0].id,
+          labelTranslationPath: fulfillmentTypes[0].label,
+          value: fulfillmentTypes[0].id,
         },
         {
-          labelTranslationPath: fulfilmentTypes[1].label,
-          value: fulfilmentTypes[1].id,
+          labelTranslationPath: fulfillmentTypes[1].label,
+          value: fulfillmentTypes[1].id,
         }
       ];
 
-      expect(getFulfillmentTypeOptions(true, fulfilmentTypes)).toEqual(expectedResult);
+      expect(getFulfillmentTypeOptions(true, fulfillmentTypes)).toEqual(expectedResult);
     });
   });
 
   describe('when "hasDelivery" is false', () => {
-    it('should return filtered "fulfilmentTypeOptions"', () => {
+    it('should return filtered "fulfillmentTypeOptions"', () => {
       const expectedResult = [
         {
-          labelTranslationPath: fulfilmentTypes[0].label,
-          value: fulfilmentTypes[0].id,
+          labelTranslationPath: fulfillmentTypes[0].label,
+          value: fulfillmentTypes[0].id,
         }
       ];
 
-      expect(getFulfillmentTypeOptions(false, fulfilmentTypes)).toEqual(expectedResult);
+      expect(getFulfillmentTypeOptions(false, fulfillmentTypes)).toEqual(expectedResult);
     });
   });
 });
@@ -463,17 +463,17 @@ describe('getDefaultRequestPreferences', () => {
 
 describe('getFulfillmentPreference', () => {
   describe('when "requesterId" equals "userId"', () => {
-    const fulfilmentPreference = 'fulfilmentPreference';
+    const fulfillmentPreference = 'fulfillmentPreference';
     const initialValues = {
       requesterId: 'id',
-      fulfilmentPreference,
+      fulfillmentPreference,
     };
     const preferences = {
       userId: 'id'
     };
 
-    it('should return "fulfilmentPreference"', () => {
-      expect(getFulfillmentPreference(preferences, initialValues)).toEqual(fulfilmentPreference);
+    it('should return "fulfillmentPreference"', () => {
+      expect(getFulfillmentPreference(preferences, initialValues)).toEqual(fulfillmentPreference);
     });
   });
 
@@ -495,7 +495,7 @@ describe('getFulfillmentPreference', () => {
 
 describe('isDeliverySelected', () => {
   it('should return true', () => {
-    expect(isDeliverySelected(fulfilmentTypeMap.DELIVERY)).toBe(true);
+    expect(isDeliverySelected(fulfillmentTypeMap.DELIVERY)).toBe(true);
   });
 
   it('should return false', () => {

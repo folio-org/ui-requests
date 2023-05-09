@@ -19,6 +19,7 @@
 * Cannot save item request from item with status On Order, because need a barcode. Refs UIREQ-924.
 * Cover `src/components/PrintButton/PrintButton.js` file by RTL/Jest tests. Refs UIREQ-886.
 * Cover `src/components/Loading/Loading.js` file by RTL/Jest tests. Refs UIREQ-885.
+* Update `circulation` okapi interface to `14.0` version. Refs UIREQ-954.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)
@@ -571,7 +572,7 @@
 * Fixes presentation of shelving location in create/edit view.
 * Excludes closed loans from loan lookup. Completes UIREQ-27.
 * Adds an 'all permissions' permission. Completes UIREQ-36.
-* Adds fulfilment preference and delivery address to detail view. Completes UIREQ-39.
+* Adds fulfillment preference and delivery address to detail view. Completes UIREQ-39.
 * Favor react-intl date/time formatters. Refs STCOR-109.
 * Updates validation to use redux-form's asyncValidate approach.
 * Switch out magnifying glass for "Requester look-up" link. Fixes UIREQ-47.
