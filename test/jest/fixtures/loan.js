@@ -127,6 +127,7 @@ export const loan = {
       effectiveLocationLibrary: 'Datalogisk Institut',
       effectiveLocationCampus: 'City Campus',
       effectiveLocationInstitution: 'Københavns Universitet',
+      effectiveLocationPrimaryServicePointName: 'Circulation Desk',
       callNumber: 'TK5105.88815 . A58 2004 FT MEADE',
       callNumberPrefix: null,
       callNumberSuffix: null,
