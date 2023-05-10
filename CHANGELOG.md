@@ -572,7 +572,7 @@
 * Fixes presentation of shelving location in create/edit view.
 * Excludes closed loans from loan lookup. Completes UIREQ-27.
 * Adds an 'all permissions' permission. Completes UIREQ-36.
-* Adds fulfillment preference and delivery address to detail view. Completes UIREQ-39.
+* Adds fulfilment preference and delivery address to detail view. Completes UIREQ-39.
 * Favor react-intl date/time formatters. Refs STCOR-109.
 * Updates validation to use redux-form's asyncValidate approach.
 * Switch out magnifying glass for "Requester look-up" link. Fixes UIREQ-47.
