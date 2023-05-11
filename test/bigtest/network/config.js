@@ -261,6 +261,7 @@ export default function config() {
           effectiveLocationLibrary: 'Djanogly Learning Resource Centre',
           effectiveLocationCampus: 'Jubilee Campus',
           effectiveLocationInstitution: 'Nottingham University',
+          effectiveLocationPrimaryServicePointName: 'Circulation Desk',
           callNumber: '123456',
           callNumberPrefix: 'PREFIX',
           callNumberSuffix: 'SUFFIX',
