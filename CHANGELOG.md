@@ -20,6 +20,7 @@
 * Cover `src/components/PrintButton/PrintButton.js` file by RTL/Jest tests. Refs UIREQ-886.
 * Cover `src/components/Loading/Loading.js` file by RTL/Jest tests. Refs UIREQ-885.
 * Leverage cookie-based authentication in all API requests. Refs UIREQ-861.
+* Update `circulation` okapi interface to `14.0` version. Refs UIREQ-954.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)

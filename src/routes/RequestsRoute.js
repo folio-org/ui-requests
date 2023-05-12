@@ -45,7 +45,7 @@ import RequestFormContainer from '../RequestFormContainer';
 
 import {
   reportHeaders,
-  fulfilmentTypes,
+  fulfillmentTypes,
   expiredHoldsReportHeaders,
   pickSlipType,
   createModes,
@@ -55,6 +55,7 @@ import {
   DEFAULT_DISPLAYED_YEARS_AMOUNT,
   MAX_RECORDS,
   OPEN_REQUESTS_STATUSES,
+  fulfillmentTypeMap,
 } from '../constants';
 import {
   buildUrl,
@@ -1011,7 +1012,7 @@ class RequestsRoute extends React.Component {
     const initialValues = dupRequest ||
     {
       requestType: 'Hold',
-      fulfilmentPreference: 'Hold Shelf',
+      fulfillmentPreference: fulfillmentTypeMap.HOLD_SHELF,
       createTitleLevelRequest: createTitleLevelRequestsByDefault,
     };
 
@@ -1191,7 +1192,7 @@ class RequestsRoute extends React.Component {
                 joinRequest: this.addRequestFields,
                 optionLists: {
                   addressTypes,
-                  fulfilmentTypes,
+                  fulfillmentTypes,
                   servicePoints,
                   cancellationReasons,
                 },
