@@ -635,6 +635,7 @@ describe('convertToSlipData', () => {
     servicePointPickup: 'Circ Desk 1',
     requestExpirationDate: '2019-07-30T00:00:00.000+03:00',
     holdShelfExpirationDate: '2019-08-31T00:00:00.000+03:00',
+    requestDate: '2019-08-31T00:00:00.000+03:00',
     deliveryAddressType: 'Home',
     patronComments: 'Please hurry!',
   };
@@ -706,6 +707,7 @@ describe('convertToSlipData', () => {
     'request.deliveryAddressType': 'Home',
     'request.requestExpirationDate': '2019-07-30T00:00:00.000+03:00 America/New_York en',
     'request.holdShelfExpirationDate': '2019-08-31T00:00:00.000+03:00 America/New_York en',
+    'request.requestDate': '2019-08-31T00:00:00.000+03:00 America/New_York en',
     'request.requestID': 'dd606ca6-a2cb-4723-9a8d-e73b05c42232',
     'request.patronComments': 'Please hurry!',
   };
