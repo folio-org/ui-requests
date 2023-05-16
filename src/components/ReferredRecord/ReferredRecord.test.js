@@ -1,12 +1,7 @@
 import '../../../test/jest/__mock__';
-import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { Router } from 'react-router';
-import { createMemoryHistory } from 'history';
-
 import ReferredRecord from './ReferredRecord';
 
-const history = createMemoryHistory();
 const propsData = {
   instanceId: 'testInstanceId',
   instanceTitle: 'testInstanceTitle',
@@ -18,18 +13,23 @@ const propsData = {
   requesterName: 'testRequesterName',
 };
 
-const renderReferredRecord = (prop) => render(
-  <Router history={history}>
-    <ReferredRecord values={prop} />
-  </Router>
-);
+const renderReferredRecord = (prop) => render(<ReferredRecord values={prop} />);
 
 describe('ReferredRecord', () => {
-  it('component should render correctly', () => {
+  it('entityType.request should render', () => {
     renderReferredRecord(propsData);
     expect(screen.getByText('ui-requests.notes.entityType.request')).toBeInTheDocument();
+  });
+  it('assigned.for should render', () => {
+    renderReferredRecord(propsData);
     expect(screen.getByText('ui-requests.notes.assigned.for')).toBeInTheDocument();
+  });
+  it('assigned.requester should render', () => {
+    renderReferredRecord(propsData);
     expect(screen.getByText('ui-requests.notes.assigned.requester')).toBeInTheDocument();
+  });
+  it('assigned.requestDate should render', () => {
+    renderReferredRecord(propsData);
     expect(screen.getByText('ui-requests.notes.assigned.requestDate')).toBeInTheDocument();
   });
 });
