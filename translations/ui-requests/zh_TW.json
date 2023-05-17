@@ -34,7 +34,6 @@
     "requester.scanOrEnterBarcode": "掃描或輸入預約者條碼",
     "requester.findUserPluginLabel": "查詢預約者",
     "requester.proxy": "預約者的代理人",
-    "requester.fulfilmentPref": "取件偏好設定",
     "requester.requester": "預約者",
     "requester.pickupLocation": "取書館藏地",
     "actions.editRequest": "編輯預約",
@@ -55,7 +54,6 @@
     "item.requestsOnItem": "單件的預約數量",
     "actions.viewRequestsInQueue": "查看預約排隊順序",
     "actions.selectPickupSp": "選擇取書工作區",
-    "fulfilmentPreference": "請求履行偏好",
     "requestType": "預約類型",
     "status": "預約狀態",
     "requestExpirationDate": "預約到期日",
@@ -81,8 +79,6 @@
     "requestMeta.type.recalls": "催還",
     "requestMeta.type.holds": "預約",
     "requestMeta.type.pages": "处理",
-    "requestMeta.fulfilment.holdShelf": "預約書架",
-    "requestMeta.fulfilment.delivery": "送货",
     "actions.edit": "編輯",
     "item.location.name": "有效的館藏地名稱",
     "proxy.name": "请求者的代理名称",
@@ -269,5 +265,9 @@
     "navigation.app": "Requests app Search",
     "navigation.keyboardShortcuts": "Keyboard shortcuts",
     "requests.servicePoint": "Pickup service point",
-    "requests.callNumber": "Effective call number string"
+    "requests.callNumber": "Effective call number string",
+    "fulfillmentPreference": "Request fulfillment preference",
+    "requestMeta.fulfillment.holdShelf": "Hold Shelf",
+    "requestMeta.fulfillment.delivery": "Delivery",
+    "requester.fulfillmentPref": "Fulfillment preference"
 }
