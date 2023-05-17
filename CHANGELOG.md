@@ -1,10 +1,6 @@
 # Change history for ui-requests
 
 ## IN PROGRESS
-## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-05-16)
-* Create Jest/RTL test for NoteCreateRoute.js Refs: UIREQ-943
-* Added new file in fixtures folder historyData.js file for static data
-* Added NoteCreatePage function to 'ui-requests\test\jest_mock_\stripesSmartComponents.mock.js'
 
 * Made code improvements related to TLR. Refs UIREQ-871.
 * UI tests replacement with RTL/Jest for urls. Refs UIREQ-896.
@@ -23,6 +19,7 @@
 * Cannot save item request from item with status On Order, because need a barcode. Refs UIREQ-924.
 * Cover `src/components/PrintButton/PrintButton.js` file by RTL/Jest tests. Refs UIREQ-886.
 * Cover `src/components/Loading/Loading.js` file by RTL/Jest tests. Refs UIREQ-885.
+* Create Jest/RTL test for NoteCreateRoute.js Refs: UIREQ-943.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)
