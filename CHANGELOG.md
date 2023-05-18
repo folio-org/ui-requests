@@ -19,7 +19,8 @@
 * Cannot save item request from item with status On Order, because need a barcode. Refs UIREQ-924.
 * Cover `src/components/PrintButton/PrintButton.js` file by RTL/Jest tests. Refs UIREQ-886.
 * Cover `src/components/Loading/Loading.js` file by RTL/Jest tests. Refs UIREQ-885.
-* Leverage cookie-based authentication in all API requests. Refs UIREQ-861.
+* Create Jest/RTL test for NoteCreateRoute.js Refs: UIREQ-943.
+* Create Jest/RTL test for NoteCreateRoute.js Refs: UIREQ-944.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)
