@@ -1,4 +1,3 @@
-import React from 'react';
 import '__mock__/';
 import { render, screen } from '@testing-library/react';
 import { historyData } from '../../test/jest/fixtures/historyData';
