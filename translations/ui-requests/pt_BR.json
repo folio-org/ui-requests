@@ -34,7 +34,6 @@
     "requester.scanOrEnterBarcode": "Escaneie ou insira o código de barras do solicitante",
     "requester.findUserPluginLabel": "Busca de solicitante",
     "requester.proxy": "Autorizados para solicitação",
-    "requester.fulfilmentPref": "Preferência de atendimento",
     "requester.requester": "Solicitante",
     "requester.pickupLocation": "Localização de retirada",
     "actions.editRequest": "Editar solicitação",
@@ -55,7 +54,6 @@
     "item.requestsOnItem": "Requisições no item",
     "actions.viewRequestsInQueue": "ver solicitações na fila",
     "actions.selectPickupSp": "Selecione o ponto de serviço para retirada",
-    "fulfilmentPreference": "Solicitar preferência de atendimento",
     "requestType": "Tipo de solicitação",
     "status": "Status da solicitação",
     "requestExpirationDate": "Data de vencimento da solicitação",
@@ -81,8 +79,6 @@
     "requestMeta.type.recalls": "Devoluções antecipadas",
     "requestMeta.type.holds": "Reservas",
     "requestMeta.type.pages": "Entregas",
-    "requestMeta.fulfilment.holdShelf": "Prateleira de espera",
-    "requestMeta.fulfilment.delivery": "Entrega",
     "actions.edit": "Editar",
     "item.location.name": "Localização efetiva",
     "proxy.name": "Nome dos autorizados para solicitação",
@@ -269,5 +265,9 @@
     "navigation.app": "Buscar no aplicativo de Pedidos",
     "navigation.keyboardShortcuts": "Atalhos do teclado",
     "requests.servicePoint": "Ponto de serviço para retirada",
-    "requests.callNumber": "Cadeia de número de chamada efetivo"
+    "requests.callNumber": "Cadeia de número de chamada efetivo",
+    "fulfillmentPreference": "Solicitar preferência de atendimento",
+    "requestMeta.fulfillment.holdShelf": "Prateleira de espera",
+    "requestMeta.fulfillment.delivery": "Entrega",
+    "requester.fulfillmentPref": "Preferência de atendimento"
 }

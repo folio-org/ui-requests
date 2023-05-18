@@ -34,7 +34,6 @@
     "requester.scanOrEnterBarcode": "Naskenovat nebo zadat čárový kód čtenáře",
     "requester.findUserPluginLabel": "Vyhledávat čtenáře",
     "requester.proxy": "Zástupce žadatele",
-    "requester.fulfilmentPref": "Preference vyřízení",
     "requester.requester": "Čtenář",
     "requester.pickupLocation": "Místo vyzvednutí",
     "actions.editRequest": "Upravit žádanku",
@@ -55,7 +54,6 @@
     "item.requestsOnItem": "Žádanky na jednotku",
     "actions.viewRequestsInQueue": "zobrazit žádanky ve frontě",
     "actions.selectPickupSp": "Zvolte pult služeb vyzvednutí",
-    "fulfilmentPreference": "Přednostní plnění žádanky",
     "requestType": "Typ žádanky",
     "status": "Stav žádanky",
     "requestExpirationDate": "Datum platnosti žádanky",
@@ -81,8 +79,6 @@
     "requestMeta.type.recalls": "Stažení z výpůjčky",
     "requestMeta.type.holds": "Rezervace",
     "requestMeta.type.pages": "Na volnou jednotku",
-    "requestMeta.fulfilment.holdShelf": "Vyzvednutí z regálu",
-    "requestMeta.fulfilment.delivery": "Doručení",
     "actions.edit": "Upravit",
     "item.location.name": "Efektivní lokace",
     "proxy.name": "Jméno zástupce žadatele",
@@ -269,5 +265,9 @@
     "navigation.app": "Vyhledat požadavek",
     "navigation.keyboardShortcuts": "Klávesové zkratky",
     "requests.servicePoint": "Pult služeb pro vyzvednutí",
-    "requests.callNumber": "Efektivní signatura"
+    "requests.callNumber": "Efektivní signatura",
+    "fulfillmentPreference": "Request fulfillment preference",
+    "requestMeta.fulfillment.holdShelf": "Hold Shelf",
+    "requestMeta.fulfillment.delivery": "Delivery",
+    "requester.fulfillmentPref": "Fulfillment preference"
 }
