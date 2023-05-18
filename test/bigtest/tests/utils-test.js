@@ -84,6 +84,7 @@ describe('utils', () => {
       requestID: 'dd606ca6-a2cb-4723-9a8d-e73b05c42232',
       servicePointPickup: 'Circ Desk 1',
       requestExpirationDate: '2019-07-30T00:00:00.000+03:00',
+      requestDate: '2019-08-31T00:00:00.000+03:00',
       holdShelfExpirationDate: '2019-08-31T00:00:00.000+03:00',
       deliveryAddressType: 'Home',
       patronComments: 'Please hurry!',
@@ -155,6 +156,7 @@ describe('utils', () => {
       'request.servicePointPickup': 'Circ Desk 1',
       'request.deliveryAddressType': 'Home',
       'request.requestExpirationDate': 'formatDate',
+      'request.requestDate': 'formatDate',
       'request.holdShelfExpirationDate': 'formatDate',
       'request.requestID': 'dd606ca6-a2cb-4723-9a8d-e73b05c42232',
       'request.patronComments': 'Please hurry!',
@@ -171,6 +173,7 @@ describe('utils', () => {
         request: {
           ...request,
           requestExpirationDate: '',
+          requestDate: '',
           holdShelfExpirationDate: '',
         },
         requester: {
@@ -182,6 +185,7 @@ describe('utils', () => {
       const expectSlipDataWithEmptyDate = [{
         ...slipData,
         'request.requestExpirationDate': '',
+        'request.requestDate': '',
         'request.holdShelfExpirationDate': '',
         'requester.country': '',
       }];
