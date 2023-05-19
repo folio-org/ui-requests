@@ -34,7 +34,6 @@
     "requester.scanOrEnterBarcode": "Scan or enter requester barcode",
     "requester.findUserPluginLabel": "Requester look-up",
     "requester.proxy": "Requester's proxy",
-    "requester.fulfilmentPref": "Fulfillment preference",
     "requester.requester": "Requester",
     "requester.pickupLocation": "Pickup location",
     "actions.editRequest": "Edit request",
@@ -55,7 +54,6 @@
     "item.requestsOnItem": "Requests on item",
     "actions.viewRequestsInQueue": "view requests in queue",
     "actions.selectPickupSp": "Select pickup service point",
-    "fulfilmentPreference": "Request fulfillment preference",
     "requestType": "Request type",
     "status": "Request status",
     "requestExpirationDate": "Request expiration date",
@@ -81,8 +79,6 @@
     "requestMeta.type.recalls": "Recalls",
     "requestMeta.type.holds": "Holds",
     "requestMeta.type.pages": "Pages",
-    "requestMeta.fulfilment.holdShelf": "Hold Shelf",
-    "requestMeta.fulfilment.delivery": "Delivery",
     "actions.edit": "Edit",
     "item.location.name": "موثر مقام",
     "proxy.name": "Requester's proxy name",
@@ -269,5 +265,9 @@
     "navigation.app": "Requests app Search",
     "navigation.keyboardShortcuts": "Keyboard shortcuts",
     "requests.servicePoint": "Pickup service point",
-    "requests.callNumber": "Effective call number string"
+    "requests.callNumber": "Effective call number string",
+    "fulfillmentPreference": "Request fulfillment preference",
+    "requestMeta.fulfillment.holdShelf": "Hold Shelf",
+    "requestMeta.fulfillment.delivery": "Delivery",
+    "requester.fulfillmentPref": "Fulfillment preference"
 }

@@ -46,12 +46,12 @@ jest.mock('./ItemsDialog', () => jest.fn(() => null));
 jest.mock('./PositionLink', () => jest.fn(() => null));
 jest.mock('./UserForm', () => jest.fn(({
   onChangeAddress,
-  onChangeFulfilment,
+  onChangeFulfillment,
 }) => (
   <>
     <input
       data-testid="fulfillmentInput"
-      onChange={onChangeFulfilment}
+      onChange={onChangeFulfillment}
     />
     <input
       data-testid="addressInput"
@@ -68,7 +68,7 @@ describe('RequestForm', () => {
     addressInput: 'addressInput'
   };
   const formFieldNames = {
-    fulfilmentPreference: 'fulfilmentPreference',
+    fulfillmentPreference: 'fulfillmentPreference',
     deliveryAddressTypeId: 'deliveryAddressTypeId',
   };
   const labelIds = {
@@ -432,7 +432,7 @@ describe('RequestForm', () => {
 
         fireEvent.change(screen.getByTestId(testIds.fulfillmentInput), event);
 
-        expect(mockedChangeFunction).toHaveBeenCalledWith(formFieldNames.fulfilmentPreference, value);
+        expect(mockedChangeFunction).toHaveBeenCalledWith(formFieldNames.fulfillmentPreference, value);
       });
     });
 

@@ -19,7 +19,10 @@ import {
   getFullName,
   userHighlightBox,
 } from './utils';
-import { requestStatuses } from './constants';
+import {
+  REQUEST_FORM_FIELD_NAMES,
+  requestStatuses,
+} from './constants';
 
 const {
   AWAITING_DELIVERY,
@@ -30,10 +33,10 @@ class UserForm extends React.Component {
   static propTypes = {
     deliveryAddress: PropTypes.node,
     deliveryLocations: PropTypes.arrayOf(PropTypes.object),
-    fulfilmentTypeOptions: PropTypes.arrayOf(PropTypes.object),
-    fulfilmentPreference: PropTypes.string,
+    fulfillmentTypeOptions: PropTypes.arrayOf(PropTypes.object),
+    fulfillmentPreference: PropTypes.string,
     onChangeAddress: PropTypes.func,
-    onChangeFulfilment: PropTypes.func,
+    onChangeFulfillment: PropTypes.func,
     onCloseProxy: PropTypes.func.isRequired,
     onSelectProxy: PropTypes.func.isRequired,
     patronGroup: PropTypes.string,
@@ -48,9 +51,9 @@ class UserForm extends React.Component {
   static defaultProps = {
     deliveryAddress: '',
     deliveryLocations: [],
-    fulfilmentTypeOptions: [],
+    fulfillmentTypeOptions: [],
     onChangeAddress: () => {},
-    onChangeFulfilment: () => {},
+    onChangeFulfillment: () => {},
     patronGroup: '',
     proxy: {},
     deliverySelected: false,
@@ -115,9 +118,9 @@ class UserForm extends React.Component {
       deliveryAddress,
       deliveryLocations,
       deliverySelected,
-      fulfilmentPreference,
-      fulfilmentTypeOptions,
-      onChangeFulfilment,
+      fulfillmentPreference,
+      fulfillmentTypeOptions,
+      onChangeFulfillment,
       request,
     } = this.props;
 
@@ -153,16 +156,16 @@ class UserForm extends React.Component {
           </Col>
           <Col xs={4}>
             <Field
-              name="fulfilmentPreference"
-              label={<FormattedMessage id="ui-requests.requester.fulfilmentPref" />}
+              name={REQUEST_FORM_FIELD_NAMES.FULFILLMENT_PREFERENCE}
+              label={<FormattedMessage id="ui-requests.requester.fulfillmentPref" />}
               component={Select}
               fullWidth
-              value={fulfilmentPreference}
-              onChange={onChangeFulfilment}
+              value={fulfillmentPreference}
+              onChange={onChangeFulfillment}
               disabled={shouldDisableFulfillmentPreferenceField}
               data-test-fulfillment-preference-filed
             >
-              {fulfilmentTypeOptions.map(({ labelTranslationPath, value }) => (
+              {fulfillmentTypeOptions.map(({ labelTranslationPath, value }) => (
                 <FormattedMessage key={value} id={labelTranslationPath}>
                   {translatedLabel => (
                     <option value={value}>

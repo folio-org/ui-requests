@@ -1,6 +1,6 @@
 {
   "name": "@folio/requests",
-  "version": "8.0.0",
+  "version": "9.0.0",
   "description": "Requests manager",
   "repository": "folio-org/ui-requests",
   "publishConfig": {
@@ -29,9 +29,9 @@
     "queryResource": "query",
     "okapiInterfaces": {
       "cancellation-reason-storage": "1.1",
-      "circulation": "13.0",
+      "circulation": "14.0",
       "inventory": "10.0 11.0 12.0 13.0",
-      "request-storage": "5.0",
+      "request-storage": "6.0",
       "pick-slips": "0.1",
       "automated-patron-blocks": "0.1"
     },
