@@ -24,6 +24,7 @@
 * Added requestDate token. Refs UIREQ-962.
 * Update `request-storage` okapi interface to `6.0` version. Refs UIREQ-963.
 * UI tests replacement with RTL/Jest for src/PatronBlockModal.js. Refs UIREQ-878.
+* create Jest/RTL test for draggableRowFormatter.js, Refs UIREQ-942
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)
