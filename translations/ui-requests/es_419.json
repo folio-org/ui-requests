@@ -34,7 +34,6 @@
     "requester.scanOrEnterBarcode": "Escanear o introducir el código de barras del solicitante",
     "requester.findUserPluginLabel": "Búsqueda del solicitante",
     "requester.proxy": "Proxy del solicitante",
-    "requester.fulfilmentPref": "Preferencia de cumplimiento",
     "requester.requester": "Solicitante",
     "requester.pickupLocation": "Lugar de recogida",
     "actions.editRequest": "Editar solicitud",
@@ -55,7 +54,6 @@
     "item.requestsOnItem": "Reservas del ítem",
     "actions.viewRequestsInQueue": "Ver cola de reservas",
     "actions.selectPickupSp": "Recoger en",
-    "fulfilmentPreference": "Preferencia de cumplimentado de la reserva",
     "requestType": "Tipo de reserva",
     "status": "Estado de la reserva",
     "requestExpirationDate": "Fecha de expiración de la reserva",
@@ -81,8 +79,6 @@
     "requestMeta.type.recalls": "Recordatorios",
     "requestMeta.type.holds": "Reservas",
     "requestMeta.type.pages": "Páginas",
-    "requestMeta.fulfilment.holdShelf": "Reserva en estantería",
-    "requestMeta.fulfilment.delivery": "Entrega",
     "actions.edit": "Editar",
     "item.location.name": "Localización",
     "proxy.name": "Nombre del proxy del solicitante",
@@ -269,5 +265,9 @@
     "navigation.app": "Solicitudes app Búsqueda",
     "navigation.keyboardShortcuts": "Atajos de teclado",
     "requests.servicePoint": "Punto de servicio de recogida",
-    "requests.callNumber": "Cadena de números de llamada efectiva"
+    "requests.callNumber": "Cadena de números de llamada efectiva",
+    "fulfillmentPreference": "Solicitar preferencia de cumplimiento",
+    "requestMeta.fulfillment.holdShelf": "Estante",
+    "requestMeta.fulfillment.delivery": "Entrega",
+    "requester.fulfillmentPref": "Preferencia de cumplimiento"
 }
