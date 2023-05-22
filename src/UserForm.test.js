@@ -3,8 +3,6 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import UserForm from './UserForm';
 
-import '../test/jest/__mock__';
-
 jest.mock('@folio/stripes/components', () => ({
   Col: ({ xs, children }) => (
     <div data-testid="col" xs={xs}>{children}</div>
@@ -38,7 +36,7 @@ jest.mock('@folio/stripes/components', () => ({
 }));
 
 jest.mock('react-final-form', () => ({
-  Field: ({ name, label, component, fullWidth, onChange, required, validate, children, ...rest }) => {
+  Field: ({ name, label, component, onChange, required, validate, children }) => {
     const Component = component;
     return (
       <div>
@@ -49,11 +47,9 @@ jest.mock('react-final-form', () => ({
           onChange={onChange}
           required={required}
           validate={validate}
-          fullWidth={fullWidth}
         >
           {children}
         </Component>
-        <div {...rest} />
       </div>
     );
   },
@@ -67,7 +63,7 @@ jest.mock('@folio/stripes/smart-components', () => ({
 
 jest.mock('./utils', () => ({
   ...jest.requireActual('./utils'),
-  getFullName: jest.fn(() => ({ user: 'adam', proxy:'11' })),
+  getFullName: jest.fn(() => ({ user: '12', proxy:'11' })),
   userHighlightBox: jest.fn(() => 'userHighlightBox'),
 }));
 
@@ -89,13 +85,13 @@ jest.mock('react-intl', () => {
 
 const user = {
   id: '1234',
-  firstName: 'Jony',
-  lastName: 'Doe',
+  firstName: 'test first name',
+  lastName: 'test last name',
   barcode: '123456',
 };
 const deliveryLocations = [
-  { value: 'value 1', label: 'Location 1' },
-  { value: 'value 2', label: 'Location 2' },
+  { value: 'location1', label: 'Location 1' },
+  { value: 'location2', label: 'Location 2' },
 ];
 const fulfilmentTypeOptions = [
   { labelTranslationPath: 'ui-requests.fulfilmentTypes.delivery', value: 'delivery' },
@@ -124,7 +120,7 @@ describe('UserForm', () => {
       onSelectProxy,
       stripes: { connect: jest.fn((component) => component) },
       patronGroup: 'Staff',
-      proxy: { id: '123', firstName: 'Jay', lastName: 'Doe', barcode: '123456789' },
+      proxy: { id: '123', firstName: 'proxyFirstName', lastName: 'proxyLastName', barcode: '123456789' },
       optionLabel : 'testoptionLabel'
     };
     render(<UserForm {...defaultProps} />);
@@ -147,9 +143,8 @@ describe('UserForm', () => {
       onSelectProxy,
       stripes: { connect: jest.fn((component) => component) },
       patronGroup: 'Staff',
-      proxy: { id: '123', firstName: 'Jay', lastName: 'Doe', barcode: '123456789' },
-      optionLabel : 'testoptionLabel',
-      request: { status : 'AWAITING_DELIVERY' },
+      proxy: { id: '123', firstName: 'proxyFirstName', lastName: 'proxyLastName', barcode: '123456789' },
+      optionLabel : 'testoptionLabel'
     };
     render(<UserForm {...props} />);
     userEvent.selectOptions(
@@ -157,6 +152,25 @@ describe('UserForm', () => {
       screen.getByRole('option', { name: 'Service Point 2' }),
     );
     expect(screen.getByRole('option', { name: 'Service Point 2' }).selected).toBe(true);
+  });
+  it('should renders UserForm', () => {
+    const propsData = {
+      deliverySelected: true,
+      deliveryLocations,
+      fulfilmentTypeOptions,
+      onChangeAddress,
+      onChangeFulfilment,
+      onCloseProxy,
+      onSelectProxy,
+      stripes: { connect: jest.fn((component) => component) },
+      patronGroup: '',
+      proxy: {},
+      user: { id: '456', firstName: 'userFirstName', lastName: 'userLastName', barcode: '987654321' },
+      request: { status : 'AWAITING_DELIVERY' },
+    };
+
+    const result = render(<UserForm {...propsData} />);
+    expect(result).toBeTruthy();
   });
   it('should renders ProxyManager', () => {
     const props = {
@@ -169,8 +183,8 @@ describe('UserForm', () => {
       onSelectProxy,
       stripes: { connect: jest.fn((component) => component) },
       patronGroup: 'Staff',
-      proxy: { id: '123', firstName: 'John', lastName: 'Doe', barcode: '123456789' },
-      user: { id: '456', firstName: 'Jane', lastName: 'Doe', barcode: '987654321' },
+      proxy: { id: '123', firstName: 'proxyFirstName', lastName: 'proxyLastName', barcode: '123456789' },
+      user: { id: '456', firstName: 'userFirstName', lastName: 'userLastName', barcode: '987654321' },
       optionLabel : 'testoptionLabel'
     };
 
@@ -188,7 +202,7 @@ describe('UserForm', () => {
       onSelectProxy,
       stripes: { connect: jest.fn((component) => component) },
       proxy: {},
-      user: { firstName: 'Jane', lastName: 'Doe', barcode: '987654321' },
+      user: { firstName: 'userFirstName', lastName: 'userLastName', barcode: '987654321' },
       request: { AWAITING_PICKUP:'AWAITING_PICKUP' }
     };
 
