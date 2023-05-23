@@ -1018,6 +1018,7 @@ class RequestForm extends React.Component {
     const fulfillmentTypeOptions = getFulfillmentTypeOptions(hasDelivery, optionLists?.fulfillmentTypes || []);
     const selectedProxy = getProxy(request, proxy);
     const isSubmittingDisabled = isSubmittingButtonDisabled(pristine, submitting);
+    const isTitleLevelRequest = createTitleLevelRequest || request?.requestLevel === REQUEST_LEVEL_TYPES.TITLE;
     const getPatronBlockModalOpenStatus = () => {
       if (isAwaitingForProxySelection) {
         return false;
@@ -1108,6 +1109,7 @@ class RequestForm extends React.Component {
                         type="checkbox"
                         label={formatMessage({ id: 'ui-requests.requests.createTitleLevelRequest' })}
                         component={Checkbox}
+                        checked={isTitleLevelRequest}
                         disabled={!this.state.titleLevelRequestsFeatureEnabled || isItemOrInstanceLoading}
                         onChange={this.handleTlrCheckboxChange}
                       />
@@ -1118,7 +1120,7 @@ class RequestForm extends React.Component {
               <AccordionStatus ref={this.accordionStatusRef}>
                 <AccordionSet>
                   {
-                    createTitleLevelRequest || (request?.requestLevel === REQUEST_LEVEL_TYPES.TITLE)
+                    isTitleLevelRequest
                       ? (
                         <Accordion
                           id="new-instance-info"
