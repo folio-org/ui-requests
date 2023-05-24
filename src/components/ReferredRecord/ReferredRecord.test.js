@@ -13,23 +13,31 @@ const propsData = {
   requesterName: 'testRequesterName',
 };
 
+const labelIds = {
+  entityTypeRequest: 'ui-requests.notes.entityType.request',
+  assignedFor: 'ui-requests.notes.assigned.for',
+  assignedRequester: 'ui-requests.notes.assigned.requester',
+  assignedRequestDate: 'ui-requests.notes.assigned.requestDate'
+};
+
 const renderReferredRecord = (prop) => render(<ReferredRecord values={prop} />);
 
 describe('ReferredRecord', () => {
+  beforeEach(() => renderReferredRecord(propsData));
+
   it('entityType.request should render', () => {
-    renderReferredRecord(propsData);
-    expect(screen.getByText('ui-requests.notes.entityType.request')).toBeInTheDocument();
+    expect(screen.getByText(labelIds.entityTypeRequest)).toBeInTheDocument();
   });
+
   it('assigned.for should render', () => {
-    renderReferredRecord(propsData);
-    expect(screen.getByText('ui-requests.notes.assigned.for')).toBeInTheDocument();
+    expect(screen.getByText(labelIds.assignedFor)).toBeInTheDocument();
   });
+
   it('assigned.requester should render', () => {
-    renderReferredRecord(propsData);
-    expect(screen.getByText('ui-requests.notes.assigned.requester')).toBeInTheDocument();
+    expect(screen.getByText(labelIds.assignedRequester)).toBeInTheDocument();
   });
+
   it('assigned.requestDate should render', () => {
-    renderReferredRecord(propsData);
-    expect(screen.getByText('ui-requests.notes.assigned.requestDate')).toBeInTheDocument();
+    expect(screen.getByText(labelIds.assignedRequestDate)).toBeInTheDocument();
   });
 });
