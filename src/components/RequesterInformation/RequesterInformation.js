@@ -65,7 +65,7 @@ class RequesterInformation extends Component {
     deliverySelected: PropTypes.bool,
     addressDetail: PropTypes.element,
     deliveryLocations: PropTypes.arrayOf(PropTypes.object),
-    fulfilmentTypeOptions: PropTypes.arrayOf(PropTypes.object),
+    fulfillmentTypeOptions: PropTypes.arrayOf(PropTypes.object),
   };
 
   constructor(props) {
@@ -79,7 +79,7 @@ class RequesterInformation extends Component {
     };
   }
 
-  onChangeFulfilment = (e) => {
+  onChangeFulfillment = (e) => {
     const {
       form,
       defaultDeliveryAddressTypeId,
@@ -89,7 +89,7 @@ class RequesterInformation extends Component {
     const deliverySelected = isDeliverySelected(selectedFulfillmentPreference);
     const selectedAddressTypeId = getSelectedAddressTypeId(deliverySelected, defaultDeliveryAddressTypeId);
 
-    form.change(REQUEST_FORM_FIELD_NAMES.FULFILMENT_PREFERENCE, selectedFulfillmentPreference);
+    form.change(REQUEST_FORM_FIELD_NAMES.FULFILLMENT_PREFERENCE, selectedFulfillmentPreference);
     changeDeliveryAddress(deliverySelected, selectedAddressTypeId);
   }
 
@@ -232,7 +232,7 @@ class RequesterInformation extends Component {
       deliverySelected,
       addressDetail,
       deliveryLocations,
-      fulfilmentTypeOptions,
+      fulfillmentTypeOptions,
       onChangeAddress,
       selectedProxy,
       onSelectProxy,
@@ -245,7 +245,7 @@ class RequesterInformation extends Component {
       isUserBlurred,
     } = this.state;
     const isEditForm = isFormEditing(request);
-    const { fulfilmentPreference } = request || {};
+    const { fulfillmentPreference } = request || {};
     const isAddressSelected = values?.deliveryAddressTypeId !== undefined || values?.pickupServicePointId !== undefined;
 
     return (
@@ -321,12 +321,12 @@ class RequesterInformation extends Component {
               request={request}
               patronGroup={patronGroup?.group}
               deliverySelected={deliverySelected}
-              fulfilmentPreference={fulfilmentPreference}
+              fulfillmentPreference={fulfillmentPreference}
               deliveryAddress={addressDetail}
               deliveryLocations={deliveryLocations}
-              fulfilmentTypeOptions={fulfilmentTypeOptions}
+              fulfillmentTypeOptions={fulfillmentTypeOptions}
               onChangeAddress={onChangeAddress}
-              onChangeFulfilment={this.onChangeFulfilment}
+              onChangeFulfillment={this.onChangeFulfillment}
               proxy={selectedProxy}
               servicePoints={optionLists.servicePoints}
               onSelectProxy={onSelectProxy}

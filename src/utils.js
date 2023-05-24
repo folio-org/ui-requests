@@ -27,7 +27,7 @@ import {
   requestTypesByItemStatus,
   requestTypeOptionMap,
   itemStatuses,
-  fulfilmentTypeMap,
+  fulfillmentTypeMap,
   requestStatuses,
   requestTypesMap,
   REQUEST_LEVEL_TYPES,
@@ -157,7 +157,7 @@ export function hasNonRequestableStatus(item) {
 }
 
 export function isDelivery(request) {
-  return request?.fulfilmentPreference === fulfilmentTypeMap.DELIVERY;
+  return request?.fulfillmentPreference === fulfillmentTypeMap.DELIVERY;
 }
 
 export function isNotYetFilled(request) {
@@ -266,6 +266,9 @@ export const convertToSlipData = (source, intl, timeZone, locale, slipName = 'Pi
       'request.requestExpirationDate': request.requestExpirationDate
         ? intl.formatDate(request.requestExpirationDate, { timeZone, locale })
         : request.requestExpirationDate,
+      'request.requestDate': request.requestDate
+        ? intl.formatDate(request.requestDate, { timeZone, locale, year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' })
+        : request.requestDate,
       'request.holdShelfExpirationDate': request.holdShelfExpirationDate
         ? intl.formatDate(request.holdShelfExpirationDate, { timeZone, locale })
         : request.holdShelfExpirationDate,
@@ -389,16 +392,16 @@ export const memoizeValidation = (fn) => {
   };
 };
 
-export const getFulfillmentTypeOptions = (hasDelivery, fulfilmentTypes) => {
-  const sortedFulfilmentTypes = sortBy(fulfilmentTypes, ['label']);
-  const fulfilmentTypeOptions = sortedFulfilmentTypes.map(({ label, id }) => ({
+export const getFulfillmentTypeOptions = (hasDelivery, fulfillmentTypes) => {
+  const sortedFulfillmentTypes = sortBy(fulfillmentTypes, ['label']);
+  const fulfillmentTypeOptions = sortedFulfillmentTypes.map(({ label, id }) => ({
     labelTranslationPath: label,
     value: id,
   }));
 
   return hasDelivery
-    ? fulfilmentTypeOptions
-    : fulfilmentTypeOptions.filter(option => option.value !== fulfilmentTypeMap.DELIVERY);
+    ? fulfillmentTypeOptions
+    : fulfillmentTypeOptions.filter(option => option.value !== fulfillmentTypeMap.DELIVERY);
 };
 
 export const getDefaultRequestPreferences = (request, initialValues) => {
@@ -417,14 +420,14 @@ export const getFulfillmentPreference = (preferences, initialValues) => {
   const userId = get(preferences, 'userId');
 
   if (requesterId === userId) {
-    return get(initialValues, 'fulfilmentPreference');
+    return get(initialValues, 'fulfillmentPreference');
   } else {
-    return get(preferences, 'fulfillment', fulfilmentTypeMap.HOLD_SHELF);
+    return get(preferences, 'fulfillment', fulfillmentTypeMap.HOLD_SHELF);
   }
 };
 
 export const isDeliverySelected = (fulfillmentPreference) => {
-  return fulfillmentPreference === fulfilmentTypeMap.DELIVERY;
+  return fulfillmentPreference === fulfillmentTypeMap.DELIVERY;
 };
 
 export const getSelectedAddressTypeId = (deliverySelected, defaultDeliveryAddressTypeId) => {

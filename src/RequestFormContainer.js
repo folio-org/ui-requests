@@ -19,7 +19,7 @@ import {
   hasNonRequestableStatus,
 } from './utils';
 import {
-  fulfilmentTypeMap,
+  fulfillmentTypeMap,
   REQUEST_LEVEL_TYPES,
   RESOURCE_TYPES,
 } from './constants';
@@ -118,7 +118,7 @@ const RequestFormContainer = ({
       requestExpirationDate,
       holdShelfExpirationDate,
       holdShelfExpirationTime,
-      fulfilmentPreference,
+      fulfillmentPreference,
       deliveryAddressTypeId,
       pickupServicePointId,
     } = requestData;
@@ -141,10 +141,10 @@ const RequestFormContainer = ({
     } else {
       unset(requestData, 'holdShelfExpirationDate');
     }
-    if (fulfilmentPreference === fulfilmentTypeMap.HOLD_SHELF && isString(deliveryAddressTypeId)) {
+    if (fulfillmentPreference === fulfillmentTypeMap.HOLD_SHELF && isString(deliveryAddressTypeId)) {
       unset(requestData, 'deliveryAddressTypeId');
     }
-    if (fulfilmentPreference === fulfilmentTypeMap.DELIVERY && isString(pickupServicePointId)) {
+    if (fulfillmentPreference === fulfillmentTypeMap.DELIVERY && isString(pickupServicePointId)) {
       unset(requestData, 'pickupServicePointId');
     }
 
