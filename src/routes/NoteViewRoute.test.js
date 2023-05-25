@@ -21,15 +21,19 @@ const match = {
 const renderNoteViewRoute = (locationProps, historyProps) => render(
   <NoteViewRoute location={locationProps} history={historyProps} match={match} />
 );
+
 describe('NoteViewRoute', () => {
-  it('NoteViewPage should render when location.state is not empty', () => {
-    renderNoteViewRoute(locationData, historyData);
-    expect(screen.getByText('NoteViewPage')).toBeInTheDocument();
-  });
-  it('history.replace function to be called when onEdit clicked', () => {
-    renderNoteViewRoute(locationData, historyData);
-    userEvent.click(screen.getByRole('button', { name: 'onEdit' }));
-    expect(historyData.replace).toBeCalled();
+  describe('When location.state is not empty', () => {
+    beforeEach(() => {
+      renderNoteViewRoute(locationData, historyData);
+    });
+    it('NoteViewPage should render when location.state is not empty', () => {
+      expect(screen.getByText('NoteViewPage')).toBeInTheDocument();
+    });
+    it('history.replace function to be called when onEdit clicked', () => {
+      userEvent.click(screen.getByRole('button', { name: 'onEdit' }));
+      expect(historyData.replace).toBeCalled();
+    });
   });
   it('Request page should render when location.state is empty', () => {
     const historyProp = {
