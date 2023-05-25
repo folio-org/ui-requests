@@ -52,12 +52,12 @@ describe('RequestsFiltersConfig', () => {
     const tagsFilter = filtersConfig.find(f => f.name === 'tags');
     expect(tagsFilter.parse('tag1')).toEqual('tags.tagList==*"*tag1*"*');
   });
-  
+
   it('should return the expected query string for an array of tags', () => {
     const tagsFilter = filtersConfig.find(f => f.name === 'tags');
     expect(tagsFilter.parse(['tag1', 'tag2'])).toEqual('tags.tagList==(*"*tag1*"* or *"*tag2*"*)');
   });
-  
+
   it('should have a filter for pickup service point', () => {
     const pickupServicePointFilter = filtersConfig.find(f => f.name === requestFilterTypes.PICKUP_SERVICE_POINT);
     const expectedResult = {
