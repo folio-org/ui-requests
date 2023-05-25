@@ -9,7 +9,7 @@ jest.mock('@folio/stripes/smart-components', () => ({
       <div>
         <div>NoteViewPage</div>
         {props.renderReferredRecord()}
-        <button type="button" onClick={() => props.onEdit()}>onEdit</button>
+        <button type="button" onClick={props.onEdit}>onEdit</button>
       </div>
     );
   },
