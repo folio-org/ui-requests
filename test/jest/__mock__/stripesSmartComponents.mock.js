@@ -4,14 +4,6 @@ jest.mock('@folio/stripes/smart-components', () => ({
   ClipCopy: jest.fn(() => null),
   makeQueryFunction: jest.fn((value) => value),
   CheckboxFilter: jest.fn(() => null),
-  NoteCreatePage: (props) => {
-    return (
-      <div>
-        <div>NoteCreatePage</div>
-        {props.renderReferredRecord()}
-      </div>
-    );
-  },
   NoteEditPage: (props) => {
     return (
       <div>
