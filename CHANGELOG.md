@@ -29,6 +29,7 @@
 * UI tests replacement with RTL/Jest for src/UserDetail.js. Refs UIREQ-881.
 * TLR: "Create title level request" checkbox not preselected on "New request" page. Refs UIREQ-955.
 * Do not publish test artifacts to NPM. Refs STRIPES-865.
+* Create Jest/RTL test for RequestQueueRoute.js Refs: UIREQ-946.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)
