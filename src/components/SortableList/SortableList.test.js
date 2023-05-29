@@ -28,16 +28,19 @@ const renderSortableList = (prop) => {
 };
 
 describe('SortableList', () => {
-  it('Should render the SortableList component with provided droppableId', () => {
+  beforeEach(() => {
     renderSortableList(propsData);
+  });
+
+  it('Should render the SortableList component with provided droppableId', () => {
     expect(document.querySelector('[droppableid="droppableId1"]')).toBeInTheDocument();
   });
+
   it('Should render the MultiColumnList', () => {
-    renderSortableList(propsData);
     expect(screen.getByText('MultiColumnList')).toBeInTheDocument();
   });
+
   it('Should render the Provided Placeholder', () => {
-    renderSortableList(propsData);
     expect(screen.getByText('Placeholder')).toBeInTheDocument();
   });
 });
