@@ -30,7 +30,6 @@ describe('NoteEditRoute', () => {
       ...historyData,
       location : {
         hash: '',
-        key: '9pb09t',
         pathname: '/users/notes/new',
         search: '',
         state: ''
