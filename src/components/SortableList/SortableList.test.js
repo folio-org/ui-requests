@@ -21,10 +21,7 @@ const propsData = {
 };
 
 const renderSortableList = (prop) => {
-  const Component = () => SortableList(prop);
-  return (
-    render(<Component />)
-  );
+  render(<SortableList {...prop} />);
 };
 
 describe('SortableList', () => {
