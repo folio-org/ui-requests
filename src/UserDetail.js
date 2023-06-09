@@ -1,8 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Col, KeyValue, Row } from '@folio/stripes/components';
-import { getFullName, userHighlightBox, getPatronGroup } from './utils';
+
+import {
+  Col,
+  KeyValue,
+  Row,
+  NoValue,
+} from '@folio/stripes/components';
+
+import {
+  getFullName,
+  userHighlightBox,
+  getPatronGroup,
+} from './utils';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -42,7 +53,7 @@ class UserDetail extends React.Component {
     let proxyId;
     if (proxy) {
       proxyName = getFullName(proxy);
-      proxyBarcode = proxy?.barcode || '-';
+      proxyBarcode = proxy?.barcode || <NoValue />;
       proxyId = proxy.id || request.proxyUserId;
     }
 
@@ -57,24 +68,24 @@ class UserDetail extends React.Component {
           <Col xs={4}>
             <KeyValue
               label={<FormattedMessage id="ui-requests.requester.patronGroup.group" />}
-              value={patronGroup.group || '-'}
+              value={patronGroup.group || <NoValue />}
             />
           </Col>
           <Col xs={4}>
             <KeyValue
-              label={<FormattedMessage id="ui-requests.requester.fulfilmentPref" />}
-              value={request?.fulfilmentPreference || '-'}
+              label={<FormattedMessage id="ui-requests.requester.fulfillmentPref" />}
+              value={request?.fulfillmentPreference || <NoValue />}
             />
           </Col>
           <Col xs={4}>
             { selectedDelivery ?
               <KeyValue
                 label={<FormattedMessage id="ui-requests.deliveryAddress" />}
-                value={deliveryAddress || '-'}
+                value={deliveryAddress || <NoValue />}
               /> :
               <KeyValue
                 label={<FormattedMessage id="ui-requests.pickupServicePoint.name" />}
-                value={pickupServicePoint || '-'}
+                value={pickupServicePoint || <NoValue />}
               /> }
           </Col>
         </Row>

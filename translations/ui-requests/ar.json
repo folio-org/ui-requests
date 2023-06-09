@@ -34,7 +34,6 @@
     "requester.scanOrEnterBarcode": "قم بمسح باركود مقدم الطلب ضوئيًا أو إدخاله يدويًا",
     "requester.findUserPluginLabel": "بحث مقدم الطلب",
     "requester.proxy": "وكيل مقدم الطلب",
-    "requester.fulfilmentPref": "مفضلات الاستيفاء",
     "requester.requester": "مقدم الطلب",
     "requester.pickupLocation": "موقع الالتقاط",
     "actions.editRequest": "تحرير الطلب",
@@ -55,7 +54,6 @@
     "item.requestsOnItem": "طلبات على المادة",
     "actions.viewRequestsInQueue": "عرض الطلبات في الصف",
     "actions.selectPickupSp": "قم بتحديد نقطة خدمة الالتقاط",
-    "fulfilmentPreference": "مفضلات استيفاء الطلب",
     "requestType": "نوع الطلب",
     "status": "حالة الطلب",
     "requestExpirationDate": "تاريخ انتهاء الطلب",
@@ -81,8 +79,6 @@
     "requestMeta.type.recalls": "طلبات استعادة المادة",
     "requestMeta.type.holds": "الحجوزات",
     "requestMeta.type.pages": "تنبيهات للالتقاط",
-    "requestMeta.fulfilment.holdShelf": "رف الحجز",
-    "requestMeta.fulfilment.delivery": "التوصيل",
     "actions.edit": "تحرير",
     "item.location.name": "الموقع الفعلي",
     "proxy.name": "اسم وكيل مقدم الطلب",
@@ -269,5 +265,9 @@
     "navigation.app": "Requests app Search",
     "navigation.keyboardShortcuts": "Keyboard shortcuts",
     "requests.servicePoint": "Pickup service point",
-    "requests.callNumber": "Effective call number string"
+    "requests.callNumber": "Effective call number string",
+    "fulfillmentPreference": "Request fulfillment preference",
+    "requestMeta.fulfillment.holdShelf": "Hold Shelf",
+    "requestMeta.fulfillment.delivery": "Delivery",
+    "requester.fulfillmentPref": "Fulfillment preference"
 }

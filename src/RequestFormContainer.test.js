@@ -21,7 +21,7 @@ const data = {
   requestExpirationDate: '',
   holdShelfExpirationDate: '',
   holdShelfExpirationTime: '',
-  fulfilmentPreference: '',
+  fulfillmentPreference: '',
   deliveryAddressTypeId: '',
   pickupServicePointId: '',
   itemId: '',
@@ -107,7 +107,7 @@ describe('RequestFormContainer', () => {
     it('should pass correct payload', () => {
       const payload = {
         deliveryAddressTypeId: '',
-        fulfilmentPreference: '',
+        fulfillmentPreference: '',
         holdShelfExpirationTime: '',
         holdingsRecordId: undefined,
         instanceId: undefined,

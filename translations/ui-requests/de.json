@@ -34,7 +34,6 @@
     "requester.scanOrEnterBarcode": "Barcode Benutzer/-in scannen oder eingeben",
     "requester.findUserPluginLabel": "Personensuche",
     "requester.proxy": "Vollmachtnehmer/-in ",
-    "requester.fulfilmentPref": "Bereitstellungspräferenz",
     "requester.requester": "Bestandsanfrage für",
     "requester.pickupLocation": "Abholstandort",
     "actions.editRequest": "Bestandsanfrage bearbeiten",
@@ -55,7 +54,6 @@
     "item.requestsOnItem": "Bestandsanfragen für Exemplar",
     "actions.viewRequestsInQueue": "Bestandsanfragen in Warteliste anzeigen",
     "actions.selectPickupSp": "Abholservicestelle auswählen",
-    "fulfilmentPreference": "Bestandsanfrage Bereitstellungspräferenz",
     "requestType": "Bestandsanfragetyp",
     "status": "Status der Bestandsanfrage",
     "requestExpirationDate": "Ablaufdatum Bestandsanfrage",
@@ -81,8 +79,6 @@
     "requestMeta.type.recalls": "Rückrufe",
     "requestMeta.type.holds": "Vormerkungen",
     "requestMeta.type.pages": "Ausleihbestellungen",
-    "requestMeta.fulfilment.holdShelf": "Abholregal",
-    "requestMeta.fulfilment.delivery": "Lieferung",
     "actions.edit": "Bearbeiten",
     "item.location.name": "Effektiver Standort",
     "proxy.name": "Name Vollmachtnehmer/-in",
@@ -268,6 +264,10 @@
     "appMenu.keyboardShortcuts": "Tastenkürzel",
     "navigation.app": "Suche in Bestandsanfragen",
     "navigation.keyboardShortcuts": "Tastenkürzel",
-    "requests.servicePoint": "Pickup service point",
-    "requests.callNumber": "Effective call number string"
+    "requests.servicePoint": "Abholservicestelle",
+    "requests.callNumber": "Effektive Signatur Zeichenkette",
+    "fulfillmentPreference": "Bestandsanfrage Bereitstellungspräferenz",
+    "requestMeta.fulfillment.holdShelf": "Abholregal",
+    "requestMeta.fulfillment.delivery": "Lieferung",
+    "requester.fulfillmentPref": "Bereitstellungspräferenz"
 }

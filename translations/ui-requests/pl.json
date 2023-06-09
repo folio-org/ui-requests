@@ -34,7 +34,6 @@
     "requester.scanOrEnterBarcode": "Zeskanuj lub wprowadź kod kreskowy zamawiającego",
     "requester.findUserPluginLabel": "Wyszukiwanie zamawiającego",
     "requester.proxy": "Pełnomocnik zamawiającego",
-    "requester.fulfilmentPref": "Preferencje realizacji",
     "requester.requester": "Zamawiający",
     "requester.pickupLocation": "Miejsce odbioru",
     "actions.editRequest": "Edytuj zamówienie",
@@ -55,7 +54,6 @@
     "item.requestsOnItem": "zamówienia egzemplarzy",
     "actions.viewRequestsInQueue": "wyświetl zamówienia w kolejce",
     "actions.selectPickupSp": "Wybierz punkt odbioru",
-    "fulfilmentPreference": "Preferencje realizacji zamówienia",
     "requestType": "Typ zamówienia",
     "status": "Status zamówienia",
     "requestExpirationDate": "Data ważności zamówienia",
@@ -81,8 +79,6 @@
     "requestMeta.type.recalls": "Przypomnienia",
     "requestMeta.type.holds": "Umieszczone",
     "requestMeta.type.pages": "Strony",
-    "requestMeta.fulfilment.holdShelf": "Umieść na półce",
-    "requestMeta.fulfilment.delivery": "Dostawa",
     "actions.edit": "Edytuj",
     "item.location.name": "Efektywna lokalizacja",
     "proxy.name": "Nazwa pełnomocnika zamawiającego",
@@ -269,5 +265,9 @@
     "navigation.app": "Requests app Search",
     "navigation.keyboardShortcuts": "Keyboard shortcuts",
     "requests.servicePoint": "Pickup service point",
-    "requests.callNumber": "Effective call number string"
+    "requests.callNumber": "Effective call number string",
+    "fulfillmentPreference": "Request fulfillment preference",
+    "requestMeta.fulfillment.holdShelf": "Hold Shelf",
+    "requestMeta.fulfillment.delivery": "Delivery",
+    "requester.fulfillmentPref": "Fulfillment preference"
 }

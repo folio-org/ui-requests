@@ -34,7 +34,6 @@
     "requester.scanOrEnterBarcode": "Scansiona o digita il barcode del richiedente",
     "requester.findUserPluginLabel": "Ricerca utente",
     "requester.proxy": "Proxy del richiedente",
-    "requester.fulfilmentPref": "Modalità di evasione della richiesta",
     "requester.requester": "Richiedente",
     "requester.pickupLocation": "Luogo di ritiro",
     "actions.editRequest": "Modifica richiesta",
@@ -55,7 +54,6 @@
     "item.requestsOnItem": "Richieste su item",
     "actions.viewRequestsInQueue": "Visualizza richieste in coda",
     "actions.selectPickupSp": "Seleziona punto di ritiro",
-    "fulfilmentPreference": "Modalità di evasione della richiesta",
     "requestType": "Tipologia richiesta",
     "status": "Stato richiesta",
     "requestExpirationDate": "Data di scadenza della richiesta",
@@ -81,8 +79,6 @@
     "requestMeta.type.recalls": "Richiami",
     "requestMeta.type.holds": "Prenotazioni",
     "requestMeta.type.pages": "Richieste",
-    "requestMeta.fulfilment.holdShelf": "Scaffale prenotazioni",
-    "requestMeta.fulfilment.delivery": "Consegna",
     "actions.edit": "Modifica",
     "item.location.name": "Collocazione",
     "proxy.name": "Nome del delegato del richiedente",
@@ -269,5 +265,9 @@
     "navigation.app": "Ricerca nell'app Richieste",
     "navigation.keyboardShortcuts": "Scorciatoie da tastiera",
     "requests.servicePoint": "Pickup service point",
-    "requests.callNumber": "Effective call number string"
+    "requests.callNumber": "Effective call number string",
+    "fulfillmentPreference": "Request fulfillment preference",
+    "requestMeta.fulfillment.holdShelf": "Hold Shelf",
+    "requestMeta.fulfillment.delivery": "Delivery",
+    "requester.fulfillmentPref": "Fulfillment preference"
 }

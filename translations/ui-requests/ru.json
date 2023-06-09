@@ -34,7 +34,6 @@
     "requester.scanOrEnterBarcode": "Сканирование или введите штрихкод запроса",
     "requester.findUserPluginLabel": "Поиск заявителя",
     "requester.proxy": "Представитель заказчика",
-    "requester.fulfilmentPref": "Предпочтение выполнения",
     "requester.requester": "Заявитель",
     "requester.pickupLocation": "Место доставки ",
     "actions.editRequest": "Редактировать запрос",
@@ -55,7 +54,6 @@
     "item.requestsOnItem": "Запросы по пункту",
     "actions.viewRequestsInQueue": "Просмотр запросов в очереди",
     "actions.selectPickupSp": "Выберите пункт выдачи",
-    "fulfilmentPreference": "Предпочтительное выполнение запроса",
     "requestType": "Тип запроса",
     "status": "Статус запроса",
     "requestExpirationDate": "Дата окончания запроса",
@@ -81,8 +79,6 @@
     "requestMeta.type.recalls": "Recalls",
     "requestMeta.type.holds": "Holds",
     "requestMeta.type.pages": "Страницы",
-    "requestMeta.fulfilment.holdShelf": "Бронеполка",
-    "requestMeta.fulfilment.delivery": "Доставка",
     "actions.edit": "Редактировать",
     "item.location.name": "Постоянное хранение",
     "proxy.name": "Имя представителя заказчика",
@@ -269,5 +265,9 @@
     "navigation.app": "Requests app Search",
     "navigation.keyboardShortcuts": "Keyboard shortcuts",
     "requests.servicePoint": "Pickup service point",
-    "requests.callNumber": "Effective call number string"
+    "requests.callNumber": "Effective call number string",
+    "fulfillmentPreference": "Request fulfillment preference",
+    "requestMeta.fulfillment.holdShelf": "Hold Shelf",
+    "requestMeta.fulfillment.delivery": "Delivery",
+    "requester.fulfillmentPref": "Fulfillment preference"
 }

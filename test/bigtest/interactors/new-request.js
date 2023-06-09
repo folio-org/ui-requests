@@ -56,9 +56,9 @@ import BlockModalInteractor from './patron-block-modal';
 
   clickAddUser = clickable('[data-test-plugin-find-user-button]');
 
-  chooseFulfillmentPreference = selectable('[name="fulfilmentPreference"]');
+  chooseFulfillmentPreference = selectable('[name="fulfillmentPreference"]');
   chooseDeliveryAddress = selectable('[name="deliveryAddressTypeId"]');
-  fulfillmentPreferenceValue = value('[name="fulfilmentPreference"]');
+  fulfillmentPreferenceValue = value('[name="fulfillmentPreference"]');
   deliveryAddressTypeIdValue = value('[name="deliveryAddressTypeId"]');
   pickupServicePointIdValue = value('[name="pickupServicePointId"]');
 

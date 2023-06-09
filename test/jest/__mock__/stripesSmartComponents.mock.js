@@ -12,6 +12,23 @@ jest.mock('@folio/stripes/smart-components', () => ({
       </div>
     );
   },
+  NoteViewPage: (props) => {
+    return (
+      <div>
+        <div>NoteViewPage</div>
+        {props.renderReferredRecord()}
+        <button type="button" onClick={props.onEdit}>onEdit</button>
+      </div>
+    );
+  },
+  NoteCreatePage: (props) => {
+    return (
+      <div>
+        <div>NoteCreatePage</div>
+        {props.renderReferredRecord()}
+      </div>
+    );
+  },
   NotesSmartAccordion: jest.fn(() => null),
   SearchAndSort: jest.fn(() => null),
   ViewMetaData: jest.fn(() => null),
