@@ -16,6 +16,12 @@ jest.mock('@folio/stripes/smart-components', () => ({
   SearchAndSort: jest.fn(() => null),
   ViewMetaData: jest.fn(() => null),
   withTags: jest.fn((WrappedComponent) => (props) => <WrappedComponent {...props} />),
-  ProxyManager: () => (<div data-testid="proxy-manager" />),
-  MultiSelectionFilter: jest.fn(() => <div>Multi Selection Filter</div>),
+  MultiSelectionFilter: (props) => {
+    return (
+      <div>
+        <div>MultiSelectionFilter</div>
+        {props.selectedValues}
+      </div>
+    );
+  },
 }));

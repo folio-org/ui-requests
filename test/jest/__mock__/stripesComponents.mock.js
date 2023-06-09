@@ -9,7 +9,7 @@ jest.mock('@folio/stripes/components', () => ({
       <div>
         <button
           type="button"
-          onClick={() => onClearFilter()}
+          onClick={onClearFilter}
           data-testid={`clear-${name}`}
         >Clear
         </button>
@@ -17,14 +17,8 @@ jest.mock('@folio/stripes/components', () => ({
       <div data-testid={`accordion-${name}`} />
     </div>
   )),
-  AccordionSet: jest.fn(({ children, onToggle }) => (
+  AccordionSet: jest.fn(({ children }) => (
     <div>
-      <button type="button" onClick={() => onToggle({ id: 'fulfillment-in-progress' })}>
-        Toggle in Progress
-      </button>
-      <button type="button" onClick={() => onToggle({ id: 'not-yet-filled' })}>
-        Toggle Not Yet Filled
-      </button>
       {children}
     </div>
   )),
@@ -48,23 +42,9 @@ jest.mock('@folio/stripes/components', () => ({
       {children}
     </div>
   )),
-  ConfirmationModal: jest.fn(({ heading, confirmLabel, cancelLabel, onConfirm, onCancel }) => (
-    <div>
-      <span>ConfirmationModal</span>
-      <div>
-        <div>{heading}</div>
-        <button type="button" onClick={onConfirm}>{confirmLabel}</button>
-        <button type="button" onClick={onCancel}>{cancelLabel}</button>
-      </div>
-    </div>)),
+  ConfirmationModal: jest.fn(() => <div>ConfirmationModal</div>),
   Datepicker: jest.fn(() => <div>Datepicker</div>),
-  ErrorModal: jest.fn(({ label, content, buttonLabel, onClose }) => (
-    <div>
-      <span>ErrorModal</span>
-      <div>{label}</div>
-      <div>{content}</div>
-      <button type="button" onClick={onClose}>{buttonLabel}</button>
-    </div>)),
+  ErrorModal: jest.fn(() => <div>ErrorModal</div>),
   FormattedDate: jest.fn(() => <div>Datepicker</div>),
   FilterAccordionHeader: jest.fn(({ children }) => <div>{children}</div>),
   Headline: jest.fn(({ children }) => (
@@ -151,24 +131,7 @@ jest.mock('@folio/stripes/components', () => ({
       {children}
     </div>
   )),
-  Select: ({ name, label, onChange, required, children, value }) => {
-    return (
-      <div>
-        <label htmlFor={name}>{label}</label>
-        <select
-          id={name}
-          name={name}
-          onChange={onChange}
-          required={required}
-          data-testid="select"
-          value={value}
-        >
-          {children}
-          Select
-        </select>
-      </div>
-    );
-  },
+  Select: jest.fn(() => <div>Select</div>),
   TextArea: jest.fn(() => <div>TextArea</div>),
   TextField: jest.fn(() => <div>TextField</div>),
   Timepicker: jest.fn(() => <div>Timepicker</div>),
