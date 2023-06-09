@@ -50,7 +50,7 @@ import {
 import ItemsDialog from './ItemsDialog';
 import {
   iconTypes,
-  fulfilmentTypeMap,
+  fulfillmentTypeMap,
   createModes,
   REQUEST_LEVEL_TYPES,
   itemStatusesTranslations,
@@ -108,7 +108,7 @@ class RequestForm extends React.Component {
     toggleModal: PropTypes.func,
     optionLists: PropTypes.shape({
       addressTypes: PropTypes.arrayOf(PropTypes.object),
-      fulfilmentTypes: PropTypes.arrayOf(PropTypes.object),
+      fulfillmentTypes: PropTypes.arrayOf(PropTypes.object),
       servicePoints: PropTypes.arrayOf(PropTypes.object),
     }),
     patronGroups: PropTypes.arrayOf(PropTypes.object),
@@ -242,9 +242,9 @@ class RequestForm extends React.Component {
 
     if (
       (initialValues &&
-        initialValues.fulfilmentPreference &&
+        initialValues.fulfillmentPreference &&
         prevInitialValues &&
-        !prevInitialValues.fulfilmentPreference) ||
+        !prevInitialValues.fulfillmentPreference) ||
       !isEqual(request, prevRequest)
     ) {
       onSetSelectedItem(request.item);
@@ -533,7 +533,7 @@ class RequestForm extends React.Component {
         deliverySelected,
         selectedAddressTypeId,
       }, () => {
-        form.change(REQUEST_FORM_FIELD_NAMES.FULFILMENT_PREFERENCE, fulfillmentPreference);
+        form.change(REQUEST_FORM_FIELD_NAMES.FULFILLMENT_PREFERENCE, fulfillmentPreference);
 
         this.updateRequestPreferencesFields();
       });
@@ -542,7 +542,7 @@ class RequestForm extends React.Component {
         ...getDefaultRequestPreferences(request, initialValues),
         deliverySelected: false,
       }, () => {
-        form.change(REQUEST_FORM_FIELD_NAMES.FULFILMENT_PREFERENCE, fulfilmentTypeMap.HOLD_SHELF);
+        form.change(REQUEST_FORM_FIELD_NAMES.FULFILLMENT_PREFERENCE, fulfillmentTypeMap.HOLD_SHELF);
       });
     }
   }
@@ -1015,9 +1015,10 @@ class RequestForm extends React.Component {
     const requestTypeError = hasNonRequestableStatus(selectedItem);
     const itemStatus = selectedItem?.status?.name;
     const itemStatusMessage = <FormattedMessage id={itemStatusesTranslations[itemStatus]} />;
-    const fulfilmentTypeOptions = getFulfillmentTypeOptions(hasDelivery, optionLists?.fulfilmentTypes || []);
+    const fulfillmentTypeOptions = getFulfillmentTypeOptions(hasDelivery, optionLists?.fulfillmentTypes || []);
     const selectedProxy = getProxy(request, proxy);
     const isSubmittingDisabled = isSubmittingButtonDisabled(pristine, submitting);
+    const isTitleLevelRequest = createTitleLevelRequest || request?.requestLevel === REQUEST_LEVEL_TYPES.TITLE;
     const getPatronBlockModalOpenStatus = () => {
       if (isAwaitingForProxySelection) {
         return false;
@@ -1108,6 +1109,7 @@ class RequestForm extends React.Component {
                         type="checkbox"
                         label={formatMessage({ id: 'ui-requests.requests.createTitleLevelRequest' })}
                         component={Checkbox}
+                        checked={isTitleLevelRequest}
                         disabled={!this.state.titleLevelRequestsFeatureEnabled || isItemOrInstanceLoading}
                         onChange={this.handleTlrCheckboxChange}
                       />
@@ -1118,7 +1120,7 @@ class RequestForm extends React.Component {
               <AccordionStatus ref={this.accordionStatusRef}>
                 <AccordionSet>
                   {
-                    createTitleLevelRequest || (request?.requestLevel === REQUEST_LEVEL_TYPES.TITLE)
+                    isTitleLevelRequest
                       ? (
                         <Accordion
                           id="new-instance-info"
@@ -1195,7 +1197,7 @@ class RequestForm extends React.Component {
                         deliverySelected={deliverySelected}
                         addressDetail={addressDetail}
                         deliveryLocations={deliveryLocations}
-                        fulfilmentTypeOptions={fulfilmentTypeOptions}
+                        fulfillmentTypeOptions={fulfillmentTypeOptions}
                         selectedProxy={selectedProxy}
                         isLoading={isUserLoading}
                         changeDeliveryAddress={this.changeDeliveryAddress}

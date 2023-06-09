@@ -34,7 +34,6 @@
     "requester.scanOrEnterBarcode": "リクエスト者バーコードをスキャンまたは入力する",
     "requester.findUserPluginLabel": "Requester look-up",
     "requester.proxy": "Requester's proxy",
-    "requester.fulfilmentPref": "Fulfillment preference",
     "requester.requester": "Requester",
     "requester.pickupLocation": "Pickup location",
     "actions.editRequest": "リクエストを編集",
@@ -55,7 +54,6 @@
     "item.requestsOnItem": "Requests on item",
     "actions.viewRequestsInQueue": "view requests in queue",
     "actions.selectPickupSp": "受取サービスポイントを選択",
-    "fulfilmentPreference": "Request fulfillment preference",
     "requestType": "リクエストの種類",
     "status": "リクエスト状況",
     "requestExpirationDate": "リクエスト失効日",
@@ -81,8 +79,6 @@
     "requestMeta.type.recalls": "期限前返却依頼",
     "requestMeta.type.holds": "予約",
     "requestMeta.type.pages": "分館取寄",
-    "requestMeta.fulfilment.holdShelf": "取り置き棚",
-    "requestMeta.fulfilment.delivery": "Delivery",
     "actions.edit": "編集",
     "item.location.name": "有効な場所",
     "proxy.name": "Requester's proxy name",
@@ -269,5 +265,9 @@
     "navigation.app": "Requests app Search",
     "navigation.keyboardShortcuts": "Keyboard shortcuts",
     "requests.servicePoint": "Pickup service point",
-    "requests.callNumber": "Effective call number string"
+    "requests.callNumber": "Effective call number string",
+    "fulfillmentPreference": "Request fulfillment preference",
+    "requestMeta.fulfillment.holdShelf": "Hold Shelf",
+    "requestMeta.fulfillment.delivery": "Delivery",
+    "requester.fulfillmentPref": "Fulfillment preference"
 }

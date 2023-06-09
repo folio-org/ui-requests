@@ -70,6 +70,7 @@ jest.mock('@folio/stripes/components', () => ({
   )),
   MultiColumnList: jest.fn(({ children }) => (
     <div>
+      <div>MultiColumnList</div>
       {children}
     </div>
   )),

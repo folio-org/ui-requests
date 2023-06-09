@@ -34,7 +34,6 @@
     "requester.scanOrEnterBarcode": "扫描或输入请求者条码",
     "requester.findUserPluginLabel": "请求者查找",
     "requester.proxy": "请求者的代理",
-    "requester.fulfilmentPref": "履行首选项",
     "requester.requester": "请求者",
     "requester.pickupLocation": "取件地",
     "actions.editRequest": "编辑请求",
@@ -55,7 +54,6 @@
     "item.requestsOnItem": "请求单件",
     "actions.viewRequestsInQueue": "查看队列中的请求",
     "actions.selectPickupSp": "选择取件服务点",
-    "fulfilmentPreference": "请求履行首选项",
     "requestType": "请求类型",
     "status": "请求状态",
     "requestExpirationDate": "请求到期日",
@@ -81,8 +79,6 @@
     "requestMeta.type.recalls": "召回",
     "requestMeta.type.holds": "馆藏",
     "requestMeta.type.pages": "传呼",
-    "requestMeta.fulfilment.holdShelf": "预约架",
-    "requestMeta.fulfilment.delivery": "传递",
     "actions.edit": "编辑",
     "item.location.name": "有效馆藏地",
     "proxy.name": "请求者的代理名称",
@@ -269,5 +265,9 @@
     "navigation.app": "请求应用程序搜索",
     "navigation.keyboardShortcuts": "键盘快捷键",
     "requests.servicePoint": "取件服务点",
-    "requests.callNumber": "有效的索书号字符串"
+    "requests.callNumber": "有效的索书号字符串",
+    "fulfillmentPreference": "请求履行首选项",
+    "requestMeta.fulfillment.holdShelf": "预约架",
+    "requestMeta.fulfillment.delivery": "传递",
+    "requester.fulfillmentPref": "执行偏好"
 }

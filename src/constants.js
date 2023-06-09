@@ -11,20 +11,14 @@ export const requestTypesTranslations = {
   'Page': 'ui-requests.requestMeta.type.page',
 };
 
-export const fulfilmentTypes = [
-  { id: 'Hold Shelf', label: 'ui-requests.requestMeta.fulfilment.holdShelf' },
-  { id: 'Delivery', label: 'ui-requests.requestMeta.fulfilment.delivery' },
+export const fulfillmentTypes = [
+  { id: 'Hold Shelf', label: 'ui-requests.requestMeta.fulfillment.holdShelf' },
+  { id: 'Delivery', label: 'ui-requests.requestMeta.fulfillment.delivery' },
 ];
 
-export const fulfilmentTypeMap = {
+export const fulfillmentTypeMap = {
   DELIVERY: 'Delivery',
   HOLD_SHELF: 'Hold Shelf',
-};
-
-// map from API's enum-value to translation key
-export const fulfilmentTypesTranslations = {
-  'Delivery': 'ui-requests.requestMeta.fulfilment.delivery.',
-  'Hold Shelf': 'ui-requests.requestMeta.fulfilment.holdShelf.',
 };
 
 export const OPEN_REQUESTS_STATUSES = [
@@ -185,7 +179,7 @@ export const reportHeaders = [
   'requester.name',
   'requester.barcode',
   'requester.patronGroup.group',
-  'fulfilmentPreference',
+  'fulfillmentPreference',
   'pickupServicePoint.name',
   'deliveryAddress',
   'proxy.name',
@@ -311,7 +305,7 @@ export const RESOURCE_KEYS = {
 
 export const REQUEST_FORM_FIELD_NAMES = {
   CREATE_TLR: 'createTitleLevelRequest',
-  FULFILMENT_PREFERENCE: 'fulfilmentPreference',
+  FULFILLMENT_PREFERENCE: 'fulfillmentPreference',
   DELIVERY_ADDRESS_TYPE_ID: 'deliveryAddressTypeId',
   REQUESTER_ID: 'requesterId',
   REQUESTER: 'requester',
