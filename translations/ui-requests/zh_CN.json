@@ -266,8 +266,8 @@
     "navigation.keyboardShortcuts": "键盘快捷键",
     "requests.servicePoint": "取件服务点",
     "requests.callNumber": "有效的索书号字符串",
-    "fulfillmentPreference": "Request fulfillment preference",
-    "requestMeta.fulfillment.holdShelf": "Hold Shelf",
-    "requestMeta.fulfillment.delivery": "Delivery",
-    "requester.fulfillmentPref": "Fulfillment preference"
+    "fulfillmentPreference": "请求履行首选项",
+    "requestMeta.fulfillment.holdShelf": "预约架",
+    "requestMeta.fulfillment.delivery": "传递",
+    "requester.fulfillmentPref": "执行偏好"
 }

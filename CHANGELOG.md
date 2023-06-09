@@ -19,12 +19,21 @@
 * Cannot save item request from item with status On Order, because need a barcode. Refs UIREQ-924.
 * Cover `src/components/PrintButton/PrintButton.js` file by RTL/Jest tests. Refs UIREQ-886.
 * Cover `src/components/Loading/Loading.js` file by RTL/Jest tests. Refs UIREQ-885.
+* Create Jest/RTL test for ReferredRecord.js. Refs UIREQ-936.
+* Create Jest/RTL test for NoteCreateRoute.js Refs: UIREQ-943.
 * Leverage cookie-based authentication in all API requests. Refs UIREQ-861.
+* Create Jest/RTL test for NoteEditRoute.js Refs: UIREQ-944.
 * Update `circulation` okapi interface to `14.0` version. Refs UIREQ-954.
 * Added requestDate token. Refs UIREQ-962.
 * Update `request-storage` okapi interface to `6.0` version. Refs UIREQ-963.
 * UI tests replacement with RTL/Jest for src/PatronBlockModal.js. Refs UIREQ-878.
 * Create Jest/RTL test for RequestsFiltersConfig.js. Refs: UIREQ-938
+* Create Jest/RTL test for SortableList.js. Refs UIREQ-941.
+* create Jest/RTL test for draggableRowFormatter.js, Refs UIREQ-942
+* UI tests replacement with RTL/Jest for src/UserDetail.js. Refs UIREQ-881.
+* TLR: "Create title level request" checkbox not preselected on "New request" page. Refs UIREQ-955.
+* Do not publish test artifacts to NPM. Refs STRIPES-865.
+* Create Jest/RTL test for NoteViewRoute.js Refs: UIREQ-945.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)
