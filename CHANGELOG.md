@@ -19,6 +19,7 @@
 * Cannot save item request from item with status On Order, because need a barcode. Refs UIREQ-924.
 * Cover `src/components/PrintButton/PrintButton.js` file by RTL/Jest tests. Refs UIREQ-886.
 * Cover `src/components/Loading/Loading.js` file by RTL/Jest tests. Refs UIREQ-885.
+* Create Jest/RTL test for ReferredRecord.js. Refs UIREQ-936.
 * Create Jest/RTL test for NoteCreateRoute.js Refs: UIREQ-943.
 * Leverage cookie-based authentication in all API requests. Refs UIREQ-861.
 * Update `circulation` okapi interface to `14.0` version. Refs UIREQ-954.
