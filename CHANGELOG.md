@@ -22,6 +22,7 @@
 * Create Jest/RTL test for ReferredRecord.js. Refs UIREQ-936.
 * Create Jest/RTL test for NoteCreateRoute.js Refs: UIREQ-943.
 * Leverage cookie-based authentication in all API requests. Refs UIREQ-861.
+* Create Jest/RTL test for NoteEditRoute.js Refs: UIREQ-944.
 * Update `circulation` okapi interface to `14.0` version. Refs UIREQ-954.
 * Added requestDate token. Refs UIREQ-962.
 * Update `request-storage` okapi interface to `6.0` version. Refs UIREQ-963.
