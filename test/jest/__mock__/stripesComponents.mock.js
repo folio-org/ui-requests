@@ -139,17 +139,18 @@ jest.mock('@folio/stripes-components', () => ({
     const handleChange = (e) => {
       validate(e.target.value);
       onChange(e);
-    }
+    };
 
     return (
       <div>
-        <label>{label}</label>
+        <label htmlFor="textField">{label}</label>
         <input
+          id="textField"
           onChange={handleChange}
           {...rest}
         />
       </div>
-    )
+    );
   }),
   Timepicker: jest.fn(() => <div>Timepicker</div>),
 }));
