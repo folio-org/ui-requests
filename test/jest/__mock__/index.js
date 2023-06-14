@@ -7,3 +7,4 @@ import './stripesIcon.mock';
 import './stripesCore.mock';
 import './stripesSmartComponents.mock';
 import './reactToPrint.mock';
+import './finalFormComponents.mock';
