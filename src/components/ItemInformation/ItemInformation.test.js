@@ -134,7 +134,7 @@ describe('ItemInformation', () => {
       expect(itemBarcodeLabel).toBeVisible();
     });
 
-    it('should trigger "findItem" after "keyDown" event', () => {
+    it('should trigger "findItem" when Enter key is pressed', () => {
       const itemBarcodeField = screen.getByTestId(testIds.itemBarcodeField);
 
       fireEvent.keyDown(itemBarcodeField, { key: ENTER_EVENT_KEY });
@@ -142,7 +142,7 @@ describe('ItemInformation', () => {
       expect(basicProps.findItem).toHaveBeenCalledWith(RESOURCE_KEYS.barcode, basicProps.values.item.barcode);
     });
 
-    it('should not trigger "findItem" after "keyDown" event', () => {
+    it('should not trigger "findItem" when Control key is pressed', () => {
       const itemBarcodeField = screen.getByTestId(testIds.itemBarcodeField);
 
       fireEvent.keyDown(itemBarcodeField, { key: 'Control' });
