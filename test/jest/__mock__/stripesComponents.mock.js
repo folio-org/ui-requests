@@ -9,7 +9,7 @@ jest.mock('@folio/stripes-components', () => ({
       <div>
         <button
           type="button"
-          onClick={() => onClearFilter()}
+          onClick={onClearFilter}
           data-testid={`clear-${name}`}
         >Clear
         </button>
