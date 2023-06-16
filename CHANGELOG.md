@@ -35,6 +35,7 @@
 * Do not publish test artifacts to NPM. Refs STRIPES-865.
 * Create Jest/RTL test for NoteViewRoute.js Refs: UIREQ-945.
 * Cover ItemInformation by jest/RTL tests. Refs UIREQ-949.
+* Cover InstanceInformation by jest/RTL tests. Refs UIREQ-950.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)
