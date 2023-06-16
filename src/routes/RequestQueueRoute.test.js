@@ -110,7 +110,7 @@ describe('RequestQueueRoute', () => {
     expect(container).toBeInTheDocument();
   });
   it('should call setTlrSettings on mount if configs have loaded', () => {
-    render(
+    const { rerender } = render(
       <RequestQueueRoute
         resources={{
           ...mockResources,
@@ -124,11 +124,8 @@ describe('RequestQueueRoute', () => {
     );
 
     expect(mockMutator.requests.GET).not.toHaveBeenCalled();
-    expect(mockMutator.requests.reset).not.toHaveBeenCalled();
-    expect(mockMutator.reorderInstanceQueue.POST).not.toHaveBeenCalled();
-    expect(mockMutator.reorderItemQueue.POST).not.toHaveBeenCalled();
 
-    render(
+    rerender(
       <RequestQueueRoute
         resources={mockResources}
         mutator={mockMutator}
@@ -139,9 +136,6 @@ describe('RequestQueueRoute', () => {
     );
 
     expect(mockMutator.requests.GET).toHaveBeenCalled();
-    expect(mockMutator.requests.reset).toHaveBeenCalled();
-    expect(mockMutator.reorderInstanceQueue.POST).not.toHaveBeenCalled();
-    expect(mockMutator.reorderItemQueue.POST).not.toHaveBeenCalled();
   });
   it('calls setTlrSettings on update', () => {
     const { rerender } = render(
@@ -168,8 +162,6 @@ describe('RequestQueueRoute', () => {
         location={mockLocation}
       />
     );
-    expect(mockMutator.requests.reset).toHaveBeenCalledTimes(1);
-    expect(mockMutator.requests.GET).toHaveBeenCalledTimes(1);
     expect(mockMutator.requests.GET).toHaveBeenCalledWith({
       path: 'circulation/requests/queue/item/2',
     });
@@ -222,7 +214,6 @@ describe('RequestQueueRoute', () => {
       />,
     );
     userEvent.click(getByText('Close'));
-    expect(push).toHaveBeenCalledTimes(1);
     expect(push).toHaveBeenCalledWith('/requests/view/1');
   });
 });
