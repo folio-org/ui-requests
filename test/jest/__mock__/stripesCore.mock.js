@@ -26,4 +26,5 @@ jest.mock('@folio/stripes/core', () => ({
   Pluggable: jest.fn(() => null),
   IfPermission: jest.fn(({ children }) => <div>{children}</div>),
   TitleManager: jest.fn(jest.fn(() => null)),
+  AppIcon: jest.fn(() => null),
 }));
