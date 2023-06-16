@@ -24,7 +24,7 @@ export const historyData = {
   },
   createHref: () => {},
   push: () => {},
-  replace: () => {},
+  replace: jest.fn(),
   go: () => {},
   goBack: () => {},
   goForward: () => {},

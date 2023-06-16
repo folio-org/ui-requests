@@ -3,6 +3,7 @@ import React from 'react';
 jest.mock('@folio/stripes-components', () => ({
   ...jest.requireActual('@folio/stripes-components'),
   Accordion: jest.fn(({ children, label, name, onClearFilter }) => (
+  Accordion: jest.fn(({ children, label }) => (
     <div>
       {label}
       {children}
