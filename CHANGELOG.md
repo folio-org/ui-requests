@@ -27,15 +27,16 @@
 * Added requestDate token. Refs UIREQ-962.
 * Update `request-storage` okapi interface to `6.0` version. Refs UIREQ-963.
 * UI tests replacement with RTL/Jest for src/PatronBlockModal.js. Refs UIREQ-878.
-* Create Jest/RTL test for RequestsFiltersConfig.js. Refs: UIREQ-938
+* Create Jest/RTL test for RequestsFiltersConfig.js. Refs UIREQ-938.
 * Create Jest/RTL test for SortableList.js. Refs UIREQ-941.
-* create Jest/RTL test for draggableRowFormatter.js, Refs UIREQ-942
+* Create Jest/RTL test for draggableRowFormatter.js. Refs UIREQ-942.
 * UI tests replacement with RTL/Jest for src/UserDetail.js. Refs UIREQ-881.
 * TLR: "Create title level request" checkbox not preselected on "New request" page. Refs UIREQ-955.
 * Do not publish test artifacts to NPM. Refs STRIPES-865.
-* Create Jest/RTL test for NoteViewRoute.js Refs: UIREQ-945.
+* Create Jest/RTL test for NoteViewRoute.js. Refs UIREQ-945.
 * Cover ItemInformation by jest/RTL tests. Refs UIREQ-949.
 * Cover InstanceInformation by jest/RTL tests. Refs UIREQ-950.
+* Fix inconsistency in RTL/Jest tests. Refs UIREQ-979.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)
