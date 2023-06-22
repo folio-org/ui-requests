@@ -1,25 +1,36 @@
-import '__mock__/';
-import { render, screen } from '@testing-library/react';
+import {
+  render,
+  screen,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { historyData } from '../../test/jest/fixtures/historyData';
+
+import '__mock__/';
+
 import NoteViewRoute from './NoteViewRoute';
+import {
+  historyData,
+} from '../../test/jest/fixtures/historyData';
 
 jest.mock('react-router', () => ({
   ...jest.requireActual('react-router'),
-  Redirect: () => <div>Request</div>
+  Redirect: () => <div>Request</div>,
 }));
 
 const locationData = historyData.location;
 const match = {
   params: {
-    noteId: 'viewNoteRouteID'
+    noteId: 'viewNoteRouteID',
   },
   path: 'viewPath',
-  url: '{{ env.FOLIO_MD_REGISTRY }}/_/proxy/modules'
+  url: '{{ env.FOLIO_MD_REGISTRY }}/_/proxy/modules',
 };
 
 const renderNoteViewRoute = (locationProps, historyProps) => render(
-  <NoteViewRoute location={locationProps} history={historyProps} match={match} />
+  <NoteViewRoute
+    location={locationProps}
+    history={historyProps}
+    match={match}
+  />
 );
 
 describe('NoteViewRoute', () => {
@@ -27,15 +38,19 @@ describe('NoteViewRoute', () => {
     beforeEach(() => {
       renderNoteViewRoute(locationData, historyData);
     });
+
     it('NoteViewPage should render when location.state is not empty', () => {
       expect(screen.getByText('NoteViewPage')).toBeInTheDocument();
     });
+
     it('history.replace function to be called when onEdit clicked', () => {
       userEvent.click(screen.getByRole('button', { name: 'onEdit' }));
+
       expect(historyData.replace).toBeCalled();
     });
   });
-  it('Request page should render when location.state is empty', () => {
+
+  it('should render request page when location.state is empty', () => {
     const historyProp = {
       ...historyData,
       location : {
@@ -47,7 +62,9 @@ describe('NoteViewRoute', () => {
       },
     };
     const locationProp = historyProp.location;
+
     renderNoteViewRoute(locationProp, historyProp);
+
     expect(screen.getByText('Request')).toBeInTheDocument();
   });
 });
