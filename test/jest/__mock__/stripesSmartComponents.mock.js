@@ -2,6 +2,7 @@ import React from 'react';
 
 jest.mock('@folio/stripes/smart-components', () => ({
   ClipCopy: jest.fn(() => null),
+  deparseFilters: jest.fn(),
   makeQueryFunction: jest.fn((value) => value),
   CheckboxFilter: jest.fn(() => null),
   NoteEditPage: (props) => {
