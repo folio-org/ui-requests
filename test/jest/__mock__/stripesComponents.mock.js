@@ -1,15 +1,30 @@
 import React from 'react';
 
-jest.mock('@folio/stripes-components', () => ({
-  ...jest.requireActual('@folio/stripes-components'),
-  Accordion: jest.fn(({ children, label }) => (
+jest.mock('@folio/stripes/components', () => ({
+  ...jest.requireActual('@folio/stripes/components'),
+  Accordion: jest.fn(({ children, label, name, onClearFilter }) => (
     <div>
       {label}
       {children}
+      <div>
+        <button
+          type="button"
+          onClick={onClearFilter}
+          data-testid={`clear-${name}`}
+        >Clear
+        </button>
+      </div>
+      <div data-testid={`accordion-${name}`} />
     </div>
   )),
-  AccordionSet: jest.fn(({ children }) => (
+  AccordionSet: jest.fn(({ children, onToggle }) => (
     <div>
+      <button type="button" onClick={() => onToggle({ id: 'fulfillment-in-progress' })}>
+        Toggle in Progress
+      </button>
+      <button type="button" onClick={() => onToggle({ id: 'not-yet-filled' })}>
+        Toggle Not Yet Filled
+      </button>
       {children}
     </div>
   )),
@@ -27,20 +42,29 @@ jest.mock('@folio/stripes-components', () => ({
     </button>
   )),
   Callout: jest.fn(() => <div>Callout</div>),
-  Checkbox: jest.fn((props) => (
-    <input
-      type="checkbox"
-      {...props}
-    />
-  )),
+  Checkbox: jest.fn(() => <div>Checkbox</div>),
   Col: jest.fn(({ children }) => (
     <div data-test-col>
       {children}
     </div>
   )),
-  ConfirmationModal: jest.fn(() => <div>ConfirmationModal</div>),
+  ConfirmationModal: jest.fn(({ heading, confirmLabel, cancelLabel, onConfirm, onCancel }) => (
+    <div>
+      <span>ConfirmationModal</span>
+      <div>
+        <div>{heading}</div>
+        <button type="button" onClick={onConfirm}>{confirmLabel}</button>
+        <button type="button" onClick={onCancel}>{cancelLabel}</button>
+      </div>
+    </div>)),
   Datepicker: jest.fn(() => <div>Datepicker</div>),
-  ErrorModal: jest.fn(() => <div>ErrorModal</div>),
+  ErrorModal: jest.fn(({ label, content, buttonLabel, onClose }) => (
+    <div>
+      <span>ErrorModal</span>
+      <div>{label}</div>
+      <div>{content}</div>
+      <button type="button" onClick={onClose}>{buttonLabel}</button>
+    </div>)),
   FormattedDate: jest.fn(() => <div>Datepicker</div>),
   FilterAccordionHeader: jest.fn(({ children }) => <div>{children}</div>),
   Headline: jest.fn(({ children }) => (
@@ -75,7 +99,6 @@ jest.mock('@folio/stripes-components', () => ({
   )),
   MultiColumnList: jest.fn(({ children }) => (
     <div>
-      <div>MultiColumnList</div>
       {children}
     </div>
   )),
@@ -128,29 +151,25 @@ jest.mock('@folio/stripes-components', () => ({
       {children}
     </div>
   )),
-  Select: jest.fn(() => <div>Select</div>),
-  TextArea: jest.fn(() => <div>TextArea</div>),
-  TextField: jest.fn(({
-    label,
-    onChange,
-    validate = jest.fn(),
-    ...rest
-  }) => {
-    const handleChange = (e) => {
-      validate(e.target.value);
-      onChange(e);
-    };
-
+  Select: ({ name, label, onChange, required, children, value }) => {
     return (
       <div>
-        <label htmlFor="textField">{label}</label>
-        <input
-          id="textField"
-          onChange={handleChange}
-          {...rest}
-        />
+        <label htmlFor={name}>{label}</label>
+        <select
+          id={name}
+          name={name}
+          onChange={onChange}
+          required={required}
+          data-testid="select"
+          value={value}
+        >
+          {children}
+          Select
+        </select>
       </div>
     );
-  }),
+  },
+  TextArea: jest.fn(() => <div>TextArea</div>),
+  TextField: jest.fn(() => <div>TextField</div>),
   Timepicker: jest.fn(() => <div>Timepicker</div>),
 }));
