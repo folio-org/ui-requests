@@ -232,7 +232,7 @@ describe('getInstanceQueryString', () => {
 });
 
 describe('generateUserName', () => {
-  it('Should return full name', () => {
+  it('should return full name', () => {
     const firstName = 'Bob';
     const lastName = 'Marley';
     const middleName = 'Test';
@@ -241,7 +241,7 @@ describe('generateUserName', () => {
       .toEqual(`${lastName}, ${firstName} ${middleName}`);
   });
 
-  it('Should return last name and first name', () => {
+  it('should return last name and first name', () => {
     const firstName = 'Bob';
     const lastName = 'Marley';
     const middleName = undefined;
@@ -250,7 +250,7 @@ describe('generateUserName', () => {
       .toEqual(`${lastName}, ${firstName}`);
   });
 
-  it('Should return last name only', () => {
+  it('should return last name only', () => {
     const firstName = undefined;
     const lastName = 'Marley';
     const middleName = undefined;
@@ -259,7 +259,7 @@ describe('generateUserName', () => {
       .toEqual(lastName);
   });
 
-  it('Should return last name only if lastName and middleName presented', () => {
+  it('should return last name only if lastName and middleName presented', () => {
     const firstName = undefined;
     const lastName = 'Marley';
     const middleName = 'Test';

@@ -1,5 +1,10 @@
 import '../../../test/jest/__mock__';
-import { render, screen } from '@testing-library/react';
+
+import {
+  render,
+  screen,
+} from '@testing-library/react';
+
 import ReferredRecord from './ReferredRecord';
 
 const propsData = {
@@ -12,32 +17,30 @@ const propsData = {
   requesterId: 'testRequesterId',
   requesterName: 'testRequesterName',
 };
-
 const labelIds = {
   entityTypeRequest: 'ui-requests.notes.entityType.request',
   assignedFor: 'ui-requests.notes.assigned.for',
   assignedRequester: 'ui-requests.notes.assigned.requester',
-  assignedRequestDate: 'ui-requests.notes.assigned.requestDate'
+  assignedRequestDate: 'ui-requests.notes.assigned.requestDate',
 };
-
 const renderReferredRecord = (prop) => render(<ReferredRecord values={prop} />);
 
 describe('ReferredRecord', () => {
   beforeEach(() => renderReferredRecord(propsData));
 
-  it('entityType.request should render', () => {
+  it('should render entityType.request', () => {
     expect(screen.getByText(labelIds.entityTypeRequest)).toBeInTheDocument();
   });
 
-  it('assigned.for should render', () => {
+  it('should render assigned.for', () => {
     expect(screen.getByText(labelIds.assignedFor)).toBeInTheDocument();
   });
 
-  it('assigned.requester should render', () => {
+  it('should render assigned.requester', () => {
     expect(screen.getByText(labelIds.assignedRequester)).toBeInTheDocument();
   });
 
-  it('assigned.requestDate should render', () => {
+  it('should render assigned.requestDate', () => {
     expect(screen.getByText(labelIds.assignedRequestDate)).toBeInTheDocument();
   });
 });
