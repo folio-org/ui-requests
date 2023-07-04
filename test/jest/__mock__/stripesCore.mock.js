@@ -23,7 +23,20 @@ jest.mock('@folio/stripes/core', () => ({
     />
   ),
   stripesConnect: Component => props => <Component {...props} />,
-  Pluggable: jest.fn(() => null),
+  Pluggable: jest.fn(({
+    searchLabel,
+    selectInstance,
+  }) => (
+    <>
+      <div>{searchLabel}</div>
+      <button
+        type="button"
+        onClick={() => selectInstance({ hrid: 'hrid' })}
+      >
+        Search Instance
+      </button>
+    </>
+  )),
   IfPermission: jest.fn(({ children }) => <div>{children}</div>),
   TitleManager: jest.fn(jest.fn(() => null)),
   AppIcon: jest.fn(() => null),
