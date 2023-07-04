@@ -54,7 +54,6 @@ describe('RequestsFilters', () => {
       expect(screen.getByText(/PickupServicePointFilter/i)).toBeInTheDocument();
     });
     it('should render the MultiSelectionFilter', () => {
-      screen.debug();
       expect(screen.getByText(/MultiSelectionFilter/i)).toBeInTheDocument();
     });
     it('should not render RequestLevelFilter when titleLevelRequestsFeatureEnabled is false', () => {
