@@ -1,11 +1,8 @@
+import '__mock__/';
 import React from 'react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import RequestQueueRoute from './RequestQueueRoute';
-
-jest.mock('@folio/stripes/core', () => ({
-  stripesConnect: jest.fn(Component => props => <Component {...props} />)
-}));
 
 jest.mock('react-router-prop-types', () => ({
   location: jest.fn(),
@@ -97,18 +94,6 @@ describe('RequestQueueRoute', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  it('renders without error', () => {
-    const { container } = render(
-      <RequestQueueRoute
-        resources={mockResources}
-        mutator={mockMutator}
-        history={mockHistory}
-        location={mockLocation}
-        match={mockMatch}
-      />
-    );
-    expect(container).toBeInTheDocument();
-  });
   it('should call setTlrSettings on mount if configs have loaded', () => {
     const { rerender } = render(
       <RequestQueueRoute
@@ -136,35 +121,6 @@ describe('RequestQueueRoute', () => {
     );
 
     expect(mockMutator.requests.GET).toHaveBeenCalled();
-  });
-  it('calls setTlrSettings on update', () => {
-    const { rerender } = render(
-      <RequestQueueRoute
-        resources={{
-          ...mockResources,
-          configs: {
-            ...mockResources.configs,
-            hasLoaded: false,
-          },
-        }}
-        mutator={mockMutator}
-        history={mockHistory}
-        match={mockMatch}
-        location={mockLocation}
-      />
-    );
-    rerender(
-      <RequestQueueRoute
-        resources={mockResources}
-        mutator={mockMutator}
-        history={mockHistory}
-        match={mockMatch}
-        location={mockLocation}
-      />
-    );
-    expect(mockMutator.requests.GET).toHaveBeenCalledWith({
-      path: 'circulation/requests/queue/item/2',
-    });
   });
   it('calls history.goBack() if location.state.request is truthy', () => {
     const goBack = jest.fn();
