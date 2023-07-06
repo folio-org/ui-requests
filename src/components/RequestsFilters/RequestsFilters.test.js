@@ -2,7 +2,37 @@ import '__mock__/';
 
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Accordion, AccordionSet } from '@folio/stripes/components';
 import RequestsFilters from './RequestsFilters';
+
+Accordion.mockImplementation(jest.fn(({ children, label, name, onClearFilter }) => (
+  <div>
+    {label}
+    {children}
+    <div>
+      <button
+        type="button"
+        onClick={onClearFilter}
+        data-testid={`clear-${name}`}
+      >
+        Clear
+      </button>
+    </div>
+    <div data-testid={`accordion-${name}`} />
+  </div>
+)));
+
+AccordionSet.mockImplementation(jest.fn(({ children, onToggle }) => (
+  <div>
+    <button type="button" onClick={() => onToggle({ id: 'fulfillment-in-progress' })}>
+      Toggle in Progress
+    </button>
+    <button type="button" onClick={() => onToggle({ id: 'not-yet-filled' })}>
+      Toggle Not Yet Filled
+    </button>
+    {children}
+  </div>
+)));
 
 jest.mock('./PickupServicePointFilter', () => ({
   PickupServicePointFilter: jest.fn(() => <div>PickupServicePointFilter</div>),
