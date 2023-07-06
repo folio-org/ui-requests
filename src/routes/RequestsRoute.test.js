@@ -16,6 +16,9 @@ import { CommandList, defaultKeyboardShortcuts } from '@folio/stripes/components
 
 import RequestsRoute, {
   buildHoldRecords,
+  REQUEST_ERROR_MESSAGE_CODE,
+  REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS,
+  getRequestErrorMessage,
 } from './RequestsRoute';
 
 import {
@@ -298,6 +301,52 @@ describe('RequestsRoute', () => {
       const expectedResult = [{}];
 
       expect(buildHoldRecords(records)).toEqual(expectedResult);
+    });
+  });
+
+  describe('getRequestErrorMessage', () => {
+    const formatMessage = jest.fn(({ id }) => id);
+    const intl = {
+      formatMessage,
+    };
+    const message = 'test message';
+
+    it('should have same count of code and translation keys', () => {
+      expect(Object.keys(REQUEST_ERROR_MESSAGE_CODE).length).toEqual(Object.keys(REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS).length);
+    });
+
+    describe('should have translation key for each code', () => {
+      Object.keys(REQUEST_ERROR_MESSAGE_CODE).forEach((key) => {
+        it(`should have translation key for code: ${key}`, () => {
+          expect(!!REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS[key]).toBeTruthy();
+        });
+      });
+    });
+
+    it('should return translation key for code', () => {
+      expect(getRequestErrorMessage({
+        code: REQUEST_ERROR_MESSAGE_CODE.REQUEST_NOT_ALLOWED_FOR_PATRON_TITLE_COMBINATION,
+      }, intl)).toEqual(REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS.REQUEST_NOT_ALLOWED_FOR_PATRON_TITLE_COMBINATION);
+    });
+
+    it('should trigger formatMessage with correct props', () => {
+      getRequestErrorMessage({
+        code: REQUEST_ERROR_MESSAGE_CODE.REQUEST_NOT_ALLOWED_FOR_PATRON_TITLE_COMBINATION,
+      }, intl);
+
+      expect(formatMessage).toHaveBeenCalledWith({
+        id: REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS.REQUEST_NOT_ALLOWED_FOR_PATRON_TITLE_COMBINATION,
+      });
+    });
+
+    it('should return message when code empty', () => {
+      expect(getRequestErrorMessage({
+        message,
+      }, intl)).toEqual(message);
+    });
+
+    it('should return default message when code and message empty', () => {
+      expect(getRequestErrorMessage({}, intl)).toEqual('');
     });
   });
 });
