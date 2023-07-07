@@ -177,7 +177,6 @@ describe('ItemsDialog', () => {
         expect.objectContaining({
           id: 'instance-items-list',
           interactive: true,
-          ariaLabel: labelIds.instanceItems,
           contentData: [],
           visibleColumns: COLUMN_NAMES,
           columnMapping: COLUMN_MAP,
@@ -236,7 +235,6 @@ describe('ItemsDialog', () => {
           {
             id: 'instance-items-list',
             interactive: true,
-            ariaLabel: labelIds.instanceItems,
             contentData: [{
               id: '2',
               status: {
@@ -397,7 +395,6 @@ describe('ItemsDialog', () => {
             {
               id: 'instance-items-list',
               interactive: true,
-              ariaLabel: labelIds.instanceItems,
               contentData: [],
               visibleColumns: COLUMN_NAMES,
               columnMapping: COLUMN_MAP,
