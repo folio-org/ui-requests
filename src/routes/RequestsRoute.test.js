@@ -37,11 +37,11 @@ jest.mock('../components', () => ({
   PrintContent: jest.fn(() => <div>PrintContent</div>)
 }));
 
-jest.mock('../components/RequestsFilters/RequestsFilters', () => ({onClear}) => {
+jest.mock('../components/RequestsFilters/RequestsFilters', () => ({ onClear }) => {
   return (
     <div>
       <span>RequestsFilter</span>
-      <button type="button" onClick={onClear} >onClear</button>
+      <button type="button" onClick={onClear}>onClear</button>
     </div>
   );
 });
@@ -122,7 +122,7 @@ SearchAndSort.mockImplementation(jest.fn(({
   const onClickActions = () => {
     onDuplicate(records[0]);
     buildRecordsForHoldsShelfReport();
-    massageNewRecord({});    
+    massageNewRecord({});
     resultIsSelected({ item: { id: 'id' } });
     viewRecordOnCollapse();
   };
@@ -344,7 +344,7 @@ describe('RequestsRoute', () => {
     afterEach(() => {
       jest.clearAllMocks();
     });
-    
+
     it('should execute "SearchAndSort" with "createTitleLevelRequest" equal true', () => {
       const expectedResult = {
         newRecordInitialValues: {
@@ -369,7 +369,7 @@ describe('RequestsRoute', () => {
       expect(screen.getByText('RequestsFilter')).toBeInTheDocument();
     });
     it('onChange to be called on onClear of RequestsFilter', () => {
-      userEvent.click(screen.getByRole('button', { name: 'onClear' }))
+      userEvent.click(screen.getByRole('button', { name: 'onClear' }));
       expect(RequestFilterData.onChange).toBeCalled();
     });
     it('PrintContent should render', () => {
