@@ -1,20 +1,19 @@
-import React from 'react';
-import { render } from '@testing-library/react';
+import '__mock__/';
+import { render, screen } from '@testing-library/react';
 import LoadingButton from './LoadingButton';
 
-jest.mock('@folio/stripes/components', () => ({
-  Button: jest.fn(() => 'test'),
-  Icon: jest.fn(() => 'stripeIcon'),
-}));
+const defaultProp = {
+  children: 'LoadingButton'
+};
 
 describe('LoadingButton', () => {
-  it('renders the loading button correctly', () => {
-    const { getAllByText } = render(<LoadingButton>Test</LoadingButton>);
-    expect(getAllByText('test').length).toBe(1);
+  beforeEach(() => {
+    render(<LoadingButton {...defaultProp} />);
   });
-  it('renders the styling for Button', () => {
-    render(<LoadingButton>Test</LoadingButton>);
-    const button = document.querySelector('button[buttonStyle="dropdownItem"]');
-    expect(button).toBeDefined();
+  it('Component should render correctly', () => {
+    expect(screen.getByText('LoadingButton')).toBeInTheDocument();
+  });
+  it('Button should have disabled attribute', () => {
+    expect(screen.getByRole('button', { name: 'LoadingButton' })).toHaveAttribute('disabled');
   });
 });
