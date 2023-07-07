@@ -1,13 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+
 import {
   Col,
   KeyValue,
   Row,
   NoValue,
 } from '@folio/stripes/components';
-import { getFullName, userHighlightBox, getPatronGroup } from './utils';
+
+import {
+  getFullName,
+  userHighlightBox,
+  getPatronGroup,
+} from './utils';
 
 class UserDetail extends React.Component {
   static propTypes = {

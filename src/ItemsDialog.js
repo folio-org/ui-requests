@@ -212,7 +212,6 @@ const ItemsDialog = ({
             : <MultiColumnList
                 id="instance-items-list"
                 interactive
-                ariaLabel={formatMessage({ id: 'ui-requests.items.instanceItems' })}
                 contentData={contentData}
                 visibleColumns={COLUMN_NAMES}
                 columnMapping={COLUMN_MAP}
