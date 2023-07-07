@@ -1,6 +1,9 @@
 import '__mock__/';
 import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {
+  AccordionSet,
+} from '@folio/stripes/components';
 import RequestQueueView from './RequestQueueView';
 
 jest.mock('./components/FulfillmentRequestsData', () => jest.fn(() => <div>FulfillmentRequestsData</div>));
@@ -71,38 +74,37 @@ describe('RequestQueueView', () => {
   });
 
   it('should perform reload event', () => {
+    const reloadMock = jest.fn();
+    Object.defineProperty(window, 'location', {
+      value: { reload: reloadMock },
+    });
     const refreshButton = screen.getByRole('button', { name: /ui-requests.requestQueue.refresh/i });
-    expect(refreshButton).toBeInTheDocument();
     userEvent.click(refreshButton);
-  });
-  it('should perform drag event', () => {
-    const dragButton = screen.getByRole('button', { name: /Drag Button/i });
-    expect(dragButton).toBeInTheDocument();
-    userEvent.click(dragButton);
+    expect(reloadMock).toHaveBeenCalled();
   });
   it('should perform confrim event', () => {
     const confirmButton = screen.getByRole('button', { name: /ui-requests.requestQueue.confirmReorder.confirm/i });
-    expect(confirmButton).toBeInTheDocument();
     userEvent.click(confirmButton);
+    expect(mockOnReorder).toHaveBeenCalled();
   });
   it('should perform cancel event', () => {
     const cancelButton = screen.getByRole('button', { name: /ui-requests.requestQueue.confirmReorder.cancel/i });
-    expect(cancelButton).toBeInTheDocument();
     userEvent.click(cancelButton);
+    expect(mockOnReorder).not.toHaveBeenCalled();
   });
   it('should render isRowDraggable value', () => {
     const isDraggable = screen.getByTestId('rowDraggable');
     expect(isDraggable.textContent).toBe('true');
   });
-  it('toggle Not Yet Filled', () => {
-    const toggleField = screen.getByText('Toggle Not Yet Filled');
-    expect(toggleField).toBeInTheDocument();
-    userEvent.click(toggleField);
+  it('should perform drag event', () => {
+    const dragButton = screen.getByRole('button', { name: /Drag Button/i });
+    userEvent.click(dragButton);
+    expect(mockOnReorder).toHaveBeenCalled();
   });
-  it('toggle event should be in progress', () => {
-    const toggleInProcess = screen.getByText('Toggle in Progress');
-    expect(toggleInProcess).toBeInTheDocument();
-    userEvent.click(toggleInProcess);
+  it('should perform toggle event', () => {
+    const toggleField = screen.getByText('Toggle');
+    userEvent.click(toggleField);
+    expect(AccordionSet).toHaveBeenCalledTimes(2);
   });
 });
 describe('RequestQueueView should be in loading state', () => {

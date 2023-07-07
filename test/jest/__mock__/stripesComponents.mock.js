@@ -3,7 +3,7 @@ import React from 'react';
 jest.mock('@folio/stripes-components', () => ({
   ...jest.requireActual('@folio/stripes-components'),
   Accordion: jest.fn(({ children, label, name, onClearFilter }) => (
-    <div>
+    <div data-testid={`accordion-${name}`}>
       {label}
       {children}
       <div>
@@ -14,16 +14,12 @@ jest.mock('@folio/stripes-components', () => ({
         >Clear
         </button>
       </div>
-      <div data-testid={`accordion-${name}`} />
     </div>
   )),
   AccordionSet: jest.fn(({ children, onToggle }) => (
     <div>
-      <button type="button" onClick={() => onToggle({ id: 'fulfillment-in-progress' })}>
-        Toggle in Progress
-      </button>
-      <button type="button" onClick={() => onToggle({ id: 'not-yet-filled' })}>
-        Toggle Not Yet Filled
+      <button type="button" onClick={onToggle}>
+        Toggle
       </button>
       {children}
     </div>
