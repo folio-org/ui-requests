@@ -10,11 +10,16 @@ import { duplicateRequest, getTlrSettings } from '../utils';
 import { REQUEST_LEVEL_TYPES, createModes } from '../constants';
 import RequestsRoute, { buildHoldRecords } from './RequestsRoute';
 
+jest.mock('react', () => ({
+  ...jest.requireActual('react'),
+  createRef: jest.fn(),
+}));
 jest.mock('../utils', () => ({
   ...jest.requireActual('../utils'),
   duplicateRequest: jest.fn((request) => request),
   getTlrSettings: jest.fn(() => ({})),
 }));
+
 jest.mock('../components', () => ({
   ErrorModal: jest.fn(({ onClose }) => (
     <div>
@@ -22,22 +27,30 @@ jest.mock('../components', () => ({
       <button type="button" onClick={onClose}>Close</button>
     </div>
   )),
+  LoadingButton: jest.fn(() => null),
   PrintButton: jest.fn(({ onBeforeGetContent, children }) => (
     <div>
       <button type="button" onClick={onBeforeGetContent}>onBeforeGetContent</button>
       {children}
     </div>
   )),
-  PrintContent: jest.fn(() => null),
-  LoadingButton: jest.fn(() => null),
+  PrintContent: jest.fn(() => <div>PrintContent</div>)
 }));
+
+jest.mock('../components/RequestsFilters/RequestsFilters', () => ({onClear}) => {
+  return (
+    <div>
+      <span>RequestsFilter</span>
+      <button type="button" onClick={onClear} >onClear</button>
+    </div>
+  );
+});
 jest.mock('../ViewRequest', () => jest.fn());
 jest.mock('../RequestForm', () => jest.fn());
 
 global.fetch = jest.fn(() => Promise.resolve({
   json: () => Promise.resolve({ requests: [{ requestLevel: REQUEST_LEVEL_TYPES.TITLE }] }),
 }));
-
 
 const testIds = {
   searchAndSort: 'searchAndSort',
@@ -54,33 +67,39 @@ const request = {
 };
 
 const resultFormatterData = {
+  id: 'resultFormatterTestId',
   instance: {
     publication: [
-      {
-        dateOfPublication: '2023-08-11'
-      }
+      { dateOfPublication: '2021-01-01' },
+      { dateOfPublication: '2020-05-10' },
+      { dateOfPublication: '2019-09-15' },
+      { dateOfPublication: '2018-03-20' },
+      { dateOfPublication: '2017-07-25' }
     ],
-    title: '',
+    title: 'testTitle',
   },
   item: {
-    barcode: 'itemBarcode'
+    barcode: 'testBarcode'
   },
-  position: 'positon',
+  pickupServicePoint: {
+    name: 'TestPickupServicePoint'
+  },
+  position: 'testPositon',
   proxy: {
     personal: {
-      lastName: 'lastName',
-      firstName: 'firstName',
-      middleName: 'middleName'
+      lastName: 'testLastName',
+      firstName: 'testFirstName',
+      middleName: 'testMiddleName'
     }
   },
   status: '',
   requester: {
-    barcode: 'requesterBarcode',
+    barcode: 'testRequesterBarcode',
     firstName: 'requesterFirstName',
     lastName: 'requesterLastName',
   },
   requestDate: '2023-04-21',
-  requestType: 'requestType',
+  requestType: 'Recall',
 };
 
 SearchAndSort.mockImplementation(jest.fn(({
@@ -96,27 +115,14 @@ SearchAndSort.mockImplementation(jest.fn(({
   resultIsSelected,
   viewRecordOnCollapse
 }) => {
-  const resultsFormatterHandler = () => {
-    resultsFormatter.itemBarcode(resultFormatterData);
-    resultsFormatter.position(resultFormatterData);
-    resultsFormatter.proxy(resultFormatterData);
-    resultsFormatter.requestDate(resultFormatterData);
-    resultsFormatter.requester(resultFormatterData);
-    resultsFormatter.requesterBarcode(resultFormatterData);
-    resultsFormatter.requestStatus(resultFormatterData);
-    resultsFormatter.type(resultFormatterData);
-    resultsFormatter.title(resultFormatterData);
-    resultsFormatter.year(resultFormatterData);
-    resultsFormatter.callNumber(resultFormatterData);
-    resultsFormatter.servicePoint(resultFormatterData);
+  const resultsFormatterResult = (key) => {
+    const value = resultsFormatter[key];
+    return value ? value(resultFormatterData) : '';
   };
   const onClickActions = () => {
     onDuplicate(records[0]);
     buildRecordsForHoldsShelfReport();
-    getHelperResourcePath();
-    massageNewRecord({});
-    resultsFormatterHandler();
-    renderFilters(RequestFilterData.onChange);
+    massageNewRecord({});    
     resultIsSelected({ item: { id: 'id' } });
     viewRecordOnCollapse();
   };
@@ -129,6 +135,24 @@ SearchAndSort.mockImplementation(jest.fn(({
         onKeyDown={onClickActions}
         onClick={onClickActions}
       />
+      <p>getHelperResourcePath: {getHelperResourcePath('', 'testID1')}</p>
+      <div>
+        <p>itemBarcode: {resultsFormatterResult('itemBarcode')}</p>
+        <p>position: {resultsFormatterResult('position')}</p>
+        <p>proxy: {resultsFormatterResult('proxy')}</p>
+        <p>requestDate: {resultsFormatterResult('requestDate')}</p>
+        <p>requester: {resultsFormatterResult('requester')}</p>
+        <p>requesterBarcode: {resultsFormatterResult('requesterBarcode')}</p>
+        <p>requestStatus: {resultsFormatterResult('requestStatus')}</p>
+        <p>type: {resultsFormatterResult('type')}</p>
+        <div>title: {resultsFormatterResult('title')}</div>
+        <p>year: {resultsFormatterResult('year')}</p>
+        <p>callNumber: {resultsFormatterResult('callNumber')}</p>
+        <p>servicePoint: {resultsFormatterResult('servicePoint')}</p>
+      </div>
+      <div>
+        {renderFilters(RequestFilterData.onChange)}
+      </div>
       <div>
         <button type="button" onClick={onChangePatron}>onChangePatron</button>
         <button type="button" onClick={onCloseNewRecord}>onCloseNewRecord</button>
@@ -242,7 +266,7 @@ describe('RequestsRoute', () => {
     stripes: {
       connect: jest.fn(),
       hasPerm: jest.fn().mockResolvedValue(true),
-      locale: 'en-US',
+      locale: 'en',
       logger: {
         log: jest.fn(),
       },
@@ -253,7 +277,7 @@ describe('RequestsRoute', () => {
       store: {
         getState: jest.fn(() => ({ okapi: { token: 'token' } })),
       },
-      timezone: 'timezone',
+      timezone: 'America/New_York',
       user: {},
     },
     resources: {
@@ -273,7 +297,9 @@ describe('RequestsRoute', () => {
         ]
       },
       pickSlips: {
-        records: [{}],
+        records: [
+          { name: 'pick slip' }
+        ],
       },
       query: {
         filters: 'filter1.value1,filter1.value2,filter2.value3',
@@ -298,13 +324,11 @@ describe('RequestsRoute', () => {
     fulfillmentPreference: 'Hold Shelf',
   };
 
-  const renderComponent = (props = defaultProps) => {
-    render(
-      <CalloutContext.Provider value={{ sendCallout: () => {} }}>
-        <RequestsRoute {...props} />
-      </CalloutContext.Provider>,
-    );
-  };
+  const renderComponent = (props = defaultProps) => render(
+    <CalloutContext.Provider value={{ sendCallout: () => {} }}>
+      <RequestsRoute {...props} />
+    </CalloutContext.Provider>,
+  );
 
   afterEach(() => {
     getTlrSettings.mockClear();
@@ -320,7 +344,7 @@ describe('RequestsRoute', () => {
     afterEach(() => {
       jest.clearAllMocks();
     });
-
+    
     it('should execute "SearchAndSort" with "createTitleLevelRequest" equal true', () => {
       const expectedResult = {
         newRecordInitialValues: {
@@ -340,6 +364,16 @@ describe('RequestsRoute', () => {
         },
       };
       expect(SearchAndSort).toHaveBeenCalledWith(expect.objectContaining(expectedResult), {});
+    });
+    it('RequestsFilter should render on renderFilter', () => {
+      expect(screen.getByText('RequestsFilter')).toBeInTheDocument();
+    });
+    it('onChange to be called on onClear of RequestsFilter', () => {
+      userEvent.click(screen.getByRole('button', { name: 'onClear' }))
+      expect(RequestFilterData.onChange).toBeCalled();
+    });
+    it('PrintContent should render', () => {
+      expect(screen.getByText('PrintContent')).toBeInTheDocument();
     });
     it('exportCsv function to be called when ui-requests.exportSearchResultsToCsv button clicked', async () => {
       userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsToCsv' }));
@@ -378,6 +412,50 @@ describe('RequestsRoute', () => {
       expect(screen.getByText('ui-requests.printPickSlips')).toBeInTheDocument();
     });
   });
+
+  describe('resultsFormatter function', () => {
+    beforeEach(() => {
+      renderComponent(defaultProps);
+    });
+    it('itemBarcode of resultsFormatter should have value "testBarcode"', () => {
+      expect(screen.getByText(/itemBarcode: testBarcode/i)).toBeInTheDocument();
+    });
+    it('position of resultsFormatter should have value "testPositon"', () => {
+      expect(screen.getByText(/position: testPositon/i)).toBeInTheDocument();
+    });
+    it('proxy of resultsFormatter should have value "testLastName, testFirstName testMiddleName"', () => {
+      expect(screen.getByText(/proxy: testLastName, testFirstName testMiddleName/i)).toBeInTheDocument();
+    });
+    it('requestDate of resultsFormatter should have value "2023-04-21"', () => {
+      expect(screen.getByText('2023-04-21')).toBeInTheDocument();
+    });
+    it('requester of resultsFormatter should have value "requesterLastName, requesterFirstName"', () => {
+      expect(screen.getByText(/requester: requesterLastName, requesterFirstName/i)).toBeInTheDocument();
+    });
+    it('requesterBarcode of resultsFormatter should have value "testRequesterBarcode"', () => {
+      expect(screen.getByText(/requesterBarcode: testRequesterBarcode/i)).toBeInTheDocument();
+    });
+    it('requestStatus of resultsFormatter should have value "No Value"', () => {
+      expect(screen.getByText(/No value/i)).toBeInTheDocument();
+    });
+    it('type of resultsFormatter should have value "ui-requests.requestMeta.type.recall"', () => {
+      expect(screen.getByText(/type: ui-requests.requestMeta.type.recall/i)).toBeInTheDocument();
+    });
+    it('servicePoint of resultsFormatter should have value "TestPickupServicePoint"', () => {
+      expect(screen.getByText(/servicePoint: TestPickupServicePoint/i)).toBeInTheDocument();
+    });
+    it('title of resultsFormatter should have value link with value', () => {
+      expect(screen.getByRole('link', { name: 'testTitle' })).toHaveAttribute('href', 'viewPath/view/resultFormatterTestId?instanceId=12345&foo=bar');
+    });
+  });
+
+  describe('getHelperResourcePath', () => {
+    it('getHelperResourcePath to have value "circulation/requests/testID1"', () => {
+      renderComponent(defaultProps);
+      expect(screen.getByText('getHelperResourcePath: circulation/requests/testID1')).toBeInTheDocument();
+    });
+  });
+
   describe('on request duplicate', () => {
     const defaultExpectedResultForUpdate = {
       layer: 'create',

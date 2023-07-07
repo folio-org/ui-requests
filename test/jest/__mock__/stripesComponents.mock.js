@@ -15,6 +15,7 @@ jest.mock('@folio/stripes-components', () => ({
   )),
   Button: jest.fn(({
     children,
+    buttonStyle,
     ...rest
   }) => (
     <button
@@ -152,5 +153,6 @@ jest.mock('@folio/stripes-components', () => ({
       </div>
     );
   }),
+  TextLink: jest.fn(({ to, children }) => <div><a href={to}>{children}</a></div>),
   Timepicker: jest.fn(() => <div>Timepicker</div>),
 }));
