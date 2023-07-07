@@ -32,7 +32,7 @@ describe('PickupServicePointFilter', () => {
     expect(MultiSelectionFilter).toBeInTheDocument();
   });
   it('MultiSelectionFilter should render with activeValues', () => {
-    const activeValue = screen.getByText('test');
+    const activeValue = screen.getByText(activeValues[0]);
     expect(activeValue).toBeInTheDocument();
   });
   it('should perform onClear event', () => {

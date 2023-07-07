@@ -1,9 +1,9 @@
 import React from 'react';
 
-jest.mock('@folio/stripes/components', () => ({
-  ...jest.requireActual('@folio/stripes/components'),
+jest.mock('@folio/stripes-components', () => ({
+  ...jest.requireActual('@folio/stripes-components'),
   Accordion: jest.fn(({ children, label, name, onClearFilter }) => (
-    <div>
+    <div data-testid={`accordion-${name}`}>
       {label}
       {children}
       <div>
@@ -14,7 +14,6 @@ jest.mock('@folio/stripes/components', () => ({
         >Clear
         </button>
       </div>
-      <div data-testid={`accordion-${name}`} />
     </div>
   )),
   AccordionSet: jest.fn(({ children }) => (
@@ -36,7 +35,12 @@ jest.mock('@folio/stripes/components', () => ({
     </button>
   )),
   Callout: jest.fn(() => <div>Callout</div>),
-  Checkbox: jest.fn(() => <div>Checkbox</div>),
+  Checkbox: jest.fn((props) => (
+    <input
+      type="checkbox"
+      {...props}
+    />
+  )),
   Col: jest.fn(({ children }) => (
     <div data-test-col>
       {children}
@@ -79,6 +83,7 @@ jest.mock('@folio/stripes/components', () => ({
   )),
   MultiColumnList: jest.fn(({ children }) => (
     <div>
+      <div>MultiColumnList</div>
       {children}
     </div>
   )),
@@ -133,6 +138,27 @@ jest.mock('@folio/stripes/components', () => ({
   )),
   Select: jest.fn(() => <div>Select</div>),
   TextArea: jest.fn(() => <div>TextArea</div>),
-  TextField: jest.fn(() => <div>TextField</div>),
+  TextField: jest.fn(({
+    label,
+    onChange,
+    validate = jest.fn(),
+    ...rest
+  }) => {
+    const handleChange = (e) => {
+      validate(e.target.value);
+      onChange(e);
+    };
+
+    return (
+      <div>
+        <label htmlFor="textField">{label}</label>
+        <input
+          id="textField"
+          onChange={handleChange}
+          {...rest}
+        />
+      </div>
+    );
+  }),
   Timepicker: jest.fn(() => <div>Timepicker</div>),
 }));
