@@ -1,5 +1,8 @@
-import { requestFilterTypes } from '../../constants';
 import filtersConfig from './RequestsFiltersConfig';
+
+import {
+  requestFilterTypes,
+} from '../../constants';
 
 describe('RequestsFiltersConfig', () => {
   it('should have a filter for requestType', () => {
@@ -10,6 +13,7 @@ describe('RequestsFiltersConfig', () => {
       values: [],
       operator: '==',
     };
+
     expect(requestTypeFilter).toEqual(expectedResult);
   });
 
@@ -20,8 +24,9 @@ describe('RequestsFiltersConfig', () => {
       cql: 'status',
       values: [],
       operator: '==',
-      label: 'ui-requests.requestMeta.status'
+      label: 'ui-requests.requestMeta.status',
     };
+
     expect(requestStatusFilter).toEqual(expectedResult);
   });
 
@@ -33,6 +38,7 @@ describe('RequestsFiltersConfig', () => {
       values: [],
       operator: '==',
     };
+
     expect(requestLevelsFilter).toEqual(expectedResult);
   });
 
@@ -45,16 +51,19 @@ describe('RequestsFiltersConfig', () => {
       operator: '==',
       parse: expect.any(Function),
     };
+
     expect(tagsFilter).toEqual(expectedResult);
   });
 
   it('should return the expected query string for a single tag', () => {
     const tagsFilter = filtersConfig.find(f => f.name === 'tags');
+
     expect(tagsFilter.parse('tag1')).toEqual('tags.tagList==*"*tag1*"*');
   });
 
   it('should return the expected query string for an array of tags', () => {
     const tagsFilter = filtersConfig.find(f => f.name === 'tags');
+
     expect(tagsFilter.parse(['tag1', 'tag2'])).toEqual('tags.tagList==(*"*tag1*"* or *"*tag2*"*)');
   });
 
@@ -66,6 +75,7 @@ describe('RequestsFiltersConfig', () => {
       values: [],
       operator: '==',
     };
+
     expect(pickupServicePointFilter).toEqual(expectedResult);
   });
 });

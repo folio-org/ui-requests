@@ -95,7 +95,7 @@
     "showTags": "Tags anzeigen",
     "tags.tagList": "Tags",
     "item.copyNumbers": "Exemplarnummer",
-    "requestNotAllowed": "Bestandsanfrage nicht erlaubt",
+    "requestNotAllowed": "Bestandsanfrage nicht zulässig",
     "additionalReasons": "Details der Sperre anzeigen, um zusätzliche Gründe für die Sperre anzuzeigen...",
     "pickupServicePoint.name": "Abholservicestelle",
     "item.id": "Exemplar-ID",

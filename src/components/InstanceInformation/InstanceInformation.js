@@ -26,7 +26,7 @@ import {
 
 import css from '../../requests.css';
 
-const INSTANCE_SEGMENT_FOR_PLUGIN = 'instances';
+export const INSTANCE_SEGMENT_FOR_PLUGIN = 'instances';
 
 class InstanceInformation extends Component {
   static propTypes = {
@@ -183,6 +183,7 @@ class InstanceInformation extends Component {
 
                       return (
                         <Field
+                          data-testid="instanceHridField"
                           key={key}
                           name={REQUEST_FORM_FIELD_NAMES.INSTANCE_HRID}
                           validate={this.validate(REQUEST_FORM_FIELD_NAMES.INSTANCE_HRID, key)}
