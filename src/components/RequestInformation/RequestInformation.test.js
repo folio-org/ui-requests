@@ -19,8 +19,8 @@ import { isFormEditing } from '../../utils';
 import {
   REQUEST_FORM_FIELD_NAMES,
   requestStatuses,
-  requestTypeErrors,
-  requestTypeErrorTranslations,
+  REQUEST_TYPE_ERRORS,
+  REQUEST_TYPE_ERROR_TRANSLATIONS,
   requestTypesMap,
   requestTypesTranslations,
 } from '../../constants';
@@ -56,11 +56,11 @@ const testIds = {
 describe('RequestInformation', () => {
   describe('getNoRequestTypeErrorMessageId', () => {
     it('should return title level error', () => {
-      expect(getNoRequestTypeErrorMessageId(true)).toBe(requestTypeErrorTranslations[requestTypeErrors.TITLE_LEVEL_ERROR]);
+      expect(getNoRequestTypeErrorMessageId(true)).toBe(REQUEST_TYPE_ERROR_TRANSLATIONS[REQUEST_TYPE_ERRORS.TITLE_LEVEL_ERROR]);
     });
 
     it('should return item level error', () => {
-      expect(getNoRequestTypeErrorMessageId(false)).toBe(requestTypeErrorTranslations[requestTypeErrors.ITEM_LEVEL_ERROR]);
+      expect(getNoRequestTypeErrorMessageId(false)).toBe(REQUEST_TYPE_ERROR_TRANSLATIONS[REQUEST_TYPE_ERRORS.ITEM_LEVEL_ERROR]);
     });
   });
 
