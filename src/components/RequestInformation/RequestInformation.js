@@ -29,10 +29,9 @@ import { isFormEditing } from '../../utils';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 
-export const getNoRequestTypeErrorMessageId = (isTitleLevelRequest) =>
-  isTitleLevelRequest ?
-    requestTypeErrorTranslations[requestTypeErrors.TITLE_LEVEL_ERROR] :
-    requestTypeErrorTranslations[requestTypeErrors.ITEM_LEVEL_ERROR];
+export const getNoRequestTypeErrorMessageId = (isTitleLevelRequest) => (isTitleLevelRequest ?
+  requestTypeErrorTranslations[requestTypeErrors.TITLE_LEVEL_ERROR] :
+  requestTypeErrorTranslations[requestTypeErrors.ITEM_LEVEL_ERROR]);
 
 const RequestInformation = ({
   request,
@@ -63,7 +62,7 @@ const RequestInformation = ({
     }
 
     return undefined;
-  }, [isItemOrTitleSelected, requestTypeOptions]);
+  }, [isItemOrTitleSelected, requestTypeOptions, isTitleLevelRequest]);
 
   return (
     <>
@@ -79,55 +78,54 @@ const RequestInformation = ({
               data-test-request-type
               xs={3}
             >
-              {isEditForm ?
+              {!requestTypeError && (isEditForm ?
                 <KeyValue
                   label={<FormattedMessage id="ui-requests.requestType" />}
                   value={<FormattedMessage id={requestTypesTranslations[request.requestType]} />}
                 /> :
-                !requestTypeError &&
-                  <Field
-                    data-testid="requestTypeDropDown"
-                    name={REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE}
-                    validateFields={[]}
-                    validate={validateRequestType}
-                  >
-                    {({
-                      input,
-                      meta,
-                    }) => {
-                      const error = (meta.touched && meta.error) || null;
+                <Field
+                  data-testid="requestTypeDropDown"
+                  name={REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE}
+                  validateFields={[]}
+                  validate={validateRequestType}
+                >
+                  {({
+                    input,
+                    meta,
+                  }) => {
+                    const error = (meta.touched && meta.error) || null;
 
-                      return (
-                        <Select
-                          {...input}
-                          label={<FormattedMessage id="ui-requests.requestType" />}
-                          disabled={isRequestTypeDisabled}
-                          error={error}
-                          fullWidth
-                          required
-                        >
-                          <FormattedMessage id="ui-requests.actions.selectRequestType">
-                            {optionLabel => <option value="">{optionLabel}</option>}
+                    return (
+                      <Select
+                        {...input}
+                        label={<FormattedMessage id="ui-requests.requestType" />}
+                        disabled={isRequestTypeDisabled}
+                        error={error}
+                        fullWidth
+                        required
+                      >
+                        <FormattedMessage id="ui-requests.actions.selectRequestType">
+                          {optionLabel => <option value="">{optionLabel}</option>}
+                        </FormattedMessage>
+                        {requestTypeOptions.map(({
+                          id,
+                          value,
+                        }) => (
+                          <FormattedMessage
+                            id={id}
+                            key={id}
+                          >
+                            {translatedLabel => (
+                              <option value={value}>
+                                {translatedLabel}
+                              </option>
+                            )}
                           </FormattedMessage>
-                          {requestTypeOptions.map(({
-                            id,
-                            value,
-                          }) => (
-                            <FormattedMessage
-                              id={id}
-                              key={id}
-                            >
-                              {translatedLabel => (
-                                <option value={value}>
-                                  {translatedLabel}
-                                </option>
-                              )}
-                            </FormattedMessage>
-                          ))}
-                        </Select>
-                      );
-                    }}
-                  </Field>
+                        ))}
+                      </Select>
+                    );
+                  }}
+                </Field>)
               }
               {requestTypeError &&
                 <KeyValue

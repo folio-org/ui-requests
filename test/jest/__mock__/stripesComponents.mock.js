@@ -134,8 +134,7 @@ jest.mock('@folio/stripes-components', () => ({
       <select {...props}>
         {props.children}
       </select>
-    </div>)
-  ),
+    </div>)),
   TextArea: jest.fn(() => <div>TextArea</div>),
   TextField: jest.fn(({
     label,

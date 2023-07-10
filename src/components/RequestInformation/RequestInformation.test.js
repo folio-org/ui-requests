@@ -268,5 +268,5 @@ describe('RequestInformation', () => {
         expect(errorMessage).toBeEmpty();
       });
     });
-  })
+  });
 });
