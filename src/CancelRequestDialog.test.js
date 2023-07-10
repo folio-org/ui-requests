@@ -16,6 +16,8 @@ const labelIds = {
 };
 const testIds = {
   cancelRequestDialog: 'cancelRequestDialog',
+  selectCancelationReason: 'selectCancelationReason',
+  additionalInfo: 'additionalInfo',
   cancelRequestDialogCancel: 'cancelRequestDialogCancel',
   cancelRequestDialogClose: 'cancelRequestDialogClose',
 };
@@ -25,20 +27,23 @@ describe('CancelRequestDialog', () => {
   const onClose = jest.fn();
   const cancellationReasons = {
     records: [{
+      id: '1',
       name: 'cancellation reasons',
       requiresAdditionalInformation: false,
     }, {
+      id: '2',
       name: 'other cancellation reasons',
       requiresAdditionalInformation: true,
     }],
   };
-  const defaultProps = {
-    request: {
-      id: 'ad038163-7368-44e8-9057-c21bd2b9cd4c',
-      instance: {
-        title: 'title',
-      },
+  const request = {
+    id: 'ad038163-7368-44e8-9057-c21bd2b9cd4c',
+    instance: {
+      title: 'request instance title',
     },
+  };
+  const defaultProps = {
+    request,
     onCancelRequest,
     onClose,
     open: true,
@@ -71,6 +76,18 @@ describe('CancelRequestDialog', () => {
 
     it('should render modal text', () => {
       expect(screen.getByText(labelIds.modalText)).toBeInTheDocument();
+    });
+
+    it('should render modal text value', () => {
+      expect(screen.getByText(request.instance.title)).toBeInTheDocument();
+    });
+
+    it('should render select cancelation reason', () => {
+      expect(screen.getByTestId(testIds.selectCancelationReason)).toBeInTheDocument();
+    });
+
+    it('should render additional info', () => {
+      expect(screen.getByTestId(testIds.additionalInfo)).toBeInTheDocument();
     });
 
     it('should render close button text', () => {

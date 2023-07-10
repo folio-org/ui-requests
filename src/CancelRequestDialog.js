@@ -184,6 +184,7 @@ class CancelRequestDialog extends React.Component {
           />
         </p>
         <Select
+          data-testid="selectCancelationReason"
           data-test-select-cancelation-reason
           label={<FormattedMessage id="ui-requests.cancel.reasonLabel" />}
           dataOptions={reasons}
@@ -193,6 +194,7 @@ class CancelRequestDialog extends React.Component {
         <FormattedMessage id={additionalInfoPlaceholder}>
           {placeholder => (
             <TextArea
+              data-testid="additionalInfo"
               label={
                 <FormattedMessage
                   id="ui-requests.cancel.additionalInfoLabel"

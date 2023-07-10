@@ -129,8 +129,12 @@ jest.mock('@folio/stripes-components', () => ({
       {children}
     </div>
   )),
-  Select: jest.fn(() => <div>Select</div>),
-  TextArea: jest.fn(() => <div>TextArea</div>),
+  Select: jest.fn(({
+    'data-testid': testId,
+  }) => <div data-testid={testId}>Select</div>),
+  TextArea: jest.fn(({
+    'data-testid': testId,
+  }) => <div data-testid={testId}>TextArea</div>),
   TextField: jest.fn(({
     label,
     onChange,
