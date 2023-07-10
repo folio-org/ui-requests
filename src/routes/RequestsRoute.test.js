@@ -24,7 +24,8 @@ import {
 } from '../utils';
 import {
   REQUEST_LEVEL_TYPES,
-  createModes, DEFAULT_REQUEST_TYPE_VALUE,
+  createModes,
+  DEFAULT_REQUEST_TYPE_VALUE,
 } from '../constants';
 
 jest.mock('../utils', () => ({

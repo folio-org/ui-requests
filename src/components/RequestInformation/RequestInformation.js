@@ -21,17 +21,19 @@ import {
   requestStatusesTranslations,
   requestTypesTranslations,
   REQUEST_FORM_FIELD_NAMES,
-  requestTypeErrorTranslations,
-  requestTypeErrors,
+  REQUEST_TYPE_ERROR_TRANSLATIONS,
+  REQUEST_TYPE_ERRORS,
 } from '../../constants';
 import PositionLink from '../../PositionLink';
 import { isFormEditing } from '../../utils';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 
-export const getNoRequestTypeErrorMessageId = (isTitleLevelRequest) => (isTitleLevelRequest ?
-  requestTypeErrorTranslations[requestTypeErrors.TITLE_LEVEL_ERROR] :
-  requestTypeErrorTranslations[requestTypeErrors.ITEM_LEVEL_ERROR]);
+export const getNoRequestTypeErrorMessageId = (isTitleLevelRequest) => (
+  isTitleLevelRequest ?
+    REQUEST_TYPE_ERROR_TRANSLATIONS[REQUEST_TYPE_ERRORS.TITLE_LEVEL_ERROR] :
+    REQUEST_TYPE_ERROR_TRANSLATIONS[REQUEST_TYPE_ERRORS.ITEM_LEVEL_ERROR]
+);
 
 const RequestInformation = ({
   request,

@@ -77,6 +77,7 @@ import {
   getProxy,
   isSubmittingButtonDisabled,
   isFormEditing,
+  resetRequestTypeState,
 } from './utils';
 
 import css from './requests.css';
@@ -666,7 +667,7 @@ class RequestForm extends React.Component {
           form.change(REQUEST_FORM_FIELD_NAMES.ITEM_ID, item.id);
           form.change(REQUEST_FORM_FIELD_NAMES.ITEM_BARCODE, item.barcode);
           form.change(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, DEFAULT_REQUEST_TYPE_VALUE);
-          form.resetFieldState(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE);
+          resetRequestTypeState(form);
 
           // Setting state here is redundant with what follows, but it lets us
           // display the matched item as quickly as possible, without waiting for
@@ -746,7 +747,7 @@ class RequestForm extends React.Component {
 
           form.change(REQUEST_FORM_FIELD_NAMES.INSTANCE_ID, instance.id);
           form.change(REQUEST_FORM_FIELD_NAMES.INSTANCE_HRID, instance.hrid);
-          form.resetFieldState(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE);
+          resetRequestTypeState(form);
 
           onSetSelectedInstance(instance);
           this.setState({
@@ -880,7 +881,7 @@ class RequestForm extends React.Component {
       }
     } else if (selectedInstance) {
       form.change(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, DEFAULT_REQUEST_TYPE_VALUE);
-      form.resetFieldState(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE);
+      resetRequestTypeState(form);
       this.setState({
         isItemsDialogOpen: true,
       });

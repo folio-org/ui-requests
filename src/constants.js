@@ -121,14 +121,14 @@ export const itemStatusesTranslations = {
   [itemStatuses.RESTRICTED]: 'ui-requests.item.status.restricted',
 };
 
-export const requestTypeErrors = {
+export const REQUEST_TYPE_ERRORS = {
   TITLE_LEVEL_ERROR: 'title',
   ITEM_LEVEL_ERROR: 'item',
 };
 
-export const requestTypeErrorTranslations = {
-  [requestTypeErrors.TITLE_LEVEL_ERROR]: 'ui-requests.errors.requestType.titleLevelRequest',
-  [requestTypeErrors.ITEM_LEVEL_ERROR]: 'ui-requests.errors.requestType.itemLevelRequest',
+export const REQUEST_TYPE_ERROR_TRANSLATIONS = {
+  [REQUEST_TYPE_ERRORS.TITLE_LEVEL_ERROR]: 'ui-requests.errors.requestType.titleLevelRequest',
+  [REQUEST_TYPE_ERRORS.ITEM_LEVEL_ERROR]: 'ui-requests.errors.requestType.itemLevelRequest',
 };
 
 export const DEFAULT_REQUEST_TYPE_VALUE = '';
