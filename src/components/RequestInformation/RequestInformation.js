@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'react-final-form';
 import { get } from 'lodash';
@@ -20,29 +21,49 @@ import {
   requestStatusesTranslations,
   requestTypesTranslations,
   REQUEST_FORM_FIELD_NAMES,
+  requestTypeErrorTranslations,
+  requestTypeErrors,
 } from '../../constants';
 import PositionLink from '../../PositionLink';
 import { isFormEditing } from '../../utils';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 
+export const getNoRequestTypeErrorMessageId = (isTitleLevelRequest) =>
+  isTitleLevelRequest ?
+    requestTypeErrorTranslations[requestTypeErrors.TITLE_LEVEL_ERROR] :
+    requestTypeErrorTranslations[requestTypeErrors.ITEM_LEVEL_ERROR];
+
 const RequestInformation = ({
   request,
   requestTypeOptions,
-  requestTypeError,
-  multiRequestTypesVisible,
-  singleRequestTypeVisible,
   isTlrEnabledOnEditPage,
   MetadataDisplay,
+  isTitleLevelRequest,
+  isSelectedInstance,
+  isSelectedItem,
+  requestTypeError,
 }) => {
   const isEditForm = isFormEditing(request);
   const holdShelfExpireDate = get(request, ['status'], '') === requestStatuses.AWAITING_PICKUP
     ? <FormattedDate value={get(request, ['holdShelfExpirationDate'], '')} />
     : <NoValue />;
   const isMetadata = isEditForm && request?.metadata;
-  const isRequestTypeMessage = !isEditForm && !requestTypeOptions?.length && !requestTypeError;
   const isExpirationDate = isEditForm && request.status === requestStatuses.AWAITING_PICKUP;
   const isHoldShelfExpireDate = isEditForm && request.status !== requestStatuses.AWAITING_PICKUP;
+  const isItemOrTitleSelected = isTitleLevelRequest ? isSelectedInstance : isSelectedItem;
+  const isRequestTypeDisabled = requestTypeOptions.length === 0 || !isItemOrTitleSelected;
+  const validateRequestType = useCallback((requestType) => {
+    if (!requestType) {
+      return <FormattedMessage id="ui-requests.errors.requestType.selectItem" />;
+    }
+
+    if (isItemOrTitleSelected && requestTypeOptions.length === 0) {
+      return <FormattedMessage id={getNoRequestTypeErrorMessageId(isTitleLevelRequest)} />;
+    }
+
+    return undefined;
+  }, [isItemOrTitleSelected, requestTypeOptions]);
 
   return (
     <>
@@ -58,54 +79,54 @@ const RequestInformation = ({
               data-test-request-type
               xs={3}
             >
-              {isRequestTypeMessage &&
-                <span data-test-request-type-message>
-                  <KeyValue
-                    label={<FormattedMessage id="ui-requests.requestType" />}
-                    value={<FormattedMessage id="ui-requests.requestType.message" />}
-                  />
-                </span>
-              }
-              {multiRequestTypesVisible &&
-                <Field
-                  label={<FormattedMessage id="ui-requests.requestType" />}
-                  name={REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE}
-                  component={Select}
-                  disabled={isEditForm}
-                  fullWidth
-                >
-                  {requestTypeOptions.map(({
-                    id,
-                    value,
-                  }) => (
-                    <FormattedMessage
-                      id={id}
-                      key={id}
-                    >
-                      {translatedLabel => (
-                        <option value={value}>
-                          {translatedLabel}
-                        </option>
-                      )}
-                    </FormattedMessage>
-                  ))}
-                </Field>
-              }
-              {singleRequestTypeVisible &&
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.requestType" />}
-                  value={
-                    <span data-test-request-type-text>
-                      <FormattedMessage id={requestTypeOptions[0].id} />
-                    </span>
-                  }
-                />
-              }
-              {isEditForm &&
+              {isEditForm ?
                 <KeyValue
                   label={<FormattedMessage id="ui-requests.requestType" />}
                   value={<FormattedMessage id={requestTypesTranslations[request.requestType]} />}
-                />
+                /> :
+                <Field
+                  data-testid="requestTypeDropDown"
+                  name={REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE}
+                  validateFields={[]}
+                  validate={validateRequestType}
+                >
+                  {({
+                    input,
+                    meta,
+                  }) => {
+                    const error = (meta.touched && meta.error) || null;
+
+                    return (
+                      <Select
+                        {...input}
+                        label={<FormattedMessage id="ui-requests.requestType"/>}
+                        disabled={isRequestTypeDisabled}
+                        error={error}
+                        fullWidth
+                        required
+                      >
+                        <FormattedMessage id="ui-requests.actions.selectRequestType">
+                          {optionLabel => <option value="">{optionLabel}</option>}
+                        </FormattedMessage>
+                        {requestTypeOptions.map(({
+                          id,
+                          value,
+                        }) => (
+                          <FormattedMessage
+                            id={id}
+                            key={id}
+                          >
+                            {translatedLabel => (
+                              <option value={value}>
+                                {translatedLabel}
+                              </option>
+                            )}
+                          </FormattedMessage>
+                        ))}
+                      </Select>
+                    );
+                  }}
+                </Field>
               }
               {requestTypeError &&
                 <KeyValue
@@ -211,11 +232,12 @@ const RequestInformation = ({
 };
 
 RequestInformation.propTypes = {
-  multiRequestTypesVisible: PropTypes.bool.isRequired,
-  singleRequestTypeVisible: PropTypes.bool.isRequired,
   isTlrEnabledOnEditPage: PropTypes.bool.isRequired,
   MetadataDisplay: PropTypes.func.isRequired,
   requestTypeError: PropTypes.bool,
+  isTitleLevelRequest: PropTypes.bool.isRequired,
+  isSelectedInstance: PropTypes.bool.isRequired,
+  isSelectedItem: PropTypes.bool.isRequired,
   requestTypeOptions: PropTypes.arrayOf(PropTypes.object),
   request: PropTypes.object,
 };
