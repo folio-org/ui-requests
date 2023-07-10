@@ -56,6 +56,7 @@ import {
   MAX_RECORDS,
   OPEN_REQUESTS_STATUSES,
   fulfillmentTypeMap,
+  DEFAULT_REQUEST_TYPE_VALUE,
 } from '../constants';
 import {
   buildUrl,
@@ -1011,7 +1012,7 @@ class RequestsRoute extends React.Component {
     const requestCount = get(resources, 'records.other.totalRecords', 0);
     const initialValues = dupRequest ||
     {
-      requestType: 'Hold',
+      requestType: DEFAULT_REQUEST_TYPE_VALUE,
       fulfillmentPreference: fulfillmentTypeMap.HOLD_SHELF,
       createTitleLevelRequest: createTitleLevelRequestsByDefault,
     };
