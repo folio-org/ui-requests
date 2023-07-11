@@ -10,7 +10,7 @@ import '../../../test/jest/__mock__';
 
 import { Field } from 'react-final-form';
 
-import { Select } from '@folio/stripes-components';
+import { Select } from '@folio/stripes/components';
 
 import RequestInformation, {
   getNoRequestTypeErrorMessageId,
