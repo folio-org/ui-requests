@@ -60,9 +60,10 @@ jest.mock('@folio/stripes-components', () => ({
   Modal: jest.fn(({
     children,
     footer,
-    label
+    label,
+    'data-testid': testId,
   }) => (
-    <div>
+    <div data-testid={testId}>
       {label && label}
       {children}
       {footer}
@@ -135,7 +136,9 @@ jest.mock('@folio/stripes-components', () => ({
         {props.children}
       </select>
     </div>)),
-  TextArea: jest.fn(() => <div>TextArea</div>),
+  TextArea: jest.fn(({
+    'data-testid': testId,
+  }) => <div data-testid={testId}>TextArea</div>),
   TextField: jest.fn(({
     label,
     onChange,

@@ -7,12 +7,25 @@ jest.mock('react-intl', () => {
 
   return {
     ...jest.requireActual('react-intl'),
-    FormattedMessage: jest.fn(({ id, children }) => {
+    FormattedMessage: jest.fn(({ id, values, children }) => {
+      let valuesString = '';
+
       if (children) {
         return children([id]);
       }
 
-      return id;
+      if (values) {
+        Object.keys(values).forEach((key) => {
+          valuesString += values[key];
+        });
+      }
+
+      return (
+        <>
+          {id}
+          {values && <span>{valuesString}</span>}
+        </>
+      );
     }),
     FormattedTime: jest.fn(({ value, children }) => {
       if (children) {
