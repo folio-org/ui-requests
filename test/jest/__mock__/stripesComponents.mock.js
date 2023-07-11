@@ -129,9 +129,13 @@ jest.mock('@folio/stripes-components', () => ({
       {children}
     </div>
   )),
-  Select: jest.fn(({
-    'data-testid': testId,
-  }) => <div data-testid={testId}>Select</div>),
+  Select: jest.fn((props) => (
+    <div>
+      <div>{props.label}</div>
+      <select {...props}>
+        {props.children}
+      </select>
+    </div>)),
   TextArea: jest.fn(({
     'data-testid': testId,
   }) => <div data-testid={testId}>TextArea</div>),

@@ -28,6 +28,7 @@ import {
 import {
   REQUEST_LEVEL_TYPES,
   createModes,
+  DEFAULT_REQUEST_TYPE_VALUE,
 } from '../constants';
 
 jest.mock('../utils', () => ({
@@ -131,7 +132,7 @@ describe('RequestsRoute', () => {
   };
 
   const defaultExpectedProps = {
-    requestType: 'Hold',
+    requestType: DEFAULT_REQUEST_TYPE_VALUE,
     fulfillmentPreference: 'Hold Shelf',
   };
 

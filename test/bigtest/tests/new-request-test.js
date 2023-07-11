@@ -30,8 +30,8 @@ const nonRequestableItemStatuses = [
   'Unknown',
   'Withdrawn',
 ];
-
 const patronComment = 'I really need this in the next three days';
+const baseRequestTypeOptions = ['', 'Hold', 'Recall'];
 
 describe('New Request page', () => {
   setupApplication({
@@ -143,6 +143,7 @@ describe('New Request page', () => {
         await newRequest.patronComments.fillAndBlur(patronComment);
         await newRequest.chooseFulfillmentPreference('Hold Shelf');
         await newRequest.chooseServicePoint('Circ Desk 2');
+        await newRequest.chooseRequestType('Hold');
         await newRequest.clickNewRequest();
         await viewRequest.isPresent;
       });
@@ -185,6 +186,7 @@ describe('New Request page', () => {
         await newRequest.chooseFulfillmentPreference('Hold Shelf');
         await newRequest.whenServicePointIsPresent();
         await newRequest.chooseServicePoint('Circ Desk 2');
+        await newRequest.chooseRequestType('Hold');
         await newRequest.clickNewRequest();
         await viewRequest.isPresent;
       });
@@ -222,6 +224,7 @@ describe('New Request page', () => {
           .clickUserEnterBtn();
 
         await newRequest.chooseServicePoint('Circ Desk 1');
+        await newRequest.chooseRequestType('Hold');
         await newRequest.clickNewRequest();
         await viewRequest.isPresent;
       });
@@ -264,6 +267,7 @@ describe('New Request page', () => {
 
         await newRequest.chooseFulfillmentPreference('Delivery');
         await newRequest.chooseDeliveryAddress('Claim');
+        await newRequest.chooseRequestType('Hold');
         await newRequest.clickNewRequest();
         await viewRequest.isPresent;
       });
@@ -271,32 +275,6 @@ describe('New Request page', () => {
       it('should create a new request and open view request pane', () => {
         expect(viewRequest.requestSectionPresent).to.be.true;
         expect(viewRequest.requesterSectionPresent).to.be.true;
-      });
-    });
-
-    describe('showing request type message', () => {
-      it('should show request type message', () => {
-        expect(newRequest.requestTypeMessageIsPresent).to.be.true;
-      });
-    });
-
-    describe('hiding request type message', () => {
-      beforeEach(async function () {
-        this.server.create('item', {
-          barcode: '9676761472500',
-          title: 'Best Book Ever',
-          materialType: {
-            name: 'book',
-          },
-        });
-
-        await newRequest
-          .fillItemBarcode('9676761472500')
-          .clickItemEnterBtn();
-      });
-
-      it('should hide request type message', () => {
-        expect(newRequest.requestTypeMessageIsPresent).to.be.false;
       });
     });
 
@@ -314,8 +292,8 @@ describe('New Request page', () => {
             .whenRequestTypesArePresent();
         });
 
-        it('should show hold and recall options', () => {
-          expect(newRequest.requestTypeOptions).to.eql(['Hold', 'Recall']);
+        it('should show default, hold and recall options', () => {
+          expect(newRequest.requestTypeOptions).to.eql(baseRequestTypeOptions);
         });
       });
 
@@ -329,11 +307,11 @@ describe('New Request page', () => {
           await newRequest
             .fillItemBarcode('9676761472501')
             .clickItemEnterBtn()
-            .whenRequestTypeIsPresent();
+            .whenRequestTypesArePresent();
         });
 
-        it('should show page option', () => {
-          expect(newRequest.requestTypeText).to.equal('Page');
+        it('should show default and page options', () => {
+          expect(newRequest.requestTypeOptions).to.eql(['', 'Page']);
         });
       });
 
@@ -350,8 +328,8 @@ describe('New Request page', () => {
             .whenRequestTypesArePresent();
         });
 
-        it('should show hold and recall options', () => {
-          expect(newRequest.requestTypeOptions).to.eql(['Hold', 'Recall']);
+        it('should show default, hold and recall options', () => {
+          expect(newRequest.requestTypeOptions).to.eql(baseRequestTypeOptions);
         });
       });
 
@@ -368,8 +346,8 @@ describe('New Request page', () => {
             .whenRequestTypesArePresent();
         });
 
-        it('should show hold and recall options', () => {
-          expect(newRequest.requestTypeOptions).to.eql(['Hold', 'Recall']);
+        it('should show default, hold and recall options', () => {
+          expect(newRequest.requestTypeOptions).to.eql(baseRequestTypeOptions);
         });
       });
 
@@ -383,11 +361,11 @@ describe('New Request page', () => {
           await newRequest
             .fillItemBarcode('9676761472501')
             .clickItemEnterBtn()
-            .whenRequestTypeIsPresent();
+            .whenRequestTypesArePresent();
         });
 
-        it('should show hold option', () => {
-          expect(newRequest.requestTypeText).to.equal('Hold');
+        it('should show default and hold options', () => {
+          expect(newRequest.requestTypeOptions).to.eql(['', 'Hold']);
         });
       });
 
@@ -404,8 +382,8 @@ describe('New Request page', () => {
             .whenRequestTypesArePresent();
         });
 
-        it('should show hold and recall options', () => {
-          expect(newRequest.requestTypeOptions).to.eql(['Hold', 'Recall']);
+        it('should show default, hold and recall options', () => {
+          expect(newRequest.requestTypeOptions).to.eql(baseRequestTypeOptions);
         });
       });
 
@@ -422,8 +400,8 @@ describe('New Request page', () => {
             .whenRequestTypesArePresent();
         });
 
-        it('should show hold and recall options', () => {
-          expect(newRequest.requestTypeOptions).to.eql(['Hold', 'Recall']);
+        it('should show default, hold and recall options', () => {
+          expect(newRequest.requestTypeOptions).to.eql(baseRequestTypeOptions);
         });
       });
 
@@ -440,8 +418,8 @@ describe('New Request page', () => {
             .whenRequestTypesArePresent();
         });
 
-        it('should show hold and recall options', () => {
-          expect(newRequest.requestTypeOptions).to.eql(['Hold', 'Recall']);
+        it('should show default, hold and recall options', () => {
+          expect(newRequest.requestTypeOptions).to.eql(baseRequestTypeOptions);
         });
       });
 
@@ -457,8 +435,8 @@ describe('New Request page', () => {
           await newRequest.whenRequestTypesArePresent();
         });
 
-        it('should show hold and recall options', () => {
-          expect(newRequest.requestTypeOptions).to.eql(['Hold', 'Recall']);
+        it('should show default, hold and recall options', () => {
+          expect(newRequest.requestTypeOptions).to.eql(baseRequestTypeOptions);
         });
       });
     });
@@ -511,7 +489,6 @@ describe('New Request page', () => {
       });
     });
 
-
     describe('New request with prefilled user barcode and item barcode', function () {
       beforeEach(async function () {
         this.server.create('item', {
@@ -544,6 +521,7 @@ describe('New Request page', () => {
           defaultServicePointId: 'servicepointId1',
         });
         this.visit('/requests/view/?layer=create&userBarcode=9676761472504&itemId=123');
+        await newRequest.chooseRequestType('Hold');
         await newRequest.chooseServicePoint('Circ Desk 2');
         await newRequest.clickNewRequest();
       });

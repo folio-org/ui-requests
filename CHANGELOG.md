@@ -40,6 +40,7 @@
 * Remove redundant ariaLabel prop. Refs UIREQ-972.
 * TLRs check circulation rules before request is placed. Refs UIREQ-960.
 * Create Jest/RTL test for CancelRequestDialog.js. Refs UIREQ-876.
+* Preparation for Enable Request Policy to Determine Allowed Pickup Service Points. Refs UIREQ-978.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)
