@@ -160,6 +160,25 @@ export const buildHoldRecords = (records) => {
   });
 };
 
+export const REQUEST_ERROR_MESSAGE_CODE = {
+  REQUEST_NOT_ALLOWED_FOR_PATRON_TITLE_COMBINATION: 'REQUEST_NOT_ALLOWED_FOR_PATRON_TITLE_COMBINATION',
+};
+
+export const REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS = {
+  [REQUEST_ERROR_MESSAGE_CODE.REQUEST_NOT_ALLOWED_FOR_PATRON_TITLE_COMBINATION]: 'ui-requests.errors.requestNotAllowedForPatronTitleCombination',
+};
+
+export const getRequestErrorMessage = (error, intl) => {
+  const {
+    code = '',
+    message = '',
+  } = error;
+
+  return code && REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS[code]
+    ? intl.formatMessage({ id: REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS[code] })
+    : message;
+};
+
 class RequestsRoute extends React.Component {
   static contextType = CalloutContext;
 
@@ -814,8 +833,15 @@ class RequestsRoute extends React.Component {
   }
 
   handleJsonError({ errors }) {
+    const {
+      intl,
+    } = this.props;
     const errorMessages = [];
-    errors.forEach(({ message }) => errorMessages.push(message));
+
+    errors.forEach((error) => (
+      errorMessages.push(getRequestErrorMessage(error, intl))
+    ));
+
     this.setState({ errorMessage: errorMessages.join(';') });
   }
 

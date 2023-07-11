@@ -85,6 +85,7 @@
   "errors.requestType.titleLevelRequest": "None available for this title",
   "errors.requestType.itemLevelRequest": "None available for this item",
   "errors.requestType.selectItem": "Please select a request type",
+  "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
 
   "actions.label": "Actions",
   "actions.edit": "Edit",

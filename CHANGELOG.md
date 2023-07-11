@@ -38,6 +38,7 @@
 * Cover InstanceInformation by jest/RTL tests. Refs UIREQ-950.
 * Fix inconsistency in RTL/Jest tests. Refs UIREQ-979.
 * Remove redundant ariaLabel prop. Refs UIREQ-972.
+* TLRs check circulation rules before request is placed. Refs UIREQ-960.
 * Preparation for Enable Request Policy to Determine Allowed Pickup Service Points. Refs UIREQ-978.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
