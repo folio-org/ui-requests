@@ -83,6 +83,7 @@
   "errors.unknown.requestQueueLabel": "Request queue error",
   "errors.unknown.requestQueueBody": "Request queue reorder failed",
   "errors.closingAlreadyClosedRequest": "Error: The Request has already been closed.",
+  "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
 
   "actions.label": "Actions",
   "actions.edit": "Edit",
