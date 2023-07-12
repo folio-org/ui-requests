@@ -27,6 +27,7 @@
 * Added requestDate token. Refs UIREQ-962.
 * Update `request-storage` okapi interface to `6.0` version. Refs UIREQ-963.
 * UI tests replacement with RTL/Jest for src/PatronBlockModal.js. Refs UIREQ-878.
+* Create Jest/RTL test for PickupServicePointFilter.js Refs UIREQ-939.
 * Create Jest/RTL test for RequestsFiltersConfig.js. Refs UIREQ-938.
 * Create Jest/RTL test for SortableList.js. Refs UIREQ-941.
 * Create Jest/RTL test for draggableRowFormatter.js. Refs UIREQ-942.
