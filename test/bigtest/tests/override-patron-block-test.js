@@ -78,6 +78,8 @@ describe('Override patron block', () => {
         await RequestForm
           .whenServicePointIsPresent()
           .chooseServicePoint(servicePoint.name)
+          .whenRequestTypeIsPresent()
+          .chooseRequestType('Hold')
           .clickNewRequest();
         await ViewRequestPage.isPresent;
       });
@@ -122,6 +124,8 @@ describe('Override patron block', () => {
 
         await RequestForm
           .chooseServicePoint(servicePoint.name)
+          .whenRequestTypeIsPresent()
+          .chooseRequestType('Hold')
           .clickNewRequest();
         await ErrorModalInteractor.whenModalIsPresent();
       });

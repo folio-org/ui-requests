@@ -54,7 +54,7 @@ describe('View request page', () => {
       expect(viewRequest.patronComments.label.text).to.equal(translations.patronComments);
     });
 
-    describe('Request cancelation', function () {
+    describe('Request cancellation', function () {
       describe('clicking the Actions menu on the Requests pane', function () {
         beforeEach(async () => {
           await requests.headerDropdown.click();
