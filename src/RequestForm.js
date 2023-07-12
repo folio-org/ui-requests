@@ -57,6 +57,7 @@ import {
   RESOURCE_TYPES,
   RESOURCE_KEYS,
   REQUEST_FORM_FIELD_NAMES,
+  DEFAULT_REQUEST_TYPE_VALUE,
 } from './constants';
 import {
   handleKeyCommand,
@@ -76,6 +77,7 @@ import {
   getProxy,
   isSubmittingButtonDisabled,
   isFormEditing,
+  resetRequestTypeState,
 } from './utils';
 
 import css from './requests.css';
@@ -179,6 +181,7 @@ class RequestForm extends React.Component {
       isItemOrInstanceLoading: false,
       isItemsDialogOpen: false,
       isItemIdRequest: this.isItemIdProvided(),
+      requestTypeOptions: [],
     };
 
     this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
@@ -663,9 +666,8 @@ class RequestForm extends React.Component {
 
           form.change(REQUEST_FORM_FIELD_NAMES.ITEM_ID, item.id);
           form.change(REQUEST_FORM_FIELD_NAMES.ITEM_BARCODE, item.barcode);
-          if (options.length >= 1) {
-            form.change(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, options[0].value);
-          }
+          form.change(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, DEFAULT_REQUEST_TYPE_VALUE);
+          resetRequestTypeState(form);
 
           // Setting state here is redundant with what follows, but it lets us
           // display the matched item as quickly as possible, without waiting for
@@ -745,6 +747,7 @@ class RequestForm extends React.Component {
 
           form.change(REQUEST_FORM_FIELD_NAMES.INSTANCE_ID, instance.id);
           form.change(REQUEST_FORM_FIELD_NAMES.INSTANCE_HRID, instance.hrid);
+          resetRequestTypeState(form);
 
           onSetSelectedInstance(instance);
           this.setState({
@@ -772,7 +775,7 @@ class RequestForm extends React.Component {
 
     const requestTypeOptions = getInstanceRequestTypeOptions();
 
-    form.change(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, requestTypeOptions[0].value);
+    form.change(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, DEFAULT_REQUEST_TYPE_VALUE);
 
     this.setState({ requestTypeOptions });
 
@@ -877,6 +880,8 @@ class RequestForm extends React.Component {
         this.findInstance(null, selectedItem.holdingsRecordId);
       }
     } else if (selectedInstance) {
+      form.change(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, DEFAULT_REQUEST_TYPE_VALUE);
+      resetRequestTypeState(form);
       this.setState({
         isItemsDialogOpen: true,
       });
@@ -1009,8 +1014,6 @@ class RequestForm extends React.Component {
       addressDetail = toUserAddress(deliveryLocationsDetail[selectedAddressTypeId]);
     }
 
-    const multiRequestTypesVisible = !isEditForm && (selectedItem || selectedInstance) && requestTypeOptions?.length > 1;
-    const singleRequestTypeVisible = !isEditForm && (selectedItem || selectedInstance) && requestTypeOptions?.length === 1;
     const patronGroup = getPatronGroup(selectedUser, patronGroups);
     const requestTypeError = hasNonRequestableStatus(selectedItem);
     const itemStatus = selectedItem?.status?.name;
@@ -1172,20 +1175,6 @@ class RequestForm extends React.Component {
                       )
                   }
                   <Accordion
-                    id="new-request-info"
-                    label={<FormattedMessage id="ui-requests.requestMeta.information" />}
-                  >
-                    <RequestInformation
-                      request={request}
-                      requestTypeOptions={requestTypeOptions}
-                      requestTypeError={requestTypeError}
-                      multiRequestTypesVisible={multiRequestTypesVisible}
-                      singleRequestTypeVisible={singleRequestTypeVisible}
-                      isTlrEnabledOnEditPage={isTlrEnabledOnEditPage}
-                      MetadataDisplay={metadataDisplay}
-                    />
-                  </Accordion>
-                  <Accordion
                     id="new-requester-info"
                     label={<FormattedMessage id="ui-requests.requester.information" />}
                   >
@@ -1208,6 +1197,21 @@ class RequestForm extends React.Component {
                         triggerUserBarcodeValidation={this.triggerUserBarcodeValidation}
                       />
                     </div>
+                  </Accordion>
+                  <Accordion
+                    id="new-request-info"
+                    label={<FormattedMessage id="ui-requests.requestMeta.information" />}
+                  >
+                    <RequestInformation
+                      request={request}
+                      requestTypeOptions={requestTypeOptions}
+                      requestTypeError={requestTypeError}
+                      isTlrEnabledOnEditPage={isTlrEnabledOnEditPage}
+                      MetadataDisplay={metadataDisplay}
+                      isTitleLevelRequest={isTitleLevelRequest}
+                      isSelectedInstance={Boolean(selectedInstance)}
+                      isSelectedItem={Boolean(selectedItem)}
+                    />
                   </Accordion>
                 </AccordionSet>
               </AccordionStatus>

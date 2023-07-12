@@ -34,6 +34,7 @@ import {
   REQUEST_TYPES,
   createModes,
   INVALID_REQUEST_HARDCODED_ID,
+  REQUEST_FORM_FIELD_NAMES,
 } from './constants';
 
 import css from './requests.css';
@@ -452,3 +453,11 @@ export const isSubmittingButtonDisabled = (pristine, submitting) => {
 export const isFormEditing = (request) => {
   return !!get(request, 'id');
 };
+
+export function resetRequestTypeState(form) {
+  const registeredFields = form.getRegisteredFields();
+
+  if (includes(registeredFields, REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE)) {
+    form.resetFieldState(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE);
+  }
+}
