@@ -2,14 +2,25 @@ import React from 'react';
 
 jest.mock('@folio/stripes-components', () => ({
   ...jest.requireActual('@folio/stripes-components'),
-  Accordion: jest.fn(({ children, label }) => (
-    <div>
+  Accordion: jest.fn(({ children, label, name, onClearFilter }) => (
+    <div data-testid={`accordion-${name}`}>
       {label}
       {children}
+      <div>
+        <button
+          type="button"
+          onClick={onClearFilter}
+          data-testid={`clear-${name}`}
+        >Clear
+        </button>
+      </div>
     </div>
   )),
-  AccordionSet: jest.fn(({ children }) => (
+  AccordionSet: jest.fn(({ children, onToggle }) => (
     <div>
+      <button type="button" onClick={onToggle}>
+        Toggle
+      </button>
       {children}
     </div>
   )),
@@ -40,9 +51,23 @@ jest.mock('@folio/stripes-components', () => ({
       {children}
     </div>
   )),
-  ConfirmationModal: jest.fn(() => <div>ConfirmationModal</div>),
+  ConfirmationModal: jest.fn(({ heading, confirmLabel, cancelLabel, onConfirm, onCancel }) => (
+    <div>
+      <span>ConfirmationModal</span>
+      <div>
+        <div>{heading}</div>
+        <button type="button" onClick={onConfirm}>{confirmLabel}</button>
+        <button type="button" onClick={onCancel}>{cancelLabel}</button>
+      </div>
+    </div>)),
   Datepicker: jest.fn(() => <div>Datepicker</div>),
-  ErrorModal: jest.fn(() => <div>ErrorModal</div>),
+  ErrorModal: jest.fn(({ label, content, buttonLabel, onClose }) => (
+    <div>
+      <span>ErrorModal</span>
+      <div>{label}</div>
+      <div>{content}</div>
+      <button type="button" onClick={onClose}>{buttonLabel}</button>
+    </div>)),
   FormattedDate: jest.fn(() => <div>Datepicker</div>),
   FilterAccordionHeader: jest.fn(({ children }) => <div>{children}</div>),
   Headline: jest.fn(({ children }) => (
