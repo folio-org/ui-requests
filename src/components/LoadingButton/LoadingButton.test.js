@@ -1,19 +1,45 @@
-import '__mock__/';
-import { render, screen } from '@testing-library/react';
+import {
+  render,
+  screen,
+} from '@testing-library/react';
+
+import '__mock__';
+
+import {
+  Button,
+  Icon,
+} from '@folio/stripes/components';
+
 import LoadingButton from './LoadingButton';
 
-const defaultProp = {
+const props = {
   children: 'LoadingButton'
 };
 
 describe('LoadingButton', () => {
   beforeEach(() => {
-    render(<LoadingButton {...defaultProp} />);
+    render(<LoadingButton {...props} />);
   });
-  it('Component should render correctly', () => {
-    expect(screen.getByText('LoadingButton')).toBeInTheDocument();
+
+  it('should render button label', () => {
+    expect(screen.getByText(props.children)).toBeInTheDocument();
   });
-  it('Button should have disabled attribute', () => {
-    expect(screen.getByRole('button', { name: 'LoadingButton' })).toHaveAttribute('disabled');
+
+  it('should render "Button" with correct props', () => {
+    const expectedProps = {
+      buttonStyle: 'dropdownItem',
+      disabled: true,
+    };
+
+    expect(Button).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+  });
+
+  it('should render "Icon" with correct props', () => {
+    const expectedProps = {
+      icon: 'spinner-ellipsis',
+      width: '10px',
+    };
+
+    expect(Icon).toHaveBeenCalledWith(expectedProps, {});
   });
 });

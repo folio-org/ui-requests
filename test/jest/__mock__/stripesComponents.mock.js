@@ -2,15 +2,21 @@ import React from 'react';
 
 jest.mock('@folio/stripes-components', () => ({
   ...jest.requireActual('@folio/stripes-components'),
-  Accordion: jest.fn(({ children, label, name, onClearFilter }) => (
-    <div data-testid={`accordion-${name}`}>
+  Accordion: jest.fn(({
+    children,
+    label,
+    name,
+    onClearFilter,
+    'data-testid': testId,
+  }) => (
+    <div data-testid={testId}>
       {label}
       {children}
       <div>
         <button
           type="button"
           onClick={onClearFilter}
-          data-testid={`clear-${name}`}
+          data-testid={`${testId}Button`}
         >Clear
         </button>
       </div>
