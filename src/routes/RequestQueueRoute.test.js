@@ -94,7 +94,7 @@ describe('RequestQueueRoute', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  it('should call setTlrSettings on mount if configs have loaded', () => {
+  it('should call requests.GET when it rerender', () => {
     const { rerender } = render(
       <RequestQueueRoute
         resources={{
