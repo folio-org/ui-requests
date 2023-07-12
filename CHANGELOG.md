@@ -33,6 +33,7 @@
 * UI tests replacement with RTL/Jest for src/UserDetail.js. Refs UIREQ-881.
 * TLR: "Create title level request" checkbox not preselected on "New request" page. Refs UIREQ-955.
 * Do not publish test artifacts to NPM. Refs STRIPES-865.
+* Create JEST/RTL test cases for LoadingButton.js. Refs UIREQ-933.
 * Create Jest/RTL test for NoteViewRoute.js. Refs UIREQ-945.
 * Cover ItemInformation by jest/RTL tests. Refs UIREQ-949.
 * Cover InstanceInformation by jest/RTL tests. Refs UIREQ-950.

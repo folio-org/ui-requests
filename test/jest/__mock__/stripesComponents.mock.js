@@ -15,10 +15,12 @@ jest.mock('@folio/stripes-components', () => ({
   )),
   Button: jest.fn(({
     children,
+    buttonStyle,
     ...rest
   }) => (
     <button
       type="button"
+      data-button-type={buttonStyle}
       {...rest}
     >
       <span>
