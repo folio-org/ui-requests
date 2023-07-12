@@ -26,10 +26,12 @@ jest.mock('@folio/stripes-components', () => ({
   )),
   Button: jest.fn(({
     children,
+    buttonStyle,
     ...rest
   }) => (
     <button
       type="button"
+      data-button-type={buttonStyle}
       {...rest}
     >
       <span>
@@ -85,9 +87,10 @@ jest.mock('@folio/stripes-components', () => ({
   Modal: jest.fn(({
     children,
     footer,
-    label
+    label,
+    'data-testid': testId,
   }) => (
-    <div>
+    <div data-testid={testId}>
       {label && label}
       {children}
       {footer}
@@ -153,8 +156,16 @@ jest.mock('@folio/stripes-components', () => ({
       {children}
     </div>
   )),
-  Select: jest.fn(() => <div>Select</div>),
-  TextArea: jest.fn(() => <div>TextArea</div>),
+  Select: jest.fn((props) => (
+    <div>
+      <div>{props.label}</div>
+      <select {...props}>
+        {props.children}
+      </select>
+    </div>)),
+  TextArea: jest.fn(({
+    'data-testid': testId,
+  }) => <div data-testid={testId}>TextArea</div>),
   TextField: jest.fn(({
     label,
     onChange,
