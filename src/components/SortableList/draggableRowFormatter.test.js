@@ -1,4 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import {
+  render,
+  screen,
+} from '@testing-library/react';
+
 import draggableRowFormatter from './draggableRowFormatter';
 
 jest.mock('react-beautiful-dnd', () => ({
@@ -9,7 +13,7 @@ jest.mock('react-beautiful-dnd', () => ({
         <div>{prop.children()}</div>
       </div>
     );
-  }
+  },
 }));
 
 const cells = [
@@ -23,33 +27,35 @@ const propsData = {
   rowData: 'rowData',
   rowProps: {
     isRowDraggable: jest.fn(),
-    additionalClasses: ['my-additional-class']
+    additionalClasses: ['my-additional-class'],
   },
   snapshot: {
-    isDragging: false
+    isDragging: false,
   },
   provided: {
     draggableProps: {
       style: {
-        backgroundColor: 'white'
-      }
+        backgroundColor: 'white',
+      },
     },
     dragHandleProps: '',
-    innerRef: () => {}
+    innerRef: () => {},
   },
-  cells
+  cells,
 };
 
 const renderDraggableRowFormatter = (prop) => {
   const Component = () => draggableRowFormatter(prop);
+
   return (
     render(<Component />)
   );
 };
 
 describe('draggableRowFormatter', () => {
-  it('draggableRowFormatter component should render correctly', () => {
+  it('should render correctly draggableRowFormatter component', () => {
     renderDraggableRowFormatter(propsData);
+
     expect(screen.getByRole('row', { name: /Cell 1 Cell 2 Cell 3/i })).toBeInTheDocument();
   });
 });

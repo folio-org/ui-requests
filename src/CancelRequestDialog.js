@@ -150,6 +150,7 @@ class CancelRequestDialog extends React.Component {
     const footer = (
       <ModalFooter>
         <Button
+          data-testid="cancelRequestDialogCancel"
           data-test-confirm-cancel-request
           buttonStyle="primary"
           onClick={this.onCancelRequestHandler}
@@ -158,6 +159,7 @@ class CancelRequestDialog extends React.Component {
           <FormattedMessage id="stripes-core.button.confirm" />
         </Button>
         <Button
+          data-testid="cancelRequestDialogClose"
           data-test-cancel-cancel-request
           onClick={onClose}
         >
@@ -168,6 +170,7 @@ class CancelRequestDialog extends React.Component {
 
     return (
       <Modal
+        data-testid="cancelRequestDialog"
         data-test-cancel-request-modal
         label={<FormattedMessage id="ui-requests.cancel.modalLabel" />}
         open={open}
@@ -181,6 +184,7 @@ class CancelRequestDialog extends React.Component {
           />
         </p>
         <Select
+          data-testid="selectCancelationReason"
           data-test-select-cancelation-reason
           label={<FormattedMessage id="ui-requests.cancel.reasonLabel" />}
           dataOptions={reasons}
@@ -190,6 +194,7 @@ class CancelRequestDialog extends React.Component {
         <FormattedMessage id={additionalInfoPlaceholder}>
           {placeholder => (
             <TextArea
+              data-testid="additionalInfo"
               label={
                 <FormattedMessage
                   id="ui-requests.cancel.additionalInfoLabel"
