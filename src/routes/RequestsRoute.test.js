@@ -1,12 +1,12 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '../../test/jest/__mock__';
+import '../../test/jest/__mock__/stripesUtils.mock';
 import {
   SearchAndSort,
 } from '@folio/stripes/smart-components';
-
-
-import { CommandList, defaultKeyboardShortcuts } from '@folio/stripes/components';
+import { CalloutContext } from '@folio/stripes-core';
+import { exportCsv } from '@folio/stripes/util';
 
 import RequestsRoute, {
   buildHoldRecords,
@@ -24,6 +24,7 @@ import {
   createModes,
   DEFAULT_REQUEST_TYPE_VALUE,
 } from '../constants';
+import { historyData } from '../../test/jest/fixtures/historyData';
 
 jest.mock('react', () => ({
   ...jest.requireActual('react'),
@@ -396,11 +397,11 @@ describe('RequestsRoute', () => {
       });
     });
     it('ErrorModel model should render', () => {
-      userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportExpiredHoldShelfToCsv' }));
+      userEvent.click(screen.getByTestId('exportExpiredHoldShelfToCsvButton'));
       expect(screen.queryByText('ErrorModel')).toBeInTheDocument();
     });
     it('ErrorModel model should close on clicking close Button', () => {
-      userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportExpiredHoldShelfToCsv' }));
+      userEvent.click(screen.getByTestId('exportExpiredHoldShelfToCsvButton'));
       userEvent.click(screen.getByRole('button', { name: 'Close' }));
       expect(screen.queryByText('ErrorModel')).not.toBeInTheDocument();
     });
