@@ -38,6 +38,7 @@
 * Cover ItemInformation by jest/RTL tests. Refs UIREQ-949.
 * Cover InstanceInformation by jest/RTL tests. Refs UIREQ-950.
 * Fix inconsistency in RTL/Jest tests. Refs UIREQ-979.
+* Create Jest/RTL test for RequestsRoute.js. Refs UIREQ-947.
 * Remove redundant ariaLabel prop. Refs UIREQ-972.
 * TLRs check circulation rules before request is placed. Refs UIREQ-960.
 * Create Jest/RTL test for CancelRequestDialog.js. Refs UIREQ-876.

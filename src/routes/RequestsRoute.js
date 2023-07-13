@@ -1106,6 +1106,7 @@ class RequestsRoute extends React.Component {
               </LoadingButton> :
               <>
                 <Button
+                  data-testid="exportExpiredHoldShelfToCsvButton"
                   buttonStyle="dropdownItem"
                   id="exportExpiredHoldsToCsvPaneHeaderBtn"
                   disabled={holdsShelfReportPending || (servicePointId && requestsEmpty)}

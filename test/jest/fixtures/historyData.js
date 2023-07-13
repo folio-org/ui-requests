@@ -5,7 +5,7 @@ export const historyData = {
     hash: '',
     key: '9pb09t',
     pathname: '/users/notes/new',
-    search: '',
+    search: '?instanceId=12345&foo=bar',
     state: {
       entityId: '2205005b-ca51-4a04-87fd-938eefa8f6de',
       entityName: 'rick, psych',
@@ -23,7 +23,7 @@ export const historyData = {
     }
   },
   createHref: () => {},
-  push: () => {},
+  push: jest.fn(),
   replace: jest.fn(),
   go: () => {},
   goBack: () => {},
