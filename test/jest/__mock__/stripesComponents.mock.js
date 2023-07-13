@@ -5,7 +5,6 @@ jest.mock('@folio/stripes-components', () => ({
   Accordion: jest.fn(({
     children,
     label,
-    name,
     onClearFilter,
     'data-testid': testId,
   }) => (
