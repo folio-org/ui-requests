@@ -27,6 +27,7 @@
 * Added requestDate token. Refs UIREQ-962.
 * Update `request-storage` okapi interface to `6.0` version. Refs UIREQ-963.
 * UI tests replacement with RTL/Jest for src/PatronBlockModal.js. Refs UIREQ-878.
+* Create Jest/RTL test for PickupServicePointFilter.js Refs UIREQ-939.
 * Create Jest/RTL test for RequestsFiltersConfig.js. Refs UIREQ-938.
 * Create Jest/RTL test for SortableList.js. Refs UIREQ-941.
 * Create Jest/RTL test for draggableRowFormatter.js. Refs UIREQ-942.
@@ -39,6 +40,11 @@
 * Fix inconsistency in RTL/Jest tests. Refs UIREQ-979.
 * Create Jest/RTL test for RequestsRoute.js. Refs UIREQ-947.
 * Remove redundant ariaLabel prop. Refs UIREQ-972.
+* TLRs check circulation rules before request is placed. Refs UIREQ-960.
+* Create Jest/RTL test for CancelRequestDialog.js. Refs UIREQ-876.
+* Preparation for Enable Request Policy to Determine Allowed Pickup Service Points. Refs UIREQ-978.
+* Create JEST/RTL test cases for LoadingButton.js. Refs UIREQ-933.
+* Create Jest/RTL test for RequestQueueRoute.js Refs UIREQ-946.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)
