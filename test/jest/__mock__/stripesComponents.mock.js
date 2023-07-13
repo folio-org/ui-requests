@@ -74,6 +74,7 @@ jest.mock('@folio/stripes-components', () => ({
       <button type="button" onClick={onClose}>{buttonLabel}</button>
     </div>)),
   FormattedDate: jest.fn(() => <div>Datepicker</div>),
+  FormattedTime: jest.fn(({ value }) => <div>{value}</div>),
   FilterAccordionHeader: jest.fn(({ children }) => <div>{children}</div>),
   Headline: jest.fn(({ children }) => (
     <div data-test-headline>
@@ -193,5 +194,6 @@ jest.mock('@folio/stripes-components', () => ({
       </div>
     );
   }),
+  TextLink: jest.fn(({ to, children }) => <div><a href={to}>{children}</a></div>),
   Timepicker: jest.fn(() => <div>Timepicker</div>),
 }));
