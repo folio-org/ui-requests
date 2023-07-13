@@ -1,9 +1,15 @@
-import '__mock__/';
-import { screen, render } from '@testing-library/react';
+import {
+  screen,
+  render,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+
+import '__mock__';
+
 import {
   AccordionSet,
 } from '@folio/stripes/components';
+
 import RequestQueueView from './RequestQueueView';
 
 jest.mock('./components/FulfillmentRequestsData', () => jest.fn(() => <div>FulfillmentRequestsData</div>));
@@ -59,6 +65,7 @@ const data = {
 const mockOnReorder = jest.fn().mockResolvedValue();
 const mockOnClose = jest.fn();
 const mockisTlrEnabled = true;
+
 describe('RequestQueueView', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -79,34 +86,51 @@ describe('RequestQueueView', () => {
       value: { reload: reloadMock },
     });
     const refreshButton = screen.getByRole('button', { name: /ui-requests.requestQueue.refresh/i });
+
     userEvent.click(refreshButton);
+
     expect(reloadMock).toHaveBeenCalled();
   });
+
   it('should perform confrim event', () => {
     const confirmButton = screen.getByRole('button', { name: /ui-requests.requestQueue.confirmReorder.confirm/i });
+
     userEvent.click(confirmButton);
+
     expect(mockOnReorder).toHaveBeenCalled();
   });
+
   it('should perform cancel event', () => {
     const cancelButton = screen.getByRole('button', { name: /ui-requests.requestQueue.confirmReorder.cancel/i });
+
     userEvent.click(cancelButton);
+
     expect(mockOnReorder).not.toHaveBeenCalled();
   });
+
   it('should render isRowDraggable value', () => {
     const isDraggable = screen.getByTestId('rowDraggable');
+
     expect(isDraggable.textContent).toBe('true');
   });
+
   it('should perform drag event', () => {
     const dragButton = screen.getByRole('button', { name: /Drag Button/i });
+
     userEvent.click(dragButton);
+
     expect(mockOnReorder).toHaveBeenCalled();
   });
+
   it('should perform toggle event', () => {
     const toggleField = screen.getByText('Toggle');
+
     userEvent.click(toggleField);
+
     expect(AccordionSet).toHaveBeenCalledTimes(2);
   });
 });
+
 describe('RequestQueueView should be in loading state', () => {
   it('isLoading should be true', () => {
     const { getByText } = render(
@@ -118,6 +142,7 @@ describe('RequestQueueView should be in loading state', () => {
         isLoading={loadingmock}
       />
     );
+
     expect(getByText('Loading...')).toBeInTheDocument();
   });
 });
