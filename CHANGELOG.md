@@ -20,14 +20,13 @@
 * Cover `src/components/PrintButton/PrintButton.js` file by RTL/Jest tests. Refs UIREQ-886.
 * Cover `src/components/Loading/Loading.js` file by RTL/Jest tests. Refs UIREQ-885.
 * Create Jest/RTL test for ReferredRecord.js. Refs UIREQ-936.
-* Create Jest/RTL test for NoteCreateRoute.js Refs: UIREQ-943.
+* Create Jest/RTL test for NoteCreateRoute.js. Refs: UIREQ-943.
 * Leverage cookie-based authentication in all API requests. Refs UIREQ-861.
-* Create Jest/RTL test for NoteEditRoute.js Refs: UIREQ-944.
+* Create Jest/RTL test for NoteEditRoute.js. Refs: UIREQ-944.
 * Update `circulation` okapi interface to `14.0` version. Refs UIREQ-954.
 * Added requestDate token. Refs UIREQ-962.
 * Update `request-storage` okapi interface to `6.0` version. Refs UIREQ-963.
 * UI tests replacement with RTL/Jest for src/PatronBlockModal.js. Refs UIREQ-878.
-* Create Jest/RTL test for PickupServicePointFilter.js Refs UIREQ-939.
 * Create Jest/RTL test for RequestsFiltersConfig.js. Refs UIREQ-938.
 * Create Jest/RTL test for SortableList.js. Refs UIREQ-941.
 * Create Jest/RTL test for draggableRowFormatter.js. Refs UIREQ-942.
@@ -45,6 +44,10 @@
 * Preparation for Enable Request Policy to Determine Allowed Pickup Service Points. Refs UIREQ-978.
 * Create JEST/RTL test cases for LoadingButton.js. Refs UIREQ-933.
 * Create Jest/RTL test for RequestQueueRoute.js. Refs UIREQ-946.
+* Create Jest/RTL test for RequestQueueView.js. Refs UIREQ-948.
+* Create Jest/RTL test for RequestQueueRoute.js. Refs UIREQ-946.
+* Create Jest/RTL test for PickupServicePointFilter.js. Refs UIREQ-939.
+* Jest/RTL tests cleanup. Refs UIREQ-988.
 * Jest/RTL tests cleanup of RequestsRoute.js file. Refs UIREQ-991.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
