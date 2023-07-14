@@ -9,9 +9,6 @@ import userEvent from '@testing-library/user-event';
 import '../../test/jest/__mock__';
 
 import {
-  stringify,
-} from 'query-string';
-import {
   SearchAndSort,
 } from '@folio/stripes/smart-components';
 import {
@@ -30,7 +27,6 @@ import RequestsRoute, {
   buildHoldRecords,
   getRequestErrorMessage,
   getListFormatter,
-  urls,
   REQUEST_ERROR_MESSAGE_CODE,
   REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS,
   DEFAULT_FORMATTER_VALUE,
@@ -39,11 +35,9 @@ import {
   duplicateRequest,
   getTlrSettings,
   getFullName,
-  getInstanceQueryString,
 } from '../utils';
 import {
   getFormattedYears,
-  getStatusQuery,
 } from './utils';
 import {
   createModes,
@@ -54,8 +48,6 @@ import {
   requestTypesTranslations,
   requestTypesMap,
   DEFAULT_DISPLAYED_YEARS_AMOUNT,
-  OPEN_REQUESTS_STATUSES,
-  MAX_RECORDS,
 } from '../constants';
 import { historyData } from '../../test/jest/fixtures/historyData';
 
@@ -354,9 +346,11 @@ describe('RequestsRoute', () => {
       },
       configs: {
         hasLoaded: true,
-        records: [{
-          value: 'testConfig',
-        }],
+        records: [
+          {
+            value: 'testConfig',
+          }
+        ],
       },
       currentServicePoint: {},
       patronBlocks: {
@@ -445,7 +439,9 @@ describe('RequestsRoute', () => {
     });
 
     it('should render RequestsFilter', () => {
-      expect(screen.getByText('RequestsFilter')).toBeInTheDocument();
+      const requestFilter = screen.getByText('RequestsFilter');
+
+      expect(requestFilter).toBeInTheDocument();
     });
 
     it('should trigger "onChange" after clicking on clear button', () => {
@@ -455,7 +451,9 @@ describe('RequestsRoute', () => {
     });
 
     it('should render PrintContent', () => {
-      expect(screen.getByText('PrintContent')).toBeInTheDocument();
+      const printContent = screen.getByText('PrintContent');
+
+      expect(printContent).toBeInTheDocument();
     });
 
     it('should trigger "exportCsv"', async () => {
@@ -467,9 +465,11 @@ describe('RequestsRoute', () => {
     });
 
     it('should render "ErrorModal"', () => {
+      const errorModal = screen.queryByText('ErrorModal');
+
       userEvent.click(screen.getByTestId('exportExpiredHoldShelfToCsvButton'));
 
-      expect(screen.queryByText('ErrorModal')).toBeInTheDocument();
+      expect(errorModal).toBeInTheDocument();
     });
 
     it('should hide "ErrorModal"', () => {
@@ -517,10 +517,12 @@ describe('RequestsRoute', () => {
   });
 
   describe('getHelperResourcePath', () => {
-    it('getHelperResourcePath to have value "circulation/requests/testID1"', () => {
+    it('should correctly handle "getHelperResourcePath"', () => {
       renderComponent(defaultProps);
 
-      expect(screen.getByText('getHelperResourcePath: circulation/requests/testID1')).toBeInTheDocument();
+      const resourcePath = screen.getByText('getHelperResourcePath: circulation/requests/testID1');
+
+      expect(resourcePath).toBeInTheDocument();
     });
   });
 

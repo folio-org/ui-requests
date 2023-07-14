@@ -43,7 +43,6 @@
 * Create Jest/RTL test for CancelRequestDialog.js. Refs UIREQ-876.
 * Preparation for Enable Request Policy to Determine Allowed Pickup Service Points. Refs UIREQ-978.
 * Create JEST/RTL test cases for LoadingButton.js. Refs UIREQ-933.
-* Create Jest/RTL test for RequestQueueRoute.js. Refs UIREQ-946.
 * Create Jest/RTL test for RequestQueueView.js. Refs UIREQ-948.
 * Create Jest/RTL test for RequestQueueRoute.js. Refs UIREQ-946.
 * Create Jest/RTL test for PickupServicePointFilter.js. Refs UIREQ-939.
