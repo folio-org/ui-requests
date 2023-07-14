@@ -1,28 +1,61 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+  cleanup,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+
 import '../../test/jest/__mock__';
-import '../../test/jest/__mock__/stripesUtils.mock';
+
+import {
+  stringify,
+} from 'query-string';
 import {
   SearchAndSort,
 } from '@folio/stripes/smart-components';
-import { CalloutContext } from '@folio/stripes-core';
-import { exportCsv } from '@folio/stripes/util';
+import {
+  CalloutContext,
+  AppIcon,
+} from '@folio/stripes/core';
+import {
+  TextLink,
+} from '@folio/stripes/components';
+import {
+  exportCsv,
+  effectiveCallNumber,
+} from '@folio/stripes/util';
 
 import RequestsRoute, {
   buildHoldRecords,
+  getRequestErrorMessage,
+  getListFormatter,
+  urls,
   REQUEST_ERROR_MESSAGE_CODE,
   REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS,
-  getRequestErrorMessage,
+  DEFAULT_FORMATTER_VALUE,
 } from './RequestsRoute';
-
 import {
   duplicateRequest,
   getTlrSettings,
+  getFullName,
+  getInstanceQueryString,
 } from '../utils';
 import {
-  REQUEST_LEVEL_TYPES,
+  getFormattedYears,
+  getStatusQuery,
+} from './utils';
+import {
   createModes,
+  REQUEST_LEVEL_TYPES,
   DEFAULT_REQUEST_TYPE_VALUE,
+  requestStatusesTranslations,
+  requestStatuses,
+  requestTypesTranslations,
+  requestTypesMap,
+  DEFAULT_DISPLAYED_YEARS_AMOUNT,
+  OPEN_REQUESTS_STATUSES,
+  MAX_RECORDS,
 } from '../constants';
 import { historyData } from '../../test/jest/fixtures/historyData';
 
@@ -30,33 +63,59 @@ jest.mock('react', () => ({
   ...jest.requireActual('react'),
   createRef: jest.fn(),
 }));
+jest.mock('query-string', () => ({
+  ...jest.requireActual('query-string'),
+  stringify: jest.fn(),
+}));
 jest.mock('../utils', () => ({
   ...jest.requireActual('../utils'),
   duplicateRequest: jest.fn((request) => request),
   getTlrSettings: jest.fn(() => ({})),
+  getFullName: jest.fn(),
+  getFormattedYears: jest.fn(),
+  getInstanceQueryString: jest.fn(),
+}));
+jest.mock('./utils', () => ({
+  ...jest.requireActual('./utils'),
+  getFormattedYears: jest.fn(),
+  getStatusQuery: jest.fn(),
 }));
 jest.mock('../components', () => ({
   ErrorModal: jest.fn(({ onClose }) => (
     <div>
-      <span>ErrorModel</span>
-      <button type="button" onClick={onClose}>Close</button>
+      <span>ErrorModal</span>
+      <button
+        type="button"
+        onClick={onClose}
+      >Close
+      </button>
     </div>
   )),
   LoadingButton: jest.fn(() => null),
-  PrintButton: jest.fn(({ onBeforeGetContent, children }) => (
+  PrintButton: jest.fn(({
+    onBeforeGetContent,
+    children,
+  }) => (
     <div>
-      <button type="button" onClick={onBeforeGetContent}>onBeforeGetContent</button>
+      <button
+        type="button"
+        onClick={onBeforeGetContent}
+      >onBeforeGetContent
+      </button>
       {children}
     </div>
   )),
   PrintContent: jest.fn(() => <div>PrintContent</div>)
 }));
-
 jest.mock('../components/RequestsFilters/RequestsFilters', () => ({ onClear }) => {
   return (
     <div>
       <span>RequestsFilter</span>
-      <button type="button" onClick={onClear}>onClear</button>
+      <button
+        type="button"
+        onClick={onClear}
+      >onClear
+      </button>
     </div>
   );
 });
@@ -64,81 +123,62 @@ jest.mock('../ViewRequest', () => jest.fn());
 jest.mock('../RequestForm', () => jest.fn());
 
 global.fetch = jest.fn(() => Promise.resolve({
-  json: () => Promise.resolve({ requests: [{ requestLevel: REQUEST_LEVEL_TYPES.TITLE }] }),
+  json: () => Promise.resolve({
+    requests: [
+      {
+        requestLevel: REQUEST_LEVEL_TYPES.TITLE,
+      }
+    ],
+  }),
 }));
 
 const testIds = {
   searchAndSort: 'searchAndSort',
 };
-
 const RequestFilterData = {
   onChange: jest.fn(),
 };
-
 const request = {
   requesterId: 'requestId',
   instanceId: 'instanceId',
   itemId: 'itemId',
 };
-
-const resultFormatterData = {
-  id: 'resultFormatterTestId',
-  instance: {
-    publication: [
-      { dateOfPublication: '2021-01-01' },
-      { dateOfPublication: '2020-05-10' },
-      { dateOfPublication: '2019-09-15' },
-      { dateOfPublication: '2018-03-20' },
-      { dateOfPublication: '2017-07-25' }
-    ],
-    title: 'testTitle',
-  },
-  item: {
-    barcode: 'testBarcode'
-  },
-  pickupServicePoint: {
-    name: 'TestPickupServicePoint'
-  },
-  position: 'testPositon',
-  proxy: {
-    personal: {
-      lastName: 'testLastName',
-      firstName: 'testFirstName',
-      middleName: 'testMiddleName'
-    }
-  },
-  status: '',
-  requester: {
-    barcode: 'testRequesterBarcode',
-    firstName: 'requesterFirstName',
-    lastName: 'requesterLastName',
-  },
-  requestDate: '2023-04-21',
-  requestType: 'Recall',
+const labelIds = {
+  closedCancelledRequest: requestStatusesTranslations[requestStatuses.CANCELLED],
+  requestType: requestTypesTranslations[requestTypesMap.RECALL],
+  printPickSlips: 'ui-requests.printPickSlips',
 };
 
 SearchAndSort.mockImplementation(jest.fn(({
   actionMenu,
-  detailProps: { onDuplicate, buildRecordsForHoldsShelfReport, onChangePatron, joinRequest },
+  detailProps: {
+    onDuplicate,
+    buildRecordsForHoldsShelfReport,
+    onChangePatron,
+    joinRequest,
+  },
   getHelperResourcePath,
   massageNewRecord,
   onCloseNewRecord,
   onFilterChange,
-  parentResources: { records: { records } },
+  parentResources: {
+    records: {
+      records,
+    },
+  },
   renderFilters,
-  resultsFormatter,
   resultIsSelected,
-  viewRecordOnCollapse
+  viewRecordOnCollapse,
 }) => {
-  const resultsFormatterResult = (key) => {
-    const value = resultsFormatter[key];
-    return value ? value(resultFormatterData) : '';
-  };
   const onClickActions = () => {
     onDuplicate(records[0]);
     buildRecordsForHoldsShelfReport();
     massageNewRecord({});
-    resultIsSelected({ item: { id: 'id' } });
+    resultIsSelected({
+      item: {
+        id: 'id',
+      },
+    });
     viewRecordOnCollapse();
   };
   return (
@@ -152,27 +192,32 @@ SearchAndSort.mockImplementation(jest.fn(({
       />
       <p>getHelperResourcePath: {getHelperResourcePath('', 'testID1')}</p>
       <div>
-        <p>itemBarcode: {resultsFormatterResult('itemBarcode')}</p>
-        <p>position: {resultsFormatterResult('position')}</p>
-        <p>proxy: {resultsFormatterResult('proxy')}</p>
-        <p>requestDate: {resultsFormatterResult('requestDate')}</p>
-        <p>requester: {resultsFormatterResult('requester')}</p>
-        <p>requesterBarcode: {resultsFormatterResult('requesterBarcode')}</p>
-        <p>requestStatus: {resultsFormatterResult('requestStatus')}</p>
-        <p>type: {resultsFormatterResult('type')}</p>
-        <div>title: {resultsFormatterResult('title')}</div>
-        <p>year: {resultsFormatterResult('year')}</p>
-        <p>callNumber: {resultsFormatterResult('callNumber')}</p>
-        <p>servicePoint: {resultsFormatterResult('servicePoint')}</p>
-      </div>
-      <div>
         {renderFilters(RequestFilterData.onChange)}
       </div>
       <div>
-        <button type="button" onClick={onChangePatron}>onChangePatron</button>
-        <button type="button" onClick={onCloseNewRecord}>onCloseNewRecord</button>
-        <button type="button" onClick={() => joinRequest(request)}>addRequestFields</button>
-        <button type="button" onClick={onFilterChange({ name: 'filter4', values: ['Value4', 'Value5'] })}>onFilterChange</button>
+        <button
+          type="button"
+          onClick={onChangePatron}
+        >onChangePatron
+        </button>
+        <button
+          type="button"
+          onClick={onCloseNewRecord}
+        >onCloseNewRecord
+        </button>
+        <button
+          type="button"
+          onClick={() => joinRequest(request)}
+        >addRequestFields
+        </button>
+        <button
+          type="button"
+          onClick={onFilterChange({
+            name: 'filter4',
+            values: ['Value4', 'Value5']
+          })}
+        >onFilterChange
+        </button>
       </div>
       {actionMenu({ onToggle: jest.fn() })}
     </div>
@@ -196,28 +241,32 @@ describe('RequestsRoute', () => {
     {
       instance: {
         contributorNames: [
-          { name: 'John Doe' },
-          { name: 'Jane Smith' }
-        ]
+          {
+            name: 'John Doe',
+          },
+          {
+            name: 'Jane Smith',
+          }
+        ],
       },
       tags: {
-        tagList: ['tag1', 'tag2']
+        tagList: ['tag1', 'tag2'],
       },
       requester: {
         firstName: 'Alice',
-        lastName: 'Johnson'
+        lastName: 'Johnson',
       },
       proxy: {
         firstName: 'Bob',
-        lastName: 'Williams'
+        lastName: 'Williams',
       },
       deliveryAddress: {
         addressLine1: '123 Main St',
         city: 'Cityville',
         region: 'State',
         postalCode: '12345',
-        countryId: 'US'
-      }
+        countryId: 'US',
+      },
     }
   ];
   const defaultProps = {
@@ -225,10 +274,10 @@ describe('RequestsRoute', () => {
     location: historyData.location,
     match: {
       params: {
-        noteId: 'viewNoteRouteID'
+        noteId: 'viewNoteRouteID',
       },
       path: 'viewPath',
-      url: '{{ env.FOLIO_MD_REGISTRY }}/_/proxy/modules'
+      url: '{{ env.FOLIO_MD_REGISTRY }}/_/proxy/modules',
     },
     mutator: {
       activeRecord: {
@@ -238,13 +287,17 @@ describe('RequestsRoute', () => {
         update: jest.fn(),
       },
       expiredHolds: {
-        GET: jest.fn(() => ({ requests: [{
-          requester: {
-            firstName: 'firstName',
-            lastName: 'lastName',
-            name: ''
-          }
-        }] })),
+        GET: jest.fn(() => ({
+          requests: [
+            {
+              requester: {
+                firstName: 'firstName',
+                lastName: 'lastName',
+                name: '',
+              },
+            }
+          ],
+        })),
         reset: jest.fn(),
       },
       patronBlocks: {
@@ -265,11 +318,11 @@ describe('RequestsRoute', () => {
       },
       records: {
         GET: jest.fn(),
-        POST: jest.fn().mockResolvedValue()
+        POST: jest.fn().mockResolvedValue(),
       },
       reportRecords: {
         GET: jest.fn().mockReturnValueOnce(mockRecordValues).mockRejectedValue(),
-        reset: jest.fn()
+        reset: jest.fn(),
       },
       requestCount: {
         replace: jest.fn(),
@@ -301,19 +354,25 @@ describe('RequestsRoute', () => {
       },
       configs: {
         hasLoaded: true,
-        records: [{ value: 'testConfig' }],
+        records: [
+          {
+            value: 'testConfig',
+          }
+        ],
       },
       currentServicePoint: {},
       patronBlocks: {
         records: [
           {
-            expirationDate: '2023-09-11'
+            expirationDate: '2023-09-11',
           }
         ]
       },
       pickSlips: {
         records: [
-          { name: 'pick slip' }
+          {
+            name: 'pick slip',
+          }
         ],
       },
       query: {
@@ -329,11 +388,14 @@ describe('RequestsRoute', () => {
         records: [mockedRequest],
       },
       staffSlips: {
-        records: [{ name: 'staffSlipName' }],
+        records: [
+          {
+            name: 'staffSlipName',
+          }
+        ],
       },
     },
   };
-
   const defaultExpectedProps = {
     requestType: DEFAULT_REQUEST_TYPE_VALUE,
     fulfillmentPreference: 'Hold Shelf',
@@ -347,6 +409,8 @@ describe('RequestsRoute', () => {
 
   afterEach(() => {
     getTlrSettings.mockClear();
+    jest.clearAllMocks();
+    cleanup();
   });
 
   describe('RequestsRoute', () => {
@@ -378,96 +442,95 @@ describe('RequestsRoute', () => {
           createTitleLevelRequest: false,
         },
       };
+
       expect(SearchAndSort).toHaveBeenCalledWith(expect.objectContaining(expectedResult), {});
     });
-    it('RequestsFilter should render on renderFilter', () => {
-      expect(screen.getByText('RequestsFilter')).toBeInTheDocument();
+
+    it('should render RequestsFilter', () => {
+      const requestFilter = screen.getByText('RequestsFilter');
+
+      expect(requestFilter).toBeInTheDocument();
     });
-    it('onChange to be called on onClear of RequestsFilter', () => {
+
+    it('should trigger "onChange" after clicking on clear button', () => {
       userEvent.click(screen.getByRole('button', { name: 'onClear' }));
+
       expect(RequestFilterData.onChange).toBeCalled();
     });
-    it('PrintContent should render', () => {
-      expect(screen.getByText('PrintContent')).toBeInTheDocument();
+
+    it('should render PrintContent', () => {
+      const printContent = screen.getByText('PrintContent');
+
+      expect(printContent).toBeInTheDocument();
     });
-    it('exportCsv function to be called when ui-requests.exportSearchResultsToCsv button clicked', async () => {
+
+    it('should trigger "exportCsv"', async () => {
       userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsToCsv' }));
+
       await waitFor(() => {
         expect(exportCsv).toBeCalled();
       });
     });
-    it('ErrorModel model should render', () => {
+
+    it('should render "ErrorModal"', () => {
       userEvent.click(screen.getByTestId('exportExpiredHoldShelfToCsvButton'));
-      expect(screen.queryByText('ErrorModel')).toBeInTheDocument();
+
+      const errorModal = screen.queryByText('ErrorModal');
+
+      expect(errorModal).toBeInTheDocument();
     });
-    it('ErrorModel model should close on clicking close Button', () => {
+
+    it('should hide "ErrorModal"', () => {
+      const errorModal = screen.queryByText('ErrorModal');
+
       userEvent.click(screen.getByTestId('exportExpiredHoldShelfToCsvButton'));
       userEvent.click(screen.getByRole('button', { name: 'Close' }));
-      expect(screen.queryByText('ErrorModel')).not.toBeInTheDocument();
+
+      expect(errorModal).not.toBeInTheDocument();
     });
-    it('mutator.query.update function to be called on onFilterChange', () => {
+
+    it('should trigger "mutator.query.update"', () => {
       const expectFilterValue = { 'filters': 'filter1.value1,filter1.value2,filter2.value3,filter4.Value4,filter4.Value5' };
+
       userEvent.click(screen.getByRole('button', { name: 'onFilterChange' }));
+
       expect(defaultProps.mutator.query.update).toBeCalledWith(expectFilterValue);
     });
-    it('mutator.activeRecord.update to be called on onChangePatron', () => {
+
+    it('should trigger "mutator.activeRecord.update"', () => {
       userEvent.click(screen.getByRole('button', { name: 'onChangePatron' }));
+
       expect(defaultProps.mutator.activeRecord.update).toBeCalled();
     });
-    it('fetch function to be called on addRequestFields', () => {
+
+    it('should trigger "fetch"', () => {
       userEvent.click(screen.getByRole('button', { name: 'addRequestFields' }));
+
       expect(global.fetch).toBeCalled();
     });
-    it('PUSH function of history to be called on onCloseNewRecord', () => {
+
+    it('should trigger "history.push"', () => {
       userEvent.click(screen.getByRole('button', { name: 'onCloseNewRecord' }));
+
       expect(defaultProps.history.push).toBeCalled();
     });
-    it('ui-requests.printPickSlips should render', () => {
-      userEvent.click(screen.getByRole('button', { name: 'onBeforeGetContent' }));
-      expect(screen.getByText('ui-requests.printPickSlips')).toBeInTheDocument();
-    });
-  });
 
-  describe('resultsFormatter function', () => {
-    beforeEach(() => {
-      renderComponent(defaultProps);
-    });
-    it('itemBarcode of resultsFormatter should have value "testBarcode"', () => {
-      expect(screen.getByText(/itemBarcode: testBarcode/i)).toBeInTheDocument();
-    });
-    it('position of resultsFormatter should have value "testPositon"', () => {
-      expect(screen.getByText(/position: testPositon/i)).toBeInTheDocument();
-    });
-    it('proxy of resultsFormatter should have value "testLastName, testFirstName testMiddleName"', () => {
-      expect(screen.getByText(/proxy: testLastName, testFirstName testMiddleName/i)).toBeInTheDocument();
-    });
-    it('requestDate of resultsFormatter should have value "2023-04-21"', () => {
-      expect(screen.getByText('2023-04-21')).toBeInTheDocument();
-    });
-    it('requester of resultsFormatter should have value "requesterLastName, requesterFirstName"', () => {
-      expect(screen.getByText(/requester: requesterLastName, requesterFirstName/i)).toBeInTheDocument();
-    });
-    it('requesterBarcode of resultsFormatter should have value "testRequesterBarcode"', () => {
-      expect(screen.getByText(/requesterBarcode: testRequesterBarcode/i)).toBeInTheDocument();
-    });
-    it('requestStatus of resultsFormatter should have value "No Value"', () => {
-      expect(screen.getByText(/No value/i)).toBeInTheDocument();
-    });
-    it('type of resultsFormatter should have value "ui-requests.requestMeta.type.recall"', () => {
-      expect(screen.getByText(/type: ui-requests.requestMeta.type.recall/i)).toBeInTheDocument();
-    });
-    it('servicePoint of resultsFormatter should have value "TestPickupServicePoint"', () => {
-      expect(screen.getByText(/servicePoint: TestPickupServicePoint/i)).toBeInTheDocument();
-    });
-    it('title of resultsFormatter should have value link with value', () => {
-      expect(screen.getByRole('link', { name: 'testTitle' })).toHaveAttribute('href', 'viewPath/view/resultFormatterTestId?instanceId=12345&foo=bar');
+    it('should render print pick slips label', () => {
+      const printPickSlipsLabel = screen.getByText(labelIds.printPickSlips);
+
+      userEvent.click(screen.getByRole('button', { name: 'onBeforeGetContent' }));
+
+      expect(printPickSlipsLabel).toBeInTheDocument();
     });
   });
 
   describe('getHelperResourcePath', () => {
-    it('getHelperResourcePath to have value "circulation/requests/testID1"', () => {
+    it('should correctly handle "getHelperResourcePath"', () => {
       renderComponent(defaultProps);
-      expect(screen.getByText('getHelperResourcePath: circulation/requests/testID1')).toBeInTheDocument();
+
+      const resourcePath = screen.getByText('getHelperResourcePath: circulation/requests/testID1');
+
+      expect(resourcePath).toBeInTheDocument();
     });
   });
 
@@ -641,6 +704,424 @@ describe('RequestsRoute', () => {
 
     it('should return default message when code and message empty', () => {
       expect(getRequestErrorMessage({}, intl)).toEqual('');
+    });
+  });
+
+  describe('getListFormatter', () => {
+    const getRowURLMock = jest.fn(id => id);
+    const setURLMock = jest.fn(id => id);
+    const listFormatter = getListFormatter(getRowURLMock, setURLMock);
+    const requestWithData = {
+      id: 'id',
+      item: {
+        barcode: 'itemBarcode',
+      },
+      position: 'position',
+      proxy: {},
+      requestDate: '02.02.2023',
+      requester: {
+        lastName: 'lastName',
+        firstName: 'firstName',
+        barcode: 'barcode',
+      },
+      status: requestStatuses.CANCELLED,
+      requestType: requestTypesMap.RECALL,
+      instance: {
+        title: 'title',
+        publication: 'publication',
+      },
+      pickupServicePoint: {
+        name: 'name',
+      },
+    };
+    const requestWithoutData = {};
+
+    describe('itemBarcode', () => {
+      it('should return item barcode', () => {
+        expect(listFormatter.itemBarcode(requestWithData)).toBe(requestWithData.item.barcode);
+      });
+
+      it('should return empty string', () => {
+        expect(listFormatter.itemBarcode(requestWithoutData)).toBe(DEFAULT_FORMATTER_VALUE);
+      });
+    });
+
+    describe('position', () => {
+      it('should return item position', () => {
+        expect(listFormatter.position(requestWithData)).toBe(requestWithData.position);
+      });
+
+      it('should return empty string', () => {
+        expect(listFormatter.position(requestWithoutData)).toBe(DEFAULT_FORMATTER_VALUE);
+      });
+    });
+
+    describe('proxy', () => {
+      it('should return request proxy', () => {
+        const mockProxy = 'proxy full name';
+
+        getFullName.mockReturnValueOnce(mockProxy);
+
+        expect(listFormatter.proxy(requestWithData)).toBe(mockProxy);
+      });
+
+      it('should return empty string', () => {
+        expect(listFormatter.proxy(requestWithoutData)).toBe(DEFAULT_FORMATTER_VALUE);
+      });
+    });
+
+    describe('requestDate', () => {
+      beforeEach(() => {
+        render(listFormatter.requestDate(requestWithData));
+      });
+
+      it('should render request date', () => {
+        const requestDate = screen.getByText(requestWithData.requestDate);
+
+        expect(requestDate).toBeInTheDocument();
+      });
+
+      it('should render "AppIcon" with correct props', () => {
+        const expectedProps = {
+          size: 'small',
+          app: 'requests',
+        };
+
+        expect(AppIcon).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+      });
+    });
+
+    describe('requester', () => {
+      it('should return requester information', () => {
+        const requesterInfo = `${requestWithData.requester.lastName}, ${requestWithData.requester.firstName}`;
+
+        expect(listFormatter.requester(requestWithData)).toBe(requesterInfo);
+      });
+
+      it('should return empty string', () => {
+        expect(listFormatter.requester(requestWithoutData)).toBe(DEFAULT_FORMATTER_VALUE);
+      });
+    });
+
+    describe('requesterBarcode', () => {
+      it('should return requester barcode', () => {
+        expect(listFormatter.requesterBarcode(requestWithData)).toBe(requestWithData.requester.barcode);
+      });
+
+      it('should return empty string', () => {
+        expect(listFormatter.requester(requestWithoutData)).toBe(DEFAULT_FORMATTER_VALUE);
+      });
+    });
+
+    describe('requestStatus', () => {
+      it('should render request status', () => {
+        render(listFormatter.requestStatus(requestWithData));
+
+        const requestStatus = screen.getByText(labelIds.closedCancelledRequest);
+
+        expect(requestStatus).toBeInTheDocument();
+      });
+
+      it('should render "NoValue"', () => {
+        render(listFormatter.requestStatus(requestWithoutData));
+
+        const noValue = screen.getByText('No value');
+
+        expect(noValue).toBeInTheDocument();
+      });
+    });
+
+    describe('type', () => {
+      it('should render request type', () => {
+        render(listFormatter.type(requestWithData));
+
+        const requestType = screen.getByText(labelIds.requestType);
+
+        expect(requestType).toBeInTheDocument();
+      });
+    });
+
+    describe('title', () => {
+      it('should render instance title', () => {
+        render(listFormatter.title(requestWithData));
+
+        const instanceTitle = screen.getByText(requestWithData.instance.title);
+
+        expect(instanceTitle).toBeInTheDocument();
+      });
+
+      it('should render "TextLink" with correct props', () => {
+        const expectedProps = {
+          to: requestWithData.id,
+          onClick: expect.any(Function),
+        };
+
+        render(listFormatter.title(requestWithData));
+
+        expect(TextLink).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+      });
+    });
+
+    describe('type', () => {
+      it('should trigger "getFormattedYears" with correct arguments', () => {
+        const expectedArgs = [requestWithData.instance.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT];
+
+        listFormatter.year(requestWithData);
+
+        expect(getFormattedYears).toHaveBeenCalledWith(...expectedArgs);
+      });
+    });
+
+    describe('callNumber', () => {
+      it('should trigger "effectiveCallNumber" with correct argument', () => {
+        listFormatter.callNumber(requestWithData);
+
+        expect(effectiveCallNumber).toHaveBeenCalledWith(requestWithData.item);
+      });
+    });
+
+    describe('servicePoint', () => {
+      it('should return service point', () => {
+        expect(listFormatter.servicePoint(requestWithData)).toBe(requestWithData.pickupServicePoint.name);
+      });
+    });
+  });
+
+  describe('urls', () => {
+    const mockedQueryValue = 'testQuery';
+    const idType = 'idType';
+
+    beforeEach(() => {
+      stringify.mockReturnValue(mockedQueryValue);
+    });
+
+    describe('user', () => {
+      const value = 'value';
+      let queryString;
+
+      beforeEach(() => {
+        queryString = urls.user(value, idType);
+      });
+
+      it('should trigger "stringify" with correct argument', () => {
+        const expectedArgument = {
+          query: `(${idType}=="${value}")`,
+        };
+
+        expect(stringify).toHaveBeenCalledWith(expectedArgument);
+      });
+
+      it('should return correct url', () => {
+        const expectedResult = `users?${mockedQueryValue}`;
+
+        expect(queryString).toBe(expectedResult);
+      });
+    });
+
+    describe('item', () => {
+      describe('when "value" is an array', () => {
+        const value = ['value_1', 'value_2'];
+        let queryString;
+
+        beforeEach(() => {
+          queryString = urls.item(value, idType);
+        });
+
+        it('should trigger "stringify" with correct argument', () => {
+          const expectedArgument = {
+            query: `(${idType}=="${value[0]}" or ${idType}=="${value[1]}")`,
+          };
+
+          expect(stringify).toHaveBeenCalledWith(expectedArgument);
+        });
+
+        it('should return correct url', () => {
+          const expectedResult = `inventory/items?${mockedQueryValue}`;
+
+          expect(queryString).toBe(expectedResult);
+        });
+      });
+
+      describe('when "value" is not an array', () => {
+        const value = 'value';
+        let queryString;
+
+        beforeEach(() => {
+          queryString = urls.item(value, idType);
+        });
+
+        it('should trigger "stringify" with correct argument', () => {
+          const expectedArgument = {
+            query: `(${idType}=="${value}")`,
+          };
+
+          expect(stringify).toHaveBeenCalledWith(expectedArgument);
+        });
+
+        it('should return correct url', () => {
+          const expectedResult = `inventory/items?${mockedQueryValue}`;
+
+          expect(queryString).toBe(expectedResult);
+        });
+      });
+    });
+
+    describe('instance', () => {
+      const value = 'value';
+      const instanceQueryString = 'instanceQueryString';
+      let queryString;
+
+      beforeEach(() => {
+        getInstanceQueryString.mockReturnValue(instanceQueryString);
+        queryString = urls.instance(value, idType);
+      });
+
+      it('should trigger "getInstanceQueryString" with correct argument', () => {
+        expect(getInstanceQueryString).toHaveBeenCalledWith(value);
+      });
+
+      it('should trigger "stringify" with correct argument', () => {
+        const expectedArgument = {
+          query: instanceQueryString,
+        };
+
+        expect(stringify).toHaveBeenCalledWith(expectedArgument);
+      });
+
+      it('should return correct url', () => {
+        const expectedResult = `inventory/instances?${mockedQueryValue}`;
+
+        expect(queryString).toBe(expectedResult);
+      });
+    });
+
+    describe('loan', () => {
+      const value = 'value';
+      let queryString;
+
+      beforeEach(() => {
+        queryString = urls.loan(value, idType);
+      });
+
+      it('should trigger "stringify" with correct argument', () => {
+        const expectedArgument = {
+          query: `(itemId=="${value}") and status.name==Open`,
+        };
+
+        expect(stringify).toHaveBeenCalledWith(expectedArgument);
+      });
+
+      it('should return correct url', () => {
+        const expectedResult = `circulation/loans?${mockedQueryValue}`;
+
+        expect(queryString).toBe(expectedResult);
+      });
+    });
+
+    describe('requestsForItem', () => {
+      const value = 'value';
+      const statusQuery = 'statusQuery';
+      let queryString;
+
+      beforeEach(() => {
+        getStatusQuery.mockReturnValue(statusQuery);
+        queryString = urls.requestsForItem(value);
+      });
+
+      it('should trigger "getStatusQuery" with correct argument', () => {
+        expect(getStatusQuery).toHaveBeenCalledWith(OPEN_REQUESTS_STATUSES);
+      });
+
+      it('should trigger "stringify" with correct argument', () => {
+        const expectedArgument = {
+          query: `(itemId=="${value}" and (${statusQuery}))`,
+          limit: MAX_RECORDS,
+        };
+
+        expect(stringify).toHaveBeenCalledWith(expectedArgument);
+      });
+
+      it('should return correct url', () => {
+        const expectedResult = `circulation/requests?${mockedQueryValue}`;
+
+        expect(queryString).toBe(expectedResult);
+      });
+    });
+
+    describe('requestsForInstance', () => {
+      const value = 'value';
+      const statusQuery = 'statusQuery';
+      let queryString;
+
+      beforeEach(() => {
+        getStatusQuery.mockReturnValue(statusQuery);
+        queryString = urls.requestsForInstance(value);
+      });
+
+      it('should trigger "getStatusQuery" with correct argument', () => {
+        expect(getStatusQuery).toHaveBeenCalledWith(OPEN_REQUESTS_STATUSES);
+      });
+
+      it('should trigger "stringify" with correct argument', () => {
+        const expectedArgument = {
+          query: `(instanceId=="${value}" and (${statusQuery}))`,
+          limit: MAX_RECORDS,
+        };
+
+        expect(stringify).toHaveBeenCalledWith(expectedArgument);
+      });
+
+      it('should return correct url', () => {
+        const expectedResult = `circulation/requests?${mockedQueryValue}`;
+
+        expect(queryString).toBe(expectedResult);
+      });
+    });
+
+    describe('requestPreferences', () => {
+      const value = 'value';
+      let queryString;
+
+      beforeEach(() => {
+        queryString = urls.requestPreferences(value);
+      });
+
+      it('should trigger "stringify" with correct argument', () => {
+        const expectedArgument = {
+          query: `(userId=="${value}")`,
+        };
+
+        expect(stringify).toHaveBeenCalledWith(expectedArgument);
+      });
+
+      it('should return correct url', () => {
+        const expectedResult = `request-preference-storage/request-preference?${mockedQueryValue}`;
+
+        expect(queryString).toBe(expectedResult);
+      });
+    });
+
+    describe('holding', () => {
+      const value = 'value';
+      let queryString;
+
+      beforeEach(() => {
+        queryString = urls.holding(value, idType);
+      });
+
+      it('should trigger "stringify" with correct argument', () => {
+        const expectedArgument = {
+          query: `(${idType}=="${value}")`,
+        };
+
+        expect(stringify).toHaveBeenCalledWith(expectedArgument);
+      });
+
+      it('should return correct url', () => {
+        const expectedResult = `holdings-storage/holdings?${mockedQueryValue}`;
+
+        expect(queryString).toBe(expectedResult);
+      });
     });
   });
 });
