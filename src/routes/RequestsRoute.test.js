@@ -266,7 +266,7 @@ describe('RequestsRoute', () => {
         region: 'State',
         postalCode: '12345',
         countryId: 'US',
-      }
+      },
     }
   ];
   const defaultProps = {
