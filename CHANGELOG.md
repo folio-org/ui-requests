@@ -47,6 +47,8 @@
 * Create Jest/RTL test for RequestQueueRoute.js. Refs UIREQ-946.
 * Create Jest/RTL test for PickupServicePointFilter.js. Refs UIREQ-939.
 * Jest/RTL tests cleanup. Refs UIREQ-988.
+* Jest/RTL tests cleanup of RequestsRoute.js file. Refs UIREQ-991.
+* UI tests replacement with RTL/Jest for src/MoveRequestManager.js. Refs UIREQ-877.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)
