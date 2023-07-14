@@ -15,12 +15,14 @@ describe('ComponentToPrint', () => {
   beforeEach(() => {
     templateFnMock.mockClear();
   });
+  afterEach(() => {
+    parser.parseWithInstructions = originalParseWithInstructions;
+  });
   it('should handle null result from parseWithInstructions', () => {
     const originalParseWithInstructions = parser.parseWithInstructions;
     parser.parseWithInstructions = jest.fn(() => null);
     render(<ComponentToPrint dataSource={dataSource} templateFn={templateFn} />);
     expect(screen.queryByTestId('barcode')).not.toBeInTheDocument();
-    parser.parseWithInstructions = originalParseWithInstructions;
   });
   it('should handle empty template string', () => {
     const emptyTemplateFn = jest.fn(() => null);
@@ -43,6 +45,5 @@ describe('ComponentToPrint', () => {
     render(<ComponentToPrint dataSource={dataSource} templateFn={templateFn} />);
     const emptyBarcodeElement = screen.getAllByTestId('barcode-component')[1];
     expect(emptyBarcodeElement).toBeInTheDocument();
-    parser.parseWithInstructions = originalParseWithInstructions;
   });
 });
