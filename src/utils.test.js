@@ -27,6 +27,7 @@ import {
   getProxy,
   isSubmittingButtonDisabled,
   isFormEditing,
+  resetRequestTypeState,
 } from './utils';
 
 import {
@@ -36,6 +37,7 @@ import {
   REQUEST_LEVEL_TYPES,
   REQUEST_TYPES,
   fulfillmentTypeMap,
+  REQUEST_FORM_FIELD_NAMES,
 } from './constants';
 
 describe('escapeValue', () => {
@@ -87,8 +89,6 @@ describe('createUserHighlightBoxLink', () => {
     expect(text).toMatch('');
   });
 });
-
-
 
 describe('duplicateRequest', () => {
   it('omits non-cloneable attributes', () => {
@@ -232,7 +232,7 @@ describe('getInstanceQueryString', () => {
 });
 
 describe('generateUserName', () => {
-  it('Should return full name', () => {
+  it('should return full name', () => {
     const firstName = 'Bob';
     const lastName = 'Marley';
     const middleName = 'Test';
@@ -241,7 +241,7 @@ describe('generateUserName', () => {
       .toEqual(`${lastName}, ${firstName} ${middleName}`);
   });
 
-  it('Should return last name and first name', () => {
+  it('should return last name and first name', () => {
     const firstName = 'Bob';
     const lastName = 'Marley';
     const middleName = undefined;
@@ -250,7 +250,7 @@ describe('generateUserName', () => {
       .toEqual(`${lastName}, ${firstName}`);
   });
 
-  it('Should return last name only', () => {
+  it('should return last name only', () => {
     const firstName = undefined;
     const lastName = 'Marley';
     const middleName = undefined;
@@ -259,7 +259,7 @@ describe('generateUserName', () => {
       .toEqual(lastName);
   });
 
-  it('Should return last name only if lastName and middleName presented', () => {
+  it('should return last name only if lastName and middleName presented', () => {
     const firstName = undefined;
     const lastName = 'Marley';
     const middleName = 'Test';
@@ -780,5 +780,43 @@ describe('convertToSlipData', () => {
     }];
 
     expect(convertToSlipData(pickSlipsWithoutPreferredFirstName, intl, tz, locale)).toEqual(expectSlipDataWithoutPreferredFirstName);
+  });
+});
+
+describe('resetRequestTypeState', () => {
+  const form = {
+    getRegisteredFields: jest.fn(),
+    resetFieldState: jest.fn(),
+  };
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+    jest.clearAllMocks();
+  });
+
+  describe('when request type field exists', () => {
+    beforeEach(() => {
+      form.getRegisteredFields.mockReturnValue([REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE]);
+      resetRequestTypeState(form);
+    });
+
+    it('should trigger "getRegisteredFields"', () => {
+      expect(form.getRegisteredFields).toHaveBeenCalled();
+    });
+
+    it('should trigger "resetFieldState" with correct argument', () => {
+      expect(form.resetFieldState).toHaveBeenCalledWith(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE);
+    });
+  });
+
+  describe('when request type field does not exist', () => {
+    beforeEach(() => {
+      form.getRegisteredFields.mockReturnValue([]);
+      resetRequestTypeState(form);
+    });
+
+    it('should not trigger "resetFieldState"', () => {
+      expect(form.resetFieldState).not.toHaveBeenCalled();
+    });
   });
 });

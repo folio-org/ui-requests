@@ -31,7 +31,6 @@ import BlockModalInteractor from './patron-block-modal';
 
   title = text('[class*=paneTitleLabel---]');
   headerDropdown = new HeaderDropdown();
-  requestTypeMessageIsPresent = isPresent('[data-test-request-type-message]');
   itemBarcodeIsPresent = isPresent('[name="item.barcode"]');
   fillItemBarcode = fillable('[name="item.barcode"]');
 
@@ -41,12 +40,12 @@ import BlockModalInteractor from './patron-block-modal';
   fillUserBarcode = fillable('[name="requester.barcode"]');
   userField = new InputField('[name="requester.barcode"]');
 
+  chooseRequestType = selectable('[name="requestType"]');
+  requestTypePresent = isPresent('[name="requestType"]');
   chooseServicePoint = selectable('[name="pickupServicePointId"]');
   servicePointPresent = isPresent('[name="pickupServicePointId"]');
   requestTypes = isPresent('[name="requestType"]');
   requestTypeOptions = getSelectValues('[name="requestType"] option');
-  requestTypeText = text('[data-test-request-type-text]');
-  requestTypeIsPresent = isPresent('[data-test-request-type-text]');
   clickNewRequest = clickable('#clickable-save-request');
   clickCancel = clickable('#clickable-cancel-request-changes');
   containsUserBarcode = value('[name="requester.barcode"]');
@@ -73,15 +72,15 @@ import BlockModalInteractor from './patron-block-modal';
     return this.when(() => this.itemBarcodeIsPresent);
   }
 
-  whenRequestTypeIsPresent() {
-    return this.when(() => this.requestTypeIsPresent);
-  }
-
   whenRequestTypesArePresent() {
     return this.when(() => this.requestTypes);
   }
 
   whenServicePointIsPresent() {
+    return this.when(() => this.servicePointPresent, 5000);
+  }
+
+  whenRequestTypeIsPresent() {
     return this.when(() => this.servicePointPresent, 5000);
   }
 }
