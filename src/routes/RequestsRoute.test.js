@@ -9,6 +9,9 @@ import userEvent from '@testing-library/user-event';
 import '../../test/jest/__mock__';
 
 import {
+  stringify,
+} from 'query-string';
+import {
   SearchAndSort,
 } from '@folio/stripes/smart-components';
 import {
@@ -27,6 +30,7 @@ import RequestsRoute, {
   buildHoldRecords,
   getRequestErrorMessage,
   getListFormatter,
+  urls,
   REQUEST_ERROR_MESSAGE_CODE,
   REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS,
   DEFAULT_FORMATTER_VALUE,
@@ -35,9 +39,11 @@ import {
   duplicateRequest,
   getTlrSettings,
   getFullName,
+  getInstanceQueryString,
 } from '../utils';
 import {
   getFormattedYears,
+  getStatusQuery,
 } from './utils';
 import {
   createModes,
@@ -48,6 +54,8 @@ import {
   requestTypesTranslations,
   requestTypesMap,
   DEFAULT_DISPLAYED_YEARS_AMOUNT,
+  OPEN_REQUESTS_STATUSES,
+  MAX_RECORDS,
 } from '../constants';
 import { historyData } from '../../test/jest/fixtures/historyData';
 
@@ -466,7 +474,7 @@ describe('RequestsRoute', () => {
 
     it('should render "ErrorModal"', () => {
       userEvent.click(screen.getByTestId('exportExpiredHoldShelfToCsvButton'));
-      
+
       const errorModal = screen.queryByText('ErrorModal');
 
       expect(errorModal).toBeInTheDocument();
@@ -875,6 +883,244 @@ describe('RequestsRoute', () => {
     describe('servicePoint', () => {
       it('should return service point', () => {
         expect(listFormatter.servicePoint(requestWithData)).toBe(requestWithData.pickupServicePoint.name);
+      });
+    });
+  });
+
+  describe('urls', () => {
+    const mockedQueryValue = 'testQuery';
+    const idType = 'idType';
+
+    beforeEach(() => {
+      stringify.mockReturnValue(mockedQueryValue);
+    });
+
+    describe('user', () => {
+      const value = 'value';
+      let queryString;
+
+      beforeEach(() => {
+        queryString = urls.user(value, idType);
+      });
+
+      it('should trigger "stringify" with correct argument', () => {
+        const expectedArgument = {
+          query: `(${idType}=="${value}")`,
+        };
+
+        expect(stringify).toHaveBeenCalledWith(expectedArgument);
+      });
+
+      it('should return correct url', () => {
+        const expectedResult = `users?${mockedQueryValue}`;
+
+        expect(queryString).toBe(expectedResult);
+      });
+    });
+
+    describe('item', () => {
+      describe('when "value" is an array', () => {
+        const value = ['value_1', 'value_2'];
+        let queryString;
+
+        beforeEach(() => {
+          queryString = urls.item(value, idType);
+        });
+
+        it('should trigger "stringify" with correct argument', () => {
+          const expectedArgument = {
+            query: `(${idType}=="${value[0]}" or ${idType}=="${value[1]}")`,
+          };
+
+          expect(stringify).toHaveBeenCalledWith(expectedArgument);
+        });
+
+        it('should return correct url', () => {
+          const expectedResult = `inventory/items?${mockedQueryValue}`;
+
+          expect(queryString).toBe(expectedResult);
+        });
+      });
+
+      describe('when "value" is not an array', () => {
+        const value = 'value';
+        let queryString;
+
+        beforeEach(() => {
+          queryString = urls.item(value, idType);
+        });
+
+        it('should trigger "stringify" with correct argument', () => {
+          const expectedArgument = {
+            query: `(${idType}=="${value}")`,
+          };
+
+          expect(stringify).toHaveBeenCalledWith(expectedArgument);
+        });
+
+        it('should return correct url', () => {
+          const expectedResult = `inventory/items?${mockedQueryValue}`;
+
+          expect(queryString).toBe(expectedResult);
+        });
+      });
+    });
+
+    describe('instance', () => {
+      const value = 'value';
+      const instanceQueryString = 'instanceQueryString';
+      let queryString;
+
+      beforeEach(() => {
+        getInstanceQueryString.mockReturnValue(instanceQueryString);
+        queryString = urls.instance(value, idType);
+      });
+
+      it('should trigger "getInstanceQueryString" with correct argument', () => {
+        expect(getInstanceQueryString).toHaveBeenCalledWith(value);
+      });
+
+      it('should trigger "stringify" with correct argument', () => {
+        const expectedArgument = {
+          query: instanceQueryString,
+        };
+
+        expect(stringify).toHaveBeenCalledWith(expectedArgument);
+      });
+
+      it('should return correct url', () => {
+        const expectedResult = `inventory/instances?${mockedQueryValue}`;
+
+        expect(queryString).toBe(expectedResult);
+      });
+    });
+
+    describe('loan', () => {
+      const value = 'value';
+      let queryString;
+
+      beforeEach(() => {
+        queryString = urls.loan(value, idType);
+      });
+
+      it('should trigger "stringify" with correct argument', () => {
+        const expectedArgument = {
+          query: `(itemId=="${value}") and status.name==Open`,
+        };
+
+        expect(stringify).toHaveBeenCalledWith(expectedArgument);
+      });
+
+      it('should return correct url', () => {
+        const expectedResult = `circulation/loans?${mockedQueryValue}`;
+
+        expect(queryString).toBe(expectedResult);
+      });
+    });
+
+    describe('requestsForItem', () => {
+      const value = 'value';
+      const statusQuery = 'statusQuery';
+      let queryString;
+
+      beforeEach(() => {
+        getStatusQuery.mockReturnValue(statusQuery);
+        queryString = urls.requestsForItem(value);
+      });
+
+      it('should trigger "getStatusQuery" with correct argument', () => {
+        expect(getStatusQuery).toHaveBeenCalledWith(OPEN_REQUESTS_STATUSES);
+      });
+
+      it('should trigger "stringify" with correct argument', () => {
+        const expectedArgument = {
+          query: `(itemId=="${value}" and (${statusQuery}))`,
+          limit: MAX_RECORDS,
+        };
+
+        expect(stringify).toHaveBeenCalledWith(expectedArgument);
+      });
+
+      it('should return correct url', () => {
+        const expectedResult = `circulation/requests?${mockedQueryValue}`;
+
+        expect(queryString).toBe(expectedResult);
+      });
+    });
+
+    describe('requestsForInstance', () => {
+      const value = 'value';
+      const statusQuery = 'statusQuery';
+      let queryString;
+
+      beforeEach(() => {
+        getStatusQuery.mockReturnValue(statusQuery);
+        queryString = urls.requestsForInstance(value);
+      });
+
+      it('should trigger "getStatusQuery" with correct argument', () => {
+        expect(getStatusQuery).toHaveBeenCalledWith(OPEN_REQUESTS_STATUSES);
+      });
+
+      it('should trigger "stringify" with correct argument', () => {
+        const expectedArgument = {
+          query: `(instanceId=="${value}" and (${statusQuery}))`,
+          limit: MAX_RECORDS,
+        };
+
+        expect(stringify).toHaveBeenCalledWith(expectedArgument);
+      });
+
+      it('should return correct url', () => {
+        const expectedResult = `circulation/requests?${mockedQueryValue}`;
+
+        expect(queryString).toBe(expectedResult);
+      });
+    });
+
+    describe('requestPreferences', () => {
+      const value = 'value';
+      let queryString;
+
+      beforeEach(() => {
+        queryString = urls.requestPreferences(value);
+      });
+
+      it('should trigger "stringify" with correct argument', () => {
+        const expectedArgument = {
+          query: `(userId=="${value}")`,
+        };
+
+        expect(stringify).toHaveBeenCalledWith(expectedArgument);
+      });
+
+      it('should return correct url', () => {
+        const expectedResult = `request-preference-storage/request-preference?${mockedQueryValue}`;
+
+        expect(queryString).toBe(expectedResult);
+      });
+    });
+
+    describe('holding', () => {
+      const value = 'value';
+      let queryString;
+
+      beforeEach(() => {
+        queryString = urls.holding(value, idType);
+      });
+
+      it('should trigger "stringify" with correct argument', () => {
+        const expectedArgument = {
+          query: `(${idType}=="${value}")`,
+        };
+
+        expect(stringify).toHaveBeenCalledWith(expectedArgument);
+      });
+
+      it('should return correct url', () => {
+        const expectedResult = `holdings-storage/holdings?${mockedQueryValue}`;
+
+        expect(queryString).toBe(expectedResult);
       });
     });
   });
