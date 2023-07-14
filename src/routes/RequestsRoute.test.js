@@ -465,9 +465,9 @@ describe('RequestsRoute', () => {
     });
 
     it('should render "ErrorModal"', () => {
-      const errorModal = screen.queryByText('ErrorModal');
-
       userEvent.click(screen.getByTestId('exportExpiredHoldShelfToCsvButton'));
+      
+      const errorModal = screen.queryByText('ErrorModal');
 
       expect(errorModal).toBeInTheDocument();
     });
