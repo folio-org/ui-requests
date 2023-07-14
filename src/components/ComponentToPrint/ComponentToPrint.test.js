@@ -12,14 +12,15 @@ describe('ComponentToPrint', () => {
   const templateFn = jest.fn(() => '<barcode>123456</barcode>');
   const dataSource = { 'request':1 };
   const parser = new Parser();
+  let originalParseWithInstructions;
   beforeEach(() => {
     templateFnMock.mockClear();
+    originalParseWithInstructions = parser.parseWithInstructions;
   });
   afterEach(() => {
     parser.parseWithInstructions = originalParseWithInstructions;
   });
   it('should handle null result from parseWithInstructions', () => {
-    const originalParseWithInstructions = parser.parseWithInstructions;
     parser.parseWithInstructions = jest.fn(() => null);
     render(<ComponentToPrint dataSource={dataSource} templateFn={templateFn} />);
     expect(screen.queryByTestId('barcode')).not.toBeInTheDocument();
@@ -39,7 +40,6 @@ describe('ComponentToPrint', () => {
     expect(barcodeElement).toBeInTheDocument();
   });
   it('should process the barcode rule with data', () => {
-    const originalParseWithInstructions = parser.parseWithInstructions;
     const mockParsedComponent = <div data-testid="mock-component">Mock Component</div>;
     parser.parseWithInstructions = jest.fn(() => mockParsedComponent);
     render(<ComponentToPrint dataSource={dataSource} templateFn={templateFn} />);
