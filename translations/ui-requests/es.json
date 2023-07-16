@@ -91,7 +91,6 @@
     "blockModal": "Patrón bloqueado para préstamo",
     "detailsButton": "Ver detalles del bloqueo",
     "enter": "Introducir",
-    "requestType.message": "Seleccionar ítem para ver los tipos de reserva disponibles",
     "showTags": "Mostrar etiquetas",
     "tags.tagList": "Etiquetas",
     "item.copyNumbers": "Número de copia",
@@ -269,5 +268,10 @@
     "fulfillmentPreference": "Request fulfillment preference",
     "requestMeta.fulfillment.holdShelf": "Hold Shelf",
     "requestMeta.fulfillment.delivery": "Delivery",
-    "requester.fulfillmentPref": "Fulfillment preference"
+    "requester.fulfillmentPref": "Fulfillment preference",
+    "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
+    "errors.requestType.titleLevelRequest": "None available for this title",
+    "errors.requestType.itemLevelRequest": "None available for this item",
+    "errors.requestType.selectItem": "Please select a request type",
+    "actions.selectRequestType": "Select request type"
 }
