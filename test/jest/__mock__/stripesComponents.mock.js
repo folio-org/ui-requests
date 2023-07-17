@@ -1,24 +1,42 @@
 import React from 'react';
 
-jest.mock('@folio/stripes/components', () => ({
-  ...jest.requireActual('@folio/stripes/components'),
-  Accordion: jest.fn(({ children, label }) => (
-    <div>
+jest.mock('@folio/stripes-components', () => ({
+  ...jest.requireActual('@folio/stripes-components'),
+  Accordion: jest.fn(({
+    children,
+    label,
+    onClearFilter,
+    'data-testid': testId,
+  }) => (
+    <div data-testid={testId}>
       {label}
       {children}
+      <div>
+        <button
+          type="button"
+          onClick={onClearFilter}
+          data-testid={`${testId}Button`}
+        >Clear
+        </button>
+      </div>
     </div>
   )),
-  AccordionSet: jest.fn(({ children }) => (
+  AccordionSet: jest.fn(({ children, onToggle }) => (
     <div>
+      <button type="button" onClick={onToggle}>
+        Toggle
+      </button>
       {children}
     </div>
   )),
   Button: jest.fn(({
     children,
+    buttonStyle,
     ...rest
   }) => (
     <button
       type="button"
+      data-button-type={buttonStyle}
       {...rest}
     >
       <span>
@@ -27,16 +45,36 @@ jest.mock('@folio/stripes/components', () => ({
     </button>
   )),
   Callout: jest.fn(() => <div>Callout</div>),
-  Checkbox: jest.fn(() => <div>Checkbox</div>),
+  Checkbox: jest.fn((props) => (
+    <input
+      type="checkbox"
+      {...props}
+    />
+  )),
   Col: jest.fn(({ children }) => (
     <div data-test-col>
       {children}
     </div>
   )),
-  ConfirmationModal: jest.fn(() => <div>ConfirmationModal</div>),
+  ConfirmationModal: jest.fn(({ heading, confirmLabel, cancelLabel, onConfirm, onCancel }) => (
+    <div>
+      <span>ConfirmationModal</span>
+      <div>
+        <div>{heading}</div>
+        <button type="button" onClick={onConfirm}>{confirmLabel}</button>
+        <button type="button" onClick={onCancel}>{cancelLabel}</button>
+      </div>
+    </div>)),
   Datepicker: jest.fn(() => <div>Datepicker</div>),
-  ErrorModal: jest.fn(() => <div>ErrorModal</div>),
+  ErrorModal: jest.fn(({ label, content, buttonLabel, onClose }) => (
+    <div>
+      <span>ErrorModal</span>
+      <div>{label}</div>
+      <div>{content}</div>
+      <button type="button" onClick={onClose}>{buttonLabel}</button>
+    </div>)),
   FormattedDate: jest.fn(() => <div>Datepicker</div>),
+  FormattedTime: jest.fn(({ value }) => <div>{value}</div>),
   FilterAccordionHeader: jest.fn(({ children }) => <div>{children}</div>),
   Headline: jest.fn(({ children }) => (
     <div data-test-headline>
@@ -55,9 +93,10 @@ jest.mock('@folio/stripes/components', () => ({
   Modal: jest.fn(({
     children,
     footer,
-    label
+    label,
+    'data-testid': testId,
   }) => (
-    <div>
+    <div data-testid={testId}>
       {label && label}
       {children}
       {footer}
@@ -70,6 +109,7 @@ jest.mock('@folio/stripes/components', () => ({
   )),
   MultiColumnList: jest.fn(({ children }) => (
     <div>
+      <div>MultiColumnList</div>
       {children}
     </div>
   )),
@@ -122,8 +162,38 @@ jest.mock('@folio/stripes/components', () => ({
       {children}
     </div>
   )),
-  Select: jest.fn(() => <div>Select</div>),
-  TextArea: jest.fn(() => <div>TextArea</div>),
-  TextField: jest.fn(() => <div>TextField</div>),
+  Select: jest.fn((props) => (
+    <div>
+      <div>{props.label}</div>
+      <select {...props}>
+        {props.children}
+      </select>
+    </div>)),
+  TextArea: jest.fn(({
+    'data-testid': testId,
+  }) => <div data-testid={testId}>TextArea</div>),
+  TextField: jest.fn(({
+    label,
+    onChange,
+    validate = jest.fn(),
+    ...rest
+  }) => {
+    const handleChange = (e) => {
+      validate(e.target.value);
+      onChange(e);
+    };
+
+    return (
+      <div>
+        <label htmlFor="textField">{label}</label>
+        <input
+          id="textField"
+          onChange={handleChange}
+          {...rest}
+        />
+      </div>
+    );
+  }),
+  TextLink: jest.fn(({ to, children }) => <div><a href={to}>{children}</a></div>),
   Timepicker: jest.fn(() => <div>Timepicker</div>),
 }));

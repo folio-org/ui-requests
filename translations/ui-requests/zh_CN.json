@@ -91,7 +91,6 @@
     "blockModal": "读者请求被冻结",
     "detailsButton": "查看冻结详情",
     "enter": "输入",
-    "requestType.message": "选择单件以查看可用的请求类型",
     "showTags": "显示标签",
     "tags.tagList": "标签",
     "item.copyNumbers": "复本号",
@@ -266,8 +265,13 @@
     "navigation.keyboardShortcuts": "键盘快捷键",
     "requests.servicePoint": "取件服务点",
     "requests.callNumber": "有效的索书号字符串",
-    "fulfillmentPreference": "Request fulfillment preference",
-    "requestMeta.fulfillment.holdShelf": "Hold Shelf",
-    "requestMeta.fulfillment.delivery": "Delivery",
-    "requester.fulfillmentPref": "Fulfillment preference"
+    "fulfillmentPreference": "请求履行首选项",
+    "requestMeta.fulfillment.holdShelf": "预约架",
+    "requestMeta.fulfillment.delivery": "传递",
+    "requester.fulfillmentPref": "执行偏好",
+    "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
+    "errors.requestType.titleLevelRequest": "None available for this title",
+    "errors.requestType.itemLevelRequest": "None available for this item",
+    "errors.requestType.selectItem": "Please select a request type",
+    "actions.selectRequestType": "Select request type"
 }

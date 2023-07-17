@@ -39,6 +39,7 @@ const PickupServicePointFilter = ({
 
   return (
     <Accordion
+      data-testid="pickupServicePointAccordion"
       displayClearButton={!isEmpty(activeValues)}
       id={name}
       header={FilterAccordionHeader}

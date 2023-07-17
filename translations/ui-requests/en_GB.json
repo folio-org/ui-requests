@@ -91,7 +91,6 @@
     "blockModal": "Patron blocked from requesting",
     "detailsButton": "View block details",
     "enter": "Enter",
-    "requestType.message": "Select item to view available request types",
     "showTags": "Show Tags",
     "tags.tagList": "Tags",
     "item.copyNumbers": "Copy number",
@@ -174,9 +173,9 @@
     "notes.assigned.requestDate": "Request date: {requestCreateDate}",
     "pickSlipsLoading": "Pick slips are loading, please wait",
     "printInProgress": "Print options loading in progress. It might take a few seconds, please be patient.",
-    "requestDate": "requestDate",
-    "holdShelfExpirationTime": "holdShelfExpirationTime",
-    "csvReportPending": "csvReportPending",
+    "requestDate": "Request date",
+    "holdShelfExpirationTime": "Hold shelf expiration time",
+    "csvReportPending": "CSV report is being generated. Please wait.",
     "csvReportInProgress": "A CSV results report is being generated. This may take some time for larger result sets. Please be patient.",
     "patronComments": "Patron comments",
     "override": "Override",
@@ -269,5 +268,10 @@
     "fulfillmentPreference": "Request fulfillment preference",
     "requestMeta.fulfillment.holdShelf": "Hold Shelf",
     "requestMeta.fulfillment.delivery": "Delivery",
-    "requester.fulfillmentPref": "Fulfillment preference"
+    "requester.fulfillmentPref": "Fulfillment preference",
+    "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
+    "errors.requestType.titleLevelRequest": "None available for this title",
+    "errors.requestType.itemLevelRequest": "None available for this item",
+    "errors.requestType.selectItem": "Please select a request type",
+    "actions.selectRequestType": "Select request type"
 }

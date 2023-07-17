@@ -57,6 +57,7 @@ import {
   MAX_RECORDS,
   OPEN_REQUESTS_STATUSES,
   fulfillmentTypeMap,
+  DEFAULT_REQUEST_TYPE_VALUE,
 } from '../constants';
 import {
   buildUrl,
@@ -89,8 +90,9 @@ import {
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
+export const DEFAULT_FORMATTER_VALUE = '';
 
-const urls = {
+export const urls = {
   user: (value, idType) => {
     const query = stringify({ query: `(${idType}=="${value}")` });
     return `users?${query}`;
@@ -137,13 +139,36 @@ const urls = {
   },
   requestPreferences: (value) => {
     const query = stringify({ query: `(userId=="${value}")` });
+
     return `request-preference-storage/request-preference?${query}`;
   },
   holding: (value, idType) => {
     const query = stringify({ query: `(${idType}=="${value}")` });
+
     return `holdings-storage/holdings?${query}`;
   },
 };
+
+export const getListFormatter = (getRowURL, setURL) => ({
+  'itemBarcode': rq => (rq.item ? rq.item.barcode : DEFAULT_FORMATTER_VALUE),
+  'position': rq => (rq.position || DEFAULT_FORMATTER_VALUE),
+  'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : DEFAULT_FORMATTER_VALUE),
+  'requestDate': rq => (
+    <AppIcon size="small" app="requests">
+      <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
+    </AppIcon>
+  ),
+  'requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : DEFAULT_FORMATTER_VALUE),
+  'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : DEFAULT_FORMATTER_VALUE),
+  'requestStatus': rq => (requestStatusesTranslations[rq.status]
+    ? <FormattedMessage id={requestStatusesTranslations[rq.status]} />
+    : <NoValue />),
+  'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
+  'title': rq => <TextLink to={getRowURL(rq.id)} onClick={() => setURL(rq.id)}>{(rq.instance ? rq.instance.title : DEFAULT_FORMATTER_VALUE)}</TextLink>,
+  'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
+  'callNumber': rq => effectiveCallNumber(rq.item),
+  'servicePoint': rq => get(rq, 'pickupServicePoint.name', DEFAULT_FORMATTER_VALUE),
+});
 
 export const buildHoldRecords = (records) => {
   return records.map(record => {
@@ -158,6 +183,25 @@ export const buildHoldRecords = (records) => {
 
     return record;
   });
+};
+
+export const REQUEST_ERROR_MESSAGE_CODE = {
+  REQUEST_NOT_ALLOWED_FOR_PATRON_TITLE_COMBINATION: 'REQUEST_NOT_ALLOWED_FOR_PATRON_TITLE_COMBINATION',
+};
+
+export const REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS = {
+  [REQUEST_ERROR_MESSAGE_CODE.REQUEST_NOT_ALLOWED_FOR_PATRON_TITLE_COMBINATION]: 'ui-requests.errors.requestNotAllowedForPatronTitleCombination',
+};
+
+export const getRequestErrorMessage = (error, intl) => {
+  const {
+    code = '',
+    message = '',
+  } = error;
+
+  return code && REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS[code]
+    ? intl.formatMessage({ id: REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS[code] })
+    : message;
 };
 
 class RequestsRoute extends React.Component {
@@ -738,7 +782,7 @@ class RequestsRoute extends React.Component {
     return `${path}/view/${id}${search}`;
   }
 
-  setURL(id) {
+  setURL = (id) => {
     this.setState({
       selectedId: id,
     });
@@ -815,8 +859,15 @@ class RequestsRoute extends React.Component {
   }
 
   handleJsonError({ errors }) {
+    const {
+      intl,
+    } = this.props;
     const errorMessages = [];
-    errors.forEach(({ message }) => errorMessages.push(message));
+
+    errors.forEach((error) => (
+      errorMessages.push(getRequestErrorMessage(error, intl))
+    ));
+
     this.setState({ errorMessage: errorMessages.join(';') });
   }
 
@@ -1013,7 +1064,7 @@ class RequestsRoute extends React.Component {
     const requestCount = get(resources, 'records.other.totalRecords', 0);
     const initialValues = dupRequest ||
     {
-      requestType: 'Hold',
+      requestType: DEFAULT_REQUEST_TYPE_VALUE,
       fulfillmentPreference: fulfillmentTypeMap.HOLD_SHELF,
       createTitleLevelRequest: createTitleLevelRequestsByDefault,
     };
@@ -1023,26 +1074,7 @@ class RequestsRoute extends React.Component {
     const pickSlipsEmpty = isEmpty(pickSlips);
     const printTemplate = this.getPrintTemplate();
     const pickSlipsData = convertToSlipData(pickSlips, intl, timezone, locale);
-    const resultsFormatter = {
-      'itemBarcode': rq => (rq.item ? rq.item.barcode : ''),
-      'position': rq => (rq.position || ''),
-      'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : ''),
-      'requestDate': rq => (
-        <AppIcon size="small" app="requests">
-          <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
-        </AppIcon>
-      ),
-      'requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : ''),
-      'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : ''),
-      'requestStatus': rq => (requestStatusesTranslations[rq.status]
-        ? <FormattedMessage id={requestStatusesTranslations[rq.status]} />
-        : <NoValue />),
-      'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
-      'title': rq => <TextLink to={this.getRowURL(rq.id)} onClick={() => this.setURL(rq.id)}>{(rq.instance ? rq.instance.title : '')}</TextLink>,
-      'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
-      'callNumber': rq => effectiveCallNumber(rq.item),
-      'servicePoint': rq => get(rq, 'pickupServicePoint.name', ''),
-    };
+    const resultsFormatter = getListFormatter(this.getRowURL, this.setURL);
 
     const actionMenu = ({ onToggle, renderColumnsMenu }) => (
       <>
@@ -1081,6 +1113,7 @@ class RequestsRoute extends React.Component {
               </LoadingButton> :
               <>
                 <Button
+                  data-testid="exportExpiredHoldShelfToCsvButton"
                   buttonStyle="dropdownItem"
                   id="exportExpiredHoldsToCsvPaneHeaderBtn"
                   disabled={holdsShelfReportPending || (servicePointId && requestsEmpty)}

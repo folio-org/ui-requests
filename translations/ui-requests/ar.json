@@ -91,7 +91,6 @@
     "blockModal": "تم حظرالمستفيد من الطلب",
     "detailsButton": "عرض تفاصيل الحظر",
     "enter": "إدخال",
-    "requestType.message": "حدد مادة لعرض أنواع الطلب المتاحة",
     "showTags": "عرض الوسوم",
     "tags.tagList": "الوسوم",
     "item.copyNumbers": "رقم النسخة",
@@ -269,5 +268,10 @@
     "fulfillmentPreference": "Request fulfillment preference",
     "requestMeta.fulfillment.holdShelf": "Hold Shelf",
     "requestMeta.fulfillment.delivery": "Delivery",
-    "requester.fulfillmentPref": "Fulfillment preference"
+    "requester.fulfillmentPref": "Fulfillment preference",
+    "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
+    "errors.requestType.titleLevelRequest": "None available for this title",
+    "errors.requestType.itemLevelRequest": "None available for this item",
+    "errors.requestType.selectItem": "Please select a request type",
+    "actions.selectRequestType": "Select request type"
 }
