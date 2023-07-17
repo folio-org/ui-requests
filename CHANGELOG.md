@@ -1,6 +1,6 @@
 # Change history for ui-requests
 
-## IN PROGRESS
+## 9.0.0 IN PROGRESS
 
 * Made code improvements related to TLR. Refs UIREQ-871.
 * UI tests replacement with RTL/Jest for urls. Refs UIREQ-896.
@@ -47,6 +47,17 @@
 * Create Jest/RTL test for RequestQueueRoute.js. Refs UIREQ-946.
 * Create Jest/RTL test for PickupServicePointFilter.js. Refs UIREQ-939.
 * Jest/RTL tests cleanup. Refs UIREQ-988.
+* Jest/RTL tests cleanup of RequestsRoute.js file. Refs UIREQ-991.
+* Cover RequestInformation by jest/RTL tests. Refs UIREQ-951.
+* Create Jest/RTL test for PrintContent.js. Refs UIREQ-935.
+* UI tests replacement with RTL/Jest for src/MoveRequestManager.js. Refs UIREQ-877.
+* Increase code coverage for Jest/RTL tests. Refs UIREQ-995.
+* Convert primary search results view to use Prev/Next pagination. Refs UIREQ-965.
+* Remove bigtest tests and associated dependencies. Refs UIREQ-999.
+* Update Node.js to v18 in GitHub Actions. Refs UIREQ-1000.
+* Implementation of receiving available request types. Refs UIREQ-971.
+* Ensure Only Available Service Points Display When Placing a New Request. Refs UIREQ-977.
+* *BREAKING* Upgrade React to v18. Refs UIREQ-998.
 * Create JEST/RTL test cases for DraggableRow.js. Refs UIREQ-940.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)

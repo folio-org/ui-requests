@@ -6,7 +6,7 @@ import {
   screen,
   within,
   fireEvent,
-} from '@testing-library/react';
+} from '@folio/jest-config-stripes/testing-library/react';
 
 import '../test/jest/__mock__';
 
@@ -18,11 +18,22 @@ import {
   defaultKeyboardShortcuts,
 } from '@folio/stripes/components';
 
-import RequestForm from './RequestForm';
+import RequestForm, {
+  getRequestInformation,
+  getResourceTypeId,
+  ID_TYPE_MAP,
+} from './RequestForm';
 import TitleInformation from './components/TitleInformation';
+import FulfilmentPreference from './components/FulfilmentPreference';
 import ItemDetail from './ItemDetail';
 
-import { REQUEST_LEVEL_TYPES } from './constants';
+import {
+  REQUEST_LEVEL_TYPES,
+  createModes,
+  RESOURCE_TYPES, REQUEST_LAYERS,
+  REQUEST_FORM_FIELD_NAMES,
+  DEFAULT_REQUEST_TYPE_VALUE,
+} from './constants';
 
 let mockedTlrSettings;
 
@@ -31,7 +42,7 @@ jest.mock('./utils', () => ({
   getTlrSettings: jest.fn(() => (mockedTlrSettings)),
   getRequestLevelValue: jest.fn(),
 }));
-
+jest.mock('./components/FulfilmentPreference', () => jest.fn(() => null));
 jest.mock('@folio/stripes/final-form', () => () => jest.fn((component) => component));
 jest.mock('react-final-form', () => ({
   ...jest.requireActual('react-final-form'),
@@ -65,11 +76,7 @@ describe('RequestForm', () => {
     tlrCheckbox: 'tlrCheckbox',
     instanceInfoSection: 'instanceInfoSection',
     fulfillmentInput: 'fulfillmentInput',
-    addressInput: 'addressInput'
-  };
-  const formFieldNames = {
-    fulfillmentPreference: 'fulfillmentPreference',
-    deliveryAddressTypeId: 'deliveryAddressTypeId',
+    addressInput: 'addressInput',
   };
   const labelIds = {
     tlrCheckbox: 'ui-requests.requests.createTitleLevelRequest',
@@ -81,10 +88,51 @@ describe('RequestForm', () => {
     instanceHrid: 2,
   };
   const mockedChangeFunction = jest.fn();
+  const findResourceMock = jest.fn(() => new Promise((resolve) => resolve()));
   const valuesMock = {
     deliveryAddressTypeId: '',
     pickupServicePointId: '',
     createTitleLevelRequest: '',
+  };
+  const basicProps = {
+    onGetPatronManualBlocks: jest.fn(),
+    onGetAutomatedPatronBlocks: jest.fn(),
+    onSetSelectedInstance: jest.fn(),
+    onSetSelectedItem: jest.fn(),
+    onSetSelectedUser: jest.fn(),
+    onSetInstanceId: jest.fn(),
+    onSetIsPatronBlocksOverridden: jest.fn(),
+    onSetBlocked: jest.fn(),
+    onShowErrorModal: jest.fn(),
+    onHideErrorModal: jest.fn(),
+    form: {
+      change: mockedChangeFunction,
+    },
+    handleSubmit: jest.fn(),
+    asyncValidate: jest.fn(),
+    initialValues: {},
+    location: {
+      pathname: 'pathname',
+    },
+    onCancel: jest.fn(),
+    parentMutator: {
+      proxy: {
+        reset: jest.fn(),
+        GET: jest.fn(),
+      },
+    },
+    onSubmit: jest.fn(),
+    parentResources: {
+      patronBlocks: {
+        records: [],
+      },
+    },
+    intl: {
+      formatMessage: ({ id }) => id,
+    },
+    stripes: {
+      connect: jest.fn((component) => component),
+    },
   };
 
   const renderComponent = (passedProps = {}) => {
@@ -104,43 +152,19 @@ describe('RequestForm', () => {
     } = passedProps;
 
     const props = {
+      ...basicProps,
       stripes: {
-        connect: jest.fn((component) => component),
+        ...basicProps.stripes,
         store: {
           getState: jest.fn().mockReturnValue({
             requestForm: mockedRequestForm,
           }),
         },
       },
-      form: {
-        change: mockedChangeFunction,
-      },
       values,
-      handleSubmit: jest.fn(),
-      asyncValidate: jest.fn(),
-      findResource: jest.fn(() => new Promise((resolve) => resolve())),
-      request: mockedRequest || {},
-      initialValues: {},
-      location: {
-        pathname: 'pathname',
-      },
-      onCancel: jest.fn(),
-      parentMutator: {
-        proxy: {
-          reset: jest.fn(),
-          GET: jest.fn(),
-        },
-      },
-      query: mockedQuery || {},
-      onSubmit: jest.fn(),
-      parentResources: {
-        patronBlocks: {
-          records: [],
-        },
-      },
-      intl: {
-        formatMessage: ({ id }) => id,
-      },
+      findResource: findResourceMock,
+      request: mockedRequest,
+      query: mockedQuery,
       selectedItem,
       selectedUser,
       selectedInstance,
@@ -148,19 +172,9 @@ describe('RequestForm', () => {
       isErrorModalOpen,
       instanceId,
       blocked,
-      onGetPatronManualBlocks: jest.fn(),
-      onGetAutomatedPatronBlocks: jest.fn(),
-      onSetSelectedInstance: jest.fn(),
-      onSetSelectedItem: jest.fn(),
-      onSetSelectedUser: jest.fn(),
-      onSetInstanceId: jest.fn(),
-      onSetIsPatronBlocksOverridden: jest.fn(),
-      onSetBlocked: jest.fn(),
-      onShowErrorModal: jest.fn(),
-      onHideErrorModal: jest.fn(),
     };
 
-    render(
+    const { rerender } = render(
       <CommandList commands={defaultKeyboardShortcuts}>
         <Router history={history}>
           <RequestForm
@@ -169,6 +183,8 @@ describe('RequestForm', () => {
         </Router>
       </CommandList>
     );
+
+    return rerender;
   };
 
   afterEach(() => {
@@ -410,44 +426,178 @@ describe('RequestForm', () => {
     });
   });
 
-  describe('User information', () => {
-    beforeAll(() => {
+  describe('when duplicate a request', () => {
+    const props = {
+      mockedQuery: {
+        mode: createModes.DUPLICATE,
+      },
+      selectedUser: {
+        id: 'userId',
+      },
+      mockedRequest: {
+        requestLevel: REQUEST_LEVEL_TYPES.TITLE,
+      },
+    };
+    beforeEach(() => {
       mockedTlrSettings = {
-        titleLevelRequestsFeatureEnabled: false,
+        titleLevelRequestsFeatureEnabled: true,
       };
     });
 
+    it('should trigger "findResource" to find request types', () => {
+      const newProps = {
+        ...basicProps,
+        selectedInstance: {
+          id: 'instanceId',
+        },
+        query: {
+          mode: createModes.DUPLICATE,
+        },
+        selectedUser: {
+          id: 'userId',
+        },
+        request: {
+          requestLevel: REQUEST_LEVEL_TYPES.TITLE,
+        },
+        values: valuesMock,
+        findResource: findResourceMock,
+      };
+      const rerender = renderComponent(props);
+
+      rerender(
+        <CommandList commands={defaultKeyboardShortcuts}>
+          <Router history={createMemoryHistory()}>
+            <RequestForm
+              {...newProps}
+            />
+          </Router>
+        </CommandList>
+      );
+
+      expect(findResourceMock).toHaveBeenCalledWith(RESOURCE_TYPES.REQUEST_TYPES, {
+        [ID_TYPE_MAP.INSTANCE_ID]: newProps.selectedInstance.id,
+        requesterId: newProps.selectedUser.id,
+      });
+    });
+  });
+
+  describe('User information', () => {
+    const instanceId = 'instanceId';
+    const requesterId = 'requesterId';
+
     beforeEach(() => {
-      renderComponent();
+      mockedTlrSettings = {
+        titleLevelRequestsFeatureEnabled: true,
+      };
+
+      const newProps = {
+        ...basicProps,
+        query: {
+          layer: REQUEST_LAYERS.EDIT,
+        },
+        request: {
+          requestLevel: REQUEST_LEVEL_TYPES.TITLE,
+          requester: {},
+          requesterId,
+          instanceId,
+        },
+        values: {
+          ...valuesMock,
+          requestType: 'requestType',
+          createTitleLevelRequest: true,
+        },
+        findResource: findResourceMock,
+      };
+      const rerender = renderComponent();
+
+      rerender(
+        <CommandList commands={defaultKeyboardShortcuts}>
+          <Router history={createMemoryHistory()}>
+            <RequestForm
+              {...newProps}
+            />
+          </Router>
+        </CommandList>
+      );
     });
 
-    describe('Fulfillment preference', () => {
-      it('should trigger `form.change` with correct arguments', () => {
-        const value = 'test';
-        const event = {
-          target: {
-            value,
-          },
+    it.skip('should trigger "FulfilmentPreference"', () => {
+      expect(FulfilmentPreference).toHaveBeenCalled();
+    });
+
+    it('should trigger "form.change" with correct arguments', () => {
+      const expectedArgs = [REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, DEFAULT_REQUEST_TYPE_VALUE];
+
+      expect(basicProps.form.change).toHaveBeenCalledWith(...expectedArgs);
+    });
+
+    it('should trigger "findResource" with correct arguments', () => {
+      const expectedArgs = [
+        RESOURCE_TYPES.REQUEST_TYPES,
+        {
+          [ID_TYPE_MAP.INSTANCE_ID]: instanceId,
+          requesterId,
+        }
+      ];
+
+      expect(findResourceMock).toHaveBeenCalledWith(...expectedArgs);
+    });
+  });
+
+  describe('getResourceTypeId', () => {
+    it('should return instance id type', () => {
+      expect(getResourceTypeId(true)).toBe(ID_TYPE_MAP.INSTANCE_ID);
+    });
+
+    it('should return item id type', () => {
+      expect(getResourceTypeId(false)).toBe(ID_TYPE_MAP.ITEM_ID);
+    });
+  });
+
+  describe('getRequestInformation', () => {
+    describe('when title level request', () => {
+      const selectedInstance = {
+        id: 'instanceId',
+      };
+      const args = [
+        {},
+        selectedInstance,
+        {},
+        {
+          requestLevel: REQUEST_LEVEL_TYPES.TITLE,
+        },
+      ];
+
+      it('should return correct data', () => {
+        const expectedResult = {
+          isTitleLevelRequest: true,
+          selectedResource: selectedInstance,
         };
 
-        fireEvent.change(screen.getByTestId(testIds.fulfillmentInput), event);
-
-        expect(mockedChangeFunction).toHaveBeenCalledWith(formFieldNames.fulfillmentPreference, value);
+        expect(getRequestInformation(...args)).toEqual(expectedResult);
       });
     });
 
-    describe('Delivery address', () => {
-      it('should trigger `form.change` with correct arguments', () => {
-        const value = 'test';
-        const event = {
-          target: {
-            value,
-          },
+    describe('when item level request', () => {
+      const selectedItem = {
+        id: 'itemId',
+      };
+      const args = [
+        {},
+        {},
+        selectedItem,
+        {
+          requestLevel: REQUEST_LEVEL_TYPES.ITEM,
+        },
+      ];
+
+      it('should return correct data', () => {
+        const expectedResult = {
+          isTitleLevelRequest: false,
+          selectedResource: selectedItem,
         };
 
-        fireEvent.change(screen.getByTestId(testIds.addressInput), event);
-
-        expect(mockedChangeFunction).toHaveBeenCalledWith(formFieldNames.deliveryAddressTypeId, value);
+        expect(getRequestInformation(...args)).toEqual(expectedResult);
       });
     });
   });

@@ -31,10 +31,8 @@ import {
   requestStatuses,
   requestTypesMap,
   REQUEST_LEVEL_TYPES,
-  REQUEST_TYPES,
   createModes,
   INVALID_REQUEST_HARDCODED_ID,
-  REQUEST_FORM_FIELD_NAMES,
 } from './constants';
 
 import css from './requests.css';
@@ -140,21 +138,6 @@ export function getRequestTypeOptions(item) {
 
 export function isPagedItem(item) {
   return item?.status?.name === itemStatuses.PAGED;
-}
-
-export function hasNonRequestableStatus(item) {
-  return includes([
-    itemStatuses.AGED_TO_LOST,
-    itemStatuses.CLAIMED_RETURNED,
-    itemStatuses.DECLARED_LOST,
-    itemStatuses.INTELLECTUAL_ITEM,
-    itemStatuses.IN_PROCESS_NON_REQUESTABLE,
-    itemStatuses.LONG_MISSING,
-    itemStatuses.LOST_AND_PAID,
-    itemStatuses.UNAVAILABLE,
-    itemStatuses.UNKNOWN,
-    itemStatuses.WITHDRAWN,
-  ], item?.status?.name);
 }
 
 export function isDelivery(request) {
@@ -332,14 +315,6 @@ export const getRequestLevelValue = (value) => {
     : REQUEST_LEVEL_TYPES.ITEM;
 };
 
-export const getInstanceRequestTypeOptions = () => {
-  return [
-    REQUEST_TYPES[requestTypesMap.PAGE],
-    REQUEST_TYPES[requestTypesMap.HOLD],
-    REQUEST_TYPES[requestTypesMap.RECALL],
-  ];
-};
-
 export const getInstanceQueryString = (hrid, id) => `("hrid"=="${hrid}" or "id"=="${id || hrid}")`;
 
 export const generateUserName = (user) => {
@@ -454,10 +429,10 @@ export const isFormEditing = (request) => {
   return !!get(request, 'id');
 };
 
-export function resetRequestTypeState(form) {
+export function resetFieldState(form, fieldName) {
   const registeredFields = form.getRegisteredFields();
 
-  if (includes(registeredFields, REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE)) {
-    form.resetFieldState(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE);
+  if (includes(registeredFields, fieldName)) {
+    form.resetFieldState(fieldName);
   }
 }

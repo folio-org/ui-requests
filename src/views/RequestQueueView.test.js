@@ -1,8 +1,8 @@
 import {
   screen,
   render,
-} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+} from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import '__mock__';
 
@@ -80,30 +80,30 @@ describe('RequestQueueView', () => {
     );
   });
 
-  it('should perform reload event', () => {
+  it('should perform reload event', async () => {
     const reloadMock = jest.fn();
     Object.defineProperty(window, 'location', {
       value: { reload: reloadMock },
     });
     const refreshButton = screen.getByRole('button', { name: /ui-requests.requestQueue.refresh/i });
 
-    userEvent.click(refreshButton);
+    await userEvent.click(refreshButton);
 
     expect(reloadMock).toHaveBeenCalled();
   });
 
-  it('should perform confrim event', () => {
+  it('should perform confrim event', async () => {
     const confirmButton = screen.getByRole('button', { name: /ui-requests.requestQueue.confirmReorder.confirm/i });
 
-    userEvent.click(confirmButton);
+    await userEvent.click(confirmButton);
 
     expect(mockOnReorder).toHaveBeenCalled();
   });
 
-  it('should perform cancel event', () => {
+  it('should perform cancel event', async () => {
     const cancelButton = screen.getByRole('button', { name: /ui-requests.requestQueue.confirmReorder.cancel/i });
 
-    userEvent.click(cancelButton);
+    await userEvent.click(cancelButton);
 
     expect(mockOnReorder).not.toHaveBeenCalled();
   });
@@ -114,18 +114,18 @@ describe('RequestQueueView', () => {
     expect(isDraggable.textContent).toBe('true');
   });
 
-  it('should perform drag event', () => {
+  it('should perform drag event', async () => {
     const dragButton = screen.getByRole('button', { name: /Drag Button/i });
 
-    userEvent.click(dragButton);
+    await userEvent.click(dragButton);
 
     expect(mockOnReorder).toHaveBeenCalled();
   });
 
-  it('should perform toggle event', () => {
+  it('should perform toggle event', async () => {
     const toggleField = screen.getByText('Toggle');
 
-    userEvent.click(toggleField);
+    await userEvent.click(toggleField);
 
     expect(AccordionSet).toHaveBeenCalledTimes(2);
   });

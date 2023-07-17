@@ -7,9 +7,6 @@
     "registry": "https://repository.folio.org/repository/npm-folio/"
   },
   "license": "Apache-2.0",
-  "engines": {
-    "node": ">=14.0.0"
-  },
   "main": "src/index.js",
   "stripes": {
     "actsAs": [
@@ -57,6 +54,7 @@
         "subPermissions": [
           "circulation.requests.queue.collection.get",
           "circulation.requests.queue.reorder.collection.post",
+          "circulation.requests.allowed-service-points.get",
           "circulation.rules.request-policy.get"
         ]
       },
@@ -116,6 +114,7 @@
           "ui-requests.view",
           "automated-patron-blocks.collection.get",
           "circulation.requests.item.post",
+          "circulation.requests.allowed-service-points.get",
           "circulation-storage.requests.item.post",
           "circulation-storage.request-preferences.collection.get",
           "circulation.pick-slips.get",
@@ -129,6 +128,7 @@
         "subPermissions": [
           "ui-requests.view",
           "circulation.requests.item.put",
+          "circulation.requests.allowed-service-points.get",
           "circulation-storage.requests.collection.delete",
           "circulation-storage.requests.item.put",
           "circulation-storage.requests.item.delete",
@@ -144,8 +144,7 @@
     "start": "stripes serve",
     "lint": "eslint .",
     "lintfix": "eslint . --fix",
-    "test": "yarn run test:jest && yarn run test:bigtest ",
-    "test:bigtest": "stripes test karma",
+    "test": "yarn run test:jest",
     "test:jest": "jest --ci --coverage --colors",
     "build-mod-descriptor": "stripes mod descriptor --full --strict | jq '.[]' > module-descriptor.json ",
     "formatjs-compile": "formatjs compile-folder --ast --format simple ./translations/ui-requests ./translations/ui-requests/compiled"
@@ -156,38 +155,24 @@
     "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/plugin-proposal-decorators": "^7.13.5",
     "@babel/plugin-transform-runtime": "^7.13.10",
-    "@bigtest/interactor": "^0.9.1",
-    "@bigtest/mocha": "^0.5.2",
-    "@bigtest/react": "^0.1.2",
-    "@folio/eslint-config-stripes": "^6.0.0",
-    "@folio/stripes": "^8.0.0",
-    "@folio/stripes-cli": "^2.4.0",
-    "@folio/stripes-components": "^11.0.0",
-    "@folio/stripes-core": "^9.0.0",
+    "@folio/eslint-config-stripes": "^7.0.0",
+    "@folio/jest-config-stripes": "^2.0.0",
+    "@folio/stripes": "^9.0.0",
+    "@folio/stripes-cli": "^3.0.0",
+    "@folio/stripes-components": "^12.0.0",
+    "@folio/stripes-core": "^10.0.0",
+    "@folio/stripes-testing": "^4.4.0",
     "@formatjs/cli": "^4.2.20",
-    "@testing-library/jest-dom": "^5.11.9",
-    "@testing-library/react": "^11.2.5",
-    "@testing-library/user-event": "^12.1.10",
-    "babel-jest": "^26.6.3",
-    "babel-plugin-module-resolver": "^5.0.0",
-    "chai": "^4.2.0",
     "core-js": "^3.6.4",
     "eslint": "^7",
     "eslint-import-resolver-alias": "^1.1.2",
-    "faker": "^4.1.0",
     "history": "^5.0.0",
-    "identity-obj-proxy": "^3.0.0",
     "inflected": "^2.0.4",
-    "jest": "^26.6.3",
-    "jest-junit": "^12.0.0",
-    "miragejs": "^0.1.40",
-    "mocha": "^9.0.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-intl": "^5.7.0",
     "react-router-dom": "^5.2.0",
-    "regenerator-runtime": "^0.13.9",
-    "sinon": "^7.2.0"
+    "regenerator-runtime": "^0.13.9"
   },
   "dependencies": {
     "final-form": "^4.20.7",
@@ -204,8 +189,9 @@
     "react-to-print": "^2.9.0"
   },
   "peerDependencies": {
-    "@folio/stripes": "^8.0.0",
-    "react": "^17.0.2",
+    "@folio/stripes": "^9.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-intl": "^5.7.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0"

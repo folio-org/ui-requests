@@ -91,7 +91,6 @@
     "blockModal": "Patron blocked from requesting",
     "detailsButton": "ブロックの詳細を表示",
     "enter": "入力",
-    "requestType.message": "Select item to view available request types",
     "showTags": "タグを表示",
     "tags.tagList": "タグ",
     "item.copyNumbers": "Copy number",
@@ -148,7 +147,6 @@
     "filters.requestStatus.awaitingPickup": "オープン - 受取待ち",
     "filters.requestStatus.inTransit": "オープン - 輸送中",
     "filters.requestStatus.notYetFilled": "オープン - 未完了",
-    "noRequestTypesAvailable": "No request types available for selected item",
     "exportExpiredHoldShelfToCsv": "{currentServicePoint}の取置棚クリアランスレポートをエクスポートする",
     "exportSearchResultsToCsv": "検索結果をCSVにエクスポートする",
     "common.cancel": "キャンセル",
@@ -156,8 +154,6 @@
     "item.callNumberComponents.callNumber": "Effective call number",
     "item.callNumberComponents.suffix": "Effective call number suffix",
     "item.chronology": "Chronology",
-    "errorModal.title": "Item cannot be requested",
-    "errorModal.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>{itemStatus}</strong> and cannot be requested.",
     "permission.moveRequest": "Requests: Move to new item, reorder queue",
     "permission.reorderQueue": "Requests: Reorder queue",
     "permission.all": "リクエスト：すべての権限",
@@ -269,5 +265,10 @@
     "fulfillmentPreference": "Request fulfillment preference",
     "requestMeta.fulfillment.holdShelf": "Hold Shelf",
     "requestMeta.fulfillment.delivery": "Delivery",
-    "requester.fulfillmentPref": "Fulfillment preference"
+    "requester.fulfillmentPref": "Fulfillment preference",
+    "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
+    "errors.requestType.titleLevelRequest": "None available for this title and patron combination",
+    "errors.requestType.itemLevelRequest": "None available for this item and patron combination",
+    "errors.requestType.selectItem": "Please select a request type",
+    "actions.selectRequestType": "Select request type"
 }

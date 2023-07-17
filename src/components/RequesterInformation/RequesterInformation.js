@@ -18,8 +18,6 @@ import {
 
 import UserForm from '../../UserForm';
 import {
-  getSelectedAddressTypeId,
-  isDeliverySelected,
   isFormEditing,
   memoizeValidation,
 } from '../../utils';
@@ -49,8 +47,6 @@ class RequesterInformation extends Component {
     submitting: PropTypes.bool.isRequired,
     onSetIsPatronBlocksOverridden: PropTypes.func.isRequired,
     onSetBlocked: PropTypes.func.isRequired,
-    changeDeliveryAddress: PropTypes.func.isRequired,
-    onChangeAddress: PropTypes.func.isRequired,
     onSelectProxy: PropTypes.func.isRequired,
     handleCloseProxy: PropTypes.func.isRequired,
     findUser: PropTypes.func.isRequired,
@@ -61,11 +57,6 @@ class RequesterInformation extends Component {
     optionLists: PropTypes.object,
     selectedProxy: PropTypes.object,
     patronGroup: PropTypes.object,
-    defaultDeliveryAddressTypeId: PropTypes.string,
-    deliverySelected: PropTypes.bool,
-    addressDetail: PropTypes.element,
-    deliveryLocations: PropTypes.arrayOf(PropTypes.object),
-    fulfillmentTypeOptions: PropTypes.arrayOf(PropTypes.object),
   };
 
   constructor(props) {
@@ -77,20 +68,6 @@ class RequesterInformation extends Component {
       isUserBlurred: false,
       validatedBarcode: null,
     };
-  }
-
-  onChangeFulfillment = (e) => {
-    const {
-      form,
-      defaultDeliveryAddressTypeId,
-      changeDeliveryAddress,
-    } = this.props;
-    const selectedFulfillmentPreference = e.target.value;
-    const deliverySelected = isDeliverySelected(selectedFulfillmentPreference);
-    const selectedAddressTypeId = getSelectedAddressTypeId(deliverySelected, defaultDeliveryAddressTypeId);
-
-    form.change(REQUEST_FORM_FIELD_NAMES.FULFILLMENT_PREFERENCE, selectedFulfillmentPreference);
-    changeDeliveryAddress(deliverySelected, selectedAddressTypeId);
   }
 
   validate = memoizeValidation(async (barcode) => {
@@ -229,24 +206,16 @@ class RequesterInformation extends Component {
       submitting,
       stripes,
       patronGroup,
-      deliverySelected,
-      addressDetail,
-      deliveryLocations,
-      fulfillmentTypeOptions,
-      onChangeAddress,
       selectedProxy,
       onSelectProxy,
       handleCloseProxy,
       isLoading,
-      optionLists,
     } = this.props;
     const {
       isUserClicked,
       isUserBlurred,
     } = this.state;
     const isEditForm = isFormEditing(request);
-    const { fulfillmentPreference } = request || {};
-    const isAddressSelected = values?.deliveryAddressTypeId !== undefined || values?.pickupServicePointId !== undefined;
 
     return (
       <Row>
@@ -314,21 +283,13 @@ class RequesterInformation extends Component {
               </Button>
             </Col>
           </Row>}
-          {(selectedUser?.id || request?.requester) && isAddressSelected &&
+          {(selectedUser?.id || isEditForm) &&
             <UserForm
               user={request ? request.requester : selectedUser}
               stripes={stripes}
               request={request}
               patronGroup={patronGroup?.group}
-              deliverySelected={deliverySelected}
-              fulfillmentPreference={fulfillmentPreference}
-              deliveryAddress={addressDetail}
-              deliveryLocations={deliveryLocations}
-              fulfillmentTypeOptions={fulfillmentTypeOptions}
-              onChangeAddress={onChangeAddress}
-              onChangeFulfillment={this.onChangeFulfillment}
               proxy={selectedProxy}
-              servicePoints={optionLists.servicePoints}
               onSelectProxy={onSelectProxy}
               onCloseProxy={handleCloseProxy}
             />

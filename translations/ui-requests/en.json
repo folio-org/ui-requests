@@ -82,8 +82,8 @@
   "errors.unknown.requestQueueLabel": "Request queue error",
   "errors.unknown.requestQueueBody": "Request queue reorder failed",
   "errors.closingAlreadyClosedRequest": "Error: The Request has already been closed.",
-  "errors.requestType.titleLevelRequest": "None available for this title",
-  "errors.requestType.itemLevelRequest": "None available for this item",
+  "errors.requestType.titleLevelRequest": "None available for this title and patron combination",
+  "errors.requestType.itemLevelRequest": "None available for this item and patron combination",
   "errors.requestType.selectItem": "Please select a request type",
   "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
 
@@ -274,10 +274,6 @@
 
   "filters.requestLevel.item": "Item",
   "filters.requestLevel.title": "Title",
-
-  "noRequestTypesAvailable": "No request types available for selected item",
-  "errorModal.title": "Item cannot be requested",
-  "errorModal.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>{itemStatus}</strong> and cannot be requested.",
 
   "permission.moveRequest": "Requests: Move to new item, reorder queue",
   "permission.reorderQueue": "Requests: Reorder queue",

@@ -25,7 +25,10 @@ import {
   REQUEST_TYPE_ERRORS,
 } from '../../constants';
 import PositionLink from '../../PositionLink';
-import { isFormEditing } from '../../utils';
+import {
+  isFormEditing,
+  resetFieldState,
+} from '../../utils';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 
@@ -43,7 +46,11 @@ const RequestInformation = ({
   isTitleLevelRequest,
   isSelectedInstance,
   isSelectedItem,
-  requestTypeError,
+  isSelectedUser,
+  isRequestTypesReceived,
+  isRequestTypeLoading,
+  values,
+  form,
 }) => {
   const isEditForm = isFormEditing(request);
   const holdShelfExpireDate = get(request, ['status'], '') === requestStatuses.AWAITING_PICKUP
@@ -53,18 +60,25 @@ const RequestInformation = ({
   const isExpirationDate = isEditForm && request.status === requestStatuses.AWAITING_PICKUP;
   const isHoldShelfExpireDate = isEditForm && request.status !== requestStatuses.AWAITING_PICKUP;
   const isItemOrTitleSelected = isTitleLevelRequest ? isSelectedInstance : isSelectedItem;
-  const isRequestTypeDisabled = requestTypeOptions.length === 0 || !isItemOrTitleSelected;
+  const isRequestTypeDisabled = requestTypeOptions.length === 0 || !(isItemOrTitleSelected && isSelectedUser);
   const validateRequestType = useCallback((requestType) => {
-    if (!requestType) {
-      return <FormattedMessage id="ui-requests.errors.requestType.selectItem" />;
-    }
+    if (isItemOrTitleSelected && isSelectedUser) {
+      if (requestTypeOptions.length === 0 && isRequestTypesReceived) {
+        return <FormattedMessage id={getNoRequestTypeErrorMessageId(isTitleLevelRequest)} />;
+      }
 
-    if (isItemOrTitleSelected && requestTypeOptions.length === 0) {
-      return <FormattedMessage id={getNoRequestTypeErrorMessageId(isTitleLevelRequest)} />;
+      if (!requestType && requestTypeOptions.length !== 0) {
+        return <FormattedMessage id="ui-requests.errors.requestType.selectItem" />;
+      }
     }
 
     return undefined;
-  }, [isItemOrTitleSelected, requestTypeOptions, isTitleLevelRequest]);
+  }, [isItemOrTitleSelected, isSelectedUser, requestTypeOptions, isTitleLevelRequest, isRequestTypesReceived]);
+  const changeRequestType = (input) => (e) => {
+    form.change(REQUEST_FORM_FIELD_NAMES.PICKUP_SERVICE_POINT_ID, undefined);
+    resetFieldState(form, REQUEST_FORM_FIELD_NAMES.PICKUP_SERVICE_POINT_ID);
+    input.onChange(e);
+  };
 
   return (
     <>
@@ -80,13 +94,14 @@ const RequestInformation = ({
               data-test-request-type
               xs={3}
             >
-              {!requestTypeError && (isEditForm ?
+              {isEditForm ?
                 <KeyValue
                   label={<FormattedMessage id="ui-requests.requestType" />}
                   value={<FormattedMessage id={requestTypesTranslations[request.requestType]} />}
                 /> :
                 <Field
                   data-testid="requestTypeDropDown"
+                  key={values.keyOfRequestTypeField ?? 0}
                   name={REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE}
                   validateFields={[]}
                   validate={validateRequestType}
@@ -95,7 +110,9 @@ const RequestInformation = ({
                     input,
                     meta,
                   }) => {
-                    const error = (meta.touched && meta.error) || null;
+                    const selectItemError = requestTypeOptions.length !== 0 && meta.touched && meta.error;
+                    const noAvailableRequestTypesError = !isRequestTypeLoading && isRequestTypesReceived && requestTypeOptions.length === 0 && meta.error;
+                    const error = selectItemError || noAvailableRequestTypesError || null;
 
                     return (
                       <Select
@@ -103,6 +120,7 @@ const RequestInformation = ({
                         label={<FormattedMessage id="ui-requests.requestType" />}
                         disabled={isRequestTypeDisabled}
                         error={error}
+                        onChange={changeRequestType(input)}
                         fullWidth
                         required
                       >
@@ -127,13 +145,7 @@ const RequestInformation = ({
                       </Select>
                     );
                   }}
-                </Field>)
-              }
-              {requestTypeError &&
-                <KeyValue
-                  label={<FormattedMessage id="ui-requests.requestType" />}
-                  value={<FormattedMessage id="ui-requests.noRequestTypesAvailable" />}
-                />
+                </Field>
               }
             </Col>
             <Col xs={2}>
@@ -235,12 +247,16 @@ const RequestInformation = ({
 RequestInformation.propTypes = {
   isTlrEnabledOnEditPage: PropTypes.bool.isRequired,
   MetadataDisplay: PropTypes.func.isRequired,
-  requestTypeError: PropTypes.bool,
   isTitleLevelRequest: PropTypes.bool.isRequired,
   isSelectedInstance: PropTypes.bool.isRequired,
   isSelectedItem: PropTypes.bool.isRequired,
+  isSelectedUser: PropTypes.bool.isRequired,
+  isRequestTypesReceived: PropTypes.bool.isRequired,
+  isRequestTypeLoading: PropTypes.bool.isRequired,
+  request: PropTypes.object.isRequired,
+  values: PropTypes.object.isRequired,
+  form: PropTypes.object.isRequired,
   requestTypeOptions: PropTypes.arrayOf(PropTypes.object),
-  request: PropTypes.object,
 };
 
 export default RequestInformation;

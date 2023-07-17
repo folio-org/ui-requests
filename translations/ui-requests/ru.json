@@ -91,7 +91,6 @@
     "blockModal": "Читатель заблокирован от запроса",
     "detailsButton": "Посмотреть детали блока",
     "enter": "Введите",
-    "requestType.message": "Выберите элемент для просмотра доступных типов запросов",
     "showTags": "Показать теги",
     "tags.tagList": "Теги",
     "item.copyNumbers": "Номер копии",
@@ -148,7 +147,6 @@
     "filters.requestStatus.awaitingPickup": "Open - Awaiting pickup",
     "filters.requestStatus.inTransit": "Open - In transit",
     "filters.requestStatus.notYetFilled": "Open - Not yet filled",
-    "noRequestTypesAvailable": "Для выбранного экземпляра нет доступных типов заказов",
     "exportExpiredHoldShelfToCsv": "Export hold shelf clearance report for {currentServicePoint}",
     "exportSearchResultsToCsv": "Export search results to CSV",
     "common.cancel": "Cancel",
@@ -156,8 +154,6 @@
     "item.callNumberComponents.callNumber": "Актуальный шифр хранения",
     "item.callNumberComponents.suffix": "Актуальный суффикс шифра хранения",
     "item.chronology": "Chronology",
-    "errorModal.title": "Экземпляр не может быть заказан",
-    "errorModal.message": "{title} ({materialType}) (Штрихкод: {barcode}) имеет статус экземпляра <strong>{itemStatus}</strong> и не может быть заказан.",
     "permission.moveRequest": "Заказы: Переходить к следующему экземпляру, изменять очередь",
     "permission.reorderQueue": "Заказы: Изменять очередь",
     "permission.all": "Заказы: Все разрешения",
@@ -269,5 +265,10 @@
     "fulfillmentPreference": "Request fulfillment preference",
     "requestMeta.fulfillment.holdShelf": "Hold Shelf",
     "requestMeta.fulfillment.delivery": "Delivery",
-    "requester.fulfillmentPref": "Fulfillment preference"
+    "requester.fulfillmentPref": "Fulfillment preference",
+    "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
+    "errors.requestType.titleLevelRequest": "None available for this title and patron combination",
+    "errors.requestType.itemLevelRequest": "None available for this item and patron combination",
+    "errors.requestType.selectItem": "Please select a request type",
+    "actions.selectRequestType": "Select request type"
 }

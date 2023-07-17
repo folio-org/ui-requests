@@ -91,7 +91,6 @@
     "blockModal": "讀者被禁止預約",
     "detailsButton": "查看冻结详情",
     "enter": "輸入",
-    "requestType.message": "选择单件以查看可用的请求类型",
     "showTags": "顯示標籤",
     "tags.tagList": "標籤",
     "item.copyNumbers": "複本號",
@@ -148,7 +147,6 @@
     "filters.requestStatus.awaitingPickup": "开放 - 等待取件",
     "filters.requestStatus.inTransit": "开放 - 传送中",
     "filters.requestStatus.notYetFilled": "开放 - 尚未满足",
-    "noRequestTypesAvailable": "没有适用于所选单件的请求类型",
     "exportExpiredHoldShelfToCsv": "匯出 {currentServicePoint} 預約架清空報告",
     "exportSearchResultsToCsv": "輸出查詢結果到 CSV 檔案",
     "common.cancel": "取消",
@@ -156,8 +154,6 @@
     "item.callNumberComponents.callNumber": "有效的索書號",
     "item.callNumberComponents.suffix": "有效的索书号后缀",
     "item.chronology": "年表",
-    "errorModal.title": "单件无法请求",
-    "errorModal.message": "{title} （ {materialType} ）（条码： {barcode} ）的单件状态为<strong> {itemStatus} </strong> ，因此无法请求。",
     "permission.moveRequest": "请求：移至新单件，重新排序队列",
     "permission.reorderQueue": "请求：重新排序队列",
     "permission.all": "请求：所有权限",
@@ -269,5 +265,10 @@
     "fulfillmentPreference": "Request fulfillment preference",
     "requestMeta.fulfillment.holdShelf": "Hold Shelf",
     "requestMeta.fulfillment.delivery": "Delivery",
-    "requester.fulfillmentPref": "Fulfillment preference"
+    "requester.fulfillmentPref": "Fulfillment preference",
+    "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
+    "errors.requestType.titleLevelRequest": "None available for this title and patron combination",
+    "errors.requestType.itemLevelRequest": "None available for this item and patron combination",
+    "errors.requestType.selectItem": "Please select a request type",
+    "actions.selectRequestType": "Select request type"
 }

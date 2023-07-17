@@ -91,7 +91,6 @@
     "blockModal": "Patron blocked from requesting",
     "detailsButton": "View block details",
     "enter": "Enter",
-    "requestType.message": "Select item to view available request types",
     "showTags": "Show Tags",
     "tags.tagList": "Tags",
     "item.copyNumbers": "Copy number",
@@ -148,7 +147,6 @@
     "filters.requestStatus.awaitingPickup": "Open - Awaiting pickup",
     "filters.requestStatus.inTransit": "Open - In transit",
     "filters.requestStatus.notYetFilled": "Open - Not yet filled",
-    "noRequestTypesAvailable": "No request types available for selected item",
     "exportExpiredHoldShelfToCsv": "Export hold shelf clearance report for {currentServicePoint}",
     "exportSearchResultsToCsv": "Export search results to CSV",
     "common.cancel": "Cancel",
@@ -156,8 +154,6 @@
     "item.callNumberComponents.callNumber": "Effective call number",
     "item.callNumberComponents.suffix": "Effective call number suffix",
     "item.chronology": "Chronology",
-    "errorModal.title": "Item cannot be requested",
-    "errorModal.message": "{title} ({materialType}) (Barcode: {barcode}) has the item status <strong>{itemStatus}</strong> and cannot be requested.",
     "permission.moveRequest": "Requests: Move to new item, reorder queue",
     "permission.reorderQueue": "Requests: Reorder queue",
     "permission.all": "Requests: All permissions",
@@ -269,5 +265,10 @@
     "fulfillmentPreference": "Request fulfillment preference",
     "requestMeta.fulfillment.holdShelf": "Hold Shelf",
     "requestMeta.fulfillment.delivery": "Delivery",
-    "requester.fulfillmentPref": "Fulfillment preference"
+    "requester.fulfillmentPref": "Fulfillment preference",
+    "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
+    "errors.requestType.titleLevelRequest": "None available for this title and patron combination",
+    "errors.requestType.itemLevelRequest": "None available for this item and patron combination",
+    "errors.requestType.selectItem": "Please select a request type",
+    "actions.selectRequestType": "Select request type"
 }

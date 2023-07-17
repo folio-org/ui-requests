@@ -13,7 +13,6 @@ import {
   escapeValue,
   getTlrSettings,
   getRequestLevelValue,
-  getInstanceRequestTypeOptions,
   getInstanceQueryString,
   generateUserName,
   handleKeyCommand,
@@ -27,7 +26,7 @@ import {
   getProxy,
   isSubmittingButtonDisabled,
   isFormEditing,
-  resetRequestTypeState,
+  resetFieldState,
 } from './utils';
 
 import {
@@ -35,9 +34,7 @@ import {
   itemStatuses,
   requestTypesMap,
   REQUEST_LEVEL_TYPES,
-  REQUEST_TYPES,
   fulfillmentTypeMap,
-  REQUEST_FORM_FIELD_NAMES,
 } from './constants';
 
 describe('escapeValue', () => {
@@ -193,18 +190,6 @@ describe('getRequestLevelValue', () => {
 
   it('should return `Item` if false is passed', () => {
     expect(getRequestLevelValue(false)).toBe(REQUEST_LEVEL_TYPES.ITEM);
-  });
-});
-
-describe('getInstanceRequestTypeOptions', () => {
-  it('should return `Page`, `HOLD` and `RECALL` request type for instance request', () => {
-    const expectedResult = [
-      REQUEST_TYPES[requestTypesMap.PAGE],
-      REQUEST_TYPES[requestTypesMap.HOLD],
-      REQUEST_TYPES[requestTypesMap.RECALL],
-    ];
-
-    expect(getInstanceRequestTypeOptions()).toEqual(expectedResult);
   });
 });
 
@@ -783,21 +768,22 @@ describe('convertToSlipData', () => {
   });
 });
 
-describe('resetRequestTypeState', () => {
+describe('resetFieldState', () => {
   const form = {
     getRegisteredFields: jest.fn(),
     resetFieldState: jest.fn(),
   };
+  const fieldName = 'test';
 
   afterEach(() => {
     jest.restoreAllMocks();
     jest.clearAllMocks();
   });
 
-  describe('when request type field exists', () => {
+  describe('when field exists', () => {
     beforeEach(() => {
-      form.getRegisteredFields.mockReturnValue([REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE]);
-      resetRequestTypeState(form);
+      form.getRegisteredFields.mockReturnValue([fieldName]);
+      resetFieldState(form, fieldName);
     });
 
     it('should trigger "getRegisteredFields"', () => {
@@ -805,14 +791,14 @@ describe('resetRequestTypeState', () => {
     });
 
     it('should trigger "resetFieldState" with correct argument', () => {
-      expect(form.resetFieldState).toHaveBeenCalledWith(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE);
+      expect(form.resetFieldState).toHaveBeenCalledWith(fieldName);
     });
   });
 
-  describe('when request type field does not exist', () => {
+  describe('when field does not exist', () => {
     beforeEach(() => {
       form.getRegisteredFields.mockReturnValue([]);
-      resetRequestTypeState(form);
+      resetFieldState(form, fieldName);
     });
 
     it('should not trigger "resetFieldState"', () => {

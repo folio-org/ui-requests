@@ -91,7 +91,6 @@
     "blockModal": "Utente bloccato per la richiesta",
     "detailsButton": "Visualizza dettagli blocco",
     "enter": "Inserisci",
-    "requestType.message": "Seleziona item per visualizzare tipi di richiesta disponibili",
     "showTags": "Mostra tag",
     "tags.tagList": "Tag",
     "item.copyNumbers": "Numero copia",
@@ -148,7 +147,6 @@
     "filters.requestStatus.awaitingPickup": "Aperto - In attesa di ritiro",
     "filters.requestStatus.inTransit": "Aperto - In transito",
     "filters.requestStatus.notYetFilled": "Aperto - In attesa di lavorazione",
-    "noRequestTypesAvailable": "Nessun tipo di richiesta disponibile per l'item selezionato",
     "exportExpiredHoldShelfToCsv": "Esporta il report sullo scaffale delle prenotazioni del {currentServicePoint}",
     "exportSearchResultsToCsv": "Esporta i risultati della ricerca in CSV",
     "common.cancel": "Annulla",
@@ -156,8 +154,6 @@
     "item.callNumberComponents.callNumber": "Collocazione effettiva",
     "item.callNumberComponents.suffix": "Suffisso collocazione effettiva",
     "item.chronology": "Cronologia",
-    "errorModal.title": "L'item non può essere richiesto",
-    "errorModal.message": "{title} ({materialType}) (Barcode: {barcode}) lo stato dell'item è <strong>{itemStatus}</strong> e non può essere richiesto.",
     "permission.moveRequest": "Richieste: sposta la richiesta, riordina coda",
     "permission.reorderQueue": "Richieste: riordina coda",
     "permission.all": "Richieste: tutte le autorizzazioni",
@@ -269,5 +265,10 @@
     "fulfillmentPreference": "Request fulfillment preference",
     "requestMeta.fulfillment.holdShelf": "Hold Shelf",
     "requestMeta.fulfillment.delivery": "Delivery",
-    "requester.fulfillmentPref": "Fulfillment preference"
+    "requester.fulfillmentPref": "Fulfillment preference",
+    "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
+    "errors.requestType.titleLevelRequest": "None available for this title and patron combination",
+    "errors.requestType.itemLevelRequest": "None available for this item and patron combination",
+    "errors.requestType.selectItem": "Please select a request type",
+    "actions.selectRequestType": "Select request type"
 }

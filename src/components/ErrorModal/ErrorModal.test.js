@@ -3,7 +3,9 @@ import {
   render,
   screen,
   fireEvent
-} from '@testing-library/react';
+} from '@folio/jest-config-stripes/testing-library/react';
+
+import { runAxeTest } from '@folio/stripes-testing';
 
 import '../../../test/jest/__mock__';
 
@@ -41,6 +43,12 @@ describe('ErrorModal', () => {
 
   it('should be rendered', () => {
     expect(screen.getByTestId(testIds.errorModal)).toBeInTheDocument();
+  });
+
+  it('should render with no axe errors', async () => {
+    await runAxeTest({
+      rootNode: document.body,
+    });
   });
 
   it('should have corresponding footer message', () => {

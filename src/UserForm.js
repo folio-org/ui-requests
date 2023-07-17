@@ -3,15 +3,11 @@ import PropTypes from 'prop-types';
 import {
   FormattedMessage,
 } from 'react-intl';
-import {
-  Field,
-} from 'react-final-form';
 
 import {
   Col,
   KeyValue,
   Row,
-  Select,
 } from '@folio/stripes/components';
 import { ProxyManager } from '@folio/stripes/smart-components';
 
@@ -19,44 +15,21 @@ import {
   getFullName,
   userHighlightBox,
 } from './utils';
-import {
-  REQUEST_FORM_FIELD_NAMES,
-  requestStatuses,
-} from './constants';
-
-const {
-  AWAITING_DELIVERY,
-  AWAITING_PICKUP,
-} = requestStatuses;
 
 class UserForm extends React.Component {
   static propTypes = {
-    deliveryAddress: PropTypes.node,
-    deliveryLocations: PropTypes.arrayOf(PropTypes.object),
-    fulfillmentTypeOptions: PropTypes.arrayOf(PropTypes.object),
-    fulfillmentPreference: PropTypes.string,
-    onChangeAddress: PropTypes.func,
-    onChangeFulfillment: PropTypes.func,
     onCloseProxy: PropTypes.func.isRequired,
     onSelectProxy: PropTypes.func.isRequired,
     patronGroup: PropTypes.string,
     proxy: PropTypes.object,
     stripes: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
-    deliverySelected: PropTypes.bool,
-    servicePoints: PropTypes.arrayOf(PropTypes.object),
     request: PropTypes.object,
   };
 
   static defaultProps = {
-    deliveryAddress: '',
-    deliveryLocations: [],
-    fulfillmentTypeOptions: [],
-    onChangeAddress: () => {},
-    onChangeFulfillment: () => {},
     patronGroup: '',
     proxy: {},
-    deliverySelected: false,
   };
 
   constructor(props) {
@@ -64,63 +37,11 @@ class UserForm extends React.Component {
     this.connectedProxyManager = props.stripes.connect(ProxyManager);
   }
 
-  requireServicePoint = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectItem" />);
-  requireDeliveryAddress = value => (value ? undefined : <FormattedMessage id="ui-requests.errors.selectItem" />);
-
-  renderDeliveryAddressSelect() {
-    const {
-      onChangeAddress,
-      deliveryLocations,
-    } = this.props;
-
-    return (
-      <Field
-        name="deliveryAddressTypeId"
-        label={<FormattedMessage id="ui-requests.deliveryAddress" />}
-        component={Select}
-        fullWidth
-        onChange={onChangeAddress}
-        required
-        validate={this.requireDeliveryAddress}
-      >
-        {deliveryLocations.map(({ value, label }) => <option key={value} value={value}>{label}</option>)}
-      </Field>
-    );
-  }
-
-  renderPickupServicePointSelect() {
-    const {
-      servicePoints,
-    } = this.props;
-
-    return (
-      <Field
-        name="pickupServicePointId"
-        label={<FormattedMessage id="ui-requests.pickupServicePoint.name" />}
-        component={Select}
-        fullWidth
-        required
-        validate={this.requireServicePoint}
-      >
-        <FormattedMessage id="ui-requests.actions.selectPickupSp">
-          {optionLabel => <option value="">{optionLabel}</option>}
-        </FormattedMessage>
-        {servicePoints.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
-      </Field>
-    );
-  }
-
   render() {
     const {
       user,
       proxy,
       patronGroup,
-      deliveryAddress,
-      deliveryLocations,
-      deliverySelected,
-      fulfillmentPreference,
-      fulfillmentTypeOptions,
-      onChangeFulfillment,
       request,
     } = this.props;
 
@@ -128,7 +49,6 @@ class UserForm extends React.Component {
     const name = getFullName(user);
     const barcode = user.barcode;
     const isEditable = !!request;
-    const shouldDisableFulfillmentPreferenceField = isEditable && (request.status === AWAITING_PICKUP || request.status === AWAITING_DELIVERY);
 
     let proxyName;
     let proxyBarcode;
@@ -154,42 +74,7 @@ class UserForm extends React.Component {
           <Col xs={4}>
             <KeyValue label={<FormattedMessage id="ui-requests.requester.patronGroup.group" />} value={patronGroup || '-'} />
           </Col>
-          <Col xs={4}>
-            <Field
-              name={REQUEST_FORM_FIELD_NAMES.FULFILLMENT_PREFERENCE}
-              label={<FormattedMessage id="ui-requests.requester.fulfillmentPref" />}
-              component={Select}
-              fullWidth
-              value={fulfillmentPreference}
-              onChange={onChangeFulfillment}
-              disabled={shouldDisableFulfillmentPreferenceField}
-              data-test-fulfillment-preference-filed
-            >
-              {fulfillmentTypeOptions.map(({ labelTranslationPath, value }) => (
-                <FormattedMessage key={value} id={labelTranslationPath}>
-                  {translatedLabel => (
-                    <option value={value}>
-                      {translatedLabel}
-                    </option>
-                  )}
-                </FormattedMessage>
-              ))}
-            </Field>
-          </Col>
-          <Col xs={4}>
-            {
-              (!deliverySelected && this.renderPickupServicePointSelect()) ||
-              (deliveryLocations && this.renderDeliveryAddressSelect())
-            }
-          </Col>
         </Row>
-
-        { deliverySelected &&
-          <Row>
-            <Col xs={4} xsOffset={8}>
-              {deliveryAddress}
-            </Col>
-          </Row> }
 
         {proxySection}
 
