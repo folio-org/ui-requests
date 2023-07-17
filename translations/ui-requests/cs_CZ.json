@@ -91,7 +91,6 @@
     "blockModal": "Čtenáři je blokováno zadávání žádanek",
     "detailsButton": "Zobrazit podrobnosti bloku",
     "enter": "Potvrdit",
-    "requestType.message": "Výběrem jednotky zobrazíte dostupné typy žádanek",
     "showTags": "Zobrazit štítky",
     "tags.tagList": "Štítky",
     "item.copyNumbers": "Číslo kopie",
@@ -245,7 +244,7 @@
     "item.status.inProcess": "Ve zpracování",
     "item.status.inProcessNonRequestable": "Ve zpracování (nelze vyžádat)",
     "item.status.inTransit": "V přepravě",
-    "item.status.intellectualItem": "Fiktivní jednotka",
+    "item.status.intellectualItem": "Duševní jednotka",
     "item.status.longMissing": "Dlouho chybí",
     "item.status.lostAndPaid": "Ztraceno a zaplaceno",
     "item.status.missing": "Chybějící",
@@ -269,5 +268,10 @@
     "fulfillmentPreference": "Přednostní plnění žádanky",
     "requestMeta.fulfillment.holdShelf": "Vyzvednutí z regálu",
     "requestMeta.fulfillment.delivery": "Doručení",
-    "requester.fulfillmentPref": "Preference vyřízení"
+    "requester.fulfillmentPref": "Preference vyřízení",
+    "errors.requestNotAllowedForPatronTitleCombination": "Rezervace pro tuto kombinaci čtenáře a titulu není povolena",
+    "errors.requestType.titleLevelRequest": "Žádné k dispozici pro tento název",
+    "errors.requestType.itemLevelRequest": "Žádné k dispozici pro tuto jednotku",
+    "errors.requestType.selectItem": "Vyberte prosím typ žádanky",
+    "actions.selectRequestType": "Vybrat typ žádanky"
 }

@@ -91,7 +91,6 @@
     "blockModal": "Patrón bloqueado para préstamo",
     "detailsButton": "Ver detalles del bloqueo",
     "enter": "Introducir",
-    "requestType.message": "Seleccionar ítem para ver los tipos de reserva disponibles",
     "showTags": "Mostrar etiquetas",
     "tags.tagList": "Etiquetas",
     "item.copyNumbers": "Número de copia",
@@ -269,5 +268,10 @@
     "fulfillmentPreference": "Solicitar preferencia de cumplimiento",
     "requestMeta.fulfillment.holdShelf": "Estante",
     "requestMeta.fulfillment.delivery": "Entrega",
-    "requester.fulfillmentPref": "Preferencia de cumplimiento"
+    "requester.fulfillmentPref": "Preferencia de cumplimiento",
+    "errors.requestNotAllowedForPatronTitleCombination": "No se permiten solicitudes de retención para esta combinación de usuario y título.",
+    "errors.requestType.titleLevelRequest": "Ninguno disponible para este título",
+    "errors.requestType.itemLevelRequest": "No disponible para este artículo",
+    "errors.requestType.selectItem": "Seleccione un tipo de solicitud",
+    "actions.selectRequestType": "Seleccionar tipo de solicitud"
 }
