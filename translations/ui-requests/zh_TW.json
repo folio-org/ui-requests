@@ -91,7 +91,6 @@
     "blockModal": "讀者被禁止預約",
     "detailsButton": "查看冻结详情",
     "enter": "輸入",
-    "requestType.message": "选择单件以查看可用的请求类型",
     "showTags": "顯示標籤",
     "tags.tagList": "標籤",
     "item.copyNumbers": "複本號",
@@ -269,5 +268,10 @@
     "fulfillmentPreference": "Request fulfillment preference",
     "requestMeta.fulfillment.holdShelf": "Hold Shelf",
     "requestMeta.fulfillment.delivery": "Delivery",
-    "requester.fulfillmentPref": "Fulfillment preference"
+    "requester.fulfillmentPref": "Fulfillment preference",
+    "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
+    "errors.requestType.titleLevelRequest": "None available for this title",
+    "errors.requestType.itemLevelRequest": "None available for this item",
+    "errors.requestType.selectItem": "Please select a request type",
+    "actions.selectRequestType": "Select request type"
 }

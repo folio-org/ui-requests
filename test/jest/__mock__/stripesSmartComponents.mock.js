@@ -2,6 +2,7 @@ import React from 'react';
 
 jest.mock('@folio/stripes/smart-components', () => ({
   ClipCopy: jest.fn(() => null),
+  deparseFilters: jest.fn(),
   makeQueryFunction: jest.fn((value) => value),
   CheckboxFilter: jest.fn(() => null),
   MultiSelectionFilter: jest.fn(() => <div>MultiSelectionFilter</div>),
@@ -34,4 +35,12 @@ jest.mock('@folio/stripes/smart-components', () => ({
   SearchAndSort: jest.fn(() => null),
   ViewMetaData: jest.fn(() => null),
   withTags: jest.fn((WrappedComponent) => (props) => <WrappedComponent {...props} />),
+  MultiSelectionFilter: (props) => {
+    return (
+      <div>
+        <div>MultiSelectionFilter</div>
+        {props.selectedValues}
+      </div>
+    );
+  },
 }));

@@ -91,7 +91,6 @@
     "blockModal": "Benutzer/-in für Bestandsanfragen gesperrt",
     "detailsButton": "Details der Sperre anzeigen",
     "enter": "Eingabe",
-    "requestType.message": "Exemplar auswählen, um verfügbare Bestandsanfragentypen anzuzeigen",
     "showTags": "Tags anzeigen",
     "tags.tagList": "Tags",
     "item.copyNumbers": "Exemplarnummer",
@@ -269,5 +268,10 @@
     "fulfillmentPreference": "Bestandsanfrage Bereitstellungspräferenz",
     "requestMeta.fulfillment.holdShelf": "Abholregal",
     "requestMeta.fulfillment.delivery": "Lieferung",
-    "requester.fulfillmentPref": "Bereitstellungspräferenz"
+    "requester.fulfillmentPref": "Bereitstellungspräferenz",
+    "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
+    "errors.requestType.titleLevelRequest": "None available for this title",
+    "errors.requestType.itemLevelRequest": "None available for this item",
+    "errors.requestType.selectItem": "Please select a request type",
+    "actions.selectRequestType": "Select request type"
 }
