@@ -12,9 +12,7 @@ import MoveRequestManager from './MoveRequestManager';
 import ItemsDialog from './ItemsDialog';
 import ChooseRequestTypeDialog from './ChooseRequestTypeDialog';
 import ErrorModal from './components/ErrorModal';
-import {
-  requestTypesMap,
-} from './constants';
+import { requestTypesMap } from './constants';
 
 const labelIds = {
   requestNotAllowed: 'ui-requests.requestNotAllowed',
