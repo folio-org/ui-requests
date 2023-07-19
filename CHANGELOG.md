@@ -48,6 +48,7 @@
 * Create Jest/RTL test for PickupServicePointFilter.js. Refs UIREQ-939.
 * Jest/RTL tests cleanup. Refs UIREQ-988.
 * Jest/RTL tests cleanup of RequestsRoute.js file. Refs UIREQ-991.
+* Create Jest/RTL test for PrintContent.js. Refs UIREQ-935.
 * UI tests replacement with RTL/Jest for src/MoveRequestManager.js. Refs UIREQ-877.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
@@ -76,7 +77,6 @@
 * UI tests replacement with RTL/Jest for ErrorModal. Refs UIREQ-883.
 * Change filtering by tag rules in `RequestsFiltersConfig`. Refs UIREQ-904.
 * Use camel case notation for all data-testid. Refs UIREQ-906.
-* Create Jest/RTL test for PrintContent.js. Refs UIREQ-935.
 
 ## [7.2.4](https://github.com/folio-org/ui-requests/tree/v7.2.4) (2022-11-30)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.2.3...v7.2.4)
