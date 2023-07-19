@@ -15,6 +15,7 @@ import { Select } from '@folio/stripes/components';
 import RequestInformation, {
   getNoRequestTypeErrorMessageId,
 } from './RequestInformation';
+import PositionLink from '../../PositionLink';
 import { isFormEditing } from '../../utils';
 import {
   REQUEST_FORM_FIELD_NAMES,
@@ -28,8 +29,24 @@ import {
 jest.mock('../../utils', () => ({
   isFormEditing: jest.fn(),
 }));
-jest.mock('../../PositionLink', () => () => <div>PositionLink</div>);
+jest.mock('../../PositionLink', () => jest.fn(() => <div>PositionLink</div>));
 
+const labelIds = {
+  requestTypeLabel: 'ui-requests.requestType',
+  selectRequestType: 'ui-requests.actions.selectRequestType',
+  titleLevelRequestError: 'ui-requests.errors.requestType.titleLevelRequest',
+  selectItemError: 'ui-requests.errors.requestType.selectItem',
+  requestStatus: 'ui-requests.status',
+  patronComment: 'ui-requests.patronComments',
+  requestPosition: 'ui-requests.position',
+  noRequestTypesAvailable: 'ui-requests.noRequestTypesAvailable',
+  holdShelfExpirationDate: 'ui-requests.holdShelfExpirationDate',
+};
+const testIds = {
+  requestTypeDropDown: 'requestTypeDropDown',
+  errorMessage: 'errorMessage',
+  metadataDisplay: 'metadataDisplay,'
+};
 const basicProps = {
   isTlrEnabledOnEditPage: true,
   isTitleLevelRequest: true,
@@ -38,19 +55,9 @@ const basicProps = {
   requestTypeOptions: [],
   request: {
     status: requestStatuses.AWAITING_PICKUP,
-    metadata: {},
+    patronComments: 'comments',
   },
-  MetadataDisplay: () => <div>MetadataDisplay</div>,
-};
-const labelIds = {
-  requestTypeLabel: 'ui-requests.requestType',
-  selectRequestType: 'ui-requests.actions.selectRequestType',
-  titleLevelRequestError: 'ui-requests.errors.requestType.titleLevelRequest',
-  selectItemError: 'ui-requests.errors.requestType.selectItem',
-};
-const testIds = {
-  requestTypeDropDown: 'requestTypeDropDown',
-  errorMessage: 'errorMessage',
+  MetadataDisplay: () => <div data-testid={testIds.metadataDisplay}>MetadataDisplay</div>,
 };
 
 describe('RequestInformation', () => {
@@ -122,8 +129,10 @@ describe('RequestInformation', () => {
         ...basicProps,
         request: {
           ...basicProps.request,
+          status: requestStatuses.HOLD,
           requestType: requestTypesMap.PAGE,
         },
+        holdShelfExpireDate: '02/02/2023',
       };
 
       beforeEach(() => {
@@ -145,6 +154,45 @@ describe('RequestInformation', () => {
         const requestTypeValue = screen.getByText(requestTypesTranslations[requestTypesMap.PAGE]);
 
         expect(requestTypeValue).toBeInTheDocument();
+      });
+
+      it('should render request status label', () => {
+        const requestStatusLabel = screen.getByText(labelIds.requestStatus);
+
+        expect(requestStatusLabel).toBeInTheDocument();
+      });
+
+      it('should render patron comments label', () => {
+        const patronCommentLabel = screen.getByText(labelIds.patronComment);
+
+        expect(patronCommentLabel).toBeInTheDocument();
+      });
+
+      it('should render patron comments value', () => {
+        const patronCommentValue = screen.getByText(basicProps.request.patronComments);
+
+        expect(patronCommentValue).toBeInTheDocument();
+      });
+
+      it('should render request position label', () => {
+        const requestPositionLabel = screen.getByText(labelIds.requestPosition);
+
+        expect(requestPositionLabel).toBeInTheDocument();
+      });
+
+      it('should trigger "PositionLink" with correct props', () => {
+        const expectedProps = {
+          request: props.request,
+          isTlrEnabled: props.isTlrEnabledOnEditPage,
+        };
+
+        expect(PositionLink).toHaveBeenCalledWith(expectedProps, {});
+      });
+
+      it('should render hold shelf expiration date label', () => {
+        const holdShelfExpirationDateLabel = screen.getByText(labelIds.holdShelfExpirationDate);
+
+        expect(holdShelfExpirationDateLabel).toBeInTheDocument();
       });
     });
 
@@ -266,6 +314,106 @@ describe('RequestInformation', () => {
         fireEvent.change(requestTypeSelect, event);
 
         expect(errorMessage).toBeEmpty();
+      });
+    });
+
+    describe('when "requestTypeError" is true', () => {
+      const props = {
+        ...basicProps,
+        requestTypeError: true,
+      };
+
+      beforeEach(() => {
+        isFormEditing.mockReturnValue(true);
+        render(
+          <RequestInformation
+            {...props}
+          />
+        );
+      });
+
+      it('should render request type label', () => {
+        const requestTypeLabel = screen.getByText(labelIds.requestTypeLabel);
+
+        expect(requestTypeLabel).toBeInTheDocument();
+      });
+
+      it('should render no request type available message', () => {
+        const noRequestTypesAvailable = screen.getByText(labelIds.noRequestTypesAvailable);
+
+        expect(noRequestTypesAvailable).toBeInTheDocument();
+      });
+    });
+
+    describe('when "requestTypeError" is false', () => {
+      const props = {
+        ...basicProps,
+        requestTypeError: false,
+      };
+
+      beforeEach(() => {
+        isFormEditing.mockReturnValue(true);
+        render(
+          <RequestInformation
+            {...props}
+          />
+        );
+      });
+
+      it('should not render no request type available message', () => {
+        const noRequestTypesAvailable = screen.queryByText(labelIds.noRequestTypesAvailable);
+
+        expect(noRequestTypesAvailable).not.toBeInTheDocument();
+      });
+    });
+
+    describe('when "metadata" is provided', () => {
+      const props = {
+        ...basicProps,
+        request: {
+          ...basicProps.request,
+          metadata: {},
+        },
+      };
+
+      beforeEach(() => {
+        isFormEditing.mockReturnValue(true);
+        render(
+          <RequestInformation
+            {...props}
+          />
+        );
+      });
+
+      it('should render "MetadataDisplay"', () => {
+        const metadataDisplay = screen.getByTestId(testIds.metadataDisplay);
+
+        expect(metadataDisplay).toBeInTheDocument();
+      });
+    });
+
+    describe('when "metadata" is not provided', () => {
+      const props = {
+        ...basicProps,
+        request: {
+          ...basicProps.request,
+          metadata: undefined,
+        },
+      };
+
+      beforeEach(() => {
+        isFormEditing.mockReturnValue(true);
+        render(
+          <RequestInformation
+            {...props}
+          />
+        );
+      });
+
+      it('should not render "MetadataDisplay"', () => {
+        const metadataDisplay = screen.queryByTestId(testIds.metadataDisplay);
+
+        expect(metadataDisplay).not.toBeInTheDocument();
       });
     });
   });
