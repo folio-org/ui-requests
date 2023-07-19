@@ -11,7 +11,10 @@ const PrintContent = forwardRef(({ dataSource, template }, ref) => {
   const templateFn = useMemo(() => buildTemplate(template), [template]);
 
   return (
-    <div className={css.hiddenContent}>
+    <div
+      data-testid="printContent"
+      className={css.hiddenContent}
+    >
       <div ref={ref}>
         {dataSource.map(source => (
           <div

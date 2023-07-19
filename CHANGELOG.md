@@ -76,6 +76,7 @@
 * UI tests replacement with RTL/Jest for ErrorModal. Refs UIREQ-883.
 * Change filtering by tag rules in `RequestsFiltersConfig`. Refs UIREQ-904.
 * Use camel case notation for all data-testid. Refs UIREQ-906.
+* Create Jest/RTL test for PrintContent.js. Refs UIREQ-935.
 
 ## [7.2.4](https://github.com/folio-org/ui-requests/tree/v7.2.4) (2022-11-30)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v7.2.3...v7.2.4)
