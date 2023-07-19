@@ -120,7 +120,7 @@ describe('MoveRequestManager', () => {
       );
     });
 
-    it('should render "ItemsDialog" with correct props', () => {
+    it('should trigger "ItemsDialog" with correct props', () => {
       const expectedProps = {
         open: true,
         instanceId: basicProps.request.instanceId,
@@ -134,11 +134,11 @@ describe('MoveRequestManager', () => {
       expect(ItemsDialog).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
     });
 
-    it('should not render "ChooseRequestTypeDialog"', () => {
+    it('should not trigger "ChooseRequestTypeDialog"', () => {
       expect(ChooseRequestTypeDialog).not.toHaveBeenCalled();
     });
 
-    it('should not render "ErrorModal"', () => {
+    it('should not trigger "ErrorModal"', () => {
       expect(ErrorModal).not.toHaveBeenCalled();
     });
   });
@@ -156,7 +156,7 @@ describe('MoveRequestManager', () => {
       fireEvent.click(rowButton);
     });
 
-    it('should render "ChooseRequestTypeDialog" with correct props', async () => {
+    it('should trigger "ChooseRequestTypeDialog" with correct props', async () => {
       const expectedProps = {
         open: true,
         'data-test-choose-request-type-modal': true,
@@ -247,7 +247,7 @@ describe('MoveRequestManager', () => {
         fireEvent.click(confirmButton);
       });
 
-      it('should render "ErrorModal" with correct props', async () => {
+      it('should trigger "ErrorModal" with correct props', async () => {
         const expectedProps = {
           onClose: expect.any(Function),
           errorMessage: error.errors[0].message,
@@ -328,7 +328,7 @@ describe('MoveRequestManager', () => {
         fireEvent.click(confirmButton);
       });
 
-      it('should render "ErrorModal" with correct props', async () => {
+      it('should trigger "ErrorModal" with correct props', async () => {
         const expectedProps = {
           onClose: expect.any(Function),
           errorMessage: error,
