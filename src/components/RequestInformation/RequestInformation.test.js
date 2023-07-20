@@ -39,8 +39,8 @@ const labelIds = {
   requestStatus: 'ui-requests.status',
   patronComment: 'ui-requests.patronComments',
   requestPosition: 'ui-requests.position',
-  noRequestTypesAvailable: 'ui-requests.noRequestTypesAvailable',
   holdShelfExpirationDate: 'ui-requests.holdShelfExpirationDate',
+  noRequestTypesAvailable: 'ui-requests.noRequestTypesAvailable',
 };
 const testIds = {
   requestTypeDropDown: 'requestTypeDropDown',
