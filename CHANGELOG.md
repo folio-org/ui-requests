@@ -48,6 +48,7 @@
 * Create Jest/RTL test for PickupServicePointFilter.js. Refs UIREQ-939.
 * Jest/RTL tests cleanup. Refs UIREQ-988.
 * Jest/RTL tests cleanup of RequestsRoute.js file. Refs UIREQ-991.
+* Cover RequestInformation by jest/RTL tests. Refs UIREQ-951.
 * Create Jest/RTL test for PrintContent.js. Refs UIREQ-935.
 * UI tests replacement with RTL/Jest for src/MoveRequestManager.js. Refs UIREQ-877.
 
