@@ -68,13 +68,13 @@ describe('formatter', () => {
       }), {});
     });
 
-    it('should return requestDate', () => {
+    it('should render requestDate', () => {
       render(formatter.requestDate(requiredData));
 
       expect(screen.getByText(requiredData.requestDate)).toBeInTheDocument();
     });
 
-    it('should return status', () => {
+    it('should render status', () => {
       render(formatter.status(requiredData));
 
       expect(screen.getByText(requestStatusesTranslations[requiredData.status])).toBeInTheDocument();
@@ -92,7 +92,7 @@ describe('formatter', () => {
       }));
     });
 
-    it('should call requesterBarcode with correct props', () => {
+    it('should call "RequesterLink" with correct props', () => {
       render(formatter.requesterBarcode(requiredData));
 
       expect(RequesterLink).toHaveBeenCalledWith(expect.objectContaining({
@@ -104,7 +104,7 @@ describe('formatter', () => {
       expect(formatter.patronGroup(requiredData)).toEqual(MISSING_VALUE_SYMBOL);
     });
 
-    it('should return requestType', () => {
+    it('should render requestType', () => {
       render(formatter.requestType(requiredData));
 
       expect(screen.getByText(requestTypesTranslations[requiredData.requestType])).toBeInTheDocument();
