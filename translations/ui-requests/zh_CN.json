@@ -269,9 +269,9 @@
     "requestMeta.fulfillment.holdShelf": "预约架",
     "requestMeta.fulfillment.delivery": "传递",
     "requester.fulfillmentPref": "执行偏好",
-    "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
-    "errors.requestType.titleLevelRequest": "None available for this title",
-    "errors.requestType.itemLevelRequest": "None available for this item",
-    "errors.requestType.selectItem": "Please select a request type",
-    "actions.selectRequestType": "Select request type"
+    "errors.requestNotAllowedForPatronTitleCombination": "对此读者和品种组合不允许提出预约请求",
+    "errors.requestType.titleLevelRequest": "此标题/品种无可用信息",
+    "errors.requestType.itemLevelRequest": "此单件无可用信息",
+    "errors.requestType.selectItem": "请选择请求类型",
+    "actions.selectRequestType": "选择请求类型"
 }
