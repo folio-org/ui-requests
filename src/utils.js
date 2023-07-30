@@ -332,6 +332,7 @@ export const getRequestLevelValue = (value) => {
     : REQUEST_LEVEL_TYPES.ITEM;
 };
 
+// can be removed
 export const getInstanceRequestTypeOptions = () => {
   return [
     REQUEST_TYPES[requestTypesMap.PAGE],
