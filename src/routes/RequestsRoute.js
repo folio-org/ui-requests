@@ -28,6 +28,7 @@ import {
   TextLink,
   DefaultMCLRowFormatter,
   NoValue,
+  MCLPagingTypes,
 } from '@folio/stripes/components';
 import {
   deparseFilters,
@@ -242,6 +243,7 @@ class RequestsRoute extends React.Component {
       path: 'circulation/requests',
       records: 'requests',
       resultOffset: '%{resultOffset}',
+      resultDensity: 'sparse',
       perRequest: 100,
       throwErrors: false,
       GET: {
@@ -1257,7 +1259,7 @@ class RequestsRoute extends React.Component {
               resultIsSelected={this.resultIsSelected}
               onFilterChange={this.handleFilterChange}
               pageAmount={100}
-              pagingType="click"
+              pagingType={MCLPagingTypes.PREV_NEXT}
             />
           </div>
           <PrintContent

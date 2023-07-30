@@ -91,7 +91,6 @@
     "blockModal": "读者请求被冻结",
     "detailsButton": "查看冻结详情",
     "enter": "输入",
-    "requestType.message": "选择单件以查看可用的请求类型",
     "showTags": "显示标签",
     "tags.tagList": "标签",
     "item.copyNumbers": "复本号",
@@ -269,5 +268,10 @@
     "fulfillmentPreference": "请求履行首选项",
     "requestMeta.fulfillment.holdShelf": "预约架",
     "requestMeta.fulfillment.delivery": "传递",
-    "requester.fulfillmentPref": "执行偏好"
+    "requester.fulfillmentPref": "执行偏好",
+    "errors.requestNotAllowedForPatronTitleCombination": "对此读者和品种组合不允许提出预约请求",
+    "errors.requestType.titleLevelRequest": "此标题/品种无可用信息",
+    "errors.requestType.itemLevelRequest": "此单件无可用信息",
+    "errors.requestType.selectItem": "请选择请求类型",
+    "actions.selectRequestType": "选择请求类型"
 }
