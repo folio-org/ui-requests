@@ -44,6 +44,7 @@ const RequestInformation = ({
   isSelectedInstance,
   isSelectedItem,
   requestTypeError,
+  values,
 }) => {
   const isEditForm = isFormEditing(request);
   const holdShelfExpireDate = get(request, ['status'], '') === requestStatuses.AWAITING_PICKUP
@@ -55,12 +56,10 @@ const RequestInformation = ({
   const isItemOrTitleSelected = isTitleLevelRequest ? isSelectedInstance : isSelectedItem;
   const isRequestTypeDisabled = requestTypeOptions.length === 0 || !isItemOrTitleSelected;
   const validateRequestType = useCallback((requestType) => {
-    if (!requestType) {
-      return <FormattedMessage id="ui-requests.errors.requestType.selectItem" />;
-    }
-
-    if (isItemOrTitleSelected && requestTypeOptions.length === 0) {
+    if (!requestType && isItemOrTitleSelected && requestTypeOptions.length === 0) {
       return <FormattedMessage id={getNoRequestTypeErrorMessageId(isTitleLevelRequest)} />;
+    } else if (!requestType) {
+      return <FormattedMessage id="ui-requests.errors.requestType.selectItem" />;
     }
 
     return undefined;
@@ -87,6 +86,7 @@ const RequestInformation = ({
                 /> :
                 <Field
                   data-testid="requestTypeDropDown"
+                  key={values.keyOfRequestTypeField ?? 0}
                   name={REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE}
                   validateFields={[]}
                   validate={validateRequestType}
@@ -241,6 +241,7 @@ RequestInformation.propTypes = {
   isSelectedItem: PropTypes.bool.isRequired,
   requestTypeOptions: PropTypes.arrayOf(PropTypes.object),
   request: PropTypes.object,
+  values: PropTypes.object,
 };
 
 export default RequestInformation;

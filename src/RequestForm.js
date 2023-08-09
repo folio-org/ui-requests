@@ -58,6 +58,7 @@ import {
   RESOURCE_KEYS,
   REQUEST_FORM_FIELD_NAMES,
   DEFAULT_REQUEST_TYPE_VALUE,
+  requestTypeOptionMap,
 } from './constants';
 import {
   handleKeyCommand,
@@ -81,6 +82,11 @@ import {
 } from './utils';
 
 import css from './requests.css';
+
+const ID_TYPE_MAP = {
+  ITEM_ID: 'itemId',
+  INSTANCE_ID: 'instanceId',
+};
 
 class RequestForm extends React.Component {
   static propTypes = {
@@ -582,6 +588,38 @@ class RequestForm extends React.Component {
     }
   }
 
+  findRequestTypes = (item, requester, itemType) => {
+    const {
+      findResource,
+      form,
+    } = this.props;
+
+    return findResource(RESOURCE_TYPES.REQUEST_TYPES, {
+      [itemType]: item.id,
+      requesterId: requester.id,
+    })
+      .then(requestTypes => {
+        if (!isEmpty(requestTypes)) {
+          form.change(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, DEFAULT_REQUEST_TYPE_VALUE);
+
+          const requestTypeOptions = Object.keys(requestTypes).map(requestType => {
+            return {
+              id: requestTypeOptionMap[requestType],
+              value: requestType,
+            };
+          });
+
+          this.setState({
+            requestTypeOptions,
+          });
+        } else {
+          this.triggerRequestTypeValidation();
+        }
+
+        return item;
+      });
+  }
+
   findItemRelatedResources(item) {
     const {
       findResource,
@@ -630,6 +668,7 @@ class RequestForm extends React.Component {
       form,
       onSetSelectedItem,
       onShowErrorModal,
+      selectedUser,
     } = this.props;
 
     this.setState({
@@ -662,11 +701,11 @@ class RequestForm extends React.Component {
           }
 
           const item = result.items[0];
-          const options = getRequestTypeOptions(item);
+          // const options = getRequestTypeOptions(item);
 
           form.change(REQUEST_FORM_FIELD_NAMES.ITEM_ID, item.id);
           form.change(REQUEST_FORM_FIELD_NAMES.ITEM_BARCODE, item.barcode);
-          form.change(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, DEFAULT_REQUEST_TYPE_VALUE);
+          // form.change(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, DEFAULT_REQUEST_TYPE_VALUE);
           resetRequestTypeState(form);
 
           // Setting state here is redundant with what follows, but it lets us
@@ -674,12 +713,19 @@ class RequestForm extends React.Component {
           // the slow loan and request lookups
           onSetSelectedItem(item);
           this.setState({
-            requestTypeOptions: options,
+            // requestTypeOptions: options,
             isItemOrInstanceLoading: false,
           });
 
           if (hasNonRequestableStatus(item)) {
             onShowErrorModal();
+          }
+
+          return item;
+        })
+        .then(item => {
+          if (item && selectedUser?.id) {
+            return this.findRequestTypes(item, selectedUser, ID_TYPE_MAP.ITEM_ID);
           }
 
           return item;
@@ -710,6 +756,7 @@ class RequestForm extends React.Component {
       findResource,
       form,
       onSetSelectedInstance,
+      selectedUser,
     } = this.props;
 
     this.setState({
@@ -756,14 +803,25 @@ class RequestForm extends React.Component {
 
           return instance;
         })
+        // the solution that can be used only after implementation CIRC-1827
+        // .then(instance => {
+        //   if (instance && selectedUser?.id) {
+        //     return this.findRequestTypes(instance, selectedUser, ID_TYPE_MAP.INSTANCE_ID);
+        //   }
+        //
+        //   return instance;
+        // })
         .then(instance => {
           this.findInstanceRelatedResources(instance);
+
           return instance;
         })
+        // the next line will be not necessary and can be removed after implementation CIRC-1827
         .then(instance => this.setInstanceRequestTypeOptions(instance));
     }
   }
 
+  // can be removed
   setInstanceRequestTypeOptions = async (instance) => {
     const {
       form,
@@ -807,6 +865,16 @@ class RequestForm extends React.Component {
     } = this.props;
 
     form.change('keyOfInstanceIdField', values.keyOfInstanceIdField ? 0 : 1);
+  };
+
+  triggerRequestTypeValidation = () => {
+    console.log("CALLED");
+    const {
+      form,
+      values,
+    } = this.props;
+
+    form.change('keyOfRequestTypeField', values.keyOfRequestTypeField ? 0 : 1);
   };
 
   onCancelRequest = (cancellationInfo) => {
@@ -1211,6 +1279,7 @@ class RequestForm extends React.Component {
                       isTitleLevelRequest={isTitleLevelRequest}
                       isSelectedInstance={Boolean(selectedInstance)}
                       isSelectedItem={Boolean(selectedItem)}
+                      values={values}
                     />
                   </Accordion>
                 </AccordionSet>

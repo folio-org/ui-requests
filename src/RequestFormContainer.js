@@ -177,6 +177,7 @@ const RequestFormContainer = ({
     unset(requestData, 'keyOfItemBarcodeField');
     unset(requestData, 'keyOfUserBarcodeField');
     unset(requestData, 'keyOfInstanceIdField');
+    unset(requestData, 'keyOfRequestTypeField');
 
     return onSubmit(requestData);
   };
