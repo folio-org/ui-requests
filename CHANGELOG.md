@@ -54,7 +54,6 @@
 * Increase code coverage for Jest/RTL tests. Refs UIREQ-995.
 * Convert primary search results view to use Prev/Next pagination. Refs UIREQ-965.
 * Remove bigtest tests and associated dependencies. Refs UIREQ-999.
-* Request type dropdown implementation. Refs UIREQ-971.
 * Update Node.js to v18 in GitHub Actions. Refs UIREQ-1000.
 * Implementation of receiving available request types. Refs UIREQ-971.
 
