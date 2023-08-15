@@ -55,6 +55,7 @@
 * Convert primary search results view to use Prev/Next pagination. Refs UIREQ-965.
 * Remove bigtest tests and associated dependencies. Refs UIREQ-999.
 * Request type dropdown implementation. Refs UIREQ-971.
+* Update Node.js to v18 in GitHub Actions. Refs UIREQ-1000.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)
