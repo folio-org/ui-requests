@@ -18,7 +18,10 @@ import {
   defaultKeyboardShortcuts,
 } from '@folio/stripes/components';
 
-import RequestForm from './RequestForm';
+import RequestForm, {
+  getResourceTypeId,
+  ID_TYPE_MAP,
+} from './RequestForm';
 import TitleInformation from './components/TitleInformation';
 import ItemDetail from './ItemDetail';
 
@@ -449,6 +452,16 @@ describe('RequestForm', () => {
 
         expect(mockedChangeFunction).toHaveBeenCalledWith(formFieldNames.deliveryAddressTypeId, value);
       });
+    });
+  });
+
+  describe('getResourceTypeId', () => {
+    it('should return instance id type', () => {
+      expect(getResourceTypeId(true)).toBe(ID_TYPE_MAP.INSTANCE_ID);
+    });
+
+    it('should return item id type', () => {
+      expect(getResourceTypeId(false)).toBe(ID_TYPE_MAP.ITEM_ID);
     });
   });
 });

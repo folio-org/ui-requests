@@ -13,7 +13,6 @@ import {
   escapeValue,
   getTlrSettings,
   getRequestLevelValue,
-  getInstanceRequestTypeOptions,
   getInstanceQueryString,
   generateUserName,
   handleKeyCommand,
@@ -193,18 +192,6 @@ describe('getRequestLevelValue', () => {
 
   it('should return `Item` if false is passed', () => {
     expect(getRequestLevelValue(false)).toBe(REQUEST_LEVEL_TYPES.ITEM);
-  });
-});
-
-describe('getInstanceRequestTypeOptions', () => {
-  it('should return `Page`, `HOLD` and `RECALL` request type for instance request', () => {
-    const expectedResult = [
-      REQUEST_TYPES[requestTypesMap.PAGE],
-      REQUEST_TYPES[requestTypesMap.HOLD],
-      REQUEST_TYPES[requestTypesMap.RECALL],
-    ];
-
-    expect(getInstanceRequestTypeOptions()).toEqual(expectedResult);
   });
 });
 

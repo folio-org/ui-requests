@@ -52,12 +52,18 @@ const basicProps = {
   isTitleLevelRequest: true,
   isSelectedInstance: true,
   isSelectedItem: false,
+  isSelectedUser: true,
+  isRequestTypesReceived: true,
+  isRequestTypeLoading: false,
   requestTypeOptions: [],
+  values: {
+    keyOfRequestTypeField: 1,
+  },
   request: {
     status: requestStatuses.AWAITING_PICKUP,
-    patronComments: 'comments',
+    metadata: {},
   },
-  MetadataDisplay: () => <div data-testid={testIds.metadataDisplay}>MetadataDisplay</div>,
+  MetadataDisplay: () => <div>MetadataDisplay</div>,
 };
 
 describe('RequestInformation', () => {
@@ -249,9 +255,19 @@ describe('RequestInformation', () => {
       });
 
       it('should render "select request type" error', () => {
+        const props = {
+          ...basicProps,
+          requestTypeOptions: [
+            {
+              id: 'id',
+              value: 'value',
+            }
+          ],
+        };
+
         render(
           <RequestInformation
-            {...basicProps}
+            {...props}
           />
         );
 

@@ -16,7 +16,6 @@ import PropTypes from 'prop-types';
 import RequestForm from './RequestForm';
 import {
   getRequestLevelValue,
-  hasNonRequestableStatus,
 } from './utils';
 import {
   fulfillmentTypeMap,
@@ -41,7 +40,6 @@ const RequestFormContainer = ({
   const [selectedInstance, setSelectedInstance] = useState(request?.instance);
   const [isPatronBlocksOverridden, setIsPatronBlocksOverridden] = useState(false);
   const [instanceId, setInstanceId] = useState('');
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [blocked, setBlocked] = useState(false);
 
   const setItem = (optedItem) => {
@@ -66,14 +64,6 @@ const RequestFormContainer = ({
 
   const setStateInstanceId = (id) => {
     setInstanceId(id);
-  };
-
-  const hideErrorModal = () => {
-    setIsErrorModalOpen(false);
-  };
-
-  const showErrorModal = () => {
-    setIsErrorModalOpen(true);
   };
 
   const getPatronManualBlocks = (resources) => {
@@ -122,10 +112,6 @@ const RequestFormContainer = ({
       deliveryAddressTypeId,
       pickupServicePointId,
     } = requestData;
-
-    if (hasNonRequestableStatus(selectedItem)) {
-      return showErrorModal();
-    }
 
     if (hasBlocking()) return undefined;
 
@@ -193,12 +179,9 @@ const RequestFormContainer = ({
       selectedUser={selectedUser}
       selectedInstance={selectedInstance}
       isPatronBlocksOverridden={isPatronBlocksOverridden}
-      isErrorModalOpen={isErrorModalOpen}
       instanceId={instanceId}
       onGetPatronManualBlocks={getPatronManualBlocks}
       onGetAutomatedPatronBlocks={getAutomatedPatronBlocks}
-      onHideErrorModal={hideErrorModal}
-      onShowErrorModal={showErrorModal}
       onSetBlocked={setIsBlocked}
       onSetSelectedItem={setItem}
       onSetSelectedUser={setUser}
