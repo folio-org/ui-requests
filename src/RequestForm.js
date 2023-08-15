@@ -775,13 +775,6 @@ class RequestForm extends React.Component {
 
           return item;
         })
-        .then(item => {
-          if (item && selectedUser?.id) {
-            return this.findRequestTypes(item, selectedUser, ID_TYPE_MAP.ITEM_ID);
-          }
-
-          return item;
-        })
         .then(item => this.findItemRelatedResources(item));
     }
   }
