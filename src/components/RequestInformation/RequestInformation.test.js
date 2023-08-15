@@ -40,7 +40,6 @@ const labelIds = {
   patronComment: 'ui-requests.patronComments',
   requestPosition: 'ui-requests.position',
   holdShelfExpirationDate: 'ui-requests.holdShelfExpirationDate',
-  noRequestTypesAvailable: 'ui-requests.noRequestTypesAvailable',
 };
 const testIds = {
   requestTypeDropDown: 'requestTypeDropDown',
@@ -61,9 +60,9 @@ const basicProps = {
   },
   request: {
     status: requestStatuses.AWAITING_PICKUP,
-    metadata: {},
+    patronComments: 'comments',
   },
-  MetadataDisplay: () => <div>MetadataDisplay</div>,
+  MetadataDisplay: () => <div data-testid={testIds.metadataDisplay}>MetadataDisplay</div>,
 };
 
 describe('RequestInformation', () => {
@@ -330,56 +329,6 @@ describe('RequestInformation', () => {
         fireEvent.change(requestTypeSelect, event);
 
         expect(errorMessage).toBeEmpty();
-      });
-    });
-
-    describe('when "requestTypeError" is true', () => {
-      const props = {
-        ...basicProps,
-        requestTypeError: true,
-      };
-
-      beforeEach(() => {
-        isFormEditing.mockReturnValue(true);
-        render(
-          <RequestInformation
-            {...props}
-          />
-        );
-      });
-
-      it('should render request type label', () => {
-        const requestTypeLabel = screen.getByText(labelIds.requestTypeLabel);
-
-        expect(requestTypeLabel).toBeInTheDocument();
-      });
-
-      it('should render no request type available message', () => {
-        const noRequestTypesAvailable = screen.getByText(labelIds.noRequestTypesAvailable);
-
-        expect(noRequestTypesAvailable).toBeInTheDocument();
-      });
-    });
-
-    describe('when "requestTypeError" is false', () => {
-      const props = {
-        ...basicProps,
-        requestTypeError: false,
-      };
-
-      beforeEach(() => {
-        isFormEditing.mockReturnValue(true);
-        render(
-          <RequestInformation
-            {...props}
-          />
-        );
-      });
-
-      it('should not render no request type available message', () => {
-        const noRequestTypesAvailable = screen.queryByText(labelIds.noRequestTypesAvailable);
-
-        expect(noRequestTypesAvailable).not.toBeInTheDocument();
       });
     });
 

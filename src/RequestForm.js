@@ -84,7 +84,7 @@ export const ID_TYPE_MAP = {
   INSTANCE_ID: 'instanceId',
 };
 
-export const getResourceTypeId = (isTitleLevelRequest) => isTitleLevelRequest ? ID_TYPE_MAP.INSTANCE_ID : ID_TYPE_MAP.ITEM_ID;
+export const getResourceTypeId = (isTitleLevelRequest) => (isTitleLevelRequest ? ID_TYPE_MAP.INSTANCE_ID : ID_TYPE_MAP.ITEM_ID);
 
 class RequestForm extends React.Component {
   static propTypes = {

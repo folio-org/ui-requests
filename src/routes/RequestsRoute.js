@@ -152,7 +152,7 @@ export const urls = {
     itemId,
     instanceId,
   }) => {
-    let requestUrl = `circulation/requests/allowed-service-points?requester=${requesterId}`;
+    const requestUrl = `circulation/requests/allowed-service-points?requester=${requesterId}`;
     let itemQuery = '';
 
     if (itemId) {
