@@ -330,6 +330,35 @@ describe('RequestInformation', () => {
 
         expect(errorMessage).toBeEmpty();
       });
+
+      it('should not render request type error when user is not selected', () => {
+        const props = {
+          ...basicProps,
+          isSelectedUser: false,
+          requestTypeOptions: [{
+            id: 'id',
+            value: 'value',
+          }],
+        };
+
+        render(
+          <RequestInformation
+            {...props}
+          />
+        );
+
+        const event = {
+          target: {
+            value: 'test',
+          },
+        };
+        const requestTypeSelect = screen.getByTestId(testIds.requestTypeDropDown);
+        const errorMessage = screen.getByTestId(testIds.errorMessage);
+
+        fireEvent.change(requestTypeSelect, event);
+
+        expect(errorMessage).toBeEmpty();
+      });
     });
 
     describe('when "metadata" is provided', () => {

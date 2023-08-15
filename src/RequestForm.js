@@ -86,6 +86,16 @@ export const ID_TYPE_MAP = {
 
 export const getResourceTypeId = (isTitleLevelRequest) => (isTitleLevelRequest ? ID_TYPE_MAP.INSTANCE_ID : ID_TYPE_MAP.ITEM_ID);
 
+export const getRequestInformation = (values, selectedInstance, selectedItem, request) => {
+  const isTitleLevelRequest = values.createTitleLevelRequest || request?.requestLevel === REQUEST_LEVEL_TYPES.TITLE;
+  const selectedResource = isTitleLevelRequest ? selectedInstance : selectedItem;
+
+  return {
+    isTitleLevelRequest,
+    selectedResource,
+  };
+};
+
 class RequestForm extends React.Component {
   static propTypes = {
     stripes: PropTypes.shape({
@@ -393,8 +403,10 @@ class RequestForm extends React.Component {
       request,
       values,
     } = this.props;
-    const isTitleLevelRequest = values.createTitleLevelRequest || request?.requestLevel === REQUEST_LEVEL_TYPES.TITLE;
-    const selectedResource = isTitleLevelRequest ? selectedInstance : selectedItem;
+    const {
+      selectedResource,
+      isTitleLevelRequest,
+    } = getRequestInformation(values, selectedInstance, selectedItem, request);
 
     if (selectedResource?.id && user?.id) {
       const resourceTypeId = getResourceTypeId(isTitleLevelRequest);

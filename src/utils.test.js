@@ -34,7 +34,6 @@ import {
   itemStatuses,
   requestTypesMap,
   REQUEST_LEVEL_TYPES,
-  REQUEST_TYPES,
   fulfillmentTypeMap,
   REQUEST_FORM_FIELD_NAMES,
 } from './constants';

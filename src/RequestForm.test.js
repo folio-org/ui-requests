@@ -19,13 +19,18 @@ import {
 } from '@folio/stripes/components';
 
 import RequestForm, {
+  getRequestInformation,
   getResourceTypeId,
   ID_TYPE_MAP,
 } from './RequestForm';
 import TitleInformation from './components/TitleInformation';
 import ItemDetail from './ItemDetail';
 
-import { REQUEST_LEVEL_TYPES } from './constants';
+import {
+  REQUEST_LEVEL_TYPES,
+  createModes,
+  RESOURCE_TYPES,
+} from './constants';
 
 let mockedTlrSettings;
 
@@ -84,10 +89,51 @@ describe('RequestForm', () => {
     instanceHrid: 2,
   };
   const mockedChangeFunction = jest.fn();
+  const findResourceMock = jest.fn(() => new Promise((resolve) => resolve()));
   const valuesMock = {
     deliveryAddressTypeId: '',
     pickupServicePointId: '',
     createTitleLevelRequest: '',
+  };
+  const basicProps = {
+    onGetPatronManualBlocks: jest.fn(),
+    onGetAutomatedPatronBlocks: jest.fn(),
+    onSetSelectedInstance: jest.fn(),
+    onSetSelectedItem: jest.fn(),
+    onSetSelectedUser: jest.fn(),
+    onSetInstanceId: jest.fn(),
+    onSetIsPatronBlocksOverridden: jest.fn(),
+    onSetBlocked: jest.fn(),
+    onShowErrorModal: jest.fn(),
+    onHideErrorModal: jest.fn(),
+    form: {
+      change: mockedChangeFunction,
+    },
+    handleSubmit: jest.fn(),
+    asyncValidate: jest.fn(),
+    initialValues: {},
+    location: {
+      pathname: 'pathname',
+    },
+    onCancel: jest.fn(),
+    parentMutator: {
+      proxy: {
+        reset: jest.fn(),
+        GET: jest.fn(),
+      },
+    },
+    onSubmit: jest.fn(),
+    parentResources: {
+      patronBlocks: {
+        records: [],
+      },
+    },
+    intl: {
+      formatMessage: ({ id }) => id,
+    },
+    stripes: {
+      connect: jest.fn((component) => component),
+    },
   };
 
   const renderComponent = (passedProps = {}) => {
@@ -107,43 +153,19 @@ describe('RequestForm', () => {
     } = passedProps;
 
     const props = {
+      ...basicProps,
       stripes: {
-        connect: jest.fn((component) => component),
+        ...basicProps.stripes,
         store: {
           getState: jest.fn().mockReturnValue({
             requestForm: mockedRequestForm,
           }),
         },
       },
-      form: {
-        change: mockedChangeFunction,
-      },
       values,
-      handleSubmit: jest.fn(),
-      asyncValidate: jest.fn(),
-      findResource: jest.fn(() => new Promise((resolve) => resolve())),
-      request: mockedRequest || {},
-      initialValues: {},
-      location: {
-        pathname: 'pathname',
-      },
-      onCancel: jest.fn(),
-      parentMutator: {
-        proxy: {
-          reset: jest.fn(),
-          GET: jest.fn(),
-        },
-      },
-      query: mockedQuery || {},
-      onSubmit: jest.fn(),
-      parentResources: {
-        patronBlocks: {
-          records: [],
-        },
-      },
-      intl: {
-        formatMessage: ({ id }) => id,
-      },
+      findResource: findResourceMock,
+      request: mockedRequest,
+      query: mockedQuery,
       selectedItem,
       selectedUser,
       selectedInstance,
@@ -151,19 +173,9 @@ describe('RequestForm', () => {
       isErrorModalOpen,
       instanceId,
       blocked,
-      onGetPatronManualBlocks: jest.fn(),
-      onGetAutomatedPatronBlocks: jest.fn(),
-      onSetSelectedInstance: jest.fn(),
-      onSetSelectedItem: jest.fn(),
-      onSetSelectedUser: jest.fn(),
-      onSetInstanceId: jest.fn(),
-      onSetIsPatronBlocksOverridden: jest.fn(),
-      onSetBlocked: jest.fn(),
-      onShowErrorModal: jest.fn(),
-      onHideErrorModal: jest.fn(),
     };
 
-    render(
+    const { rerender } = render(
       <CommandList commands={defaultKeyboardShortcuts}>
         <Router history={history}>
           <RequestForm
@@ -172,6 +184,8 @@ describe('RequestForm', () => {
         </Router>
       </CommandList>
     );
+
+    return rerender;
   };
 
   afterEach(() => {
@@ -413,6 +427,62 @@ describe('RequestForm', () => {
     });
   });
 
+  describe('when duplicate a request', () => {
+    const props = {
+      mockedQuery: {
+        mode: createModes.DUPLICATE,
+      },
+      selectedUser: {
+        id: 'userId',
+      },
+      mockedRequest: {
+        requestLevel: REQUEST_LEVEL_TYPES.TITLE,
+      },
+    };
+    beforeEach(() => {
+      mockedTlrSettings = {
+        titleLevelRequestsFeatureEnabled: true,
+      };
+    });
+
+    it('should trigger "findResource" to find request types', () => {
+      const newProps = {
+        ...basicProps,
+        selectedInstance: {
+          id: 'instanceId',
+        },
+        query: {
+          mode: createModes.DUPLICATE,
+        },
+        selectedUser: {
+          id: 'userId',
+        },
+        request: {
+          requestLevel: REQUEST_LEVEL_TYPES.TITLE,
+        },
+        values: valuesMock,
+        findResource: findResourceMock,
+      };
+      const rerender = renderComponent(props);
+
+      rerender(
+        <CommandList commands={defaultKeyboardShortcuts}>
+          {/*eslint-disable-next-line no-restricted-globals*/}
+          <Router history={history}>
+            <RequestForm
+              {...newProps}
+            />
+          </Router>
+        </CommandList>
+      );
+
+      expect(findResourceMock).toHaveBeenCalledWith(RESOURCE_TYPES.REQUEST_TYPES, {
+        [ID_TYPE_MAP.INSTANCE_ID]: newProps.selectedInstance.id,
+        requesterId: newProps.selectedUser.id,
+      });
+    });
+  });
+
   describe('User information', () => {
     beforeAll(() => {
       mockedTlrSettings = {
@@ -462,6 +532,54 @@ describe('RequestForm', () => {
 
     it('should return item id type', () => {
       expect(getResourceTypeId(false)).toBe(ID_TYPE_MAP.ITEM_ID);
+    });
+  });
+
+  describe('getRequestInformation', () => {
+    describe('when title level request', () => {
+      const selectedInstance = {
+        id: 'instanceId',
+      };
+      const args = [
+        {},
+        selectedInstance,
+        {},
+        {
+          requestLevel: REQUEST_LEVEL_TYPES.TITLE,
+        },
+      ];
+
+      it('should return correct data', () => {
+        const expectedResult = {
+          isTitleLevelRequest: true,
+          selectedResource: selectedInstance,
+        };
+
+        expect(getRequestInformation(...args)).toEqual(expectedResult);
+      });
+    });
+
+    describe('when item level request', () => {
+      const selectedItem = {
+        id: 'itemId',
+      };
+      const args = [
+        {},
+        {},
+        selectedItem,
+        {
+          requestLevel: REQUEST_LEVEL_TYPES.ITEM,
+        },
+      ];
+
+      it('should return correct data', () => {
+        const expectedResult = {
+          isTitleLevelRequest: false,
+          selectedResource: selectedItem,
+        };
+
+        expect(getRequestInformation(...args)).toEqual(expectedResult);
+      });
     });
   });
 });
