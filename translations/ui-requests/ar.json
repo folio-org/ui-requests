@@ -147,7 +147,6 @@
     "filters.requestStatus.awaitingPickup": "مفتوح - في انتظار الالتقاط",
     "filters.requestStatus.inTransit": "مفتوح - في النقل",
     "filters.requestStatus.notYetFilled": "مفتوح - غير مملوء بعد",
-    "noRequestTypesAvailable": "لا تتوافر أنواع طلب للمادة المحددة",
     "exportExpiredHoldShelfToCsv": "تصدير تقرير مسح رف الحجوزات لـ {currentServicePoint}",
     "exportSearchResultsToCsv": "تصدير نتائج البحث إلى ملف CSV",
     "common.cancel": "إلغاء",
@@ -155,8 +154,6 @@
     "item.callNumberComponents.callNumber": "رقم الاستدعاء الفعلي",
     "item.callNumberComponents.suffix": "لاحقة رقم الاستدعاء الفعلي",
     "item.chronology": "التسلسل الزمني",
-    "errorModal.title": "لا يمكن طلب المادة",
-    "errorModal.message": "{title} ({materialType}) (باركود: {barcode}) له حالة المادة <strong>{itemStatus}</strong> ولا يمكن طلبه",
     "permission.moveRequest": "الطلبات: انقل إلى مادة جديدة، أعد ترتيب الصف",
     "permission.reorderQueue": "الطلبات: أعد ترتيب الصف",
     "permission.all": "الطلبات: كل الصلاحيات",
@@ -270,8 +267,8 @@
     "requestMeta.fulfillment.delivery": "Delivery",
     "requester.fulfillmentPref": "Fulfillment preference",
     "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
-    "errors.requestType.titleLevelRequest": "None available for this title",
-    "errors.requestType.itemLevelRequest": "None available for this item",
+    "errors.requestType.titleLevelRequest": "None available for this title and patron combination",
+    "errors.requestType.itemLevelRequest": "None available for this item and patron combination",
     "errors.requestType.selectItem": "Please select a request type",
     "actions.selectRequestType": "Select request type"
 }

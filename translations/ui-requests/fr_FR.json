@@ -147,7 +147,6 @@
     "filters.requestStatus.awaitingPickup": "Ouvert - En attente de retrait",
     "filters.requestStatus.inTransit": "Ouvert - En transit",
     "filters.requestStatus.notYetFilled": "Ouvert - Pas encore servi/fourni",
-    "noRequestTypesAvailable": "Aucun type de réservation disponible pour le document sélectionné",
     "exportExpiredHoldShelfToCsv": "Exporter le rapport pour {currentServicePoint}",
     "exportSearchResultsToCsv": "Exporter les résultats au format CSV",
     "common.cancel": "Annuler",
@@ -155,8 +154,6 @@
     "item.callNumberComponents.callNumber": "Chaîne de caractères de la cote",
     "item.callNumberComponents.suffix": "Suffixe de la cote",
     "item.chronology": "Chronologie",
-    "errorModal.title": "L'exemplaire ne peut pas être demandé",
-    "errorModal.message": "{title} ( {materialType} ) (Code-barres: {barcode} ) a comme statut <strong> {itemStatus} </strong> et ne peut pas être réservé.",
     "permission.moveRequest": "Demandes/réservations: déplacer vers un nouvel élément, réorganiser la file d'attente",
     "permission.reorderQueue": "Demandes/réservations: réorganiser la file d'attente",
     "permission.all": "Demandes/réservations: toutes les autorisations",
@@ -270,8 +267,8 @@
     "requestMeta.fulfillment.delivery": "Delivery",
     "requester.fulfillmentPref": "Fulfillment preference",
     "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
-    "errors.requestType.titleLevelRequest": "None available for this title",
-    "errors.requestType.itemLevelRequest": "None available for this item",
+    "errors.requestType.titleLevelRequest": "None available for this title and patron combination",
+    "errors.requestType.itemLevelRequest": "None available for this item and patron combination",
     "errors.requestType.selectItem": "Please select a request type",
     "actions.selectRequestType": "Select request type"
 }

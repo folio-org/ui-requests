@@ -147,7 +147,6 @@
     "filters.requestStatus.awaitingPickup": "Abierto - Recogida en espera",
     "filters.requestStatus.inTransit": "Abierto - En tránsito",
     "filters.requestStatus.notYetFilled": "Abierto - No rellenado todavía",
-    "noRequestTypesAvailable": "No hay tipos de reserva disponibles para el ítem seleccionado",
     "exportExpiredHoldShelfToCsv": "Export hold shelf clearance report for {currentServicePoint}",
     "exportSearchResultsToCsv": "Exportar resultados de búsqueda a CSV",
     "common.cancel": "Cancelar",
@@ -155,8 +154,6 @@
     "item.callNumberComponents.callNumber": "Número de llamada efectivo",
     "item.callNumberComponents.suffix": "Sufijo de número de llamada efectivo",
     "item.chronology": "Cronología",
-    "errorModal.title": "No se puede solicitar el ejemplar",
-    "errorModal.message": "{title} ({materialType}) (Código de barras: {barcode}) tienes el estado de ejemplar <strong>{itemStatus}</strong> y no se puede solicitar.",
     "permission.moveRequest": "Solicitudes: mover a un ejemplar nuevo, reordenar la cola",
     "permission.reorderQueue": "Solicitudes: Reordenar la cola",
     "permission.all": "Solicitudes: Todos los permisos",
@@ -270,8 +267,8 @@
     "requestMeta.fulfillment.delivery": "Delivery",
     "requester.fulfillmentPref": "Fulfillment preference",
     "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
-    "errors.requestType.titleLevelRequest": "None available for this title",
-    "errors.requestType.itemLevelRequest": "None available for this item",
+    "errors.requestType.titleLevelRequest": "None available for this title and patron combination",
+    "errors.requestType.itemLevelRequest": "None available for this item and patron combination",
     "errors.requestType.selectItem": "Please select a request type",
     "actions.selectRequestType": "Select request type"
 }

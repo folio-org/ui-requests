@@ -147,7 +147,6 @@
     "filters.requestStatus.awaitingPickup": "Offen - Abholregal",
     "filters.requestStatus.inTransit": "Offen - Im Transport",
     "filters.requestStatus.notYetFilled": "Offen - noch nicht erfüllt",
-    "noRequestTypesAvailable": "Kein Bestandsanfragentyp für ausgewähltes Exemplar verfügbar",
     "exportExpiredHoldShelfToCsv": "Abräumliste für das Abholregal {currentServicePoint} exportieren",
     "exportSearchResultsToCsv": "Suchergebnisse in CSV exportieren",
     "common.cancel": "Abbrechen",
@@ -155,8 +154,6 @@
     "item.callNumberComponents.callNumber": "Effektive Signatur",
     "item.callNumberComponents.suffix": "Effektive Signatur Suffix",
     "item.chronology": "Chronologie",
-    "errorModal.title": "Exemplar kann nicht bestellt werden.",
-    "errorModal.message": "{title} ({materialType}) (Barcode: {barcode}) hat den Exemplarstatus <strong>{itemStatus}</strong> und kann nicht vorgemerkt werden.",
     "permission.moveRequest": "Bestandsanfragen: Verschieben zu neuem Exemplar, Warteliste neu anordnen",
     "permission.reorderQueue": "Bestandsanfragen: Warteliste neu anordnen",
     "permission.all": "Bestandsanfragen: Alle Berechtigungen",
@@ -270,8 +267,8 @@
     "requestMeta.fulfillment.delivery": "Lieferung",
     "requester.fulfillmentPref": "Bereitstellungspräferenz",
     "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
-    "errors.requestType.titleLevelRequest": "None available for this title",
-    "errors.requestType.itemLevelRequest": "None available for this item",
+    "errors.requestType.titleLevelRequest": "None available for this title and patron combination",
+    "errors.requestType.itemLevelRequest": "None available for this item and patron combination",
     "errors.requestType.selectItem": "Please select a request type",
     "actions.selectRequestType": "Select request type"
 }
