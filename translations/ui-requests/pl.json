@@ -147,7 +147,6 @@
     "filters.requestStatus.awaitingPickup": "Otwarte - oczekuje na odbiór",
     "filters.requestStatus.inTransit": "Otwarte - w trakcie realizacji",
     "filters.requestStatus.notYetFilled": "Otwarte - jeszcze niewypełnione",
-    "noRequestTypesAvailable": "Brak dostępnych zamówień dla wybranej pozycji",
     "exportExpiredHoldShelfToCsv": "Wyeksportuj raport o zwolnionych rezerwacjach dla {currentServicePoint}.",
     "exportSearchResultsToCsv": "Eksportuj wynik wyszukiwania do CSV",
     "common.cancel": "Anuluj",
@@ -155,8 +154,6 @@
     "item.callNumberComponents.callNumber": "Efektywna sygnatura",
     "item.callNumberComponents.suffix": "Sufiks efektywnej sygnatury",
     "item.chronology": "Chronologia",
-    "errorModal.title": "Egzemplarz nie może zostać zamówiony",
-    "errorModal.message": "{title} ({materialType}) (Kod kreskowy: {barcode}) ma status <strong>{itemStatus}</strong> i nie może zostać zamówiony.",
     "permission.moveRequest": "Zamówienia: przejdź do nowego egzemplarza, zmień kolejkę",
     "permission.reorderQueue": "Zamówienia: kolejka zamówień",
     "permission.all": "Zamówienia: wszystkie uprawnienia",
@@ -270,8 +267,8 @@
     "requestMeta.fulfillment.delivery": "Delivery",
     "requester.fulfillmentPref": "Fulfillment preference",
     "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
-    "errors.requestType.titleLevelRequest": "None available for this title",
-    "errors.requestType.itemLevelRequest": "None available for this item",
+    "errors.requestType.titleLevelRequest": "None available for this title and patron combination",
+    "errors.requestType.itemLevelRequest": "None available for this item and patron combination",
     "errors.requestType.selectItem": "Please select a request type",
     "actions.selectRequestType": "Select request type"
 }

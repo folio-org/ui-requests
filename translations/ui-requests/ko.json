@@ -147,7 +147,6 @@
     "filters.requestStatus.awaitingPickup": "Open - Awaiting pickup",
     "filters.requestStatus.inTransit": "Open - In transit",
     "filters.requestStatus.notYetFilled": "Open - Not yet filled",
-    "noRequestTypesAvailable": "No request types available for selected item",
     "exportExpiredHoldShelfToCsv": "Export hold shelf clearance report for {currentServicePoint}",
     "exportSearchResultsToCsv": "검색 결과를 CSV로 내보내기",
     "common.cancel": "Cancel",
@@ -155,8 +154,6 @@
     "item.callNumberComponents.callNumber": "Effective call number",
     "item.callNumberComponents.suffix": "Effective call number suffix",
     "item.chronology": "Chronology",
-    "errorModal.title": "항목을 요청할 수 없습니다.",
-    "errorModal.message": "{title} ( {materialType} ) (바코드 : {barcode} )의 항목 상태는 <strong> {itemStatus} </strong> 이며 요청할 수 없습니다.",
     "permission.moveRequest": "Requests: Move to new item, reorder queue",
     "permission.reorderQueue": "Requests: Reorder queue",
     "permission.all": "Requests: All permissions",
@@ -270,8 +267,8 @@
     "requestMeta.fulfillment.delivery": "Delivery",
     "requester.fulfillmentPref": "Fulfillment preference",
     "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
-    "errors.requestType.titleLevelRequest": "None available for this title",
-    "errors.requestType.itemLevelRequest": "None available for this item",
+    "errors.requestType.titleLevelRequest": "None available for this title and patron combination",
+    "errors.requestType.itemLevelRequest": "None available for this item and patron combination",
     "errors.requestType.selectItem": "Please select a request type",
     "actions.selectRequestType": "Select request type"
 }
