@@ -306,6 +306,7 @@ export const RESOURCE_TYPES = {
   INSTANCE: 'instance',
   USER: 'user',
   HOLDING: 'holding',
+  REQUEST_TYPES: 'requestTypes',
 };
 
 export const ENTER_EVENT_KEY = 'Enter';

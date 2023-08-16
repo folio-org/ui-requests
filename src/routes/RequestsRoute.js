@@ -147,6 +147,22 @@ export const urls = {
 
     return `holdings-storage/holdings?${query}`;
   },
+  requestTypes: ({
+    requesterId,
+    itemId,
+    instanceId,
+  }) => {
+    const requestUrl = `circulation/requests/allowed-service-points?requester=${requesterId}`;
+    let itemQuery = '';
+
+    if (itemId) {
+      itemQuery = `&item=${itemId}`;
+    } else if (instanceId) {
+      itemQuery = `&instance=${instanceId}`;
+    }
+
+    return `${requestUrl}${itemQuery}`;
+  },
 };
 
 export const getListFormatter = (getRowURL, setURL) => ({

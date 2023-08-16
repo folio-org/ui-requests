@@ -40,7 +40,6 @@ const labelIds = {
   patronComment: 'ui-requests.patronComments',
   requestPosition: 'ui-requests.position',
   holdShelfExpirationDate: 'ui-requests.holdShelfExpirationDate',
-  noRequestTypesAvailable: 'ui-requests.noRequestTypesAvailable',
 };
 const testIds = {
   requestTypeDropDown: 'requestTypeDropDown',
@@ -52,7 +51,13 @@ const basicProps = {
   isTitleLevelRequest: true,
   isSelectedInstance: true,
   isSelectedItem: false,
+  isSelectedUser: true,
+  isRequestTypesReceived: true,
+  isRequestTypeLoading: false,
   requestTypeOptions: [],
+  values: {
+    keyOfRequestTypeField: 1,
+  },
   request: {
     status: requestStatuses.AWAITING_PICKUP,
     patronComments: 'comments',
@@ -249,9 +254,19 @@ describe('RequestInformation', () => {
       });
 
       it('should render "select request type" error', () => {
+        const props = {
+          ...basicProps,
+          requestTypeOptions: [
+            {
+              id: 'id',
+              value: 'value',
+            }
+          ],
+        };
+
         render(
           <RequestInformation
-            {...basicProps}
+            {...props}
           />
         );
 
@@ -315,55 +330,34 @@ describe('RequestInformation', () => {
 
         expect(errorMessage).toBeEmpty();
       });
-    });
 
-    describe('when "requestTypeError" is true', () => {
-      const props = {
-        ...basicProps,
-        requestTypeError: true,
-      };
+      it('should not render request type error when user is not selected', () => {
+        const props = {
+          ...basicProps,
+          isSelectedUser: false,
+          requestTypeOptions: [{
+            id: 'id',
+            value: 'value',
+          }],
+        };
 
-      beforeEach(() => {
-        isFormEditing.mockReturnValue(true);
         render(
           <RequestInformation
             {...props}
           />
         );
-      });
 
-      it('should render request type label', () => {
-        const requestTypeLabel = screen.getByText(labelIds.requestTypeLabel);
+        const event = {
+          target: {
+            value: 'test',
+          },
+        };
+        const requestTypeSelect = screen.getByTestId(testIds.requestTypeDropDown);
+        const errorMessage = screen.getByTestId(testIds.errorMessage);
 
-        expect(requestTypeLabel).toBeInTheDocument();
-      });
+        fireEvent.change(requestTypeSelect, event);
 
-      it('should render no request type available message', () => {
-        const noRequestTypesAvailable = screen.getByText(labelIds.noRequestTypesAvailable);
-
-        expect(noRequestTypesAvailable).toBeInTheDocument();
-      });
-    });
-
-    describe('when "requestTypeError" is false', () => {
-      const props = {
-        ...basicProps,
-        requestTypeError: false,
-      };
-
-      beforeEach(() => {
-        isFormEditing.mockReturnValue(true);
-        render(
-          <RequestInformation
-            {...props}
-          />
-        );
-      });
-
-      it('should not render no request type available message', () => {
-        const noRequestTypesAvailable = screen.queryByText(labelIds.noRequestTypesAvailable);
-
-        expect(noRequestTypesAvailable).not.toBeInTheDocument();
+        expect(errorMessage).toBeEmpty();
       });
     });
 

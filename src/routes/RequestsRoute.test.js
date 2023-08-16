@@ -1123,5 +1123,29 @@ describe('RequestsRoute', () => {
         expect(queryString).toBe(expectedResult);
       });
     });
+
+    describe('requestTypes', () => {
+      const requesterId = 'requesterIdUrl';
+      const itemId = 'itemIdUrl';
+      const instanceId = 'instanceIdUrl';
+
+      it('should return url with "itemId"', () => {
+        const expectedUrl = `circulation/requests/allowed-service-points?requester=${requesterId}&item=${itemId}`;
+
+        expect(urls.requestTypes({
+          requesterId,
+          itemId,
+        })).toBe(expectedUrl);
+      });
+
+      it('should return url with "instanceId"', () => {
+        const expectedUrl = `circulation/requests/allowed-service-points?requester=${requesterId}&instance=${instanceId}`;
+
+        expect(urls.requestTypes({
+          requesterId,
+          instanceId,
+        })).toBe(expectedUrl);
+      });
+    });
   });
 });

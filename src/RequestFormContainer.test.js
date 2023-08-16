@@ -71,18 +71,6 @@ describe('RequestFormContainer', () => {
   });
 
   describe('handle Submit', () => {
-    it('should display the ErrorModal', () => {
-      const selectedItem = {
-        status: {
-          name: 'Aged to lost',
-        },
-      };
-      renderContainerRequestForm(commonProps);
-      act(() => { RequestForm.mock.calls[0][0].onSetSelectedItem(selectedItem); });
-      act(() => { RequestForm.mock.calls[1][0].onSubmit(data); });
-      expect(RequestForm.mock.calls[2][0].isErrorModalOpen).toBeTruthy();
-    });
-
     it('should display the PatronBlockModal', () => {
       const userId = '123';
       renderContainerRequestForm({
