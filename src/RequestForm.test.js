@@ -467,8 +467,7 @@ describe('RequestForm', () => {
 
       rerender(
         <CommandList commands={defaultKeyboardShortcuts}>
-          {/*eslint-disable-next-line no-restricted-globals*/}
-          <Router history={history}>
+          <Router history={createMemoryHistory()}>
             <RequestForm
               {...newProps}
             />
