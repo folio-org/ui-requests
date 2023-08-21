@@ -33,7 +33,6 @@ import {
   REQUEST_LEVEL_TYPES,
   createModes,
   INVALID_REQUEST_HARDCODED_ID,
-  REQUEST_FORM_FIELD_NAMES,
 } from './constants';
 
 import css from './requests.css';

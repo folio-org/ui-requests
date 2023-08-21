@@ -676,7 +676,7 @@ class RequestForm extends React.Component {
 
     findResource(RESOURCE_TYPES.REQUEST_TYPES, {
       [resourceType]: resourceId,
-      requesterId: requesterId,
+      requesterId,
     })
       .then(requestTypes => {
         if (!isEmpty(requestTypes)) {

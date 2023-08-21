@@ -35,7 +35,6 @@ import {
   requestTypesMap,
   REQUEST_LEVEL_TYPES,
   fulfillmentTypeMap,
-  REQUEST_FORM_FIELD_NAMES,
 } from './constants';
 
 describe('escapeValue', () => {

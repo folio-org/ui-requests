@@ -521,7 +521,7 @@ describe('RequestForm', () => {
       );
     });
 
-    it('should trigger "FulfilmentPreference" with correct arguments', () => {
+    it('should trigger "FulfilmentPreference"', () => {
       expect(FulfilmentPreference).toHaveBeenCalled();
     });
 

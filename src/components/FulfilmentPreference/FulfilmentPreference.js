@@ -53,7 +53,7 @@ const FulfilmentPreference = ({
         {deliveryLocations.map(({ value, label }) => <option key={value} value={value}>{label}</option>)}
       </Field>
     );
-  }
+  };
   const renderPickupServicePoint = () => {
     const selectedRequestType = isEditForm ? request.requestType : values.requestType;
     const allowedServicePoints = requestTypes[selectedRequestType] || [];
@@ -90,7 +90,7 @@ const FulfilmentPreference = ({
         }
       </Field>
     );
-  }
+  };
   const onChangeFulfillment = (e) => {
     const selectedFulfillmentPreference = e.target.value;
     const isDelivery = isDeliverySelected(selectedFulfillmentPreference);
@@ -98,7 +98,7 @@ const FulfilmentPreference = ({
 
     form.change(REQUEST_FORM_FIELD_NAMES.FULFILLMENT_PREFERENCE, selectedFulfillmentPreference);
     changeDeliveryAddress(isDelivery, selectedAddressTypeId);
-  }
+  };
   const isDisabledFulfillmentPreference = !!request && (request.status === AWAITING_PICKUP || request.status === AWAITING_DELIVERY);
 
 
