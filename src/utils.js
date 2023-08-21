@@ -430,10 +430,10 @@ export const isFormEditing = (request) => {
   return !!get(request, 'id');
 };
 
-export function resetRequestTypeState(form) {
+export function resetFieldState(form, fieldName) {
   const registeredFields = form.getRegisteredFields();
 
-  if (includes(registeredFields, REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE)) {
-    form.resetFieldState(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE);
+  if (includes(registeredFields, fieldName)) {
+    form.resetFieldState(fieldName);
   }
 }

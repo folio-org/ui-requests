@@ -23,6 +23,9 @@ jest.mock('react-final-form', () => ({
         input: {
           validate,
           'data-testid': testId,
+          onChange: (e) => {
+            validate(e.target.value);
+          },
         },
       });
     }

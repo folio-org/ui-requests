@@ -26,7 +26,7 @@ import {
   getProxy,
   isSubmittingButtonDisabled,
   isFormEditing,
-  resetRequestTypeState,
+  resetFieldState,
 } from './utils';
 
 import {
@@ -769,21 +769,22 @@ describe('convertToSlipData', () => {
   });
 });
 
-describe('resetRequestTypeState', () => {
+describe('resetFieldState', () => {
   const form = {
     getRegisteredFields: jest.fn(),
     resetFieldState: jest.fn(),
   };
+  const fieldName = 'test';
 
   afterEach(() => {
     jest.restoreAllMocks();
     jest.clearAllMocks();
   });
 
-  describe('when request type field exists', () => {
+  describe('when field exists', () => {
     beforeEach(() => {
-      form.getRegisteredFields.mockReturnValue([REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE]);
-      resetRequestTypeState(form);
+      form.getRegisteredFields.mockReturnValue([fieldName]);
+      resetFieldState(form, fieldName);
     });
 
     it('should trigger "getRegisteredFields"', () => {
@@ -791,14 +792,14 @@ describe('resetRequestTypeState', () => {
     });
 
     it('should trigger "resetFieldState" with correct argument', () => {
-      expect(form.resetFieldState).toHaveBeenCalledWith(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE);
+      expect(form.resetFieldState).toHaveBeenCalledWith(fieldName);
     });
   });
 
-  describe('when request type field does not exist', () => {
+  describe('when field does not exist', () => {
     beforeEach(() => {
       form.getRegisteredFields.mockReturnValue([]);
-      resetRequestTypeState(form);
+      resetFieldState(form, fieldName);
     });
 
     it('should not trigger "resetFieldState"', () => {

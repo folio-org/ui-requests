@@ -25,7 +25,10 @@ import {
   REQUEST_TYPE_ERRORS,
 } from '../../constants';
 import PositionLink from '../../PositionLink';
-import { isFormEditing } from '../../utils';
+import {
+  isFormEditing,
+  resetFieldState,
+} from '../../utils';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 
@@ -47,6 +50,7 @@ const RequestInformation = ({
   isRequestTypesReceived,
   isRequestTypeLoading,
   values,
+  form,
 }) => {
   const isEditForm = isFormEditing(request);
   const holdShelfExpireDate = get(request, ['status'], '') === requestStatuses.AWAITING_PICKUP
@@ -70,6 +74,11 @@ const RequestInformation = ({
 
     return undefined;
   }, [isItemOrTitleSelected, isSelectedUser, requestTypeOptions, isTitleLevelRequest, isRequestTypesReceived]);
+  const changeRequestType = (input) => (e) => {
+    form.change(REQUEST_FORM_FIELD_NAMES.PICKUP_SERVICE_POINT_ID, undefined);
+    resetFieldState(form, REQUEST_FORM_FIELD_NAMES.PICKUP_SERVICE_POINT_ID);
+    input.onChange(e);
+  };
 
   return (
     <>
@@ -111,6 +120,7 @@ const RequestInformation = ({
                         label={<FormattedMessage id="ui-requests.requestType" />}
                         disabled={isRequestTypeDisabled}
                         error={error}
+                        onChange={changeRequestType(input)}
                         fullWidth
                         required
                       >
@@ -243,9 +253,10 @@ RequestInformation.propTypes = {
   isSelectedUser: PropTypes.bool.isRequired,
   isRequestTypesReceived: PropTypes.bool.isRequired,
   isRequestTypeLoading: PropTypes.bool.isRequired,
+  request: PropTypes.object.isRequired,
+  values: PropTypes.object.isRequired,
+  form: PropTypes.object.isRequired,
   requestTypeOptions: PropTypes.arrayOf(PropTypes.object),
-  request: PropTypes.object,
-  values: PropTypes.object,
 };
 
 export default RequestInformation;

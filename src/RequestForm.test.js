@@ -24,12 +24,15 @@ import RequestForm, {
   ID_TYPE_MAP,
 } from './RequestForm';
 import TitleInformation from './components/TitleInformation';
+import FulfilmentPreference from './components/FulfilmentPreference';
 import ItemDetail from './ItemDetail';
 
 import {
   REQUEST_LEVEL_TYPES,
   createModes,
-  RESOURCE_TYPES,
+  RESOURCE_TYPES, REQUEST_LAYERS,
+  REQUEST_FORM_FIELD_NAMES,
+  DEFAULT_REQUEST_TYPE_VALUE,
 } from './constants';
 
 let mockedTlrSettings;
@@ -39,7 +42,7 @@ jest.mock('./utils', () => ({
   getTlrSettings: jest.fn(() => (mockedTlrSettings)),
   getRequestLevelValue: jest.fn(),
 }));
-
+jest.mock('./components/FulfilmentPreference', () => jest.fn(() => null));
 jest.mock('@folio/stripes/final-form', () => () => jest.fn((component) => component));
 jest.mock('react-final-form', () => ({
   ...jest.requireActual('react-final-form'),
@@ -74,10 +77,6 @@ describe('RequestForm', () => {
     instanceInfoSection: 'instanceInfoSection',
     fulfillmentInput: 'fulfillmentInput',
     addressInput: 'addressInput'
-  };
-  const formFieldNames = {
-    fulfillmentPreference: 'fulfillmentPreference',
-    deliveryAddressTypeId: 'deliveryAddressTypeId',
   };
   const labelIds = {
     tlrCheckbox: 'ui-requests.requests.createTitleLevelRequest',
@@ -483,44 +482,65 @@ describe('RequestForm', () => {
   });
 
   describe('User information', () => {
-    beforeAll(() => {
-      mockedTlrSettings = {
-        titleLevelRequestsFeatureEnabled: false,
-      };
-    });
+    const instanceId = 'instanceId';
+    const requesterId = 'requesterId';
 
     beforeEach(() => {
-      renderComponent();
+      mockedTlrSettings = {
+        titleLevelRequestsFeatureEnabled: true,
+      };
+
+      const newProps = {
+        ...basicProps,
+        query: {
+          layer: REQUEST_LAYERS.EDIT,
+        },
+        request: {
+          requestLevel: REQUEST_LEVEL_TYPES.TITLE,
+          requester: {},
+          requesterId,
+          instanceId,
+        },
+        values: {
+          ...valuesMock,
+          requestType: 'requestType',
+          createTitleLevelRequest: true,
+        },
+        findResource: findResourceMock,
+      };
+      const rerender = renderComponent();
+
+      rerender(
+        <CommandList commands={defaultKeyboardShortcuts}>
+          <Router history={createMemoryHistory()}>
+            <RequestForm
+              {...newProps}
+            />
+          </Router>
+        </CommandList>
+      );
     });
 
-    describe('Fulfillment preference', () => {
-      it('should trigger `form.change` with correct arguments', () => {
-        const value = 'test';
-        const event = {
-          target: {
-            value,
-          },
-        };
-
-        fireEvent.change(screen.getByTestId(testIds.fulfillmentInput), event);
-
-        expect(mockedChangeFunction).toHaveBeenCalledWith(formFieldNames.fulfillmentPreference, value);
-      });
+    it('should trigger "FulfilmentPreference" with correct arguments', () => {
+      expect(FulfilmentPreference).toHaveBeenCalled();
     });
 
-    describe('Delivery address', () => {
-      it('should trigger `form.change` with correct arguments', () => {
-        const value = 'test';
-        const event = {
-          target: {
-            value,
-          },
-        };
+    it('should trigger "form.change" with correct arguments', () => {
+      const expectedArgs = [REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, DEFAULT_REQUEST_TYPE_VALUE];
 
-        fireEvent.change(screen.getByTestId(testIds.addressInput), event);
+      expect(basicProps.form.change).toHaveBeenCalledWith(...expectedArgs);
+    });
 
-        expect(mockedChangeFunction).toHaveBeenCalledWith(formFieldNames.deliveryAddressTypeId, value);
-      });
+    it('should trigger "findResource" with correct arguments', () => {
+      const expectedArgs = [
+        RESOURCE_TYPES.REQUEST_TYPES,
+        {
+          [ID_TYPE_MAP.INSTANCE_ID]: instanceId,
+          requesterId,
+        }
+      ];
+
+      expect(findResourceMock).toHaveBeenCalledWith(...expectedArgs);
     });
   });
 
