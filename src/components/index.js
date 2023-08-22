@@ -10,3 +10,4 @@ export { default as ItemInformation } from './ItemInformation';
 export { default as InstanceInformation } from './InstanceInformation';
 export { default as RequestInformation } from './RequestInformation';
 export { default as RequesterInformation } from './RequesterInformation';
+export { default as FulfilmentPreference } from './FulfilmentPreference';

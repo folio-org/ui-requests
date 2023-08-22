@@ -46,6 +46,7 @@ import {
   InstanceInformation,
   RequestInformation,
   RequesterInformation,
+  FulfilmentPreference,
 } from './components';
 import ItemsDialog from './ItemsDialog';
 import {
@@ -58,6 +59,7 @@ import {
   REQUEST_FORM_FIELD_NAMES,
   DEFAULT_REQUEST_TYPE_VALUE,
   requestTypeOptionMap,
+  REQUEST_LAYERS,
 } from './constants';
 import {
   handleKeyCommand,
@@ -74,7 +76,7 @@ import {
   getProxy,
   isSubmittingButtonDisabled,
   isFormEditing,
-  resetRequestTypeState,
+  resetFieldState,
 } from './utils';
 
 import css from './requests.css';
@@ -83,11 +85,10 @@ export const ID_TYPE_MAP = {
   ITEM_ID: 'itemId',
   INSTANCE_ID: 'instanceId',
 };
-
 export const getResourceTypeId = (isTitleLevelRequest) => (isTitleLevelRequest ? ID_TYPE_MAP.INSTANCE_ID : ID_TYPE_MAP.ITEM_ID);
-
+export const isTLR = (createTitleLevelRequest, requestLevel) => (createTitleLevelRequest || requestLevel === REQUEST_LEVEL_TYPES.TITLE);
 export const getRequestInformation = (values, selectedInstance, selectedItem, request) => {
-  const isTitleLevelRequest = values.createTitleLevelRequest || request?.requestLevel === REQUEST_LEVEL_TYPES.TITLE;
+  const isTitleLevelRequest = isTLR(values.createTitleLevelRequest, request?.requestLevel);
   const selectedResource = isTitleLevelRequest ? selectedInstance : selectedItem;
 
   return {
@@ -192,10 +193,11 @@ class RequestForm extends React.Component {
       isItemOrInstanceLoading: false,
       isItemsDialogOpen: false,
       isItemIdRequest: this.isItemIdProvided(),
-      requestTypeOptions: [],
+      requestTypes: {},
       isRequestTypesReceived: false,
       isRequestTypeLoading: false,
       isRequestTypesForDuplicate: false,
+      isRequestTypesForEditing: false,
     };
 
     this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
@@ -232,10 +234,12 @@ class RequestForm extends React.Component {
   componentDidUpdate(prevProps) {
     const {
       isRequestTypesForDuplicate,
+      isRequestTypesForEditing,
     } = this.state;
     const {
       initialValues,
       request,
+      values,
       parentResources,
       query,
       selectedItem,
@@ -295,6 +299,20 @@ class RequestForm extends React.Component {
         isRequestTypesForDuplicate: true,
       });
       this.getAvailableRequestTypes(selectedUser);
+    }
+
+    if (query?.layer === REQUEST_LAYERS.EDIT &&
+      !isRequestTypesForEditing
+    ) {
+      this.setState({
+        isRequestTypesForEditing: true,
+      });
+
+      const isTitleLevelRequest = isTLR(values.createTitleLevelRequest, request.requestLevel);
+      const resourceTypeId = getResourceTypeId(isTitleLevelRequest);
+      const resourceId = isTitleLevelRequest ? request.instanceId : request.itemId;
+
+      this.findRequestTypes(resourceId, request.requester.id || request.requesterId, resourceTypeId);
     }
 
     if (prevQuery.userBarcode !== query.userBarcode) {
@@ -411,7 +429,7 @@ class RequestForm extends React.Component {
     if (selectedResource?.id && user?.id) {
       const resourceTypeId = getResourceTypeId(isTitleLevelRequest);
 
-      this.findRequestTypes(selectedResource, user, resourceTypeId);
+      this.findRequestTypes(selectedResource.id, user.id, resourceTypeId);
     }
   }
 
@@ -434,7 +452,7 @@ class RequestForm extends React.Component {
       onSetSelectedUser(selectedUser);
       this.setState({
         proxy,
-        requestTypeOptions: [],
+        requestTypes: {},
         isRequestTypesReceived: false,
       });
       form.change(REQUEST_FORM_FIELD_NAMES.REQUESTER_ID, proxy.id);
@@ -501,7 +519,7 @@ class RequestForm extends React.Component {
     } else {
       this.setState({
         proxy: null,
-        requestTypeOptions: [],
+        requestTypes: {},
         isRequestTypesReceived: false,
       });
       form.change(REQUEST_FORM_FIELD_NAMES.PICKUP_SERVICE_POINT_ID, undefined);
@@ -640,33 +658,30 @@ class RequestForm extends React.Component {
     }
   }
 
-  findRequestTypes = (resource, requester, resourceType) => {
+  findRequestTypes = (resourceId, requesterId, resourceType) => {
     const {
       findResource,
       form,
+      request,
     } = this.props;
+    const isEditForm = isFormEditing(request);
+
+    if (!isEditForm) {
+      form.change(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, DEFAULT_REQUEST_TYPE_VALUE);
+    }
 
     this.setState({
       isRequestTypeLoading: true,
     });
 
     findResource(RESOURCE_TYPES.REQUEST_TYPES, {
-      [resourceType]: resource.id,
-      requesterId: requester.id,
+      [resourceType]: resourceId,
+      requesterId,
     })
       .then(requestTypes => {
         if (!isEmpty(requestTypes)) {
-          form.change(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, DEFAULT_REQUEST_TYPE_VALUE);
-
-          const requestTypeOptions = Object.keys(requestTypes).map(requestType => {
-            return {
-              id: requestTypeOptionMap[requestType],
-              value: requestType,
-            };
-          });
-
           this.setState({
-            requestTypeOptions,
+            requestTypes,
             isRequestTypesReceived: true,
           }, this.triggerRequestTypeValidation);
         } else {
@@ -674,8 +689,6 @@ class RequestForm extends React.Component {
             isRequestTypesReceived: true,
           }, this.triggerRequestTypeValidation);
         }
-
-        return resource;
       })
       .finally(() => {
         this.setState({
@@ -748,7 +761,7 @@ class RequestForm extends React.Component {
         });
     } else {
       this.setState({
-        requestTypeOptions: [],
+        requestTypes: {},
         isRequestTypesReceived: false,
       });
 
@@ -768,7 +781,7 @@ class RequestForm extends React.Component {
 
           form.change(REQUEST_FORM_FIELD_NAMES.ITEM_ID, item.id);
           form.change(REQUEST_FORM_FIELD_NAMES.ITEM_BARCODE, item.barcode);
-          resetRequestTypeState(form);
+          resetFieldState(form, REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE);
 
           // Setting state here is redundant with what follows, but it lets us
           // display the matched item as quickly as possible, without waiting for
@@ -782,7 +795,7 @@ class RequestForm extends React.Component {
         })
         .then(item => {
           if (item && selectedUser?.id) {
-            this.findRequestTypes(item, selectedUser, ID_TYPE_MAP.ITEM_ID);
+            this.findRequestTypes(item.id, selectedUser.id, ID_TYPE_MAP.ITEM_ID);
           }
 
           return item;
@@ -834,7 +847,7 @@ class RequestForm extends React.Component {
         });
     } else {
       this.setState({
-        requestTypeOptions: [],
+        requestTypes: {},
         isRequestTypesReceived: false,
       });
 
@@ -852,7 +865,7 @@ class RequestForm extends React.Component {
 
           form.change(REQUEST_FORM_FIELD_NAMES.INSTANCE_ID, instance.id);
           form.change(REQUEST_FORM_FIELD_NAMES.INSTANCE_HRID, instance.hrid);
-          resetRequestTypeState(form);
+          resetFieldState(form, REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE);
 
           onSetSelectedInstance(instance);
           this.setState({
@@ -863,7 +876,7 @@ class RequestForm extends React.Component {
         })
         .then(instance => {
           if (instance && selectedUser?.id) {
-            this.findRequestTypes(instance, selectedUser, ID_TYPE_MAP.INSTANCE_ID);
+            this.findRequestTypes(instance.id, selectedUser.id, ID_TYPE_MAP.INSTANCE_ID);
           }
 
           return instance;
@@ -976,7 +989,7 @@ class RequestForm extends React.Component {
     if (isCreateTlr) {
       onSetSelectedItem(undefined);
       this.setState({
-        requestTypeOptions: [],
+        requestTypes: {},
         isRequestTypesReceived: false,
       });
 
@@ -985,14 +998,14 @@ class RequestForm extends React.Component {
       }
     } else if (selectedInstance) {
       form.change(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, DEFAULT_REQUEST_TYPE_VALUE);
-      resetRequestTypeState(form);
+      resetFieldState(form, REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE);
       this.setState({
         isItemsDialogOpen: true,
       });
     } else {
       onSetSelectedInstance(undefined);
       this.setState({
-        requestTypeOptions: [],
+        requestTypes: {},
         isRequestTypesReceived: false,
       });
     }
@@ -1006,7 +1019,7 @@ class RequestForm extends React.Component {
     onSetSelectedInstance(undefined);
     this.setState({
       isItemsDialogOpen: false,
-      requestTypeOptions: [],
+      requestTypes: {},
       isRequestTypesReceived: false,
       isItemIdRequest: false,
     }, this.triggerItemBarcodeValidation);
@@ -1021,7 +1034,7 @@ class RequestForm extends React.Component {
     onSetSelectedInstance(undefined);
     this.setState({
       isItemsDialogOpen: false,
-      requestTypeOptions: [],
+      requestTypes: {},
     });
 
     if (item?.barcode) {
@@ -1090,7 +1103,7 @@ class RequestForm extends React.Component {
       isAwaitingForProxySelection,
       isItemsDialogOpen,
       proxy,
-      requestTypeOptions,
+      requestTypes,
       hasDelivery,
       defaultDeliveryAddressTypeId,
       isItemIdRequest,
@@ -1144,6 +1157,13 @@ class RequestForm extends React.Component {
       else if (keepEditBtn) keepEditBtn.click();
       else onCancel();
     };
+    const isFulfilmentPreferenceVisible = (values.requestType || isEditForm) && !isRequestTypeLoading && isRequestTypesReceived;
+    const requestTypeOptions = Object.keys(requestTypes).map(requestType => {
+      return {
+        id: requestTypeOptionMap[requestType],
+        value: requestType,
+      };
+    });
 
     return (
       <Paneset isRoot>
@@ -1284,16 +1304,9 @@ class RequestForm extends React.Component {
                     <div id="section-requester-info">
                       <RequesterInformation
                         {...this.props}
-                        defaultDeliveryAddressTypeId={defaultDeliveryAddressTypeId}
                         patronGroup={patronGroup}
-                        deliverySelected={deliverySelected}
-                        addressDetail={addressDetail}
-                        deliveryLocations={deliveryLocations}
-                        fulfillmentTypeOptions={fulfillmentTypeOptions}
                         selectedProxy={selectedProxy}
                         isLoading={isUserLoading}
-                        changeDeliveryAddress={this.changeDeliveryAddress}
-                        onChangeAddress={this.onChangeAddress}
                         onSelectProxy={this.onSelectProxy}
                         handleCloseProxy={this.handleCloseProxy}
                         findUser={this.findUser}
@@ -1317,7 +1330,24 @@ class RequestForm extends React.Component {
                       isSelectedItem={Boolean(selectedItem?.id)}
                       isSelectedUser={Boolean(selectedUser?.id)}
                       values={values}
+                      form={form}
                     />
+                    {isFulfilmentPreferenceVisible &&
+                      <FulfilmentPreference
+                        isEditForm={isEditForm}
+                        requestTypes={requestTypes}
+                        deliverySelected={deliverySelected}
+                        deliveryAddress={addressDetail}
+                        onChangeAddress={this.onChangeAddress}
+                        changeDeliveryAddress={this.changeDeliveryAddress}
+                        deliveryLocations={deliveryLocations}
+                        fulfillmentTypeOptions={fulfillmentTypeOptions}
+                        defaultDeliveryAddressTypeId={defaultDeliveryAddressTypeId}
+                        request={request}
+                        form={form}
+                        values={values}
+                      />
+                    }
                   </Accordion>
                 </AccordionSet>
               </AccordionStatus>

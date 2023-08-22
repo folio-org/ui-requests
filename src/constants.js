@@ -262,6 +262,10 @@ export const createModes = {
   DUPLICATE: 'duplicate',
 };
 
+export const REQUEST_LAYERS = {
+  EDIT: 'edit',
+};
+
 export const errorMessages = {
   REORDER_SYNC_ERROR: 'There is inconsistency between provided reordered queue and item queue.',
   DELETE_REQUEST_ERROR: 'The Request has already been closed',

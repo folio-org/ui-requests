@@ -55,6 +55,7 @@ import {
   requestTypesTranslations,
   requestStatusesTranslations,
   errorMessageLabels,
+  REQUEST_LAYERS,
 } from './constants';
 import {
   toUserAddress,
@@ -371,7 +372,7 @@ class ViewRequest extends React.Component {
 
     const query = location.search ? queryString.parse(location.search) : {};
 
-    if (query.layer === 'edit') {
+    if (query.layer === REQUEST_LAYERS.EDIT) {
       // The hold shelf expiration date is stored as a single value (e.g., 20201101T23:59:00-0400),
       // but it's exposed in the UI as separate date- and time-picker components.
       let momentDate;

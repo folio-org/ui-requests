@@ -33,7 +33,6 @@ import {
   REQUEST_LEVEL_TYPES,
   createModes,
   INVALID_REQUEST_HARDCODED_ID,
-  REQUEST_FORM_FIELD_NAMES,
 } from './constants';
 
 import css from './requests.css';
@@ -430,10 +429,10 @@ export const isFormEditing = (request) => {
   return !!get(request, 'id');
 };
 
-export function resetRequestTypeState(form) {
+export function resetFieldState(form, fieldName) {
   const registeredFields = form.getRegisteredFields();
 
-  if (includes(registeredFields, REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE)) {
-    form.resetFieldState(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE);
+  if (includes(registeredFields, fieldName)) {
+    form.resetFieldState(fieldName);
   }
 }

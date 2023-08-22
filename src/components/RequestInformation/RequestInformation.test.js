@@ -16,7 +16,10 @@ import RequestInformation, {
   getNoRequestTypeErrorMessageId,
 } from './RequestInformation';
 import PositionLink from '../../PositionLink';
-import { isFormEditing } from '../../utils';
+import {
+  isFormEditing,
+  resetFieldState,
+} from '../../utils';
 import {
   REQUEST_FORM_FIELD_NAMES,
   requestStatuses,
@@ -28,6 +31,7 @@ import {
 
 jest.mock('../../utils', () => ({
   isFormEditing: jest.fn(),
+  resetFieldState: jest.fn(),
 }));
 jest.mock('../../PositionLink', () => jest.fn(() => <div>PositionLink</div>));
 
@@ -57,6 +61,9 @@ const basicProps = {
   requestTypeOptions: [],
   values: {
     keyOfRequestTypeField: 1,
+  },
+  form: {
+    change: jest.fn(),
   },
   request: {
     status: requestStatuses.AWAITING_PICKUP,
@@ -230,11 +237,13 @@ describe('RequestInformation', () => {
       beforeEach(() => {
         Select.mockImplementation(jest.fn(({
           validate,
+          onChange,
           ...rest
         }) => {
           const [error, setError] = useState('');
           const handleChange = (e) => {
             setError(validate(e.target.value));
+            onChange(e);
           };
 
           return (
@@ -358,6 +367,39 @@ describe('RequestInformation', () => {
         fireEvent.change(requestTypeSelect, event);
 
         expect(errorMessage).toBeEmpty();
+      });
+    });
+
+    describe('Request type changing', () => {
+      beforeEach(() => {
+        const event = {
+          target: {
+            value: 'test',
+          },
+        };
+
+        isFormEditing.mockReturnValue(false);
+        render(
+          <RequestInformation
+            {...basicProps}
+          />
+        );
+
+        const requestTypeSelect = screen.getByTestId(testIds.requestTypeDropDown);
+
+        fireEvent.change(requestTypeSelect, event);
+      });
+
+      it('should trigger "form.change" with correct arguments', () => {
+        const expectedArgs = [REQUEST_FORM_FIELD_NAMES.PICKUP_SERVICE_POINT_ID, undefined];
+
+        expect(basicProps.form.change).toHaveBeenCalledWith(...expectedArgs);
+      });
+
+      it('should trigger "resetFieldState" with correct arguments', () => {
+        const expectedArgs = [basicProps.form, REQUEST_FORM_FIELD_NAMES.PICKUP_SERVICE_POINT_ID];
+
+        expect(resetFieldState).toHaveBeenCalledWith(...expectedArgs);
       });
     });
 
