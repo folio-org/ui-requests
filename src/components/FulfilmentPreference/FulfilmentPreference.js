@@ -6,7 +6,7 @@ import {
   Col,
   Row,
   Select,
-} from '@folio/stripes-components';
+} from '@folio/stripes/components';
 
 import {
   REQUEST_FORM_FIELD_NAMES,
