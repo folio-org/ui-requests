@@ -1,8 +1,8 @@
 import {
   render,
   screen,
-} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+} from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import '__mock__';
 
@@ -59,10 +59,10 @@ describe('PickupServicePointFilter', () => {
     expect(MultiSelectionFilter).toBeInTheDocument();
   });
 
-  it('should perform onClear event', () => {
+  it('should perform onClear event', async () => {
     const pickupServicePointsButton = screen.getByTestId(testIds.pickupServicePointAccordionButton);
 
-    userEvent.click(pickupServicePointsButton);
+    await userEvent.click(pickupServicePointsButton);
 
     expect(onClear).toHaveBeenCalledWith(requestFilterTypes.PICKUP_SERVICE_POINT);
   });

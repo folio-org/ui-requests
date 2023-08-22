@@ -4,7 +4,8 @@ import {
   fireEvent,
   cleanup,
   waitFor,
-} from '@testing-library/react';
+} from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import '../test/jest/__mock__';
 
@@ -212,7 +213,7 @@ describe('MoveRequestManager', () => {
       const get = jest.fn(() => 'application/json');
       const json = jest.fn(() => new Promise(res => res(error)));
 
-      beforeEach(() => {
+      beforeEach(async () => {
         const props = {
           ...basicProps,
           mutator: {
@@ -240,11 +241,11 @@ describe('MoveRequestManager', () => {
 
         const rowButton = screen.getByTestId(testIds.rowButton);
 
-        fireEvent.click(rowButton);
+        await userEvent.click(rowButton);
 
         const confirmButton = screen.getByTestId(testIds.confirmButton);
 
-        fireEvent.click(confirmButton);
+        await userEvent.click(confirmButton);
       });
 
       it('should trigger "ErrorModal" with correct props', async () => {

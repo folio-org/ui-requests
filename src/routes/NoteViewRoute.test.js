@@ -1,8 +1,8 @@
 import {
   render,
   screen,
-} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+} from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import '__mock__/';
 
@@ -43,8 +43,8 @@ describe('NoteViewRoute', () => {
       expect(screen.getByText('NoteViewPage')).toBeInTheDocument();
     });
 
-    it('history.replace function to be called when onEdit clicked', () => {
-      userEvent.click(screen.getByRole('button', { name: 'onEdit' }));
+    it('history.replace function to be called when onEdit clicked', async () => {
+      await userEvent.click(screen.getByRole('button', { name: 'onEdit' }));
 
       expect(historyData.replace).toBeCalled();
     });

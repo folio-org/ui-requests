@@ -1,6 +1,6 @@
 # Change history for ui-requests
 
-## IN PROGRESS
+## 9.0.0 IN PROGRESS
 
 * Made code improvements related to TLR. Refs UIREQ-871.
 * UI tests replacement with RTL/Jest for urls. Refs UIREQ-896.
@@ -57,6 +57,7 @@
 * Update Node.js to v18 in GitHub Actions. Refs UIREQ-1000.
 * Implementation of receiving available request types. Refs UIREQ-971.
 * Ensure Only Available Service Points Display When Placing a New Request. Refs UIREQ-977.
+* *BREAKING* Upgrade React to v18. Refs UIREQ-998.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)

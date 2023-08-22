@@ -2,7 +2,7 @@ import {
   render,
   screen,
   cleanup,
-} from '@testing-library/react';
+} from '@folio/jest-config-stripes/testing-library/react';
 
 import '../../../test/jest/__mock__';
 
