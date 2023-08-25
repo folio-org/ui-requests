@@ -3,8 +3,8 @@ import {
   screen,
   waitFor,
   cleanup,
-} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+} from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import '../../test/jest/__mock__';
 
@@ -452,8 +452,8 @@ describe('RequestsRoute', () => {
       expect(requestFilter).toBeInTheDocument();
     });
 
-    it('should trigger "onChange" after clicking on clear button', () => {
-      userEvent.click(screen.getByRole('button', { name: 'onClear' }));
+    it('should trigger "onChange" after clicking on clear button', async () => {
+      await await userEvent.click(screen.getByRole('button', { name: 'onClear' }));
 
       expect(RequestFilterData.onChange).toBeCalled();
     });
@@ -465,60 +465,60 @@ describe('RequestsRoute', () => {
     });
 
     it('should trigger "exportCsv"', async () => {
-      userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsToCsv' }));
+      await userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsToCsv' }));
 
       await waitFor(() => {
         expect(exportCsv).toBeCalled();
       });
     });
 
-    it('should render "ErrorModal"', () => {
-      userEvent.click(screen.getByTestId('exportExpiredHoldShelfToCsvButton'));
+    it('should render "ErrorModal"', async () => {
+      await userEvent.click(screen.getByTestId('exportExpiredHoldShelfToCsvButton'));
 
       const errorModal = screen.queryByText('ErrorModal');
 
       expect(errorModal).toBeInTheDocument();
     });
 
-    it('should hide "ErrorModal"', () => {
+    it('should hide "ErrorModal"', async () => {
       const errorModal = screen.queryByText('ErrorModal');
 
-      userEvent.click(screen.getByTestId('exportExpiredHoldShelfToCsvButton'));
-      userEvent.click(screen.getByRole('button', { name: 'Close' }));
+      await userEvent.click(screen.getByTestId('exportExpiredHoldShelfToCsvButton'));
+      await userEvent.click(screen.getByRole('button', { name: 'Close' }));
 
       expect(errorModal).not.toBeInTheDocument();
     });
 
-    it('should trigger "mutator.query.update"', () => {
+    it('should trigger "mutator.query.update"', async () => {
       const expectFilterValue = { 'filters': 'filter1.value1,filter1.value2,filter2.value3,filter4.Value4,filter4.Value5' };
 
-      userEvent.click(screen.getByRole('button', { name: 'onFilterChange' }));
+      await userEvent.click(screen.getByRole('button', { name: 'onFilterChange' }));
 
       expect(defaultProps.mutator.query.update).toBeCalledWith(expectFilterValue);
     });
 
-    it('should trigger "mutator.activeRecord.update"', () => {
-      userEvent.click(screen.getByRole('button', { name: 'onChangePatron' }));
+    it('should trigger "mutator.activeRecord.update"', async () => {
+      await userEvent.click(screen.getByRole('button', { name: 'onChangePatron' }));
 
       expect(defaultProps.mutator.activeRecord.update).toBeCalled();
     });
 
-    it('should trigger "fetch"', () => {
-      userEvent.click(screen.getByRole('button', { name: 'addRequestFields' }));
+    it('should trigger "fetch"', async () => {
+      await userEvent.click(screen.getByRole('button', { name: 'addRequestFields' }));
 
       expect(global.fetch).toBeCalled();
     });
 
-    it('should trigger "history.push"', () => {
-      userEvent.click(screen.getByRole('button', { name: 'onCloseNewRecord' }));
+    it('should trigger "history.push"', async () => {
+      await userEvent.click(screen.getByRole('button', { name: 'onCloseNewRecord' }));
 
       expect(defaultProps.history.push).toBeCalled();
     });
 
-    it('should render print pick slips label', () => {
+    it('should render print pick slips label', async () => {
       const printPickSlipsLabel = screen.getByText(labelIds.printPickSlips);
 
-      userEvent.click(screen.getByRole('button', { name: 'onBeforeGetContent' }));
+      await userEvent.click(screen.getByRole('button', { name: 'onBeforeGetContent' }));
 
       expect(printPickSlipsLabel).toBeInTheDocument();
     });
@@ -542,7 +542,7 @@ describe('RequestsRoute', () => {
       mode: createModes.DUPLICATE,
     };
 
-    it('should pass correct props if `requestLevel` is `Item`', () => {
+    it('should pass correct props if `requestLevel` is `Item`', async () => {
       const expectedResultForUpdate = {
         ...defaultExpectedResultForUpdate,
         itemBarcode: mockedRequest.item.barcode,
@@ -553,18 +553,18 @@ describe('RequestsRoute', () => {
 
       renderComponent(defaultProps);
 
-      userEvent.click(screen.getByTestId(testIds.searchAndSort));
+      await userEvent.click(screen.getByTestId(testIds.searchAndSort));
 
       expect(duplicateRequest).toHaveBeenCalledWith(mockedRequest);
       expect(mockedUpdateFunc).toHaveBeenCalledWith(expectedResultForUpdate);
     });
 
-    it('should pass correct props if requestLevel is Title', () => {
+    it('should pass correct props if requestLevel is Title', async () => {
       mockedRequest.requestLevel = REQUEST_LEVEL_TYPES.TITLE;
 
       renderComponent(defaultProps);
 
-      userEvent.click(screen.getByTestId(testIds.searchAndSort));
+      await userEvent.click(screen.getByTestId(testIds.searchAndSort));
 
       expect(duplicateRequest).toHaveBeenCalledWith(mockedRequest);
       expect(mockedUpdateFunc).toHaveBeenCalledWith(defaultExpectedResultForUpdate);

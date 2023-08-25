@@ -1,7 +1,7 @@
 import {
   render,
   screen,
-} from '@testing-library/react';
+} from '@folio/jest-config-stripes/testing-library/react';
 
 import '__mock__';
 

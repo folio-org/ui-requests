@@ -1,5 +1,5 @@
-import { render } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import '__mock__';
 
@@ -152,7 +152,7 @@ describe('RequestQueueRoute', () => {
     expect(mockMutator.requests.GET).toHaveBeenCalled();
   });
 
-  it('should call "history.goBack" if "location.state.request" is truthy', () => {
+  it('should call "history.goBack" if "location.state.request" is truthy', async () => {
     const goBack = jest.fn();
     const { getByText } = render(
       <RequestQueueRoute
@@ -164,12 +164,12 @@ describe('RequestQueueRoute', () => {
       />,
     );
 
-    userEvent.click(getByText('Close'));
+    await userEvent.click(getByText('Close'));
 
     expect(goBack).toHaveBeenCalledTimes(1);
   });
 
-  it('should call "history.push" with the correct URL if "location.state.request" is falsy', () => {
+  it('should call "history.push" with the correct URL if "location.state.request" is falsy', async () => {
     const push = jest.fn();
     const { getByText } = render(
       <RequestQueueRoute
@@ -181,7 +181,7 @@ describe('RequestQueueRoute', () => {
       />,
     );
 
-    userEvent.click(getByText('Close'));
+    await userEvent.click(getByText('Close'));
 
     expect(push).toHaveBeenCalledWith('/requests/view/1');
   });
