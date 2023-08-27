@@ -267,8 +267,8 @@
     "requestMeta.fulfillment.delivery": "Entrega",
     "requester.fulfillmentPref": "Preferência de atendimento",
     "errors.requestNotAllowedForPatronTitleCombination": "Solicitações de reserva não são permitidas para esta combinação de usuário e título",
-    "errors.requestType.titleLevelRequest": "Nenhum disponível para este título",
-    "errors.requestType.itemLevelRequest": "Nenhum disponível para este item",
+    "errors.requestType.titleLevelRequest": "Nenhum disponível para esta combinação de título e usuário",
+    "errors.requestType.itemLevelRequest": "Nenhum disponível para esta combinação de item e usuário",
     "errors.requestType.selectItem": "Por favor, selecione um tipo de solicitação",
     "actions.selectRequestType": "Selecione o tipo de solicitação"
 }

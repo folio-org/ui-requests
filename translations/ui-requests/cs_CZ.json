@@ -267,8 +267,8 @@
     "requestMeta.fulfillment.delivery": "Doručení",
     "requester.fulfillmentPref": "Preference vyřízení",
     "errors.requestNotAllowedForPatronTitleCombination": "Rezervace pro tuto kombinaci čtenáře a titulu není povolena",
-    "errors.requestType.titleLevelRequest": "Žádné k dispozici pro tento název",
-    "errors.requestType.itemLevelRequest": "Žádné k dispozici pro tuto jednotku",
+    "errors.requestType.titleLevelRequest": "Žádné k dispozici pro tuto kombinaci názvu a čtenáře",
+    "errors.requestType.itemLevelRequest": "Žádné k dispozici pro tuto kombinaci jednotky a čtenáře",
     "errors.requestType.selectItem": "Vyberte prosím typ žádanky",
     "actions.selectRequestType": "Vybrat typ žádanky"
 }
