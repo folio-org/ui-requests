@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import css from './DraggableRow.css';
 
-const getItemStyle = (draggableStyle) => {
+export const getItemStyle = (draggableStyle) => {
   return {
     userSelect: 'none',
     ...draggableStyle,
