@@ -1,6 +1,12 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import DraggableRow from './DraggableRow';
+import {
+  render,
+  screen,
+} from '@folio/jest-config-stripes/testing-library/react';
+
+import DraggableRow, {
+  getItemStyle,
+} from './DraggableRow';
 
 describe('DraggableRow', () => {
   const cells = [<div key="cell-1">Cell 1</div>];
@@ -22,39 +28,50 @@ describe('DraggableRow', () => {
     rowIndex: 1,
     rowProps,
   };
-  test('should render DraggableRow', () => {
+
+  describe('getItemStyle', () => {
+    it('should return style', () => {
+      const style = {
+        class: 'class',
+      };
+
+      expect(getItemStyle(style)).toEqual({
+        ...style,
+        userSelect: 'none',
+      });
+    });
+  });
+
+  it('should render DraggableRow', () => {
     render(
       <DraggableRow {...props} />
     );
+
     expect(screen.getByText('Cell 1')).toBeInTheDocument();
   });
 
-  test('should have css "class extra-class row-class" if isDragging prop false', () => {
+  it('should have css "class extra-class row-class" if isDragging prop false', () => {
     render(
       <DraggableRow {...props} />
     );
+
     expect(document.querySelector('[class="extra-class row-class"]')).toBeInTheDocument();
   });
 
-  const draggableProps = {
-    ...props,
-    snapshot: {
-      isDragging: true,
-    },
-  };
+  it('should have css "class extra-class row-class DraggableRow" if isDragging prop true', () => {
+    const draggableProps = {
+      ...props,
+      snapshot: {
+        isDragging: true,
+      },
+    };
 
-  test('DraggableRow using portal', () => {
     document.body.innerHTML = '<div id="ModuleContainer"></div>';
-    render(
-      <DraggableRow {...draggableProps} />
-    );
-    expect(document.getElementById('ModuleContainer')).toBeInTheDocument();
-  });
 
-  test('should have css "class extra-class row-class DraggableRow" if isDragging prop true', () => {
     render(
       <DraggableRow {...draggableProps} />
     );
+
     expect(document.querySelector('[class="extra-class row-class DraggableRow"]')).toBeInTheDocument();
   });
 });
