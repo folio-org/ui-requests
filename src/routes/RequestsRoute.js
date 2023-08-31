@@ -203,10 +203,12 @@ export const buildHoldRecords = (records) => {
 
 export const REQUEST_ERROR_MESSAGE_CODE = {
   REQUEST_NOT_ALLOWED_FOR_PATRON_TITLE_COMBINATION: 'REQUEST_NOT_ALLOWED_FOR_PATRON_TITLE_COMBINATION',
+  SERVICE_POINT_IS_NOT_PICKUP_LOCATION: 'SERVICE_POINT_IS_NOT_PICKUP_LOCATION',
 };
 
 export const REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS = {
   [REQUEST_ERROR_MESSAGE_CODE.REQUEST_NOT_ALLOWED_FOR_PATRON_TITLE_COMBINATION]: 'ui-requests.errors.requestNotAllowedForPatronTitleCombination',
+  [REQUEST_ERROR_MESSAGE_CODE.SERVICE_POINT_IS_NOT_PICKUP_LOCATION]: 'ui-requests.errors.servicePointIsNotPickupLocation',
 };
 
 export const getRequestErrorMessage = (error, intl) => {
