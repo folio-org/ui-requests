@@ -9,7 +9,10 @@ import '../test/jest/__mock__';
 import { Button } from '@folio/stripes/components';
 
 import { Loading } from './components';
-import ChooseRequestTypeDialog from './ChooseRequestTypeDialog';
+import ChooseRequestTypeDialog, {
+  getRequestTypeError,
+} from './ChooseRequestTypeDialog';
+import { REQUEST_LEVEL_TYPES } from './constants';
 
 jest.mock('./components', () => ({
   Loading: jest.fn(({ 'data-testid': dataTestId }) => (
@@ -26,19 +29,29 @@ jest.mock('./utils', () => ({
 const testIds = {
   loading: 'loading',
 };
+const labelIds = {
+  titleLevelRequestError: 'ui-requests.moveRequest.error.titleLevelRequest',
+  itemLevelRequestError: 'ui-requests.moveRequest.error.itemLevelRequest',
+};
 
 describe('ChooseRequestTypeDialog', () => {
   const buttonCallOrder = {
     confirm: 1,
     cancel: 2,
   };
-  const testItem = {};
   const mockOnConfirm = jest.fn();
   const mockOnCancel = jest.fn();
   const defaultTestProps = {
-    item: testItem,
     onConfirm: mockOnConfirm,
     onCancel: mockOnCancel,
+    requestTypes: [
+      {
+        id: 'testId',
+        value: 'Page',
+      }
+    ],
+    requestLevel: REQUEST_LEVEL_TYPES.ITEM,
+    isLoading: false,
   };
 
   afterEach(() => {
@@ -106,6 +119,24 @@ describe('ChooseRequestTypeDialog', () => {
 
     it('should render Loading component', () => {
       expect(screen.getByTestId(testIds.loading)).toBeVisible();
+    });
+  });
+
+  describe('getRequestTypeError', () => {
+    it('should render title level request error', () => {
+      const requestLevel = REQUEST_LEVEL_TYPES.TITLE;
+
+      render(getRequestTypeError(requestLevel));
+
+      expect(screen.getByText(labelIds.titleLevelRequestError)).toBeInTheDocument();
+    });
+
+    it('should render item level request error', () => {
+      const requestLevel = REQUEST_LEVEL_TYPES.ITEM;
+
+      render(getRequestTypeError(requestLevel));
+
+      expect(screen.getByText(labelIds.itemLevelRequestError)).toBeInTheDocument();
     });
   });
 });

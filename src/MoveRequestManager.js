@@ -7,11 +7,28 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
 import { stripesConnect } from '@folio/stripes/core';
+import {
+  getHeaderWithCredentials,
+} from '@folio/stripes/util';
 
 import ItemsDialog from './ItemsDialog';
 import ChooseRequestTypeDialog from './ChooseRequestTypeDialog';
 import ErrorModal from './components/ErrorModal';
-import { requestTypesByItemStatus } from './constants';
+import { REQUEST_LEVEL_TYPES } from './constants';
+import { getRequestTypeOptions } from './utils';
+
+export const getRequestTypeUrl = (request, okapiUrl) => {
+  const url = `circulation/requests/allowed-service-points?requester=${request.requesterId}`;
+  let resourceQuery = '';
+
+  if (request.requestLevel === REQUEST_LEVEL_TYPES.ITEM && request.itemId) {
+    resourceQuery = `&item=${request.itemId}`;
+  } else if (request.instanceId) {
+    resourceQuery = `&instance=${request.instanceId}`;
+  }
+
+  return `${okapiUrl}/${url}${resourceQuery}`;
+}
 
 class MoveRequestManager extends React.Component {
   static propTypes = {
@@ -44,6 +61,8 @@ class MoveRequestManager extends React.Component {
     this.state = {
       moveRequest: true,
       moveInProgress: false,
+      requestTypes: [],
+      isRequestTypesLoading: false,
     };
 
     this.steps = [
@@ -69,9 +88,12 @@ class MoveRequestManager extends React.Component {
   }
 
   shouldChooseRequestTypeDialogBeShown = () => {
-    const { selectedItem } = this.state;
-    const { request: { requestType } } = this.props;
-    const requestTypes = this.getPossibleRequestTypes(selectedItem);
+    const { requestTypes } = this.state;
+    const {
+      request: {
+        requestType,
+      },
+    } = this.props;
 
     return !includes(requestTypes, requestType);
   }
@@ -132,27 +154,49 @@ class MoveRequestManager extends React.Component {
     });
   }
 
-  getPossibleRequestTypes(item) {
-    const itemStatus = get(item, 'status.name');
-    return requestTypesByItemStatus[itemStatus] || [];
-  }
-
   onItemSelected = (selectedItem) => {
+    const {
+      request,
+      stripes,
+    } = this.props;
+    const httpHeadersOptions = {
+      ...getHeaderWithCredentials({
+        tenant: stripes.okapi.tenant,
+        token: stripes.store.getState().okapi.token,
+      })
+    };
+    const url = getRequestTypeUrl(request, stripes.okapi.url);
+
     this.setState({
-      selectedItem,
-    }, () => this.execSteps(0));
+      isRequestTypesLoading: true,
+      requestTypes: [],
+    });
+
+    fetch(url, httpHeadersOptions)
+      .then(res => res.json())
+      .then((res) => {
+        this.setState({
+          requestTypes: Object.keys(res),
+          selectedItem,
+        }, () => this.execSteps(0));
+      })
+      .finally(() => {
+        this.setState({
+          isRequestTypesLoading: false,
+        })
+      });
   }
 
   cancelMoveRequest = () => {
     this.setState({
       moveRequest: true,
       chooseRequestType: false,
+      selectedRequestType: '',
     });
   }
 
   closeErrorMessage = () => {
-    const { selectedItem } = this.state;
-    const requestTypes = this.getPossibleRequestTypes(selectedItem);
+    const { requestTypes } = this.state;
     const state = { errorMessage: null };
 
     if (requestTypes && requestTypes.length > 1) {
@@ -171,10 +215,11 @@ class MoveRequestManager extends React.Component {
     } = this.props;
     const {
       chooseRequestType,
-      selectedItem,
       errorMessage,
       moveRequest,
       moveInProgress,
+      requestTypes,
+      isRequestTypesLoading,
     } = this.state;
 
     return (
@@ -192,8 +237,9 @@ class MoveRequestManager extends React.Component {
           <ChooseRequestTypeDialog
             open={chooseRequestType}
             data-test-choose-request-type-modal
-            item={selectedItem}
-            isLoading={moveInProgress}
+            isLoading={moveInProgress || isRequestTypesLoading}
+            requestTypes={getRequestTypeOptions(requestTypes)}
+            requestLevel={request.requestLevel}
             onConfirm={this.confirmChoosingRequestType}
             onCancel={this.cancelMoveRequest}
           /> }

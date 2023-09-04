@@ -60,6 +60,7 @@
 * *BREAKING* Upgrade React to v18. Refs UIREQ-998.
 * Create Jest/RTL test for DraggableRow.js. Refs UIREQ-940.
 * Create Jest/RTL test for ComponentToPrint.js. Refs UIREQ-931.
+* Move request popup show available Request Types. Refs UIREQ-1005.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)
