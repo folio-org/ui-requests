@@ -187,7 +187,7 @@ class MoveRequestManager extends React.Component {
       .finally(() => {
         this.setState({
           isRequestTypesLoading: false,
-        })
+        });
       });
   }
 

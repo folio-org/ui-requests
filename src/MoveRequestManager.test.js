@@ -210,7 +210,7 @@ describe('MoveRequestManager', () => {
 
         fireEvent.click(cancelButton);
 
-        expect(chooseRequestTypeDialog).not.toBeInTheDocument()
+        expect(chooseRequestTypeDialog).not.toBeInTheDocument();
       });
     });
 
@@ -231,7 +231,7 @@ describe('MoveRequestManager', () => {
         fireEvent.click(confirmButton);
 
         await waitFor(() => {
-          expect(basicProps.onMove).toHaveBeenCalledWith(movedRequest)
+          expect(basicProps.onMove).toHaveBeenCalledWith(movedRequest);
         });
       });
     });

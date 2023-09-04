@@ -60,6 +60,8 @@
 * *BREAKING* Upgrade React to v18. Refs UIREQ-998.
 * Create Jest/RTL test for DraggableRow.js. Refs UIREQ-940.
 * Create Jest/RTL test for ComponentToPrint.js. Refs UIREQ-931.
+* Correctly escape CQL special characters in tag API queries. Refs UIREQ-918.
+* Add new pickup service point error. Refs UIREQ-981.
 * Move request popup show available Request Types. Refs UIREQ-1005.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
