@@ -32,8 +32,6 @@ import {
 
 import {
   INVALID_REQUEST_HARDCODED_ID,
-  itemStatuses,
-  requestTypesMap,
   REQUEST_LEVEL_TYPES,
   fulfillmentTypeMap,
   requestTypeOptionMap,

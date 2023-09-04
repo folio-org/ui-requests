@@ -4,7 +4,6 @@ import {
   fireEvent,
   cleanup,
   waitFor,
-  act,
 } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
@@ -182,7 +181,7 @@ describe('MoveRequestManager', () => {
 
       const rowButton = screen.getByTestId(testIds.rowButton);
 
-      act(() => fireEvent.click(rowButton));
+      fireEvent.click(rowButton);
     });
 
     it('should trigger "ChooseRequestTypeDialog" with correct props', async () => {

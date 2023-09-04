@@ -89,28 +89,28 @@ class ChooseRequestTypeDialog extends React.Component {
         onClose={onCancel}
         footer={footer}
       >
-        {isLoading
-          ? <Loading data-testid="loading" />
-          : <Select
-              label={<FormattedMessage id="ui-requests.moveRequest.chooseRequestMessage" />}
-              name="requestType"
-              onChange={this.selectRequestType}
-              disabled={isRequestTypeDisabled}
-              error={requestTypesError}
-            >
-              {requestTypes.map(({ id, value }) => (
-                <FormattedMessage id={id} key={id}>
-                  {translatedLabel => (
-                    <option
-                      value={value}
-                    >
-                      {translatedLabel}
-                    </option>
-                  )}
-                </FormattedMessage>
-              ))}
-            </Select>
-          }
+        {isLoading ?
+          <Loading data-testid="loading" /> :
+          <Select
+            label={<FormattedMessage id="ui-requests.moveRequest.chooseRequestMessage" />}
+            name="requestType"
+            onChange={this.selectRequestType}
+            disabled={isRequestTypeDisabled}
+            error={requestTypesError}
+          >
+            {requestTypes.map(({ id, value }) => (
+              <FormattedMessage id={id} key={id}>
+                {translatedLabel => (
+                  <option
+                    value={value}
+                  >
+                    {translatedLabel}
+                  </option>
+                )}
+              </FormattedMessage>
+            ))}
+          </Select>
+        }
       </Modal>
     );
   }

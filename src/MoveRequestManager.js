@@ -6,7 +6,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import { stripesConnect } from '@folio/stripes/core';
+import {
+  stripesConnect,
+  stripesShape,
+} from '@folio/stripes/core';
 import {
   getHeaderWithCredentials,
 } from '@folio/stripes/util';
@@ -28,7 +31,7 @@ export const getRequestTypeUrl = (request, okapiUrl) => {
   }
 
   return `${okapiUrl}/${url}${resourceQuery}`;
-}
+};
 
 class MoveRequestManager extends React.Component {
   static propTypes = {
@@ -43,6 +46,7 @@ class MoveRequestManager extends React.Component {
         POST: PropTypes.func.isRequired,
       }),
     }).isRequired,
+    stripes: stripesShape.isRequired,
   };
 
   static manifest = {
