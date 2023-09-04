@@ -1,4 +1,6 @@
-import filtersConfig from './RequestsFiltersConfig';
+import filtersConfig, {
+  escapingForSpecialCharactersWhichCanBreakCQL,
+} from './RequestsFiltersConfig';
 
 import {
   requestFilterTypes,
@@ -58,13 +60,13 @@ describe('RequestsFiltersConfig', () => {
   it('should return the expected query string for a single tag', () => {
     const tagsFilter = filtersConfig.find(f => f.name === 'tags');
 
-    expect(tagsFilter.parse('tag1')).toEqual('tags.tagList==*"*tag1*"*');
+    expect(tagsFilter.parse('tag1')).toEqual('(tags.tagList==("*\\"*tag1*\\"*"))');
   });
 
   it('should return the expected query string for an array of tags', () => {
     const tagsFilter = filtersConfig.find(f => f.name === 'tags');
 
-    expect(tagsFilter.parse(['tag1', 'tag2'])).toEqual('tags.tagList==(*"*tag1*"* or *"*tag2*"*)');
+    expect(tagsFilter.parse(['tag1', 'tag2'])).toEqual('(tags.tagList==("*\\"*tag1*\\"*" or "*\\"*tag2*\\"*"))');
   });
 
   it('should have a filter for pickup service point', () => {
@@ -77,5 +79,32 @@ describe('RequestsFiltersConfig', () => {
     };
 
     expect(pickupServicePointFilter).toEqual(expectedResult);
+  });
+
+  describe('escapingForSpecialCharactersWhichCanBreakCQL', () => {
+    it('should return empty string', () => {
+      expect(escapingForSpecialCharactersWhichCanBreakCQL()).toBe('');
+    });
+
+    it('should escape \\', () => {
+      expect(escapingForSpecialCharactersWhichCanBreakCQL('\\')).toBe('\\\\');
+    });
+
+    it('should escape "', () => {
+      expect(escapingForSpecialCharactersWhichCanBreakCQL('"')).toBe('\\"');
+    });
+
+    it('should escape ?', () => {
+      expect(escapingForSpecialCharactersWhichCanBreakCQL('?')).toBe('\\?');
+    });
+
+    it('should escape *', () => {
+      expect(escapingForSpecialCharactersWhichCanBreakCQL('*')).toBe('\\*');
+    });
+
+    it('should escape special characters in string', () => {
+      expect(escapingForSpecialCharactersWhichCanBreakCQL('(test") + [test] * ? \\ (){}[]-_=+<>/?.,~'))
+        .toBe('(test\\") + [test] \\* \\? \\\\ (){}[]-_=+<>/\\?.,~');
+    });
   });
 });

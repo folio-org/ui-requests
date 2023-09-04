@@ -2,6 +2,8 @@ import {
   requestFilterTypes,
 } from '../../constants';
 
+export const escapingForSpecialCharactersWhichCanBreakCQL = (string = '') => string.replace(/[\\"?*]/g, '\\$&');
+
 export default [
   {
     name: 'requestType',
@@ -29,9 +31,10 @@ export default [
     operator: '==',
     parse: (value) => {
       if (Array.isArray(value)) {
-        return `tags.tagList==(${value.map(v => `*"*${v}*"*`)
-          .join(' or ')})`;
-      } else return `tags.tagList==*"*${value}*"*`;
+        return `(tags.tagList==(${value.map(v => `"*\\"*${escapingForSpecialCharactersWhichCanBreakCQL(v)}*\\"*"`).join(' or ')}))`;
+      } else {
+        return `(tags.tagList==("*\\"*${escapingForSpecialCharactersWhichCanBreakCQL(value)}*\\"*"))`;
+      }
     }
   },
   {
