@@ -151,20 +151,18 @@ export const requestTypeOptionMap = {
   'Page': 'ui-requests.requestMeta.type.page',
 };
 
-export const requestTypesByItemStatus = {
-  [itemStatuses.CHECKED_OUT]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
-  [itemStatuses.AVAILABLE]: [requestTypesMap.PAGE],
-  [itemStatuses.AWAITING_PICKUP]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
-  [itemStatuses.AWAITING_DELIVERY]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
-  [itemStatuses.IN_TRANSIT]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
-  [itemStatuses.MISSING]: [requestTypesMap.HOLD],
-  [itemStatuses.PAGED]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
-  [itemStatuses.ON_ORDER]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
-  [itemStatuses.IN_PROCESS]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
-  [itemStatuses.RESTRICTED]: [requestTypesMap.HOLD, requestTypesMap.RECALL],
-};
-
-export const requestableItemStatuses = Object.keys(requestTypesByItemStatus);
+export const requestableItemStatuses = [
+  itemStatuses.CHECKED_OUT,
+  itemStatuses.AVAILABLE,
+  itemStatuses.AWAITING_PICKUP,
+  itemStatuses.AWAITING_DELIVERY,
+  itemStatuses.IN_TRANSIT,
+  itemStatuses.MISSING,
+  itemStatuses.PAGED,
+  itemStatuses.ON_ORDER,
+  itemStatuses.IN_PROCESS,
+  itemStatuses.RESTRICTED,
+];
 
 export const reportHeaders = [
   'requestType',

@@ -24,9 +24,7 @@ import {
 } from '@folio/stripes/components';
 
 import {
-  requestTypesByItemStatus,
   requestTypeOptionMap,
-  itemStatuses,
   fulfillmentTypeMap,
   requestStatuses,
   requestTypesMap,
@@ -100,13 +98,7 @@ export function getPatronGroup(patron, patronGroups) {
 }
 
 export function duplicateRequest(request) {
-  const itemStatus = get(request, 'item.status');
-  const requestType = request.requestType;
-  const requestTypes = requestTypesByItemStatus[itemStatus] || [];
   const clonedRequest = cloneDeep(request);
-
-  // check if the current request type is valid if not pick a first available type
-  clonedRequest.requestType = requestTypes.find(rt => rt === requestType) || requestTypes[0];
 
   return omit(clonedRequest, [
     'cancellationAdditionalInformation',
@@ -126,18 +118,11 @@ export function duplicateRequest(request) {
   ]);
 }
 
-export function getRequestTypeOptions(item) {
-  const itemStatus = item?.status?.name;
-  const requestTypes = requestTypesByItemStatus[itemStatus] || [];
-
-  return requestTypes.map(type => ({
-    id: requestTypeOptionMap[type],
-    value: type,
+export function getRequestTypeOptions(requestTypes) {
+  return requestTypes.map(requestType => ({
+    id: requestTypeOptionMap[requestType],
+    value: requestType,
   }));
-}
-
-export function isPagedItem(item) {
-  return item?.status?.name === itemStatuses.PAGED;
 }
 
 export function isDelivery(request) {

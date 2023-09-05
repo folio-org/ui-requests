@@ -27,14 +27,14 @@ import {
   isSubmittingButtonDisabled,
   isFormEditing,
   resetFieldState,
+  getRequestTypeOptions,
 } from './utils';
 
 import {
   INVALID_REQUEST_HARDCODED_ID,
-  itemStatuses,
-  requestTypesMap,
   REQUEST_LEVEL_TYPES,
   fulfillmentTypeMap,
+  requestTypeOptionMap,
 } from './constants';
 
 describe('escapeValue', () => {
@@ -128,38 +128,6 @@ describe('duplicateRequest', () => {
 
     omit.forEach(i => {
       expect(duped).not.toHaveProperty(i);
-    });
-  });
-
-  describe('adjusts request type if necessary', () => {
-    it('leaves request type if it is valid for item type', () => {
-      const r = {
-        monkey: 'bagel',
-        requestType: requestTypesMap.RECALL,
-        item: { status: itemStatuses.CHECKED_OUT },
-      };
-      const duped = duplicateRequest(r);
-      expect(duped.requestType).toBe(requestTypesMap.RECALL);
-    });
-
-    it('changes request type if it is invalid for item-status', () => {
-      const r = {
-        monkey: 'bagel',
-        requestType: requestTypesMap.RECALL,
-        item: { status: itemStatuses.AVAILABLE },
-      };
-      const duped = duplicateRequest(r);
-      expect(duped.requestType).toBe(requestTypesMap.PAGE);
-    });
-
-    it('omits request type if it is invalid for item-status', () => {
-      const r = {
-        monkey: 'bagel',
-        requestType: requestTypesMap.RECALL,
-        item: { status: itemStatuses.AGED_TO_LOST },
-      };
-      const duped = duplicateRequest(r);
-      expect(duped.requestType).toBeUndefined();
     });
   });
 });
@@ -804,5 +772,19 @@ describe('resetFieldState', () => {
     it('should not trigger "resetFieldState"', () => {
       expect(form.resetFieldState).not.toHaveBeenCalled();
     });
+  });
+});
+
+describe('getRequestTypeOptions', () => {
+  it('should return modified array of request type options', () => {
+    const requestTypes = ['Hold'];
+    const expectedResult = [
+      {
+        id: requestTypeOptionMap[requestTypes[0]],
+        value: requestTypes[0],
+      }
+    ];
+
+    expect(getRequestTypeOptions(requestTypes)).toEqual(expectedResult);
   });
 });
