@@ -22,13 +22,7 @@ import { getRequestTypeOptions } from './utils';
 
 export const getRequestTypeUrl = (request, okapiUrl, id) => {
   const url = `circulation/requests/allowed-service-points?requester=${request.requesterId}`;
-  let resourceQuery = '';
-
-  if (request.requestLevel === REQUEST_LEVEL_TYPES.ITEM) {
-    resourceQuery = `&item=${id}`;
-  } else {
-    resourceQuery = `&instance=${id}`;
-  }
+  const resourceQuery = request.requestLevel === REQUEST_LEVEL_TYPES.ITEM ? `&item=${id}` : `&instance=${id}`;
 
   return `${okapiUrl}/${url}${resourceQuery}`;
 };

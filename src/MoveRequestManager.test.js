@@ -17,6 +17,7 @@ import ChooseRequestTypeDialog from './ChooseRequestTypeDialog';
 import ErrorModal from './components/ErrorModal';
 import {
   REQUEST_LEVEL_TYPES,
+  requestTypeOptionMap,
   requestTypesMap,
 } from './constants';
 
@@ -42,7 +43,7 @@ const basicProps = {
     instance: {
       title: 'instanceTitle',
     },
-    requestLevel: 'Item',
+    requestLevel: REQUEST_LEVEL_TYPES.ITEM,
   },
   mutator: {
     move: {
@@ -128,7 +129,7 @@ describe('MoveRequestManager', () => {
   beforeEach(() => {
     global.fetch = jest.fn(() => Promise.resolve({
       json: () => ({
-        Hold: ['id'],
+        [requestTypesMap.HOLD]: ['id'],
       })
     }));
   });
@@ -176,7 +177,7 @@ describe('MoveRequestManager', () => {
       global.fetch = jest.fn(() => Promise.resolve({
         ok: true,
         json: () => ({
-          Hold: ['id'],
+          [requestTypesMap.HOLD]: ['id'],
         })
       }));
 
@@ -200,8 +201,8 @@ describe('MoveRequestManager', () => {
         isLoading: false,
         requestTypes: [
           {
-            id: 'ui-requests.requestMeta.type.hold',
-            value: 'Hold',
+            id: requestTypeOptionMap[requestTypesMap.HOLD],
+            value: requestTypesMap.HOLD,
           }
         ],
         requestLevel: basicProps.request.requestLevel,
@@ -260,8 +261,8 @@ describe('MoveRequestManager', () => {
         global.fetch = jest.fn(() => Promise.resolve({
           ok: true,
           json: () => ({
-            Hold: ['holdId'],
-            Recall: ['recallId'],
+            [requestTypesMap.HOLD]: ['holdId'],
+            [requestTypesMap.RECALL]: ['recallId'],
           })
         }));
 
@@ -368,8 +369,8 @@ describe('MoveRequestManager', () => {
         global.fetch = jest.fn(() => Promise.resolve({
           ok: true,
           json: () => ({
-            Hold: ['holdId'],
-            Recall: ['recallId'],
+            [requestTypesMap.HOLD]: ['holdId'],
+            [requestTypesMap.RECALL]: ['recallId'],
           })
         }));
 
