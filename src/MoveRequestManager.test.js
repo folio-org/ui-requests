@@ -173,6 +173,13 @@ describe('MoveRequestManager', () => {
 
   describe('Request type dialog', () => {
     beforeEach(() => {
+      global.fetch = jest.fn(() => Promise.resolve({
+        ok: true,
+        json: () => ({
+          Hold: ['id'],
+        })
+      }));
+
       render(
         <MoveRequestManager
           {...basicProps}
@@ -251,6 +258,7 @@ describe('MoveRequestManager', () => {
 
       beforeEach(async () => {
         global.fetch = jest.fn(() => Promise.resolve({
+          ok: true,
           json: () => ({
             Hold: ['holdId'],
             Recall: ['recallId'],
@@ -358,6 +366,7 @@ describe('MoveRequestManager', () => {
         };
 
         global.fetch = jest.fn(() => Promise.resolve({
+          ok: true,
           json: () => ({
             Hold: ['holdId'],
             Recall: ['recallId'],
@@ -395,27 +404,26 @@ describe('MoveRequestManager', () => {
   describe('getRequestTypeUrl', () => {
     const okapiUrl = 'okapiUrl';
     const requesterId = 'requesterId';
+    const resourceId = 'resourceId';
 
     it('should return item related link', () => {
       const request = {
         requestLevel: REQUEST_LEVEL_TYPES.ITEM,
-        itemId: 'itemId',
         requesterId,
       };
-      const expectedResult = `${okapiUrl}/circulation/requests/allowed-service-points?requester=${requesterId}&item=${request.itemId}`;
+      const expectedResult = `${okapiUrl}/circulation/requests/allowed-service-points?requester=${requesterId}&item=${resourceId}`;
 
-      expect(getRequestTypeUrl(request, okapiUrl)).toBe(expectedResult);
+      expect(getRequestTypeUrl(request, okapiUrl, resourceId)).toBe(expectedResult);
     });
 
     it('should return title related link', () => {
       const request = {
         requestLevel: REQUEST_LEVEL_TYPES.TITLE,
-        instanceId: 'instanceId',
         requesterId,
       };
-      const expectedResult = `${okapiUrl}/circulation/requests/allowed-service-points?requester=${requesterId}&instance=${request.instanceId}`;
+      const expectedResult = `${okapiUrl}/circulation/requests/allowed-service-points?requester=${requesterId}&instance=${resourceId}`;
 
-      expect(getRequestTypeUrl(request, okapiUrl)).toBe(expectedResult);
+      expect(getRequestTypeUrl(request, okapiUrl, resourceId)).toBe(expectedResult);
     });
   });
 });

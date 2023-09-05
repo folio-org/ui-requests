@@ -20,14 +20,14 @@ import ErrorModal from './components/ErrorModal';
 import { REQUEST_LEVEL_TYPES } from './constants';
 import { getRequestTypeOptions } from './utils';
 
-export const getRequestTypeUrl = (request, okapiUrl) => {
+export const getRequestTypeUrl = (request, okapiUrl, id) => {
   const url = `circulation/requests/allowed-service-points?requester=${request.requesterId}`;
   let resourceQuery = '';
 
-  if (request.requestLevel === REQUEST_LEVEL_TYPES.ITEM && request.itemId) {
-    resourceQuery = `&item=${request.itemId}`;
-  } else if (request.instanceId) {
-    resourceQuery = `&instance=${request.instanceId}`;
+  if (request.requestLevel === REQUEST_LEVEL_TYPES.ITEM) {
+    resourceQuery = `&item=${id}`;
+  } else {
+    resourceQuery = `&instance=${id}`;
   }
 
   return `${okapiUrl}/${url}${resourceQuery}`;
@@ -169,7 +169,7 @@ class MoveRequestManager extends React.Component {
         token: stripes.store.getState().okapi.token,
       })
     };
-    const url = getRequestTypeUrl(request, stripes.okapi.url);
+    const url = getRequestTypeUrl(request, stripes.okapi.url, selectedItem.id);
 
     this.setState({
       isRequestTypesLoading: true,
@@ -177,12 +177,21 @@ class MoveRequestManager extends React.Component {
     });
 
     fetch(url, httpHeadersOptions)
-      .then(res => res.json())
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+
+        return Promise.reject(res);
+      })
       .then((res) => {
         this.setState({
           requestTypes: Object.keys(res),
           selectedItem,
         }, () => this.execSteps(0));
+      })
+      .catch(() => {
+        this.execSteps(0);
       })
       .finally(() => {
         this.setState({
