@@ -9,9 +9,7 @@ import '../test/jest/__mock__';
 import { Button } from '@folio/stripes/components';
 
 import { Loading } from './components';
-import ChooseRequestTypeDialog, {
-  getRequestTypeError,
-} from './ChooseRequestTypeDialog';
+import ChooseRequestTypeDialog from './ChooseRequestTypeDialog';
 import { REQUEST_LEVEL_TYPES } from './constants';
 
 jest.mock('./components', () => ({
@@ -119,24 +117,6 @@ describe('ChooseRequestTypeDialog', () => {
 
     it('should render Loading component', () => {
       expect(screen.getByTestId(testIds.loading)).toBeVisible();
-    });
-  });
-
-  describe('getRequestTypeError', () => {
-    it('should render title level request error', () => {
-      const requestLevel = REQUEST_LEVEL_TYPES.TITLE;
-
-      render(getRequestTypeError(requestLevel));
-
-      expect(screen.getByText(labelIds.titleLevelRequestError)).toBeInTheDocument();
-    });
-
-    it('should render item level request error', () => {
-      const requestLevel = REQUEST_LEVEL_TYPES.ITEM;
-
-      render(getRequestTypeError(requestLevel));
-
-      expect(screen.getByText(labelIds.itemLevelRequestError)).toBeInTheDocument();
     });
   });
 });

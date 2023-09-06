@@ -17,15 +17,7 @@ import {
 import ItemsDialog from './ItemsDialog';
 import ChooseRequestTypeDialog from './ChooseRequestTypeDialog';
 import ErrorModal from './components/ErrorModal';
-import { REQUEST_LEVEL_TYPES } from './constants';
 import { getRequestTypeOptions } from './utils';
-
-export const getRequestTypeUrl = (request, okapiUrl, id) => {
-  const url = `circulation/requests/allowed-service-points?requester=${request.requesterId}`;
-  const resourceQuery = request.requestLevel === REQUEST_LEVEL_TYPES.ITEM ? `&item=${id}` : `&instance=${id}`;
-
-  return `${okapiUrl}/${url}${resourceQuery}`;
-};
 
 class MoveRequestManager extends React.Component {
   static propTypes = {
@@ -163,7 +155,7 @@ class MoveRequestManager extends React.Component {
         token: stripes.store.getState().okapi.token,
       })
     };
-    const url = getRequestTypeUrl(request, stripes.okapi.url, selectedItem.id);
+    const url = `${stripes.okapi.url}/circulation/requests/allowed-service-points?requester=${request.requesterId}&item=${selectedItem.id}`;
 
     this.setState({
       isRequestTypesLoading: true,
@@ -246,7 +238,6 @@ class MoveRequestManager extends React.Component {
             data-test-choose-request-type-modal
             isLoading={moveInProgress || isRequestTypesLoading}
             requestTypes={getRequestTypeOptions(requestTypes)}
-            requestLevel={request.requestLevel}
             onConfirm={this.confirmChoosingRequestType}
             onCancel={this.cancelMoveRequest}
           /> }
