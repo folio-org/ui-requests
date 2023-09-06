@@ -206,7 +206,6 @@
   "moveRequest.success": "Request has been moved successfully",
   "moveRequest.secondPositionTitle": "Request moved to position 2 of the queue",
   "moveRequest.secondPositionMessage": "Requests cannot be moved above page requests, even when fulfillment has not begun. This request will be moved to position 2 in the request queue.",
-  "moveRequest.error.titleLevelRequest": "None available for this title and patron combination",
   "moveRequest.error.itemLevelRequest": "None available for this item and patron combination",
 
   "createRequest.success": "Request has been successfully created for {requester}",

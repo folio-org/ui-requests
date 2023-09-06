@@ -9,14 +9,11 @@ import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import '../test/jest/__mock__';
 
-import MoveRequestManager, {
-  getRequestTypeUrl,
-} from './MoveRequestManager';
+import MoveRequestManager from './MoveRequestManager';
 import ItemsDialog from './ItemsDialog';
 import ChooseRequestTypeDialog from './ChooseRequestTypeDialog';
 import ErrorModal from './components/ErrorModal';
 import {
-  REQUEST_LEVEL_TYPES,
   requestTypeOptionMap,
   requestTypesMap,
 } from './constants';
@@ -43,7 +40,6 @@ const basicProps = {
     instance: {
       title: 'instanceTitle',
     },
-    requestLevel: REQUEST_LEVEL_TYPES.ITEM,
   },
   mutator: {
     move: {
@@ -205,7 +201,6 @@ describe('MoveRequestManager', () => {
             value: requestTypesMap.HOLD,
           }
         ],
-        requestLevel: basicProps.request.requestLevel,
       };
 
       await waitFor(() => expect(ChooseRequestTypeDialog).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {}));
@@ -399,32 +394,6 @@ describe('MoveRequestManager', () => {
 
         await waitFor(() => expect(ErrorModal).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {}));
       });
-    });
-  });
-
-  describe('getRequestTypeUrl', () => {
-    const okapiUrl = 'okapiUrl';
-    const requesterId = 'requesterId';
-    const resourceId = 'resourceId';
-
-    it('should return item related link', () => {
-      const request = {
-        requestLevel: REQUEST_LEVEL_TYPES.ITEM,
-        requesterId,
-      };
-      const expectedResult = `${okapiUrl}/circulation/requests/allowed-service-points?requester=${requesterId}&item=${resourceId}`;
-
-      expect(getRequestTypeUrl(request, okapiUrl, resourceId)).toBe(expectedResult);
-    });
-
-    it('should return title related link', () => {
-      const request = {
-        requestLevel: REQUEST_LEVEL_TYPES.TITLE,
-        requesterId,
-      };
-      const expectedResult = `${okapiUrl}/circulation/requests/allowed-service-points?requester=${requesterId}&instance=${resourceId}`;
-
-      expect(getRequestTypeUrl(request, okapiUrl, resourceId)).toBe(expectedResult);
     });
   });
 });

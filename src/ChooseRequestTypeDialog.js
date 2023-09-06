@@ -10,20 +10,10 @@ import {
 } from '@folio/stripes/components';
 
 import { Loading } from './components';
-import { REQUEST_LEVEL_TYPES } from './constants';
-
-export const getRequestTypeError = (requestLevel) => {
-  if (requestLevel === REQUEST_LEVEL_TYPES.TITLE) {
-    return <FormattedMessage id="ui-requests.moveRequest.error.titleLevelRequest" />;
-  }
-
-  return <FormattedMessage id="ui-requests.moveRequest.error.itemLevelRequest" />;
-};
 
 class ChooseRequestTypeDialog extends React.Component {
   static propTypes = {
     isLoading: PropTypes.bool.isRequired,
-    requestLevel: PropTypes.string.isRequired,
     onConfirm: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
     requestTypes: PropTypes.arrayOf(PropTypes.string),
@@ -56,11 +46,10 @@ class ChooseRequestTypeDialog extends React.Component {
       onCancel,
       isLoading,
       requestTypes,
-      requestLevel,
     } = this.props;
     const isRequestTypeDisabled = requestTypes.length === 0;
     const isConfirmButtonDisabled = isRequestTypeDisabled || isLoading;
-    const requestTypesError = isRequestTypeDisabled ? getRequestTypeError(requestLevel) : null;
+    const requestTypesError = isRequestTypeDisabled ? <FormattedMessage id="ui-requests.moveRequest.error.itemLevelRequest" /> : null;
     const footer = (
       <ModalFooter>
         <Button
