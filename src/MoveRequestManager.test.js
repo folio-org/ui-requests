@@ -14,7 +14,6 @@ import ItemsDialog from './ItemsDialog';
 import ChooseRequestTypeDialog from './ChooseRequestTypeDialog';
 import ErrorModal from './components/ErrorModal';
 import {
-  REQUEST_LEVEL_TYPES,
   requestTypeOptionMap,
   requestTypesMap,
 } from './constants';

@@ -27,10 +27,6 @@ jest.mock('./utils', () => ({
 const testIds = {
   loading: 'loading',
 };
-const labelIds = {
-  titleLevelRequestError: 'ui-requests.moveRequest.error.titleLevelRequest',
-  itemLevelRequestError: 'ui-requests.moveRequest.error.itemLevelRequest',
-};
 
 describe('ChooseRequestTypeDialog', () => {
   const buttonCallOrder = {
