@@ -235,7 +235,8 @@ describe('InstanceInformation', () => {
 
     it('should trigger "findInstance" with correct argument', () => {
       const hrid = 'hrid';
-      const searchButton = screen.getByText('Search Instance');
+      const searchButtonLabel = 'Search';
+      const searchButton = screen.getByText(searchButtonLabel);
 
       fireEvent.click(searchButton);
 
