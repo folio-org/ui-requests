@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
   render,
   screen,
@@ -56,13 +58,22 @@ import {
   DEFAULT_DISPLAYED_YEARS_AMOUNT,
   OPEN_REQUESTS_STATUSES,
   MAX_RECORDS,
+  INPUT_REQUEST_SEARCH_SELECTOR,
 } from '../constants';
 import { historyData } from '../../test/jest/fixtures/historyData';
 
-jest.mock('react', () => ({
-  ...jest.requireActual('react'),
-  createRef: jest.fn(),
-}));
+const createRefMock = {
+  current: {
+    focus: jest.fn(),
+  },
+};
+const createDocumentRefMock = {
+  focus: jest.fn(),
+};
+jest.spyOn(React, 'createRef').mockReturnValue(createRefMock);
+
+jest.spyOn(document, 'getElementById').mockReturnValue(createDocumentRefMock);
+
 jest.mock('query-string', () => ({
   ...jest.requireActual('query-string'),
   stringify: jest.fn(),
@@ -150,6 +161,7 @@ const labelIds = {
 };
 
 SearchAndSort.mockImplementation(jest.fn(({
+  paneTitleRef,
   actionMenu,
   detailProps: {
     onDuplicate,
@@ -184,6 +196,7 @@ SearchAndSort.mockImplementation(jest.fn(({
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div>
+      <div id={INPUT_REQUEST_SEARCH_SELECTOR} />
       <div
         aria-hidden="true"
         data-testid={testIds.searchAndSort}
@@ -220,6 +233,7 @@ SearchAndSort.mockImplementation(jest.fn(({
         </button>
       </div>
       {actionMenu({ onToggle: jest.fn() })}
+      <div paneTitleRef={paneTitleRef} />
     </div>
   );
 }));
@@ -378,12 +392,13 @@ describe('RequestsRoute', () => {
       query: {
         filters: 'filter1.value1,filter1.value2,filter2.value3',
         instanceId: 'instanceId',
-        query: 'testQueryTerm'
+        query: 'testQueryTerm',
       },
       records: {
         hasLoaded: true,
+        isPending: false,
         other: {
-          totalRecords: 1
+          totalRecords: 1,
         },
         records: [mockedRequest],
       },
@@ -521,6 +536,39 @@ describe('RequestsRoute', () => {
       await userEvent.click(screen.getByRole('button', { name: 'onBeforeGetContent' }));
 
       expect(printPickSlipsLabel).toBeInTheDocument();
+    });
+  });
+
+  describe('focus event', () => {
+    it('should trigger focus on pane title', async () => {
+      renderComponent(defaultProps);
+
+      await userEvent.click(screen.getByTestId(testIds.searchAndSort));
+
+      expect(createRefMock.current.focus).toBeCalled();
+    });
+
+    it('should trigger focus on search field', async () => {
+      const props = {
+        ...defaultProps,
+        resources: {
+          ...defaultProps.resources,
+          records: {
+            hasLoaded: true,
+            isPending: false,
+            other: {
+              totalRecords: 0,
+            },
+            records: [mockedRequest],
+          },
+        },
+      };
+
+      renderComponent(props);
+
+      await userEvent.click(screen.getByTestId(testIds.searchAndSort));
+
+      expect(createDocumentRefMock.focus).toBeCalled();
     });
   });
 

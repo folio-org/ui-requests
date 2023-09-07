@@ -58,6 +58,7 @@ import {
   OPEN_REQUESTS_STATUSES,
   fulfillmentTypeMap,
   DEFAULT_REQUEST_TYPE_VALUE,
+  INPUT_REQUEST_SEARCH_SELECTOR,
 } from '../constants';
 import {
   buildUrl,
@@ -449,6 +450,7 @@ class RequestsRoute extends React.Component {
       query: PropTypes.object,
       records: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
+        isPending: PropTypes.bool.isRequired,
         other: PropTypes.shape({
           totalRecords: PropTypes.number,
         }),
@@ -547,6 +549,7 @@ class RequestsRoute extends React.Component {
     };
 
     this.printContentRef = React.createRef();
+    this.paneTitleRef = React.createRef();
   }
 
   static getDerivedStateFromProps(props) {
@@ -607,6 +610,25 @@ class RequestsRoute extends React.Component {
 
     if (!this.props.resources.query.instanceId && instanceId) {
       this.props.mutator.query.update({ instanceId });
+    }
+
+    if (!this.props.resources.records.isPending) {
+      this.onSearchComplete(this.props.resources.records);
+    }
+  }
+
+  onSearchComplete(records) {
+    const paneTitleRef = this.paneTitleRef.current;
+    const resultsCount = get(records, 'other.totalRecords', 0);
+
+    if (!!resultsCount && paneTitleRef) {
+      paneTitleRef.focus();
+    } else {
+      const searchFieldRef = document.getElementById(INPUT_REQUEST_SEARCH_SELECTOR);
+
+      if (searchFieldRef) {
+        searchFieldRef.focus();
+      }
     }
   }
 
@@ -1209,6 +1231,7 @@ class RequestsRoute extends React.Component {
           }
           <div data-test-request-instances>
             <SearchAndSort
+              paneTitleRef={this.paneTitleRef}
               columnManagerProps={columnManagerProps}
               hasNewButton={false}
               actionMenu={actionMenu}
