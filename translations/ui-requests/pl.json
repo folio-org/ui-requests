@@ -106,7 +106,6 @@
     "loanType": "Sposób wypożyczania",
     "actions.moveRequest": "Przesuń zamówienie",
     "moveRequest.requestTypeChangeHeading": "Ten typ zamówień nie jest dostępny dla wybranego egzemplarza",
-    "moveRequest.requestTypeChangeMessage": "Zamówienie zostanie zmienione na <strong>{requestType}</strong>.",
     "moveRequest.chooseRequestMessage": "Proszę wybrać dopuszczalny typ",
     "moveRequest.confirm": "Potwierdź",
     "moveRequest.success": "Zamówienie zostało pomyślnie przeniesione",
@@ -270,5 +269,7 @@
     "errors.requestType.titleLevelRequest": "None available for this title and patron combination",
     "errors.requestType.itemLevelRequest": "None available for this item and patron combination",
     "errors.requestType.selectItem": "Please select a request type",
-    "actions.selectRequestType": "Select request type"
+    "actions.selectRequestType": "Select request type",
+    "errors.servicePointIsNotPickupLocation": "Service point is not a Pickup location",
+    "moveRequest.error.itemLevelRequest": "None available for this item and patron combination"
 }

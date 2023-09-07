@@ -106,7 +106,6 @@
     "loanType": "借閱類型",
     "actions.moveRequest": "移動預約",
     "moveRequest.requestTypeChangeHeading": "所选单件不允许使用当前请求类型",
-    "moveRequest.requestTypeChangeMessage": "请求将转换为<strong> {requestType} </strong> 。",
     "moveRequest.chooseRequestMessage": "請選擇允許的類型",
     "moveRequest.confirm": "確認",
     "moveRequest.success": "移動預約成功",
@@ -270,5 +269,7 @@
     "errors.requestType.titleLevelRequest": "None available for this title and patron combination",
     "errors.requestType.itemLevelRequest": "None available for this item and patron combination",
     "errors.requestType.selectItem": "Please select a request type",
-    "actions.selectRequestType": "Select request type"
+    "actions.selectRequestType": "Select request type",
+    "errors.servicePointIsNotPickupLocation": "Service point is not a Pickup location",
+    "moveRequest.error.itemLevelRequest": "None available for this item and patron combination"
 }

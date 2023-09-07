@@ -106,7 +106,6 @@
     "loanType": "Тип книговыдачи",
     "actions.moveRequest": "Переместить запрос",
     "moveRequest.requestTypeChangeHeading": "Тип текущего запроса не разрешен для выбранного элемента",
-    "moveRequest.requestTypeChangeMessage": "Запрос будет преобразован в <strong> {requestType} </strong> .",
     "moveRequest.chooseRequestMessage": "Пожалуйста, выберите допустимый тип",
     "moveRequest.confirm": "Подтвердить",
     "moveRequest.success": "Запрос был успешно перемещен",
@@ -270,5 +269,7 @@
     "errors.requestType.titleLevelRequest": "None available for this title and patron combination",
     "errors.requestType.itemLevelRequest": "None available for this item and patron combination",
     "errors.requestType.selectItem": "Please select a request type",
-    "actions.selectRequestType": "Select request type"
+    "actions.selectRequestType": "Select request type",
+    "errors.servicePointIsNotPickupLocation": "Service point is not a Pickup location",
+    "moveRequest.error.itemLevelRequest": "None available for this item and patron combination"
 }
