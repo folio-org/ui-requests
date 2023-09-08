@@ -106,7 +106,6 @@
     "loanType": "Tipo de empréstimo",
     "actions.moveRequest": "Pedido de mudança",
     "moveRequest.requestTypeChangeHeading": "Tipo de solicitações atuais não são permitidos para o item selecionado",
-    "moveRequest.requestTypeChangeMessage": "A requisição será convertida em <strong>{requestType}</strong>.",
     "moveRequest.chooseRequestMessage": "Por favor, selecione o tipo permitido",
     "moveRequest.confirm": "Confirmar",
     "moveRequest.success": "Requisição foi movida com sucesso",
@@ -267,8 +266,10 @@
     "requestMeta.fulfillment.delivery": "Entrega",
     "requester.fulfillmentPref": "Preferência de atendimento",
     "errors.requestNotAllowedForPatronTitleCombination": "Solicitações de reserva não são permitidas para esta combinação de usuário e título",
-    "errors.requestType.titleLevelRequest": "Nenhum disponível para este título",
-    "errors.requestType.itemLevelRequest": "Nenhum disponível para este item",
+    "errors.requestType.titleLevelRequest": "Nenhum disponível para esta combinação de título e usuário",
+    "errors.requestType.itemLevelRequest": "Nenhum disponível para esta combinação de item e usuário",
     "errors.requestType.selectItem": "Por favor, selecione um tipo de solicitação",
-    "actions.selectRequestType": "Selecione o tipo de solicitação"
+    "actions.selectRequestType": "Selecione o tipo de solicitação",
+    "errors.servicePointIsNotPickupLocation": "Este ponto de serviço não é um local de retirada",
+    "moveRequest.error.itemLevelRequest": "Nenhum disponível para esta combinação de item e usuário"
 }
