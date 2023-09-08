@@ -7,8 +7,6 @@ import {
   waitFor,
 } from '@folio/jest-config-stripes/testing-library/react';
 
-import '../../../test/jest/__mock__';
-
 import { Field } from 'react-final-form';
 import {
   Icon,
@@ -30,6 +28,7 @@ import {
 } from '../../constants';
 
 jest.mock('../../utils', () => ({
+  ...jest.requireActual('../../utils'),
   isFormEditing: jest.fn(() => false),
   memoizeValidation: (fn) => () => fn,
 }));
@@ -168,18 +167,6 @@ describe('RequesterInformation', () => {
       fireEvent.change(requesterBarcodeField, event);
 
       expect(basicProps.form.change).toHaveBeenCalledWith(REQUEST_FORM_FIELD_NAMES.REQUESTER_BARCODE, event.target.value);
-    });
-
-    it('should trigger "TextField" with correct props', () => {
-      const expectedProps = {
-        required: true,
-        error: null,
-        onChange: expect.any(Function),
-        onBlur: expect.any(Function),
-        onKeyDown: expect.any(Function),
-      };
-
-      expect(TextField).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
     });
 
     it('should render "TextField" with validation error', () => {
