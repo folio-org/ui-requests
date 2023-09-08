@@ -25,18 +25,26 @@ jest.mock('@folio/stripes/core', () => ({
   stripesConnect: Component => props => <Component {...props} />,
   Pluggable: jest.fn(({
     searchLabel,
-    selectInstance,
-  }) => (
-    <>
-      <div>{searchLabel}</div>
-      <button
-        type="button"
-        onClick={() => selectInstance({ hrid: 'hrid' })}
-      >
-        Search Instance
-      </button>
-    </>
-  )),
+    selectInstance = () => {},
+    selectUser = () => {},
+  }) => {
+    const handleClick = () => {
+      selectInstance({ hrid: 'hrid' });
+      selectUser();
+    };
+
+    return (
+      <>
+        <div>{searchLabel}</div>
+        <button
+          type="button"
+          onClick={handleClick}
+        >
+          Search
+        </button>
+      </>
+    );
+  }),
   IfPermission: jest.fn(({ children }) => <div>{children}</div>),
   TitleManager: jest.fn(jest.fn(() => null)),
   AppIcon: jest.fn(({ children }) => <div>{children}</div>),

@@ -30,8 +30,8 @@ import {
 
 import css from '../../requests.css';
 
-const VISIBLE_COLUMNS = ['active', 'name', 'patronGroup', 'username', 'barcode'];
-const COLUMN_MAPPING = {
+export const VISIBLE_COLUMNS = ['active', 'name', 'patronGroup', 'username', 'barcode'];
+export const COLUMN_MAPPING = {
   name: <FormattedMessage id="ui-requests.requester.name" />,
   patronGroup: <FormattedMessage id="ui-requests.requester.patronGroup.group" />,
   username: <FormattedMessage id="ui-requests.requester.username" />,
@@ -42,7 +42,6 @@ class RequesterInformation extends Component {
   static propTypes = {
     form: PropTypes.object.isRequired,
     values: PropTypes.object.isRequired,
-    selectedUser: PropTypes,
     onSetSelectedUser: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
     onSetIsPatronBlocksOverridden: PropTypes.func.isRequired,
@@ -52,6 +51,7 @@ class RequesterInformation extends Component {
     findUser: PropTypes.func.isRequired,
     triggerUserBarcodeValidation: PropTypes.func.isRequired,
     stripes: stripesShape.isRequired,
+    selectedUser: PropTypes.object,
     isLoading: PropTypes.bool,
     request: PropTypes.object,
     optionLists: PropTypes.object,
@@ -229,6 +229,7 @@ class RequesterInformation extends Component {
 
                   return (
                     <Field
+                      data-testid="requesterBarcodeField"
                       key={key}
                       name={REQUEST_FORM_FIELD_NAMES.REQUESTER_BARCODE}
                       validate={this.validate(REQUEST_FORM_FIELD_NAMES.REQUESTER_BARCODE, key)}
