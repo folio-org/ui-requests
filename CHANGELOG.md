@@ -65,6 +65,7 @@
 * Move request popup show available Request Types. Refs UIREQ-1005.
 * Cover RequesterInformation by jest/RTL tests. Refs UIREQ-952.
 * Prefer `@folio/stripes` exports to private paths when importing components. Refs UIREQ-1020.
+* Add `One or more Pickup locations are no longer available` error. Refs UIREQ-1022.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)
