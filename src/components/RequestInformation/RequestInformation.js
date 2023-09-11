@@ -14,7 +14,7 @@ import {
   Select,
   TextArea,
   Timepicker,
-} from '@folio/stripes-components';
+} from '@folio/stripes/components';
 
 import {
   requestStatuses,

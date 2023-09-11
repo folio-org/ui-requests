@@ -13,7 +13,7 @@ import { Field } from 'react-final-form';
 import {
   Icon,
   TextField,
-} from '@folio/stripes-components';
+} from '@folio/stripes/components';
 import { Pluggable } from '@folio/stripes/core';
 
 import InstanceInformation, {
