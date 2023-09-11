@@ -64,6 +64,7 @@
 * Add new pickup service point error. Refs UIREQ-981.
 * Move request popup show available Request Types. Refs UIREQ-1005.
 * Cover RequesterInformation by jest/RTL tests. Refs UIREQ-952.
+* *BREAKING* bump `react-intl` to `v6.4.4`. Refs UIREQ-1025.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)
