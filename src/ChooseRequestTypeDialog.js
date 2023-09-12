@@ -73,7 +73,7 @@ class ChooseRequestTypeDialog extends React.Component {
     return (
       <Modal
         data-test-choose-request-type-modal
-        label={<FormattedMessage id="ui-requests.moveRequest.requestTypeChangeHeading" />}
+        label={<FormattedMessage id="ui-requests.moveRequest.chooseRequestType" />}
         open={open}
         onClose={onCancel}
         footer={footer}
