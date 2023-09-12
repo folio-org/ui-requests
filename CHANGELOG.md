@@ -67,6 +67,7 @@
 * Prefer `@folio/stripes` exports to private paths when importing components. Refs UIREQ-1020.
 * Add `One or more Pickup locations are no longer available` error. Refs UIREQ-1022.
 * *BREAKING* bump `react-intl` to `v6.4.4`. Refs UIREQ-1025.
+* Rename modal window for select request type. Refs UIREQ-1026.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)

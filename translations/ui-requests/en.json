@@ -201,7 +201,7 @@
   "items.instanceItems": "Other items in {title}",
   "items.instanceItems.notFound": "No items found",
 
-  "moveRequest.requestTypeChangeHeading": "Current requests type not allowed for selected item",
+  "moveRequest.chooseRequestType": "Select request type",
   "moveRequest.chooseRequestMessage": "Please select allowed type",
   "moveRequest.confirm": "Confirm",
   "moveRequest.success": "Request has been moved successfully",
