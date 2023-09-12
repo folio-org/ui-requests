@@ -10,7 +10,7 @@ import {
   Icon,
   Row,
   TextField,
-} from '@folio/stripes-components';
+} from '@folio/stripes/components';
 import {
   Pluggable,
   stripesShape,

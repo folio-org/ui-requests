@@ -6,7 +6,7 @@
 * UI tests replacement with RTL/Jest for urls. Refs UIREQ-896.
 * Reassign limit variable from hardcoded value to MAX_RECORDS constant for `ItemsDialog.js`. Refs UIREQ-913.
 * Reassign limit variable from hardcoded value to MAX_RECORDS constant for `RequestsRoute.js`. Refs UIREQ-914.
-* Include pickup service point in display of result list. Refs-900.
+* Include pickup service point in display of result list. Refs UIREQ-900.
 * Include "Effective call number string" in display of result list. Refs UIREQ-898.
 * Include call number in Action menu list of fields to display. Refs UIREQ-899.
 * Include pickup service point in Action menu list of fields to display. Refs UIREQ-901.
@@ -22,7 +22,7 @@
 * Create Jest/RTL test for ReferredRecord.js. Refs UIREQ-936.
 * Create Jest/RTL test for NoteCreateRoute.js. Refs: UIREQ-943.
 * Leverage cookie-based authentication in all API requests. Refs UIREQ-861.
-* Create Jest/RTL test for NoteEditRoute.js. Refs: UIREQ-944.
+* Create Jest/RTL test for NoteEditRoute.js. Refs UIREQ-944.
 * Update `circulation` okapi interface to `14.0` version. Refs UIREQ-954.
 * Added requestDate token. Refs UIREQ-962.
 * Update `request-storage` okapi interface to `6.0` version. Refs UIREQ-963.
@@ -64,6 +64,8 @@
 * Add new pickup service point error. Refs UIREQ-981.
 * Move request popup show available Request Types. Refs UIREQ-1005.
 * Cover RequesterInformation by jest/RTL tests. Refs UIREQ-952.
+* Prefer `@folio/stripes` exports to private paths when importing components. Refs UIREQ-1020.
+* Add `One or more Pickup locations are no longer available` error. Refs UIREQ-1022.
 * *BREAKING* bump `react-intl` to `v6.4.4`. Refs UIREQ-1025.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)

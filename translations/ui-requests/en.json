@@ -87,6 +87,7 @@
   "errors.requestType.selectItem": "Please select a request type",
   "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
   "errors.servicePointIsNotPickupLocation": "Service point is not a Pickup location",
+  "errors.requestPickupServicePointIsNotAllowed": "One or more Pickup locations are no longer available",
 
   "actions.label": "Actions",
   "actions.edit": "Edit",
