@@ -26,7 +26,7 @@ const labelIds = {
 };
 
 jest.mock('@folio/stripes/smart-components', () => ({
-  ProxyManager: jest.fn(() => <div/>),
+  ProxyManager: jest.fn(() => <div />),
 }));
 jest.mock('./utils', () => ({
   getFullName: jest.fn((user) => user.lastName),
