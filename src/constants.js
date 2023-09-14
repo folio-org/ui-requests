@@ -262,6 +262,7 @@ export const createModes = {
 
 export const REQUEST_LAYERS = {
   EDIT: 'edit',
+  CREATE: 'create',
 };
 
 export const errorMessages = {
