@@ -24,6 +24,9 @@ jest.mock('./utils', () => ({
   }])),
 }));
 
+const labelIds = {
+  chooseRequestType: 'ui-requests.moveRequest.chooseRequestType',
+};
 const testIds = {
   loading: 'loading',
 };
@@ -58,6 +61,10 @@ describe('ChooseRequestTypeDialog', () => {
   describe('with default props', () => {
     beforeEach(() => {
       render(<ChooseRequestTypeDialog {...defaultTestProps} />);
+    });
+
+    it('should render modal title', () => {
+      expect(screen.getByText(labelIds.chooseRequestType)).toBeInTheDocument();
     });
 
     it('should render confirm button', () => {
