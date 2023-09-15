@@ -33,6 +33,7 @@ import {
   RESOURCE_TYPES, REQUEST_LAYERS,
   REQUEST_FORM_FIELD_NAMES,
   DEFAULT_REQUEST_TYPE_VALUE,
+  RESOURCE_KEYS,
 } from './constants';
 
 let mockedTlrSettings;
@@ -149,6 +150,7 @@ describe('RequestForm', () => {
       isErrorModalOpen = false,
       instanceId = '',
       blocked = false,
+      findResource = findResourceMock,
     } = passedProps;
 
     const props = {
@@ -162,7 +164,7 @@ describe('RequestForm', () => {
         },
       },
       values,
-      findResource: findResourceMock,
+      findResource,
       request: mockedRequest,
       query: mockedQuery,
       selectedItem,
@@ -481,7 +483,7 @@ describe('RequestForm', () => {
     });
   });
 
-  describe('User information', () => {
+  describe('Request information', () => {
     const instanceId = 'instanceId';
     const requesterId = 'requesterId';
 
@@ -541,6 +543,85 @@ describe('RequestForm', () => {
       ];
 
       expect(findResourceMock).toHaveBeenCalledWith(...expectedArgs);
+    });
+  });
+
+  describe('User information', () => {
+    const initialUserId = 'userId';
+    const updatedUserId = 'updatedUserId';
+
+    beforeEach(() => {
+      mockedTlrSettings = {
+        titleLevelRequestsFeatureEnabled: true,
+      };
+    });
+
+    describe('Initial rendering', () => {
+      const findResource = jest.fn(() => Promise.resolve({}));
+
+      beforeEach(() => {
+        renderComponent({
+          mockedQuery: {
+            layer: REQUEST_LAYERS.CREATE,
+            userId: initialUserId,
+          },
+          findResource,
+        });
+      });
+
+      it('should trigger "findResource" with correct arguments to get user data', () => {
+        const expectedArgs = [
+          RESOURCE_TYPES.USER,
+          initialUserId,
+          RESOURCE_KEYS.id,
+        ];
+
+        expect(findResource).toHaveBeenCalledWith(...expectedArgs);
+      });
+    });
+
+    describe('Component updating', () => {
+      const findResource = jest.fn(() => Promise.resolve({}));
+
+      beforeEach(() => {
+        const newProps = {
+          ...basicProps,
+          values: {},
+          request: {},
+          query: {
+            layer: REQUEST_LAYERS.CREATE,
+            userId: updatedUserId,
+          },
+          findResource,
+        };
+        const rerender = renderComponent({
+          mockedQuery: {
+            layer: REQUEST_LAYERS.CREATE,
+            userId: initialUserId,
+          },
+          findResource,
+        });
+
+        rerender(
+          <CommandList commands={defaultKeyboardShortcuts}>
+            <Router history={createMemoryHistory()}>
+              <RequestForm
+                {...newProps}
+              />
+            </Router>
+          </CommandList>
+        );
+      });
+
+      it('should trigger "findResource" with correct arguments to get user data', () => {
+        const expectedArgs = [
+          RESOURCE_TYPES.USER,
+          updatedUserId,
+          RESOURCE_KEYS.id,
+        ];
+
+        expect(findResource).toHaveBeenCalledWith(...expectedArgs);
+      });
     });
   });
 
