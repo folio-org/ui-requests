@@ -208,8 +208,16 @@ class RequestForm extends React.Component {
   }
 
   componentDidMount() {
+    const {
+      query: {
+        userId,
+      },
+    } = this.props;
+
     if (this.props.query.userBarcode) {
       this.findUser(RESOURCE_KEYS.barcode, this.props.query.userBarcode);
+    } else if (userId) {
+      this.findUser(RESOURCE_KEYS.id, userId);
     }
 
     if (this.props.query.itemBarcode) {
@@ -317,6 +325,10 @@ class RequestForm extends React.Component {
 
     if (prevQuery.userBarcode !== query.userBarcode) {
       this.findUser(RESOURCE_KEYS.barcode, query.userBarcode);
+    }
+
+    if (prevQuery.userId !== query.userId) {
+      this.findUser(RESOURCE_KEYS.id, query.userId);
     }
 
     if (prevQuery.itemBarcode !== query.itemBarcode) {

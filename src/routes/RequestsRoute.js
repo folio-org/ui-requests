@@ -906,6 +906,7 @@ class RequestsRoute extends React.Component {
       userBarcode: null,
       itemId: null,
       instanceId: null,
+      userId: null,
       query: null,
     });
 
