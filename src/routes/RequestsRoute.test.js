@@ -56,6 +56,7 @@ import {
   DEFAULT_DISPLAYED_YEARS_AMOUNT,
   OPEN_REQUESTS_STATUSES,
   MAX_RECORDS,
+  REQUEST_OPERATIONS,
 } from '../constants';
 import { historyData } from '../../test/jest/fixtures/historyData';
 
@@ -1126,24 +1127,37 @@ describe('RequestsRoute', () => {
 
     describe('requestTypes', () => {
       const requesterId = 'requesterIdUrl';
+      const operation = REQUEST_OPERATIONS.CREATE;
       const itemId = 'itemIdUrl';
       const instanceId = 'instanceIdUrl';
 
       it('should return url with "itemId"', () => {
-        const expectedUrl = `circulation/requests/allowed-service-points?requester=${requesterId}&item=${itemId}`;
+        const expectedUrl = `circulation/requests/allowed-service-points?requesterId=${requesterId}&operation=${operation}&itemId=${itemId}`;
 
         expect(urls.requestTypes({
           requesterId,
           itemId,
+          operation,
         })).toBe(expectedUrl);
       });
 
       it('should return url with "instanceId"', () => {
-        const expectedUrl = `circulation/requests/allowed-service-points?requester=${requesterId}&instance=${instanceId}`;
+        const expectedUrl = `circulation/requests/allowed-service-points?requesterId=${requesterId}&operation=${operation}&instanceId=${instanceId}`;
 
         expect(urls.requestTypes({
           requesterId,
           instanceId,
+          operation,
+        })).toBe(expectedUrl);
+      });
+
+      it('should return url with "requestId"', () => {
+        const requestId = 'requestId';
+        const expectedUrl = `circulation/requests/allowed-service-points?operation=${operation}&requestId=${requestId}`;
+
+        expect(urls.requestTypes({
+          requestId,
+          operation,
         })).toBe(expectedUrl);
       });
     });

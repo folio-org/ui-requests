@@ -151,17 +151,22 @@ export const urls = {
     requesterId,
     itemId,
     instanceId,
+    requestId,
+    operation,
   }) => {
-    const requestUrl = `circulation/requests/allowed-service-points?requester=${requesterId}`;
-    let itemQuery = '';
-
-    if (itemId) {
-      itemQuery = `&item=${itemId}`;
-    } else if (instanceId) {
-      itemQuery = `&instance=${instanceId}`;
+    if (requestId) {
+      return `circulation/requests/allowed-service-points?operation=${operation}&requestId=${requestId}`;
     }
 
-    return `${requestUrl}${itemQuery}`;
+    let requestUrl = `circulation/requests/allowed-service-points?requesterId=${requesterId}&operation=${operation}`;
+
+    if (itemId) {
+      requestUrl = `${requestUrl}&itemId=${itemId}`;
+    } else if (instanceId) {
+      requestUrl = `${requestUrl}&instanceId=${instanceId}`;
+    }
+
+    return requestUrl;
   },
 };
 
