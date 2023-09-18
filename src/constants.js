@@ -221,6 +221,7 @@ export const requestFilterTypes = {
   REQUEST_STATUS: 'requestStatus',
   REQUEST_LEVELS: 'requestLevels',
   PICKUP_SERVICE_POINT: 'pickupServicePoints',
+  EffLocation_SERVICE_POINT: 'effectiveLocationPrimaryServicePoint',
 };
 
 export const REQUEST_LEVEL_TYPES = {

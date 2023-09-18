@@ -58,6 +58,7 @@ import {
   OPEN_REQUESTS_STATUSES,
   fulfillmentTypeMap,
   DEFAULT_REQUEST_TYPE_VALUE,
+  requestFilterTypes,
 } from '../constants';
 import {
   buildUrl,
@@ -174,6 +175,7 @@ export const getListFormatter = (getRowURL, setURL) => ({
       <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
     </AppIcon>
   ),
+  'itemEffectiveLocationPrimaryServicePointName': rq => (rq.item ? rq.item.location.effectiveLocationPrimaryServicePointName : DEFAULT_FORMATTER_VALUE),
   'requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : DEFAULT_FORMATTER_VALUE),
   'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : DEFAULT_FORMATTER_VALUE),
   'requestStatus': rq => (requestStatusesTranslations[rq.status]
@@ -273,6 +275,12 @@ class RequestsRoute extends React.Component {
             RequestsFiltersConfig,
             2, // do not fetch unless we have a query or a filter
           ),
+          effectiveLocationPrimaryServicePointId: makeQueryFunction('', '', {}, [{
+            name: requestFilterTypes.EffLocation_SERVICE_POINT,
+            cql: 'effectiveLocationPrimaryServicePointId',
+            values: [],
+            operator: '==',
+          }], 2)
         },
         staticFallback: { params: {} },
       },
@@ -513,6 +521,7 @@ class RequestsRoute extends React.Component {
       title: formatMessage({ id: 'ui-requests.requests.title' }),
       year: formatMessage({ id: 'ui-requests.requests.year' }),
       itemBarcode: formatMessage({ id: 'ui-requests.requests.itemBarcode' }),
+      itemEffectiveLocationPrimaryServicePointName: formatMessage({ id: 'ui-requests.requests.itemEffectiveLocationPrimaryServicePointName' }),
       callNumber: formatMessage({ id: 'ui-requests.requests.callNumber' }),
       type: formatMessage({ id: 'ui-requests.requests.type' }),
       requestStatus: formatMessage({ id: 'ui-requests.requests.status' }),

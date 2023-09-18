@@ -25,6 +25,7 @@ import {
 
 import { PickupServicePointFilter } from './PickupServicePointFilter';
 import { RequestLevelFilter } from './RequestLevelFilter';
+import EffectiveLocationServicePointFilter from "./EffectiveLocationServicePointFilter";
 
 export default class RequestsFilters extends React.Component {
   static propTypes = {
@@ -33,6 +34,7 @@ export default class RequestsFilters extends React.Component {
       requestLevels: PropTypes.arrayOf(PropTypes.string),
       requestType: PropTypes.arrayOf(PropTypes.string),
       tags: PropTypes.arrayOf(PropTypes.string),
+      effectiveLocationPrimaryServicePoint: PropTypes.arrayOf(PropTypes.string),
       pickupServicePoints: PropTypes.arrayOf(PropTypes.string),
     }).isRequired,
     resources: PropTypes.object.isRequired,
@@ -58,6 +60,7 @@ export default class RequestsFilters extends React.Component {
   render() {
     const {
       activeFilters: {
+        effectiveLocationPrimaryServicePoint = [],
         tags = [],
         requestType = [],
         requestStatus = [],
@@ -127,6 +130,13 @@ export default class RequestsFilters extends React.Component {
             ariaLabelledBy={requestFilterTypes.TAGS}
           />
         </Accordion>
+
+        <EffectiveLocationServicePointFilter
+            activeValues={effectiveLocationPrimaryServicePoint}
+            servicePoints={this.props.resources?.servicePoints?.records}
+            onChange={onChange}
+            onClear={onClear}
+        />
 
         <PickupServicePointFilter
           activeValues={pickupServicePoints}
