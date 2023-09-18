@@ -105,7 +105,6 @@
     "materialType": "資料種別",
     "loanType": "Loan type",
     "actions.moveRequest": "Move request",
-    "moveRequest.requestTypeChangeHeading": "Current requests type not allowed for selected item",
     "moveRequest.chooseRequestMessage": "Please select allowed type",
     "moveRequest.confirm": "Confirm",
     "moveRequest.success": "Request has been moved successfully",
@@ -271,5 +270,7 @@
     "errors.requestType.selectItem": "Please select a request type",
     "actions.selectRequestType": "Select request type",
     "errors.servicePointIsNotPickupLocation": "Service point is not a Pickup location",
-    "moveRequest.error.itemLevelRequest": "None available for this item and patron combination"
+    "moveRequest.error.itemLevelRequest": "None available for this item and patron combination",
+    "errors.requestPickupServicePointIsNotAllowed": "One or more Pickup locations are no longer available",
+    "moveRequest.chooseRequestType": "Select request type"
 }

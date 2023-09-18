@@ -105,7 +105,6 @@
     "materialType": "Tipo de material",
     "loanType": "Tipo de empréstimo",
     "actions.moveRequest": "Pedido de mudança",
-    "moveRequest.requestTypeChangeHeading": "Tipo de solicitações atuais não são permitidos para o item selecionado",
     "moveRequest.chooseRequestMessage": "Por favor, selecione o tipo permitido",
     "moveRequest.confirm": "Confirmar",
     "moveRequest.success": "Requisição foi movida com sucesso",
@@ -271,5 +270,7 @@
     "errors.requestType.selectItem": "Por favor, selecione um tipo de solicitação",
     "actions.selectRequestType": "Selecione o tipo de solicitação",
     "errors.servicePointIsNotPickupLocation": "Este ponto de serviço não é um local de retirada",
-    "moveRequest.error.itemLevelRequest": "Nenhum disponível para esta combinação de item e usuário"
+    "moveRequest.error.itemLevelRequest": "Nenhum disponível para esta combinação de item e usuário",
+    "errors.requestPickupServicePointIsNotAllowed": "Um ou mais locais de retirada não estão mais disponíveis",
+    "moveRequest.chooseRequestType": "Selecione o tipo de solicitação"
 }
