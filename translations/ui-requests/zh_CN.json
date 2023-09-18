@@ -105,7 +105,6 @@
     "materialType": "资料类型",
     "loanType": "借阅类型",
     "actions.moveRequest": "移动请求",
-    "moveRequest.requestTypeChangeHeading": "所选单件不允许使用当前请求类型",
     "moveRequest.chooseRequestMessage": "请选择允许的类型",
     "moveRequest.confirm": "确认",
     "moveRequest.success": "请求已成功移动",
@@ -271,5 +270,7 @@
     "errors.requestType.selectItem": "请选择请求类型",
     "actions.selectRequestType": "选择请求类型",
     "errors.servicePointIsNotPickupLocation": "Service point is not a Pickup location",
-    "moveRequest.error.itemLevelRequest": "None available for this item and patron combination"
+    "moveRequest.error.itemLevelRequest": "None available for this item and patron combination",
+    "errors.requestPickupServicePointIsNotAllowed": "One or more Pickup locations are no longer available",
+    "moveRequest.chooseRequestType": "Select request type"
 }

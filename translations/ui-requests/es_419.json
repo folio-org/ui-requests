@@ -105,7 +105,6 @@
     "materialType": "Tipo de material",
     "loanType": "Tipo de préstamo",
     "actions.moveRequest": "Mover reserva",
-    "moveRequest.requestTypeChangeHeading": "Tipo de reservas actuales no permitidas para el ítem seleccionado",
     "moveRequest.chooseRequestMessage": "Por favor, seleccionar un tipo permitido",
     "moveRequest.confirm": "Confirmar",
     "moveRequest.success": "La reserva se movió correctamente",
@@ -271,5 +270,7 @@
     "errors.requestType.selectItem": "Seleccione un tipo de solicitud",
     "actions.selectRequestType": "Seleccionar tipo de solicitud",
     "errors.servicePointIsNotPickupLocation": "El punto de servicio no es un lugar de recogida",
-    "moveRequest.error.itemLevelRequest": "Ninguno disponible para esta combinación de artículo y patrón"
+    "moveRequest.error.itemLevelRequest": "Ninguno disponible para esta combinación de artículo y patrón",
+    "errors.requestPickupServicePointIsNotAllowed": "One or more Pickup locations are no longer available",
+    "moveRequest.chooseRequestType": "Seleccionar tipo de solicitud"
 }
