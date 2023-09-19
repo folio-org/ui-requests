@@ -70,6 +70,7 @@
 * Rename modal window for select request type. Refs UIREQ-1026.
 * Create request from user without barcode. Refs UIREQ-1023.
 * Create Jest/RTL for src/UserForm.js. Refs UIREQ-882.
+* Hit Enter or Search should move focus to the Results List pane header. Refs UIREQ-564.
 * Add "operation" parameter to "allowed-service-points" endpoint. Refs UIREQ-1028.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
