@@ -18,6 +18,7 @@ import ItemsDialog from './ItemsDialog';
 import ChooseRequestTypeDialog from './ChooseRequestTypeDialog';
 import ErrorModal from './components/ErrorModal';
 import { getRequestTypeOptions } from './utils';
+import { REQUEST_OPERATIONS } from './constants';
 
 class MoveRequestManager extends React.Component {
   static propTypes = {
@@ -155,7 +156,7 @@ class MoveRequestManager extends React.Component {
         token: stripes.store.getState().okapi.token,
       })
     };
-    const url = `${stripes.okapi.url}/circulation/requests/allowed-service-points?requester=${request.requesterId}&item=${selectedItem.id}`;
+    const url = `${stripes.okapi.url}/circulation/requests/allowed-service-points?requestId=${request.id}&operation=${REQUEST_OPERATIONS.MOVE}`;
 
     this.setState({
       isRequestTypesLoading: true,
@@ -220,6 +221,7 @@ class MoveRequestManager extends React.Component {
       requestTypes,
       isRequestTypesLoading,
     } = this.state;
+    const isLoading = moveInProgress || isRequestTypesLoading;
 
     return (
       <>
@@ -227,7 +229,7 @@ class MoveRequestManager extends React.Component {
           open={moveRequest}
           instanceId={request.instanceId}
           title={request.instance.title}
-          isLoading={moveInProgress}
+          isLoading={isLoading}
           onClose={onCancelMove}
           skippedItemId={request.itemId}
           onRowClick={(_, item) => this.onItemSelected(item)}
@@ -236,7 +238,7 @@ class MoveRequestManager extends React.Component {
           <ChooseRequestTypeDialog
             open={chooseRequestType}
             data-test-choose-request-type-modal
-            isLoading={moveInProgress || isRequestTypesLoading}
+            isLoading={isLoading}
             requestTypes={getRequestTypeOptions(requestTypes)}
             onConfirm={this.confirmChoosingRequestType}
             onCancel={this.cancelMoveRequest}

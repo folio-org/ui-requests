@@ -34,6 +34,7 @@ import {
   REQUEST_FORM_FIELD_NAMES,
   DEFAULT_REQUEST_TYPE_VALUE,
   RESOURCE_KEYS,
+  REQUEST_OPERATIONS,
 } from './constants';
 
 let mockedTlrSettings;
@@ -479,6 +480,7 @@ describe('RequestForm', () => {
       expect(findResourceMock).toHaveBeenCalledWith(RESOURCE_TYPES.REQUEST_TYPES, {
         [ID_TYPE_MAP.INSTANCE_ID]: newProps.selectedInstance.id,
         requesterId: newProps.selectedUser.id,
+        operation: REQUEST_OPERATIONS.CREATE,
       });
     });
   });
@@ -539,6 +541,7 @@ describe('RequestForm', () => {
         {
           [ID_TYPE_MAP.INSTANCE_ID]: instanceId,
           requesterId,
+          operation: REQUEST_OPERATIONS.CREATE,
         }
       ];
 

@@ -341,3 +341,9 @@ export const BASE_SPINNER_PROPS = {
   icon: 'spinner-ellipsis',
   width: '10px',
 };
+
+export const REQUEST_OPERATIONS = {
+  CREATE: 'create',
+  REPLACE: 'replace',
+  MOVE: 'move',
+};

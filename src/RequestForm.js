@@ -60,6 +60,7 @@ import {
   DEFAULT_REQUEST_TYPE_VALUE,
   requestTypeOptionMap,
   REQUEST_LAYERS,
+  REQUEST_OPERATIONS,
 } from './constants';
 import {
   handleKeyCommand,
@@ -677,8 +678,19 @@ class RequestForm extends React.Component {
       request,
     } = this.props;
     const isEditForm = isFormEditing(request);
+    let requestParams;
 
-    if (!isEditForm) {
+    if (isEditForm) {
+      requestParams = {
+        operation: REQUEST_OPERATIONS.REPLACE,
+        requestId: request.id,
+      };
+    } else {
+      requestParams = {
+        operation: REQUEST_OPERATIONS.CREATE,
+        [resourceType]: resourceId,
+        requesterId,
+      };
       form.change(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, DEFAULT_REQUEST_TYPE_VALUE);
     }
 
@@ -686,10 +698,7 @@ class RequestForm extends React.Component {
       isRequestTypeLoading: true,
     });
 
-    findResource(RESOURCE_TYPES.REQUEST_TYPES, {
-      [resourceType]: resourceId,
-      requesterId,
-    })
+    findResource(RESOURCE_TYPES.REQUEST_TYPES, requestParams)
       .then(requestTypes => {
         if (!isEmpty(requestTypes)) {
           this.setState({
