@@ -133,7 +133,7 @@ export default class RequestsFilters extends React.Component {
 
         <EffectiveLocationServicePointFilter
             activeValues={effectiveLocationPrimaryServicePoint}
-            servicePoints={this.props.resources?.servicePoints?.records}
+            servicePoints={this.props.resources?.effectiveLocationsPrimaryServicePoints?.records}
             onChange={onChange}
             onClear={onClear}
         />

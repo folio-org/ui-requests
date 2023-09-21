@@ -311,6 +311,15 @@ class RequestsRoute extends React.Component {
         limit: MAX_RECORDS,
       },
     },
+    effectiveLocationsPrimaryServicePoints: {
+      type: 'okapi',
+      records: 'servicepoints',
+      path: 'service-points',
+      params: {
+        query: 'cql.allRecords=1 sortby name',
+        limit: MAX_RECORDS,
+      },
+    },
     itemUniquenessValidator: {
       type: 'okapi',
       records: 'items',
