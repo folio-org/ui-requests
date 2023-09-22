@@ -70,6 +70,7 @@
 * Rename modal window for select request type. Refs UIREQ-1026.
 * Create request from user without barcode. Refs UIREQ-1023.
 * Add "operation" parameter to "allowed-service-points" endpoint. Refs UIREQ-1028.
+* Fix issues with skipped tests. Refs UIREQ-1024.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)

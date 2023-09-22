@@ -1,12 +1,10 @@
-import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
+
 import {
   render,
   screen,
   fireEvent,
 } from '@folio/jest-config-stripes/testing-library/react';
-
-import '../test/jest/__mock__';
 
 import Requests from './index';
 
@@ -18,33 +16,29 @@ jest.mock('./routes', () => ({
 const labelIds = {
   navigation: 'ui-requests.navigation.app',
   keyboardShortcuts: 'ui-requests.appMenu.keyboardShortcuts',
-  shortcutMvodalLabel: 'stripes-components.shortcut.modalLabel',
+  shortcutModalLabel: 'stripes-components.shortcut.modalLabel',
 };
+const requestsPath = '/requests';
 
 describe('UI Requests', () => {
-  const renderRequest = () => {
-    const component = (
-      <Router>
-        <Requests
-          match={{ path: '/requests', params: {}, isExact: true, url: '/requests' }}
-        />
-      </Router>
-    );
-
-    return render(component);
+  const props = {
+    match: {
+      path: requestsPath,
+      params: {},
+    },
   };
 
   beforeEach(() => {
-    window.history.pushState({}, '', '/requests');
-
-    renderRequest();
+    render(
+      <MemoryRouter initialEntries={[requestsPath]}>
+        <Requests
+          {...props}
+        />
+      </MemoryRouter>
+    );
   });
 
-  it('should render', () => {
-    expect(renderRequest()).toBeDefined();
-  });
-
-  it.skip('should render RequestsRoute', () => {
+  it('should render RequestsRoute', () => {
     expect(screen.getByText('RequestsRoute')).toBeInTheDocument();
   });
 
@@ -59,7 +53,7 @@ describe('UI Requests', () => {
   it('should render keyboard shortcuts modal', () => {
     fireEvent.click(screen.getByText(labelIds.keyboardShortcuts));
 
-    expect(screen.getByText(labelIds.shortcutMvodalLabel)).toBeInTheDocument();
+    expect(screen.getByText(labelIds.shortcutModalLabel)).toBeInTheDocument();
   });
 
   it('should close keyboard shortcuts modal on clicking close button', () => {

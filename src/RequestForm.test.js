@@ -6,6 +6,7 @@ import {
   screen,
   within,
   fireEvent,
+  waitFor,
 } from '@folio/jest-config-stripes/testing-library/react';
 
 import '../test/jest/__mock__';
@@ -525,8 +526,10 @@ describe('RequestForm', () => {
       );
     });
 
-    it.skip('should trigger "FulfilmentPreference"', () => {
-      expect(FulfilmentPreference).toHaveBeenCalled();
+    it('should trigger "FulfilmentPreference"', async () => {
+      await waitFor(() => {
+        expect(FulfilmentPreference).toHaveBeenCalled();
+      });
     });
 
     it('should trigger "form.change" with correct arguments', () => {
