@@ -72,6 +72,7 @@
 * Create Jest/RTL for src/UserForm.js. Refs UIREQ-882.
 * Hit Enter or Search should move focus to the Results List pane header. Refs UIREQ-564.
 * Add "operation" parameter to "allowed-service-points" endpoint. Refs UIREQ-1028.
+* Fix issues with skipped tests. Refs UIREQ-1024.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)
