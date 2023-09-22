@@ -69,6 +69,8 @@
 * *BREAKING* bump `react-intl` to `v6.4.4`. Refs UIREQ-1025.
 * Rename modal window for select request type. Refs UIREQ-1026.
 * Create request from user without barcode. Refs UIREQ-1023.
+* Create Jest/RTL for src/UserForm.js. Refs UIREQ-882.
+* Hit Enter or Search should move focus to the Results List pane header. Refs UIREQ-564.
 * Add "operation" parameter to "allowed-service-points" endpoint. Refs UIREQ-1028.
 * Fix issues with skipped tests. Refs UIREQ-1024.
 
