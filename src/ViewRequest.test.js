@@ -1,14 +1,11 @@
-import React from 'react';
+import moment from 'moment-timezone';
+
 import {
   render,
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
-import moment from 'moment-timezone';
-
-import '../test/jest/__mock__';
 
 import {
-  Pane,
   CommandList,
   defaultKeyboardShortcuts,
 } from '@folio/stripes/components';
@@ -34,12 +31,6 @@ jest.mock('./UserDetail', () => jest.fn(() => null));
 jest.mock('./CancelRequestDialog', () => jest.fn(() => null));
 jest.mock('./PositionLink', () => jest.fn(() => null));
 jest.mock('./components/TitleInformation', () => jest.fn(() => null));
-Pane.mockImplementation(({ children, actionMenu }) => (
-  <div>
-    {children}
-    {actionMenu({ onToggle: jest.fn() })}
-  </div>
-));
 
 describe('ViewRequest', () => {
   const labelIds = {

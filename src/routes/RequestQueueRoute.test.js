@@ -1,8 +1,6 @@
 import { render } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
-import '__mock__';
-
 import RequestQueueRoute from './RequestQueueRoute';
 
 jest.mock('react-router-prop-types', () => ({

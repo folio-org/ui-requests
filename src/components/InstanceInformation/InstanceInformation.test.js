@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Field } from 'react-final-form';
+
 import {
   render,
   screen,
@@ -7,9 +9,6 @@ import {
   waitFor,
 } from '@folio/jest-config-stripes/testing-library/react';
 
-import '../../../test/jest/__mock__';
-
-import { Field } from 'react-final-form';
 import {
   Icon,
   TextField,

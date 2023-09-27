@@ -40,6 +40,7 @@ const RequestLevelFilter = ({
     <Accordion
       displayClearButton={!isEmpty(activeValues)}
       id={name}
+      data-testid="requestLevelFilter"
       header={FilterAccordionHeader}
       label={formatMessage({ id: 'ui-requests.requestLevel' })}
       name={name}

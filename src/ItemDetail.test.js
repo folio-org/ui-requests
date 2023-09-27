@@ -1,13 +1,11 @@
-import React from 'react';
 import {
   render,
   screen,
   within,
 } from '@folio/jest-config-stripes/testing-library/react';
 
-import '../test/jest/__mock__';
-
 import ItemDetail from './ItemDetail';
+
 import { INVALID_REQUEST_HARDCODED_ID } from './constants';
 
 jest.mock('react-router-dom', () => ({

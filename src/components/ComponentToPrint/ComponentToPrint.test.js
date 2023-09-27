@@ -1,5 +1,5 @@
-import React from 'react';
 import { Parser } from 'html-to-react';
+
 import {
   render,
   screen,

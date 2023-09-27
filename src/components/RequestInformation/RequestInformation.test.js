@@ -1,14 +1,12 @@
 import { useState } from 'react';
+import { Field } from 'react-final-form';
+
 import {
   render,
   screen,
   fireEvent,
   cleanup,
 } from '@folio/jest-config-stripes/testing-library/react';
-
-import '../../../test/jest/__mock__';
-
-import { Field } from 'react-final-form';
 
 import { Select } from '@folio/stripes/components';
 

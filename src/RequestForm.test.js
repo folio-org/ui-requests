@@ -1,6 +1,7 @@
-import React from 'react';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
+import { Field } from 'react-final-form';
+
 import {
   render,
   screen,
@@ -8,10 +9,6 @@ import {
   fireEvent,
   waitFor,
 } from '@folio/jest-config-stripes/testing-library/react';
-
-import '../test/jest/__mock__';
-
-import { Field } from 'react-final-form';
 
 import {
   Checkbox,

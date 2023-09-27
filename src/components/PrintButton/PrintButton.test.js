@@ -1,11 +1,9 @@
+import ReactToPrint from 'react-to-print';
+
 import {
   render,
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
-
-import '../../../test/jest/__mock__';
-
-import ReactToPrint from 'react-to-print';
 
 import PrintButton from './PrintButton';
 

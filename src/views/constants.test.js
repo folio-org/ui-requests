@@ -3,8 +3,6 @@ import {
   render,
 } from '@folio/jest-config-stripes/testing-library/react';
 
-import '__mock__';
-
 import {
   formatter,
 } from './constants';

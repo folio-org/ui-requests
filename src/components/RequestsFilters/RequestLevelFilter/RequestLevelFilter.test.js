@@ -1,17 +1,15 @@
-import React from 'react';
 import {
   render,
   screen,
   fireEvent,
 } from '@folio/jest-config-stripes/testing-library/react';
 
-import '../../../../test/jest/__mock__';
-
 import {
   Accordion,
   FilterAccordionHeader,
 } from '@folio/stripes/components';
 import { CheckboxFilter } from '@folio/stripes/smart-components';
+
 import RequestLevelFilter from './RequestLevelFilter';
 import {
   requestFilterTypes,
@@ -19,21 +17,11 @@ import {
 } from '../../../constants';
 
 const testIds = {
-  accordion: 'accordion',
+  requestLevelFilter: 'requestLevelFilter',
 };
 const labelIds = {
   requestLevel: 'ui-requests.requestLevel',
 };
-
-Accordion.mockImplementation(({ onClearFilter, children }) => (
-  // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-  <div
-    data-testid={testIds.accordion}
-    onClick={onClearFilter}
-  >
-    {children}
-  </div>
-));
 
 describe('RequestLevelFilter', () => {
   const testOnClearCallback = jest.fn();
@@ -46,7 +34,6 @@ describe('RequestLevelFilter', () => {
   };
 
   afterEach(() => {
-    Accordion.mockClear();
     FilterAccordionHeader.mockClear();
     CheckboxFilter.mockClear();
     testOnClearCallback.mockClear();
@@ -73,7 +60,7 @@ describe('RequestLevelFilter', () => {
     it('should handle clear filters', () => {
       expect(testOnClearCallback).not.toHaveBeenCalled();
 
-      fireEvent.click(screen.getByTestId(testIds.accordion));
+      fireEvent.click(screen.getByTestId(`${testIds.requestLevelFilter}Button`));
 
       expect(testOnClearCallback).toHaveBeenCalledWith(requestFilterTypes.REQUEST_LEVELS);
     });

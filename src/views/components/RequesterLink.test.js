@@ -1,11 +1,9 @@
-import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+
 import {
   render,
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-
-import '../../../test/jest/__mock__';
 
 import RequesterLink from './RequesterLink';
 
