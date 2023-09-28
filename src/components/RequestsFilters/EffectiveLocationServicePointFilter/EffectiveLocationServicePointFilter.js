@@ -2,7 +2,6 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 
@@ -16,7 +15,7 @@ import {
 
 import {
   requestFilterTypes,
-} from '../../constants';
+} from '../../../constants';
 
 const EffectiveLocationServicePointFilter = ({
   activeValues,

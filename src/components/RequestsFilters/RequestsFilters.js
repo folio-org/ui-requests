@@ -25,7 +25,7 @@ import {
 
 import { PickupServicePointFilter } from './PickupServicePointFilter';
 import { RequestLevelFilter } from './RequestLevelFilter';
-import EffectiveLocationServicePointFilter from "./EffectiveLocationServicePointFilter";
+import EffectiveLocationServicePointFilter from './EffectiveLocationServicePointFilter/EffectiveLocationServicePointFilter';
 
 export default class RequestsFilters extends React.Component {
   static propTypes = {
@@ -132,10 +132,10 @@ export default class RequestsFilters extends React.Component {
         </Accordion>
 
         <EffectiveLocationServicePointFilter
-            activeValues={effectiveLocationPrimaryServicePoint}
-            servicePoints={this.props.resources?.effectiveLocationsPrimaryServicePoints?.records}
-            onChange={onChange}
-            onClear={onClear}
+          activeValues={effectiveLocationPrimaryServicePoint}
+          servicePoints={this.props.resources?.effectiveLocationsPrimaryServicePoints?.records}
+          onChange={onChange}
+          onClear={onClear}
         />
 
         <PickupServicePointFilter
