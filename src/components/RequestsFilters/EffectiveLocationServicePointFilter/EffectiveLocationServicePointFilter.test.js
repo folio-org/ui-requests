@@ -60,9 +60,9 @@ describe('EffectiveLocationServicePointFilter', () => {
   });
 
   it('should perform onClear event', async () => {
-    const effectiveLocationServicePointAccordionButton = screen.getByTestId(testIds.effectiveLocationServicePointAccordionButton);
+    const effectiveLocationServicePointButton = screen.getByTestId(testIds.effectiveLocationServicePointAccordionButton);
 
-    await userEvent.click(effectiveLocationServicePointAccordionButton);
+    await userEvent.click(effectiveLocationServicePointButton);
 
     expect(onClear).toHaveBeenCalledWith(requestFilterTypes.EffLocation_SERVICE_POINT);
   });
