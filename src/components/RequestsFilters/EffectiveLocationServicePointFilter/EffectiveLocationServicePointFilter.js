@@ -38,7 +38,7 @@ const EffectiveLocationServicePointFilter = ({
 
   return (
     <Accordion
-      data-testid="pickupServicePointAccordion1"
+      data-testid="effectiveLocationServicePointAccordion"
       displayClearButton={!isEmpty(activeValues)}
       id={name}
       header={FilterAccordionHeader}
@@ -50,7 +50,7 @@ const EffectiveLocationServicePointFilter = ({
       <MultiSelectionFilter
         ariaLabelledBy={`accordion-toggle-button-${name}`}
         dataOptions={filterOptions}
-        id="req-pickup-service-point-filter1"
+        id="req-effective-location-service-point-filter"
         name={name}
         onChange={onChange}
         selectedValues={activeValues}
