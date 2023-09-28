@@ -58,11 +58,6 @@ const props = {
   },
   titleLevelRequestsFeatureEnabled: false,
 };
-const accordionSelector = [
-  requestFilterTypes.REQUEST_TYPE,
-  requestFilterTypes.REQUEST_STATUS,
-  requestFilterTypes.TAGS,
-];
 const testIds = {
   [requestFilterTypes.REQUEST_TYPE]: requestFilterTypes.REQUEST_TYPE,
   [`${requestFilterTypes.REQUEST_TYPE}Filter`]: `${requestFilterTypes.REQUEST_TYPE}Filter`,
@@ -88,72 +83,131 @@ describe('RequestsFilters', () => {
     jest.clearAllMocks();
   });
 
-  accordionSelector.forEach((requestFilterType, index) => {
-    describe(`${requestFilterType} accordion`, () => {
-      const currentAccordionIndex = index + 1;
+  describe('Request type accordion', () => {
+    it('should render request type accordion', () => {
+      expect(screen.getByTestId(testIds[requestFilterTypes.REQUEST_TYPE])).toBeInTheDocument();
+    });
 
-      it(`should render ${requestFilterType} accordion`, () => {
-        expect(screen.getByTestId(testIds[requestFilterType])).toBeInTheDocument();
-      });
+    it('should render label for request type accordion', () => {
+      expect(screen.getByText(labelIds[requestFilterTypes.REQUEST_TYPE])).toBeInTheDocument();
+    });
 
-      it(`should render label for ${requestFilterType} accordion`, () => {
-        expect(screen.getByText(labelIds[requestFilterType])).toBeInTheDocument();
-      });
+    it('should trigger request type accordion with correct props', () => {
+      expect(Accordion).toHaveBeenNthCalledWith(1, expect.objectContaining({
+        displayClearButton: true,
+        id: requestFilterTypes.REQUEST_TYPE,
+        'data-testid': requestFilterTypes.REQUEST_TYPE,
+        name: requestFilterTypes.REQUEST_TYPE,
+        onClearFilter: expect.any(Function),
+        header: expect.any(Function),
+        separator: false,
+      }), {});
+    });
 
-      it(`should trigger ${requestFilterType} accordion with correct props`, () => {
-        expect(Accordion).toHaveBeenNthCalledWith(currentAccordionIndex, expect.objectContaining({
-          displayClearButton: true,
-          id: requestFilterType,
-          'data-testid': requestFilterType,
-          name: requestFilterType,
-          onClearFilter: expect.any(Function),
-          header: expect.any(Function),
-          separator: false,
-        }), {});
-      });
+    it('should be called onClearFilter with request filter types Request type', async () => {
+      await userEvent.click(screen.getByTestId(`${testIds[requestFilterTypes.REQUEST_TYPE]}Button`));
 
-      it(`should be called onClearFilter with request filter types ${requestFilterType}`, async () => {
-        await userEvent.click(screen.getByTestId(`${testIds[requestFilterType]}Button`));
+      expect(onClear).toHaveBeenCalledWith(requestFilterTypes.REQUEST_TYPE);
+    });
 
-        expect(onClear).toHaveBeenCalledWith(requestFilterType);
-      });
+    it('should render CheckboxFilter for Request type accordion', () => {
+      expect(screen.getByTestId(testIds[`${requestFilterTypes.REQUEST_TYPE}Filter`])).toBeInTheDocument();
+    });
 
-      if (requestFilterType === requestFilterTypes.TAGS) {
-        describe(`MultiSelectionFilter for ${requestFilterType} accordion`, () => {
-          it(`should render MultiSelectionFilter for ${requestFilterType} accordion`, () => {
-            expect(screen.getByTestId(testIds.multiSelectionFilter)).toBeInTheDocument();
-          });
+    it('should trigger CheckboxFilter for Request type accordion with correct props', () => {
+      expect(CheckboxFilter).toHaveBeenNthCalledWith(1, expect.objectContaining({
+        'data-testid': testIds[`${requestFilterTypes.REQUEST_TYPE}Filter`],
+        name: requestFilterTypes.REQUEST_TYPE,
+        selectedValues: props.activeFilters[requestFilterTypes.REQUEST_TYPE],
+        onChange,
+      }), {});
+    });
+  });
 
-          it(`should trigger MultiSelectionFilter for ${requestFilterType} accordion with correct props`, () => {
-            expect(MultiSelectionFilter).toHaveBeenCalledWith(expect.objectContaining({
-              'data-testid': testIds.multiSelectionFilter,
-              dataOptions: [{
-                label: 'Urgent',
-                value: 'Urgent',
-              }],
-              name: requestFilterTypes.TAGS,
-              selectedValues: props.activeFilters.tags,
-              onChange,
-              ariaLabelledBy: requestFilterTypes.TAGS,
-            }), {});
-          });
-        });
-      } else {
-        describe(`CheckboxFilter for ${requestFilterType} accordion`, () => {
-          it(`should render CheckboxFilter for ${requestFilterType} accordion`, () => {
-            expect(screen.getByTestId(testIds[`${requestFilterType}Filter`])).toBeInTheDocument();
-          });
+  describe('Request status accordion', () => {
+    it('should render request status accordion', () => {
+      expect(screen.getByTestId(testIds[requestFilterTypes.REQUEST_STATUS])).toBeInTheDocument();
+    });
 
-          it(`should trigger CheckboxFilter for ${requestFilterType} accordion with correct props`, () => {
-            expect(CheckboxFilter).toHaveBeenNthCalledWith(currentAccordionIndex, expect.objectContaining({
-              'data-testid': testIds[`${requestFilterType}Filter`],
-              name: requestFilterType,
-              selectedValues: props.activeFilters[requestFilterType],
-              onChange,
-            }), {});
-          });
-        });
-      }
+    it('should render label for request status accordion', () => {
+      expect(screen.getByText(labelIds[requestFilterTypes.REQUEST_STATUS])).toBeInTheDocument();
+    });
+
+    it('should trigger request status accordion with correct props', () => {
+      expect(Accordion).toHaveBeenNthCalledWith(2, expect.objectContaining({
+        displayClearButton: true,
+        id: requestFilterTypes.REQUEST_STATUS,
+        'data-testid': requestFilterTypes.REQUEST_STATUS,
+        name: requestFilterTypes.REQUEST_STATUS,
+        onClearFilter: expect.any(Function),
+        header: expect.any(Function),
+        separator: false,
+      }), {});
+    });
+
+    it('should be called onClearFilter with request filter types Request status', async () => {
+      await userEvent.click(screen.getByTestId(`${testIds[requestFilterTypes.REQUEST_STATUS]}Button`));
+
+      expect(onClear).toHaveBeenCalledWith(requestFilterTypes.REQUEST_STATUS);
+    });
+
+    it('should render CheckboxFilter for Request status accordion', () => {
+      expect(screen.getByTestId(testIds[`${requestFilterTypes.REQUEST_STATUS}Filter`])).toBeInTheDocument();
+    });
+
+    it('should trigger CheckboxFilter for Request status accordion with correct props', () => {
+      expect(CheckboxFilter).toHaveBeenNthCalledWith(1, expect.objectContaining({
+        'data-testid': testIds[`${requestFilterTypes.REQUEST_TYPE}Filter`],
+        name: requestFilterTypes.REQUEST_TYPE,
+        selectedValues: props.activeFilters[requestFilterTypes.REQUEST_TYPE],
+        onChange,
+      }), {});
+    });
+  });
+
+  describe('Tags accordion', () => {
+    it('should render tags accordion', () => {
+      expect(screen.getByTestId(testIds[requestFilterTypes.TAGS])).toBeInTheDocument();
+    });
+
+    it('should render label for tags accordion', () => {
+      expect(screen.getByText(labelIds[requestFilterTypes.TAGS])).toBeInTheDocument();
+    });
+
+    it('should trigger tags accordion with correct props', () => {
+      expect(Accordion).toHaveBeenNthCalledWith(3, expect.objectContaining({
+        displayClearButton: true,
+        id: requestFilterTypes.TAGS,
+        'data-testid': requestFilterTypes.TAGS,
+        name: requestFilterTypes.TAGS,
+        onClearFilter: expect.any(Function),
+        header: expect.any(Function),
+        separator: false,
+      }), {});
+    });
+
+    it('should be called onClearFilter with request filter types tags', async () => {
+      await userEvent.click(screen.getByTestId(`${testIds[requestFilterTypes.TAGS]}Button`));
+
+      expect(onClear).toHaveBeenCalledWith(requestFilterTypes.TAGS);
+    });
+
+    it('should render MultiSelectionFilter for tags accordion', () => {
+      expect(screen.getByTestId(testIds.multiSelectionFilter)).toBeInTheDocument();
+    });
+
+    it('should trigger MultiSelectionFilter for Tags accordion with correct props', () => {
+      expect(MultiSelectionFilter).toHaveBeenCalledWith(expect.objectContaining({
+        'data-testid': testIds.multiSelectionFilter,
+        dataOptions: [{
+          label: 'Urgent',
+          value: 'Urgent',
+        }],
+        name: requestFilterTypes.TAGS,
+        selectedValues: props.activeFilters.tags,
+        onChange,
+        ariaLabelledBy: requestFilterTypes.TAGS,
+      }), {});
     });
   });
 
