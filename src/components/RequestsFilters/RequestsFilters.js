@@ -74,6 +74,7 @@ export default class RequestsFilters extends React.Component {
         <Accordion
           displayClearButton={!isEmpty(requestType)}
           id={requestFilterTypes.REQUEST_TYPE}
+          data-testid={requestFilterTypes.REQUEST_TYPE}
           header={FilterAccordionHeader}
           label={<FormattedMessage id="ui-requests.requestMeta.type" />}
           name={requestFilterTypes.REQUEST_TYPE}
@@ -81,6 +82,7 @@ export default class RequestsFilters extends React.Component {
           onClearFilter={() => onClear(requestFilterTypes.REQUEST_TYPE)}
         >
           <CheckboxFilter
+            data-testid={`${requestFilterTypes.REQUEST_TYPE}Filter`}
             dataOptions={this.transformRequestFilterOptions(requestTypeFilters)}
             name={requestFilterTypes.REQUEST_TYPE}
             selectedValues={requestType}
@@ -90,6 +92,7 @@ export default class RequestsFilters extends React.Component {
         <Accordion
           displayClearButton={!isEmpty(requestStatus)}
           id={requestFilterTypes.REQUEST_STATUS}
+          data-testid={requestFilterTypes.REQUEST_STATUS}
           header={FilterAccordionHeader}
           label={<FormattedMessage id="ui-requests.requestMeta.status" />}
           name={requestFilterTypes.REQUEST_STATUS}
@@ -97,6 +100,7 @@ export default class RequestsFilters extends React.Component {
           onClearFilter={() => onClear(requestFilterTypes.REQUEST_STATUS)}
         >
           <CheckboxFilter
+            data-testid={`${requestFilterTypes.REQUEST_STATUS}Filter`}
             dataOptions={this.transformRequestFilterOptions(requestStatusFilters)}
             name={requestFilterTypes.REQUEST_STATUS}
             selectedValues={requestStatus}
@@ -105,6 +109,7 @@ export default class RequestsFilters extends React.Component {
         </Accordion>
         {titleLevelRequestsFeatureEnabled && (
           <RequestLevelFilter
+            data-testid="requestLevelFilter"
             activeValues={requestLevels}
             onChange={onChange}
             onClear={onClear}
@@ -113,6 +118,7 @@ export default class RequestsFilters extends React.Component {
         <Accordion
           displayClearButton={!isEmpty(tags)}
           id={requestFilterTypes.TAGS}
+          data-testid={requestFilterTypes.TAGS}
           header={FilterAccordionHeader}
           label={<FormattedMessage id="ui-requests.requestMeta.tags" />}
           name={requestFilterTypes.TAGS}
@@ -120,6 +126,7 @@ export default class RequestsFilters extends React.Component {
           onClearFilter={() => onClear(requestFilterTypes.TAGS)}
         >
           <MultiSelectionFilter
+            data-testid="multiSelectionFilter"
             dataOptions={this.transformTagsOptions()}
             name={requestFilterTypes.TAGS}
             selectedValues={tags}
@@ -127,8 +134,8 @@ export default class RequestsFilters extends React.Component {
             ariaLabelledBy={requestFilterTypes.TAGS}
           />
         </Accordion>
-
         <PickupServicePointFilter
+          data-testid="pickupServicePointFilter"
           activeValues={pickupServicePoints}
           servicePoints={this.props.resources?.servicePoints?.records}
           onChange={onChange}
