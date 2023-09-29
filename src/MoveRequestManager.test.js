@@ -14,6 +14,7 @@ import ItemsDialog from './ItemsDialog';
 import ChooseRequestTypeDialog from './ChooseRequestTypeDialog';
 import ErrorModal from './components/ErrorModal';
 import {
+  REQUEST_OPERATIONS,
   requestTypeOptionMap,
   requestTypesMap,
 } from './constants';
@@ -40,6 +41,7 @@ const basicProps = {
     instance: {
       title: 'instanceTitle',
     },
+    id: 'requestId',
   },
   mutator: {
     move: {
@@ -63,18 +65,17 @@ const basicProps = {
     },
   },
 };
+const selectedItem = {
+  id: 'selectedItemId',
+  status: {
+    name: 'Checked out',
+  },
+};
 
 jest.mock('./ItemsDialog', () => jest.fn(({
   children,
   onRowClick,
 }) => {
-  const selectedItem = {
-    id: 'selectedItemId',
-    status: {
-      name: 'Checked out',
-    },
-  };
-
   return (
     <div>
       <button
@@ -186,6 +187,12 @@ describe('MoveRequestManager', () => {
       const rowButton = screen.getByTestId(testIds.rowButton);
 
       fireEvent.click(rowButton);
+    });
+
+    it('should trigger fetch with correct argument', () => {
+      const expectedUrl = `${basicProps.stripes.okapi.url}/circulation/requests/allowed-service-points?requestId=${basicProps.request.id}&itemId=${selectedItem.id}&operation=${REQUEST_OPERATIONS.MOVE}`;
+
+      expect(global.fetch).toHaveBeenCalledWith(expectedUrl, {});
     });
 
     it('should trigger "ChooseRequestTypeDialog" with correct props', async () => {
