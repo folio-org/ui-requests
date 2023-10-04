@@ -161,6 +161,7 @@
   "item.status.orderClosed": "Order closed",
   "item.status.restricted": "Restricted",
   "title.information": "Title information",
+  "requests.itemEffectiveLocationPrimaryServicePointName": "Effective Location Primary Service Point Name",
   "loan.dueDate": "Current due date",
   "proxy.name": "Requester's proxy name",
   "proxy.barcode": "Requester's proxy barcode",

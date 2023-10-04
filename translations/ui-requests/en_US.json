@@ -73,7 +73,6 @@
     "requests.requestDate": "Request Date",
     "requests.proxy": "Proxy",
     "requests.itemBarcode": "Item barcode",
-    "requests.itemEffectiveLocationPrimaryServicePointName": "Effective Location Primary Service Point Name",
     "requestMeta.type.recall": "Recall",
     "requestMeta.type.hold": "Hold",
     "requestMeta.type.page": "Page",
