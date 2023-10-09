@@ -54,7 +54,6 @@ import {
   REQUEST_LEVEL_TYPES,
   requestTypesTranslations,
   requestStatusesTranslations,
-  errorMessageLabels,
   REQUEST_LAYERS,
 } from './constants';
 import {
@@ -68,6 +67,14 @@ import {
 import urls from './routes/urls';
 
 const CREATE_SUCCESS = 'CREATE_SUCCESS';
+
+const REQUEST_ERROR_MESSAGE_CODE = {
+  REQUEST_ALREADY_CLOSED: 'REQUEST_ALREADY_CLOSED',
+};
+
+const REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS = {
+  [REQUEST_ERROR_MESSAGE_CODE.REQUEST_ALREADY_CLOSED]: 'ui-requests.errors.requestAlreadyClosed',
+};
 
 class ViewRequest extends React.Component {
   static manifest = {
@@ -277,7 +284,7 @@ class ViewRequest extends React.Component {
           .then(res => {
             res.errors.forEach(error => {
               this.callout.current.sendCallout({
-                message: errorMessageLabels[error.message] ? formatMessage({ id: errorMessageLabels[error.message] }) : error.message,
+                message: REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS[error?.code] ? formatMessage({ id: REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS[error?.code] }) : error.message,
                 type: 'error',
               });
             });
