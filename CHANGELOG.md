@@ -76,6 +76,7 @@
 * Create Jest/RTL test for RequestsFilters.js. Refs UIREQ-937.
 * Add "itemId" parameter to "allowed-service-points" endpoint. Refs UIREQ-1030.
 * Use current optional dependencies. Refs UIREQ-1031.
+* Update Requests error messages. Refs UIREQ-1036.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)
