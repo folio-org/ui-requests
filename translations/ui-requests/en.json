@@ -81,7 +81,7 @@
   "errors.sync.requestQueueBody": "This request queue has been updated by another person or process and may be out of synch.",
   "errors.unknown.requestQueueLabel": "Request queue error",
   "errors.unknown.requestQueueBody": "Request queue reorder failed",
-  "errors.closingAlreadyClosedRequest": "Error: The Request has already been closed.",
+  "errors.requestAlreadyClosed": "Error: The Request has already been closed.",
   "errors.requestType.titleLevelRequest": "None available for this title and patron combination",
   "errors.requestType.itemLevelRequest": "None available for this item and patron combination",
   "errors.requestType.selectItem": "Please select a request type",

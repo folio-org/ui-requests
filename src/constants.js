@@ -270,10 +270,6 @@ export const errorMessages = {
   DELETE_REQUEST_ERROR: 'The Request has already been closed',
 };
 
-export const errorMessageLabels = {
-  [errorMessages.DELETE_REQUEST_ERROR]: 'ui-requests.errors.closingAlreadyClosedRequest',
-};
-
 export const errorCodes = {
   SYNC: 'sync',
   UNKNOWN: 'unknown',
