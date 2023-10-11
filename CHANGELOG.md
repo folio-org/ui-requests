@@ -78,6 +78,7 @@
 * Use current optional dependencies. Refs UIREQ-1031.
 * Update Requests error messages. Refs UIREQ-1036.
 * Replace using of error.message with enum values for translation keys. Refs UIREQ-789.
+* Update `circulation` interface version to `14.2`. Refs UIREQ-1038.
 
 ## [8.0.2](https://github.com/folio-org/ui-requests/tree/v8.0.2) (2023-03-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.1...v8.0.2)
