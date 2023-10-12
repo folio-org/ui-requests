@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 9.0.0 IN PROGRESS
+## [9.0.0](https://github.com/folio-org/ui-requests/tree/v9.0.0) (2023-10-12)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.2...v9.0.0)
 
 * Made code improvements related to TLR. Refs UIREQ-871.
 * UI tests replacement with RTL/Jest for urls. Refs UIREQ-896.
