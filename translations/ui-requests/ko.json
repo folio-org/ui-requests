@@ -254,7 +254,6 @@
     "item.status.missingFromASR": "Missing from ASR",
     "item.status.orderClosed": "Order closed",
     "item.status.restricted": "Restricted",
-    "errors.closingAlreadyClosedRequest": "Error: The Request has already been closed.",
     "appMenu.keyboardShortcuts": "Keyboard shortcuts",
     "navigation.app": "Requests app Search",
     "navigation.keyboardShortcuts": "Keyboard shortcuts",
@@ -272,5 +271,15 @@
     "errors.servicePointIsNotPickupLocation": "Service point is not a Pickup location",
     "moveRequest.error.itemLevelRequest": "None available for this item and patron combination",
     "errors.requestPickupServicePointIsNotAllowed": "One or more Pickup locations are no longer available",
-    "moveRequest.chooseRequestType": "Select request type"
+    "moveRequest.chooseRequestType": "Select request type",
+    "errors.requestLevelIsNotAllowed": "Request level must be one of the following: \"Item\", \"Title\"",
+    "errors.fulfillmentPreferenceIsNotAllowed": "Fulfillment preference must be one of the following: Hold Shelf, Delivery",
+    "errors.requesterAlreadyHasLoanForOneOfInstancesItems": "This requester already has a loan for one of the instance's items",
+    "errors.requesterAlreadyHasThisItemOnLoan": "This requester already has this item on loan",
+    "errors.cannotCreatePageTlrWithoutItemId": "Cannot create a title level page request for this instance ID with no item ID",
+    "errors.holdAndRecallTlrNotAllowedPageableAvailableItemFound": "Hold/Recall title level request not allowed: pageable available item found for instance",
+    "errors.userCannotBeProxyForThemselves": "User cannot be proxy for themselves",
+    "errors.itemAlreadyRequested": "Not allowed to move title level page request to the same item",
+    "errors.holdShelfRequestsRequirePickupServicePoint": "Hold shelf fulfillment requests require a Pickup service point",
+    "errors.requestAlreadyClosed": "Error: The Request has already been closed."
 }

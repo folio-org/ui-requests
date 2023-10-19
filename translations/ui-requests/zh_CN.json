@@ -254,7 +254,6 @@
     "item.status.missingFromASR": "从ASR中遗失",
     "item.status.orderClosed": "订单已关闭",
     "item.status.restricted": "使用受限",
-    "errors.closingAlreadyClosedRequest": "错误：请求已关闭。",
     "appMenu.keyboardShortcuts": "键盘快捷键",
     "navigation.app": "请求应用程序搜索",
     "navigation.keyboardShortcuts": "键盘快捷键",
@@ -272,5 +271,15 @@
     "errors.servicePointIsNotPickupLocation": "服务点不是取件位置",
     "moveRequest.error.itemLevelRequest": "此单件和读者组合均不可用",
     "errors.requestPickupServicePointIsNotAllowed": "一个或多个取件地点不再可用",
-    "moveRequest.chooseRequestType": "选择请求类型"
+    "moveRequest.chooseRequestType": "选择请求类型",
+    "errors.requestLevelIsNotAllowed": "Request level must be one of the following: \"Item\", \"Title\"",
+    "errors.fulfillmentPreferenceIsNotAllowed": "Fulfillment preference must be one of the following: Hold Shelf, Delivery",
+    "errors.requesterAlreadyHasLoanForOneOfInstancesItems": "This requester already has a loan for one of the instance's items",
+    "errors.requesterAlreadyHasThisItemOnLoan": "This requester already has this item on loan",
+    "errors.cannotCreatePageTlrWithoutItemId": "Cannot create a title level page request for this instance ID with no item ID",
+    "errors.holdAndRecallTlrNotAllowedPageableAvailableItemFound": "Hold/Recall title level request not allowed: pageable available item found for instance",
+    "errors.userCannotBeProxyForThemselves": "User cannot be proxy for themselves",
+    "errors.itemAlreadyRequested": "Not allowed to move title level page request to the same item",
+    "errors.holdShelfRequestsRequirePickupServicePoint": "Hold shelf fulfillment requests require a Pickup service point",
+    "errors.requestAlreadyClosed": "Error: The Request has already been closed."
 }
