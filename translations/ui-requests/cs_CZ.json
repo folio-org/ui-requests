@@ -254,7 +254,6 @@
     "item.status.missingFromASR": "Chybí v ASR",
     "item.status.orderClosed": "Objednávka uzavřena",
     "item.status.restricted": "Omezeno",
-    "errors.closingAlreadyClosedRequest": "Chyba: Žádanka byla již uzavřena.",
     "appMenu.keyboardShortcuts": "Klávesové zkratky",
     "navigation.app": "Vyhledat požadavek",
     "navigation.keyboardShortcuts": "Klávesové zkratky",
@@ -272,5 +271,15 @@
     "errors.servicePointIsNotPickupLocation": "Pult služeb není místem vyzvednutí",
     "moveRequest.error.itemLevelRequest": "Žádné k dispozici pro tuto kombinaci jednotky a čtenáře",
     "errors.requestPickupServicePointIsNotAllowed": "Jedno nebo více míst vyzvednutí již není k dispozici",
-    "moveRequest.chooseRequestType": "Vybrat typ žádanky"
+    "moveRequest.chooseRequestType": "Vybrat typ žádanky",
+    "errors.requestLevelIsNotAllowed": "Request level must be one of the following: \"Item\", \"Title\"",
+    "errors.fulfillmentPreferenceIsNotAllowed": "Fulfillment preference must be one of the following: Hold Shelf, Delivery",
+    "errors.requesterAlreadyHasLoanForOneOfInstancesItems": "This requester already has a loan for one of the instance's items",
+    "errors.requesterAlreadyHasThisItemOnLoan": "This requester already has this item on loan",
+    "errors.cannotCreatePageTlrWithoutItemId": "Cannot create a title level page request for this instance ID with no item ID",
+    "errors.holdAndRecallTlrNotAllowedPageableAvailableItemFound": "Hold/Recall title level request not allowed: pageable available item found for instance",
+    "errors.userCannotBeProxyForThemselves": "User cannot be proxy for themselves",
+    "errors.itemAlreadyRequested": "Not allowed to move title level page request to the same item",
+    "errors.holdShelfRequestsRequirePickupServicePoint": "Hold shelf fulfillment requests require a Pickup service point",
+    "errors.requestAlreadyClosed": "Error: The Request has already been closed."
 }
