@@ -135,7 +135,7 @@
     "item.effectiveLocation": "Localização efetiva",
     "requestMeta.tags": "Tags",
     "filters.requestType.holds": "Reservas",
-    "filters.requestType.pages": "Páginas",
+    "filters.requestType.pages": "Itens disponíveis",
     "filters.requestType.recalls": "Devoluções antecipadas",
     "filters.requestStatus.cancelled": "Fechado - Cancelado",
     "filters.requestStatus.filled": "Fechado - Completo",
