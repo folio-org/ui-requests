@@ -31,6 +31,9 @@ import {
   REQUEST_LEVEL_TYPES,
   createModes,
   INVALID_REQUEST_HARDCODED_ID,
+  DCB_INSTANCE_ID,
+  DCB_HOLDING_ID,
+  DCB_USER,
 } from './constants';
 
 import css from './requests.css';
@@ -330,6 +333,22 @@ export const isValidRequest = ({
   instanceId,
   holdingsRecordId,
 }) => instanceId !== INVALID_REQUEST_HARDCODED_ID && holdingsRecordId !== INVALID_REQUEST_HARDCODED_ID;
+
+/*
+  DCB Transactions (where FOLIO plays a) borrowing role work with virtual items,
+  whose instance and holding record id are hard coded
+*/
+export const isvirtualItem = ({
+  instanceId,
+  holdingsRecordId,
+}) => instanceId === DCB_INSTANCE_ID && holdingsRecordId === DCB_HOLDING_ID;
+
+
+/*
+  DCB Transactions (where FOLIO plays a) lending role work with virtual patons,
+  whose lastname is hard coded to "DcbSystem"
+*/
+export const isVirtualPatron = (lastName) => lastName === DCB_USER.lastName;
 
 export const memoizeValidation = (fn) => {
   const lastArgs = {};

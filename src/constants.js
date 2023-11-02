@@ -343,3 +343,10 @@ export const REQUEST_OPERATIONS = {
   REPLACE: 'replace',
   MOVE: 'move',
 };
+
+export const DCB_USER = {
+  lastName: 'DcbSystem'
+};
+
+export const DCB_INSTANCE_ID = '9d1b77e4-f02e-4b7f-b296-3f2042ddac54';
+export const DCB_HOLDING_ID = '10cd3a5a-d36f-4c7a-bc4f-e1ae3cf820c9';

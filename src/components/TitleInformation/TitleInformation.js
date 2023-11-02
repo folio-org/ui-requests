@@ -17,6 +17,7 @@ import {
 } from '../../constants';
 import {
   isValidRequest,
+  isvirtualItem,
   openRequestStatusFilters,
 } from '../../utils';
 
@@ -33,6 +34,7 @@ export const getIdentifiers = (data, separator, limit) => data.slice(0, limit).m
 const TitleInformation = (props) => {
   const {
     titleLevelRequestsLink,
+    holdingsRecordId,
     instanceId,
     titleLevelRequestsCount,
     title,
@@ -45,7 +47,7 @@ const TitleInformation = (props) => {
     },
   } = props;
   const titleLevelRequestsCountValue = titleLevelRequestsLink ? getURL(instanceId, titleLevelRequestsCount) : titleLevelRequestsCount;
-  const titleValue = isValidRequest({ instanceId }) ? getTitleURL(instanceId, title) : title;
+  const titleValue = isValidRequest({ instanceId }) && !isvirtualItem(instanceId, holdingsRecordId) ? getTitleURL(instanceId, title) : title;
 
   return (
     <>
@@ -104,6 +106,7 @@ TitleInformation.defaultProps = {
 TitleInformation.propTypes = {
   titleLevelRequestsLink: PropTypes.bool,
   titleLevelRequestsCount: PropTypes.number.isRequired,
+  holdingsRecordId: PropTypes.string.isRequired,
   instanceId: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   contributors: PropTypes.arrayOf(PropTypes.shape({
