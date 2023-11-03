@@ -338,10 +338,12 @@ export const isValidRequest = ({
   DCB Transactions (where FOLIO plays a) borrowing role work with virtual items,
   whose instance and holding record id are hard coded
 */
-export const isvirtualItem = ({
+export const isvirtualItem = (
   instanceId,
   holdingsRecordId,
-}) => instanceId === DCB_INSTANCE_ID && holdingsRecordId === DCB_HOLDING_ID;
+) => {
+  return instanceId === DCB_INSTANCE_ID && holdingsRecordId === DCB_HOLDING_ID;
+};
 
 
 /*

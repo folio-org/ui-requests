@@ -17,12 +17,17 @@ import TitleInformation, {
   getEditions,
   getIdentifiers,
 } from './TitleInformation';
-import { INVALID_REQUEST_HARDCODED_ID } from '../../constants';
+import {
+  INVALID_REQUEST_HARDCODED_ID,
+  DCB_INSTANCE_ID,
+  DCB_HOLDING_ID,
+} from '../../constants';
 
 KeyValue.mockImplementation(jest.fn(() => null));
 
 describe('TitleInformation', () => {
   const instanceId = 'instanceId';
+  const holdingsRecordId = 'holdingsRecordId';
   const titleLevelRequestsCount = 5;
   const title = 'Title';
   const contributors = [{
@@ -69,6 +74,7 @@ describe('TitleInformation', () => {
   };
   const defaultProps = {
     instanceId,
+    holdingsRecordId,
     titleLevelRequestsCount,
     title,
     contributors,
@@ -179,6 +185,30 @@ describe('TitleInformation', () => {
         <TitleInformation
           {...defaultProps}
           instanceId={INVALID_REQUEST_HARDCODED_ID}
+        />
+      );
+    });
+
+    it('should render "instanceId" not as a link', () => {
+      const expectedProps = {
+        value: title,
+      };
+
+      expect(KeyValue).toHaveBeenNthCalledWith(
+        orderOfKeyValueCall.title,
+        expect.objectContaining(expectedProps),
+        {}
+      );
+    });
+  });
+
+  describe('when dcb transaction request with virtual item', () => {
+    beforeEach(() => {
+      render(
+        <TitleInformation
+          {...defaultProps}
+          instanceId={DCB_INSTANCE_ID}
+          holdingsRecordId={DCB_HOLDING_ID}
         />
       );
     });
