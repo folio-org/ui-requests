@@ -294,40 +294,20 @@ describe('isValidRequest', () => {
 });
 
 describe('isvirtualItem', () => {
-  it('should return true it item is virtual', () => {
-    const request = {
-      instanceId: DCB_INSTANCE_ID,
-      holdingsRecordId: DCB_HOLDING_ID,
-    };
-
-    expect(isvirtualItem(request)).toBe(true);
+  it('should return true if item is virtual', () => {
+    expect(isvirtualItem(DCB_INSTANCE_ID, DCB_HOLDING_ID)).toBe(true);
   });
 
   it('should return false if "holdingsRecordId" in request have hardcoded invalid value', () => {
-    const request = {
-      instanceId: DCB_INSTANCE_ID,
-      holdingsRecordId: 'testHoldingRecordId',
-    };
-
-    expect(isvirtualItem(request)).toBe(false);
+    expect(isvirtualItem(DCB_INSTANCE_ID, 'testHoldingRecordId')).toBe(false);
   });
 
   it('should return false if "instanceId" in request have hardcoded invalid value', () => {
-    const request = {
-      instanceId: 'testInstanceId',
-      holdingsRecordId: DCB_HOLDING_ID,
-    };
-
-    expect(isvirtualItem(request)).toBe(false);
+    expect(isvirtualItem('testInstanceId', DCB_HOLDING_ID)).toBe(false);
   });
 
   it('should return false if "instanceId" and "holdingsRecordId" in request have hardcoded invalid value', () => {
-    const request = {
-      instanceId: 'testInstanceId',
-      holdingsRecordId: 'testHoldingRecordId',
-    };
-
-    expect(isvirtualItem(request)).toBe(false);
+    expect(isvirtualItem('testInstanceId', 'testHoldingRecordId')).toBe(false);
   });
 });
 
