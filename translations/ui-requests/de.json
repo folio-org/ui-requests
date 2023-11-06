@@ -263,7 +263,7 @@
     "requestMeta.fulfillment.holdShelf": "Abholregal",
     "requestMeta.fulfillment.delivery": "Lieferung",
     "requester.fulfillmentPref": "Bereitstellungspräferenz",
-    "errors.requestNotAllowedForPatronTitleCombination": "Hold requests are not allowed for this patron and title combination",
+    "errors.requestNotAllowedForPatronTitleCombination": "Vormerkung für diese Kombination aus Benutzer/-in und Titel nicht erlaubt",
     "errors.requestType.titleLevelRequest": "None available for this title and patron combination",
     "errors.requestType.itemLevelRequest": "None available for this item and patron combination",
     "errors.requestType.selectItem": "Please select a request type",
@@ -281,5 +281,5 @@
     "errors.userCannotBeProxyForThemselves": "User cannot be proxy for themselves",
     "errors.itemAlreadyRequested": "Not allowed to move title level page request to the same item",
     "errors.holdShelfRequestsRequirePickupServicePoint": "Hold shelf fulfillment requests require a Pickup service point",
-    "errors.requestAlreadyClosed": "Error: The Request has already been closed."
+    "errors.requestAlreadyClosed": "Fehler: Bestandsanfrage wurde bereits geschlossen"
 }
