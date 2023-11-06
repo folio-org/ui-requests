@@ -485,7 +485,7 @@ class ViewRequest extends React.Component {
     const isRequestOpen = requestStatus.startsWith('Open');
     const cancellationReasonMap = keyBy(cancellationReasons, 'id');
     const isRequestValid = isValidRequest(request);
-    const isDCBTransaction = isVirtualPatron(requester?.personal?.lastName) || isvirtualItem(request);
+    const isDCBTransaction = isVirtualPatron(requester?.personal?.lastName) || isvirtualItem(request?.instanceId, request?.holdingsRecordId);
 
     let deliveryAddressDetail;
     let selectedDelivery = false;
