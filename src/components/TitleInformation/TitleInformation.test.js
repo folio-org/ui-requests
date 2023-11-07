@@ -20,7 +20,7 @@ import TitleInformation, {
 import {
   INVALID_REQUEST_HARDCODED_ID,
   DCB_INSTANCE_ID,
-  DCB_HOLDING_ID,
+  DCB_HOLDINGS_RECORD_ID,
 } from '../../constants';
 
 KeyValue.mockImplementation(jest.fn(() => null));
@@ -208,7 +208,7 @@ describe('TitleInformation', () => {
         <TitleInformation
           {...defaultProps}
           instanceId={DCB_INSTANCE_ID}
-          holdingsRecordId={DCB_HOLDING_ID}
+          holdingsRecordId={DCB_HOLDINGS_RECORD_ID}
         />
       );
     });

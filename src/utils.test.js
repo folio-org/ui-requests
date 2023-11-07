@@ -37,7 +37,7 @@ import {
   fulfillmentTypeMap,
   requestTypeOptionMap,
   DCB_INSTANCE_ID,
-  DCB_HOLDING_ID,
+  DCB_HOLDINGS_RECORD_ID,
 } from './constants';
 
 describe('escapeValue', () => {
@@ -295,7 +295,7 @@ describe('isValidRequest', () => {
 
 describe('isvirtualItem', () => {
   it('should return true if item is virtual', () => {
-    expect(isvirtualItem(DCB_INSTANCE_ID, DCB_HOLDING_ID)).toBe(true);
+    expect(isvirtualItem(DCB_INSTANCE_ID, DCB_HOLDINGS_RECORD_ID)).toBe(true);
   });
 
   it('should return false if "holdingsRecordId" in request have hardcoded invalid value', () => {
@@ -303,7 +303,7 @@ describe('isvirtualItem', () => {
   });
 
   it('should return false if "instanceId" in request have hardcoded invalid value', () => {
-    expect(isvirtualItem('testInstanceId', DCB_HOLDING_ID)).toBe(false);
+    expect(isvirtualItem('testInstanceId', DCB_HOLDINGS_RECORD_ID)).toBe(false);
   });
 
   it('should return false if "instanceId" and "holdingsRecordId" in request have hardcoded invalid value', () => {

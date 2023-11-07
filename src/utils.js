@@ -32,7 +32,7 @@ import {
   createModes,
   INVALID_REQUEST_HARDCODED_ID,
   DCB_INSTANCE_ID,
-  DCB_HOLDING_ID,
+  DCB_HOLDINGS_RECORD_ID,
   DCB_USER,
 } from './constants';
 
@@ -342,7 +342,7 @@ export const isvirtualItem = (
   instanceId,
   holdingsRecordId,
 ) => {
-  return instanceId === DCB_INSTANCE_ID && holdingsRecordId === DCB_HOLDING_ID;
+  return instanceId === DCB_INSTANCE_ID && holdingsRecordId === DCB_HOLDINGS_RECORD_ID;
 };
 
 
