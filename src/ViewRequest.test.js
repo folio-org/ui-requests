@@ -219,7 +219,7 @@ describe('ViewRequest', () => {
             );
           });
 
-          it('should not render "Dublicate" button', () => {
+          it('should not render "Duplicate" button', () => {
             expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
           });
         });
@@ -401,68 +401,6 @@ describe('ViewRequest', () => {
             expect(screen.queryByText(labelIds.moveRequest)).not.toBeInTheDocument();
             expect(screen.queryByText(labelIds.reorderQueue)).not.toBeInTheDocument();
           });
-
-          // describe('when request is valid', () => {
-          //   const props = {
-          //     ...defaultProps,
-          //     resources: {
-          //       selectedRequest: {
-          //         hasLoaded: true,
-          //         records: [openValidRequest],
-          //       },
-          //     },
-          //   };
-
-          //   beforeEach(() => {
-          //     render(
-          //       <CommandList commands={defaultKeyboardShortcuts}>
-          //         <ViewRequest {...props} />
-          //       </CommandList>
-          //     );
-          //   });
-
-          //   it('actions menu should show all possible actions', () => {
-          //     expect(screen.getByText(labelIds.cancelRequest)).toBeInTheDocument();
-          //     expect(screen.getByText(labelIds.edit)).not.toBeInTheDocument();
-          //     expect(screen.getByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
-          //     expect(screen.getByText(labelIds.moveRequest)).not.toBeInTheDocument();
-          //     expect(screen.getByText(labelIds.reorderQueue)).not.toBeInTheDocument();
-          //   });
-          // });
-
-          // describe('when request is invalid', () => {
-          //   const props = {
-          //     ...defaultProps,
-          //     resources: {
-          //       selectedRequest: {
-          //         hasLoaded: true,
-          //         records: [
-          //           {
-          //             ...openValidRequest,
-          //             instanceId: INVALID_REQUEST_HARDCODED_ID,
-          //             holdingsRecordId: INVALID_REQUEST_HARDCODED_ID,
-          //           },
-          //         ],
-          //       },
-          //     },
-          //   };
-
-          //   beforeEach(() => {
-          //     render(
-          //       <CommandList commands={defaultKeyboardShortcuts}>
-          //         <ViewRequest {...props} />
-          //       </CommandList>
-          //     );
-          //   });
-
-          //   it('should render action menu with only "Cancel request" button', () => {
-          //     expect(screen.getByText(labelIds.cancelRequest)).toBeInTheDocument();
-          //     expect(screen.queryByText(labelIds.edit)).not.toBeInTheDocument();
-          //     expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
-          //     expect(screen.queryByText(labelIds.moveRequest)).not.toBeInTheDocument();
-          //     expect(screen.queryByText(labelIds.reorderQueue)).not.toBeInTheDocument();
-          //   });
-          // });
         });
       });
 
@@ -574,68 +512,6 @@ describe('ViewRequest', () => {
             expect(screen.queryByText(labelIds.moveRequest)).not.toBeInTheDocument();
             expect(screen.queryByText(labelIds.reorderQueue)).not.toBeInTheDocument();
           });
-
-          // describe('when request is valid', () => {
-          //   const props = {
-          //     ...defaultProps,
-          //     resources: {
-          //       selectedRequest: {
-          //         hasLoaded: true,
-          //         records: [openValidRequest],
-          //       },
-          //     },
-          //   };
-
-          //   beforeEach(() => {
-          //     render(
-          //       <CommandList commands={defaultKeyboardShortcuts}>
-          //         <ViewRequest {...props} />
-          //       </CommandList>
-          //     );
-          //   });
-
-          //   it('actions menu should show all possible actions', () => {
-          //     expect(screen.getByText(labelIds.cancelRequest)).toBeInTheDocument();
-          //     expect(screen.getByText(labelIds.edit)).not.toBeInTheDocument();
-          //     expect(screen.getByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
-          //     expect(screen.getByText(labelIds.moveRequest)).not.toBeInTheDocument();
-          //     expect(screen.getByText(labelIds.reorderQueue)).not.toBeInTheDocument();
-          //   });
-          // });
-
-          // describe('when request is invalid', () => {
-          //   const props = {
-          //     ...defaultProps,
-          //     resources: {
-          //       selectedRequest: {
-          //         hasLoaded: true,
-          //         records: [
-          //           {
-          //             ...openValidRequest,
-          //             instanceId: INVALID_REQUEST_HARDCODED_ID,
-          //             holdingsRecordId: INVALID_REQUEST_HARDCODED_ID,
-          //           },
-          //         ],
-          //       },
-          //     },
-          //   };
-
-          //   beforeEach(() => {
-          //     render(
-          //       <CommandList commands={defaultKeyboardShortcuts}>
-          //         <ViewRequest {...props} />
-          //       </CommandList>
-          //     );
-          //   });
-
-          //   it('should render action menu with only "Cancel request" button', () => {
-          //     expect(screen.getByText(labelIds.cancelRequest)).toBeInTheDocument();
-          //     expect(screen.queryByText(labelIds.edit)).not.toBeInTheDocument();
-          //     expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
-          //     expect(screen.queryByText(labelIds.moveRequest)).not.toBeInTheDocument();
-          //     expect(screen.queryByText(labelIds.reorderQueue)).not.toBeInTheDocument();
-          //   });
-          // });
         });
       });
 
