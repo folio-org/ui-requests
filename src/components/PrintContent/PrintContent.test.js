@@ -28,6 +28,7 @@ describe('PrintContent', () => {
         },
       }
     ],
+    printContentTestId: testIds.printContent,
   };
 
   afterEach(() => {

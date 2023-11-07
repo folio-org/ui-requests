@@ -1,6 +1,6 @@
 {
   "name": "@folio/requests",
-  "version": "9.0.0",
+  "version": "9.1.0",
   "description": "Requests manager",
   "repository": "folio-org/ui-requests",
   "publishConfig": {
@@ -118,6 +118,7 @@
           "circulation-storage.requests.item.post",
           "circulation-storage.request-preferences.collection.get",
           "circulation.pick-slips.get",
+          "circulation.search-slips.get",
           "inventory-storage.locations.item.get"
         ],
         "visible": true

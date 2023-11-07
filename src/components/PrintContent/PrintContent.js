@@ -7,12 +7,16 @@ import { buildTemplate } from '../../utils';
 
 import css from './PrintContent.css';
 
-const PrintContent = forwardRef(({ dataSource, template }, ref) => {
+const PrintContent = forwardRef(({
+  dataSource,
+  template,
+  printContentTestId,
+}, ref) => {
   const templateFn = useMemo(() => buildTemplate(template), [template]);
 
   return (
     <div
-      data-testid="printContent"
+      data-testid={printContentTestId}
       className={css.hiddenContent}
     >
       <div ref={ref}>
@@ -33,6 +37,7 @@ const PrintContent = forwardRef(({ dataSource, template }, ref) => {
 });
 
 PrintContent.propTypes = {
+  printContentTestId: PropTypes.string.isRequired,
   dataSource: PropTypes.arrayOf(PropTypes.object).isRequired,
   template: PropTypes.string.isRequired,
 };

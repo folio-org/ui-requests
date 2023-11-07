@@ -48,7 +48,7 @@ import {
   reportHeaders,
   fulfillmentTypes,
   expiredHoldsReportHeaders,
-  pickSlipType,
+  SLIPS_TYPE,
   createModes,
   requestStatusesTranslations,
   requestTypesTranslations,
@@ -92,6 +92,15 @@ import {
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
 export const DEFAULT_FORMATTER_VALUE = '';
+
+export const getPrintHoldRequestsEnabled = (printHoldRequests) => {
+  const value = printHoldRequests.records[0]?.value;
+  const {
+    printHoldRequestsEnabled = false,
+  } = value ? JSON.parse(value) : {};
+
+  return printHoldRequestsEnabled;
+};
 
 export const urls = {
   user: (value, idType) => {
@@ -395,6 +404,21 @@ class RequestsRoute extends React.Component {
       fetch: true,
       throwErrors: false,
     },
+    searchSlips: {
+      type: 'okapi',
+      records: 'searchSlips',
+      path: 'circulation/search-slips/%{currentServicePoint.id}',
+      fetch: true,
+      throwErrors: false,
+    },
+    printHoldRequests: {
+      type: 'okapi',
+      records: 'configs',
+      path: 'configurations/entries',
+      params: {
+        query: '(module==SETTINGS and configName==PRINT_HOLD_REQUESTS)',
+      },
+    },
     currentServicePoint: {},
     tags: {
       throwErrors: false,
@@ -456,6 +480,9 @@ class RequestsRoute extends React.Component {
       pickSlips: PropTypes.shape({
         GET: PropTypes.func,
       }).isRequired,
+      searchSlips: PropTypes.shape({
+        GET: PropTypes.func,
+      }).isRequired,
       currentServicePoint: PropTypes.shape({
         update: PropTypes.func.isRequired,
       }).isRequired,
@@ -486,8 +513,15 @@ class RequestsRoute extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object).isRequired,
         isPending: PropTypes.bool,
       }),
+      searchSlips: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object).isRequired,
+        isPending: PropTypes.bool,
+      }),
       configs: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
+        records: PropTypes.arrayOf(PropTypes.object).isRequired,
+      }),
+      printHoldRequests: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object).isRequired,
       }),
     }).isRequired,
@@ -571,7 +605,8 @@ class RequestsRoute extends React.Component {
       createTitleLevelRequestsByDefault,
     };
 
-    this.printContentRef = React.createRef();
+    this.pickSlipsPrintContentRef = React.createRef();
+    this.searchSlipsPrintContentRef = React.createRef();
     this.paneTitleRef = React.createRef();
   }
 
@@ -1037,10 +1072,11 @@ class RequestsRoute extends React.Component {
     this.setState({ errorModalData: {} });
   };
 
-  getPrintTemplate() {
+  getPrintTemplate(slipType) {
     const staffSlips = get(this.props.resources, 'staffSlips.records', []);
-    const pickSlip = staffSlips.find(slip => slip.name.toLowerCase() === pickSlipType);
-    return get(pickSlip, 'template', '');
+    const slipTemplate = staffSlips.find(slip => slip.name.toLowerCase() === slipType.toLowerCase());
+
+    return get(slipTemplate, 'template', '');
   }
 
   handleFilterChange = ({ name, values }) => {
@@ -1121,8 +1157,10 @@ class RequestsRoute extends React.Component {
       holdsShelfReportPending,
       createTitleLevelRequestsByDefault,
     } = this.state;
+    const printHoldRequestsEnabled = getPrintHoldRequestsEnabled(resources.printHoldRequests);
     const { name: servicePointName } = this.getCurrentServicePointInfo();
     const pickSlips = get(resources, 'pickSlips.records', []);
+    const searchSlips = get(resources, 'searchSlips.records', []);
     const patronGroups = get(resources, 'patronGroups.records', []);
     const addressTypes = get(resources, 'addressTypes.records', []);
     const servicePoints = get(resources, 'servicePoints.records', []);
@@ -1136,10 +1174,14 @@ class RequestsRoute extends React.Component {
     };
 
     const pickSlipsArePending = resources?.pickSlips?.isPending;
+    const searchSlipsArePending = resources?.searchSlips?.isPending;
     const requestsEmpty = isEmpty(requests);
     const pickSlipsEmpty = isEmpty(pickSlips);
-    const printTemplate = this.getPrintTemplate();
-    const pickSlipsData = convertToSlipData(pickSlips, intl, timezone, locale);
+    const searchSlipsEmpty = isEmpty(searchSlips);
+    const pickSlipsPrintTemplate = this.getPrintTemplate(SLIPS_TYPE.PICK_SLIP);
+    const searchSlipsPrintTemplate = this.getPrintTemplate(SLIPS_TYPE.SEARCH_SLIP_HOLD_REQUESTS);
+    const pickSlipsData = convertToSlipData(pickSlips, intl, timezone, locale, SLIPS_TYPE.PICK_SLIP);
+    const searchSlipsData = convertToSlipData(searchSlips, intl, timezone, locale, SLIPS_TYPE.SEARCH_SLIP_HOLD_REQUESTS);
     const resultsFormatter = getListFormatter(this.getRowURL, this.setURL);
 
     const actionMenu = ({ onToggle, renderColumnsMenu }) => (
@@ -1197,8 +1239,8 @@ class RequestsRoute extends React.Component {
                   buttonStyle="dropdownItem"
                   id="printPickSlipsBtn"
                   disabled={pickSlipsEmpty}
-                  template={printTemplate}
-                  contentRef={this.printContentRef}
+                  template={pickSlipsPrintTemplate}
+                  contentRef={this.pickSlipsPrintContentRef}
                   onBeforeGetContent={
                     () => new Promise(resolve => {
                       this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
@@ -1215,6 +1257,38 @@ class RequestsRoute extends React.Component {
                   />
                 </PrintButton>
               </>
+          }
+          {
+            printHoldRequestsEnabled &&
+            <>
+              {
+                searchSlipsArePending ?
+                  <LoadingButton>
+                    <FormattedMessage id="ui-requests.searchSlipsLoading" />
+                  </LoadingButton> :
+                  <PrintButton
+                    buttonStyle="dropdownItem"
+                    id="printSearchSlipsBtn"
+                    disabled={searchSlipsEmpty}
+                    template={searchSlipsPrintTemplate}
+                    contentRef={this.searchSlipsPrintContentRef}
+                    onBeforeGetContent={
+                      () => new Promise(resolve => {
+                        this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
+                        onToggle();
+                        // without the timeout the printing process starts right away
+                        // and the callout and onToggle above are blocked
+                        setTimeout(() => resolve(), 1000);
+                      })
+                    }
+                  >
+                    <FormattedMessage
+                      id="ui-requests.printSearchSlips"
+                      values={{ sp: servicePointName }}
+                    />
+                  </PrintButton>
+              }
+            </>
           }
         </MenuSection>
         {renderColumnsMenu}
@@ -1314,10 +1388,20 @@ class RequestsRoute extends React.Component {
             />
           </div>
           <PrintContent
-            ref={this.printContentRef}
-            template={printTemplate}
+            printContentTestId="pickSlipsPrintTemplate"
+            ref={this.pickSlipsPrintContentRef}
+            template={pickSlipsPrintTemplate}
             dataSource={pickSlipsData}
           />
+          {
+            printHoldRequestsEnabled &&
+            <PrintContent
+              printContentTestId="searchSlipsPrintTemplate"
+              ref={this.searchSlipsPrintContentRef}
+              template={searchSlipsPrintTemplate}
+              dataSource={searchSlipsData}
+            />
+          }
         </>
       </RequestsRouteShortcutsWrapper>
     );
