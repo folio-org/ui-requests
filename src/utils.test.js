@@ -28,7 +28,7 @@ import {
   isFormEditing,
   resetFieldState,
   getRequestTypeOptions,
-  isvirtualItem,
+  isVirtualItem,
 } from './utils';
 
 import {
@@ -293,21 +293,21 @@ describe('isValidRequest', () => {
   });
 });
 
-describe('isvirtualItem', () => {
+describe('isVirtualItem', () => {
   it('should return true if item is virtual', () => {
-    expect(isvirtualItem(DCB_INSTANCE_ID, DCB_HOLDINGS_RECORD_ID)).toBe(true);
+    expect(isVirtualItem(DCB_INSTANCE_ID, DCB_HOLDINGS_RECORD_ID)).toBe(true);
   });
 
   it('should return false if "holdingsRecordId" in request have hardcoded invalid value', () => {
-    expect(isvirtualItem(DCB_INSTANCE_ID, 'testHoldingRecordId')).toBe(false);
+    expect(isVirtualItem(DCB_INSTANCE_ID, 'testHoldingRecordId')).toBe(false);
   });
 
   it('should return false if "instanceId" in request have hardcoded invalid value', () => {
-    expect(isvirtualItem('testInstanceId', DCB_HOLDINGS_RECORD_ID)).toBe(false);
+    expect(isVirtualItem('testInstanceId', DCB_HOLDINGS_RECORD_ID)).toBe(false);
   });
 
   it('should return false if "instanceId" and "holdingsRecordId" in request have hardcoded invalid value', () => {
-    expect(isvirtualItem('testInstanceId', 'testHoldingRecordId')).toBe(false);
+    expect(isVirtualItem('testInstanceId', 'testHoldingRecordId')).toBe(false);
   });
 });
 

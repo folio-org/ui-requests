@@ -17,7 +17,7 @@ import {
 } from '../../constants';
 import {
   isValidRequest,
-  isvirtualItem,
+  isVirtualItem,
   openRequestStatusFilters,
 } from '../../utils';
 
@@ -47,7 +47,7 @@ const TitleInformation = (props) => {
     },
   } = props;
   const titleLevelRequestsCountValue = titleLevelRequestsLink ? getURL(instanceId, titleLevelRequestsCount) : titleLevelRequestsCount;
-  const titleValue = isValidRequest({ instanceId }) && !isvirtualItem(instanceId, holdingsRecordId) ? getTitleURL(instanceId, title) : title;
+  const titleValue = isValidRequest({ instanceId }) && !isVirtualItem(instanceId, holdingsRecordId) ? getTitleURL(instanceId, title) : title;
 
   return (
     <>

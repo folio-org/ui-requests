@@ -17,7 +17,7 @@ import {
 
 import {
   isValidRequest,
-  isvirtualItem,
+  isVirtualItem,
   openRequestStatusFilters,
 } from './utils';
 import { itemStatusesTranslations } from './constants';
@@ -59,7 +59,7 @@ const ItemDetail = ({
   const isRequestValid = isValidRequest({ instanceId, holdingsRecordId });
   const recordLink = () => {
     if (itemId) {
-      return isRequestValid && !isvirtualItem(instanceId, holdingsRecordId)
+      return isRequestValid && !isVirtualItem(instanceId, holdingsRecordId)
         ? <Link to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}>{item.barcode || itemId}</Link>
         : (item.barcode || itemId);
     }

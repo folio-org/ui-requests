@@ -63,7 +63,7 @@ import {
   getTlrSettings,
   generateUserName,
   isValidRequest,
-  isvirtualItem,
+  isVirtualItem,
   isVirtualPatron,
 } from './utils';
 import urls from './routes/urls';
@@ -485,7 +485,7 @@ class ViewRequest extends React.Component {
     const isRequestOpen = requestStatus.startsWith('Open');
     const cancellationReasonMap = keyBy(cancellationReasons, 'id');
     const isRequestValid = isValidRequest(request);
-    const isDCBTransaction = isVirtualPatron(requester?.personal?.lastName) || isvirtualItem(request?.instanceId, request?.holdingsRecordId);
+    const isDCBTransaction = isVirtualPatron(requester?.personal?.lastName) || isVirtualItem(request?.instanceId, request?.holdingsRecordId);
 
     let deliveryAddressDetail;
     let selectedDelivery = false;
