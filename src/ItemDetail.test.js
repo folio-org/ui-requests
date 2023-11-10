@@ -79,4 +79,29 @@ describe('ItemDetail', () => {
       expect(within(keyValueWithLink).getByText(item.barcode)).toBeInTheDocument();
     });
   });
+
+  describe('when DCB transaction request on virtual item', () => {
+    const request = {
+      ...defaultRequest,
+      instanceId: INVALID_REQUEST_HARDCODED_ID,
+      holdingsRecordId: INVALID_REQUEST_HARDCODED_ID,
+    };
+
+    beforeEach(() => {
+      render(
+        <ItemDetail
+          {...defaultProps}
+          request={request}
+        />
+      );
+    });
+
+    it('should render "item barcode" without link', () => {
+      const keyValueWithLink = screen.getByTestId(testIds.itemBarcodeLink);
+      const link = within(keyValueWithLink).queryByRole('link');
+
+      expect(link).not.toBeInTheDocument();
+      expect(within(keyValueWithLink).getByText(item.barcode)).toBeInTheDocument();
+    });
+  });
 });
