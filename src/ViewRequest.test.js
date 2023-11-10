@@ -19,6 +19,8 @@ import {
   INVALID_REQUEST_HARDCODED_ID,
   requestStatuses,
   REQUEST_LEVEL_TYPES,
+  DCB_INSTANCE_ID,
+  DCB_HOLDINGS_RECORD_ID,
 } from './constants';
 import {
   duplicateRecordShortcut,
@@ -62,6 +64,19 @@ describe('ViewRequest', () => {
     metadata: {
       createdDate: 'createdDate',
     },
+  };
+  const mockedRequestWithDCBUser = {
+    ...mockedRequest,
+    requester: {
+      personal: {
+        lastName: 'DcbSystem',
+      }
+    }
+  };
+  const mockedRequestWithVirtualItem = {
+    ...mockedRequest,
+    instanceId: DCB_INSTANCE_ID,
+    holdingsRecordId: DCB_HOLDINGS_RECORD_ID,
   };
   const mockedLocation = {
     pathname: 'pathname',
@@ -119,58 +134,89 @@ describe('ViewRequest', () => {
     },
   };
 
-  beforeEach(() => {
-    render(
-      <CommandList commands={defaultKeyboardShortcuts}>
-        <ViewRequest {...defaultProps} />
-      </CommandList>
-    );
-  });
-
-  afterEach(() => {
-    RequestForm.mockClear();
-  });
-
-  describe('when work with request editing', () => {
-    beforeAll(() => {
-      mockedLocation.search = '?layer=edit';
+  describe('Non DCB Transactions', () => {
+    beforeEach(() => {
+      render(
+        <CommandList commands={defaultKeyboardShortcuts}>
+          <ViewRequest {...defaultProps} />
+        </CommandList>
+      );
     });
 
-    it('should set "createTitleLevelRequest" to false when try to edit existed request', () => {
-      const expectedResult = {
-        initialValues : {
-          requestExpirationDate: null,
-          holdShelfExpirationDate: mockedRequest.holdShelfExpirationDate,
-          holdShelfExpirationTime: moment(mockedRequest.holdShelfExpirationDate).format('HH:mm'),
-          createTitleLevelRequest: false,
-          ...mockedRequest,
-        },
-      };
-
-      expect(RequestForm).toHaveBeenCalledWith(expect.objectContaining(expectedResult), {});
-    });
-  });
-
-  describe('when not working with request editing', () => {
-    beforeAll(() => {
-      mockedLocation.search = null;
+    afterEach(() => {
+      RequestForm.mockClear();
     });
 
-    describe('when current request is closed', () => {
-      describe('request is valid', () => {
-        describe('TLR in enabled', () => {
-          beforeAll(() => {
-            mockedConfig.records[0].value = '{"titleLevelRequestsFeatureEnabled":true}';
+    describe('when work with request editing', () => {
+      beforeAll(() => {
+        mockedLocation.search = '?layer=edit';
+      });
+
+      it('should set "createTitleLevelRequest" to false when try to edit existed request', () => {
+        const expectedResult = {
+          initialValues : {
+            requestExpirationDate: null,
+            holdShelfExpirationDate: mockedRequest.holdShelfExpirationDate,
+            holdShelfExpirationTime: moment(mockedRequest.holdShelfExpirationDate).format('HH:mm'),
+            createTitleLevelRequest: false,
+            ...mockedRequest,
+          },
+        };
+
+        expect(RequestForm).toHaveBeenCalledWith(expect.objectContaining(expectedResult), {});
+      });
+    });
+
+    describe('when not working with request editing', () => {
+      beforeAll(() => {
+        mockedLocation.search = null;
+      });
+
+      describe('when current request is closed', () => {
+        describe('request is valid', () => {
+          describe('TLR in enabled', () => {
+            beforeAll(() => {
+              mockedConfig.records[0].value = '{"titleLevelRequestsFeatureEnabled":true}';
+            });
+
+            it('should render "Duplicate" button', () => {
+              expect(screen.getByText(labelIds.duplicateRequest)).toBeInTheDocument();
+            });
           });
 
-          it('should render "Duplicate" button', () => {
-            expect(screen.getByText(labelIds.duplicateRequest)).toBeInTheDocument();
+          describe('TLR in disabled', () => {
+            beforeAll(() => {
+              mockedConfig.records[0].value = '{"titleLevelRequestsFeatureEnabled":false}';
+            });
+
+            it('should not render "Duplicate" button', () => {
+              expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
+            });
           });
         });
 
-        describe('TLR in disabled', () => {
-          beforeAll(() => {
-            mockedConfig.records[0].value = '{"titleLevelRequestsFeatureEnabled":false}';
+        describe('request is not valid', () => {
+          const closedInvalidRequest = {
+            ...mockedRequest,
+            instanceId: INVALID_REQUEST_HARDCODED_ID,
+            holdingsRecordId: INVALID_REQUEST_HARDCODED_ID,
+          };
+          const props = {
+            ...defaultProps,
+            resources: {
+              selectedRequest: {
+                hasLoaded: true,
+                records: [closedInvalidRequest],
+              },
+            },
+          };
+
+          beforeEach(() => {
+            render(
+              <CommandList commands={defaultKeyboardShortcuts}>
+                <ViewRequest {...props} />
+              </CommandList>
+            );
           });
 
           it('should not render "Duplicate" button', () => {
@@ -179,115 +225,314 @@ describe('ViewRequest', () => {
         });
       });
 
-      describe('request is not valid', () => {
-        const closedInvalidRequest = {
+      describe('when current request is open', () => {
+        const openValidRequest = {
           ...mockedRequest,
-          instanceId: INVALID_REQUEST_HARDCODED_ID,
-          holdingsRecordId: INVALID_REQUEST_HARDCODED_ID,
-        };
-        const props = {
-          ...defaultProps,
-          resources: {
-            selectedRequest: {
-              hasLoaded: true,
-              records: [closedInvalidRequest],
-            },
-          },
+          status: requestStatuses.NOT_YET_FILLED,
         };
 
-        beforeEach(() => {
-          render(
-            <CommandList commands={defaultKeyboardShortcuts}>
-              <ViewRequest {...props} />
-            </CommandList>
-          );
+        describe('when request is valid', () => {
+          const props = {
+            ...defaultProps,
+            resources: {
+              selectedRequest: {
+                hasLoaded: true,
+                records: [openValidRequest],
+              },
+            },
+          };
+
+          beforeEach(() => {
+            render(
+              <CommandList commands={defaultKeyboardShortcuts}>
+                <ViewRequest {...props} />
+              </CommandList>
+            );
+          });
+
+          it('actions menu should show all possible actions', () => {
+            expect(screen.getByText(labelIds.cancelRequest)).toBeInTheDocument();
+            expect(screen.getByText(labelIds.edit)).toBeInTheDocument();
+            expect(screen.getByText(labelIds.duplicateRequest)).toBeInTheDocument();
+            expect(screen.getByText(labelIds.moveRequest)).toBeInTheDocument();
+            expect(screen.getByText(labelIds.reorderQueue)).toBeInTheDocument();
+          });
         });
 
-        it('should not render "Dublicate" button', () => {
-          expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
+        describe('when request is invalid', () => {
+          const props = {
+            ...defaultProps,
+            resources: {
+              selectedRequest: {
+                hasLoaded: true,
+                records: [
+                  {
+                    ...openValidRequest,
+                    instanceId: INVALID_REQUEST_HARDCODED_ID,
+                    holdingsRecordId: INVALID_REQUEST_HARDCODED_ID,
+                  },
+                ],
+              },
+            },
+          };
+
+          beforeEach(() => {
+            render(
+              <CommandList commands={defaultKeyboardShortcuts}>
+                <ViewRequest {...props} />
+              </CommandList>
+            );
+          });
+
+          it('should render action menu with only "Cancel request" button', () => {
+            expect(screen.getByText(labelIds.cancelRequest)).toBeInTheDocument();
+            expect(screen.queryByText(labelIds.edit)).not.toBeInTheDocument();
+            expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
+            expect(screen.queryByText(labelIds.moveRequest)).not.toBeInTheDocument();
+            expect(screen.queryByText(labelIds.reorderQueue)).not.toBeInTheDocument();
+          });
         });
       });
     });
 
-    describe('when current request is open', () => {
-      const openValidRequest = {
-        ...mockedRequest,
-        status: requestStatuses.NOT_YET_FILLED,
-      };
-
-      describe('when request is valid', () => {
-        const props = {
-          ...defaultProps,
-          resources: {
-            selectedRequest: {
-              hasLoaded: true,
-              records: [openValidRequest],
-            },
-          },
-        };
-
-        beforeEach(() => {
-          render(
-            <CommandList commands={defaultKeyboardShortcuts}>
-              <ViewRequest {...props} />
-            </CommandList>
-          );
-        });
-
-        it('actions menu should show all possible actions', () => {
-          expect(screen.getByText(labelIds.cancelRequest)).toBeInTheDocument();
-          expect(screen.getByText(labelIds.edit)).toBeInTheDocument();
-          expect(screen.getByText(labelIds.duplicateRequest)).toBeInTheDocument();
-          expect(screen.getByText(labelIds.moveRequest)).toBeInTheDocument();
-          expect(screen.getByText(labelIds.reorderQueue)).toBeInTheDocument();
-        });
+    describe('Keyboard shortcuts', () => {
+      it('should check permission when duplicating', () => {
+        duplicateRecordShortcut(document.body);
+        expect(defaultProps.stripes.hasPerm).toHaveBeenCalled();
       });
 
-      describe('when request is invalid', () => {
-        const props = {
-          ...defaultProps,
-          resources: {
-            selectedRequest: {
-              hasLoaded: true,
-              records: [
-                {
-                  ...openValidRequest,
-                  instanceId: INVALID_REQUEST_HARDCODED_ID,
-                  holdingsRecordId: INVALID_REQUEST_HARDCODED_ID,
-                },
-              ],
-            },
-          },
-        };
-
-        beforeEach(() => {
-          render(
-            <CommandList commands={defaultKeyboardShortcuts}>
-              <ViewRequest {...props} />
-            </CommandList>
-          );
-        });
-
-        it('should render action menu with only "Cancel request" button', () => {
-          expect(screen.getByText(labelIds.cancelRequest)).toBeInTheDocument();
-          expect(screen.queryByText(labelIds.edit)).not.toBeInTheDocument();
-          expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
-          expect(screen.queryByText(labelIds.moveRequest)).not.toBeInTheDocument();
-          expect(screen.queryByText(labelIds.reorderQueue)).not.toBeInTheDocument();
-        });
+      it('should check permission on edit', () => {
+        editRecordShortcut(document.body);
+        expect(defaultProps.stripes.hasPerm).toHaveBeenCalled();
       });
     });
   });
 
-  describe('Keyboard shortcuts', () => {
-    it('should check permission when duplicating', () => {
-      duplicateRecordShortcut(document.body);
-      expect(defaultProps.stripes.hasPerm).toHaveBeenCalled();
+  describe('DCB Transactions', () => {
+    afterEach(() => {
+      RequestForm.mockClear();
     });
 
-    it('should check permission on edit', () => {
-      editRecordShortcut(document.body);
-      expect(defaultProps.stripes.hasPerm).toHaveBeenCalled();
+    describe('when virtual patron-DCB Lending flow', () => {
+      const alteredProps = {
+        ...defaultProps,
+        resources: {
+          selectedRequest: {
+            hasLoaded: true,
+            records: [
+              mockedRequestWithDCBUser,
+            ],
+          },
+        }
+      };
+
+      describe('when in request detail', () => {
+        beforeAll(() => {
+          mockedLocation.search = null;
+        });
+
+        describe('when current lending request is closed', () => {
+          const openValidRequest = {
+            ...mockedRequestWithDCBUser,
+            status: requestStatuses.FILLED,
+          };
+
+          const props = {
+            ...alteredProps,
+            resources: {
+              selectedRequest: {
+                hasLoaded: true,
+                records: [
+                  {
+                    ...alteredProps.resources.selectedRequest.records,
+                    ...openValidRequest,
+                  },
+                ],
+              },
+            },
+          };
+
+          beforeEach(() => {
+            render(
+              <CommandList commands={defaultKeyboardShortcuts}>
+                <ViewRequest {...props} />
+              </CommandList>
+            );
+          });
+
+          it('should not render "Duplicate" button', () => {
+            expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
+          });
+        });
+
+        describe('when current lending request is open', () => {
+          const openValidRequest = {
+            ...mockedRequestWithDCBUser,
+            status: requestStatuses.NOT_YET_FILLED,
+          };
+
+          const props = {
+            ...alteredProps,
+            resources: {
+              selectedRequest: {
+                hasLoaded: true,
+                records: [
+                  {
+                    ...alteredProps.resources.selectedRequest.records,
+                    ...openValidRequest,
+                  },
+                ],
+              },
+            },
+          };
+
+          beforeEach(() => {
+            render(
+              <CommandList commands={defaultKeyboardShortcuts}>
+                <ViewRequest {...props} />
+              </CommandList>
+            );
+          });
+
+          it('should render action menu with only "Cancel request" button', () => {
+            expect(screen.getByText(labelIds.cancelRequest)).toBeInTheDocument();
+            expect(screen.queryByText(labelIds.edit)).not.toBeInTheDocument();
+            expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
+            expect(screen.queryByText(labelIds.moveRequest)).not.toBeInTheDocument();
+            expect(screen.queryByText(labelIds.reorderQueue)).not.toBeInTheDocument();
+          });
+        });
+      });
+
+      describe('Keyboard shortcuts', () => {
+        beforeEach(() => {
+          render(
+            <CommandList commands={defaultKeyboardShortcuts}>
+              <ViewRequest {...alteredProps} />
+            </CommandList>
+          );
+        });
+        it('should check permission when duplicating', () => {
+          duplicateRecordShortcut(document.body);
+          expect(defaultProps.stripes.hasPerm).toHaveBeenCalled();
+        });
+
+        it('should check permission on edit', () => {
+          editRecordShortcut(document.body);
+          expect(defaultProps.stripes.hasPerm).toHaveBeenCalled();
+        });
+      });
+    });
+
+    describe('when virtual item-DCB Borrowing flow', () => {
+      const alteredProps = {
+        ...defaultProps,
+        resources: {
+          selectedRequest: {
+            hasLoaded: true,
+            records: [
+              mockedRequestWithVirtualItem,
+            ],
+          },
+        }
+      };
+
+      describe('when in request detail', () => {
+        beforeAll(() => {
+          mockedLocation.search = null;
+        });
+
+        describe('when current lending request is closed', () => {
+          const openValidRequest = {
+            ...mockedRequestWithDCBUser,
+            status: requestStatuses.FILLED,
+          };
+
+          const props = {
+            ...alteredProps,
+            resources: {
+              selectedRequest: {
+                hasLoaded: true,
+                records: [
+                  {
+                    ...alteredProps.resources.selectedRequest.records,
+                    ...openValidRequest,
+                  },
+                ],
+              },
+            },
+          };
+
+          beforeEach(() => {
+            render(
+              <CommandList commands={defaultKeyboardShortcuts}>
+                <ViewRequest {...props} />
+              </CommandList>
+            );
+          });
+
+          it('should not render "Duplicate" button', () => {
+            expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
+          });
+        });
+
+        describe('when current lending request is open', () => {
+          const openValidRequest = {
+            ...mockedRequestWithDCBUser,
+            status: requestStatuses.NOT_YET_FILLED,
+          };
+
+          const props = {
+            ...alteredProps,
+            resources: {
+              selectedRequest: {
+                hasLoaded: true,
+                records: [
+                  {
+                    ...alteredProps.resources.selectedRequest.records,
+                    ...openValidRequest,
+                  },
+                ],
+              },
+            },
+          };
+
+          beforeEach(() => {
+            render(
+              <CommandList commands={defaultKeyboardShortcuts}>
+                <ViewRequest {...props} />
+              </CommandList>
+            );
+          });
+
+          it('should render action menu with only "Cancel request" button', () => {
+            expect(screen.getByText(labelIds.cancelRequest)).toBeInTheDocument();
+            expect(screen.queryByText(labelIds.edit)).not.toBeInTheDocument();
+            expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
+            expect(screen.queryByText(labelIds.moveRequest)).not.toBeInTheDocument();
+            expect(screen.queryByText(labelIds.reorderQueue)).not.toBeInTheDocument();
+          });
+        });
+      });
+
+      describe('Keyboard shortcuts', () => {
+        beforeEach(() => {
+          render(
+            <CommandList commands={defaultKeyboardShortcuts}>
+              <ViewRequest {...alteredProps} />
+            </CommandList>
+          );
+        });
+        it('should check permission when duplicating', () => {
+          duplicateRecordShortcut(document.body);
+          expect(defaultProps.stripes.hasPerm).toHaveBeenCalled();
+        });
+
+        it('should check permission on edit', () => {
+          editRecordShortcut(document.body);
+          expect(defaultProps.stripes.hasPerm).toHaveBeenCalled();
+        });
+      });
     });
   });
 });

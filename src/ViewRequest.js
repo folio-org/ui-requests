@@ -63,6 +63,8 @@ import {
   getTlrSettings,
   generateUserName,
   isValidRequest,
+  isVirtualItem,
+  isVirtualPatron,
 } from './utils';
 import urls from './routes/urls';
 
@@ -473,6 +475,7 @@ class ViewRequest extends React.Component {
     const {
       requestLevel,
       item,
+      requester
     } = request;
 
     const getPickupServicePointName = this.getPickupServicePointName(request);
@@ -482,6 +485,7 @@ class ViewRequest extends React.Component {
     const isRequestOpen = requestStatus.startsWith('Open');
     const cancellationReasonMap = keyBy(cancellationReasons, 'id');
     const isRequestValid = isValidRequest(request);
+    const isDCBTransaction = isVirtualPatron(requester?.personal?.lastName) || isVirtualItem(request?.instanceId, request?.holdingsRecordId);
 
     let deliveryAddressDetail;
     let selectedDelivery = false;
@@ -519,18 +523,22 @@ class ViewRequest extends React.Component {
 
         return (
           <IfPermission perm="ui-requests.create">
-            <Button
-              id="duplicate-request"
-              onClick={() => {
-                onToggle();
-                this.props.onDuplicate(request);
-              }}
-              buttonStyle="dropdownItem"
-            >
-              <Icon icon="duplicate">
-                <FormattedMessage id="ui-requests.actions.duplicateRequest" />
-              </Icon>
-            </Button>
+            {
+              !isDCBTransaction && (
+                <Button
+                  id="duplicate-request"
+                  onClick={() => {
+                    onToggle();
+                    this.props.onDuplicate(request);
+                  }}
+                  buttonStyle="dropdownItem"
+                >
+                  <Icon icon="duplicate">
+                    <FormattedMessage id="ui-requests.actions.duplicateRequest" />
+                  </Icon>
+                </Button>
+              )
+            }
           </IfPermission>
         );
       }
@@ -539,7 +547,7 @@ class ViewRequest extends React.Component {
         <>
           <IfPermission perm="ui-requests.edit">
             {
-              isRequestValid &&
+              isRequestValid && !isDCBTransaction &&
               <Button
                 buttonStyle="dropdownItem"
                 id="clickable-edit-request"
@@ -568,7 +576,7 @@ class ViewRequest extends React.Component {
             </Button>
           </IfPermission>
           {
-            isRequestValid &&
+            isRequestValid && !isDCBTransaction &&
             <IfPermission perm="ui-requests.create">
               <Button
                 id="duplicate-request"
@@ -584,7 +592,7 @@ class ViewRequest extends React.Component {
               </Button>
             </IfPermission>
           }
-          {item && isRequestNotFilled && isRequestValid &&
+          {item && isRequestNotFilled && isRequestValid && !isDCBTransaction &&
             <IfPermission perm="ui-requests.moveRequest">
               <Button
                 id="move-request"
@@ -599,7 +607,7 @@ class ViewRequest extends React.Component {
                 </Icon>
               </Button>
             </IfPermission> }
-          {isRequestOpen && isRequestValid &&
+          {isRequestOpen && isRequestValid && !isDCBTransaction &&
             <IfPermission perm="ui-requests.reorderQueue">
               <Button
                 id="reorder-queue"
@@ -670,6 +678,7 @@ class ViewRequest extends React.Component {
               >
                 <TitleInformation
                   instanceId={request.instanceId}
+                  holdingsRecordId={request.holdingsRecordId}
                   titleLevelRequestsCount={request.titleRequestCount}
                   title={request.instance.title}
                   contributors={request.instance.contributorNames}

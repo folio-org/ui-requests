@@ -28,6 +28,7 @@ import {
   isFormEditing,
   resetFieldState,
   getRequestTypeOptions,
+  isVirtualItem,
 } from './utils';
 
 import {
@@ -35,6 +36,8 @@ import {
   REQUEST_LEVEL_TYPES,
   fulfillmentTypeMap,
   requestTypeOptionMap,
+  DCB_INSTANCE_ID,
+  DCB_HOLDINGS_RECORD_ID,
 } from './constants';
 
 describe('escapeValue', () => {
@@ -287,6 +290,24 @@ describe('isValidRequest', () => {
     };
 
     expect(isValidRequest(request)).toBe(false);
+  });
+});
+
+describe('isVirtualItem', () => {
+  it('should return true if item is virtual', () => {
+    expect(isVirtualItem(DCB_INSTANCE_ID, DCB_HOLDINGS_RECORD_ID)).toBe(true);
+  });
+
+  it('should return false if "holdingsRecordId" in request have hardcoded invalid value', () => {
+    expect(isVirtualItem(DCB_INSTANCE_ID, 'testHoldingRecordId')).toBe(false);
+  });
+
+  it('should return false if "instanceId" in request have hardcoded invalid value', () => {
+    expect(isVirtualItem('testInstanceId', DCB_HOLDINGS_RECORD_ID)).toBe(false);
+  });
+
+  it('should return false if "instanceId" and "holdingsRecordId" in request have hardcoded invalid value', () => {
+    expect(isVirtualItem('testInstanceId', 'testHoldingRecordId')).toBe(false);
   });
 });
 
