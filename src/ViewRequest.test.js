@@ -331,37 +331,121 @@ describe('ViewRequest', () => {
           mockedLocation.search = null;
         });
 
-        describe('when current lending request is closed', () => {
-          const openValidRequest = {
-            ...mockedRequestWithDCBUser,
-            status: requestStatuses.FILLED,
-          };
+        describe('when current lending request status starts with "Closed"', () => {
+          it('should not render action menu when request status is "Closed - Filled"', () => {
+            const closedFilledRequest = {
+              ...mockedRequestWithDCBUser,
+              status: requestStatuses.FILLED,
+            };
 
-          const props = {
-            ...alteredProps,
-            resources: {
-              selectedRequest: {
-                hasLoaded: true,
-                records: [
-                  {
-                    ...alteredProps.resources.selectedRequest.records,
-                    ...openValidRequest,
-                  },
-                ],
+            const props = {
+              ...alteredProps,
+              resources: {
+                selectedRequest: {
+                  hasLoaded: true,
+                  records: [
+                    {
+                      ...alteredProps.resources.selectedRequest.records,
+                      ...closedFilledRequest,
+                    },
+                  ],
+                },
               },
-            },
-          };
+            };
 
-          beforeEach(() => {
             render(
               <CommandList commands={defaultKeyboardShortcuts}>
                 <ViewRequest {...props} />
               </CommandList>
             );
+            expect(screen.queryByRole('button', { name: 'Actions' })).toBeNull();
           });
 
-          it('should not render "Duplicate" button', () => {
-            expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
+          it('should not render action menu when request status is "Closed - Cancelled"', () => {
+            const closedCancelledRequest = {
+              ...mockedRequestWithDCBUser,
+              status: requestStatuses.CANCELLED,
+            };
+
+            const props = {
+              ...alteredProps,
+              resources: {
+                selectedRequest: {
+                  hasLoaded: true,
+                  records: [
+                    {
+                      ...alteredProps.resources.selectedRequest.records,
+                      ...closedCancelledRequest,
+                    },
+                  ],
+                },
+              },
+            };
+
+            render(
+              <CommandList commands={defaultKeyboardShortcuts}>
+                <ViewRequest {...props} />
+              </CommandList>
+            );
+            expect(screen.queryByRole('button', { name: 'Actions' })).toBeNull();
+          });
+
+          it('should not render action menu when request status is "Closed - Pickup expired"', () => {
+            const closedPckupExpiredRequest = {
+              ...mockedRequestWithDCBUser,
+              status: requestStatuses.PICKUP_EXPIRED,
+            };
+
+            const props = {
+              ...alteredProps,
+              resources: {
+                selectedRequest: {
+                  hasLoaded: true,
+                  records: [
+                    {
+                      ...alteredProps.resources.selectedRequest.records,
+                      ...closedPckupExpiredRequest,
+                    },
+                  ],
+                },
+              },
+            };
+
+            render(
+              <CommandList commands={defaultKeyboardShortcuts}>
+                <ViewRequest {...props} />
+              </CommandList>
+            );
+            expect(screen.queryByRole('button', { name: 'Actions' })).toBeNull();
+          });
+
+          it('should not render action menu when request status is "Closed - Unfilled"', () => {
+            const closedPckupExpiredRequest = {
+              ...mockedRequestWithDCBUser,
+              status: requestStatuses.UNFILLED,
+            };
+
+            const props = {
+              ...alteredProps,
+              resources: {
+                selectedRequest: {
+                  hasLoaded: true,
+                  records: [
+                    {
+                      ...alteredProps.resources.selectedRequest.records,
+                      ...closedPckupExpiredRequest,
+                    },
+                  ],
+                },
+              },
+            };
+
+            render(
+              <CommandList commands={defaultKeyboardShortcuts}>
+                <ViewRequest {...props} />
+              </CommandList>
+            );
+            expect(screen.queryByRole('button', { name: 'Actions' })).toBeNull();
           });
         });
 
@@ -442,41 +526,125 @@ describe('ViewRequest', () => {
           mockedLocation.search = null;
         });
 
-        describe('when current lending request is closed', () => {
-          const openValidRequest = {
-            ...mockedRequestWithDCBUser,
-            status: requestStatuses.FILLED,
-          };
+        describe('when current borrowing request status starts with "Closed"', () => {
+          it('should not render action menu when request status is "Closed - Filled"', () => {
+            const closedFilledRequest = {
+              ...mockedRequestWithDCBUser,
+              status: requestStatuses.FILLED,
+            };
 
-          const props = {
-            ...alteredProps,
-            resources: {
-              selectedRequest: {
-                hasLoaded: true,
-                records: [
-                  {
-                    ...alteredProps.resources.selectedRequest.records,
-                    ...openValidRequest,
-                  },
-                ],
+            const props = {
+              ...alteredProps,
+              resources: {
+                selectedRequest: {
+                  hasLoaded: true,
+                  records: [
+                    {
+                      ...alteredProps.resources.selectedRequest.records,
+                      ...closedFilledRequest,
+                    },
+                  ],
+                },
               },
-            },
-          };
+            };
 
-          beforeEach(() => {
             render(
               <CommandList commands={defaultKeyboardShortcuts}>
                 <ViewRequest {...props} />
               </CommandList>
             );
+            expect(screen.queryByRole('button', { name: 'Actions' })).toBeNull();
           });
 
-          it('should not render "Duplicate" button', () => {
-            expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
+          it('should not render action menu when request status is "Closed - Cancelled"', () => {
+            const closedCancelledRequest = {
+              ...mockedRequestWithDCBUser,
+              status: requestStatuses.CANCELLED,
+            };
+
+            const props = {
+              ...alteredProps,
+              resources: {
+                selectedRequest: {
+                  hasLoaded: true,
+                  records: [
+                    {
+                      ...alteredProps.resources.selectedRequest.records,
+                      ...closedCancelledRequest,
+                    },
+                  ],
+                },
+              },
+            };
+
+            render(
+              <CommandList commands={defaultKeyboardShortcuts}>
+                <ViewRequest {...props} />
+              </CommandList>
+            );
+            expect(screen.queryByRole('button', { name: 'Actions' })).toBeNull();
+          });
+
+          it('should not render action menu when request status is "Closed - Pickup expired"', () => {
+            const closedPckupExpiredRequest = {
+              ...mockedRequestWithDCBUser,
+              status: requestStatuses.PICKUP_EXPIRED,
+            };
+
+            const props = {
+              ...alteredProps,
+              resources: {
+                selectedRequest: {
+                  hasLoaded: true,
+                  records: [
+                    {
+                      ...alteredProps.resources.selectedRequest.records,
+                      ...closedPckupExpiredRequest,
+                    },
+                  ],
+                },
+              },
+            };
+
+            render(
+              <CommandList commands={defaultKeyboardShortcuts}>
+                <ViewRequest {...props} />
+              </CommandList>
+            );
+            expect(screen.queryByRole('button', { name: 'Actions' })).toBeNull();
+          });
+
+          it('should not render action menu when request status is "Closed - Unfilled"', () => {
+            const closedPckupExpiredRequest = {
+              ...mockedRequestWithDCBUser,
+              status: requestStatuses.UNFILLED,
+            };
+
+            const props = {
+              ...alteredProps,
+              resources: {
+                selectedRequest: {
+                  hasLoaded: true,
+                  records: [
+                    {
+                      ...alteredProps.resources.selectedRequest.records,
+                      ...closedPckupExpiredRequest,
+                    },
+                  ],
+                },
+              },
+            };
+
+            render(
+              <CommandList commands={defaultKeyboardShortcuts}>
+                <ViewRequest {...props} />
+              </CommandList>
+            );
+            expect(screen.queryByRole('button', { name: 'Actions' })).toBeNull();
           });
         });
 
-        describe('when current lending request is open', () => {
+        describe('when current borrowing request is open', () => {
           const openValidRequest = {
             ...mockedRequestWithDCBUser,
             status: requestStatuses.NOT_YET_FILLED,

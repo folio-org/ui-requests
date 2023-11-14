@@ -513,7 +513,7 @@ class ViewRequest extends React.Component {
     const showActionMenu = stripes.hasPerm('ui-requests.create')
       || stripes.hasPerm('ui-requests.edit')
       || stripes.hasPerm('ui-requests.moveRequest')
-      || stripes.hasPerm('ui-requests.reorderQueue');
+      || stripes.hasPerm('ui-requests.reorderQueue') || !isDCBTransaction;
 
     const actionMenu = ({ onToggle }) => {
       if (isRequestClosed) {
@@ -523,22 +523,18 @@ class ViewRequest extends React.Component {
 
         return (
           <IfPermission perm="ui-requests.create">
-            {
-              !isDCBTransaction && (
-                <Button
-                  id="duplicate-request"
-                  onClick={() => {
-                    onToggle();
-                    this.props.onDuplicate(request);
-                  }}
-                  buttonStyle="dropdownItem"
-                >
-                  <Icon icon="duplicate">
-                    <FormattedMessage id="ui-requests.actions.duplicateRequest" />
-                  </Icon>
-                </Button>
-              )
-            }
+            <Button
+              id="duplicate-request"
+              onClick={() => {
+                onToggle();
+                this.props.onDuplicate(request);
+              }}
+              buttonStyle="dropdownItem"
+            >
+              <Icon icon="duplicate">
+                <FormattedMessage id="ui-requests.actions.duplicateRequest" />
+              </Icon>
+            </Button>
           </IfPermission>
         );
       }
