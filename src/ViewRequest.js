@@ -487,6 +487,8 @@ class ViewRequest extends React.Component {
     const isRequestValid = isValidRequest(request);
     const isDCBTransaction = isVirtualPatron(requester?.personal?.lastName) || isVirtualItem(request?.instanceId, request?.holdingsRecordId);
 
+    console.log('[ViewRequest.js] isDCBTransaction ', isDCBTransaction);
+
     let deliveryAddressDetail;
     let selectedDelivery = false;
 
@@ -514,6 +516,8 @@ class ViewRequest extends React.Component {
       || stripes.hasPerm('ui-requests.edit')
       || stripes.hasPerm('ui-requests.moveRequest')
       || stripes.hasPerm('ui-requests.reorderQueue') || !isDCBTransaction;
+
+    console.log('[ViewRequest.js] showActionMenu ', showActionMenu);
 
     const actionMenu = ({ onToggle }) => {
       if (isRequestClosed) {
