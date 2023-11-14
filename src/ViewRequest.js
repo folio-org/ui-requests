@@ -521,7 +521,7 @@ class ViewRequest extends React.Component {
 
     const actionMenu = ({ onToggle }) => {
       if (isRequestClosed) {
-        if (!isRequestValid || (requestLevel === REQUEST_LEVEL_TYPES.TITLE && !titleLevelRequestsFeatureEnabled)) {
+        if (!isRequestValid || (requestLevel === REQUEST_LEVEL_TYPES.TITLE && !titleLevelRequestsFeatureEnabled) || isDCBTransaction) {
           return null;
         }
 
