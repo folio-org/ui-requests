@@ -401,14 +401,12 @@ class RequestsRoute extends React.Component {
       type: 'okapi',
       records: 'pickSlips',
       path: 'circulation/pick-slips/%{currentServicePoint.id}',
-      fetch: true,
       throwErrors: false,
     },
     searchSlips: {
       type: 'okapi',
       records: 'searchSlips',
       path: 'circulation/search-slips/%{currentServicePoint.id}',
-      fetch: true,
       throwErrors: false,
     },
     printHoldRequests: {
@@ -1074,7 +1072,8 @@ class RequestsRoute extends React.Component {
 
   getPrintTemplate(slipType) {
     const staffSlips = get(this.props.resources, 'staffSlips.records', []);
-    const slipTemplate = staffSlips.find(slip => slip.name.toLowerCase() === slipType.toLowerCase());
+    const slipTypeInLowerCase = slipType.toLowerCase();
+    const slipTemplate = staffSlips.find(slip => slip.name.toLowerCase() === slipTypeInLowerCase);
 
     return get(slipTemplate, 'template', '');
   }
@@ -1133,6 +1132,16 @@ class RequestsRoute extends React.Component {
     );
   };
 
+  onBeforeGetContentForPrintButton = (onToggle) => (
+    new Promise(resolve => {
+      this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
+      onToggle();
+      // without the timeout the printing process starts right away
+      // and the callout and onToggle above are blocked
+      setTimeout(() => resolve(), 1000);
+    })
+  );
+
   render() {
     const {
       resources,
@@ -1157,7 +1166,7 @@ class RequestsRoute extends React.Component {
       holdsShelfReportPending,
       createTitleLevelRequestsByDefault,
     } = this.state;
-    const printHoldRequestsEnabled = getPrintHoldRequestsEnabled(resources.printHoldRequests);
+    const isPrintHoldRequestsEnabled = getPrintHoldRequestsEnabled(resources.printHoldRequests);
     const { name: servicePointName } = this.getCurrentServicePointInfo();
     const pickSlips = get(resources, 'pickSlips.records', []);
     const searchSlips = get(resources, 'searchSlips.records', []);
@@ -1173,11 +1182,11 @@ class RequestsRoute extends React.Component {
       createTitleLevelRequest: createTitleLevelRequestsByDefault,
     };
 
-    const pickSlipsArePending = resources?.pickSlips?.isPending;
-    const searchSlipsArePending = resources?.searchSlips?.isPending;
+    const isPickSlipsArePending = resources?.pickSlips?.isPending;
+    const isSearchSlipsArePending = resources?.searchSlips?.isPending;
     const requestsEmpty = isEmpty(requests);
-    const pickSlipsEmpty = isEmpty(pickSlips);
-    const searchSlipsEmpty = isEmpty(searchSlips);
+    const isPickSlipsEmpty = isEmpty(pickSlips);
+    const isSearchSlipsEmpty = isEmpty(searchSlips);
     const pickSlipsPrintTemplate = this.getPrintTemplate(SLIPS_TYPE.PICK_SLIP);
     const searchSlipsPrintTemplate = this.getPrintTemplate(SLIPS_TYPE.SEARCH_SLIP_HOLD_REQUESTS);
     const pickSlipsData = convertToSlipData(pickSlips, intl, timezone, locale, SLIPS_TYPE.PICK_SLIP);
@@ -1215,7 +1224,7 @@ class RequestsRoute extends React.Component {
             </Button>
           }
           {
-            pickSlipsArePending ?
+            isPickSlipsArePending ?
               <LoadingButton>
                 <FormattedMessage id="ui-requests.pickSlipsLoading" />
               </LoadingButton> :
@@ -1238,18 +1247,10 @@ class RequestsRoute extends React.Component {
                 <PrintButton
                   buttonStyle="dropdownItem"
                   id="printPickSlipsBtn"
-                  disabled={pickSlipsEmpty}
+                  disabled={isPickSlipsEmpty}
                   template={pickSlipsPrintTemplate}
                   contentRef={this.pickSlipsPrintContentRef}
-                  onBeforeGetContent={
-                    () => new Promise(resolve => {
-                      this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
-                      onToggle();
-                      // without the timeout the printing process starts right away
-                      // and the callout and onToggle above are blocked
-                      setTimeout(() => resolve(), 1000);
-                    })
-                  }
+                  onBeforeGetContent={() => this.onBeforeGetContentForPrintButton(onToggle)}
                 >
                   <FormattedMessage
                     id="ui-requests.printPickSlips"
@@ -1259,28 +1260,20 @@ class RequestsRoute extends React.Component {
               </>
           }
           {
-            printHoldRequestsEnabled &&
+            isPrintHoldRequestsEnabled &&
             <>
               {
-                searchSlipsArePending ?
+                isSearchSlipsArePending ?
                   <LoadingButton>
                     <FormattedMessage id="ui-requests.searchSlipsLoading" />
                   </LoadingButton> :
                   <PrintButton
                     buttonStyle="dropdownItem"
                     id="printSearchSlipsBtn"
-                    disabled={searchSlipsEmpty}
+                    disabled={isSearchSlipsEmpty}
                     template={searchSlipsPrintTemplate}
                     contentRef={this.searchSlipsPrintContentRef}
-                    onBeforeGetContent={
-                      () => new Promise(resolve => {
-                        this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
-                        onToggle();
-                        // without the timeout the printing process starts right away
-                        // and the callout and onToggle above are blocked
-                        setTimeout(() => resolve(), 1000);
-                      })
-                    }
+                    onBeforeGetContent={() => this.onBeforeGetContentForPrintButton(onToggle)}
                   >
                     <FormattedMessage
                       id="ui-requests.printSearchSlips"
@@ -1394,7 +1387,7 @@ class RequestsRoute extends React.Component {
             dataSource={pickSlipsData}
           />
           {
-            printHoldRequestsEnabled &&
+            isPrintHoldRequestsEnabled &&
             <PrintContent
               printContentTestId="searchSlipsPrintTemplate"
               ref={this.searchSlipsPrintContentRef}
