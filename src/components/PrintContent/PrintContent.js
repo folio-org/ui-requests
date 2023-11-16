@@ -43,4 +43,8 @@ PrintContent.propTypes = {
   template: PropTypes.string.isRequired,
 };
 
+PrintContent.defaultProps = {
+  id: 'printContent',
+};
+
 export default memo(PrintContent, isEqual);
