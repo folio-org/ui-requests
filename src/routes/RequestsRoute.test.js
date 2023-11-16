@@ -32,6 +32,7 @@ import RequestsRoute, {
   buildHoldRecords,
   getRequestErrorMessage,
   getListFormatter,
+  getPrintHoldRequestsEnabled,
   urls,
   REQUEST_ERROR_MESSAGE_CODE,
   REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS,
@@ -117,7 +118,7 @@ jest.mock('../components', () => ({
       {children}
     </div>
   )),
-  PrintContent: jest.fn(() => <div>PrintContent</div>)
+  PrintContent: jest.fn(({ printContentTestId }) => <div data-testid={printContentTestId}>PrintContent</div>)
 }));
 jest.mock('../components/RequestsFilters/RequestsFilters', () => ({ onClear }) => {
   return (
@@ -146,6 +147,8 @@ global.fetch = jest.fn(() => Promise.resolve({
 
 const testIds = {
   searchAndSort: 'searchAndSort',
+  pickSlipsPrintTemplate: 'pickSlipsPrintTemplate',
+  searchSlipsPrintTemplate: 'searchSlipsPrintTemplate',
 };
 const RequestFilterData = {
   onChange: jest.fn(),
@@ -159,6 +162,7 @@ const labelIds = {
   closedCancelledRequest: requestStatusesTranslations[requestStatuses.CANCELLED],
   requestType: requestTypesTranslations[requestTypesMap.RECALL],
   printPickSlips: 'ui-requests.printPickSlips',
+  printSearchSlips: 'ui-requests.printSearchSlips',
 };
 
 SearchAndSort.mockImplementation(jest.fn(({
@@ -321,6 +325,9 @@ describe('RequestsRoute', () => {
       pickSlips: {
         GET: jest.fn(),
       },
+      searchSlips: {
+        GET: jest.fn(),
+      },
       proxy: {
         reset: jest.fn(),
         GET: jest.fn(),
@@ -375,6 +382,11 @@ describe('RequestsRoute', () => {
           }
         ],
       },
+      printHoldRequests: {
+        records: [{
+          value: '{"printHoldRequestsEnabled": true}',
+        }],
+      },
       currentServicePoint: {},
       patronBlocks: {
         records: [
@@ -387,6 +399,13 @@ describe('RequestsRoute', () => {
         records: [
           {
             name: 'pick slip',
+          }
+        ],
+      },
+      searchSlips: {
+        records: [
+          {
+            name: 'search slip',
           }
         ],
       },
@@ -474,8 +493,14 @@ describe('RequestsRoute', () => {
       expect(RequestFilterData.onChange).toBeCalled();
     });
 
-    it('should render PrintContent', () => {
-      const printContent = screen.getByText('PrintContent');
+    it('should render PrintContent for pick slips', () => {
+      const printContent = screen.getByTestId(testIds.pickSlipsPrintTemplate);
+
+      expect(printContent).toBeInTheDocument();
+    });
+
+    it('should render PrintContent for search slips', () => {
+      const printContent = screen.getByTestId(testIds.searchSlipsPrintTemplate);
 
       expect(printContent).toBeInTheDocument();
     });
@@ -534,9 +559,17 @@ describe('RequestsRoute', () => {
     it('should render print pick slips label', async () => {
       const printPickSlipsLabel = screen.getByText(labelIds.printPickSlips);
 
-      await userEvent.click(screen.getByRole('button', { name: 'onBeforeGetContent' }));
+      await userEvent.click(screen.getAllByRole('button', { name: 'onBeforeGetContent' })[0]);
 
       expect(printPickSlipsLabel).toBeInTheDocument();
+    });
+
+    it('should render print search slips label', async () => {
+      const printSearchSlipsLabel = screen.getByText(labelIds.printSearchSlips);
+
+      await userEvent.click(screen.getAllByRole('button', { name: 'onBeforeGetContent' })[1]);
+
+      expect(printSearchSlipsLabel).toBeInTheDocument();
     });
   });
 
@@ -933,6 +966,30 @@ describe('RequestsRoute', () => {
       it('should return service point', () => {
         expect(listFormatter.servicePoint(requestWithData)).toBe(requestWithData.pickupServicePoint.name);
       });
+    });
+  });
+
+  describe('getPrintHoldRequestsEnabled', () => {
+    it('should return true when printHoldRequestsEnabled is true', () => {
+      expect(getPrintHoldRequestsEnabled({
+        records: [{
+          value: '{"printHoldRequestsEnabled": true}',
+        }],
+      })).toBeTruthy();
+    });
+
+    it('should return false when printHoldRequestsEnabled is false', () => {
+      expect(getPrintHoldRequestsEnabled({
+        records: [{
+          value: '{"printHoldRequestsEnabled": false}',
+        }],
+      })).toBeFalsy();
+    });
+
+    it('should return false when value absent', () => {
+      expect(getPrintHoldRequestsEnabled({
+        records: [],
+      })).toBeFalsy();
     });
   });
 
