@@ -250,7 +250,10 @@ export const requestLevelFilters = [
   { label: 'ui-requests.filters.requestLevel.title', value: REQUEST_LEVEL_TYPES.TITLE },
 ];
 
-export const pickSlipType = 'pick slip';
+export const SLIPS_TYPE = {
+  PICK_SLIP: 'Pick slip',
+  SEARCH_SLIP_HOLD_REQUESTS: 'Search slip (Hold requests)',
+};
 
 export const DOMAIN_NAME = 'requests';
 

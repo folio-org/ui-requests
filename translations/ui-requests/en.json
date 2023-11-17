@@ -266,6 +266,7 @@
   "cancellationReason": "Cancellation reason",
   "cancellationAdditionalInformation": "Additional information for patron",
   "printPickSlips": "Print pick slips for {sp}",
+  "printSearchSlips": "Print search slips for {sp}",
 
   "common.cancel": "Cancel",
   "common.saveAndClose": "Save & close",
@@ -293,6 +294,7 @@
   "permission.create": "Requests: View, create",
   "permission.edit": "Requests: View, edit, cancel",
   "pickSlipsLoading": "Pick slips are loading, please wait",
+  "searchSlipsLoading": "Search slips are loading, please wait",
   "printInProgress": "Print options loading in progress. It might take a few seconds, please be patient.",
   "csvReportPending": "CSV report is being generated. Please wait.",
   "csvReportInProgress": "A CSV results report is being generated. This may take some time for larger result sets. Please be patient.",

@@ -34,6 +34,7 @@ import {
   DCB_INSTANCE_ID,
   DCB_HOLDINGS_RECORD_ID,
   DCB_USER,
+  SLIPS_TYPE,
 } from './constants';
 
 import css from './requests.css';
@@ -178,7 +179,7 @@ export function buildLocaleDateAndTime(dateTime, timezone, locale) {
     .format('L LT');
 }
 
-export const convertToSlipData = (source, intl, timeZone, locale, slipName = 'Pick slip') => {
+export const convertToSlipData = (source, intl, timeZone, locale, slipName = SLIPS_TYPE.PICK_SLIP) => {
   return source.map(pickSlip => {
     const {
       item = {},
