@@ -1,5 +1,3 @@
-import '__mock__/';
-
 import {
   render,
   screen,

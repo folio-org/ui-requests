@@ -2,6 +2,7 @@ import {
   render,
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
+
 import { ProxyManager } from '@folio/stripes/smart-components';
 
 import UserForm from './UserForm';

@@ -4,8 +4,6 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
-import '__mock__';
-
 import {
   AccordionSet,
 } from '@folio/stripes/components';

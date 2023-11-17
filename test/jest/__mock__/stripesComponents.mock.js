@@ -116,11 +116,23 @@ jest.mock('@folio/stripes/components', () => ({
   NoValue: jest.fn(() => (
     <span>No value</span>
   )),
-  Pane: jest.fn(({ children }) => (
-    <div>
-      {children}
-    </div>
-  )),
+  Pane: jest.fn(({ children, className, defaultWidth, paneTitle, firstMenu, lastMenu, actionMenu, ...rest }) => {
+    return (
+      <div
+        className={className}
+        {...rest}
+        style={{ width: defaultWidth }}
+      >
+        <div>
+          {firstMenu ?? null}
+          {paneTitle}
+          {actionMenu ? actionMenu({ onToggle: jest.fn() }) : null}
+          {lastMenu ?? null}
+        </div>
+        {children}
+      </div>
+    );
+  }),
   PaneFooter: jest.fn(({ children }) => (
     <div>
       {children}

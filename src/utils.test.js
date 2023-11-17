@@ -2,7 +2,6 @@ import {
   escape,
   noop,
 } from 'lodash';
-import '../test/jest/__mock__';
 
 import {
   buildTemplate,

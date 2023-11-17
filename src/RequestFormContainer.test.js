@@ -1,16 +1,14 @@
-import React from 'react';
 import {
   Router,
 } from 'react-router-dom';
 import {
   createMemoryHistory,
 } from 'history';
+
 import {
   render,
   act,
 } from '@folio/jest-config-stripes/testing-library/react';
-
-import '../test/jest/__mock__';
 
 import RequestFormContainer from './RequestFormContainer';
 import RequestForm from './RequestForm';

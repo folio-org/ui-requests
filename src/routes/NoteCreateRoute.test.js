@@ -1,5 +1,8 @@
-import '__mock__/';
-import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
+import {
+  render,
+  screen,
+} from '@folio/jest-config-stripes/testing-library/react';
+
 import { historyData } from '../../test/jest/fixtures/historyData';
 import NoteCreateRoute from './NoteCreateRoute';
 
@@ -12,6 +15,7 @@ const locationData = historyData.location;
 const renderNoteCreateRoute = (locationProps, historyProps) => render(
   <NoteCreateRoute location={locationProps} history={historyProps} />
 );
+
 describe('NoteCreateRoute', () => {
   it('NoteCreatePage should render when location.state is not empty', () => {
     renderNoteCreateRoute(locationData, historyData);

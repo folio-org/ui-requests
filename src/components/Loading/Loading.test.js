@@ -3,8 +3,6 @@ import {
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
 
-import '../../../test/jest/__mock__';
-
 import { Layout } from '@folio/stripes/components';
 
 import Loading from './Loading';

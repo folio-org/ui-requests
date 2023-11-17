@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   render,
   screen,
@@ -7,8 +6,6 @@ import {
 import {
   requestStatuses,
 } from './constants';
-
-import '../test/jest/__mock__';
 
 import PositionLink from './PositionLink';
 

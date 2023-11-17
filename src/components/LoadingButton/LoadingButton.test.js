@@ -3,8 +3,6 @@ import {
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
 
-import '__mock__';
-
 import {
   Button,
   Icon,

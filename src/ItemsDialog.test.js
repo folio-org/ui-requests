@@ -1,10 +1,7 @@
-import React from 'react';
 import {
   render,
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
-
-import '../test/jest/__mock__';
 
 import {
   Modal,
@@ -137,7 +134,7 @@ describe('ItemsDialog', () => {
     });
 
     it('should render Modal', () => {
-      expect(Modal).toHaveBeenLastCalledWith(
+      expect(Modal).toHaveBeenCalledWith(
         expect.objectContaining({
           'data-test-move-request-modal': true,
           label: labelIds.selectItem,

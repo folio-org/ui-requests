@@ -1,4 +1,7 @@
 import React from 'react';
+import {
+  stringify,
+} from 'query-string';
 
 import {
   render,
@@ -8,11 +11,6 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
-import '../../test/jest/__mock__';
-
-import {
-  stringify,
-} from 'query-string';
 import {
   SearchAndSort,
 } from '@folio/stripes/smart-components';
