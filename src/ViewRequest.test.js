@@ -133,14 +133,37 @@ describe('ViewRequest', () => {
       },
     },
   };
+  const defaultDCBLendingProps = {
+    ...defaultProps,
+    resources: {
+      selectedRequest: {
+        hasLoaded: true,
+        records: [
+          mockedRequestWithDCBUser,
+        ],
+      },
+    }
+  };
+  const defaultDCBBorrowingProps = {
+    ...defaultProps,
+    resources: {
+      selectedRequest: {
+        hasLoaded: true,
+        records: [
+          mockedRequestWithVirtualItem,
+        ],
+      },
+    }
+  };
+  const renderViewRequest = (props) => render(
+    <CommandList commands={defaultKeyboardShortcuts}>
+      <ViewRequest {...props} />
+    </CommandList>
+  );
 
   describe('Non DCB Transactions', () => {
     beforeEach(() => {
-      render(
-        <CommandList commands={defaultKeyboardShortcuts}>
-          <ViewRequest {...defaultProps} />
-        </CommandList>
-      );
+      renderViewRequest(defaultProps);
     });
 
     afterEach(() => {
@@ -212,11 +235,7 @@ describe('ViewRequest', () => {
           };
 
           beforeEach(() => {
-            render(
-              <CommandList commands={defaultKeyboardShortcuts}>
-                <ViewRequest {...props} />
-              </CommandList>
-            );
+            renderViewRequest(props);
           });
 
           it('should not render "Duplicate" button', () => {
@@ -243,11 +262,7 @@ describe('ViewRequest', () => {
           };
 
           beforeEach(() => {
-            render(
-              <CommandList commands={defaultKeyboardShortcuts}>
-                <ViewRequest {...props} />
-              </CommandList>
-            );
+            renderViewRequest(props);
           });
 
           it('actions menu should show all possible actions', () => {
@@ -277,11 +292,7 @@ describe('ViewRequest', () => {
           };
 
           beforeEach(() => {
-            render(
-              <CommandList commands={defaultKeyboardShortcuts}>
-                <ViewRequest {...props} />
-              </CommandList>
-            );
+            renderViewRequest(props);
           });
 
           it('should render action menu with only "Cancel request" button', () => {
@@ -314,54 +325,37 @@ describe('ViewRequest', () => {
     });
 
     describe('when virtual patron-DCB Lending flow', () => {
-      const alteredProps = {
-        ...defaultProps,
-        resources: {
-          selectedRequest: {
-            hasLoaded: true,
-            records: [
-              mockedRequestWithDCBUser,
-            ],
-          },
-        }
-      };
-
       describe('when in request detail', () => {
         beforeAll(() => {
           mockedLocation.search = null;
         });
 
-        describe('when current lending request is closed', () => {
-          const openValidRequest = {
+        describe("when current lending request status starts with 'Closed'", () => {
+          const closedStatuses = [requestStatuses.FILLED, requestStatuses.CANCELLED, requestStatuses.PICKUP_EXPIRED, requestStatuses.UNFILLED];
+          const closedRequests = closedStatuses.map(cStatus => ({
             ...mockedRequestWithDCBUser,
-            status: requestStatuses.FILLED,
-          };
-
-          const props = {
-            ...alteredProps,
+            status: cStatus,
+          }));
+          const closedRequestsProps = closedRequests.map(cReq => ({
+            ...defaultDCBLendingProps,
             resources: {
               selectedRequest: {
                 hasLoaded: true,
                 records: [
                   {
-                    ...alteredProps.resources.selectedRequest.records,
-                    ...openValidRequest,
+                    ...defaultDCBLendingProps.resources.selectedRequest.records,
+                    ...cReq,
                   },
                 ],
               },
-            },
-          };
+            }
+          }));
 
-          beforeEach(() => {
-            render(
-              <CommandList commands={defaultKeyboardShortcuts}>
-                <ViewRequest {...props} />
-              </CommandList>
-            );
-          });
-
-          it('should not render "Duplicate" button', () => {
-            expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
+          closedRequestsProps.forEach(props => {
+            it(`should not render action menu when request status is ${props?.resources?.selectedRequest?.records[0]?.status}`, () => {
+              renderViewRequest(props);
+              expect(screen.queryByRole('button', { name: 'Actions' })).toBeNull();
+            });
           });
         });
 
@@ -370,15 +364,14 @@ describe('ViewRequest', () => {
             ...mockedRequestWithDCBUser,
             status: requestStatuses.NOT_YET_FILLED,
           };
-
           const props = {
-            ...alteredProps,
+            ...defaultDCBLendingProps,
             resources: {
               selectedRequest: {
                 hasLoaded: true,
                 records: [
                   {
-                    ...alteredProps.resources.selectedRequest.records,
+                    ...defaultDCBLendingProps.resources.selectedRequest.records,
                     ...openValidRequest,
                   },
                 ],
@@ -387,11 +380,7 @@ describe('ViewRequest', () => {
           };
 
           beforeEach(() => {
-            render(
-              <CommandList commands={defaultKeyboardShortcuts}>
-                <ViewRequest {...props} />
-              </CommandList>
-            );
+            renderViewRequest(props);
           });
 
           it('should render action menu with only "Cancel request" button', () => {
@@ -406,11 +395,7 @@ describe('ViewRequest', () => {
 
       describe('Keyboard shortcuts', () => {
         beforeEach(() => {
-          render(
-            <CommandList commands={defaultKeyboardShortcuts}>
-              <ViewRequest {...alteredProps} />
-            </CommandList>
-          );
+          renderViewRequest(defaultDCBLendingProps);
         });
         it('should check permission when duplicating', () => {
           duplicateRecordShortcut(document.body);
@@ -425,71 +410,53 @@ describe('ViewRequest', () => {
     });
 
     describe('when virtual item-DCB Borrowing flow', () => {
-      const alteredProps = {
-        ...defaultProps,
-        resources: {
-          selectedRequest: {
-            hasLoaded: true,
-            records: [
-              mockedRequestWithVirtualItem,
-            ],
-          },
-        }
-      };
-
       describe('when in request detail', () => {
         beforeAll(() => {
           mockedLocation.search = null;
         });
 
-        describe('when current lending request is closed', () => {
-          const openValidRequest = {
+        describe('when current borrowing request status starts with "Closed"', () => {
+          const closedStatuses = [requestStatuses.FILLED, requestStatuses.CANCELLED, requestStatuses.PICKUP_EXPIRED, requestStatuses.UNFILLED];
+          const closedRequests = closedStatuses.map(cStatus => ({
             ...mockedRequestWithDCBUser,
-            status: requestStatuses.FILLED,
-          };
-
-          const props = {
-            ...alteredProps,
+            status: cStatus,
+          }));
+          const closedRequestsProps = closedRequests.map(cReq => ({
+            ...defaultDCBBorrowingProps,
             resources: {
               selectedRequest: {
                 hasLoaded: true,
                 records: [
                   {
-                    ...alteredProps.resources.selectedRequest.records,
-                    ...openValidRequest,
+                    ...defaultDCBBorrowingProps.resources.selectedRequest.records,
+                    ...cReq,
                   },
                 ],
               },
-            },
-          };
+            }
+          }));
 
-          beforeEach(() => {
-            render(
-              <CommandList commands={defaultKeyboardShortcuts}>
-                <ViewRequest {...props} />
-              </CommandList>
-            );
-          });
-
-          it('should not render "Duplicate" button', () => {
-            expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
+          closedRequestsProps.forEach(props => {
+            it(`should not render action menu when request status is ${props?.resources?.selectedRequest?.records[0]?.status}`, () => {
+              renderViewRequest(props);
+              expect(screen.queryByRole('button', { name: 'Actions' })).toBeNull();
+            });
           });
         });
 
-        describe('when current lending request is open', () => {
+        describe('when current borrowing request is open', () => {
           const openValidRequest = {
             ...mockedRequestWithDCBUser,
             status: requestStatuses.NOT_YET_FILLED,
           };
-
           const props = {
-            ...alteredProps,
+            ...defaultDCBBorrowingProps,
             resources: {
               selectedRequest: {
                 hasLoaded: true,
                 records: [
                   {
-                    ...alteredProps.resources.selectedRequest.records,
+                    ...defaultDCBBorrowingProps.resources.selectedRequest.records,
                     ...openValidRequest,
                   },
                 ],
@@ -498,11 +465,7 @@ describe('ViewRequest', () => {
           };
 
           beforeEach(() => {
-            render(
-              <CommandList commands={defaultKeyboardShortcuts}>
-                <ViewRequest {...props} />
-              </CommandList>
-            );
+            renderViewRequest(props);
           });
 
           it('should render action menu with only "Cancel request" button', () => {
@@ -517,11 +480,7 @@ describe('ViewRequest', () => {
 
       describe('Keyboard shortcuts', () => {
         beforeEach(() => {
-          render(
-            <CommandList commands={defaultKeyboardShortcuts}>
-              <ViewRequest {...alteredProps} />
-            </CommandList>
-          );
+          renderViewRequest(defaultDCBBorrowingProps);
         });
         it('should check permission when duplicating', () => {
           duplicateRecordShortcut(document.body);
