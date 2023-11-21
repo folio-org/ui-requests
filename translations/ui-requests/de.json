@@ -249,9 +249,9 @@
     "item.status.unknown": "Unbekannt",
     "item.status.withdrawn": "Ausgesondert",
     "item.status.recentlyReturned": "Kürzlich zurückgegeben",
-    "item.status.availableInASR": "Available in ASR",
-    "item.status.retrievingFromASR": "Retrieving from ASR",
-    "item.status.missingFromASR": "Missing from ASR",
+    "item.status.availableInASR": "Im automatischen Magazin verfügbar",
+    "item.status.retrievingFromASR": "Aus dem automatischen Magazin abgerufen",
+    "item.status.missingFromASR": "Im automatischen Magazin vermisst",
     "item.status.orderClosed": "Bestellung abgeschlossen",
     "item.status.restricted": "Beschränkt",
     "appMenu.keyboardShortcuts": "Tastenkürzel",
@@ -281,5 +281,7 @@
     "errors.userCannotBeProxyForThemselves": "User cannot be proxy for themselves",
     "errors.itemAlreadyRequested": "Not allowed to move title level page request to the same item",
     "errors.holdShelfRequestsRequirePickupServicePoint": "Hold shelf fulfillment requests require a Pickup service point",
-    "errors.requestAlreadyClosed": "Fehler: Bestandsanfrage wurde bereits geschlossen"
+    "errors.requestAlreadyClosed": "Fehler: Bestandsanfrage wurde bereits geschlossen",
+    "printSearchSlips": "Print search slips for {sp}",
+    "searchSlipsLoading": "Search slips are loading, please wait"
 }
