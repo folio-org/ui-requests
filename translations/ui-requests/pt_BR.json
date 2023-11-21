@@ -281,5 +281,7 @@
     "errors.userCannotBeProxyForThemselves": "O usuário não pode ser procurador de si mesmo",
     "errors.itemAlreadyRequested": "Não é permitido mover a solicitação de item disponível ao nível de título para o mesmo item",
     "errors.holdShelfRequestsRequirePickupServicePoint": "As solicitações de reserva exigem um ponto de serviço de retirada",
-    "errors.requestAlreadyClosed": "Erro: A solicitação já foi fechada."
+    "errors.requestAlreadyClosed": "Erro: A solicitação já foi fechada.",
+    "printSearchSlips": "Imprimir boletins de busca para {sp}",
+    "searchSlipsLoading": "Os boletins de busca estão sendo carregados, aguarde"
 }

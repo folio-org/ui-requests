@@ -281,5 +281,7 @@
     "errors.userCannotBeProxyForThemselves": "User cannot be proxy for themselves",
     "errors.itemAlreadyRequested": "Not allowed to move title level page request to the same item",
     "errors.holdShelfRequestsRequirePickupServicePoint": "Hold shelf fulfillment requests require a Pickup service point",
-    "errors.requestAlreadyClosed": "Error: The Request has already been closed."
+    "errors.requestAlreadyClosed": "Error: The Request has already been closed.",
+    "printSearchSlips": "Print search slips for {sp}",
+    "searchSlipsLoading": "Search slips are loading, please wait"
 }

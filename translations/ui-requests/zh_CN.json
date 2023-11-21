@@ -281,5 +281,7 @@
     "errors.userCannotBeProxyForThemselves": "用户不能做自己的代理。",
     "errors.itemAlreadyRequested": "不允许将标题级传呼请求移到同一单件",
     "errors.holdShelfRequestsRequirePickupServicePoint": "预约架履行请求需要取件服务点",
-    "errors.requestAlreadyClosed": "错误：请求已关闭。"
+    "errors.requestAlreadyClosed": "错误：请求已关闭。",
+    "printSearchSlips": "Print search slips for {sp}",
+    "searchSlipsLoading": "Search slips are loading, please wait"
 }
