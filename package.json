@@ -30,6 +30,7 @@
       "inventory": "10.0 11.0 12.0 13.0",
       "request-storage": "6.0",
       "pick-slips": "0.1",
+      "search-slips": "0.1",
       "automated-patron-blocks": "0.1"
     },
     "permissionSets": [
