@@ -64,7 +64,8 @@ import {
   generateUserName,
   isValidRequest,
   isVirtualItem,
-  isVirtualPatron, getRequestErrorMessage,
+  isVirtualPatron,
+  getRequestErrorMessage,
 } from './utils';
 import urls from './routes/urls';
 
