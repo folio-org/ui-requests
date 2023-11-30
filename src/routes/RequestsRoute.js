@@ -69,6 +69,7 @@ import {
   getInstanceQueryString,
   isDuplicateMode,
   generateUserName,
+  getSelectedSlipData,
 } from '../utils';
 import packageInfo from '../../package';
 import {
@@ -179,27 +180,6 @@ export const urls = {
     return requestUrl;
   },
 };
-
-export const getListFormatter = (getRowURL, setURL) => ({
-  'itemBarcode': rq => (rq.item ? rq.item.barcode : DEFAULT_FORMATTER_VALUE),
-  'position': rq => (rq.position || DEFAULT_FORMATTER_VALUE),
-  'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : DEFAULT_FORMATTER_VALUE),
-  'requestDate': rq => (
-    <AppIcon size="small" app="requests">
-      <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
-    </AppIcon>
-  ),
-  'requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : DEFAULT_FORMATTER_VALUE),
-  'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : DEFAULT_FORMATTER_VALUE),
-  'requestStatus': rq => (requestStatusesTranslations[rq.status]
-    ? <FormattedMessage id={requestStatusesTranslations[rq.status]} />
-    : <NoValue />),
-  'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
-  'title': rq => <TextLink to={getRowURL(rq.id)} onClick={() => setURL(rq.id)}>{(rq.instance ? rq.instance.title : DEFAULT_FORMATTER_VALUE)}</TextLink>,
-  'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
-  'callNumber': rq => effectiveCallNumber(rq.item),
-  'servicePoint': rq => get(rq, 'pickupServicePoint.name', DEFAULT_FORMATTER_VALUE),
-});
 
 export const buildHoldRecords = (records) => {
   return records.map(record => {
@@ -577,6 +557,7 @@ class RequestsRoute extends React.Component {
       servicePoint: formatMessage({ id: 'ui-requests.requests.servicePoint' }),
       requester: formatMessage({ id: 'ui-requests.requests.requester' }),
       requesterBarcode: formatMessage({ id: 'ui-requests.requests.requesterBarcode' }),
+      singlePrint: formatMessage({ id: 'ui-requests.requests.singlePrint' }),
       proxy: formatMessage({ id: 'ui-requests.requests.proxy' }),
     };
 
@@ -753,6 +734,16 @@ class RequestsRoute extends React.Component {
     const name = get(currentState, 'okapi.currentUser.curServicePoint.name');
 
     return { id, name };
+  };
+
+  isPrintable = (requestId, pickSlips) => {
+    let matched;
+    if (pickSlips !== undefined) {
+      matched = pickSlips.filter((pickSlip) => {
+        return pickSlip.request.requestID === requestId;
+      })[0];
+    }
+    return matched != null;
   };
 
   setCurrentServicePointId = () => {
@@ -1142,6 +1133,15 @@ class RequestsRoute extends React.Component {
     })
   );
 
+  printContentRefs = {};
+  getPrintContentRef = (rqId) => {
+    // create a ref if it doesn't exist for the given rqId
+    if (!this.printContentRefs[rqId]) {
+      this.printContentRefs[rqId] = React.createRef();
+    }
+    return this.printContentRefs[rqId];
+  };
+
   render() {
     const {
       resources,
@@ -1191,7 +1191,53 @@ class RequestsRoute extends React.Component {
     const searchSlipsPrintTemplate = this.getPrintTemplate(SLIPS_TYPE.SEARCH_SLIP_HOLD_REQUESTS);
     const pickSlipsData = convertToSlipData(pickSlips, intl, timezone, locale, SLIPS_TYPE.PICK_SLIP);
     const searchSlipsData = convertToSlipData(searchSlips, intl, timezone, locale, SLIPS_TYPE.SEARCH_SLIP_HOLD_REQUESTS);
-    const resultsFormatter = getListFormatter(this.getRowURL, this.setURL);
+    const resultsFormatter = (getRowURL, setURL, pickSlipsToCheck) => ({
+
+      'itemBarcode': rq => (rq.item ? rq.item.barcode : DEFAULT_FORMATTER_VALUE),
+      'position': rq => (rq.position || DEFAULT_FORMATTER_VALUE),
+      'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : DEFAULT_FORMATTER_VALUE),
+      'requestDate': rq => (
+        <AppIcon size="small" app="requests">
+          <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
+        </AppIcon>
+      ),
+      'singlePrint': rq => (
+
+        <>
+          <PrintButton
+            id="singlePrintPickSlipsBtn"
+            disabled={!this.isPrintable(rq.id, pickSlipsToCheck)}
+            template={this.getPrintTemplate()}
+            contentRef={this.getPrintContentRef(rq.id)}
+            requestId={rq.id}
+            onBeforeGetContent={
+                  () => new Promise(resolve => {
+                    this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
+                    setTimeout(() => resolve(), 1000);
+                  })
+                }
+          >
+            <FormattedMessage id="ui-requests.requests.printButtonLabel" />
+
+            <PrintContent
+              ref={this.getPrintContentRef(rq.id)}
+              template={this.getPrintTemplate()}
+              dataSource={getSelectedSlipData(pickSlipsData, rq.id)}
+            />
+          </PrintButton>
+
+        </>),
+      'requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : DEFAULT_FORMATTER_VALUE),
+      'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : DEFAULT_FORMATTER_VALUE),
+      'requestStatus': rq => (requestStatusesTranslations[rq.status]
+        ? <FormattedMessage id={requestStatusesTranslations[rq.status]} />
+        : <NoValue />),
+      'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
+      'title': rq => <TextLink to={getRowURL(rq.id)} onClick={() => setURL(rq.id)}>{(rq.instance ? rq.instance.title : DEFAULT_FORMATTER_VALUE)}</TextLink>,
+      'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
+      'callNumber': rq => effectiveCallNumber(rq.item),
+      'servicePoint': rq => get(rq, 'pickupServicePoint.name', DEFAULT_FORMATTER_VALUE),
+    });
 
     const actionMenu = ({ onToggle, renderColumnsMenu }) => (
       <>
@@ -1343,7 +1389,7 @@ class RequestsRoute extends React.Component {
               }}
               columnMapping={this.columnLabels}
               resultsRowClickHandlers={false}
-              resultsFormatter={resultsFormatter}
+              resultsFormatter={resultsFormatter(this.getRowURL, this.setURL, pickSlips)}
               resultRowFormatter={DefaultMCLRowFormatter}
               newRecordInitialValues={initialValues}
               massageNewRecord={this.massageNewRecord}

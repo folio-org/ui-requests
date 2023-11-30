@@ -179,6 +179,17 @@ export function buildLocaleDateAndTime(dateTime, timezone, locale) {
     .format('L LT');
 }
 
+export function getSelectedSlipData(pickSlipsData, selectedRequestId) {
+  const sel = pickSlipsData.filter((pickSlip) => {
+    return pickSlip['request.requestID'] === selectedRequestId;
+  })[0];
+  if (sel === undefined) {
+    return [];
+  } else {
+    return [sel].flat();
+  }
+}
+
 export const convertToSlipData = (source, intl, timeZone, locale, slipName = SLIPS_TYPE.PICK_SLIP) => {
   return source.map(pickSlip => {
     const {

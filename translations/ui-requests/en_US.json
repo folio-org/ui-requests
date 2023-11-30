@@ -73,6 +73,8 @@
     "requests.requestDate": "Request Date",
     "requests.proxy": "Proxy",
     "requests.itemBarcode": "Item barcode",
+    "requests.singlePrint": "Single Print",
+    "requests.printButtonLabel": "Print",
     "requestMeta.type.recall": "Recall",
     "requestMeta.type.hold": "Hold",
     "requestMeta.type.page": "Page",
