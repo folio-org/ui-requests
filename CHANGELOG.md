@@ -1,5 +1,10 @@
 # Change history for ui-requests
 
+## [9.0.1](https://github.com/folio-org/ui-requests/tree/v9.0.1) (2023-12-04)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.0.0...v9.0.1)
+
+* Add support for missing request error code. Refs UIREQ-1050.
+
 ## [9.0.0](https://github.com/folio-org/ui-requests/tree/v9.0.0) (2023-10-12)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v8.0.2...v9.0.0)
 
