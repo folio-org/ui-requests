@@ -31,6 +31,7 @@ import {
   REQUEST_LEVEL_TYPES,
   createModes,
   INVALID_REQUEST_HARDCODED_ID,
+  REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS,
 } from './constants';
 
 import css from './requests.css';
@@ -412,6 +413,17 @@ export const isSubmittingButtonDisabled = (pristine, submitting) => {
 
 export const isFormEditing = (request) => {
   return !!get(request, 'id');
+};
+
+export const getRequestErrorMessage = (error, intl) => {
+  const {
+    code = '',
+    message = '',
+  } = error;
+
+  return code && REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS[code]
+    ? intl.formatMessage({ id: REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS[code] })
+    : message;
 };
 
 export function resetFieldState(form, fieldName) {

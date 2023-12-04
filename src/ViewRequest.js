@@ -63,18 +63,11 @@ import {
   getTlrSettings,
   generateUserName,
   isValidRequest,
+  getRequestErrorMessage,
 } from './utils';
 import urls from './routes/urls';
 
 const CREATE_SUCCESS = 'CREATE_SUCCESS';
-
-const REQUEST_ERROR_MESSAGE_CODE = {
-  REQUEST_ALREADY_CLOSED: 'REQUEST_ALREADY_CLOSED',
-};
-
-const REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS = {
-  [REQUEST_ERROR_MESSAGE_CODE.REQUEST_ALREADY_CLOSED]: 'ui-requests.errors.requestAlreadyClosed',
-};
 
 class ViewRequest extends React.Component {
   static manifest = {
@@ -264,9 +257,7 @@ class ViewRequest extends React.Component {
       mutator,
       onCloseEdit,
       buildRecordsForHoldsShelfReport,
-      intl: {
-        formatMessage,
-      },
+      intl,
     } = this.props;
 
     // Get the initial request data, mix in the cancellation info, PUT,
@@ -284,7 +275,7 @@ class ViewRequest extends React.Component {
           .then(res => {
             res.errors.forEach(error => {
               this.callout.current.sendCallout({
-                message: REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS[error?.code] ? formatMessage({ id: REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS[error?.code] }) : error.message,
+                message: getRequestErrorMessage(error, intl),
                 type: 'error',
               });
             });
