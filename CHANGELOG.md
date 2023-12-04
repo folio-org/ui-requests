@@ -8,6 +8,10 @@
 * Request Action - Create new option Print search slips. Refs UIREQ-1039.
 * Hide Actions menu on closed request of DCB Transaction. Refs UIREQ-1040.
 * Update Jest/RTL tests, remove outdated imports. Refs UIREQ-996.
+
+## [9.0.1](https://github.com/folio-org/ui-requests/tree/v9.0.1) (2023-12-04)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.0.0...v9.0.1)
+
 * Add support for missing request error code. Refs UIREQ-1050.
 
 ## [9.0.0](https://github.com/folio-org/ui-requests/tree/v9.0.0) (2023-10-12)
