@@ -279,9 +279,12 @@
     "errors.cannotCreatePageTlrWithoutItemId": "Nelze vytvořit požadavek na stránku na úrovni názvu pro toto ID titulu bez ID jednotky",
     "errors.holdAndRecallTlrNotAllowedPageableAvailableItemFound": "Požadavek Rezervace/Stažení na úroveň názvu není povolen: nalezen stránkovatelný dostupný titul jednotky",
     "errors.userCannotBeProxyForThemselves": "Uživatel nemůže být svůj zastupitel",
-    "errors.itemAlreadyRequested": "Není povoleno přesunout požadavek na úroveň názvu stránky na stejnou jednotku",
     "errors.holdShelfRequestsRequirePickupServicePoint": "Požadavky na plnění regálu pro vyzvednutí žádanky/rezervace vyžadují pult služeb vyzvednutí",
     "errors.requestAlreadyClosed": "Chyba: Žádanka byla již uzavřena.",
     "printSearchSlips": "Vytisknout vyhledávací lístky pro {sp}",
-    "searchSlipsLoading": "Vyhledávací lístky se načítají, čekejte prosím"
+    "searchSlipsLoading": "Vyhledávací lístky se načítají, čekejte prosím",
+    "errors.itemHasAlreadyBeenRequested": "This requester already has an open request for this item",
+    "errors.instanceHasAlreadyBeenRequested": "This requester already has an open request for this instance",
+    "errors.movingRequestToTheSameItem": "Není povoleno přesunout požadavek na úroveň názvu stránky na stejnou jednotku",
+    "errors.itemOfThisInstanceAlreadyRequested": "This requester already has an open request for one of the instance's items"
 }

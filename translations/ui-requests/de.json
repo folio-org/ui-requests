@@ -279,9 +279,12 @@
     "errors.cannotCreatePageTlrWithoutItemId": "Cannot create a title level page request for this instance ID with no item ID",
     "errors.holdAndRecallTlrNotAllowedPageableAvailableItemFound": "Hold/Recall title level request not allowed: pageable available item found for instance",
     "errors.userCannotBeProxyForThemselves": "User cannot be proxy for themselves",
-    "errors.itemAlreadyRequested": "Not allowed to move title level page request to the same item",
     "errors.holdShelfRequestsRequirePickupServicePoint": "Hold shelf fulfillment requests require a Pickup service point",
     "errors.requestAlreadyClosed": "Fehler: Bestandsanfrage wurde bereits geschlossen",
     "printSearchSlips": "Print search slips for {sp}",
-    "searchSlipsLoading": "Search slips are loading, please wait"
+    "searchSlipsLoading": "Search slips are loading, please wait",
+    "errors.itemHasAlreadyBeenRequested": "This requester already has an open request for this item",
+    "errors.instanceHasAlreadyBeenRequested": "This requester already has an open request for this instance",
+    "errors.movingRequestToTheSameItem": "Not allowed to move title level page request to the same item",
+    "errors.itemOfThisInstanceAlreadyRequested": "This requester already has an open request for one of the instance's items"
 }

@@ -279,9 +279,12 @@
     "errors.cannotCreatePageTlrWithoutItemId": "无法为没有单件ID的本实例ID创建标题级传呼请求",
     "errors.holdAndRecallTlrNotAllowedPageableAvailableItemFound": "不允许预约/召回标题级请求：为实例找到可传呼的可用单件",
     "errors.userCannotBeProxyForThemselves": "用户不能做自己的代理。",
-    "errors.itemAlreadyRequested": "不允许将标题级传呼请求移到同一单件",
     "errors.holdShelfRequestsRequirePickupServicePoint": "预约架履行请求需要取件服务点",
     "errors.requestAlreadyClosed": "错误：请求已关闭。",
-    "printSearchSlips": "Print search slips for {sp}",
-    "searchSlipsLoading": "Search slips are loading, please wait"
+    "printSearchSlips": "打印{sp}的搜索单",
+    "searchSlipsLoading": "搜索单正在加载，请稍候",
+    "errors.itemHasAlreadyBeenRequested": "This requester already has an open request for this item",
+    "errors.instanceHasAlreadyBeenRequested": "This requester already has an open request for this instance",
+    "errors.movingRequestToTheSameItem": "Not allowed to move title level page request to the same item",
+    "errors.itemOfThisInstanceAlreadyRequested": "This requester already has an open request for one of the instance's items"
 }
