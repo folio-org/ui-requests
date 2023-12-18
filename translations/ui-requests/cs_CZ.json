@@ -283,8 +283,8 @@
     "errors.requestAlreadyClosed": "Chyba: Žádanka byla již uzavřena.",
     "printSearchSlips": "Vytisknout vyhledávací lístky pro {sp}",
     "searchSlipsLoading": "Vyhledávací lístky se načítají, čekejte prosím",
-    "errors.itemHasAlreadyBeenRequested": "This requester already has an open request for this item",
-    "errors.instanceHasAlreadyBeenRequested": "This requester already has an open request for this instance",
+    "errors.itemHasAlreadyBeenRequested": "Tento čtenář již má otevřený žádanku na tuto jednotku",
+    "errors.instanceHasAlreadyBeenRequested": "Tento čtenář již má otevřený žádanku na tento titul",
     "errors.movingRequestToTheSameItem": "Není povoleno přesunout požadavek na úroveň názvu stránky na stejnou jednotku",
-    "errors.itemOfThisInstanceAlreadyRequested": "This requester already has an open request for one of the instance's items"
+    "errors.itemOfThisInstanceAlreadyRequested": "Tento čtenář již má otevřenou žádanku pro jeden exemplář titulu"
 }
