@@ -49,6 +49,9 @@
   "requests.callNumber": "Effective call number string",
   "requests.servicePoint": "Pickup service point",
   "requests.createTitleLevelRequest": "Create title level request",
+  "requests.singlePrint": "Single Print",
+  "requests.printButtonLabel": "Print",
+  "requests.instances.rows.select": "Select instance",
 
   "requestMeta.detailLabel": "Request Detail",
   "requestMeta.information": "Request information",
@@ -208,10 +211,12 @@
   "cancel.additionalInfoLabel": "Additional information for patron {required}",
   "cancel.additionalInfoPlaceholderRequired": "Enter more information about the cancellation (required)",
   "cancel.additionalInfoPlaceholderOptional": "Enter more information about the cancellation (optional)",
-  
-  "items.selectItem": "Select item", 
+
+  "items.selectItem": "Select item",
   "items.instanceItems": "Other items in {title}",
   "items.instanceItems.notFound": "No items found",
+
+  "rows.recordsSelected": "{count, number} {count, plural, one {record} other {records}} selected",
 
   "moveRequest.chooseRequestType": "Select request type",
   "moveRequest.chooseRequestMessage": "Please select allowed type",
@@ -270,6 +275,7 @@
   "cancellationAdditionalInformation": "Additional information for patron",
   "printPickSlips": "Print pick slips for {sp}",
   "printSearchSlips": "Print search slips for {sp}",
+  "printPickSlipsSelected": "Print selected pick slips for {sp}",
 
   "common.cancel": "Cancel",
   "common.saveAndClose": "Save & close",

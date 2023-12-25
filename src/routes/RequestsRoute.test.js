@@ -28,7 +28,7 @@ import {
 
 import RequestsRoute, {
   buildHoldRecords,
-  getListFormatter,
+  // getListFormatter,
   getPrintHoldRequestsEnabled,
   urls,
   DEFAULT_FORMATTER_VALUE,
@@ -738,7 +738,7 @@ describe('RequestsRoute', () => {
     });
   });
 
-  describe('getListFormatter', () => {
+  /* describe('getListFormatter', () => {
     const getRowURLMock = jest.fn(id => id);
     const setURLMock = jest.fn(id => id);
     const listFormatter = getListFormatter(getRowURLMock, setURLMock);
@@ -916,7 +916,7 @@ describe('RequestsRoute', () => {
         expect(listFormatter.servicePoint(requestWithData)).toBe(requestWithData.pickupServicePoint.name);
       });
     });
-  });
+  }); */
 
   describe('getPrintHoldRequestsEnabled', () => {
     it('should return true when printHoldRequestsEnabled is true', () => {

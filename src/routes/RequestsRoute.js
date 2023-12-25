@@ -2,6 +2,7 @@ import {
   get,
   isEmpty,
   isArray,
+  size
 } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -22,6 +23,7 @@ import {
 } from '@folio/stripes/core';
 import {
   Button,
+  Checkbox,
   filters2cql,
   FormattedTime,
   MenuSection,
@@ -70,8 +72,15 @@ import {
   isDuplicateMode,
   generateUserName,
   getRequestErrorMessage,
+  getSelectedSlipData,
+  getSelectedSlipDataMulti,
+  isPrintable,
+  selectedRowsNonPrintable,
+  getNextSelectedRowsState,
 } from '../utils';
 import packageInfo from '../../package';
+import CheckboxColumn from './CheckboxColumn';
+
 import {
   PrintButton,
   PrintContent,
@@ -180,27 +189,6 @@ export const urls = {
     return requestUrl;
   },
 };
-
-export const getListFormatter = (getRowURL, setURL) => ({
-  'itemBarcode': rq => (rq.item ? rq.item.barcode : DEFAULT_FORMATTER_VALUE),
-  'position': rq => (rq.position || DEFAULT_FORMATTER_VALUE),
-  'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : DEFAULT_FORMATTER_VALUE),
-  'requestDate': rq => (
-    <AppIcon size="small" app="requests">
-      <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
-    </AppIcon>
-  ),
-  'requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : DEFAULT_FORMATTER_VALUE),
-  'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : DEFAULT_FORMATTER_VALUE),
-  'requestStatus': rq => (requestStatusesTranslations[rq.status]
-    ? <FormattedMessage id={requestStatusesTranslations[rq.status]} />
-    : <NoValue />),
-  'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
-  'title': rq => <TextLink to={getRowURL(rq.id)} onClick={() => setURL(rq.id)}>{(rq.instance ? rq.instance.title : DEFAULT_FORMATTER_VALUE)}</TextLink>,
-  'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
-  'callNumber': rq => effectiveCallNumber(rq.item),
-  'servicePoint': rq => get(rq, 'pickupServicePoint.name', DEFAULT_FORMATTER_VALUE),
-});
 
 export const buildHoldRecords = (records) => {
   return records.map(record => {
@@ -525,20 +513,6 @@ class RequestsRoute extends React.Component {
       })
     };
 
-    this.columnLabels = {
-      requestDate: formatMessage({ id: 'ui-requests.requests.requestDate' }),
-      title: formatMessage({ id: 'ui-requests.requests.title' }),
-      year: formatMessage({ id: 'ui-requests.requests.year' }),
-      itemBarcode: formatMessage({ id: 'ui-requests.requests.itemBarcode' }),
-      callNumber: formatMessage({ id: 'ui-requests.requests.callNumber' }),
-      type: formatMessage({ id: 'ui-requests.requests.type' }),
-      requestStatus: formatMessage({ id: 'ui-requests.requests.status' }),
-      position: formatMessage({ id: 'ui-requests.requests.queuePosition' }),
-      servicePoint: formatMessage({ id: 'ui-requests.requests.servicePoint' }),
-      requester: formatMessage({ id: 'ui-requests.requests.requester' }),
-      requesterBarcode: formatMessage({ id: 'ui-requests.requests.requesterBarcode' }),
-      proxy: formatMessage({ id: 'ui-requests.requests.proxy' }),
-    };
 
     this.getRowURL = this.getRowURL.bind(this);
     this.addRequestFields = this.addRequestFields.bind(this);
@@ -559,6 +533,7 @@ class RequestsRoute extends React.Component {
       servicePointId: '',
       requests: [],
       selectedId: '',
+      selectedRows: {},
       titleLevelRequestsFeatureEnabled,
       createTitleLevelRequestsByDefault,
     };
@@ -566,7 +541,64 @@ class RequestsRoute extends React.Component {
     this.pickSlipsPrintContentRef = React.createRef();
     this.searchSlipsPrintContentRef = React.createRef();
     this.paneTitleRef = React.createRef();
+    this.printContentRefSelected = React.createRef();
   }
+
+  getColumnMapping = () => {
+    const columnLabels = {
+      select: <Checkbox
+        checked={this.getIsAllRowsSelected()}
+        aria-label={<FormattedMessage id="ui-requests.instances.rows.select" />}
+        onChange={() => this.toggleAllRows()}
+      />,
+      requestDate: <FormattedMessage id="ui-requests.requests.requestDate" />,
+      title: <FormattedMessage id="ui-requests.requests.title" />,
+      year: <FormattedMessage id="ui-requests.requests.year" />,
+      itemBarcode: <FormattedMessage id="ui-requests.requests.itemBarcode" />,
+      singlePrint: <FormattedMessage id="ui-requests.requests.singlePrint" />,
+      callNumber: <FormattedMessage id="ui-requests.requests.callNumber" />,
+      type: <FormattedMessage id="ui-requests.requests.type" />,
+      requestStatus: <FormattedMessage id="ui-requests.requests.status" />,
+      position: <FormattedMessage id="ui-requests.requests.queuePosition" />,
+      servicePoint: <FormattedMessage id="ui-requests.requests.servicePoint" />,
+      requester: <FormattedMessage id="ui-requests.requests.requester" />,
+      requesterBarcode: <FormattedMessage id="ui-requests.requests.requesterBarcode" />,
+      proxy: <FormattedMessage id="ui-requests.requests.proxy" />
+    };
+    return columnLabels;
+  }
+
+  getIsAllRowsSelected = () => {
+    const { resources } = this.props;
+    const { selectedRows } = this.state;
+    if (resources.records.records.length !== 0) {
+      const res = resources.records.records.every(({ id }) => Object.keys(selectedRows).includes(id));
+      return res;
+    } else {
+      return false;
+    }
+  };
+
+  toggleAllRows = () => {
+    const { resources } = this.props;
+    const { selectedRows } = this.state;
+
+    const toggledRows = resources.records.records.reduce((acc, row) => (
+      {
+        ...acc,
+        [row.id]: row,
+      }
+    ), {});
+
+    const filterSelectedRows = rows => {
+      Object.keys(toggledRows).forEach(id => {
+        if (rows[id]) delete rows[id];
+      });
+      return rows;
+    };
+
+    this.setState(({ selectedRows: this.getIsAllRowsSelected() ? filterSelectedRows(selectedRows) : { ...selectedRows, ...toggledRows } }));
+  };
 
   static getDerivedStateFromProps(props) {
     const layer = (props.resources.query || {}).layer;
@@ -862,6 +894,19 @@ class RequestsRoute extends React.Component {
     Object.assign(requestData, { requestDate: isoDate });
   };
 
+  renderPaneSub() {
+    const selectedRowsCount = size(this.state.selectedRows);
+
+    return selectedRowsCount
+      ? (
+        <FormattedMessage
+          id="ui-requests.rows.recordsSelected"
+          values={{ count: selectedRowsCount }}
+        />
+      )
+      : null;
+  }
+
   onChangePatron = (patron) => {
     this.props.mutator.activeRecord.update({ patronId: patron.id });
   };
@@ -1102,6 +1147,19 @@ class RequestsRoute extends React.Component {
     })
   );
 
+  printContentRefs = {};
+  getPrintContentRef = (rqId) => {
+    // create a ref if it doesn't exist for the given rqId
+    if (!this.printContentRefs[rqId]) {
+      this.printContentRefs[rqId] = React.createRef();
+    }
+    return this.printContentRefs[rqId];
+  };
+
+  toggleRowSelection = row => {
+    this.setState(({ selectedRows }) => ({ selectedRows: getNextSelectedRowsState(selectedRows, row) }));
+  };
+
   render() {
     const {
       resources,
@@ -1123,6 +1181,7 @@ class RequestsRoute extends React.Component {
       errorModalData,
       requests,
       servicePointId,
+      selectedRows,
       holdsShelfReportPending,
       createTitleLevelRequestsByDefault,
     } = this.state;
@@ -1151,7 +1210,70 @@ class RequestsRoute extends React.Component {
     const searchSlipsPrintTemplate = this.getPrintTemplate(SLIPS_TYPE.SEARCH_SLIP_HOLD_REQUESTS);
     const pickSlipsData = convertToSlipData(pickSlips, intl, timezone, locale, SLIPS_TYPE.PICK_SLIP);
     const searchSlipsData = convertToSlipData(searchSlips, intl, timezone, locale, SLIPS_TYPE.SEARCH_SLIP_HOLD_REQUESTS);
-    const resultsFormatter = getListFormatter(this.getRowURL, this.setURL);
+    let multiSelectPickSlipData = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
+    const columnMapping = this.getColumnMapping();
+
+    const resultsFormatter = (getRowURL, setURL, pickSlipsToCheck) => ({
+      'select': ({
+        id,
+        ...rowData
+      }) => (
+        <CheckboxColumn>
+          <Checkbox
+            checked={Boolean(selectedRows[id])}
+            aria-label={<FormattedMessage id="ui-inventory.instances.rows.select" />}
+            onChange={() => this.toggleRowSelection({
+              id,
+              ...rowData
+            })}
+          />
+        </CheckboxColumn>
+      ),
+      'itemBarcode': rq => (rq.item ? rq.item.barcode : DEFAULT_FORMATTER_VALUE),
+      'position': rq => (rq.position || DEFAULT_FORMATTER_VALUE),
+      'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : DEFAULT_FORMATTER_VALUE),
+      'requestDate': rq => (
+        <AppIcon size="small" app="requests">
+          <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
+        </AppIcon>
+      ),
+      'singlePrint': rq => (
+
+        <>
+          <PrintButton
+            id="singlePrintPickSlipsBtn"
+            disabled={!isPrintable(rq.id, pickSlipsToCheck)}
+            template={this.getPrintTemplate(SLIPS_TYPE.PICK_SLIP)}
+            contentRef={this.getPrintContentRef(rq.id)}
+            requestId={rq.id}
+            onBeforeGetContent={
+                  () => new Promise(resolve => {
+                    this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
+                    setTimeout(() => resolve(), 1000);
+                  })
+                }
+          >
+            <FormattedMessage id="ui-requests.requests.printButtonLabel" />
+
+            <PrintContent
+              ref={this.getPrintContentRef(rq.id)}
+              template={this.getPrintTemplate(SLIPS_TYPE.PICK_SLIP)}
+              dataSource={getSelectedSlipData(pickSlipsData, rq.id)}
+            />
+          </PrintButton>
+
+        </>),
+      'requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : DEFAULT_FORMATTER_VALUE),
+      'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : DEFAULT_FORMATTER_VALUE),
+      'requestStatus': rq => (requestStatusesTranslations[rq.status]
+        ? <FormattedMessage id={requestStatusesTranslations[rq.status]} />
+        : <NoValue />),
+      'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
+      'title': rq => <TextLink to={getRowURL(rq.id)} onClick={() => setURL(rq.id)}>{(rq.instance ? rq.instance.title : DEFAULT_FORMATTER_VALUE)}</TextLink>,
+      'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
+      'callNumber': rq => effectiveCallNumber(rq.item),
+      'servicePoint': rq => get(rq, 'pickupServicePoint.name', DEFAULT_FORMATTER_VALUE),
+    });
 
     const actionMenu = ({ onToggle, renderColumnsMenu }) => (
       <>
@@ -1217,6 +1339,28 @@ class RequestsRoute extends React.Component {
                     values={{ sp: servicePointName }}
                   />
                 </PrintButton>
+                <PrintButton
+                  buttonStyle="dropdownItem"
+                  id="printPickSlipsBtn1"
+                  disabled={isPickSlipsEmpty || selectedRowsNonPrintable(pickSlipsData, selectedRows)}
+                  template={pickSlipsPrintTemplate}
+                  contentRef={this.printContentRefSelected}
+                  onBeforeGetContent={
+                    () => new Promise(resolve => {
+                      this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
+                      onToggle();
+                      // without the timeout the printing process starts right away
+                      // and the callout and onToggle above are blocked
+                      setTimeout(() => resolve(), 1000);
+                      multiSelectPickSlipData = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
+                    })
+                    }
+                >
+                  <FormattedMessage
+                    id="ui-requests.printPickSlipsSelected"
+                    values={{ sp: servicePointName }}
+                  />
+                </PrintButton>
               </>
           }
           {
@@ -1249,8 +1393,9 @@ class RequestsRoute extends React.Component {
     );
 
     const columnManagerProps = {
-      excludeKeys: ['title'],
+      excludeKeys: ['title', 'select'],
       visibleColumns: [
+        'select',
         'title',
         'requestDate',
         'year',
@@ -1301,12 +1446,13 @@ class RequestsRoute extends React.Component {
                 itemBarcode: { max: 140 },
                 type: { max: 100 },
               }}
-              columnMapping={this.columnLabels}
+              columnMapping={columnMapping}
               resultsRowClickHandlers={false}
-              resultsFormatter={resultsFormatter}
+              resultsFormatter={resultsFormatter(this.getRowURL, this.setURL, pickSlips)}
               resultRowFormatter={DefaultMCLRowFormatter}
               newRecordInitialValues={initialValues}
               massageNewRecord={this.massageNewRecord}
+              customPaneSub={this.renderPaneSub()}
               onCreate={this.create}
               onCloseNewRecord={this.handleCloseNewRecord}
               parentResources={resources}
@@ -1336,6 +1482,7 @@ class RequestsRoute extends React.Component {
               renderFilters={this.renderFilters}
               resultIsSelected={this.resultIsSelected}
               onFilterChange={this.handleFilterChange}
+              sortableColumns={['requestDate', 'title', 'year', 'itemBarcode', 'type', 'requestStatus', 'position', 'requester', 'requesterBarcode', 'proxy']}
               pageAmount={100}
               pagingType={MCLPagingTypes.PREV_NEXT}
             />
@@ -1345,6 +1492,11 @@ class RequestsRoute extends React.Component {
             ref={this.pickSlipsPrintContentRef}
             template={pickSlipsPrintTemplate}
             dataSource={pickSlipsData}
+          />
+          <PrintContent
+            ref={this.printContentRefSelected}
+            template={pickSlipsPrintTemplate}
+            dataSource={multiSelectPickSlipData}
           />
           {
             isPrintHoldRequestsEnabled &&

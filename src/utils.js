@@ -9,6 +9,7 @@ import {
   pickBy,
   identity,
   sortBy,
+  size
 } from 'lodash';
 import queryString from 'query-string';
 import React from 'react';
@@ -179,6 +180,64 @@ export function buildLocaleDateAndTime(dateTime, timezone, locale) {
     .locale(locale)
     .format('L LT');
 }
+
+export function getSelectedSlipData(pickSlipsData, selectedRequestId) {
+  const sel = pickSlipsData.filter((pickSlip) => {
+    return pickSlip['request.requestID'] === selectedRequestId;
+  })[0];
+  if (sel === undefined) {
+    return [];
+  } else {
+    return [sel].flat();
+  }
+}
+
+export function getSelectedSlipDataMulti(pickSlipsData, selectedRows) {
+  const sel = pickSlipsData.filter((pickSlip) => {
+    return Object.keys(selectedRows).includes(pickSlip['request.requestID']);
+  });
+  if (sel === undefined) {
+    return [];
+  } else {
+    return [sel].flat();
+  }
+}
+
+export function selectedRowsNonPrintable(pickSlipsData, selectedRows) {
+  if (!size(selectedRows)) {
+    return true;
+  }
+  const sel = pickSlipsData.filter((pickSlip) => {
+    return Object.keys(selectedRows).includes(pickSlip['request.requestID']);
+  });
+  if (sel === undefined) {
+    return true;
+  } else return sel.length === 0;
+}
+
+export function isPrintable(requestId, pickSlips) {
+  let matched;
+  if (pickSlips !== undefined) {
+    matched = pickSlips.filter((pickSlip) => {
+      return pickSlip.request.requestID === requestId;
+    })[0];
+  }
+  return matched != null;
+}
+
+export const getNextSelectedRowsState = (selectedRows, row) => {
+  const { id } = row;
+  const isRowSelected = Boolean(selectedRows[id]);
+  const newSelectedRows = { ...selectedRows };
+
+  if (isRowSelected) {
+    delete newSelectedRows[id];
+  } else {
+    newSelectedRows[id] = row;
+  }
+
+  return newSelectedRows;
+};
 
 export const convertToSlipData = (source, intl, timeZone, locale, slipName = SLIPS_TYPE.PICK_SLIP) => {
   return source.map(pickSlip => {
