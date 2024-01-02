@@ -152,7 +152,7 @@
     "item.callNumberComponents.callNumber": "Número de llamada efectivo",
     "item.callNumberComponents.suffix": "Sufijo de número de llamada efectivo",
     "item.chronology": "Cronología",
-    "permission.moveRequest": "Solicitudes: mover a un ejemplar nuevo, reordenar la cola",
+    "permission.moveRequest": "Solicitudes: mover a un ítem nuevo, reordenar la cola",
     "permission.reorderQueue": "Solicitudes: Reordenar la cola",
     "permission.all": "Solicitudes: Todos los permisos",
     "permission.view": "Solicitudes: Ver",
