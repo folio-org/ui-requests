@@ -234,7 +234,7 @@
     "item.status.awaitingDelivery": "Aguardando entrega",
     "item.status.awaitingPickup": "Aguardando retirada",
     "item.status.checkedOut": "Emprestado",
-    "item.status.claimedReturned": "Alegado como devolvido",
+    "item.status.claimedReturned": "Alegou ter devolvido",
     "item.status.declaredLost": "Declarado como perdido",
     "item.status.inProcess": "Em processo",
     "item.status.inProcessNonRequestable": "Em processo (não-solicitável)",
