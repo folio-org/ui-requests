@@ -72,7 +72,6 @@ import {
   isDuplicateMode,
   generateUserName,
   getRequestErrorMessage,
-  getSelectedSlipData,
   getSelectedSlipDataMulti,
   isPrintable,
   selectedRowsNonPrintable,
@@ -98,6 +97,7 @@ import {
   getFormattedYears,
   getStatusQuery,
 } from './utils';
+import SinglePrintButtonForPickSlip from '../components/PrintButton/SinglePrintButtonForPickSlip';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -189,6 +189,70 @@ export const urls = {
     return requestUrl;
   },
 };
+
+export const getListFormatter = (
+  {
+    getRowURL,
+    setURL
+  },
+  {
+    selectedRows,
+    pickSlipsToCheck,
+    pickSlipsData,
+    getPrintContentRef,
+    pickSlipsPrintTemplate,
+    toggleRowSelection,
+    onBeforeGetContentForSinglePrintButton
+  }
+) => ({
+  'select': ({
+    // eslint-disable-next-line react/prop-types
+    id,
+    ...rowData
+  }) => (
+    <CheckboxColumn>
+      <Checkbox
+        checked={Boolean(selectedRows[id])}
+        aria-label={<FormattedMessage id="ui-inventory.instances.rows.select" />}
+        onChange={() => toggleRowSelection({
+          id,
+          ...rowData
+        })}
+      />
+    </CheckboxColumn>
+  ),
+  'itemBarcode': rq => (rq.item ? rq.item.barcode : DEFAULT_FORMATTER_VALUE),
+  'position': rq => (rq.position || DEFAULT_FORMATTER_VALUE),
+  'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : DEFAULT_FORMATTER_VALUE),
+  'requestDate': rq => (
+    <AppIcon size="small" app="requests">
+      <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
+    </AppIcon>
+  ),
+  'singlePrint': rq => (
+
+    <>
+      <SinglePrintButtonForPickSlip
+        rq={rq}
+        pickSlipsToCheck={pickSlipsToCheck}
+        pickSlipsPrintTemplate={pickSlipsPrintTemplate}
+        onBeforeGetContentForSinglePrintButton={onBeforeGetContentForSinglePrintButton}
+        pickSlipsData={pickSlipsData}
+        getPrintContentRef={getPrintContentRef}
+      />
+
+    </>),
+  'requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : DEFAULT_FORMATTER_VALUE),
+  'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : DEFAULT_FORMATTER_VALUE),
+  'requestStatus': rq => (requestStatusesTranslations[rq.status]
+    ? <FormattedMessage id={requestStatusesTranslations[rq.status]} />
+    : <NoValue />),
+  'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
+  'title': rq => <TextLink to={getRowURL(rq.id)} onClick={() => setURL(rq.id)}>{(rq.instance ? rq.instance.title : DEFAULT_FORMATTER_VALUE)}</TextLink>,
+  'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
+  'callNumber': rq => effectiveCallNumber(rq.item),
+  'servicePoint': rq => get(rq, 'pickupServicePoint.name', DEFAULT_FORMATTER_VALUE),
+});
 
 export const buildHoldRecords = (records) => {
   return records.map(record => {
@@ -498,7 +562,6 @@ class RequestsRoute extends React.Component {
   constructor(props) {
     super(props);
 
-    const { intl: { formatMessage } } = props;
     const {
       titleLevelRequestsFeatureEnabled = false,
       createTitleLevelRequestsByDefault = false,
@@ -1147,6 +1210,13 @@ class RequestsRoute extends React.Component {
     })
   );
 
+  onBeforeGetContentForSinglePrintButton = () => (
+    new Promise(resolve => {
+      this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
+      setTimeout(() => resolve(), 1000);
+    })
+  );
+
   printContentRefs = {};
   getPrintContentRef = (rqId) => {
     // create a ref if it doesn't exist for the given rqId
@@ -1213,67 +1283,23 @@ class RequestsRoute extends React.Component {
     let multiSelectPickSlipData = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
     const columnMapping = this.getColumnMapping();
 
-    const resultsFormatter = (getRowURL, setURL, pickSlipsToCheck) => ({
-      'select': ({
-        id,
-        ...rowData
-      }) => (
-        <CheckboxColumn>
-          <Checkbox
-            checked={Boolean(selectedRows[id])}
-            aria-label={<FormattedMessage id="ui-inventory.instances.rows.select" />}
-            onChange={() => this.toggleRowSelection({
-              id,
-              ...rowData
-            })}
-          />
-        </CheckboxColumn>
-      ),
-      'itemBarcode': rq => (rq.item ? rq.item.barcode : DEFAULT_FORMATTER_VALUE),
-      'position': rq => (rq.position || DEFAULT_FORMATTER_VALUE),
-      'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : DEFAULT_FORMATTER_VALUE),
-      'requestDate': rq => (
-        <AppIcon size="small" app="requests">
-          <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
-        </AppIcon>
-      ),
-      'singlePrint': rq => (
-
-        <>
-          <PrintButton
-            id="singlePrintPickSlipsBtn"
-            disabled={!isPrintable(rq.id, pickSlipsToCheck)}
-            template={this.getPrintTemplate(SLIPS_TYPE.PICK_SLIP)}
-            contentRef={this.getPrintContentRef(rq.id)}
-            requestId={rq.id}
-            onBeforeGetContent={
-                  () => new Promise(resolve => {
-                    this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
-                    setTimeout(() => resolve(), 1000);
-                  })
-                }
-          >
-            <FormattedMessage id="ui-requests.requests.printButtonLabel" />
-
-            <PrintContent
-              ref={this.getPrintContentRef(rq.id)}
-              template={this.getPrintTemplate(SLIPS_TYPE.PICK_SLIP)}
-              dataSource={getSelectedSlipData(pickSlipsData, rq.id)}
-            />
-          </PrintButton>
-
-        </>),
-      'requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : DEFAULT_FORMATTER_VALUE),
-      'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : DEFAULT_FORMATTER_VALUE),
-      'requestStatus': rq => (requestStatusesTranslations[rq.status]
-        ? <FormattedMessage id={requestStatusesTranslations[rq.status]} />
-        : <NoValue />),
-      'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
-      'title': rq => <TextLink to={getRowURL(rq.id)} onClick={() => setURL(rq.id)}>{(rq.instance ? rq.instance.title : DEFAULT_FORMATTER_VALUE)}</TextLink>,
-      'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
-      'callNumber': rq => effectiveCallNumber(rq.item),
-      'servicePoint': rq => get(rq, 'pickupServicePoint.name', DEFAULT_FORMATTER_VALUE),
-    });
+    const resultsFormatter = getListFormatter(
+      {
+        getRowURL: this.getRowURL,
+        setURL: this.setURL
+      },
+      {   // separate into two objects
+        selectedRows,
+        pickSlipsToCheck: pickSlips,
+        pickSlipsData,
+        getPrintContentRef: this.getPrintContentRef,
+        isPrintable,
+        // getPrintTemplate: this.getPrintTemplate
+        pickSlipsPrintTemplate,
+        toggleRowSelection: this.toggleRowSelection,
+        onBeforeGetContentForSinglePrintButton: this.onBeforeGetContentForSinglePrintButton
+      }
+    );
 
     const actionMenu = ({ onToggle, renderColumnsMenu }) => (
       <>
@@ -1448,7 +1474,7 @@ class RequestsRoute extends React.Component {
               }}
               columnMapping={columnMapping}
               resultsRowClickHandlers={false}
-              resultsFormatter={resultsFormatter(this.getRowURL, this.setURL, pickSlips)}
+              resultsFormatter={resultsFormatter}
               resultRowFormatter={DefaultMCLRowFormatter}
               newRecordInitialValues={initialValues}
               massageNewRecord={this.massageNewRecord}
