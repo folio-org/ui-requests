@@ -150,7 +150,7 @@
     "common.cancel": "Zrušit",
     "item.callNumberComponents.prefix": "Efektivní prefix signatury",
     "item.callNumberComponents.callNumber": "Efektivní signatura",
-    "item.callNumberComponents.suffix": "Efektivní přípona signatury",
+    "item.callNumberComponents.suffix": "Efektivní suffix signatury",
     "item.chronology": "Chronologie",
     "permission.moveRequest": "Požadavky: Přejít na novou jednotku, změnit pořadí fronty",
     "permission.reorderQueue": "Žádanky: Změna pořadí ve frontě",
