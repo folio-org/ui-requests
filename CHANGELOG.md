@@ -9,6 +9,7 @@
 * Hide Actions menu on closed request of DCB Transaction. Refs UIREQ-1040.
 * Update Jest/RTL tests, remove outdated imports. Refs UIREQ-996.
 * Add support for `search-slips` okapi interface version `0.1`. Refs UIREQ-1042.
+* Increase code coverage for src/RequestForm.js by Jest/RTL tests. Refs UIREQ-1043.
 
 ## [9.0.1](https://github.com/folio-org/ui-requests/tree/v9.0.1) (2023-12-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.0.0...v9.0.1)
