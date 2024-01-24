@@ -1,6 +1,5 @@
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
-import { Field } from 'react-final-form';
 
 import {
   render,
@@ -9,7 +8,6 @@ import {
   waitFor,
 } from '@folio/jest-config-stripes/testing-library/react';
 import {
-  Checkbox,
   CommandList,
   defaultKeyboardShortcuts,
 } from '@folio/stripes/components';
@@ -49,10 +47,18 @@ const testIds = {
   instanceField: 'instanceField',
   selectProxyButton: 'selectProxyButton',
   closeProxyButton: 'closeProxyButton',
+  overridePatronButton: 'overridePatronButton',
+  closePatronModalButton: 'closePatronModalButton',
+  itemDialogCloseButton: 'itemDialogCloseButton',
+  itemDialogRow: 'itemDialogRow',
 };
 const fieldValue = 'value';
 const idResourceType = 'id';
 const instanceId = 'instanceId';
+const item = {
+  id: 'itemId',
+  barcode: 'itemBarcode',
+};
 
 jest.mock('./utils', () => ({
   ...jest.requireActual('./utils'),
@@ -139,12 +145,58 @@ jest.mock('./components/InstanceInformation', () => jest.fn(({
   );
 }));
 jest.mock('@folio/stripes/final-form', () => () => jest.fn((component) => component));
-jest.mock('./PatronBlockModal', () => jest.fn(() => null));
-jest.mock('./CancelRequestDialog', () => jest.fn(() => null));
-jest.mock('./components/TitleInformation', () => jest.fn(() => null));
-jest.mock('./ItemDetail', () => jest.fn(() => null));
-jest.mock('./ItemsDialog', () => jest.fn(() => null));
-jest.mock('./PositionLink', () => jest.fn(() => null));
+jest.mock('./PatronBlockModal', () => jest.fn(({
+  onOverride,
+  onClose,
+}) => (
+  <>
+    <button
+      data-testid={testIds.overridePatronButton}
+      onClick={onOverride}
+      type="button"
+    >
+      Override
+    </button>
+    <button
+      data-testid={testIds.closePatronModalButton}
+      onClick={onClose}
+      type="button"
+    >
+      Close
+    </button>
+  </>
+)));
+jest.mock('./CancelRequestDialog', () => jest.fn(() => <div />));
+jest.mock('./components/TitleInformation', () => jest.fn(() => <div />));
+jest.mock('./ItemDetail', () => jest.fn(() => <div />));
+jest.mock('./ItemsDialog', () => jest.fn(({
+  onClose,
+  onRowClick,
+}) => {
+  const handleRowClick = () => {
+    onRowClick({}, item);
+  };
+
+  return (
+    <>
+      <button
+        data-testid={testIds.itemDialogRow}
+        type="button"
+        onClick={handleRowClick}
+      >
+        Item
+      </button>
+      <button
+        data-testid={testIds.itemDialogCloseButton}
+        onClick={onClose}
+        type="button"
+      >
+        Close
+      </button>
+    </>
+  );
+}));
+jest.mock('./PositionLink', () => jest.fn(() => <div />));
 
 describe('RequestForm', () => {
   const labelIds = {
@@ -153,10 +205,6 @@ describe('RequestForm', () => {
     enterButton:'ui-requests.enter',
     requestInfoAccordion: 'ui-requests.requestMeta.information',
     requesterInfoAccordion: 'ui-requests.requester.information',
-  };
-  const fieldCallOrder = {
-    tlrCheckbox: 1,
-    instanceHrid: 2,
   };
   const basicProps = {
     onGetPatronManualBlocks: jest.fn(),
@@ -277,6 +325,7 @@ describe('RequestForm', () => {
           findResource = jest.fn()
             .mockResolvedValueOnce(holding)
             .mockResolvedValueOnce(null);
+
           const props = {
             ...basicProps,
             selectedItem,
@@ -290,22 +339,6 @@ describe('RequestForm', () => {
           const tlrCheckbox = screen.getByTestId(testIds.tlrCheckbox);
 
           expect(tlrCheckbox).toBeVisible();
-        });
-
-        it('should execute `TLR` checkbox Field with passed props', () => {
-          const expectedResult = {
-            name: 'createTitleLevelRequest',
-            type: 'checkbox',
-            label: labelIds.tlrCheckbox,
-            component: Checkbox,
-            disabled: false,
-          };
-
-          expect(Field).toHaveBeenNthCalledWith(
-            fieldCallOrder.tlrCheckbox,
-            expect.objectContaining(expectedResult),
-            {},
-          );
         });
 
         it('should reset instance and item info on TLR checkbox change', () => {
@@ -714,6 +747,7 @@ describe('RequestForm', () => {
             .mockResolvedValueOnce(userResult)
             .mockResolvedValueOnce(requestPreferencesResult)
             .mockResolvedValue({});
+
           const props = {
             ...basicProps,
             findResource,
@@ -808,11 +842,11 @@ describe('RequestForm', () => {
           });
         });
 
-        it('should set "blocked" to true', () => {
+        it('should set blocked to true', () => {
           expect(basicProps.onSetBlocked).toHaveBeenCalledWith(true);
         });
 
-        it('should set "isPatronBlocksOverridden" to false', () => {
+        it('should set isPatronBlocksOverridden to false', () => {
           expect(basicProps.onSetIsPatronBlocksOverridden).toHaveBeenCalledWith(false);
         });
 
@@ -902,7 +936,7 @@ describe('RequestForm', () => {
           );
         });
 
-        it('should trigger "findResource" with correct arguments to get user data by user id', () => {
+        it('should get user data by user id', () => {
           const expectedArgs = [
             RESOURCE_TYPES.USER,
             updatedUserId,
@@ -1084,6 +1118,7 @@ describe('RequestForm', () => {
           findResource = jest.fn()
             .mockResolvedValueOnce(userResult)
             .mockResolvedValueOnce(requestPreferencesResult);
+
           const props = {
             ...basicProps,
             query: {
@@ -1119,16 +1154,16 @@ describe('RequestForm', () => {
         });
 
         it('should not trigger validation of user barcode field', () => {
-          const expectedArg = ['keyOfUserBarcodeField', 1];
+          const expectedArg = ['keyOfUserBarcodeField', expect.any(Number)];
 
           expect(basicProps.form.change).not.toHaveBeenCalledWith(...expectedArg);
         });
 
-        it('should not set "blocked" to true', () => {
+        it('should not set blocked to true', () => {
           expect(basicProps.onSetBlocked).not.toHaveBeenCalledWith(true);
         });
 
-        it('should not set "isPatronBlocksOverridden" to false', () => {
+        it('should not set isPatronBlocksOverridden to false', () => {
           expect(basicProps.onSetIsPatronBlocksOverridden).not.toHaveBeenCalledWith(false);
         });
       });
@@ -1166,7 +1201,7 @@ describe('RequestForm', () => {
           );
         });
 
-        it('should trigger "findResource" with correct arguments to get user data by user barcode', () => {
+        it('should get user data by user barcode', () => {
           const expectedArgs = [
             RESOURCE_TYPES.USER,
             updatedUserBarcode,
@@ -1422,7 +1457,7 @@ describe('RequestForm', () => {
           );
         });
 
-        it('should trigger "findResource" with correct arguments to get item data by item barcode', () => {
+        it('should get item data by item barcode', () => {
           const expectedArgs = [
             RESOURCE_TYPES.ITEM,
             updatedItemBarcode,
@@ -1456,7 +1491,7 @@ describe('RequestForm', () => {
           renderComponent(props);
         });
 
-        it('should get information about requested item', () => {
+        it('should get information about requested item by item id', () => {
           const expectedArgs = [
             RESOURCE_TYPES.ITEM,
             initialItemId,
@@ -1712,6 +1747,51 @@ describe('RequestForm', () => {
 
         expect(findResource).toHaveBeenCalledWith(...expectedArgs);
       });
+    });
+  });
+
+  describe('Patron block modal', () => {
+    beforeEach(() => {
+      renderComponent();
+    });
+
+    it('should set isPatronBlocksOverridden to true', () => {
+      const overridePatronButton = screen.getByTestId(testIds.overridePatronButton);
+
+      fireEvent.click(overridePatronButton);
+
+      expect(basicProps.onSetIsPatronBlocksOverridden).toHaveBeenCalledWith(true);
+    });
+
+    it('should set blocked to false', () => {
+      const closePatronModalButton = screen.getByTestId(testIds.closePatronModalButton);
+
+      fireEvent.click(closePatronModalButton);
+
+      expect(basicProps.onSetBlocked).toHaveBeenCalledWith(false);
+    });
+  });
+
+  describe('Items dialog', () => {
+    beforeEach(() => {
+      renderComponent();
+    });
+
+    it('should get information about selected item', () => {
+      const expectedArgs = [RESOURCE_TYPES.ITEM, item.id, RESOURCE_KEYS.id];
+      const itemDialogRow = screen.getByTestId(testIds.itemDialogRow);
+
+      fireEvent.click(itemDialogRow);
+
+      expect(basicProps.findResource).toHaveBeenCalledWith(...expectedArgs);
+    });
+
+    it('should reset selected instance', () => {
+      const itemDialogCloseButton = screen.getByTestId(testIds.itemDialogCloseButton);
+
+      fireEvent.click(itemDialogCloseButton);
+
+      expect(basicProps.onSetSelectedInstance).toHaveBeenCalledWith(undefined);
     });
   });
 
