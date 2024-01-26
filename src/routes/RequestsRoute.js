@@ -270,6 +270,13 @@ class RequestsRoute extends React.Component {
         staticFallback: { params: {} },
       },
     },
+    ecs: {
+      type: 'okapi',
+      path: 'tlr/ecs-tlr',
+      records: 'requests',
+      throwErrors: false,
+      fetch: false,
+    },
     reportRecords: {
       type: 'okapi',
       path: 'circulation/requests',
@@ -514,6 +521,7 @@ class RequestsRoute extends React.Component {
     const {
       titleLevelRequestsFeatureEnabled = false,
       createTitleLevelRequestsByDefault = false,
+      ecsTlrFeatureEnabled = false,
     } = getTlrSettings(props.resources.configs.records[0]?.value);
 
     this.okapiUrl = props.stripes.okapi.url;
@@ -561,6 +569,7 @@ class RequestsRoute extends React.Component {
       selectedId: '',
       titleLevelRequestsFeatureEnabled,
       createTitleLevelRequestsByDefault,
+      ecsTlrFeatureEnabled,
     };
 
     this.pickSlipsPrintContentRef = React.createRef();
@@ -869,8 +878,20 @@ class RequestsRoute extends React.Component {
   create = (data) => {
     const query = new URLSearchParams(this.props.location.search);
     const mode = query.get('mode');
+    const isTlr = data.requestLevel === REQUEST_LEVEL_TYPES.TITLE;
+    // depending on requirements we can have `isTlr && this.state.ecsTlrFeatureEnabled ? ...`
+    // or `this.state.ecsTlrFeatureEnabled ? ...` condition
+    const createMutator = isTlr && this.state.ecsTlrFeatureEnabled ?
+      this.props.mutator.ecs :
+      this.props.mutator.records;
 
-    return this.props.mutator.records.POST(data)
+    // if necessary we can delete some properties for ecs/tlr from payload
+    //
+    // if (isTlr && this.state.ecsTlrFeatureEnabled) {
+    //   unset(data, 'propertyName');
+    // }
+    return createMutator.POST(data)
+    // return this.props.mutator.records.POST(data)
       .then(() => {
         this.closeLayer();
 
