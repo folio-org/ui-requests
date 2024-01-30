@@ -612,13 +612,12 @@ class RequestsRoute extends React.Component {
       select: <Checkbox
         checked={this.getIsAllRowsSelected()}
         aria-label={<FormattedMessage id="ui-requests.instances.rows.select" />}
-        onChange={() => this.toggleAllRows()}
+        onChange={this.toggleAllRows}
       />,
       requestDate: <FormattedMessage id="ui-requests.requests.requestDate" />,
       title: <FormattedMessage id="ui-requests.requests.title" />,
       year: <FormattedMessage id="ui-requests.requests.year" />,
       itemBarcode: <FormattedMessage id="ui-requests.requests.itemBarcode" />,
-      singlePrint: <FormattedMessage id="ui-requests.requests.singlePrint" />,
       callNumber: <FormattedMessage id="ui-requests.requests.callNumber" />,
       type: <FormattedMessage id="ui-requests.requests.type" />,
       requestStatus: <FormattedMessage id="ui-requests.requests.status" />,
@@ -626,6 +625,7 @@ class RequestsRoute extends React.Component {
       servicePoint: <FormattedMessage id="ui-requests.requests.servicePoint" />,
       requester: <FormattedMessage id="ui-requests.requests.requester" />,
       requesterBarcode: <FormattedMessage id="ui-requests.requests.requesterBarcode" />,
+      singlePrint: <FormattedMessage id="ui-requests.requests.singlePrint" />,
       proxy: <FormattedMessage id="ui-requests.requests.proxy" />
     };
     return columnLabels;
@@ -1293,8 +1293,6 @@ class RequestsRoute extends React.Component {
         pickSlipsToCheck: pickSlips,
         pickSlipsData,
         getPrintContentRef: this.getPrintContentRef,
-        isPrintable,
-        // getPrintTemplate: this.getPrintTemplate
         pickSlipsPrintTemplate,
         toggleRowSelection: this.toggleRowSelection,
         onBeforeGetContentForSinglePrintButton: this.onBeforeGetContentForSinglePrintButton
