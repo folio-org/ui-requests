@@ -19,6 +19,7 @@ import {
   stripesConnect,
   IfPermission,
   CalloutContext,
+  TitleManager,
 } from '@folio/stripes/core';
 import {
   Button,
@@ -1102,6 +1103,22 @@ class RequestsRoute extends React.Component {
     })
   );
 
+  getPageTitle = () => {
+    const {
+      location,
+      intl: {
+        formatMessage,
+      },
+    } = this.props;
+    const query = parse(location.search)?.query;
+
+    if (query) {
+      return formatMessage({ id: 'ui-requests.documentTitle.search' }, { query });
+    }
+
+    return formatMessage({ id: 'ui-requests.meta.title' });
+  }
+
   render() {
     const {
       resources,
@@ -1263,6 +1280,7 @@ class RequestsRoute extends React.Component {
         'proxy',
       ],
     };
+    const pageTitle = this.getPageTitle();
 
     return (
       <RequestsRouteShortcutsWrapper
@@ -1279,6 +1297,7 @@ class RequestsRoute extends React.Component {
               errorMessage={intl.formatMessage({ id: errorModalData.errorMessage })}
             />
           }
+          <TitleManager page={pageTitle} />
           <div data-test-request-instances>
             <SearchAndSort
               paneTitleRef={this.paneTitleRef}

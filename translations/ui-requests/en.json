@@ -3,6 +3,7 @@
   "routingError": "How did you get to {pathname}?",
 
   "meta.title": "Requests",
+  "documentTitle.search": "Requests - {query} - Search",
   "appMenu.keyboardShortcuts": "Keyboard shortcuts",
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
   "barcode": "Barcode",
