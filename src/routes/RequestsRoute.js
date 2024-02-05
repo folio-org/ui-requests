@@ -230,16 +230,14 @@ export const getListFormatter = (
     </AppIcon>
   ),
   'singlePrint': rq => (
-    <>
-      <SinglePrintButtonForPickSlip
-        rq={rq}
-        pickSlipsToCheck={pickSlipsToCheck}
-        pickSlipsPrintTemplate={pickSlipsPrintTemplate}
-        onBeforeGetContentForSinglePrintButton={onBeforeGetContentForSinglePrintButton}
-        pickSlipsData={pickSlipsData}
-        getPrintContentRef={getPrintContentRef}
-      />
-    </>),
+    <SinglePrintButtonForPickSlip
+      rq={rq}
+      pickSlipsToCheck={pickSlipsToCheck}
+      pickSlipsPrintTemplate={pickSlipsPrintTemplate}
+      onBeforeGetContentForSinglePrintButton={onBeforeGetContentForSinglePrintButton}
+      pickSlipsData={pickSlipsData}
+      getPrintContentRef={getPrintContentRef}
+    />),
   'requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : DEFAULT_FORMATTER_VALUE),
   'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : DEFAULT_FORMATTER_VALUE),
   'requestStatus': rq => (requestStatusesTranslations[rq.status]

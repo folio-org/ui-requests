@@ -609,7 +609,7 @@ describe('getNextSelectedRowsState', () => {
   });
 });
 describe('isPrintable', () => {
-  test('returns true when pickSlips contain a match for requestId', () => {
+  it('returns true when pickSlips contain a match for requestId', () => {
     const requestId = '123';
     const pickSlips = [
       { request: { requestID: '123' } },
@@ -621,7 +621,7 @@ describe('isPrintable', () => {
     expect(result).toBe(true);
   });
 
-  test('returns false when pickSlips do not contain a match for requestId', () => {
+  it('returns false when pickSlips do not contain a match for requestId', () => {
     const requestId = '789';
     const pickSlips = [
       { request: { requestID: '123' } },
@@ -633,7 +633,7 @@ describe('isPrintable', () => {
     expect(result).toBe(false);
   });
 
-  test('returns false when pickSlips is undefined', () => {
+  it('returns false when pickSlips is undefined', () => {
     const requestId = '123';
     const pickSlips = undefined;
 
@@ -678,7 +678,7 @@ describe('getSelectedSlipData', () => {
 });
 
 describe('selectedRowsNonPrintable', () => {
-  test('should return true when selectedRows is empty', () => {
+  it('should return true when selectedRows is empty', () => {
     const pickSlipsData = [
       { 'request.requestID': '1' },
       { 'request.requestID': '2' },
@@ -691,7 +691,7 @@ describe('selectedRowsNonPrintable', () => {
     expect(result).toBe(true);
   });
 
-  test('should return true when no matching rows are selected', () => {
+  it('should return true when no matching rows are selected', () => {
     const pickSlipsData = [
       { 'request.requestID': '1' },
       { 'request.requestID': '2' },
@@ -704,7 +704,7 @@ describe('selectedRowsNonPrintable', () => {
     expect(result).toBe(true);
   });
 
-  test('should return false when at least one matching row is selected', () => {
+  it('should return false when at least one matching row is selected', () => {
     const pickSlipsData = [
       { 'request.requestID': '1' },
       { 'request.requestID': '2' },
