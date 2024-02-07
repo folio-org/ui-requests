@@ -725,8 +725,9 @@ class RequestsRoute extends React.Component {
 
     if (resources.currentServicePoint?.id !== id) {
       mutator.currentServicePoint.update({ id });
-      this.buildRecordsForHoldsShelfReport();
     }
+
+    this.buildRecordsForHoldsShelfReport();
   };
 
   getColumnHeaders = (headers) => {
@@ -991,12 +992,21 @@ class RequestsRoute extends React.Component {
     reset();
 
     const { id } = this.getCurrentServicePointInfo();
-    const path = `circulation/requests-reports/hold-shelf-clearance/${id}`;
-    const { requests } = await GET({ path });
 
     this.setState({
       servicePointId: id,
-      requests,
+    });
+
+    if (id !== this.state.servicePointId) {
+      const path = `circulation/requests-reports/hold-shelf-clearance/${id}`;
+      const { requests } = await GET({ path });
+
+      this.setState({
+        requests,
+      });
+    }
+
+    this.setState({
       holdsShelfReportPending: false,
     });
   }
