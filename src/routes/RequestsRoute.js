@@ -1300,6 +1300,7 @@ class RequestsRoute extends React.Component {
           <TitleManager page={pageTitle} />
           <div data-test-request-instances>
             <SearchAndSort
+              title="Vega test"
               paneTitleRef={this.paneTitleRef}
               columnManagerProps={columnManagerProps}
               hasNewButton={false}
