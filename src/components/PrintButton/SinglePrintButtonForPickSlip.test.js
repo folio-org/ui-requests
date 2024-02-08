@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
 import SinglePrintButtonForPickSlip from './SinglePrintButtonForPickSlip';
+import * as utils from '../../utils';
 
 const testIds = {
   printContent: 'printContent',
@@ -43,9 +44,9 @@ describe('SinglePrintButtonForPickSlip', () => {
   });
 
   it('disables the button if not printable', () => {
-    jest.spyOn(require('../../utils'), 'isPrintable').mockReturnValueOnce(false);
+    jest.spyOn(utils, 'isPrintable').mockReturnValueOnce(false);
 
-    const { getByTestId } = render(
+    render(
       <SinglePrintButtonForPickSlip
         {...basicProps}
       />
@@ -56,9 +57,9 @@ describe('SinglePrintButtonForPickSlip', () => {
   });
 
   it('enables the button if printable', () => {
-    jest.spyOn(require('../../utils'), 'isPrintable').mockReturnValueOnce(true);
+    jest.spyOn(utils, 'isPrintable').mockReturnValueOnce(true);
 
-    const { getByTestId } = render(
+    render(
       <SinglePrintButtonForPickSlip
         {...basicProps}
       />
