@@ -602,27 +602,6 @@ class RequestsRoute extends React.Component {
     this.printContentRefSelected = React.createRef();
   }
 
-  toggleAllRows = () => {
-    const { resources } = this.props;
-    const { selectedRows } = this.state;
-
-    const toggledRows = resources.records.records.reduce((acc, row) => (
-      {
-        ...acc,
-        [row.id]: row,
-      }
-    ), {});
-
-    const filterSelectedRows = rows => {
-      Object.keys(toggledRows).forEach(id => {
-        if (rows[id]) delete rows[id];
-      });
-      return rows;
-    };
-
-    this.setState(({ selectedRows: this.getIsAllRowsSelected() ? filterSelectedRows(selectedRows) : { ...selectedRows, ...toggledRows } }));
-  };
-
   static getDerivedStateFromProps(props) {
     const layer = (props.resources.query || {}).layer;
     if (!layer) {
@@ -687,6 +666,27 @@ class RequestsRoute extends React.Component {
       this.onSearchComplete(this.props.resources.records);
     }
   }
+
+  toggleAllRows = () => {
+    const { resources } = this.props;
+    const { selectedRows } = this.state;
+
+    const toggledRows = resources.records.records.reduce((acc, row) => (
+      {
+        ...acc,
+        [row.id]: row,
+      }
+    ), {});
+
+    const filterSelectedRows = rows => {
+      Object.keys(toggledRows).forEach(id => {
+        if (rows[id]) delete rows[id];
+      });
+      return rows;
+    };
+
+    this.setState(({ selectedRows: this.getIsAllRowsSelected() ? filterSelectedRows(selectedRows) : { ...selectedRows, ...toggledRows } }));
+  };
 
   getIsAllRowsSelected = () => {
     const { resources } = this.props;
