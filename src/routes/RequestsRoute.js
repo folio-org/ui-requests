@@ -602,17 +602,6 @@ class RequestsRoute extends React.Component {
     this.printContentRefSelected = React.createRef();
   }
 
-  getIsAllRowsSelected = () => {
-    const { resources } = this.props;
-    const { selectedRows } = this.state;
-    if (resources.records.records.length !== 0) {
-      const res = resources.records.records.every(({ id }) => Object.keys(selectedRows).includes(id));
-      return res;
-    } else {
-      return false;
-    }
-  };
-
   toggleAllRows = () => {
     const { resources } = this.props;
     const { selectedRows } = this.state;
@@ -698,6 +687,18 @@ class RequestsRoute extends React.Component {
       this.onSearchComplete(this.props.resources.records);
     }
   }
+
+  getIsAllRowsSelected = () => {
+    const { resources } = this.props;
+    const { selectedRows } = this.state;
+    if (resources.records.records.length !== 0) {
+      const res = resources.records.records.every(({ id }) => Object.keys(selectedRows).includes(id));
+      return res;
+    } else {
+      return false;
+    }
+  };
+
 
   getColumnMapping = () => {
     return {
