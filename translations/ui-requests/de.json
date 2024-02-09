@@ -286,5 +286,6 @@
     "errors.itemHasAlreadyBeenRequested": "Offene Bestandsanfrage für Benutzer/-in auf dieses Exemplar ist bereits vorhanden.",
     "errors.instanceHasAlreadyBeenRequested": "Offene Bestandsanfrage für Benutzer/-in auf diese Instanz ist bereits vorhanden",
     "errors.movingRequestToTheSameItem": "Not allowed to move title level page request to the same item",
-    "errors.itemOfThisInstanceAlreadyRequested": "Offene Bestandanfrage für Benutzer/-in auf ein Exemplar dieser Instanz ist bereits vorhanden."
+    "errors.itemOfThisInstanceAlreadyRequested": "Offene Bestandanfrage für Benutzer/-in auf ein Exemplar dieser Instanz ist bereits vorhanden.",
+    "documentTitle.search": "Requests - {query} - Search"
 }
