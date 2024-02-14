@@ -9,7 +9,11 @@ import { stripesConnect } from '@folio/stripes/core';
 
 import RequestQueueView from '../views/RequestQueueView';
 import urls from './urls';
-import { requestStatuses } from '../constants';
+import {
+  requestStatuses,
+  SETTINGS_SCOPES,
+  SETTINGS_KEYS,
+} from '../constants';
 import {
   getTlrSettings,
   isPageRequest,
@@ -29,10 +33,10 @@ class RequestQueueRoute extends React.Component {
   static manifest = {
     configs: {
       type: 'okapi',
-      records: 'configs',
-      path: 'configurations/entries',
+      records: 'items',
+      path: 'settings/entries',
       params: {
-        query: '(module==SETTINGS and configName==TLR)',
+        query: `(scope==${SETTINGS_SCOPES.CIRCULATION} and key==${SETTINGS_KEYS.GENERAL_TLR})`,
       },
     },
     addressTypes: {

@@ -143,16 +143,12 @@ describe('getTlrSettings', () => {
     createTitleLevelRequestsByDefault: false,
   };
 
-  it('should return parsed settings', () => {
-    expect(getTlrSettings(JSON.stringify(defaultSettings))).toEqual(defaultSettings);
+  it('should return passed settings', () => {
+    expect(getTlrSettings(defaultSettings)).toEqual(defaultSettings);
   });
 
   it('should return empty object if nothing passed', () => {
     expect(getTlrSettings()).toEqual({});
-  });
-
-  it('should return empty object if invalid settings passed', () => {
-    expect(getTlrSettings("{'foo': 1}")).toEqual({});
   });
 });
 
