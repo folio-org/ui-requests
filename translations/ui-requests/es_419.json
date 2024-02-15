@@ -152,7 +152,7 @@
     "item.callNumberComponents.callNumber": "Número de llamada efectivo",
     "item.callNumberComponents.suffix": "Sufijo de número de llamada efectivo",
     "item.chronology": "Cronología",
-    "permission.moveRequest": "Solicitudes: mover a un ejemplar nuevo, reordenar la cola",
+    "permission.moveRequest": "Solicitudes: mover a un ítem nuevo, reordenar la cola",
     "permission.reorderQueue": "Solicitudes: Reordenar la cola",
     "permission.all": "Solicitudes: Todos los permisos",
     "permission.view": "Solicitudes: Ver",
@@ -192,7 +192,7 @@
     "instance.title": "Título",
     "instance.contributorNames": "Colaborador",
     "requestLevel": "Nivel de solicitud",
-    "itemLevel": "Artículo",
+    "itemLevel": "Ítem",
     "titleLevel": "Título",
     "requests.year": "Año",
     "requests.createTitleLevelRequest": "Crear solicitud a nivel de título",
@@ -217,7 +217,7 @@
     "requestQueue.requestInProgress": "En curso",
     "requestQueue.noDataForFulfillment": "No hay solicitudes en cumplimiento.",
     "requestQueue.notYetFilledRequests.noData": "No se han encontrado solicitudes",
-    "filters.requestLevel.item": "Artículo",
+    "filters.requestLevel.item": "Ítem",
     "filters.requestLevel.title": "Título",
     "requests.queuePosition": "Posición en la cola",
     "requestQueue.heading": "Cola de peticiones en instancia - {title} /{author}.",
@@ -286,5 +286,6 @@
     "errors.itemHasAlreadyBeenRequested": "This requester already has an open request for this item",
     "errors.instanceHasAlreadyBeenRequested": "This requester already has an open request for this instance",
     "errors.movingRequestToTheSameItem": "Not allowed to move title level page request to the same item",
-    "errors.itemOfThisInstanceAlreadyRequested": "This requester already has an open request for one of the instance's items"
+    "errors.itemOfThisInstanceAlreadyRequested": "This requester already has an open request for one of the instance's items",
+    "documentTitle.search": "Requests - {query} - Search"
 }

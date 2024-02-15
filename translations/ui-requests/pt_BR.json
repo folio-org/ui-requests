@@ -234,7 +234,7 @@
     "item.status.awaitingDelivery": "Aguardando entrega",
     "item.status.awaitingPickup": "Aguardando retirada",
     "item.status.checkedOut": "Emprestado",
-    "item.status.claimedReturned": "Alegado como devolvido",
+    "item.status.claimedReturned": "Alegou ter devolvido",
     "item.status.declaredLost": "Declarado como perdido",
     "item.status.inProcess": "Em processo",
     "item.status.inProcessNonRequestable": "Em processo (não-solicitável)",
@@ -286,5 +286,6 @@
     "errors.itemHasAlreadyBeenRequested": "Este solicitante já tem uma solicitação aberta para este item",
     "errors.instanceHasAlreadyBeenRequested": "Este solicitante já tem uma solicitação aberta para esta instância",
     "errors.movingRequestToTheSameItem": "Não é permitido mover a solicitação de item disponível ao nível de título para o mesmo item",
-    "errors.itemOfThisInstanceAlreadyRequested": "Este solicitante já tem uma solicitação aberta para um dos itens da instância"
+    "errors.itemOfThisInstanceAlreadyRequested": "Este solicitante já tem uma solicitação aberta para um dos itens da instância",
+    "documentTitle.search": "Solicitações - {query} - Buscar"
 }

@@ -17,6 +17,7 @@ import {
 import {
   CalloutContext,
   AppIcon,
+  TitleManager,
 } from '@folio/stripes/core';
 import {
   TextLink,
@@ -158,6 +159,8 @@ const labelIds = {
   requestType: requestTypesTranslations[requestTypesMap.RECALL],
   printPickSlips: 'ui-requests.printPickSlips',
   printSearchSlips: 'ui-requests.printSearchSlips',
+  titleWithSearch: 'ui-requests.documentTitle.search',
+  defaultTitle: 'ui-requests.meta.title',
 };
 
 SearchAndSort.mockImplementation(jest.fn(({
@@ -565,6 +568,38 @@ describe('RequestsRoute', () => {
       await userEvent.click(screen.getAllByRole('button', { name: 'onBeforeGetContent' })[1]);
 
       expect(printSearchSlipsLabel).toBeInTheDocument();
+    });
+  });
+
+  describe('Page title', () => {
+    describe('When url contains query param', () => {
+      it('should trigger TitleManager with correct props', () => {
+        renderComponent({
+          ...defaultProps,
+          location: {
+            ...defaultProps.location,
+            search: '?query=testQuery'
+          }
+        });
+
+        const expectedProps = {
+          page: labelIds.titleWithSearch,
+        };
+
+        expect(TitleManager).toHaveBeenCalledWith(expectedProps, {});
+      });
+    });
+
+    describe('When url does not contain query param', () => {
+      it('should trigger TitleManager with correct props', () => {
+        renderComponent(defaultProps);
+
+        const expectedProps = {
+          page: labelIds.defaultTitle,
+        };
+
+        expect(TitleManager).toHaveBeenCalledWith(expectedProps, {});
+      });
     });
   });
 
