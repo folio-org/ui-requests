@@ -77,7 +77,7 @@ import {
   getNextSelectedRowsState,
 } from '../utils';
 import packageInfo from '../../package';
-import CheckboxColumn from './CheckboxColumn';
+import CheckboxColumn from '../components/CheckboxColumn';
 
 import {
   PrintButton,
@@ -698,7 +698,6 @@ class RequestsRoute extends React.Component {
       return false;
     }
   };
-
 
   getColumnMapping = () => {
     return {

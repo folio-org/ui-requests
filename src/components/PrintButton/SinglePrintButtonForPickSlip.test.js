@@ -10,6 +10,11 @@ const mockAccordionStatusRef = () => ({
   current: <div data-testid={testIds.testContent} />,
 });
 describe('SinglePrintButtonForPickSlip', () => {
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   const basicProps = {
     rq: { id: 11 },
     pickSlipsToCheck: [
@@ -24,14 +29,12 @@ describe('SinglePrintButtonForPickSlip', () => {
         }
       }
     ],
-
     pickSlipsPrintTemplate: '<div></div>',
     pickSlipsData: [
       { request: { requestID: '11' } },
       { request: { requestID: '22' } },
     ],
     onBeforeGetContentForSinglePrintButton: jest.fn(),
-
     getPrintContentRef: mockAccordionStatusRef
   };
 
@@ -52,7 +55,6 @@ describe('SinglePrintButtonForPickSlip', () => {
       />
     );
 
-    // expect(getByTestId('singlePrintPickSlipsBtn')).toBeDisabled();
     expect(screen.getByRole('button', { name: /ui-requests\.requests\.printButtonLabel/i })).toBeDisabled();
   });
 
@@ -66,9 +68,5 @@ describe('SinglePrintButtonForPickSlip', () => {
     );
 
     expect(screen.getByRole('button', { name: /ui-requests\.requests\.printButtonLabel/i })).toBeEnabled();
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
   });
 });
