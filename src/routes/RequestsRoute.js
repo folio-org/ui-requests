@@ -612,7 +612,7 @@ class RequestsRoute extends React.Component {
       this.setCurrentServicePointId();
     }
 
-    if (prevConfigs.hasLoaded !== configs.hasLoaded && configs.hasLoaded) {
+    if (configs?.records[0]?.value !== prevConfigs?.records[0]?.value) {
       const {
         titleLevelRequestsFeatureEnabled = false,
         createTitleLevelRequestsByDefault = false,
