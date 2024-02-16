@@ -442,7 +442,7 @@ describe('RequestsRoute', () => {
     );
 
     return rerender;
-  }
+  };
 
   afterEach(() => {
     getTlrSettings.mockClear();
