@@ -434,11 +434,15 @@ describe('RequestsRoute', () => {
     fulfillmentPreference: 'Hold Shelf',
   };
 
-  const renderComponent = (props = defaultProps) => render(
-    <CalloutContext.Provider value={{ sendCallout: () => {} }}>
-      <RequestsRoute {...props} />
-    </CalloutContext.Provider>,
-  );
+  const renderComponent = (props = defaultProps) => {
+    const { rerender } = render(
+      <CalloutContext.Provider value={{ sendCallout: () => {} }}>
+        <RequestsRoute {...props} />
+      </CalloutContext.Provider>,
+    );
+
+    return rerender;
+  }
 
   afterEach(() => {
     getTlrSettings.mockClear();
@@ -680,6 +684,55 @@ describe('RequestsRoute', () => {
 
       expect(duplicateRequest).toHaveBeenCalledWith(mockedRequest);
       expect(mockedUpdateFunc).toHaveBeenCalledWith(defaultExpectedResultForUpdate);
+    });
+  });
+
+  describe('Component updating', () => {
+    let rerender;
+
+    beforeEach(() => {
+      rerender = renderComponent();
+    });
+
+    it('should get new settings', () => {
+      const newProps = {
+        ...defaultProps,
+        resources: {
+          ...defaultProps.resources,
+          configs: {
+            hasLoaded: true,
+            records: [
+              {
+                value: '{"createTitleLevelRequestsByDefault": true}',
+              }
+            ],
+          },
+        },
+      };
+
+      rerender(
+        <CalloutContext.Provider value={{ sendCallout: () => {} }}>
+          <RequestsRoute {...newProps} />
+        </CalloutContext.Provider>,
+      );
+
+      expect(getTlrSettings).toHaveBeenCalledWith(newProps.resources.configs.records[0].value);
+    });
+
+    it('should not get new settings', () => {
+      const newProps = {
+        ...defaultProps,
+        addressTypes: {},
+      };
+      const getUpdatedSettingsCallNumber = 2;
+
+      rerender(
+        <CalloutContext.Provider value={{ sendCallout: () => {} }}>
+          <RequestsRoute {...newProps} />
+        </CalloutContext.Provider>,
+      );
+
+      expect(getTlrSettings).not.toHaveBeenNthCalledWith(getUpdatedSettingsCallNumber, defaultProps.resources.configs.records[0].value);
     });
   });
 
