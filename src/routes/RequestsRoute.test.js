@@ -59,6 +59,7 @@ import {
   INPUT_REQUEST_SEARCH_SELECTOR,
 } from '../constants';
 import { historyData } from '../../test/jest/fixtures/historyData';
+import SinglePrintButtonForPickSlip from "../components/PrintButton/SinglePrintButtonForPickSlip";
 
 const createRefMock = {
   current: {
@@ -800,12 +801,14 @@ describe('RequestsRoute', () => {
     );
     const requestWithData = {
       id: 'id',
+      select: 'test value',
       item: {
         barcode: 'itemBarcode',
       },
       position: 'position',
       proxy: {},
       requestDate: '02.02.2023',
+      singlePrint: 'singlePrint',
       requester: {
         lastName: 'lastName',
         firstName: 'firstName',
@@ -822,6 +825,18 @@ describe('RequestsRoute', () => {
       },
     };
     const requestWithoutData = {};
+
+    describe('select', () => {
+      it('should return select', () => {
+        expect(listFormatter.select(requestWithData)).toBeTruthy();
+      });
+    });
+
+    describe('singlePrint', () => {
+      it('should render "SinglePrintButtonForPickSlip" with correct props', () => {
+        expect(SinglePrintButtonForPickSlip).toBeTruthy();
+      });
+    });
 
     describe('itemBarcode', () => {
       it('should return item barcode', () => {
@@ -875,7 +890,7 @@ describe('RequestsRoute', () => {
         };
 
         expect(AppIcon).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
-      });
+      });      
     });
 
     describe('requester', () => {
