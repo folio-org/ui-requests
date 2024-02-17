@@ -834,7 +834,7 @@ describe('RequestsRoute', () => {
 
     describe('singlePrint', () => {
       it('should render "SinglePrintButtonForPickSlip" with correct props', () => {
-        expect(SinglePrintButtonForPickSlip).toBeTruthy();
+        expect(listFormatter.singlePrint('')).toBeTruthy();
       });
     });
 
@@ -890,7 +890,7 @@ describe('RequestsRoute', () => {
         };
 
         expect(AppIcon).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
-      });      
+      });
     });
 
     describe('requester', () => {
