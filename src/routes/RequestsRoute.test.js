@@ -59,7 +59,6 @@ import {
   INPUT_REQUEST_SEARCH_SELECTOR,
 } from '../constants';
 import { historyData } from '../../test/jest/fixtures/historyData';
-import SinglePrintButtonForPickSlip from "../components/PrintButton/SinglePrintButtonForPickSlip";
 
 const createRefMock = {
   current: {
@@ -834,7 +833,7 @@ describe('RequestsRoute', () => {
 
     describe('singlePrint', () => {
       it('should render "SinglePrintButtonForPickSlip" with correct props', () => {
-        expect(listFormatter.singlePrint('')).toBeTruthy();
+        expect(listFormatter.singlePrint({})).toBeTruthy();
       });
     });
 
