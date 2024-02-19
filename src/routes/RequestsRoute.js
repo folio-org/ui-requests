@@ -60,6 +60,8 @@ import {
   fulfillmentTypeMap,
   DEFAULT_REQUEST_TYPE_VALUE,
   INPUT_REQUEST_SEARCH_SELECTOR,
+  SETTINGS_SCOPES,
+  SETTINGS_KEYS,
 } from '../constants';
 import {
   buildUrl,
@@ -398,10 +400,10 @@ class RequestsRoute extends React.Component {
     },
     configs: {
       type: 'okapi',
-      records: 'configs',
-      path: 'configurations/entries',
+      records: 'items',
+      path: 'settings/entries',
       params: {
-        query: '(module==SETTINGS and configName==TLR)',
+        query: `(scope==${SETTINGS_SCOPES.CIRCULATION} and key==${SETTINGS_KEYS.GENERAL_TLR})`,
       },
     },
   };

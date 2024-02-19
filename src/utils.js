@@ -291,13 +291,7 @@ export function parseErrorMessage(errorMessage) {
     ));
 }
 
-export const getTlrSettings = (settings) => {
-  try {
-    return JSON.parse(settings);
-  } catch (error) {
-    return {};
-  }
-};
+export const getTlrSettings = (settings) => settings || {};
 
 export const getRequestLevelValue = (value) => {
   return value

@@ -75,7 +75,11 @@ describe('ViewRequest', () => {
   };
   const mockedConfig = {
     records: [
-      { value: '{"titleLevelRequestsFeatureEnabled":true}' },
+      {
+        value: {
+          titleLevelRequestsFeatureEnabled: true,
+        },
+      }
     ],
   };
   const defaultProps = {
@@ -190,7 +194,9 @@ describe('ViewRequest', () => {
         describe('request is valid', () => {
           describe('TLR in enabled', () => {
             beforeAll(() => {
-              mockedConfig.records[0].value = '{"titleLevelRequestsFeatureEnabled":true}';
+              mockedConfig.records[0].value = {
+                titleLevelRequestsFeatureEnabled: true,
+              };
             });
 
             it('should render "Duplicate" button', () => {
@@ -200,7 +206,9 @@ describe('ViewRequest', () => {
 
           describe('TLR in disabled', () => {
             beforeAll(() => {
-              mockedConfig.records[0].value = '{"titleLevelRequestsFeatureEnabled":false}';
+              mockedConfig.records[0].value = {
+                titleLevelRequestsFeatureEnabled: false,
+              };
             });
 
             it('should not render "Duplicate" button', () => {
