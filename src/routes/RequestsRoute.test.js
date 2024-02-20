@@ -912,9 +912,11 @@ describe('RequestsRoute', () => {
 
     describe('requester', () => {
       it('should return requester information', () => {
-        const requesterInfo = `${requestWithData.requester.lastName}, ${requestWithData.requester.firstName}`;
+        const mockRequester = `${requestWithData.requester.lastName}, ${requestWithData.requester.firstName}`;
 
-        expect(listFormatter.requester(requestWithData)).toBe(requesterInfo);
+        getFullName.mockReturnValueOnce(mockRequester);
+
+        expect(listFormatter.requester(requestWithData)).toBe(mockRequester);
       });
 
       it('should return empty string', () => {

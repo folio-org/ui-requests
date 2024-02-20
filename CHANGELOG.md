@@ -14,6 +14,7 @@
 * Error in Export Hold Shelf Clearance Report. Refs UIREQ-1057.
 * Make updating of TLR settings when settings config is changed. Refs UIREQ-1063.
 * Increase code coverage for src/components/RequestsFilters/RequestsFilters.js by Jest/RTL tests. Refs UIREQ-1051.
+* Use `getFullName` for requester. Refs UIREQ-1064.
 
 ## [9.0.1](https://github.com/folio-org/ui-requests/tree/v9.0.1) (2023-12-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.0.0...v9.0.1)
