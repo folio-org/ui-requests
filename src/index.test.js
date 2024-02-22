@@ -26,6 +26,9 @@ describe('UI Requests', () => {
       path: requestsPath,
       params: {},
     },
+    history: {
+      push: jest.fn(),
+    },
   };
 
   beforeEach(() => {
@@ -64,5 +67,30 @@ describe('UI Requests', () => {
     fireEvent.click(button);
 
     expect(screen.queryByText('stripes-components.shortcut.modalLabel')).not.toBeInTheDocument();
+  });
+
+  it('should focus on search field', () => {
+    const requestAppLink = screen.getByText(labelIds.navigation);
+    const elementMock = {
+      focus: jest.fn(),
+    };
+
+    jest.spyOn(document, 'getElementById').mockReturnValueOnce(elementMock);
+
+    fireEvent.click(requestAppLink);
+
+    expect(elementMock.focus).toHaveBeenCalled();
+  });
+
+  it('should redirect to request home page', () => {
+    const requestAppLink = screen.getByText(labelIds.navigation);
+    const requestAppHomeRoute = '/requests?filters=&sort=requestDate';
+    const elementMock = null;
+
+    jest.spyOn(document, 'getElementById').mockReturnValueOnce(elementMock);
+
+    fireEvent.click(requestAppLink);
+
+    expect(props.history.push).toHaveBeenCalledWith(requestAppHomeRoute);
   });
 });
