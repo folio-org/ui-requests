@@ -287,5 +287,5 @@
     "errors.instanceHasAlreadyBeenRequested": "Tento čtenář již má otevřený žádanku na tento titul",
     "errors.movingRequestToTheSameItem": "Není povoleno přesunout požadavek na úroveň názvu stránky na stejnou jednotku",
     "errors.itemOfThisInstanceAlreadyRequested": "Tento čtenář již má otevřenou žádanku pro jeden exemplář titulu",
-    "documentTitle.search": "Requests - {query} - Search"
+    "documentTitle.search": "Žádanky - {query} - Vyhledat"
 }
