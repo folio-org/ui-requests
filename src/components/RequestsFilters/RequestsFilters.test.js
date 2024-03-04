@@ -255,4 +255,66 @@ describe('RequestsFilters', () => {
       }), {});
     });
   });
+
+  describe('When activeFilters prop is empty', () => {
+    const propsWithoutFilters = {
+      ...props,
+      activeFilters: {},
+      titleLevelRequestsFeatureEnabled: true,
+    };
+    const checkboxFilterCallOrder = {
+      requestTypeCheckbox: 1,
+      requestStatusCheckbox: 2,
+    };
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+
+      render(
+        <RequestsFilters
+          {...propsWithoutFilters}
+        />
+      );
+    });
+
+    it('should trigger tags filter with correct selectedValues prop', () => {
+      const expectedProps = {
+        selectedValues: [],
+      };
+
+      expect(MultiSelectionFilter).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+    });
+
+    it('should trigger request type filter with correct selectedValues prop', () => {
+      const expectedProps = {
+        selectedValues: [],
+      };
+
+      expect(CheckboxFilter).toHaveBeenNthCalledWith(checkboxFilterCallOrder.requestTypeCheckbox, expect.objectContaining(expectedProps), {});
+    });
+
+    it('should trigger request status filter with correct selectedValues prop', () => {
+      const expectedProps = {
+        selectedValues: [],
+      };
+
+      expect(CheckboxFilter).toHaveBeenNthCalledWith(checkboxFilterCallOrder.requestStatusCheckbox, expect.objectContaining(expectedProps), {});
+    });
+
+    it('should trigger pickup service point filter with correct activeValues prop', () => {
+      const expectedProps = {
+        activeValues: [],
+      };
+
+      expect(PickupServicePointFilter).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+    });
+
+    it('should trigger request level filter with correct activeValues prop', () => {
+      const expectedProps = {
+        activeValues: [],
+      };
+
+      expect(RequestLevelFilter).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+    });
+  });
 });

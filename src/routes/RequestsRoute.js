@@ -193,7 +193,7 @@ export const getListFormatter = (getRowURL, setURL) => ({
       <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
     </AppIcon>
   ),
-  'requester': rq => (rq.requester ? `${rq.requester.lastName}, ${rq.requester.firstName}` : DEFAULT_FORMATTER_VALUE),
+  'requester': rq => (rq.requester ? getFullName(rq.requester) : DEFAULT_FORMATTER_VALUE),
   'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : DEFAULT_FORMATTER_VALUE),
   'requestStatus': rq => (requestStatusesTranslations[rq.status]
     ? <FormattedMessage id={requestStatusesTranslations[rq.status]} />
@@ -614,7 +614,7 @@ class RequestsRoute extends React.Component {
       this.setCurrentServicePointId();
     }
 
-    if (prevConfigs.hasLoaded !== configs.hasLoaded && configs.hasLoaded) {
+    if (configs?.records[0]?.value !== prevConfigs?.records[0]?.value) {
       const {
         titleLevelRequestsFeatureEnabled = false,
         createTitleLevelRequestsByDefault = false,

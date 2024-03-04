@@ -434,11 +434,15 @@ describe('RequestsRoute', () => {
     fulfillmentPreference: 'Hold Shelf',
   };
 
-  const renderComponent = (props = defaultProps) => render(
-    <CalloutContext.Provider value={{ sendCallout: () => {} }}>
-      <RequestsRoute {...props} />
-    </CalloutContext.Provider>,
-  );
+  const renderComponent = (props = defaultProps) => {
+    const { rerender } = render(
+      <CalloutContext.Provider value={{ sendCallout: () => {} }}>
+        <RequestsRoute {...props} />
+      </CalloutContext.Provider>,
+    );
+
+    return rerender;
+  };
 
   afterEach(() => {
     getTlrSettings.mockClear();
@@ -683,6 +687,55 @@ describe('RequestsRoute', () => {
     });
   });
 
+  describe('Component updating', () => {
+    let rerender;
+
+    beforeEach(() => {
+      rerender = renderComponent();
+    });
+
+    it('should get new settings', () => {
+      const newProps = {
+        ...defaultProps,
+        resources: {
+          ...defaultProps.resources,
+          configs: {
+            hasLoaded: true,
+            records: [
+              {
+                value: '{"createTitleLevelRequestsByDefault": true}',
+              }
+            ],
+          },
+        },
+      };
+
+      rerender(
+        <CalloutContext.Provider value={{ sendCallout: () => {} }}>
+          <RequestsRoute {...newProps} />
+        </CalloutContext.Provider>,
+      );
+
+      expect(getTlrSettings).toHaveBeenCalledWith(newProps.resources.configs.records[0].value);
+    });
+
+    it('should not get new settings', () => {
+      const newProps = {
+        ...defaultProps,
+        addressTypes: {},
+      };
+      const getUpdatedSettingsCallNumber = 2;
+
+      rerender(
+        <CalloutContext.Provider value={{ sendCallout: () => {} }}>
+          <RequestsRoute {...newProps} />
+        </CalloutContext.Provider>,
+      );
+
+      expect(getTlrSettings).not.toHaveBeenNthCalledWith(getUpdatedSettingsCallNumber, defaultProps.resources.configs.records[0].value);
+    });
+  });
+
   describe('buildHoldRecords method', () => {
     it('should build hold records when there are first name and last name', () => {
       const records = [{
@@ -859,9 +912,11 @@ describe('RequestsRoute', () => {
 
     describe('requester', () => {
       it('should return requester information', () => {
-        const requesterInfo = `${requestWithData.requester.lastName}, ${requestWithData.requester.firstName}`;
+        const mockRequester = `${requestWithData.requester.lastName}, ${requestWithData.requester.firstName}`;
 
-        expect(listFormatter.requester(requestWithData)).toBe(requesterInfo);
+        getFullName.mockReturnValueOnce(mockRequester);
+
+        expect(listFormatter.requester(requestWithData)).toBe(mockRequester);
       });
 
       it('should return empty string', () => {
