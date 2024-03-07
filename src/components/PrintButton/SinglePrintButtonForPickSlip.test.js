@@ -10,7 +10,6 @@ const mockAccordionStatusRef = () => ({
   current: <div data-testid={testIds.testContent} />,
 });
 describe('SinglePrintButtonForPickSlip', () => {
-
   afterEach(() => {
     jest.clearAllMocks();
   });
