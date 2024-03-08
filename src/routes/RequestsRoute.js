@@ -1491,6 +1491,7 @@ class RequestsRoute extends React.Component {
                 requestType: { max: 101 },
                 itemBarcode: { max: 140 },
                 type: { max: 100 },
+                select: { max: 30 }
               }}
               columnMapping={columnMapping}
               resultsRowClickHandlers={false}
