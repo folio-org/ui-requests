@@ -1224,7 +1224,6 @@ class RequestsRoute extends React.Component {
 
   printContentRefs = {};
   getPrintContentRef = (rqId) => {
-    // create a ref if it doesn't exist for the given rqId
     if (!this.printContentRefs[rqId]) {
       this.printContentRefs[rqId] = React.createRef();
     }
@@ -1309,7 +1308,7 @@ class RequestsRoute extends React.Component {
         getRowURL: this.getRowURL,
         setURL: this.setURL
       },
-      {   // separate into two objects
+      {
         selectedRows,
         pickSlipsToCheck: pickSlips,
         pickSlipsData,

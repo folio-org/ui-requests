@@ -603,7 +603,6 @@ describe('getNextSelectedRowsState', () => {
 
     const result = getNextSelectedRowsState(selectedRows, row);
 
-    // Ensure original selectedRows object is not mutated
     expect(selectedRows).toEqual({ [row.id]: row });
     expect(result).not.toBe(selectedRows);
   });

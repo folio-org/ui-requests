@@ -841,12 +841,12 @@ describe('RequestsRoute', () => {
         setURL: setURLMock
       },
       {
-        'selectedRows':'',
-        'pickSlipsToCheck':'',
-        'pickSlipsData':'',
+        selectedRows: '',
+        pickSlipsToCheck: '',
+        pickSlipsData: '',
         getPrintContentRef: getPrintContentRefMock,
         isPrintableMock,
-        'pickSlipsPrintTemplate':'',
+        pickSlipsPrintTemplate: '',
         toggleRowSelection: toggleRowSelectionMock,
         onBeforeGetContentForSinglePrintButton: onBeforeGetContentForSinglePrintButtonMock
       }
