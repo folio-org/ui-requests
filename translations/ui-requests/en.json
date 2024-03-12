@@ -140,6 +140,7 @@
   "item.callNumberComponents.prefix": "Effective call number prefix",
   "item.callNumberComponents.callNumber": "Effective call number",
   "item.callNumberComponents.suffix": "Effective call number suffix",
+  "item.displaySummary": "Display summary",
   "item.chronology": "Chronology",
   "item.enumeration": "Enumeration",
   "item.copyNumber": "Item copy",
