@@ -2,28 +2,26 @@ import React from 'react';
 import { render, fireEvent } from '@folio/jest-config-stripes/testing-library/react';
 import CheckboxColumn from './CheckboxColumn';
 
-describe('CheckboxColumn component', () => {
-  it('renders children correctly', () => {
-    const { getByText } = render(
-      <CheckboxColumn>
-        <span>Test Content</span>
-      </CheckboxColumn>
-    );
+describe('CheckboxColumn', () => {
+  const rq = { id: '1' };
+  const selectedRows = {};
+  const toggleRowSelection = jest.fn();
 
-    expect(getByText('Test Content')).toBeInTheDocument();
+  it('renders correctly', () => {
+    const { getByRole } = render(
+      <CheckboxColumn rq={rq} selectedRows={selectedRows} toggleRowSelection={toggleRowSelection} />
+    );
+    const checkbox = getByRole('checkbox');
+    expect(checkbox).toBeInTheDocument();
+    expect(checkbox.checked).toBe(false);
   });
 
-  it('stops propagation of click event', () => {
-    const onClickMock = jest.fn();
-    const { container } = render(
-      <CheckboxColumn>
-        <span>Test Content</span>
-      </CheckboxColumn>
+  it('toggles selection on click', () => {
+    const { getByRole } = render(
+      <CheckboxColumn rq={rq} selectedRows={selectedRows} toggleRowSelection={toggleRowSelection} />
     );
-
-    const div = container.querySelector('div');
-    fireEvent.click(div, { bubbles: true });
-
-    expect(onClickMock).not.toHaveBeenCalled();
+    const checkbox = getByRole('checkbox');
+    fireEvent.click(checkbox);
+    expect(toggleRowSelection).toHaveBeenCalledWith(rq);
   });
 });
