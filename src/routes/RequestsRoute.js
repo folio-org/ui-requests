@@ -205,22 +205,12 @@ export const getListFormatter = (
     onBeforeGetContentForSinglePrintButton
   }
 ) => ({
-  'select': ({
-    // eslint-disable-next-line react/prop-types
-    id,
-    ...rowData
-  }) => (
-    <CheckboxColumn>
-      <Checkbox
-        checked={Boolean(selectedRows[id])}
-        aria-label={<FormattedMessage id="ui-inventory.instances.rows.select" />}
-        onChange={() => toggleRowSelection({
-          id,
-          ...rowData
-        })}
-      />
-    </CheckboxColumn>
-  ),
+  'select': rq => (
+    <CheckboxColumn
+      rq={rq}
+      selectedRows={selectedRows}
+      toggleRowSelection={toggleRowSelection}
+    />),
   'itemBarcode': rq => (rq.item ? rq.item.barcode : DEFAULT_FORMATTER_VALUE),
   'position': rq => (rq.position || DEFAULT_FORMATTER_VALUE),
   'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : DEFAULT_FORMATTER_VALUE),

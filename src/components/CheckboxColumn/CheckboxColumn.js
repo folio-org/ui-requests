@@ -1,16 +1,42 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
-const CheckboxColumn = ({ children }) => (
-  <div // eslint-disable-line jsx-a11y/click-events-have-key-events
-    tabIndex="0"
-    role="button"
-    onClick={e => e.stopPropagation()}
-  >
-    {children}
-  </div>
-);
+import { Checkbox } from '@folio/stripes/components';
 
-CheckboxColumn.propTypes = { children: PropTypes.node.isRequired };
+const CheckboxColumn = ({
+  rq,
+  selectedRows,
+  toggleRowSelection,
+}) => {
+  const {
+    id,
+    ...rowData
+  } = rq;
 
+  return (
+    <div  // eslint-disable-line jsx-a11y/click-events-have-key-events
+      tabIndex="0"
+      role="button"
+      onClick={e => e.stopPropagation()}
+    >
+      <Checkbox
+        checked={Boolean(selectedRows[id])}
+        aria-label={<FormattedMessage id="ui-inventory.instances.rows.select" />}
+        onChange={() => toggleRowSelection({
+          id,
+          ...rowData
+        })}
+      />
+    </div>
+  );
+};
+
+CheckboxColumn.propTypes = {
+  rq: PropTypes.shape({
+    id: PropTypes.string.isRequired
+  }),
+  selectedRows: PropTypes.func.isRequired,
+  toggleRowSelection: PropTypes.func.isRequired,
+};
 export default CheckboxColumn;
