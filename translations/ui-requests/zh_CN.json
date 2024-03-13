@@ -287,5 +287,6 @@
     "errors.instanceHasAlreadyBeenRequested": "请求者已有对该实例的未结请求",
     "errors.movingRequestToTheSameItem": "不允许将标题级传呼请求移到同一单件",
     "errors.itemOfThisInstanceAlreadyRequested": "请求者已有对一个该实例单件的未结请求",
-    "documentTitle.search": "Requests - {query} - Search"
+    "documentTitle.search": "Requests - {query} - Search",
+    "item.displaySummary": "Display summary"
 }
