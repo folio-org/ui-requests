@@ -7,6 +7,7 @@ import {
 } from 'lodash';
 
 import { Button } from '@folio/stripes/components';
+import css from './PrintButton.css';
 
 class PrintButton extends React.Component {
   static propTypes = {
@@ -44,9 +45,9 @@ class PrintButton extends React.Component {
     };
 
     return (
-      // eslint-disable-next-line react/prop-types
-      <div style={{ pointerEvents: this.props.disabled ? 'none' : 'auto' }}>
-        <Button {...props} onClick={handleClick} type="submit">
+    // eslint-disable-next-line react/prop-types
+      <div className={this.props.disabled ? css.disabled : css.enabled}>
+        <Button {...props} onClick={handleClick} type="submit" style={{ marginBottom : 0 }}>
           {this.props.children}
         </Button>
       </div>
