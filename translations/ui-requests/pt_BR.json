@@ -287,5 +287,6 @@
     "errors.instanceHasAlreadyBeenRequested": "Este solicitante já tem uma solicitação aberta para esta instância",
     "errors.movingRequestToTheSameItem": "Não é permitido mover a solicitação de item disponível ao nível de título para o mesmo item",
     "errors.itemOfThisInstanceAlreadyRequested": "Este solicitante já tem uma solicitação aberta para um dos itens da instância",
-    "documentTitle.search": "Solicitações - {query} - Buscar"
+    "documentTitle.search": "Solicitações - {query} - Buscar",
+    "item.displaySummary": "Exibir resumo"
 }

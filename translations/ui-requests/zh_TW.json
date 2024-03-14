@@ -287,5 +287,6 @@
     "errors.instanceHasAlreadyBeenRequested": "This requester already has an open request for this instance",
     "errors.movingRequestToTheSameItem": "Not allowed to move title level page request to the same item",
     "errors.itemOfThisInstanceAlreadyRequested": "This requester already has an open request for one of the instance's items",
-    "documentTitle.search": "Requests - {query} - Search"
+    "documentTitle.search": "Requests - {query} - Search",
+    "item.displaySummary": "Display summary"
 }

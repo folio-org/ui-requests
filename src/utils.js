@@ -275,6 +275,7 @@ export const convertToSlipData = (source, intl, timeZone, locale, slipName = SLI
       'item.callNumber': item.callNumber,
       'item.callNumberPrefix': item.callNumberPrefix,
       'item.callNumberSuffix': item.callNumberSuffix,
+      'item.displaySummary': item.displaySummary,
       'item.enumeration': item.enumeration,
       'item.volume': item.volume,
       'item.chronology': item.chronology,
