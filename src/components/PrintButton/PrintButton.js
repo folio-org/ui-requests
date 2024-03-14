@@ -47,7 +47,7 @@ class PrintButton extends React.Component {
     return (
     // eslint-disable-next-line react/prop-types
       <div className={this.props.disabled ? css.disabled : css.enabled}>
-        <Button {...props} onClick={handleClick} type="submit" style={{ marginBottom : 0 }}>
+        <Button {...props} onClick={handleClick} type="submit" bottomMargin0>
           {this.props.children}
         </Button>
       </div>
