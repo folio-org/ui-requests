@@ -600,6 +600,7 @@ describe('convertToSlipData', () => {
     callNumber: '123456',
     callNumberPrefix: 'PREFIX',
     callNumberSuffix: 'SUFFIX',
+    displaySummary: 'Display summary',
     lastCheckedInDateTime: '2020-02-17T12:12:33.374Z',
   };
   const request = {
@@ -660,6 +661,7 @@ describe('convertToSlipData', () => {
     'item.callNumber': '123456',
     'item.callNumberPrefix': 'PREFIX',
     'item.callNumberSuffix': 'SUFFIX',
+    'item.displaySummary': 'Display summary',
     'item.enumeration': 'v.70:no.7-12',
     'item.volume': 'vol.1',
     'item.chronology': '1984:July-Dec.',

@@ -18,6 +18,8 @@
 * Use `getFullName` for requester. Refs UIREQ-1064.
 * Increase code coverage for src/RequestFormContainer.js by Jest/RTL tests. Refs UIREQ-1045.
 * Increase code coverage for src/index.js by Jest/RTL tests. Refs UIREQ-1047.
+* Add displaySummary field for Requests csv export. Refs UIREQ-1068.
+* Add support for displaySummary token for Staff Slips. Refs UIREQ-1067.
 
 ## [9.0.1](https://github.com/folio-org/ui-requests/tree/v9.0.1) (2023-12-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.0.0...v9.0.1)
