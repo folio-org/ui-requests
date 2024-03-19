@@ -17,10 +17,11 @@ const CheckboxColumn = ({
   const handleClick = (e) => {
     e.stopPropagation();
   };
-  const handleRowSelectionToggle = (identifier, row) => {
+    // eslint-disable-next-line no-shadow
+  const handleRowSelectionToggle = (id, rowData) => {
     toggleRowSelection({
-      identifier,
-      ...row
+      id,
+      ...rowData
     });
   };
 

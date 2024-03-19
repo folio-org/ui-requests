@@ -3,7 +3,7 @@ import { render, fireEvent } from '@folio/jest-config-stripes/testing-library/re
 import CheckboxColumn from './CheckboxColumn';
 
 describe('CheckboxColumn', () => {
-  const rq = { identifier: '1' };
+  const rq = { id: '1' };
   const selectedRows = {};
   const toggleRowSelection = jest.fn();
 
