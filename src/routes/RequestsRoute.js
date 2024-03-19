@@ -1242,9 +1242,9 @@ class RequestsRoute extends React.Component {
   render() {
     const getColumnMapping = {
       select: <Checkbox
-          checked={this.getIsAllRowsSelected()}
-          aria-label={<FormattedMessage id="ui-requests.instances.rows.select" />}
-          onChange={this.toggleAllRows}
+        checked={this.getIsAllRowsSelected()}
+        aria-label={<FormattedMessage id="ui-requests.instances.rows.select" />}
+        onChange={this.toggleAllRows}
       />,
       requestDate: <FormattedMessage id="ui-requests.requests.requestDate" />,
       title: <FormattedMessage id="ui-requests.requests.title" />,
