@@ -196,11 +196,7 @@ export function getSelectedSlipDataMulti(pickSlipsData, selectedRows) {
   const sel = pickSlipsData.filter((pickSlip) => {
     return Object.keys(selectedRows).includes(pickSlip['request.requestID']);
   });
-  if (sel === undefined) {
-    return [];
-  } else {
-    return [sel].flat();
-  }
+  return [sel].flat();
 }
 
 export function selectedRowsNonPrintable(pickSlipsData, selectedRows) {
@@ -210,19 +206,17 @@ export function selectedRowsNonPrintable(pickSlipsData, selectedRows) {
   const sel = pickSlipsData.filter((pickSlip) => {
     return Object.keys(selectedRows).includes(pickSlip['request.requestID']);
   });
-  if (sel === undefined) {
-    return true;
-  } else return sel.length === 0;
+  return sel.length === 0;
 }
 
 export function isPrintable(requestId, pickSlips) {
-  let matched;
+  let matched = false;
   if (pickSlips !== undefined) {
     matched = pickSlips.filter((pickSlip) => {
       return pickSlip.request.requestID === requestId;
     })[0];
   }
-  return matched != null;
+  return Boolean(matched);
 }
 
 export const getNextSelectedRowsState = (selectedRows, row) => {

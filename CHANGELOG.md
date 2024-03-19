@@ -19,6 +19,7 @@
 * Increase code coverage for src/index.js by Jest/RTL tests. Refs UIREQ-1047.
 * Add displaySummary field for Requests csv export. Refs UIREQ-1068.
 * Add support for displaySummary token for Staff Slips. Refs UIREQ-1067.
+* Include single print and selection print options on results list and actions menu. Refs UIREQ-966.
 
 ## [9.0.1](https://github.com/folio-org/ui-requests/tree/v9.0.1) (2023-12-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.0.0...v9.0.1)
