@@ -1520,7 +1520,7 @@ class RequestsRoute extends React.Component {
               renderFilters={this.renderFilters}
               resultIsSelected={this.resultIsSelected}
               onFilterChange={this.handleFilterChange}
-              sortableColumns={['requestDate', 'title', 'year', 'itemBarcode', 'type', 'requestStatus', 'position', 'requester', 'requesterBarcode', 'proxy']}
+              sortableColumns={['requestDate', 'title', 'year', 'itemBarcode', 'callNumber', 'type', 'requestStatus', 'position', 'servicePoint', 'requester', 'requesterBarcode', 'proxy']}
               pageAmount={100}
               pagingType={MCLPagingTypes.PREV_NEXT}
             />
