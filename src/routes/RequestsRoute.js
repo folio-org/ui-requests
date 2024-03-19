@@ -14,6 +14,8 @@ import {
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
+import { sanitize } from 'dompurify';
+
 import {
   AppIcon,
   stripesConnect,
@@ -1000,7 +1002,7 @@ class RequestsRoute extends React.Component {
   getPrintTemplate() {
     const staffSlips = get(this.props.resources, 'staffSlips.records', []);
     const pickSlip = staffSlips.find(slip => slip.name.toLowerCase() === pickSlipType);
-    return get(pickSlip, 'template', '');
+    return sanitize(get(pickSlip, 'template', ''));
   }
 
   handleFilterChange = ({ name, values }) => {
