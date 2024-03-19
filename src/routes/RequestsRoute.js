@@ -1308,6 +1308,8 @@ class RequestsRoute extends React.Component {
       }
     );
 
+    const isPrintingDisabled = isPickSlipsEmpty || selectedRowsNonPrintable(pickSlipsData, selectedRows);
+
     const actionMenu = ({ onToggle, renderColumnsMenu }) => (
       <>
         <MenuSection label={intl.formatMessage({ id: 'ui-requests.actions.label' })}>
@@ -1424,7 +1426,6 @@ class RequestsRoute extends React.Component {
         {renderColumnsMenu}
       </>
     );
-    const isPrintingDisabled = isPickSlipsEmpty || selectedRowsNonPrintable(pickSlipsData, selectedRows);
 
     const columnManagerProps = {
       excludeKeys: ['title', 'select'],
