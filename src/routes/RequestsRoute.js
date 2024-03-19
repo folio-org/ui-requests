@@ -1240,6 +1240,27 @@ class RequestsRoute extends React.Component {
   }
 
   render() {
+    const getColumnMapping = {
+      select: <Checkbox
+          checked={this.getIsAllRowsSelected()}
+          aria-label={<FormattedMessage id="ui-requests.instances.rows.select" />}
+          onChange={this.toggleAllRows}
+      />,
+      requestDate: <FormattedMessage id="ui-requests.requests.requestDate" />,
+      title: <FormattedMessage id="ui-requests.requests.title" />,
+      year: <FormattedMessage id="ui-requests.requests.year" />,
+      itemBarcode: <FormattedMessage id="ui-requests.requests.itemBarcode" />,
+      callNumber: <FormattedMessage id="ui-requests.requests.callNumber" />,
+      type: <FormattedMessage id="ui-requests.requests.type" />,
+      requestStatus: <FormattedMessage id="ui-requests.requests.status" />,
+      position: <FormattedMessage id="ui-requests.requests.queuePosition" />,
+      servicePoint: <FormattedMessage id="ui-requests.requests.servicePoint" />,
+      requester: <FormattedMessage id="ui-requests.requests.requester" />,
+      requesterBarcode: <FormattedMessage id="ui-requests.requests.requesterBarcode" />,
+      singlePrint: <FormattedMessage id="ui-requests.requests.singlePrint" />,
+      proxy: <FormattedMessage id="ui-requests.requests.proxy" />
+    };
+
     const {
       resources,
       mutator,
@@ -1290,7 +1311,6 @@ class RequestsRoute extends React.Component {
     const pickSlipsData = convertToSlipData(pickSlips, intl, timezone, locale, SLIPS_TYPE.PICK_SLIP);
     const searchSlipsData = convertToSlipData(searchSlips, intl, timezone, locale, SLIPS_TYPE.SEARCH_SLIP_HOLD_REQUESTS);
     let multiSelectPickSlipData = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
-    const columnMapping = this.getColumnMapping();
 
     const resultsFormatter = getListFormatter(
       {
@@ -1484,7 +1504,7 @@ class RequestsRoute extends React.Component {
                 type: { max: 100 },
                 select: { max: 30 }
               }}
-              columnMapping={columnMapping}
+              columnMapping={getColumnMapping}
               resultsRowClickHandlers={false}
               resultsFormatter={resultsFormatter}
               resultRowFormatter={DefaultMCLRowFormatter}
