@@ -16,6 +16,7 @@ class PrintButton extends React.Component {
     onBeforePrint: PropTypes.func,
     onBeforeGetContent: PropTypes.func,
     contentRef: PropTypes.object,
+    disabled: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -45,7 +46,6 @@ class PrintButton extends React.Component {
     };
 
     return (
-    // eslint-disable-next-line react/prop-types
       <div className={this.props.disabled ? css.disabled : css.enabled}>
         <Button {...props} onClick={handleClick} type="submit" bottomMargin0>
           {this.props.children}

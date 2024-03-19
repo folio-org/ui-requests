@@ -14,19 +14,26 @@ const CheckboxColumn = ({
     ...rowData
   } = rq;
 
+  const handleClick = (e) => {
+    e.stopPropagation();
+  };
+  const handleRowSelectionToggle = (identifier, row) => {
+    toggleRowSelection({
+      identifier,
+      ...row
+    });
+  };
+
   return (
     <div  // eslint-disable-line jsx-a11y/click-events-have-key-events
       tabIndex="0"
       role="button"
-      onClick={e => e.stopPropagation()}
+      onClick={handleClick}
     >
       <Checkbox
         checked={Boolean(selectedRows[id])}
         aria-label={<FormattedMessage id="ui-inventory.instances.rows.select" />}
-        onChange={() => toggleRowSelection({
-          id,
-          ...rowData
-        })}
+        onChange={() => handleRowSelectionToggle(id, rowData)}
       />
     </div>
   );

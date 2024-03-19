@@ -37,14 +37,6 @@ describe('SinglePrintButtonForPickSlip', () => {
     getPrintContentRef: mockAccordionStatusRef
   };
 
-  it('renders without crashing', () => {
-    render(
-      <SinglePrintButtonForPickSlip
-        {...basicProps}
-      />
-    );
-  });
-
   it('disables the button if not printable', () => {
     jest.spyOn(utils, 'isPrintable').mockReturnValueOnce(false);
 

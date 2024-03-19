@@ -7,16 +7,23 @@ describe('CheckboxColumn', () => {
   const selectedRows = {};
   const toggleRowSelection = jest.fn();
 
-  it('renders correctly', () => {
+  it('should renders correctly with checkbox', () => {
     const { getByRole } = render(
       <CheckboxColumn rq={rq} selectedRows={selectedRows} toggleRowSelection={toggleRowSelection} />
     );
     const checkbox = getByRole('checkbox');
     expect(checkbox).toBeInTheDocument();
+  });
+
+  it('should be unchecked by default', () => {
+    const { getByRole } = render(
+      <CheckboxColumn rq={rq} selectedRows={selectedRows} toggleRowSelection={toggleRowSelection} />
+    );
+    const checkbox = getByRole('checkbox');
     expect(checkbox.checked).toBe(false);
   });
 
-  it('toggles selection on click', () => {
+  it('should toggles selection on click', () => {
     const { getByRole } = render(
       <CheckboxColumn rq={rq} selectedRows={selectedRows} toggleRowSelection={toggleRowSelection} />
     );

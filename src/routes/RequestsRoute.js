@@ -590,7 +590,7 @@ class RequestsRoute extends React.Component {
     this.pickSlipsPrintContentRef = React.createRef();
     this.searchSlipsPrintContentRef = React.createRef();
     this.paneTitleRef = React.createRef();
-    this.printContentRefSelected = React.createRef();
+    this.printSelectedContentRef = React.createRef();
   }
 
   static getDerivedStateFromProps(props) {
@@ -683,8 +683,7 @@ class RequestsRoute extends React.Component {
     const { resources } = this.props;
     const { selectedRows } = this.state;
     if (resources.records.records.length !== 0) {
-      const res = resources.records.records.every(({ id }) => Object.keys(selectedRows).includes(id));
-      return res;
+      return resources.records.records.every(({ id }) => Object.keys(selectedRows).includes(id));
     } else {
       return false;
     }
@@ -1375,10 +1374,10 @@ class RequestsRoute extends React.Component {
                 </PrintButton>
                 <PrintButton
                   buttonStyle="dropdownItem"
-                  id="printPickSlipsBtn1"
-                  disabled={isPickSlipsEmpty || selectedRowsNonPrintable(pickSlipsData, selectedRows)}
+                  id="printSelectedPickSlipsBtn"
+                  disabled={isPrintingDisabled}
                   template={pickSlipsPrintTemplate}
-                  contentRef={this.printContentRefSelected}
+                  contentRef={this.printSelectedContentRef}
                   onBeforeGetContent={
                     () => new Promise(resolve => {
                       this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
@@ -1425,6 +1424,7 @@ class RequestsRoute extends React.Component {
         {renderColumnsMenu}
       </>
     );
+    const isPrintingDisabled = isPickSlipsEmpty || selectedRowsNonPrintable(pickSlipsData, selectedRows);
 
     const columnManagerProps = {
       excludeKeys: ['title', 'select'],
@@ -1531,7 +1531,7 @@ class RequestsRoute extends React.Component {
             dataSource={pickSlipsData}
           />
           <PrintContent
-            ref={this.printContentRefSelected}
+            ref={this.printSelectedContentRef}
             template={pickSlipsPrintTemplate}
             dataSource={multiSelectPickSlipData}
           />
