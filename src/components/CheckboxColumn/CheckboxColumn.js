@@ -18,7 +18,7 @@ const CheckboxColumn = ({
     e.stopPropagation();
   };
     // eslint-disable-next-line no-shadow
-  const handleRowSelectionToggle = (id, rowData) => {
+  const handleRowSelectionToggle = () => {
     toggleRowSelection({
       id,
       ...rowData
@@ -34,7 +34,7 @@ const CheckboxColumn = ({
       <Checkbox
         checked={Boolean(selectedRows[id])}
         aria-label={<FormattedMessage id="ui-inventory.instances.rows.select" />}
-        onChange={() => handleRowSelectionToggle(id, rowData)}
+        onChange={handleRowSelectionToggle}
       />
     </div>
   );
