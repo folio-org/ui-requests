@@ -608,7 +608,7 @@ describe('getNextSelectedRowsState', () => {
   });
 });
 describe('isPrintable', () => {
-  it('returns true when pickSlips contain a match for requestId', () => {
+  it('should return true when pickSlips contain a match for requestId', () => {
     const requestId = '123';
     const pickSlips = [
       { request: { requestID: '123' } },
@@ -620,7 +620,7 @@ describe('isPrintable', () => {
     expect(result).toBe(true);
   });
 
-  it('returns false when pickSlips do not contain a match for requestId', () => {
+  it('should return false when pickSlips do not contain a match for requestId', () => {
     const requestId = '789';
     const pickSlips = [
       { request: { requestID: '123' } },
@@ -632,7 +632,7 @@ describe('isPrintable', () => {
     expect(result).toBe(false);
   });
 
-  it('returns false when pickSlips is undefined', () => {
+  it('should return false when pickSlips is undefined', () => {
     const requestId = '123';
     const pickSlips = undefined;
 
@@ -717,14 +717,14 @@ describe('selectedRowsNonPrintable', () => {
   });
 });
 describe('getSelectedSlipDataMulti', () => {
-  it('returns an empty array when selectedRows is empty', () => {
+  it('should return an empty array when selectedRows is empty', () => {
     const pickSlipsData = [{ 'request.requestID': '1' }, { 'request.requestID': '2' }];
     const selectedRows = {};
     const result = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
     expect(result).toEqual([]);
   });
 
-  it('returns selected pickSlipsData when there are matching entries in selectedRows', () => {
+  it('should return selected pickSlipsData when there are matching entries in selectedRows', () => {
     const pickSlipsData = [
       { 'request.requestID': '1', data: 'slip1' },
       { 'request.requestID': '2', data: 'slip2' },
@@ -735,7 +735,7 @@ describe('getSelectedSlipDataMulti', () => {
     expect(result).toEqual([{ 'request.requestID': '1', data: 'slip1' }, { 'request.requestID': '3', data: 'slip3' }]);
   });
 
-  it('returns an empty array when there are no matching entries in selectedRows', () => {
+  it('should return an empty array when there are no matching entries in selectedRows', () => {
     const pickSlipsData = [
       { 'request.requestID': '1', data: 'slip1' },
       { 'request.requestID': '2', data: 'slip2' },

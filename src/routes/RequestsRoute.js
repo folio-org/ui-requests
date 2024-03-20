@@ -689,29 +689,6 @@ class RequestsRoute extends React.Component {
     }
   };
 
-  getColumnMapping = () => {
-    return {
-      select: <Checkbox
-        checked={this.getIsAllRowsSelected()}
-        aria-label={<FormattedMessage id="ui-requests.instances.rows.select" />}
-        onChange={this.toggleAllRows}
-      />,
-      requestDate: <FormattedMessage id="ui-requests.requests.requestDate" />,
-      title: <FormattedMessage id="ui-requests.requests.title" />,
-      year: <FormattedMessage id="ui-requests.requests.year" />,
-      itemBarcode: <FormattedMessage id="ui-requests.requests.itemBarcode" />,
-      callNumber: <FormattedMessage id="ui-requests.requests.callNumber" />,
-      type: <FormattedMessage id="ui-requests.requests.type" />,
-      requestStatus: <FormattedMessage id="ui-requests.requests.status" />,
-      position: <FormattedMessage id="ui-requests.requests.queuePosition" />,
-      servicePoint: <FormattedMessage id="ui-requests.requests.servicePoint" />,
-      requester: <FormattedMessage id="ui-requests.requests.requester" />,
-      requesterBarcode: <FormattedMessage id="ui-requests.requests.requesterBarcode" />,
-      singlePrint: <FormattedMessage id="ui-requests.requests.singlePrint" />,
-      proxy: <FormattedMessage id="ui-requests.requests.proxy" />
-    };
-  }
-
   onSearchComplete(records) {
     const paneTitleRef = this.paneTitleRef.current;
     const resultsCount = get(records, 'other.totalRecords', 0);
@@ -1240,7 +1217,7 @@ class RequestsRoute extends React.Component {
   }
 
   render() {
-    const getColumnMapping = {
+    const columnLabels = {
       select: <Checkbox
         checked={this.getIsAllRowsSelected()}
         aria-label={<FormattedMessage id="ui-requests.instances.rows.select" />}
@@ -1504,7 +1481,7 @@ class RequestsRoute extends React.Component {
                 type: { max: 100 },
                 select: { max: 30 }
               }}
-              columnMapping={getColumnMapping}
+              columnMapping={columnLabels}
               resultsRowClickHandlers={false}
               resultsFormatter={resultsFormatter}
               resultRowFormatter={DefaultMCLRowFormatter}
