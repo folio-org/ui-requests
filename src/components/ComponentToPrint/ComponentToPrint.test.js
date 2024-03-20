@@ -14,6 +14,9 @@ const testIds = {
 jest.mock('react-barcode', () => {
   return jest.fn().mockImplementation(() => <div data-testid={testIds.barcode} />);
 });
+jest.mock('dompurify', () => ({
+  sanitize: jest.fn((data) => (data)),
+}));
 
 describe('ComponentToPrint', () => {
   const templateFnMock = jest.fn();
