@@ -32,9 +32,7 @@ class PrintButton extends React.Component {
   };
 
   handlePrintBeforeGetContent = () => {
-    if (this.eventObject.event !== undefined) {
-      this.eventObject.event.stopPropagation();
-    }
+    this.eventObject.event.stopPropagation();
     this.props.onBeforeGetContent();
   }
 
