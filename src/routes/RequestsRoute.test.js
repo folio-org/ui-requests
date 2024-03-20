@@ -131,6 +131,24 @@ jest.mock('../components/RequestsFilters/RequestsFilters', () => ({ onClear }) =
 jest.mock('../ViewRequest', () => jest.fn());
 jest.mock('../RequestForm', () => jest.fn());
 
+jest.mock('../components/PrintButton/SinglePrintButtonForPickSlip', () => {
+  return {
+    __esModule: true,
+    default: jest.fn().mockImplementation(() => {
+      return <div data-testid="mocked-single-print-button" />;
+    })
+  };
+});
+
+jest.mock('../components/CheckboxColumn/CheckboxColumn', () => {
+  return {
+    __esModule: true,
+    default: jest.fn().mockImplementation(() => {
+      return <div data-testid="mocked-checkbox" />;
+    })
+  };
+});
+
 global.fetch = jest.fn(() => Promise.resolve({
   json: () => Promise.resolve({
     requests: [
@@ -882,11 +900,51 @@ describe('RequestsRoute', () => {
       it('should return select', () => {
         expect(listFormatter.select(requestWithData)).toBeTruthy();
       });
+
+      it('should render CheckboxColumn with the correct props', () => {
+        const rq = {};
+        const options = {
+          selectedRows: [],
+          pickSlipsToCheck: [],
+          pickSlipsData: {},
+          getPrintContentRef: jest.fn(),
+          pickSlipsPrintTemplate: jest.fn(),
+          toggleRowSelection: jest.fn(),
+          onBeforeGetContentForSinglePrintButton: jest.fn()
+        };
+
+        const formatter = getListFormatter({}, options);
+
+        const result = formatter.select(rq);
+        render(result);
+
+        expect(screen.getByTestId('mocked-checkbox')).toBeInTheDocument();
+      });
     });
 
     describe('singlePrint', () => {
       it('should render "SinglePrintButtonForPickSlip" with correct props', () => {
         expect(listFormatter.singlePrint({})).toBeTruthy();
+      });
+
+      it('should render SinglePrintButtonForPickSlip correctly', () => {
+        const rq = {};
+        const options = {
+          selectedRows: [],
+          pickSlipsToCheck: [],
+          pickSlipsData: {},
+          getPrintContentRef: jest.fn(),
+          pickSlipsPrintTemplate: jest.fn(),
+          toggleRowSelection: jest.fn(),
+          onBeforeGetContentForSinglePrintButton: jest.fn()
+        };
+
+        const formatter = getListFormatter({}, options);
+        const singlePrintButton = formatter.singlePrint(rq);
+
+        render(singlePrintButton);
+
+        expect(screen.getByTestId('mocked-single-print-button')).toBeInTheDocument();
       });
     });
 
