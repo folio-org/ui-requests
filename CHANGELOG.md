@@ -1,8 +1,9 @@
 # Change history for ui-requests
 
-## [9.0.2] in progress
+## [9.0.2](https://github.com/folio-org/ui-requests/tree/v9.0.2) (2024-03-22)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.0.1...v9.0.2)
 
-* Only certain HTML tags should be rendered when displaying staff slips. Refs UIREQ-1080.
+* Only certain HTML tags should be rendered when displaying staff slips. Refs UIREQ-1080, UIREQ-1082.
 
 ## [9.0.1](https://github.com/folio-org/ui-requests/tree/v9.0.1) (2023-12-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.0.0...v9.0.1)
