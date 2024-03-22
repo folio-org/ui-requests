@@ -20,6 +20,7 @@
 * Add displaySummary field for Requests csv export. Refs UIREQ-1068.
 * Add support for displaySummary token for Staff Slips. Refs UIREQ-1067.
 * Only certain HTML tags should be rendered when displaying staff slips. Refs UIREQ-1080.
+* Use Save & close button label stripes-component translation key. Refs UIREQ-1073.
 
 ## [9.0.1](https://github.com/folio-org/ui-requests/tree/v9.0.1) (2023-12-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.0.0...v9.0.1)
