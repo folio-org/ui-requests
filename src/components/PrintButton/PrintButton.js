@@ -7,6 +7,7 @@ import {
 } from 'lodash';
 
 import { Button } from '@folio/stripes/components';
+import css from './PrintButton.css';
 
 class PrintButton extends React.Component {
   static propTypes = {
@@ -15,6 +16,7 @@ class PrintButton extends React.Component {
     onBeforePrint: PropTypes.func,
     onBeforeGetContent: PropTypes.func,
     contentRef: PropTypes.object,
+    disabled: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -23,26 +25,37 @@ class PrintButton extends React.Component {
     onBeforeGetContent: noop,
   };
 
+  eventObject = {};
+
   getContent = () => {
     return this.props.contentRef.current;
   };
 
+  handlePrintBeforeGetContent = () => {
+    this.eventObject.event.stopPropagation();
+    this.props.onBeforeGetContent();
+  }
+
   renderTriggerButton = () => {
     const fieldsToSkip = ['contentRef', 'onBeforePrint', 'onAfterPrint', 'onBeforeGetContent'];
     const props = omit(this.props, fieldsToSkip);
+    const handleClick = (e) => {
+      this.eventObject.event = e;
+    };
 
     return (
-      <Button {...props}>
-        {this.props.children}
-      </Button>
+      <div className={this.props.disabled ? css.disabled : css.enabled}>
+        <Button {...props} onClick={handleClick} type="submit" bottomMargin0>
+          {this.props.children}
+        </Button>
+      </div>
     );
   };
 
   render() {
     const {
       onAfterPrint,
-      onBeforePrint,
-      onBeforeGetContent,
+      onBeforePrint
     } = this.props;
 
     return (
@@ -52,7 +65,7 @@ class PrintButton extends React.Component {
         trigger={this.renderTriggerButton}
         onAfterPrint={onAfterPrint}
         onBeforePrint={onBeforePrint}
-        onBeforeGetContent={onBeforeGetContent}
+        onBeforeGetContent={this.handlePrintBeforeGetContent}
       />
     );
   }

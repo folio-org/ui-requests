@@ -30,7 +30,7 @@ describe('PrintButton', () => {
       removeAfterPrint: true,
       onAfterPrint: props.onAfterPrint,
       onBeforePrint: props.onBeforePrint,
-      onBeforeGetContent: props.onBeforeGetContent,
+      onBeforeGetContent: expect.any(Function),
       content: expect.any(Function),
       trigger: expect.any(Function),
     };

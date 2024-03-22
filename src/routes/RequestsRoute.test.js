@@ -131,6 +131,24 @@ jest.mock('../components/RequestsFilters/RequestsFilters', () => ({ onClear }) =
 jest.mock('../ViewRequest', () => jest.fn());
 jest.mock('../RequestForm', () => jest.fn());
 
+jest.mock('../components/PrintButton/SinglePrintButtonForPickSlip', () => {
+  return {
+    __esModule: true,
+    default: jest.fn().mockImplementation(() => {
+      return <div data-testid="mocked-single-print-button" />;
+    })
+  };
+});
+
+jest.mock('../components/CheckboxColumn/CheckboxColumn', () => {
+  return {
+    __esModule: true,
+    default: jest.fn().mockImplementation(() => {
+      return <div data-testid="mocked-checkbox" />;
+    })
+  };
+});
+
 global.fetch = jest.fn(() => Promise.resolve({
   json: () => Promise.resolve({
     requests: [
@@ -829,15 +847,38 @@ describe('RequestsRoute', () => {
   describe('getListFormatter', () => {
     const getRowURLMock = jest.fn(id => id);
     const setURLMock = jest.fn(id => id);
-    const listFormatter = getListFormatter(getRowURLMock, setURLMock);
+    const getPrintContentRefMock = jest.fn(id => id);
+    const isPrintableMock = jest.fn(id => id);
+    const toggleRowSelectionMock = jest.fn(id => id);
+
+    const onBeforeGetContentForSinglePrintButtonMock = jest.fn(id => id);
+
+    const listFormatter = getListFormatter(
+      {
+        getRowURL: getRowURLMock,
+        setURL: setURLMock
+      },
+      {
+        selectedRows: '',
+        pickSlipsToCheck: '',
+        pickSlipsData: '',
+        getPrintContentRef: getPrintContentRefMock,
+        isPrintableMock,
+        pickSlipsPrintTemplate: '',
+        toggleRowSelection: toggleRowSelectionMock,
+        onBeforeGetContentForSinglePrintButton: onBeforeGetContentForSinglePrintButtonMock
+      }
+    );
     const requestWithData = {
       id: 'id',
+      select: 'test value',
       item: {
         barcode: 'itemBarcode',
       },
       position: 'position',
       proxy: {},
       requestDate: '02.02.2023',
+      singlePrint: 'singlePrint',
       requester: {
         lastName: 'lastName',
         firstName: 'firstName',
@@ -854,6 +895,58 @@ describe('RequestsRoute', () => {
       },
     };
     const requestWithoutData = {};
+
+    describe('select', () => {
+      it('should return select', () => {
+        expect(listFormatter.select(requestWithData)).toBeTruthy();
+      });
+
+      it('should render CheckboxColumn with the correct props', () => {
+        const rq = {};
+        const options = {
+          selectedRows: [],
+          pickSlipsToCheck: [],
+          pickSlipsData: {},
+          getPrintContentRef: jest.fn(),
+          pickSlipsPrintTemplate: jest.fn(),
+          toggleRowSelection: jest.fn(),
+          onBeforeGetContentForSinglePrintButton: jest.fn()
+        };
+
+        const formatter = getListFormatter({}, options);
+
+        const result = formatter.select(rq);
+        render(result);
+
+        expect(screen.getByTestId('mocked-checkbox')).toBeInTheDocument();
+      });
+    });
+
+    describe('singlePrint', () => {
+      it('should render "SinglePrintButtonForPickSlip" with correct props', () => {
+        expect(listFormatter.singlePrint({})).toBeTruthy();
+      });
+
+      it('should render SinglePrintButtonForPickSlip correctly', () => {
+        const rq = {};
+        const options = {
+          selectedRows: [],
+          pickSlipsToCheck: [],
+          pickSlipsData: {},
+          getPrintContentRef: jest.fn(),
+          pickSlipsPrintTemplate: jest.fn(),
+          toggleRowSelection: jest.fn(),
+          onBeforeGetContentForSinglePrintButton: jest.fn()
+        };
+
+        const formatter = getListFormatter({}, options);
+        const singlePrintButton = formatter.singlePrint(rq);
+
+        render(singlePrintButton);
+
+        expect(screen.getByTestId('mocked-single-print-button')).toBeInTheDocument();
+      });
+    });
 
     describe('itemBarcode', () => {
       it('should return item barcode', () => {
