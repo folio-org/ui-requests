@@ -131,7 +131,6 @@
     "cancellationReason": "Důvod zrušení",
     "cancellationAdditionalInformation": "Dodatečné informace pro čtenáře",
     "printPickSlips": "Vytisknout cirkulační lístky žádanek pro {sp}",
-    "common.saveAndClose": "Uložit a zavřít",
     "item.effectiveLocation": "Efektivní lokace",
     "requestMeta.tags": "Štítky",
     "filters.requestType.holds": "Rezervace",
@@ -288,5 +287,5 @@
     "errors.movingRequestToTheSameItem": "Není povoleno přesunout požadavek na úroveň názvu stránky na stejnou jednotku",
     "errors.itemOfThisInstanceAlreadyRequested": "Tento čtenář již má otevřenou žádanku pro jeden exemplář titulu",
     "documentTitle.search": "Žádanky - {query} - Vyhledat",
-    "item.displaySummary": "Display summary"
+    "item.displaySummary": "Zobrazit souhrn"
 }

@@ -131,7 +131,6 @@
     "cancellationReason": "取消原因",
     "cancellationAdditionalInformation": "读者附加信息",
     "printPickSlips": "打印{sp}选取单",
-    "common.saveAndClose": "保存并关闭",
     "item.effectiveLocation": "有效馆藏地",
     "requestMeta.tags": "标签",
     "filters.requestType.holds": "预约",
