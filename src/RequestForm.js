@@ -1229,7 +1229,7 @@ class RequestForm extends React.Component {
                       buttonStyle="primary mega"
                       disabled={isSubmittingDisabled}
                     >
-                      <FormattedMessage id="ui-requests.common.saveAndClose" />
+                      <FormattedMessage id="stripes-components.saveAndClose" />
                     </Button>
                   </div>
                 </PaneFooter>
