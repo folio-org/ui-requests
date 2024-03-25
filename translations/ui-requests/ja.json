@@ -131,7 +131,6 @@
     "cancellationReason": "キャンセル理由",
     "cancellationAdditionalInformation": "Additional information for patron",
     "printPickSlips": "Print pick slips for {sp}",
-    "common.saveAndClose": "保存して閉じる",
     "item.effectiveLocation": "有効な場所",
     "requestMeta.tags": "タグ",
     "filters.requestType.holds": "予約",

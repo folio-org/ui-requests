@@ -131,7 +131,6 @@
     "cancellationReason": "Cancellation reason",
     "cancellationAdditionalInformation": "Additional information for patron",
     "printPickSlips": "Print pick slips for {sp}",
-    "common.saveAndClose": "Save & close",
     "item.effectiveLocation": "Effective location",
     "requestMeta.tags": "Tags",
     "filters.requestType.holds": "Holds",
