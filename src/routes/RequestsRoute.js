@@ -1002,7 +1002,7 @@ class RequestsRoute extends React.Component {
   getPrintTemplate() {
     const staffSlips = get(this.props.resources, 'staffSlips.records', []);
     const pickSlip = staffSlips.find(slip => slip.name.toLowerCase() === pickSlipType);
-    return sanitize(get(pickSlip, 'template', ''));
+    return sanitize(get(pickSlip, 'template', ''), { ADD_TAGS: ['Barcode'] });
   }
 
   handleFilterChange = ({ name, values }) => {
