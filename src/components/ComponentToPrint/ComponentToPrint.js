@@ -20,7 +20,7 @@ const rules = [
 const parser = new Parser();
 
 const ComponentToPrint = ({ dataSource, templateFn }) => {
-  const componentStr = sanitize(templateFn(dataSource));
+  const componentStr = sanitize(templateFn(dataSource), { ADD_TAGS: ['Barcode'] });
   const Component = parser.parseWithInstructions(componentStr, () => true, rules) || null;
 
   return Component;
