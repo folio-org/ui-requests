@@ -1,6 +1,6 @@
 {
   "name": "@folio/requests",
-  "version": "9.0.2",
+  "version": "9.0.3",
   "description": "Requests manager",
   "repository": "folio-org/ui-requests",
   "publishConfig": {
