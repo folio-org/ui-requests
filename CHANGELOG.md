@@ -1,5 +1,10 @@
 # Change history for ui-requests
 
+## [9.1.1] (https://github.com/folio-org/ui-checkin/tree/v9.1.1) (2024-03-27)
+[Full Changelog](https://github.com/folio-org/ui-checkin/compare/v9.1.0...v9.1.1)
+
+* Add support for Barcode tag with sanitize. Refs UIREQ-1080, UIREQ-1082.
+
 ## [9.1.0](https://github.com/folio-org/ui-requests/tree/v9.1.0) (2024-03-22)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.0.2...v9.1.0)
 
