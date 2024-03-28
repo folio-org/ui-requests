@@ -4,6 +4,11 @@
 
 * Use Save & close button label stripes-component translation key. Refs UIREQ-1073.
 
+## [9.1.1] (https://github.com/folio-org/ui-checkin/tree/v9.1.1) (2024-03-27)
+[Full Changelog](https://github.com/folio-org/ui-checkin/compare/v9.1.0...v9.1.1)
+
+* Add support for Barcode tag with sanitize. Refs UIREQ-1080, UIREQ-1082.
+
 ## [9.1.0](https://github.com/folio-org/ui-requests/tree/v9.1.0) (2024-03-22)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.0.2...v9.1.0)
 
@@ -26,6 +31,10 @@
 * Add support for displaySummary token for Staff Slips. Refs UIREQ-1067.
 * Only certain HTML tags should be rendered when displaying staff slips. Refs UIREQ-1080.
 
+## [9.0.3](https://github.com/folio-org/ui-requests/tree/v9.0.3) (2024-03-27)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.0.2...v9.0.3)
+
+* Add support for Barcode tag with sanitize. Refs UIREQ-1080, UIREQ-1082.
 
 ## [9.0.2](https://github.com/folio-org/ui-requests/tree/v9.0.2) (2024-03-22)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.0.1...v9.0.2)
