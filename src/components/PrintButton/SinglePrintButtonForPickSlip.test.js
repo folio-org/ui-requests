@@ -1,5 +1,9 @@
 import React from 'react';
-import { render, screen } from '@folio/jest-config-stripes/testing-library/react';
+
+import {
+  render,
+  screen
+} from '@folio/jest-config-stripes/testing-library/react';
 import SinglePrintButtonForPickSlip from './SinglePrintButtonForPickSlip';
 import * as utils from '../../utils';
 
@@ -19,19 +23,27 @@ describe('SinglePrintButtonForPickSlip', () => {
     pickSlipsToCheck: [
       {
         request: {
-          requestID: '11'
-        }
+          requestID: '11',
+        },
       },
       {
         request: {
-          requestID: '22'
-        }
-      }
+          requestID: '22',
+        },
+      },
     ],
-    pickSlipsPrintTemplate: '<div></div>',
+    pickSlipsPrintTemplate: '<div />',
     pickSlipsData: [
-      { request: { requestID: '11' } },
-      { request: { requestID: '22' } },
+      {
+        request: {
+          requestID: '11',
+        },
+      },
+      {
+        request: {
+          requestID: '22',
+        },
+      },
     ],
     onBeforeGetContentForSinglePrintButton: jest.fn(),
     getPrintContentRef: mockAccordionStatusRef
@@ -46,7 +58,7 @@ describe('SinglePrintButtonForPickSlip', () => {
       />
     );
 
-    expect(screen.getByRole('button', { name: /ui-requests\.requests\.printButtonLabel/i })).toBeDisabled();
+    expect(screen.getByTestId('singlePrintPickSlipsBtnId')).toBeDisabled();
   });
 
   it('enables the button if printable', () => {
@@ -58,6 +70,6 @@ describe('SinglePrintButtonForPickSlip', () => {
       />
     );
 
-    expect(screen.getByRole('button', { name: /ui-requests\.requests\.printButtonLabel/i })).toBeEnabled();
+    expect(screen.getByTestId('singlePrintPickSlipsBtnId')).toBeEnabled();
   });
 });

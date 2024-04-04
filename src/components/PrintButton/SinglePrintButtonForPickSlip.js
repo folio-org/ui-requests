@@ -1,8 +1,15 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import { PrintButton, PrintContent } from '..';
-import { getSelectedSlipData, isPrintable } from '../../utils';
+
+import {
+  PrintButton,
+  PrintContent,
+} from '..';
+import {
+  getSelectedSlipData,
+  isPrintable,
+} from '../../utils';
 
 const SinglePrintButtonForPickSlip = ({
   rq,
@@ -18,6 +25,7 @@ const SinglePrintButtonForPickSlip = ({
   return (
     <PrintButton
       id="singlePrintPickSlipsBtn"
+      data-testid="singlePrintPickSlipsBtnId"
       disabled={disabled}
       template={pickSlipsPrintTemplate}
       contentRef={getPrintContentRef(rq.id)}

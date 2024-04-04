@@ -7,6 +7,7 @@ import {
 } from 'lodash';
 
 import { Button } from '@folio/stripes/components';
+
 import css from './PrintButton.css';
 
 class PrintButton extends React.Component {
@@ -23,6 +24,8 @@ class PrintButton extends React.Component {
     onAfterPrint: noop,
     onBeforePrint: noop,
     onBeforeGetContent: noop,
+    contentRef: {},
+    disabled: false,
   };
 
   eventObject = {};
@@ -45,7 +48,12 @@ class PrintButton extends React.Component {
 
     return (
       <div className={this.props.disabled ? css.disabled : css.enabled}>
-        <Button {...props} onClick={handleClick} type="submit" bottomMargin0>
+        <Button
+          {...props}
+          onClick={handleClick}
+          type="submit"
+          bottomMargin0
+        >
           {this.props.children}
         </Button>
       </div>

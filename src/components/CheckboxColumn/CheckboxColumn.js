@@ -17,7 +17,6 @@ const CheckboxColumn = ({
   const handleClick = (e) => {
     e.stopPropagation();
   };
-    // eslint-disable-next-line no-shadow
   const handleRowSelectionToggle = () => {
     toggleRowSelection({
       id,
