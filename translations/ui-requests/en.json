@@ -280,7 +280,6 @@
   "printPickSlipsSelected": "Print selected pick slips for {sp}",
 
   "common.cancel": "Cancel",
-  "common.saveAndClose": "Save & close",
 
   "filters.requestType.holds": "Holds",
   "filters.requestType.pages": "Pages",
