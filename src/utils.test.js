@@ -84,6 +84,10 @@ const pickSlipsDataWithRequest = [
     data: 'slip3',
   },
 ];
+const row = {
+  id: 1,
+  name: 'John Doe',
+};
 
 describe('escapeValue', () => {
   it('escapes values', () => {
@@ -619,20 +623,12 @@ describe('isFormEditing', () => {
 describe('getNextSelectedRowsState', () => {
   it('should add a row to selectedRows if not selected', () => {
     const selectedRows = {};
-    const row = {
-      id: 1,
-      name: 'John Doe',
-    };
     const result = getNextSelectedRowsState(selectedRows, row);
 
     expect(result).toEqual({ [row.id]: row });
   });
 
   it('should remove a row from selectedRows if already selected', () => {
-    const row = {
-      id: 1,
-      name: 'John Doe',
-    };
     const selectedRows = { [row.id]: row };
     const result = getNextSelectedRowsState(selectedRows, row);
 

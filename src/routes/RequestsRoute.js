@@ -682,6 +682,7 @@ class RequestsRoute extends React.Component {
   getIsAllRowsSelected = () => {
     const { resources } = this.props;
     const { selectedRows } = this.state;
+
     if (resources.records.records.length !== 0) {
       return resources.records.records.every(({ id }) => Object.keys(selectedRows).includes(id));
     } else {
