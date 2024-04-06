@@ -4,6 +4,7 @@ import {
   render,
   screen
 } from '@folio/jest-config-stripes/testing-library/react';
+
 import SinglePrintButtonForPickSlip from './SinglePrintButtonForPickSlip';
 import * as utils from '../../utils';
 
@@ -13,6 +14,7 @@ const testIds = {
 const mockAccordionStatusRef = () => ({
   current: <div data-testid={testIds.testContent} />,
 });
+
 describe('SinglePrintButtonForPickSlip', () => {
   afterEach(() => {
     jest.clearAllMocks();
@@ -46,7 +48,7 @@ describe('SinglePrintButtonForPickSlip', () => {
       },
     ],
     onBeforeGetContentForSinglePrintButton: jest.fn(),
-    getPrintContentRef: mockAccordionStatusRef
+    getPrintContentRef: mockAccordionStatusRef,
   };
 
   it('disables the button if not printable', () => {

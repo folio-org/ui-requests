@@ -2,7 +2,7 @@ import {
   get,
   isEmpty,
   isArray,
-  size
+  size,
 } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -195,7 +195,7 @@ export const urls = {
 export const getListFormatter = (
   {
     getRowURL,
-    setURL
+    setURL,
   },
   {
     selectedRows,
@@ -204,7 +204,7 @@ export const getListFormatter = (
     getPrintContentRef,
     pickSlipsPrintTemplate,
     toggleRowSelection,
-    onBeforeGetContentForSinglePrintButton
+    onBeforeGetContentForSinglePrintButton,
   }
 ) => ({
   'select': rq => (
@@ -663,14 +663,12 @@ class RequestsRoute extends React.Component {
   toggleAllRows = () => {
     const { resources } = this.props;
     const { selectedRows } = this.state;
-
     const toggledRows = resources.records.records.reduce((acc, row) => (
       {
         ...acc,
         [row.id]: row,
       }
     ), {});
-
     const filterSelectedRows = rows => {
       Object.keys(toggledRows).forEach(id => {
         if (rows[id]) delete rows[id];
@@ -1191,6 +1189,7 @@ class RequestsRoute extends React.Component {
   );
 
   printContentRefs = {};
+
   getPrintContentRef = (rqId) => {
     if (!this.printContentRefs[rqId]) {
       this.printContentRefs[rqId] = React.createRef();
@@ -1237,7 +1236,7 @@ class RequestsRoute extends React.Component {
       requester: <FormattedMessage id="ui-requests.requests.requester" />,
       requesterBarcode: <FormattedMessage id="ui-requests.requests.requesterBarcode" />,
       singlePrint: <FormattedMessage id="ui-requests.requests.singlePrint" />,
-      proxy: <FormattedMessage id="ui-requests.requests.proxy" />
+      proxy: <FormattedMessage id="ui-requests.requests.proxy" />,
     };
 
     const {
@@ -1294,7 +1293,7 @@ class RequestsRoute extends React.Component {
     const resultsFormatter = getListFormatter(
       {
         getRowURL: this.getRowURL,
-        setURL: this.setURL
+        setURL: this.setURL,
       },
       {
         selectedRows,
@@ -1303,7 +1302,7 @@ class RequestsRoute extends React.Component {
         getPrintContentRef: this.getPrintContentRef,
         pickSlipsPrintTemplate,
         toggleRowSelection: this.toggleRowSelection,
-        onBeforeGetContentForSinglePrintButton: this.onBeforeGetContentForSinglePrintButton
+        onBeforeGetContentForSinglePrintButton: this.onBeforeGetContentForSinglePrintButton,
       }
     );
 

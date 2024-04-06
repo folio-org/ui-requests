@@ -13,7 +13,6 @@ const CheckboxColumn = ({
     id,
     ...rowData
   } = rq;
-
   const handleClick = (e) => {
     e.stopPropagation();
   };

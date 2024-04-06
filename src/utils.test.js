@@ -33,7 +33,7 @@ import {
   getSelectedSlipDataMulti,
   selectedRowsNonPrintable,
   isPrintable,
-  getNextSelectedRowsState
+  getNextSelectedRowsState,
 } from './utils';
 
 import {
@@ -46,6 +46,44 @@ import {
   REQUEST_ERROR_MESSAGE_CODE,
   REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS,
 } from './constants';
+
+const pickSlips = [
+  {
+    request: {
+      requestID: '123',
+    },
+  },
+  {
+    request: {
+      requestID: '456',
+    },
+  },
+];
+const pickSlipsData = [
+  {
+    'request.requestID': '1',
+  },
+  {
+    'request.requestID': '2',
+  },
+  {
+    'request.requestID': '3',
+  },
+];
+const pickSlipsDataWithRequest = [
+  {
+    'request.requestID': '1',
+    data: 'slip1',
+  },
+  {
+    'request.requestID': '2',
+    data: 'slip2',
+  },
+  {
+    'request.requestID': '3',
+    data: 'slip3',
+  },
+];
 
 describe('escapeValue', () => {
   it('escapes values', () => {
@@ -581,26 +619,32 @@ describe('isFormEditing', () => {
 describe('getNextSelectedRowsState', () => {
   it('should add a row to selectedRows if not selected', () => {
     const selectedRows = {};
-    const row = { id: 1, name: 'John Doe' };
-
+    const row = {
+      id: 1,
+      name: 'John Doe',
+    };
     const result = getNextSelectedRowsState(selectedRows, row);
 
     expect(result).toEqual({ [row.id]: row });
   });
 
   it('should remove a row from selectedRows if already selected', () => {
-    const row = { id: 1, name: 'John Doe' };
+    const row = {
+      id: 1,
+      name: 'John Doe',
+    };
     const selectedRows = { [row.id]: row };
-
     const result = getNextSelectedRowsState(selectedRows, row);
 
     expect(result).toEqual({});
   });
 
   it('should not mutate the original selectedRows object', () => {
-    const row = { id: 1, name: 'John Doe' };
+    const row = {
+      id: 1,
+      name: 'John Doe',
+    };
     const selectedRows = { [row.id]: row };
-
     const result = getNextSelectedRowsState(selectedRows, row);
 
     expect(selectedRows).toEqual({ [row.id]: row });
@@ -610,11 +654,6 @@ describe('getNextSelectedRowsState', () => {
 describe('isPrintable', () => {
   it('should return true when pickSlips contain a match for requestId', () => {
     const requestId = '123';
-    const pickSlips = [
-      { request: { requestID: '123' } },
-      { request: { requestID: '456' } },
-    ];
-
     const result = isPrintable(requestId, pickSlips);
 
     expect(result).toBe(true);
@@ -622,11 +661,6 @@ describe('isPrintable', () => {
 
   it('should return false when pickSlips do not contain a match for requestId', () => {
     const requestId = '789';
-    const pickSlips = [
-      { request: { requestID: '123' } },
-      { request: { requestID: '456' } },
-    ];
-
     const result = isPrintable(requestId, pickSlips);
 
     expect(result).toBe(false);
@@ -635,7 +669,6 @@ describe('isPrintable', () => {
   it('should return false when pickSlips is undefined', () => {
     const requestId = '123';
     const pickSlips = undefined;
-
     const result = isPrintable(requestId, pickSlips);
 
     expect(result).toBe(false);
@@ -644,105 +677,124 @@ describe('isPrintable', () => {
 
 describe('getSelectedSlipData', () => {
   const pickSlipsData = [
-    { 'request.requestID': 1, data: 'some data 1' },
-    { 'request.requestID': 2, data: 'some data 2' },
-    { 'request.requestID': 3, data: 'some data 3' },
+    {
+      'request.requestID': 1,
+      data: 'some data 1',
+    },
+    {
+      'request.requestID': 2,
+      data: 'some data 2',
+    },
+    {
+      'request.requestID': 3,
+      data: 'some data 3',
+    },
   ];
 
   it('should return an empty array if selectedRequestId is not found', () => {
     const selectedRequestId = 999;
     const result = getSelectedSlipData(pickSlipsData, selectedRequestId);
+
     expect(result).toEqual([]);
   });
 
   it('should return an array with the selected slip data if found', () => {
     const selectedRequestId = 2;
     const result = getSelectedSlipData(pickSlipsData, selectedRequestId);
-    const expectedResult = [{ 'request.requestID': 2, data: 'some data 2' }];
+    const expectedResult = [
+        {
+          'request.requestID': 2,
+          data: 'some data 2',
+        }
+    ];
+
     expect(result).toEqual(expectedResult);
   });
 
   it('should return an array even if only one matching slip is found', () => {
     const selectedRequestId = 3;
     const result = getSelectedSlipData(pickSlipsData, selectedRequestId);
-    const expectedResult = [{ 'request.requestID': 3, data: 'some data 3' }];
+    const expectedResult = [
+        {
+          'request.requestID': 3,
+          data: 'some data 3',
+        }
+    ];
+
     expect(result).toEqual(expectedResult);
   });
 
   it('should handle an empty pickSlipsData array', () => {
     const selectedRequestId = 1;
     const result = getSelectedSlipData([], selectedRequestId);
+
     expect(result).toEqual([]);
   });
 });
 
 describe('selectedRowsNonPrintable', () => {
   it('should return true when selectedRows is empty', () => {
-    const pickSlipsData = [
-      { 'request.requestID': '1' },
-      { 'request.requestID': '2' },
-      { 'request.requestID': '3' },
-    ];
     const selectedRows = {};
-
     const result = selectedRowsNonPrintable(pickSlipsData, selectedRows);
 
     expect(result).toBe(true);
   });
 
   it('should return true when no matching rows are selected', () => {
-    const pickSlipsData = [
-      { 'request.requestID': '1' },
-      { 'request.requestID': '2' },
-      { 'request.requestID': '3' },
-    ];
-    const selectedRows = { '4': true, '5': true };
-
+    const selectedRows = {
+      '4': true,
+      '5': true,
+    };
     const result = selectedRowsNonPrintable(pickSlipsData, selectedRows);
 
     expect(result).toBe(true);
   });
 
   it('should return false when at least one matching row is selected', () => {
-    const pickSlipsData = [
-      { 'request.requestID': '1' },
-      { 'request.requestID': '2' },
-      { 'request.requestID': '3' },
-    ];
-    const selectedRows = { '2': true, '4': true };
-
+    const selectedRows = {
+      '2': true,
+      '4': true,
+    };
     const result = selectedRowsNonPrintable(pickSlipsData, selectedRows);
 
     expect(result).toBe(false);
   });
 });
+
 describe('getSelectedSlipDataMulti', () => {
   it('should return an empty array when selectedRows is empty', () => {
-    const pickSlipsData = [{ 'request.requestID': '1' }, { 'request.requestID': '2' }];
+    const pickSlipsData = [
+      {
+        'request.requestID': '1',
+      },
+      {
+        'request.requestID': '2',
+      },
+    ];
     const selectedRows = {};
     const result = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
+
     expect(result).toEqual([]);
   });
 
   it('should return selected pickSlipsData when there are matching entries in selectedRows', () => {
-    const pickSlipsData = [
-      { 'request.requestID': '1', data: 'slip1' },
-      { 'request.requestID': '2', data: 'slip2' },
-      { 'request.requestID': '3', data: 'slip3' },
-    ];
-    const selectedRows = { '1': true, '3': true };
-    const result = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
+    const selectedRows = {
+      '1': true,
+      '3': true,
+    };
+    const result = getSelectedSlipDataMulti(pickSlipsDataWithRequest, selectedRows);
+
     expect(result).toEqual([{ 'request.requestID': '1', data: 'slip1' }, { 'request.requestID': '3', data: 'slip3' }]);
+
   });
 
   it('should return an empty array when there are no matching entries in selectedRows', () => {
-    const pickSlipsData = [
-      { 'request.requestID': '1', data: 'slip1' },
-      { 'request.requestID': '2', data: 'slip2' },
-      { 'request.requestID': '3', data: 'slip3' },
-    ];
-    const selectedRows = { '4': true, '5': true };
-    const result = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
+    const selectedRows = {
+      '4': true,
+      '5': true,
+    };
+    const result = getSelectedSlipDataMulti(pickSlipsDataWithRequest, selectedRows);
+
     expect(result).toEqual([]);
   });
 });

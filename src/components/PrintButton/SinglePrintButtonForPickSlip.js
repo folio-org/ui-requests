@@ -44,7 +44,7 @@ const SinglePrintButtonForPickSlip = ({
 
 SinglePrintButtonForPickSlip.propTypes = {
   rq: PropTypes.shape({
-    id: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired,
   }),
   pickSlipsToCheck: PropTypes.object.isRequired,
   pickSlipsPrintTemplate: PropTypes.object.isRequired,

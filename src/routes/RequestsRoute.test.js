@@ -139,7 +139,6 @@ jest.mock('../components/PrintButton/SinglePrintButtonForPickSlip', () => {
     })
   };
 });
-
 jest.mock('../components/CheckboxColumn/CheckboxColumn', () => {
   return {
     __esModule: true,
@@ -850,13 +849,11 @@ describe('RequestsRoute', () => {
     const getPrintContentRefMock = jest.fn(id => id);
     const isPrintableMock = jest.fn(id => id);
     const toggleRowSelectionMock = jest.fn(id => id);
-
     const onBeforeGetContentForSinglePrintButtonMock = jest.fn(id => id);
-
     const listFormatter = getListFormatter(
       {
         getRowURL: getRowURLMock,
-        setURL: setURLMock
+        setURL: setURLMock,
       },
       {
         selectedRows: '',
@@ -866,7 +863,7 @@ describe('RequestsRoute', () => {
         isPrintableMock,
         pickSlipsPrintTemplate: '',
         toggleRowSelection: toggleRowSelectionMock,
-        onBeforeGetContentForSinglePrintButton: onBeforeGetContentForSinglePrintButtonMock
+        onBeforeGetContentForSinglePrintButton: onBeforeGetContentForSinglePrintButtonMock,
       }
     );
     const requestWithData = {
@@ -914,8 +911,8 @@ describe('RequestsRoute', () => {
         };
 
         const formatter = getListFormatter({}, options);
-
         const result = formatter.select(rq);
+
         render(result);
 
         expect(screen.getByTestId('mocked-checkbox')).toBeInTheDocument();
@@ -938,7 +935,6 @@ describe('RequestsRoute', () => {
           toggleRowSelection: jest.fn(),
           onBeforeGetContentForSinglePrintButton: jest.fn()
         };
-
         const formatter = getListFormatter({}, options);
         const singlePrintButton = formatter.singlePrint(rq);
 

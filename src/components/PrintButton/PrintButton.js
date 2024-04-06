@@ -63,7 +63,7 @@ class PrintButton extends React.Component {
   render() {
     const {
       onAfterPrint,
-      onBeforePrint
+      onBeforePrint,
     } = this.props;
 
     return (

@@ -2,6 +2,7 @@
     pointer-events: none;
     border-radius: 999px;
 }
+
 .enabled {
     pointer-events: auto;
     border-radius: 999px;

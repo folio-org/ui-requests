@@ -9,7 +9,7 @@ import {
   pickBy,
   identity,
   sortBy,
-  size
+  size,
 } from 'lodash';
 import queryString from 'query-string';
 import React from 'react';
@@ -185,6 +185,7 @@ export function getSelectedSlipData(pickSlipsData, selectedRequestId) {
   const sel = pickSlipsData.filter((pickSlip) => {
     return pickSlip['request.requestID'] === selectedRequestId;
   })[0];
+
   if (sel === undefined) {
     return [];
   } else {
@@ -196,6 +197,7 @@ export function getSelectedSlipDataMulti(pickSlipsData, selectedRows) {
   const sel = pickSlipsData.filter((pickSlip) => {
     return Object.keys(selectedRows).includes(pickSlip['request.requestID']);
   });
+
   return [sel].flat();
 }
 
@@ -203,19 +205,23 @@ export function selectedRowsNonPrintable(pickSlipsData, selectedRows) {
   if (!size(selectedRows)) {
     return true;
   }
+
   const sel = pickSlipsData.filter((pickSlip) => {
     return Object.keys(selectedRows).includes(pickSlip['request.requestID']);
   });
+
   return sel.length === 0;
 }
 
 export function isPrintable(requestId, pickSlips) {
   let matched = false;
+
   if (pickSlips !== undefined) {
     matched = pickSlips.filter((pickSlip) => {
       return pickSlip.request.requestID === requestId;
     })[0];
   }
+
   return Boolean(matched);
 }
 
