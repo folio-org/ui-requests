@@ -47,7 +47,7 @@ import {
   REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS,
 } from './constants';
 
-const pickSlips = [
+const pickSlipsForSinglePrint = [
   {
     request: {
       requestID: '123',
@@ -59,7 +59,7 @@ const pickSlips = [
     },
   },
 ];
-const pickSlipsData = [
+const pickSlipsDataForSinglePrint = [
   {
     'request.requestID': '1',
   },
@@ -84,7 +84,7 @@ const pickSlipsDataWithRequest = [
     data: 'slip3',
   },
 ];
-const row = {
+const rowForSinglePrint = {
   id: 1,
   name: 'John Doe',
 };
@@ -623,49 +623,45 @@ describe('isFormEditing', () => {
 describe('getNextSelectedRowsState', () => {
   it('should add a row to selectedRows if not selected', () => {
     const selectedRows = {};
-    const result = getNextSelectedRowsState(selectedRows, row);
+    const result = getNextSelectedRowsState(selectedRows, rowForSinglePrint);
 
-    expect(result).toEqual({ [row.id]: row });
+    expect(result).toEqual({ [rowForSinglePrint.id]: rowForSinglePrint });
   });
 
   it('should remove a row from selectedRows if already selected', () => {
-    const selectedRows = { [row.id]: row };
-    const result = getNextSelectedRowsState(selectedRows, row);
+    const selectedRows = { [rowForSinglePrint.id]: rowForSinglePrint };
+    const result = getNextSelectedRowsState(selectedRows, rowForSinglePrint);
 
     expect(result).toEqual({});
   });
 
   it('should not mutate the original selectedRows object', () => {
-    const row = {
-      id: 1,
-      name: 'John Doe',
-    };
-    const selectedRows = { [row.id]: row };
-    const result = getNextSelectedRowsState(selectedRows, row);
+    const selectedRows = { [rowForSinglePrint.id]: rowForSinglePrint };
+    const result = getNextSelectedRowsState(selectedRows, rowForSinglePrint);
 
-    expect(selectedRows).toEqual({ [row.id]: row });
+    expect(selectedRows).toEqual({ [rowForSinglePrint.id]: rowForSinglePrint });
     expect(result).not.toBe(selectedRows);
   });
 });
 describe('isPrintable', () => {
   it('should return true when pickSlips contain a match for requestId', () => {
     const requestId = '123';
-    const result = isPrintable(requestId, pickSlips);
+    const result = isPrintable(requestId, pickSlipsForSinglePrint);
 
     expect(result).toBe(true);
   });
 
   it('should return false when pickSlips do not contain a match for requestId', () => {
     const requestId = '789';
-    const result = isPrintable(requestId, pickSlips);
+    const result = isPrintable(requestId, pickSlipsForSinglePrint);
 
     expect(result).toBe(false);
   });
 
   it('should return false when pickSlips is undefined', () => {
     const requestId = '123';
-    const pickSlips = undefined;
-    const result = isPrintable(requestId, pickSlips);
+    const pickSlipsUndefined = undefined;
+    const result = isPrintable(requestId, pickSlipsUndefined);
 
     expect(result).toBe(false);
   });
@@ -698,10 +694,10 @@ describe('getSelectedSlipData', () => {
     const selectedRequestId = 2;
     const result = getSelectedSlipData(pickSlipsData, selectedRequestId);
     const expectedResult = [
-        {
-          'request.requestID': 2,
-          data: 'some data 2',
-        }
+      {
+        'request.requestID': 2,
+        data: 'some data 2',
+      }
     ];
 
     expect(result).toEqual(expectedResult);
@@ -711,10 +707,10 @@ describe('getSelectedSlipData', () => {
     const selectedRequestId = 3;
     const result = getSelectedSlipData(pickSlipsData, selectedRequestId);
     const expectedResult = [
-        {
-          'request.requestID': 3,
-          data: 'some data 3',
-        }
+      {
+        'request.requestID': 3,
+        data: 'some data 3',
+      }
     ];
 
     expect(result).toEqual(expectedResult);
@@ -731,7 +727,7 @@ describe('getSelectedSlipData', () => {
 describe('selectedRowsNonPrintable', () => {
   it('should return true when selectedRows is empty', () => {
     const selectedRows = {};
-    const result = selectedRowsNonPrintable(pickSlipsData, selectedRows);
+    const result = selectedRowsNonPrintable(pickSlipsDataForSinglePrint, selectedRows);
 
     expect(result).toBe(true);
   });
@@ -741,7 +737,7 @@ describe('selectedRowsNonPrintable', () => {
       '4': true,
       '5': true,
     };
-    const result = selectedRowsNonPrintable(pickSlipsData, selectedRows);
+    const result = selectedRowsNonPrintable(pickSlipsDataForSinglePrint, selectedRows);
 
     expect(result).toBe(true);
   });
@@ -751,7 +747,7 @@ describe('selectedRowsNonPrintable', () => {
       '2': true,
       '4': true,
     };
-    const result = selectedRowsNonPrintable(pickSlipsData, selectedRows);
+    const result = selectedRowsNonPrintable(pickSlipsDataWithRequest, selectedRows);
 
     expect(result).toBe(false);
   });
