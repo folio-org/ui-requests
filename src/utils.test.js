@@ -777,16 +777,16 @@ describe('getSelectedSlipDataMulti', () => {
     const result = getSelectedSlipDataMulti(pickSlipsDataWithRequest, selectedRows);
 
     expect(result).toEqual(
-        [
-          {
-            'request.requestID': '1',
-            data: 'slip1',
-          },
-          {
-            'request.requestID': '3',
-            data: 'slip3',
-          },
-        ]
+      [
+        {
+          'request.requestID': '1',
+          data: 'slip1',
+        },
+        {
+          'request.requestID': '3',
+          data: 'slip3',
+        },
+      ]
     );
   });
 

@@ -909,7 +909,6 @@ describe('RequestsRoute', () => {
           toggleRowSelection: jest.fn(),
           onBeforeGetContentForSinglePrintButton: jest.fn(),
         };
-
         const formatter = getListFormatter({}, options);
         const result = formatter.select(rq);
 
