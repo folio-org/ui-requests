@@ -2,7 +2,7 @@ import React from 'react';
 
 import {
   render,
-  screen
+  screen,
 } from '@folio/jest-config-stripes/testing-library/react';
 
 import SinglePrintButtonForPickSlip from './SinglePrintButtonForPickSlip';

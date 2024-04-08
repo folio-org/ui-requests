@@ -907,7 +907,7 @@ describe('RequestsRoute', () => {
           getPrintContentRef: jest.fn(),
           pickSlipsPrintTemplate: jest.fn(),
           toggleRowSelection: jest.fn(),
-          onBeforeGetContentForSinglePrintButton: jest.fn()
+          onBeforeGetContentForSinglePrintButton: jest.fn(),
         };
 
         const formatter = getListFormatter({}, options);
@@ -933,7 +933,7 @@ describe('RequestsRoute', () => {
           getPrintContentRef: jest.fn(),
           pickSlipsPrintTemplate: jest.fn(),
           toggleRowSelection: jest.fn(),
-          onBeforeGetContentForSinglePrintButton: jest.fn()
+          onBeforeGetContentForSinglePrintButton: jest.fn(),
         };
         const formatter = getListFormatter({}, options);
         const singlePrintButton = formatter.singlePrint(rq);

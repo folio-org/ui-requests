@@ -40,7 +40,7 @@ const CheckboxColumn = ({
 
 CheckboxColumn.propTypes = {
   rq: PropTypes.shape({
-    id: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired,
   }),
   selectedRows: PropTypes.func.isRequired,
   toggleRowSelection: PropTypes.func.isRequired,
