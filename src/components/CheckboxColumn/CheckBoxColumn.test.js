@@ -1,55 +1,45 @@
-import React from 'react';
-
 import {
   render,
   fireEvent,
+  screen,
 } from '@folio/jest-config-stripes/testing-library/react';
 
 import CheckboxColumn from './CheckboxColumn';
 
-describe('CheckboxColumn', () => {
-  const rq = { id: '1' };
-  const selectedRows = {};
-  const toggleRowSelection = jest.fn();
+const basicProps = {
+  request: {
+    id: '1',
+  },
+  selectedRows: {},
+  toggleRowSelection: jest.fn(),
+};
 
-  it('should renders correctly with checkbox', () => {
-    const { getByRole } = render(
+describe('CheckboxColumn', () => {
+  beforeEach(() => {
+    render(
       <CheckboxColumn
-        rq={rq}
-        selectedRows={selectedRows}
-        toggleRowSelection={toggleRowSelection}
+        {...basicProps}
       />
     );
-    const checkbox = getByRole('checkbox');
+  });
+
+  it('should render checkbox', () => {
+    const checkbox = screen.getByRole('checkbox');
 
     expect(checkbox).toBeInTheDocument();
   });
 
-  it('should be unchecked by default', () => {
-    const { getByRole } = render(
-      <CheckboxColumn
-        rq={rq}
-        selectedRows={selectedRows}
-        toggleRowSelection={toggleRowSelection}
-      />
-    );
-    const checkbox = getByRole('checkbox');
+  it('should render unchecked checkbox by default', () => {
+    const checkbox = screen.getByRole('checkbox');
 
     expect(checkbox.checked).toBe(false);
   });
 
   it('should toggles selection on click', () => {
-    const { getByRole } = render(
-      <CheckboxColumn
-        rq={rq}
-        selectedRows={selectedRows}
-        toggleRowSelection={toggleRowSelection}
-      />
-    );
-    const checkbox = getByRole('checkbox');
+    const checkbox = screen.getByRole('checkbox');
 
     fireEvent.click(checkbox);
 
-    expect(toggleRowSelection).toHaveBeenCalledWith(rq);
+    expect(basicProps.toggleRowSelection).toHaveBeenCalledWith(basicProps.request);
   });
 });

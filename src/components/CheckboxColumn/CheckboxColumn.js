@@ -1,18 +1,17 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
 import { Checkbox } from '@folio/stripes/components';
 
 const CheckboxColumn = ({
-  rq,
+  request,
   selectedRows,
   toggleRowSelection,
 }) => {
   const {
     id,
     ...rowData
-  } = rq;
+  } = request;
   const handleClick = (e) => {
     e.stopPropagation();
   };
@@ -39,10 +38,11 @@ const CheckboxColumn = ({
 };
 
 CheckboxColumn.propTypes = {
-  rq: PropTypes.shape({
+  request: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }),
   selectedRows: PropTypes.func.isRequired,
   toggleRowSelection: PropTypes.func.isRequired,
 };
+
 export default CheckboxColumn;

@@ -1,40 +1,35 @@
-import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
-import {
-  PrintButton,
-  PrintContent,
-} from '..';
+import PrintButton from '../PrintButton';
+import PrintContent from '../PrintContent';
 import {
   getSelectedSlipData,
   isPrintable,
 } from '../../utils';
 
 const SinglePrintButtonForPickSlip = ({
-  rq,
+  request,
   pickSlipsToCheck,
   pickSlipsPrintTemplate,
   pickSlipsData,
   onBeforeGetContentForSinglePrintButton,
   getPrintContentRef,
 }) => {
-  const disabled = !isPrintable(rq.id, pickSlipsToCheck);
-  const selectedSlipData = getSelectedSlipData(pickSlipsData, rq.id);
+  const disabled = !isPrintable(request.id, pickSlipsToCheck);
+  const selectedSlipData = getSelectedSlipData(pickSlipsData, request.id);
 
   return (
     <PrintButton
-      id="singlePrintPickSlipsBtn"
-      data-testid="singlePrintPickSlipsBtnId"
+      id="singlePrintPickSlipsButton"
       disabled={disabled}
-      template={pickSlipsPrintTemplate}
-      contentRef={getPrintContentRef(rq.id)}
-      requestId={rq.id}
+      contentRef={getPrintContentRef(request.id)}
+      requestId={request.id}
       onBeforeGetContent={onBeforeGetContentForSinglePrintButton}
     >
       <FormattedMessage id="ui-requests.requests.printButtonLabel" />
       <PrintContent
-        ref={getPrintContentRef(rq.id)}
+        ref={getPrintContentRef(request.id)}
         template={pickSlipsPrintTemplate}
         dataSource={selectedSlipData}
       />
@@ -43,7 +38,7 @@ const SinglePrintButtonForPickSlip = ({
 };
 
 SinglePrintButtonForPickSlip.propTypes = {
-  rq: PropTypes.shape({
+  request: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }),
   pickSlipsToCheck: PropTypes.object.isRequired,

@@ -8,6 +8,7 @@ import {
   screen,
   waitFor,
   cleanup,
+  fireEvent,
 } from '@folio/jest-config-stripes/testing-library/react';
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
@@ -21,6 +22,7 @@ import {
 } from '@folio/stripes/core';
 import {
   TextLink,
+  Checkbox,
 } from '@folio/stripes/components';
 import {
   exportCsv,
@@ -34,11 +36,13 @@ import RequestsRoute, {
   urls,
   DEFAULT_FORMATTER_VALUE,
 } from './RequestsRoute';
+import CheckboxColumn from '../components/CheckboxColumn';
 import {
   duplicateRequest,
   getTlrSettings,
   getFullName,
   getInstanceQueryString,
+  getNextSelectedRowsState,
 } from '../utils';
 import {
   getFormattedYears,
@@ -68,8 +72,16 @@ const createRefMock = {
 const createDocumentRefMock = {
   focus: jest.fn(),
 };
-jest.spyOn(React, 'createRef').mockReturnValue(createRefMock);
+const testIds = {
+  searchAndSort: 'searchAndSort',
+  pickSlipsPrintTemplate: 'pickSlipsPrintTemplate',
+  searchSlipsPrintTemplate: 'searchSlipsPrintTemplate',
+  singlePrintButton: 'singlePrintButton',
+  rowCheckbox: 'rowCheckbox',
+  selectRequestCheckbox: 'selectRequestCheckbox',
+};
 
+jest.spyOn(React, 'createRef').mockReturnValue(createRefMock);
 jest.spyOn(document, 'getElementById').mockReturnValue(createDocumentRefMock);
 
 jest.mock('query-string', () => ({
@@ -83,6 +95,7 @@ jest.mock('../utils', () => ({
   getFullName: jest.fn(),
   getFormattedYears: jest.fn(),
   getInstanceQueryString: jest.fn(),
+  getNextSelectedRowsState: jest.fn(),
 }));
 jest.mock('./utils', () => ({
   ...jest.requireActual('./utils'),
@@ -130,23 +143,25 @@ jest.mock('../components/RequestsFilters/RequestsFilters', () => ({ onClear }) =
 });
 jest.mock('../ViewRequest', () => jest.fn());
 jest.mock('../RequestForm', () => jest.fn());
-
-jest.mock('../components/PrintButton/SinglePrintButtonForPickSlip', () => {
-  return {
-    __esModule: true,
-    default: jest.fn().mockImplementation(() => {
-      return <div data-testid="mocked-single-print-button" />;
-    })
-  };
-});
-jest.mock('../components/CheckboxColumn/CheckboxColumn', () => {
-  return {
-    __esModule: true,
-    default: jest.fn().mockImplementation(() => {
-      return <div data-testid="mocked-checkbox" />;
-    })
-  };
-});
+jest.mock('../components/SinglePrintButtonForPickSlip', () => jest.fn(({
+  onBeforeGetContentForSinglePrintButton,
+}) => (
+  <button
+    type="button"
+    data-testid={testIds.singlePrintButton}
+    onClick={onBeforeGetContentForSinglePrintButton}
+  >Print
+  </button>
+)));
+jest.mock('../components/CheckboxColumn/CheckboxColumn', () => jest.fn(({
+  toggleRowSelection,
+}) => (
+  <input
+    type="checkbox"
+    onClick={toggleRowSelection}
+    data-testid={testIds.rowCheckbox}
+  />
+)));
 
 global.fetch = jest.fn(() => Promise.resolve({
   json: () => Promise.resolve({
@@ -158,11 +173,6 @@ global.fetch = jest.fn(() => Promise.resolve({
   }),
 }));
 
-const testIds = {
-  searchAndSort: 'searchAndSort',
-  pickSlipsPrintTemplate: 'pickSlipsPrintTemplate',
-  searchSlipsPrintTemplate: 'searchSlipsPrintTemplate',
-};
 const RequestFilterData = {
   onChange: jest.fn(),
 };
@@ -178,6 +188,19 @@ const labelIds = {
   printSearchSlips: 'ui-requests.printSearchSlips',
   titleWithSearch: 'ui-requests.documentTitle.search',
   defaultTitle: 'ui-requests.meta.title',
+  recordsSelected: 'ui-requests.rows.recordsSelected',
+};
+const mockedRequest = {
+  requestLevel: REQUEST_LEVEL_TYPES.ITEM,
+  itemId: 'itemId',
+  instanceId: 'instanceId',
+  item: {
+    barcode: 'itemBarcode',
+  },
+  requester: {
+    barcode: 'requesterBarcode',
+  },
+  id: 'requestId',
 };
 
 SearchAndSort.mockImplementation(jest.fn(({
@@ -201,6 +224,9 @@ SearchAndSort.mockImplementation(jest.fn(({
   renderFilters,
   resultIsSelected,
   viewRecordOnCollapse,
+  customPaneSub,
+  columnMapping,
+  resultsFormatter,
 }) => {
   const onClickActions = () => {
     onDuplicate(records[0]);
@@ -216,6 +242,7 @@ SearchAndSort.mockImplementation(jest.fn(({
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div>
+      <span>{customPaneSub}</span>
       <div id={INPUT_REQUEST_SEARCH_SELECTOR} />
       <div
         aria-hidden="true"
@@ -254,23 +281,18 @@ SearchAndSort.mockImplementation(jest.fn(({
       </div>
       {actionMenu({ onToggle: jest.fn() })}
       <div paneTitleRef={paneTitleRef} />
+      <div>
+        {Object.keys(columnMapping).map(column => columnMapping[column])}
+      </div>
+      <div>
+        {Object.keys(resultsFormatter).map(result => resultsFormatter[result](mockedRequest))}
+      </div>
     </div>
   );
 }));
 
 describe('RequestsRoute', () => {
   const mockedUpdateFunc = jest.fn();
-  const mockedRequest = {
-    requestLevel: REQUEST_LEVEL_TYPES.ITEM,
-    itemId: 'testItemId',
-    instanceId: 'testInstanceId',
-    item: {
-      barcode: 'testItemBarcode',
-    },
-    requester: {
-      barcode: 'testRequesterBarcode',
-    },
-  };
   const mockRecordValues = [
     {
       instance: {
@@ -450,10 +472,11 @@ describe('RequestsRoute', () => {
     requestType: DEFAULT_REQUEST_TYPE_VALUE,
     fulfillmentPreference: 'Hold Shelf',
   };
+  const sendCallout = jest.fn();
 
   const renderComponent = (props = defaultProps) => {
     const { rerender } = render(
-      <CalloutContext.Provider value={{ sendCallout: () => {} }}>
+      <CalloutContext.Provider value={{ sendCallout }}>
         <RequestsRoute {...props} />
       </CalloutContext.Provider>,
     );
@@ -507,7 +530,7 @@ describe('RequestsRoute', () => {
     });
 
     it('should trigger "onChange" after clicking on clear button', async () => {
-      await await userEvent.click(screen.getByRole('button', { name: 'onClear' }));
+      await userEvent.click(screen.getByRole('button', { name: 'onClear' }));
 
       expect(RequestFilterData.onChange).toBeCalled();
     });
@@ -589,6 +612,100 @@ describe('RequestsRoute', () => {
       await userEvent.click(screen.getAllByRole('button', { name: 'onBeforeGetContent' })[1]);
 
       expect(printSearchSlipsLabel).toBeInTheDocument();
+    });
+  });
+
+  describe('Print pick slips', () => {
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    describe('When all rows selected', () => {
+      let selectRequestCheckbox;
+
+      beforeEach(() => {
+        renderComponent(defaultProps);
+
+        selectRequestCheckbox = screen.getByTestId(testIds.selectRequestCheckbox);
+      });
+
+      it('should trigger Checkbox in table header with correct props', () => {
+        const expectedProps = {
+          checked: true,
+        };
+
+        Checkbox.mockClear();
+        fireEvent.click(selectRequestCheckbox);
+
+        expect(Checkbox).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+      });
+
+      it('should trigger CheckboxColumn in table body with correct props', () => {
+        const expectedProps = {
+          selectedRows: {
+            [defaultProps.resources.records.records[0].id]: mockedRequest,
+          },
+        };
+
+        CheckboxColumn.mockClear();
+        fireEvent.click(selectRequestCheckbox);
+
+        expect(CheckboxColumn).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+      });
+
+      it('should render selected records subtitle', () => {
+        const rowCheckbox = screen.getByTestId(testIds.rowCheckbox);
+
+        getNextSelectedRowsState.mockReturnValue(mockedRequest);
+        fireEvent.click(rowCheckbox);
+
+        const recordsSelected = screen.getByText(labelIds.recordsSelected);
+
+        expect(recordsSelected).toBeInTheDocument();
+      });
+
+      it('should send callout', () => {
+        const singlePrintButton = screen.getByTestId(testIds.singlePrintButton);
+
+        sendCallout.mockClear();
+        fireEvent.click(singlePrintButton);
+
+        expect(sendCallout).toHaveBeenCalled();
+      });
+    });
+
+    describe('When all rows unselected', () => {
+      let selectRequestCheckbox;
+
+      beforeEach(() => {
+        renderComponent(defaultProps);
+
+        selectRequestCheckbox = screen.getByTestId(testIds.selectRequestCheckbox);
+
+        fireEvent.click(selectRequestCheckbox);
+      });
+
+      it('should trigger Checkbox in table header with correct props', () => {
+        const expectedProps = {
+          checked: false,
+        };
+
+        Checkbox.mockClear();
+        fireEvent.click(selectRequestCheckbox);
+
+        expect(Checkbox).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+      });
+
+      it('should trigger CheckboxColumn in table body with correct props', () => {
+        const expectedProps = {
+          selectedRows: {},
+        };
+
+        CheckboxColumn.mockClear();
+        fireEvent.click(selectRequestCheckbox);
+
+        expect(CheckboxColumn).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+      });
     });
   });
 
@@ -894,12 +1011,8 @@ describe('RequestsRoute', () => {
     const requestWithoutData = {};
 
     describe('select', () => {
-      it('should return select', () => {
-        expect(listFormatter.select(requestWithData)).toBeTruthy();
-      });
-
-      it('should render CheckboxColumn with the correct props', () => {
-        const rq = {};
+      it('should render CheckboxColumn', () => {
+        const selectedRequest = {};
         const options = {
           selectedRows: [],
           pickSlipsToCheck: [],
@@ -910,21 +1023,17 @@ describe('RequestsRoute', () => {
           onBeforeGetContentForSinglePrintButton: jest.fn(),
         };
         const formatter = getListFormatter({}, options);
-        const result = formatter.select(rq);
+        const result = formatter.select(selectedRequest);
 
         render(result);
 
-        expect(screen.getByTestId('mocked-checkbox')).toBeInTheDocument();
+        expect(screen.getByTestId(testIds.rowCheckbox)).toBeInTheDocument();
       });
     });
 
     describe('singlePrint', () => {
-      it('should render "SinglePrintButtonForPickSlip" with correct props', () => {
-        expect(listFormatter.singlePrint({})).toBeTruthy();
-      });
-
-      it('should render SinglePrintButtonForPickSlip correctly', () => {
-        const rq = {};
+      it('should render SinglePrintButtonForPickSlip', () => {
+        const selectedRequest = {};
         const options = {
           selectedRows: [],
           pickSlipsToCheck: [],
@@ -935,11 +1044,11 @@ describe('RequestsRoute', () => {
           onBeforeGetContentForSinglePrintButton: jest.fn(),
         };
         const formatter = getListFormatter({}, options);
-        const singlePrintButton = formatter.singlePrint(rq);
+        const singlePrintButton = formatter.singlePrint(selectedRequest);
 
         render(singlePrintButton);
 
-        expect(screen.getByTestId('mocked-single-print-button')).toBeInTheDocument();
+        expect(screen.getByTestId(testIds.singlePrintButton)).toBeInTheDocument();
       });
     });
 

@@ -99,7 +99,7 @@ import {
   getFormattedYears,
   getStatusQuery,
 } from './utils';
-import SinglePrintButtonForPickSlip from '../components/PrintButton/SinglePrintButtonForPickSlip';
+import SinglePrintButtonForPickSlip from '../components/SinglePrintButtonForPickSlip';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -209,7 +209,7 @@ export const getListFormatter = (
 ) => ({
   'select': rq => (
     <CheckboxColumn
-      rq={rq}
+      request={rq}
       selectedRows={selectedRows}
       toggleRowSelection={toggleRowSelection}
     />),
@@ -224,7 +224,7 @@ export const getListFormatter = (
   'requester': rq => (rq.requester ? getFullName(rq.requester) : DEFAULT_FORMATTER_VALUE),
   'singlePrint': rq => (
     <SinglePrintButtonForPickSlip
-      rq={rq}
+      request={rq}
       pickSlipsToCheck={pickSlipsToCheck}
       pickSlipsPrintTemplate={pickSlipsPrintTemplate}
       onBeforeGetContentForSinglePrintButton={onBeforeGetContentForSinglePrintButton}
@@ -563,7 +563,6 @@ class RequestsRoute extends React.Component {
         token: this.props.stripes.store.getState().okapi.token,
       })
     };
-
 
     this.getRowURL = this.getRowURL.bind(this);
     this.addRequestFields = this.addRequestFields.bind(this);
@@ -1195,6 +1194,7 @@ class RequestsRoute extends React.Component {
     if (!this.printContentRefs[rqId]) {
       this.printContentRefs[rqId] = React.createRef();
     }
+
     return this.printContentRefs[rqId];
   };
 
@@ -1221,6 +1221,7 @@ class RequestsRoute extends React.Component {
   render() {
     const columnLabels = {
       select: <Checkbox
+        data-testid="selectRequestCheckbox"
         checked={this.getIsAllRowsSelected()}
         aria-label={<FormattedMessage id="ui-requests.instances.rows.select" />}
         onChange={this.toggleAllRows}
@@ -1481,7 +1482,7 @@ class RequestsRoute extends React.Component {
                 requestType: { max: 101 },
                 itemBarcode: { max: 140 },
                 type: { max: 100 },
-                select: { max: 30 }
+                select: { max: 30 },
               }}
               columnMapping={columnLabels}
               resultsRowClickHandlers={false}
