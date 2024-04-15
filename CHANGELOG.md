@@ -6,6 +6,15 @@
 * Hide all actions except "Cancel Request" in Action menu and DCB item links (Borrowing library). Refs UIREQ-1034.
 * Hide all actions except "Cancel Request" in Action menu and DCB item links (Pickup library). Refs UIREQ-1035.
 * Hide Actions menu on closed request of DCB Transaction. Refs UIREQ-1040.
+## [9.0.3](https://github.com/folio-org/ui-requests/tree/v9.0.3) (2024-03-27)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.0.2...v9.0.3)
+
+* Add support for Barcode tag with sanitize. Refs UIREQ-1080, UIREQ-1082.
+
+## [9.0.2](https://github.com/folio-org/ui-requests/tree/v9.0.2) (2024-03-22)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.0.1...v9.0.2)
+
+* Only certain HTML tags should be rendered when displaying staff slips. Refs UIREQ-1080, UIREQ-1082.
 
 ## [9.0.1](https://github.com/folio-org/ui-requests/tree/v9.0.1) (2023-12-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.0.0...v9.0.1)
