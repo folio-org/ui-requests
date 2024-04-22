@@ -287,5 +287,10 @@
     "errors.movingRequestToTheSameItem": "Není povoleno přesunout požadavek na úroveň názvu stránky na stejnou jednotku",
     "errors.itemOfThisInstanceAlreadyRequested": "Tento čtenář již má otevřenou žádanku pro jeden exemplář titulu",
     "documentTitle.search": "Žádanky - {query} - Vyhledat",
-    "item.displaySummary": "Zobrazit souhrn"
+    "item.displaySummary": "Zobrazit souhrn",
+    "requests.singlePrint": "Single Print",
+    "requests.printButtonLabel": "Print",
+    "requests.instances.rows.select": "Select instance",
+    "rows.recordsSelected": "{count, number} {count, plural, one {record} other {records}} selected",
+    "printPickSlipsSelected": "Print selected pick slips for {sp}"
 }

@@ -287,5 +287,10 @@
     "errors.movingRequestToTheSameItem": "Verschieben einer Ausleihbestellung auf Titelebene an dasselbe Exemplar ist nicht zulässig.",
     "errors.itemOfThisInstanceAlreadyRequested": "Offene Bestandanfrage für Benutzer/-in auf ein Exemplar dieser Instanz ist bereits vorhanden.",
     "documentTitle.search": "Bestandsanfragen - {query} - Suche",
-    "item.displaySummary": "Übersicht anzeigen"
+    "item.displaySummary": "Übersicht anzeigen",
+    "requests.singlePrint": "Single Print",
+    "requests.printButtonLabel": "Print",
+    "requests.instances.rows.select": "Select instance",
+    "rows.recordsSelected": "{count, number} {count, plural, one {record} other {records}} selected",
+    "printPickSlipsSelected": "Print selected pick slips for {sp}"
 }

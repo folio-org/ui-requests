@@ -287,5 +287,10 @@
     "errors.movingRequestToTheSameItem": "不允许将标题级传呼请求移到同一单件",
     "errors.itemOfThisInstanceAlreadyRequested": "请求者已有对一个该实例单件的未结请求",
     "documentTitle.search": "请求 - {query} - 搜索",
-    "item.displaySummary": "显示摘要"
+    "item.displaySummary": "显示摘要",
+    "requests.singlePrint": "Single Print",
+    "requests.printButtonLabel": "Print",
+    "requests.instances.rows.select": "Select instance",
+    "rows.recordsSelected": "{count, number} {count, plural, one {record} other {records}} selected",
+    "printPickSlipsSelected": "Print selected pick slips for {sp}"
 }
