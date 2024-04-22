@@ -287,5 +287,10 @@
     "errors.movingRequestToTheSameItem": "Não é permitido mover a solicitação de item disponível ao nível de título para o mesmo item",
     "errors.itemOfThisInstanceAlreadyRequested": "Este solicitante já tem uma solicitação aberta para um dos itens da instância",
     "documentTitle.search": "Solicitações - {query} - Buscar",
-    "item.displaySummary": "Exibir resumo"
+    "item.displaySummary": "Exibir resumo",
+    "requests.singlePrint": "Impressão única",
+    "requests.printButtonLabel": "Imprimir",
+    "requests.instances.rows.select": "Selecionar instância",
+    "rows.recordsSelected": "{count, number} {count, plural, one {registro} other {registros}} selecionados",
+    "printPickSlipsSelected": "Imprimir os comprovantes de retirada selecionados para {sp}"
 }
