@@ -51,6 +51,7 @@ const RequestInformation = ({
   isRequestTypeLoading,
   values,
   form,
+  updateRequestPreferencesFields,
 }) => {
   const isEditForm = isFormEditing(request);
   const holdShelfExpireDate = get(request, ['status'], '') === requestStatuses.AWAITING_PICKUP
@@ -78,6 +79,7 @@ const RequestInformation = ({
     form.change(REQUEST_FORM_FIELD_NAMES.PICKUP_SERVICE_POINT_ID, undefined);
     resetFieldState(form, REQUEST_FORM_FIELD_NAMES.PICKUP_SERVICE_POINT_ID);
     input.onChange(e);
+    updateRequestPreferencesFields();
   };
 
   return (
@@ -256,6 +258,7 @@ RequestInformation.propTypes = {
   request: PropTypes.object.isRequired,
   values: PropTypes.object.isRequired,
   form: PropTypes.object.isRequired,
+  updateRequestPreferencesFields: PropTypes.func.isRequired,
   requestTypeOptions: PropTypes.arrayOf(PropTypes.object),
 };
 
