@@ -68,6 +68,7 @@ const basicProps = {
     patronComments: 'comments',
   },
   MetadataDisplay: () => <div data-testid={testIds.metadataDisplay}>MetadataDisplay</div>,
+  updateRequestPreferencesFields: jest.fn(),
 };
 
 describe('RequestInformation', () => {
@@ -388,6 +389,10 @@ describe('RequestInformation', () => {
         fireEvent.change(requestTypeSelect, event);
       });
 
+      afterEach(() => {
+        basicProps.updateRequestPreferencesFields.mockClear();
+      });
+
       it('should trigger "form.change" with correct arguments', () => {
         const expectedArgs = [REQUEST_FORM_FIELD_NAMES.PICKUP_SERVICE_POINT_ID, undefined];
 
@@ -398,6 +403,10 @@ describe('RequestInformation', () => {
         const expectedArgs = [basicProps.form, REQUEST_FORM_FIELD_NAMES.PICKUP_SERVICE_POINT_ID];
 
         expect(resetFieldState).toHaveBeenCalledWith(...expectedArgs);
+      });
+
+      it('should update request preferences', () => {
+        expect(basicProps.updateRequestPreferencesFields).toHaveBeenCalled();
       });
     });
 

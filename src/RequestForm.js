@@ -639,7 +639,7 @@ class RequestForm extends React.Component {
     }
   }
 
-  updateRequestPreferencesFields() {
+  updateRequestPreferencesFields = () => {
     const {
       defaultDeliveryAddressTypeId,
       defaultServicePointId,
@@ -1340,6 +1340,7 @@ class RequestForm extends React.Component {
                     label={<FormattedMessage id="ui-requests.requestMeta.information" />}
                   >
                     <RequestInformation
+                      updateRequestPreferencesFields={this.updateRequestPreferencesFields}
                       request={request}
                       requestTypeOptions={requestTypeOptions}
                       isTlrEnabledOnEditPage={isTlrEnabledOnEditPage}
