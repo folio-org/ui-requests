@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import HtmlToReact, { Parser } from 'html-to-react';
 import Barcode from 'react-barcode';
+import HtmlToReact, { Parser } from 'html-to-react';
+import { sanitize } from 'dompurify';
 
 const processNodeDefinitions = new HtmlToReact.ProcessNodeDefinitions(React);
 const rules = [
@@ -19,7 +20,7 @@ const rules = [
 const parser = new Parser();
 
 const ComponentToPrint = ({ dataSource, templateFn }) => {
-  const componentStr = templateFn(dataSource);
+  const componentStr = sanitize(templateFn(dataSource), { ADD_TAGS: ['Barcode'] });
   const Component = parser.parseWithInstructions(componentStr, () => true, rules) || null;
 
   return Component;

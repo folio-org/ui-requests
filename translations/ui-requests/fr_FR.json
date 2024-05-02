@@ -131,7 +131,6 @@
     "cancellationReason": "Motif de l'annulation",
     "cancellationAdditionalInformation": "Informations complémentaires sur l'utilisateur",
     "printPickSlips": "Imprimer les bordereaux de prélèvement pour {sp}",
-    "common.saveAndClose": "Sauvegarder et fermer",
     "item.effectiveLocation": "Emplacement",
     "requestMeta.tags": "Mots-clés",
     "filters.requestType.holds": "Demandes/Réservations",
@@ -288,5 +287,10 @@
     "errors.movingRequestToTheSameItem": "Not allowed to move title level page request to the same item",
     "errors.itemOfThisInstanceAlreadyRequested": "This requester already has an open request for one of the instance's items",
     "documentTitle.search": "Requests - {query} - Search",
-    "item.displaySummary": "Display summary"
+    "item.displaySummary": "Display summary",
+    "requests.singlePrint": "Single Print",
+    "requests.printButtonLabel": "Print",
+    "requests.instances.rows.select": "Select instance",
+    "rows.recordsSelected": "{count, number} {count, plural, one {record} other {records}} selected",
+    "printPickSlipsSelected": "Print selected pick slips for {sp}"
 }

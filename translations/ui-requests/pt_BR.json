@@ -40,7 +40,7 @@
     "actions.selectAddressType": "Selecione o tipo de endereço",
     "actions.selectPickupLoc": "Selecione a localização de retirada",
     "actions.loading": "Carregando...",
-    "cancel.cancelRequest": "Cancelar pedido",
+    "cancel.cancelRequest": "Requisição cancelada",
     "cancel.modalLabel": "Confirme o cancelamento da solicitação",
     "cancel.requestWillBeCancelled": "<b>{title}</b> será <b>cancelado</b>",
     "cancel.reasonLabel": "Razão para o cancelamento",
@@ -131,7 +131,6 @@
     "cancellationReason": "Motivo do cancelamento",
     "cancellationAdditionalInformation": "Informações adicionais para o usuário",
     "printPickSlips": "Imprimir ficha de encaminhamento para {sp}",
-    "common.saveAndClose": "Salvar e fechar",
     "item.effectiveLocation": "Localização efetiva",
     "requestMeta.tags": "Tags",
     "filters.requestType.holds": "Reservas",
@@ -288,5 +287,10 @@
     "errors.movingRequestToTheSameItem": "Não é permitido mover a solicitação de item disponível ao nível de título para o mesmo item",
     "errors.itemOfThisInstanceAlreadyRequested": "Este solicitante já tem uma solicitação aberta para um dos itens da instância",
     "documentTitle.search": "Solicitações - {query} - Buscar",
-    "item.displaySummary": "Exibir resumo"
+    "item.displaySummary": "Exibir resumo",
+    "requests.singlePrint": "Impressão única",
+    "requests.printButtonLabel": "Imprimir",
+    "requests.instances.rows.select": "Selecionar instância",
+    "rows.recordsSelected": "{count, number} {count, plural, one {registro} other {registros}} selecionados",
+    "printPickSlipsSelected": "Imprimir os comprovantes de retirada selecionados para {sp}"
 }

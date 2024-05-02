@@ -1,6 +1,19 @@
 # Change history for ui-requests
 
-## [9.1.0] in progress
+## 9.2.0 IN PROGRESS
+
+* Use settings/entries endpoint to get settings information. Refs UIREQ-1062.
+* Use Save & close button label stripes-component translation key. Refs UIREQ-1073.
+* Include single print and selection print options on results list and actions menu. Refs UIREQ-966.
+* Set up default pickup service point if it is available. Refs UIREQ-1095.
+
+## [9.1.1] (https://github.com/folio-org/ui-checkin/tree/v9.1.1) (2024-03-27)
+[Full Changelog](https://github.com/folio-org/ui-checkin/compare/v9.1.0...v9.1.1)
+
+* Add support for Barcode tag with sanitize. Refs UIREQ-1080, UIREQ-1082.
+
+## [9.1.0](https://github.com/folio-org/ui-requests/tree/v9.1.0) (2024-03-22)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.0.2...v9.1.0)
 
 * Hide all actions except "Cancel Request" in Action menu (Lending library). Refs UIREQ-1032.
 * Hide all actions except "Cancel Request" in Action menu and DCB item links (Borrowing library). Refs UIREQ-1034.
@@ -12,7 +25,6 @@
 * Increase code coverage for src/RequestForm.js by Jest/RTL tests. Refs UIREQ-1043.
 * Add functionality to handle page title on the requests list page. Refs UIREQ-1058.
 * Error in Export Hold Shelf Clearance Report. Refs UIREQ-1057.
-* Use settings/entries endpoint to get settings information. Refs UIREQ-1062.
 * Make updating of TLR settings when settings config is changed. Refs UIREQ-1063.
 * Increase code coverage for src/components/RequestsFilters/RequestsFilters.js by Jest/RTL tests. Refs UIREQ-1051.
 * Use `getFullName` for requester. Refs UIREQ-1064.
@@ -20,6 +32,18 @@
 * Increase code coverage for src/index.js by Jest/RTL tests. Refs UIREQ-1047.
 * Add displaySummary field for Requests csv export. Refs UIREQ-1068.
 * Add support for displaySummary token for Staff Slips. Refs UIREQ-1067.
+* Only certain HTML tags should be rendered when displaying staff slips. Refs UIREQ-1080.
+
+## [9.0.3](https://github.com/folio-org/ui-requests/tree/v9.0.3) (2024-03-27)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.0.2...v9.0.3)
+
+* Add support for Barcode tag with sanitize. Refs UIREQ-1080, UIREQ-1082.
+
+## [9.0.2](https://github.com/folio-org/ui-requests/tree/v9.0.2) (2024-03-22)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.0.1...v9.0.2)
+
+* Only certain HTML tags should be rendered when displaying staff slips. Refs UIREQ-1080, UIREQ-1082.
+
 
 ## [9.0.1](https://github.com/folio-org/ui-requests/tree/v9.0.1) (2023-12-04)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.0.0...v9.0.1)

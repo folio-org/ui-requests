@@ -13,8 +13,8 @@
     "actions.editRequestLink": "Editar Diálogo de Solicitud",
     "errors.itemBarcodeDoesNotExist": "El artículo con este código de barras no existe",
     "errors.userBarcodeDoesNotExist": "El usuario con este código de barras no existe",
-    "errors.onlyCheckedOutForRecall": "Sólo se pueden retirar los artículos desprotegidos",
-    "errors.onlyCheckedOutForHold": "Sólo se pueden retener los artículos desprotegidos",
+    "errors.onlyCheckedOutForRecall": "Sólo se pueden retirar los ítems desprotegidos",
+    "errors.onlyCheckedOutForHold": "Sólo se pueden retener los ítems desprotegidos",
     "errors.selectItem": "Por favor seleccione un artículo",
     "errors.selectUser": "Por favor seleccione un solicitante",
     "actions.closeNewRequest": "Cerrar Nueva Solicitud",
@@ -131,7 +131,6 @@
     "cancellationReason": "Motivo de la cancelación",
     "cancellationAdditionalInformation": "Información adicional para el usuario",
     "printPickSlips": "Imprimir recibos para {sp}",
-    "common.saveAndClose": "Guardar & cerrar",
     "item.effectiveLocation": "Localización efectiva",
     "requestMeta.tags": "Etiquetas",
     "filters.requestType.holds": "Reservas",
@@ -288,5 +287,10 @@
     "errors.movingRequestToTheSameItem": "Not allowed to move title level page request to the same item",
     "errors.itemOfThisInstanceAlreadyRequested": "This requester already has an open request for one of the instance's items",
     "documentTitle.search": "Requests - {query} - Search",
-    "item.displaySummary": "Display summary"
+    "item.displaySummary": "Display summary",
+    "requests.singlePrint": "Single Print",
+    "requests.printButtonLabel": "Print",
+    "requests.instances.rows.select": "Select instance",
+    "rows.recordsSelected": "{count, number} {count, plural, one {record} other {records}} selected",
+    "printPickSlipsSelected": "Print selected pick slips for {sp}"
 }

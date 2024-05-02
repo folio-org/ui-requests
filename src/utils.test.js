@@ -29,6 +29,11 @@ import {
   resetFieldState,
   getRequestTypeOptions,
   isVirtualItem,
+  getSelectedSlipData,
+  getSelectedSlipDataMulti,
+  selectedRowsNonPrintable,
+  isPrintable,
+  getNextSelectedRowsState,
 } from './utils';
 
 import {
@@ -41,6 +46,48 @@ import {
   REQUEST_ERROR_MESSAGE_CODE,
   REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS,
 } from './constants';
+
+const pickSlipsForSinglePrint = [
+  {
+    request: {
+      requestID: '123',
+    },
+  },
+  {
+    request: {
+      requestID: '456',
+    },
+  },
+];
+const pickSlipsDataForSinglePrint = [
+  {
+    'request.requestID': '1',
+  },
+  {
+    'request.requestID': '2',
+  },
+  {
+    'request.requestID': '3',
+  },
+];
+const pickSlipsDataWithRequest = [
+  {
+    'request.requestID': '1',
+    data: 'slip1',
+  },
+  {
+    'request.requestID': '2',
+    data: 'slip2',
+  },
+  {
+    'request.requestID': '3',
+    data: 'slip3',
+  },
+];
+const rowForSinglePrint = {
+  id: 1,
+  name: 'John Doe',
+};
 
 describe('escapeValue', () => {
   it('escapes values', () => {
@@ -566,6 +613,187 @@ describe('isFormEditing', () => {
     it('should return true', () => {
       expect(isFormEditing({})).toBe(false);
     });
+  });
+});
+
+describe('getNextSelectedRowsState', () => {
+  it('should add a row to selectedRows if not selected', () => {
+    const selectedRows = {};
+    const result = getNextSelectedRowsState(selectedRows, rowForSinglePrint);
+
+    expect(result).toEqual({ [rowForSinglePrint.id]: rowForSinglePrint });
+  });
+
+  it('should remove a row from selectedRows if already selected', () => {
+    const selectedRows = { [rowForSinglePrint.id]: rowForSinglePrint };
+    const result = getNextSelectedRowsState(selectedRows, rowForSinglePrint);
+
+    expect(result).toEqual({});
+  });
+
+  it('should not mutate the original selectedRows object', () => {
+    const selectedRows = { [rowForSinglePrint.id]: rowForSinglePrint };
+    const result = getNextSelectedRowsState(selectedRows, rowForSinglePrint);
+
+    expect(selectedRows).toEqual({ [rowForSinglePrint.id]: rowForSinglePrint });
+    expect(result).not.toBe(selectedRows);
+  });
+});
+describe('isPrintable', () => {
+  it('should return true when pickSlips contain a match for requestId', () => {
+    const requestId = '123';
+    const result = isPrintable(requestId, pickSlipsForSinglePrint);
+
+    expect(result).toBe(true);
+  });
+
+  it('should return false when pickSlips do not contain a match for requestId', () => {
+    const requestId = '789';
+    const result = isPrintable(requestId, pickSlipsForSinglePrint);
+
+    expect(result).toBe(false);
+  });
+
+  it('should return false when pickSlips is undefined', () => {
+    const requestId = '123';
+    const pickSlipsUndefined = undefined;
+    const result = isPrintable(requestId, pickSlipsUndefined);
+
+    expect(result).toBe(false);
+  });
+});
+
+describe('getSelectedSlipData', () => {
+  const pickSlipsData = [
+    {
+      'request.requestID': 1,
+      data: 'some data 1',
+    },
+    {
+      'request.requestID': 2,
+      data: 'some data 2',
+    },
+    {
+      'request.requestID': 3,
+      data: 'some data 3',
+    },
+  ];
+
+  it('should return an empty array if selectedRequestId is not found', () => {
+    const selectedRequestId = 999;
+    const result = getSelectedSlipData(pickSlipsData, selectedRequestId);
+
+    expect(result).toEqual([]);
+  });
+
+  it('should return an array with the selected slip data if found', () => {
+    const selectedRequestId = 2;
+    const result = getSelectedSlipData(pickSlipsData, selectedRequestId);
+    const expectedResult = [
+      {
+        'request.requestID': 2,
+        data: 'some data 2',
+      }
+    ];
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  it('should return an array even if only one matching slip is found', () => {
+    const selectedRequestId = 3;
+    const result = getSelectedSlipData(pickSlipsData, selectedRequestId);
+    const expectedResult = [
+      {
+        'request.requestID': 3,
+        data: 'some data 3',
+      }
+    ];
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  it('should handle an empty pickSlipsData array', () => {
+    const selectedRequestId = 1;
+    const result = getSelectedSlipData([], selectedRequestId);
+
+    expect(result).toEqual([]);
+  });
+});
+
+describe('selectedRowsNonPrintable', () => {
+  it('should return true when selectedRows is empty', () => {
+    const selectedRows = {};
+    const result = selectedRowsNonPrintable(pickSlipsDataForSinglePrint, selectedRows);
+
+    expect(result).toBe(true);
+  });
+
+  it('should return true when no matching rows are selected', () => {
+    const selectedRows = {
+      '4': true,
+      '5': true,
+    };
+    const result = selectedRowsNonPrintable(pickSlipsDataForSinglePrint, selectedRows);
+
+    expect(result).toBe(true);
+  });
+
+  it('should return false when at least one matching row is selected', () => {
+    const selectedRows = {
+      '2': true,
+      '4': true,
+    };
+    const result = selectedRowsNonPrintable(pickSlipsDataWithRequest, selectedRows);
+
+    expect(result).toBe(false);
+  });
+});
+
+describe('getSelectedSlipDataMulti', () => {
+  it('should return an empty array when selectedRows is empty', () => {
+    const pickSlipsData = [
+      {
+        'request.requestID': '1',
+      },
+      {
+        'request.requestID': '2',
+      },
+    ];
+    const selectedRows = {};
+    const result = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
+
+    expect(result).toEqual([]);
+  });
+
+  it('should return selected pickSlipsData when there are matching entries in selectedRows', () => {
+    const selectedRows = {
+      '1': true,
+      '3': true,
+    };
+    const result = getSelectedSlipDataMulti(pickSlipsDataWithRequest, selectedRows);
+
+    expect(result).toEqual(
+      [
+        {
+          'request.requestID': '1',
+          data: 'slip1',
+        },
+        {
+          'request.requestID': '3',
+          data: 'slip3',
+        },
+      ]
+    );
+  });
+
+  it('should return an empty array when there are no matching entries in selectedRows', () => {
+    const selectedRows = {
+      '4': true,
+      '5': true,
+    };
+    const result = getSelectedSlipDataMulti(pickSlipsDataWithRequest, selectedRows);
+
+    expect(result).toEqual([]);
   });
 });
 
