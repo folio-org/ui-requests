@@ -66,6 +66,7 @@ import {
   INPUT_REQUEST_SEARCH_SELECTOR,
   SETTINGS_SCOPES,
   SETTINGS_KEYS,
+  ITEM_QUERIES, REQUEST_ACTION_NAMES,
 } from '../constants';
 import {
   buildUrl,
@@ -80,6 +81,7 @@ import {
   getSelectedSlipDataMulti,
   selectedRowsNonPrintable,
   getNextSelectedRowsState,
+  getRequestConfig,
 } from '../utils';
 import packageInfo from '../../package';
 import CheckboxColumn from '../components/CheckboxColumn';
@@ -119,29 +121,56 @@ export const getPrintHoldRequestsEnabled = (printHoldRequests) => {
 export const urls = {
   user: (value, idType) => {
     const query = stringify({ query: `(${idType}=="${value}")` });
-    return `users?${query}`;
+
+    return {
+      url: `users?${query}`,
+    };
   },
-  item: (value, idType) => {
+  item: (value, idType, stripes) => {
     let query;
+    const itemQueryParam = ITEM_QUERIES[idType];
+    const {
+      url,
+      headers,
+    } = getRequestConfig(REQUEST_ACTION_NAMES.GET_ITEM_INFORMATION, stripes);
 
     if (isArray(value)) {
-      query = `(${value.map((valueItem) => `${idType}=="${valueItem}"`).join(' or ')})`;
+      query = `(${value.map((valueItem) => `${itemQueryParam}=="${valueItem}"`).join(' or ')})`;
     } else {
-      query = `(${idType}=="${value}")`;
+      query = `(${itemQueryParam}=="${value}")`;
     }
 
-    query = stringify({ query });
-    return `inventory/items?${query}`;
-  },
-  instance: (value) => {
-    const query = stringify({ query: getInstanceQueryString(value) });
+    query = stringify({
+      query,
+      expandAll: true, // todo: check if we need expandAll param here
+    });
 
-    return `inventory/instances?${query}`;
+    return {
+      url: `${url}?${query}`,
+      headers,
+    };
+  },
+  instance: (value, idType, stripes) => {
+    const query = stringify({
+      query: getInstanceQueryString(value),
+      expandAll: true, // todo: check if we need expandAll param here
+    });
+    const {
+      url,
+      headers,
+    } = getRequestConfig(REQUEST_ACTION_NAMES.GET_INSTANCE_INFORMATION, stripes);
+
+    return {
+      url: `${url}?${query}`,
+      headers,
+    };
   },
   loan: (value) => {
     const query = stringify({ query: `(itemId=="${value}") and status.name==Open` });
 
-    return `circulation/loans?${query}`;
+    return {
+      url: `circulation/loans?${query}`,
+    };
   },
   requestsForItem: (value) => {
     const statusQuery = getStatusQuery(OPEN_REQUESTS_STATUSES);
@@ -150,7 +179,9 @@ export const urls = {
       limit: MAX_RECORDS,
     });
 
-    return `circulation/requests?${query}`;
+    return {
+      url: `circulation/requests?${query}`,
+    };
   },
   requestsForInstance: (value) => {
     const statusQuery = getStatusQuery(OPEN_REQUESTS_STATUSES);
@@ -159,17 +190,23 @@ export const urls = {
       limit: MAX_RECORDS,
     });
 
-    return `circulation/requests?${query}`;
+    return {
+      url: `circulation/requests?${query}`,
+    };
   },
   requestPreferences: (value) => {
     const query = stringify({ query: `(userId=="${value}")` });
 
-    return `request-preference-storage/request-preference?${query}`;
+    return {
+      url: `request-preference-storage/request-preference?${query}`,
+    };
   },
   holding: (value, idType) => {
     const query = stringify({ query: `(${idType}=="${value}")` });
 
-    return `holdings-storage/holdings?${query}`;
+    return {
+      url: `holdings-storage/holdings?${query}`,
+    };
   },
   requestTypes: ({
     requesterId,
@@ -177,12 +214,21 @@ export const urls = {
     instanceId,
     requestId,
     operation,
-  }) => {
+    tenantId, // tenantId of item or instance
+  }, stripes) => {
+    const {
+      url,
+      headers,
+    } = getRequestConfig(REQUEST_ACTION_NAMES.GET_SERVICE_POINTS, stripes, tenantId);
+
     if (requestId) {
-      return `circulation/requests/allowed-service-points?operation=${operation}&requestId=${requestId}`;
+      return {
+        url: `${url}?operation=${operation}&requestId=${requestId}`,
+        headers,
+      };
     }
 
-    let requestUrl = `circulation/requests/allowed-service-points?requesterId=${requesterId}&operation=${operation}`;
+    let requestUrl = `${url}?requesterId=${requesterId}&operation=${operation}`;
 
     if (itemId) {
       requestUrl = `${requestUrl}&itemId=${itemId}`;
@@ -190,7 +236,10 @@ export const urls = {
       requestUrl = `${requestUrl}&instanceId=${instanceId}`;
     }
 
-    return requestUrl;
+    return {
+      url: requestUrl,
+      headers,
+    };
   },
 };
 
@@ -337,27 +386,6 @@ class RequestsRoute extends React.Component {
         query: 'query=(pickupLocation==true) sortby name',
         limit: MAX_RECORDS,
       },
-    },
-    itemUniquenessValidator: {
-      type: 'okapi',
-      records: 'items',
-      accumulate: 'true',
-      path: 'inventory/items',
-      fetch: false,
-    },
-    userUniquenessValidator: {
-      type: 'okapi',
-      records: 'users',
-      accumulate: 'true',
-      path: 'users',
-      fetch: false,
-    },
-    instanceUniquenessValidator: {
-      type: 'okapi',
-      records: 'instances',
-      accumulate: true,
-      path: 'inventory/instances',
-      fetch: false,
     },
     patronBlocks: {
       type: 'okapi',
@@ -839,9 +867,16 @@ class RequestsRoute extends React.Component {
 
   // idType can be 'id', 'barcode', etc.
   findResource(resource, value, idType = 'id') {
-    const query = urls[resource](value, idType);
+    const { stripes } = this.props;
+    const {
+      url,
+      headers,
+    } = urls[resource](value, idType, stripes);
 
-    return fetch(`${this.okapiUrl}/${query}`, this.httpHeadersOptions).then(response => response.json());
+    return fetch(`${this.okapiUrl}/${url}`, {
+      headers: headers || this.httpHeadersOptions.headers,
+      credentials: this.httpHeadersOptions.credentials,
+    }).then(response => response.json());
   }
 
   toggleModal() {
@@ -939,10 +974,22 @@ class RequestsRoute extends React.Component {
   };
 
   create = (data) => {
+    const { stripes } = this.props;
     const query = new URLSearchParams(this.props.location.search);
     const mode = query.get('mode');
+    const {
+      url,
+      headers,
+      credentials,
+    } = getRequestConfig(REQUEST_ACTION_NAMES.CREATE_REQUEST, stripes, data.tenantId);
 
-    return this.props.mutator.records.POST(data)
+    return fetch(`${this.okapiUrl}/${url}`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers,
+      credentials,
+    })
+    // return this.props.mutator.records.POST(data)
       .then(() => {
         this.closeLayer();
 
