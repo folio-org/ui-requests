@@ -61,6 +61,7 @@ import {
   MAX_RECORDS,
   REQUEST_OPERATIONS,
   INPUT_REQUEST_SEARCH_SELECTOR,
+  ITEM_QUERIES,
 } from '../constants';
 import { historyData } from '../../test/jest/fixtures/historyData';
 
@@ -1231,7 +1232,7 @@ describe('RequestsRoute', () => {
 
   describe('urls', () => {
     const mockedQueryValue = 'testQuery';
-    const idType = 'idType';
+    const idType = 'id';
 
     beforeEach(() => {
       stringify.mockReturnValue(mockedQueryValue);
@@ -1271,14 +1272,14 @@ describe('RequestsRoute', () => {
 
         it('should trigger "stringify" with correct argument', () => {
           const expectedArgument = {
-            query: `(${idType}=="${value[0]}" or ${idType}=="${value[1]}")`,
+            query: `(${ITEM_QUERIES[idType]}=="${value[0]}" or ${ITEM_QUERIES[idType]}=="${value[1]}")`,
           };
 
           expect(stringify).toHaveBeenCalledWith(expectedArgument);
         });
 
         it('should return correct url', () => {
-          const expectedResult = `inventory/items?${mockedQueryValue}`;
+          const expectedResult = `circulation/items-by-instance?${mockedQueryValue}`;
 
           expect(queryString).toBe(expectedResult);
         });
@@ -1294,14 +1295,14 @@ describe('RequestsRoute', () => {
 
         it('should trigger "stringify" with correct argument', () => {
           const expectedArgument = {
-            query: `(${idType}=="${value}")`,
+            query: `(${ITEM_QUERIES[idType]}=="${value}")`,
           };
 
           expect(stringify).toHaveBeenCalledWith(expectedArgument);
         });
 
         it('should return correct url', () => {
-          const expectedResult = `inventory/items?${mockedQueryValue}`;
+          const expectedResult = `circulation/items-by-instance?${mockedQueryValue}`;
 
           expect(queryString).toBe(expectedResult);
         });
@@ -1331,7 +1332,7 @@ describe('RequestsRoute', () => {
       });
 
       it('should return correct url', () => {
-        const expectedResult = `inventory/instances?${mockedQueryValue}`;
+        const expectedResult = `circulation/items-by-instance?${mockedQueryValue}`;
 
         expect(queryString).toBe(expectedResult);
       });

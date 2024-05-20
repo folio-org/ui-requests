@@ -86,28 +86,17 @@ const ItemsDialog = ({
   const [items, setItems] = useState([]);
   const { formatMessage } = useIntl();
 
-  const fetchHoldings = () => {
-    const query = `instanceId==${instanceId}`;
-    mutator.holdings.reset();
+  const fetchItems = () => {
+    const query = `id==${instanceId}`;
 
-    return mutator.holdings.GET({ params: { query, limit: MAX_RECORDS } });
-  };
+    mutator.items.reset();
 
-  const fetchItems = async (holdings) => {
-    const chunkedItems = chunk(holdings, CHUNK_SIZE);
-    const data = [];
-
-    for (const itemChunk of chunkedItems) {
-      const query = itemChunk.map(i => `holdingsRecordId==${i.id}`).join(' or ');
-
-      mutator.items.reset();
-      // eslint-disable-next-line no-await-in-loop
-      const result = await mutator.items.GET({ params: { query, limit: MAX_RECORDS } });
-
-      data.push(...result);
-    }
-
-    return data;
+    return mutator.items.GET({
+      params: {
+        query,
+        limit: MAX_RECORDS,
+      },
+    });
   };
 
   const fetchRequests = async (itemsList) => {
@@ -136,8 +125,7 @@ const ItemsDialog = ({
     const getItems = async () => {
       setAreItemsBeingLoaded(true);
 
-      const holdings = await fetchHoldings();
-      let itemsList = await fetchItems(holdings);
+      let itemsList = await fetchItems();
 
       if (skippedItemId) {
         itemsList = itemsList.filter(item => requestableItemStatuses.includes(item.status?.name));
@@ -229,17 +217,10 @@ const ItemsDialog = ({
 };
 
 ItemsDialog.manifest = {
-  holdings: {
-    type: 'okapi',
-    records: 'holdingsRecords',
-    path: 'holdings-storage/holdings',
-    accumulate: true,
-    fetch: false,
-  },
   items: {
     type: 'okapi',
     records: 'items',
-    path: 'inventory/items',
+    path: 'circulation/items-by-instance',
     accumulate: true,
     fetch: false,
   },
@@ -265,10 +246,6 @@ ItemsDialog.propTypes = {
   skippedItemId: PropTypes.string,
   onRowClick: PropTypes.func,
   mutator: PropTypes.shape({
-    holdings: PropTypes.shape({
-      GET: PropTypes.func.isRequired,
-      reset: PropTypes.func.isRequired,
-    }).isRequired,
     items: PropTypes.shape({
       GET: PropTypes.func.isRequired,
       reset: PropTypes.func.isRequired,

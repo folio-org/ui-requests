@@ -775,7 +775,7 @@ class RequestForm extends React.Component {
     if (isValidation) {
       return findResource(RESOURCE_TYPES.ITEM, value, key)
         .then((result) => {
-          return result.totalRecords;
+          return result?.items?.length;
         })
         .finally(() => {
           this.setState({ isItemOrInstanceLoading: false });
@@ -790,7 +790,7 @@ class RequestForm extends React.Component {
         .then((result) => {
           this.setItemIdRequest(key, isBarcodeRequired);
 
-          if (!result || result.totalRecords === 0) {
+          if (!result || result?.items?.length === 0) {
             this.setState({
               isItemOrInstanceLoading: false,
             });
@@ -798,21 +798,21 @@ class RequestForm extends React.Component {
             return null;
           }
 
-          const item = result.items[0];
+          const foundItem = result.items?.find(item => item[key] === value);
 
-          form.change(REQUEST_FORM_FIELD_NAMES.ITEM_ID, item.id);
-          form.change(REQUEST_FORM_FIELD_NAMES.ITEM_BARCODE, item.barcode);
+          form.change(REQUEST_FORM_FIELD_NAMES.ITEM_ID, foundItem.id);
+          form.change(REQUEST_FORM_FIELD_NAMES.ITEM_BARCODE, foundItem.barcode);
           resetFieldState(form, REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE);
 
           // Setting state here is redundant with what follows, but it lets us
           // display the matched item as quickly as possible, without waiting for
           // the slow loan and request lookups
-          onSetSelectedItem(item);
+          onSetSelectedItem(foundItem);
           this.setState({
             isItemOrInstanceLoading: false,
           });
 
-          return item;
+          return foundItem;
         })
         .then(item => {
           if (item && selectedUser?.id) {
@@ -826,7 +826,7 @@ class RequestForm extends React.Component {
   }
 
   findInstanceRelatedResources(instance) {
-    if (!instance) {
+    if (!instance?.id) {
       return null;
     }
 
@@ -861,7 +861,7 @@ class RequestForm extends React.Component {
     if (isValidation) {
       return findResource(RESOURCE_TYPES.INSTANCE, resultInstanceId)
         .then((result) => {
-          return result.totalRecords;
+          return Boolean(result?.id);
         })
         .finally(() => {
           this.setState({ isItemOrInstanceLoading: false });
@@ -873,16 +873,14 @@ class RequestForm extends React.Component {
       });
 
       return findResource(RESOURCE_TYPES.INSTANCE, resultInstanceId)
-        .then((result) => {
-          if (!result || result.totalRecords === 0) {
+        .then((instance) => {
+          if (!instance?.id) {
             this.setState({
               isItemOrInstanceLoading: false,
             });
 
             return null;
           }
-
-          const instance = result.instances[0];
 
           form.change(REQUEST_FORM_FIELD_NAMES.INSTANCE_ID, instance.id);
           form.change(REQUEST_FORM_FIELD_NAMES.INSTANCE_HRID, instance.hrid);

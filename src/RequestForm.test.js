@@ -1233,7 +1233,6 @@ describe('RequestForm', () => {
             },
           };
           const itemResult = {
-            totalRecords: 1,
             items: [
               {
                 id: 'itemId',
@@ -1375,7 +1374,6 @@ describe('RequestForm', () => {
 
         describe('When item is not found', () => {
           const itemResult = {
-            totalRecords: 0,
             items: [],
           };
           let findResource;
@@ -1473,7 +1471,6 @@ describe('RequestForm', () => {
       const initialItemId = 'itemId';
       const updatedItemId = 'updatedItemId';
       const itemResult = {
-        totalRecords: 0,
         items: [],
       };
 
@@ -1558,13 +1555,8 @@ describe('RequestForm', () => {
           },
         };
         const instanceResult = {
-          totalRecords: 1,
-          instances: [
-            {
-              id: initialInstanceId,
-              hrid: 'hrid',
-            }
-          ],
+          id: initialInstanceId,
+          hrid: 'hrid',
         };
         const requestTypesResult = {
           'Page': [
@@ -1617,8 +1609,8 @@ describe('RequestForm', () => {
 
         it('should set instance information', () => {
           const expectedArgs = [
-            [REQUEST_FORM_FIELD_NAMES.INSTANCE_ID, instanceResult.instances[0].id],
-            [REQUEST_FORM_FIELD_NAMES.INSTANCE_HRID, instanceResult.instances[0].hrid]
+            [REQUEST_FORM_FIELD_NAMES.INSTANCE_ID, instanceResult.id],
+            [REQUEST_FORM_FIELD_NAMES.INSTANCE_HRID, instanceResult.hrid]
           ];
 
           expectedArgs.forEach(args => {
@@ -1635,14 +1627,14 @@ describe('RequestForm', () => {
         it('should get information about open instance requests', () => {
           const expectedArgs = [
             'requestsForInstance',
-            instanceResult.instances[0].id
+            instanceResult.id
           ];
 
           expect(findResource).toHaveBeenCalledWith(...expectedArgs);
         });
 
         it('should set selected instance', () => {
-          expect(basicProps.onSetSelectedInstance).toHaveBeenCalledWith(instanceResult.instances[0]);
+          expect(basicProps.onSetSelectedInstance).toHaveBeenCalledWith(instanceResult);
         });
 
         it('should handle instance id field change', () => {
@@ -1665,10 +1657,7 @@ describe('RequestForm', () => {
       });
 
       describe('When instance is not found', () => {
-        const instanceResult = {
-          totalRecords: 0,
-          instances: [],
-        };
+        const instanceResult = {};
         let findResource;
 
         beforeEach(() => {
