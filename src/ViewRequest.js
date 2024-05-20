@@ -70,6 +70,10 @@ import {
 import urls from './routes/urls';
 
 const CREATE_SUCCESS = 'CREATE_SUCCESS';
+const ECS_REQUEST_PHASE = {
+  PRIMARY: 'Primary',
+  SECONDARY: 'Secondary',
+};
 
 class ViewRequest extends React.Component {
   static manifest = {
@@ -127,7 +131,9 @@ class ViewRequest extends React.Component {
         other: PropTypes.shape({
           totalRecords: PropTypes.number,
         }),
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(PropTypes.shape({
+          ecsRequestPhase: PropTypes.object,
+        })),
       }),
     }),
     query: PropTypes.object,
@@ -468,7 +474,8 @@ class ViewRequest extends React.Component {
       item,
       requester
     } = request;
-
+    const isEcsTlrPrimaryRequest = request?.ecsRequestPhase === ECS_REQUEST_PHASE.PRIMARY;
+    const isEcsTlrSecondaryRequest = request?.ecsRequestPhase === ECS_REQUEST_PHASE.SECONDARY;
     const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');
     const isRequestClosed = requestStatus.startsWith('Closed');
@@ -533,8 +540,7 @@ class ViewRequest extends React.Component {
       return (
         <>
           <IfPermission perm="ui-requests.edit">
-            {
-              isRequestValid && !isDCBTransaction &&
+            {isRequestValid && !isDCBTransaction && !isEcsTlrSecondaryRequest &&
               <Button
                 buttonStyle="dropdownItem"
                 id="clickable-edit-request"
@@ -549,21 +555,22 @@ class ViewRequest extends React.Component {
                 </Icon>
               </Button>
             }
-            <Button
-              buttonStyle="dropdownItem"
-              id="clickable-cancel-request"
-              onClick={() => {
-                this.setState({ isCancellingRequest: true });
-                onToggle();
-              }}
-            >
-              <Icon icon="times-circle">
-                <FormattedMessage id="ui-requests.cancel.cancelRequest" />
-              </Icon>
-            </Button>
+            {!isEcsTlrSecondaryRequest &&
+              <Button
+                buttonStyle="dropdownItem"
+                id="clickable-cancel-request"
+                onClick={() => {
+                  this.setState({ isCancellingRequest: true });
+                  onToggle();
+                }}
+              >
+                <Icon icon="times-circle">
+                  <FormattedMessage id="ui-requests.cancel.cancelRequest" />
+                </Icon>
+              </Button>
+            }
           </IfPermission>
-          {
-            isRequestValid && !isDCBTransaction &&
+          {isRequestValid && !isDCBTransaction &&
             <IfPermission perm="ui-requests.create">
               <Button
                 id="duplicate-request"
@@ -579,7 +586,7 @@ class ViewRequest extends React.Component {
               </Button>
             </IfPermission>
           }
-          {item && isRequestNotFilled && isRequestValid && !isDCBTransaction &&
+          {item && isRequestNotFilled && isRequestValid && !isDCBTransaction && !isEcsTlrPrimaryRequest && !isEcsTlrSecondaryRequest &&
             <IfPermission perm="ui-requests.moveRequest">
               <Button
                 id="move-request"
@@ -593,8 +600,9 @@ class ViewRequest extends React.Component {
                   <FormattedMessage id="ui-requests.actions.moveRequest" />
                 </Icon>
               </Button>
-            </IfPermission> }
-          {isRequestOpen && isRequestValid && !isDCBTransaction &&
+            </IfPermission>
+          }
+          {isRequestOpen && isRequestValid && !isDCBTransaction && !isEcsTlrSecondaryRequest &&
             <IfPermission perm="ui-requests.reorderQueue">
               <Button
                 id="reorder-queue"
@@ -608,7 +616,8 @@ class ViewRequest extends React.Component {
                   <FormattedMessage id="ui-requests.actions.reorderQueue" />
                 </Icon>
               </Button>
-            </IfPermission> }
+            </IfPermission>
+          }
         </>
       );
     };

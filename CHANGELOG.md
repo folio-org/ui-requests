@@ -6,6 +6,10 @@
 * Use Save & close button label stripes-component translation key. Refs UIREQ-1073.
 * Include single print and selection print options on results list and actions menu. Refs UIREQ-966.
 * Set up default pickup service point if it is available. Refs UIREQ-1095.
+* Requests app.: Editing requests (ECS with mod-tlr enabled). Refs UIREQ-1088.
+* Requests app.: Cancelling request (ECS with mod-tlr enabled). Refs UIREQ-1090.
+* Requests app.: Reorder request queue (ECS with mod-tlr enabled). Refs UIREQ-1098.
+* Requests app.: Moving request (ECS with mod-tlr enabled). Refs UIREQ-1100.
 * Use `circulation/items-by-instance` endpoint to get item and instance information. Refs UIREQ-1091.
 
 ## [9.1.1] (https://github.com/folio-org/ui-checkin/tree/v9.1.1) (2024-03-27)
