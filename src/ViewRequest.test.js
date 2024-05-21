@@ -39,6 +39,7 @@ describe('ViewRequest', () => {
     edit: 'ui-requests.actions.edit',
     moveRequest: 'ui-requests.actions.moveRequest',
     reorderQueue: 'ui-requests.actions.reorderQueue',
+    requestDetailTitle: 'ui-requests.request.detail.title',
   };
   const mockedRequest = {
     instance: {
@@ -159,6 +160,10 @@ describe('ViewRequest', () => {
 
     afterEach(() => {
       RequestForm.mockClear();
+    });
+
+    it('should render request detail title', () => {
+      expect(screen.getByText(labelIds.requestDetailTitle)).toBeInTheDocument();
     });
 
     describe('when work with request editing', () => {

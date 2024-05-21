@@ -638,7 +638,7 @@ class ViewRequest extends React.Component {
         id="instance-details"
         data-test-instance-details
         defaultWidth={this.props.paneWidth}
-        paneTitle={<FormattedMessage id="ui-requests.requestMeta.detailLabel" />}
+        paneTitle={<FormattedMessage id="ui-requests.request.detail.title" />}
         lastMenu={this.renderDetailMenu(request)}
         dismissible
         {... (showActionMenu ? { actionMenu } : {})}
@@ -834,7 +834,7 @@ class ViewRequest extends React.Component {
       <Pane
         id="request-details"
         defaultWidth={this.props.paneWidth}
-        paneTitle={<FormattedMessage id="ui-requests.requestMeta.detailLabel" />}
+        paneTitle={<FormattedMessage id="ui-requests.request.detail.title" />}
         lastMenu={this.renderDetailMenu()}
         dismissible
         onClose={this.props.onClose}
