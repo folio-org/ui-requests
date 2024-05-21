@@ -6,6 +6,7 @@
 * Include single print and selection print options on results list and actions menu. Refs UIREQ-966.
 * Set up default pickup service point if it is available. Refs UIREQ-1095.
 * Remove bigtests from github actions. Refs UIREQ-1099.
+* Fix Request detail pane capitalization. Refs UIREQ-1106.
 
 ## [9.1.1] (https://github.com/folio-org/ui-checkin/tree/v9.1.1) (2024-03-27)
 [Full Changelog](https://github.com/folio-org/ui-checkin/compare/v9.1.0...v9.1.1)
