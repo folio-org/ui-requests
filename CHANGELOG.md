@@ -10,6 +10,7 @@
 * Requests app.: Cancelling request (ECS with mod-tlr enabled). Refs UIREQ-1090.
 * Requests app.: Reorder request queue (ECS with mod-tlr enabled). Refs UIREQ-1098.
 * Requests app.: Moving request (ECS with mod-tlr enabled). Refs UIREQ-1100.
+* Hide Action menu on secondary requests (ECS + mod-tlr). Refs UIREQ-1105.
 * Use `circulation/items-by-instance` endpoint to get item and instance information. Refs UIREQ-1091.
 
 ## [9.1.1] (https://github.com/folio-org/ui-checkin/tree/v9.1.1) (2024-03-27)

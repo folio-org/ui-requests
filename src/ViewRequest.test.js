@@ -10,7 +10,9 @@ import {
   defaultKeyboardShortcuts,
 } from '@folio/stripes/components';
 
-import ViewRequest from './ViewRequest';
+import ViewRequest, {
+  isActionMenuVisible,
+} from './ViewRequest';
 import RequestForm from './RequestForm';
 import {
   INVALID_REQUEST_HARDCODED_ID,
@@ -491,6 +493,40 @@ describe('ViewRequest', () => {
           expect(defaultProps.stripes.hasPerm).toHaveBeenCalled();
         });
       });
+    });
+  });
+
+  describe('isActionMenuVisible', () => {
+    let stripes = {
+      hasPerm: () => true,
+    };
+
+    it('should return false when isEcsTlrSecondaryRequest true', () => {
+      expect(isActionMenuVisible(stripes, true, true)).toBeFalsy();
+    });
+
+    it('should return true when isDCBTransaction false and all permission true', () => {
+      expect(isActionMenuVisible(stripes, false, false)).toBeTruthy();
+    });
+
+    it('should return true when isDCBTransaction true and all permission true', () => {
+      expect(isActionMenuVisible(stripes, false, true)).toBeTruthy();
+    });
+
+    it('should return true when isDCBTransaction false and all permission false', () => {
+      stripes = {
+        hasPerm: () => false,
+      };
+
+      expect(isActionMenuVisible(stripes, false, false)).toBeTruthy();
+    });
+
+    it('should return true when isDCBTransaction true and all permission false', () => {
+      stripes = {
+        hasPerm: () => false,
+      };
+
+      expect(isActionMenuVisible(stripes, false, true)).toBeFalsy();
     });
   });
 });

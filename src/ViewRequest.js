@@ -75,6 +75,16 @@ const ECS_REQUEST_PHASE = {
   SECONDARY: 'Secondary',
 };
 
+export const isActionMenuVisible = (stripes, isEcsTlrSecondaryRequest, isDCBTransaction) => (
+  isEcsTlrSecondaryRequest
+    ? false
+    : stripes.hasPerm('ui-requests.create')
+    || stripes.hasPerm('ui-requests.edit')
+    || stripes.hasPerm('ui-requests.moveRequest')
+    || stripes.hasPerm('ui-requests.reorderQueue')
+    || !isDCBTransaction
+);
+
 class ViewRequest extends React.Component {
   static manifest = {
     selectedRequest: {
@@ -508,10 +518,7 @@ class ViewRequest extends React.Component {
       ? <FormattedDate value={request.requestExpirationDate} />
       : '-';
 
-    const showActionMenu = stripes.hasPerm('ui-requests.create')
-      || stripes.hasPerm('ui-requests.edit')
-      || stripes.hasPerm('ui-requests.moveRequest')
-      || stripes.hasPerm('ui-requests.reorderQueue') || !isDCBTransaction;
+    const showActionMenu = isActionMenuVisible(stripes, isEcsTlrSecondaryRequest, isDCBTransaction);
 
     const actionMenu = ({ onToggle }) => {
       if (isRequestClosed) {
