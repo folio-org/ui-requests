@@ -54,7 +54,7 @@
   "requests.printButtonLabel": "Print",
   "requests.instances.rows.select": "Select instance",
 
-  "requestMeta.detailLabel": "Request Detail",
+  "request.detail.title": "Request details",
   "requestMeta.information": "Request information",
   "requestMeta.type": "Request type",
   "requestMeta.type.recall": "Recall",

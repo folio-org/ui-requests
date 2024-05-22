@@ -288,9 +288,9 @@
     "errors.itemOfThisInstanceAlreadyRequested": "This requester already has an open request for one of the instance's items",
     "documentTitle.search": "Requests - {query} - Search",
     "item.displaySummary": "Display summary",
-    "requests.singlePrint": "Single Print",
-    "requests.printButtonLabel": "Print",
-    "requests.instances.rows.select": "Select instance",
-    "rows.recordsSelected": "{count, number} {count, plural, one {record} other {records}} selected",
-    "printPickSlipsSelected": "Print selected pick slips for {sp}"
+    "requests.singlePrint": "Impresión única",
+    "requests.printButtonLabel": "Imprimir",
+    "requests.instances.rows.select": "Seleccionar instancia",
+    "rows.recordsSelected": "{count, number} {count, plural, one {registro} other {registros}} seleccionados",
+    "printPickSlipsSelected": "Imprimir hojas de selección seleccionadas para {sp}"
 }

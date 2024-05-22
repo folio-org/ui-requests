@@ -6,11 +6,13 @@
 * Use Save & close button label stripes-component translation key. Refs UIREQ-1073.
 * Include single print and selection print options on results list and actions menu. Refs UIREQ-966.
 * Set up default pickup service point if it is available. Refs UIREQ-1095.
+* Remove bigtests from github actions. Refs UIREQ-1099.
 * Requests app.: Editing requests (ECS with mod-tlr enabled). Refs UIREQ-1088.
 * Requests app.: Cancelling request (ECS with mod-tlr enabled). Refs UIREQ-1090.
 * Requests app.: Reorder request queue (ECS with mod-tlr enabled). Refs UIREQ-1098.
 * Requests app.: Moving request (ECS with mod-tlr enabled). Refs UIREQ-1100.
 * Hide Action menu on secondary requests (ECS + mod-tlr). Refs UIREQ-1105.
+* Fix Request detail pane capitalization. Refs UIREQ-1106.
 
 ## [9.1.1] (https://github.com/folio-org/ui-checkin/tree/v9.1.1) (2024-03-27)
 [Full Changelog](https://github.com/folio-org/ui-checkin/compare/v9.1.0...v9.1.1)
