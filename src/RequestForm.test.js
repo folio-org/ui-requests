@@ -309,22 +309,14 @@ describe('RequestForm', () => {
       });
 
       describe('Initial render', () => {
-        const holding = {
-          holdingsRecords: [
-            {
-              instanceId: 'instanceId',
-            }
-          ],
-        };
         const selectedItem = {
+          instanceId: 'instanceId',
           holdingsRecordId: 'holdingsRecordId',
         };
         let findResource;
 
         beforeEach(() => {
-          findResource = jest.fn()
-            .mockResolvedValueOnce(holding)
-            .mockResolvedValueOnce(null);
+          findResource = jest.fn().mockResolvedValueOnce(null);
 
           const props = {
             ...basicProps,
@@ -364,8 +356,8 @@ describe('RequestForm', () => {
           expect(basicProps.onSetSelectedItem).toHaveBeenCalledWith(undefined);
         });
 
-        it('should get instance id if it is not provided', () => {
-          const expectedArgs = [RESOURCE_TYPES.HOLDING, selectedItem.holdingsRecordId];
+        it('should get instance information', () => {
+          const expectedArgs = [RESOURCE_TYPES.INSTANCE, selectedItem.instanceId];
           const tlrCheckbox = screen.getByTestId(testIds.tlrCheckbox);
 
           fireEvent.click(tlrCheckbox);
