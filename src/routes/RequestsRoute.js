@@ -3,6 +3,8 @@ import {
   isEmpty,
   isArray,
   size,
+  unset,
+  cloneDeep,
 } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -67,6 +69,7 @@ import {
   SETTINGS_SCOPES,
   SETTINGS_KEYS,
   ITEM_QUERIES,
+  REQUEST_ACTION_NAMES,
 } from '../constants';
 import {
   buildUrl,
@@ -81,6 +84,8 @@ import {
   getSelectedSlipDataMulti,
   selectedRowsNonPrintable,
   getNextSelectedRowsState,
+  getRequestConfig,
+  isMultiDataTenant,
 } from '../utils';
 import packageInfo from '../../package';
 import CheckboxColumn from '../components/CheckboxColumn';
@@ -120,7 +125,10 @@ export const getPrintHoldRequestsEnabled = (printHoldRequests) => {
 export const urls = {
   user: (value, idType) => {
     const query = stringify({ query: `(${idType}=="${value}")` });
-    return `users?${query}`;
+
+    return {
+      url: `users?${query}`,
+    };
   },
   item: (value, idType) => {
     let query;
@@ -136,17 +144,23 @@ export const urls = {
 
     query = stringify({ query });
 
-    return `circulation/items-by-instance?${query}`;
+    return {
+      url: `circulation/items-by-instance?${query}`,
+    };
   },
   instance: (value) => {
     const query = stringify({ query: getInstanceQueryString(value) });
 
-    return `circulation/items-by-instance?${query}`;
+    return {
+      url: `circulation/items-by-instance?${query}`,
+    };
   },
   loan: (value) => {
     const query = stringify({ query: `(itemId=="${value}") and status.name==Open` });
 
-    return `circulation/loans?${query}`;
+    return {
+      url: `circulation/loans?${query}`,
+    };
   },
   requestsForItem: (value) => {
     const statusQuery = getStatusQuery(OPEN_REQUESTS_STATUSES);
@@ -155,7 +169,9 @@ export const urls = {
       limit: MAX_RECORDS,
     });
 
-    return `circulation/requests?${query}`;
+    return {
+      url: `circulation/requests?${query}`,
+    };
   },
   requestsForInstance: (value) => {
     const statusQuery = getStatusQuery(OPEN_REQUESTS_STATUSES);
@@ -164,17 +180,23 @@ export const urls = {
       limit: MAX_RECORDS,
     });
 
-    return `circulation/requests?${query}`;
+    return {
+      url: `circulation/requests?${query}`,
+    };
   },
   requestPreferences: (value) => {
     const query = stringify({ query: `(userId=="${value}")` });
 
-    return `request-preference-storage/request-preference?${query}`;
+    return {
+      url: `request-preference-storage/request-preference?${query}`,
+    };
   },
   holding: (value, idType) => {
     const query = stringify({ query: `(${idType}=="${value}")` });
 
-    return `holdings-storage/holdings?${query}`;
+    return {
+      url: `holdings-storage/holdings?${query}`,
+    };
   },
   requestTypes: ({
     requesterId,
@@ -182,12 +204,21 @@ export const urls = {
     instanceId,
     requestId,
     operation,
-  }) => {
+    tenantId, // tenantId of item or instance
+  }, idType, stripes) => {
+    const {
+      url,
+      headers,
+    } = getRequestConfig(REQUEST_ACTION_NAMES.GET_SERVICE_POINTS, stripes, tenantId);
+
     if (requestId) {
-      return `circulation/requests/allowed-service-points?operation=${operation}&requestId=${requestId}`;
+      return {
+        url: `${url}?operation=${operation}&requestId=${requestId}`,
+        headers,
+      };
     }
 
-    let requestUrl = `circulation/requests/allowed-service-points?requesterId=${requesterId}&operation=${operation}`;
+    let requestUrl = `${url}?requesterId=${requesterId}&operation=${operation}`;
 
     if (itemId) {
       requestUrl = `${requestUrl}&itemId=${itemId}`;
@@ -195,7 +226,10 @@ export const urls = {
       requestUrl = `${requestUrl}&instanceId=${instanceId}`;
     }
 
-    return requestUrl;
+    return {
+      url: requestUrl,
+      headers,
+    };
   },
 };
 
@@ -823,9 +857,16 @@ class RequestsRoute extends React.Component {
 
   // idType can be 'id', 'barcode', etc.
   findResource(resource, value, idType = 'id') {
-    const query = urls[resource](value, idType);
+    const { stripes } = this.props;
+    const {
+      url,
+      headers,
+    } = urls[resource](value, idType, stripes);
 
-    return fetch(`${this.okapiUrl}/${query}`, this.httpHeadersOptions).then(response => response.json());
+    return fetch(`${this.okapiUrl}/${url}`, {
+      headers: headers || this.httpHeadersOptions.headers,
+      credentials: this.httpHeadersOptions.credentials,
+    }).then(response => response.json());
   }
 
   toggleModal() {
@@ -922,11 +963,23 @@ class RequestsRoute extends React.Component {
     this.props.mutator.activeRecord.update({ patronId: patron.id });
   };
 
-  create = (data) => {
+  create = (requestData, userData) => {
+    const { stripes } = this.props;
     const query = new URLSearchParams(this.props.location.search);
     const mode = query.get('mode');
+    const {
+      url,
+      headers,
+      credentials,
+    } = getRequestConfig(REQUEST_ACTION_NAMES.CREATE_REQUEST, stripes, requestData.tenantId); // todo: check tenantId
 
-    return this.props.mutator.records.POST(data)
+    // todo: maybe unset of payload should be done here. Should be double checked when all functionality will be ready.
+    return fetch(`${this.okapiUrl}/${url}`, {
+      method: 'POST',
+      body: JSON.stringify(requestData),
+      headers,
+      credentials,
+    })
       .then(() => {
         this.closeLayer();
 
@@ -935,13 +988,13 @@ class RequestsRoute extends React.Component {
             ? (
               <FormattedMessage
                 id="ui-requests.duplicateRequest.success"
-                values={{ requester: generateUserName(data.requester.personal) }}
+                values={{ requester: generateUserName(userData) }}
               />
             )
             : (
               <FormattedMessage
                 id="ui-requests.createRequest.success"
-                values={{ requester: generateUserName(data.requester.personal) }}
+                values={{ requester: generateUserName(userData) }}
               />
             ),
         });

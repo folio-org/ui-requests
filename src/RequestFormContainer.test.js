@@ -10,8 +10,13 @@ import {
   REQUEST_LEVEL_TYPES,
   fulfillmentTypeMap,
 } from './constants';
+import { isMultiDataTenant } from './utils';
 
 jest.mock('./RequestForm', () => jest.fn(() => <div />));
+jest.mock('./utils', () => ({
+  ...jest.requireActual('./utils'),
+  isMultiDataTenant: jest.fn(() => false),
+}));
 
 const defaultProps = {
   parentResources: {},
@@ -89,6 +94,9 @@ describe('RequestFormContainer', () => {
       keyOfInstanceIdField: 0,
       keyOfRequestTypeField: 0,
     };
+    const requester = {
+      personal: {},
+    };
 
     describe('When item level request', () => {
       const requestExpirationDate = new Date().toISOString();
@@ -96,6 +104,9 @@ describe('RequestFormContainer', () => {
         ...basicSubmitData,
         requestLevel: REQUEST_LEVEL_TYPES.ITEM,
         fulfillmentPreference: fulfillmentTypeMap.HOLD_SHELF,
+        item: {},
+        itemId: 'itemId',
+        requester,
         requestExpirationDate,
       };
       const props = {
@@ -109,8 +120,7 @@ describe('RequestFormContainer', () => {
         holdingsRecordId: 'holdingsRecordId',
       };
       const selectItemLabel = 'Select Item';
-
-      beforeEach(() => {
+      const triggerSubmit = () => {
         RequestForm.mockImplementation(({
           onSubmit,
           onSetSelectedItem,
@@ -138,24 +148,60 @@ describe('RequestFormContainer', () => {
         const selectItemButton = screen.getByText(selectItemLabel);
 
         fireEvent.click(selectItemButton);
+      };
+
+      describe('When single tenant env', () => {
+        beforeEach(() => {
+          triggerSubmit();
+        });
+
+        it('should submit form data', () => {
+          const expectedArgs = [
+            {
+              holdingsRecordId: selectedItem.holdingsRecordId,
+              fulfillmentPreference: fulfillmentTypeMap.HOLD_SHELF,
+              instanceId: defaultProps.request.instanceId,
+              requestLevel: REQUEST_LEVEL_TYPES.ITEM,
+              pickupServicePointId: submitData.pickupServicePointId,
+              item: submitData.item,
+              itemId: submitData.itemId,
+              requestExpirationDate,
+              requester,
+            },
+            requester.personal,
+          ];
+          const requestForm = screen.getByTestId(testIds.requestForm);
+
+          fireEvent.submit(requestForm);
+
+          expect(defaultProps.onSubmit).toHaveBeenCalledWith(...expectedArgs);
+        });
       });
 
-      it('should submit form data', () => {
-        const expectedArg = {
-          holdingsRecordId: selectedItem.holdingsRecordId,
-          fulfillmentPreference: fulfillmentTypeMap.HOLD_SHELF,
-          instanceId: defaultProps.request.instanceId,
-          requestLevel: REQUEST_LEVEL_TYPES.ITEM,
-          pickupServicePointId: submitData.pickupServicePointId,
-          item: submitData.item,
-          itemId: submitData.itemId,
-          requestExpirationDate,
-        };
-        const requestForm = screen.getByTestId(testIds.requestForm);
+      describe('When multi tenant env', () => {
+        beforeEach(() => {
+          isMultiDataTenant.mockReturnValueOnce(true);
+          triggerSubmit();
+        });
 
-        fireEvent.submit(requestForm);
+        it('should submit form data', () => {
+          const expectedArgs = [
+            {
+              fulfillmentPreference: fulfillmentTypeMap.HOLD_SHELF,
+              instanceId: defaultProps.request.instanceId,
+              requestLevel: REQUEST_LEVEL_TYPES.ITEM,
+              pickupServicePointId: submitData.pickupServicePointId,
+              itemId: submitData.itemId,
+              requestExpirationDate,
+            },
+            requester.personal,
+          ];
+          const requestForm = screen.getByTestId(testIds.requestForm);
 
-        expect(defaultProps.onSubmit).toHaveBeenCalledWith(expectedArg);
+          fireEvent.submit(requestForm);
+
+          expect(defaultProps.onSubmit).toHaveBeenCalledWith(...expectedArgs);
+        });
       });
     });
 
@@ -165,6 +211,7 @@ describe('RequestFormContainer', () => {
         requestLevel: REQUEST_LEVEL_TYPES.TITLE,
         fulfillmentPreference: fulfillmentTypeMap.DELIVERY,
         createTitleLevelRequest: true,
+        requester,
       };
       const props = {
         ...defaultProps,
@@ -209,17 +256,21 @@ describe('RequestFormContainer', () => {
       });
 
       it('should submit form data', () => {
-        const expectedArg = {
-          fulfillmentPreference: fulfillmentTypeMap.DELIVERY,
-          instanceId: selectedInstance.id,
-          requestLevel: REQUEST_LEVEL_TYPES.TITLE,
-          deliveryAddressTypeId: submitData.deliveryAddressTypeId,
-        };
+        const expectedArgs = [
+          {
+            fulfillmentPreference: fulfillmentTypeMap.DELIVERY,
+            instanceId: selectedInstance.id,
+            requestLevel: REQUEST_LEVEL_TYPES.TITLE,
+            deliveryAddressTypeId: submitData.deliveryAddressTypeId,
+            requester,
+          },
+          requester.personal,
+        ];
         const requestForm = screen.getByTestId(testIds.requestForm);
 
         fireEvent.submit(requestForm);
 
-        expect(defaultProps.onSubmit).toHaveBeenCalledWith(expectedArg);
+        expect(defaultProps.onSubmit).toHaveBeenCalledWith(...expectedArgs);
       });
     });
 
@@ -229,6 +280,7 @@ describe('RequestFormContainer', () => {
         requestLevel: REQUEST_LEVEL_TYPES.TITLE,
         fulfillmentPreference: fulfillmentTypeMap.DELIVERY,
         createTitleLevelRequest: true,
+        requester,
       };
       const overridePatronBlocksLabel = 'Override patron blocks';
 
@@ -263,22 +315,26 @@ describe('RequestFormContainer', () => {
       });
 
       it('should submit form data', () => {
-        const expectedArg = {
-          fulfillmentPreference: fulfillmentTypeMap.DELIVERY,
-          instanceId: defaultProps.request.instanceId,
-          requestLevel: REQUEST_LEVEL_TYPES.TITLE,
-          deliveryAddressTypeId: submitData.deliveryAddressTypeId,
-          requestProcessingParameters: {
-            overrideBlocks: {
-              patronBlock: {},
+        const expectedArgs = [
+          {
+            fulfillmentPreference: fulfillmentTypeMap.DELIVERY,
+            instanceId: defaultProps.request.instanceId,
+            requestLevel: REQUEST_LEVEL_TYPES.TITLE,
+            deliveryAddressTypeId: submitData.deliveryAddressTypeId,
+            requestProcessingParameters: {
+              overrideBlocks: {
+                patronBlock: {},
+              },
             },
+            requester,
           },
-        };
+          requester.personal,
+        ];
         const requestForm = screen.getByTestId(testIds.requestForm);
 
         fireEvent.submit(requestForm);
 
-        expect(defaultProps.onSubmit).toHaveBeenCalledWith(expectedArg);
+        expect(defaultProps.onSubmit).toHaveBeenCalledWith(...expectedArgs);
       });
     });
 
@@ -349,6 +405,7 @@ describe('RequestFormContainer', () => {
         createTitleLevelRequest: true,
         holdShelfExpirationDate: new Date().toDateString(),
         holdShelfExpirationTime,
+        requester,
       };
 
       beforeEach(() => {
@@ -369,19 +426,23 @@ describe('RequestFormContainer', () => {
       });
 
       it('should submit form data', () => {
-        const expectedArg = {
-          fulfillmentPreference: fulfillmentTypeMap.DELIVERY,
-          instanceId: defaultProps.request.instanceId,
-          requestLevel: REQUEST_LEVEL_TYPES.TITLE,
-          deliveryAddressTypeId: submitData.deliveryAddressTypeId,
-          holdShelfExpirationTime,
-          holdShelfExpirationDate: expect.any(String),
-        };
+        const expectedArgs = [
+          {
+            fulfillmentPreference: fulfillmentTypeMap.DELIVERY,
+            instanceId: defaultProps.request.instanceId,
+            requestLevel: REQUEST_LEVEL_TYPES.TITLE,
+            deliveryAddressTypeId: submitData.deliveryAddressTypeId,
+            holdShelfExpirationTime,
+            holdShelfExpirationDate: expect.any(String),
+            requester,
+          },
+          requester.personal,
+        ];
         const requestForm = screen.getByTestId(testIds.requestForm);
 
         fireEvent.submit(requestForm);
 
-        expect(defaultProps.onSubmit).toHaveBeenCalledWith(expectedArg);
+        expect(defaultProps.onSubmit).toHaveBeenCalledWith(...expectedArgs);
       });
     });
   });

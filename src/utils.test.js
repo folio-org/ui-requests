@@ -3,6 +3,8 @@ import {
   noop,
 } from 'lodash';
 
+import { getHeaderWithCredentials } from '@folio/stripes/util';
+
 import {
   buildTemplate,
   createUserHighlightBoxLink,
@@ -34,6 +36,9 @@ import {
   selectedRowsNonPrintable,
   isPrintable,
   getNextSelectedRowsState,
+  isMultiDataTenant,
+  getRequestConfig,
+  getTenantId,
 } from './utils';
 
 import {
@@ -45,6 +50,9 @@ import {
   DCB_HOLDINGS_RECORD_ID,
   REQUEST_ERROR_MESSAGE_CODE,
   REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS,
+  REQUEST_ACTION_NAMES,
+  MULTI_TENANT_URLS,
+  SINGLE_TENANT_URLS,
 } from './constants';
 
 const pickSlipsForSinglePrint = [
@@ -1081,5 +1089,197 @@ describe('getRequestTypeOptions', () => {
     ];
 
     expect(getRequestTypeOptions(requestTypes)).toEqual(expectedResult);
+  });
+});
+
+describe('isMultiDataTenant', () => {
+  describe('When multi data tenant', () => {
+    const stripes = {
+      hasInterface: () => true,
+    };
+
+    it('should return true', () => {
+      const result = isMultiDataTenant(stripes);
+
+      expect(result).toBe(true);
+    });
+  });
+
+  describe('When single data tenant', () => {
+    const stripes = {
+      hasInterface: () => false,
+    };
+
+    it('should return false', () => {
+      const result = isMultiDataTenant(stripes);
+
+      expect(result).toBe(false);
+    });
+  });
+});
+
+describe('getTenantId', () => {
+  describe('When current tenant is central tenant', () => {
+    const tenantId = 'id';
+    const stripes = {
+      okapi: {
+        tenant: tenantId,
+      },
+      user: {
+        user: {
+          tenants: [
+            {
+              id: tenantId,
+              isPrimary: true,
+            }
+          ],
+        },
+      },
+    };
+
+    it('should return central tenant id', () => {
+      const result = getTenantId(stripes, 'tenantId');
+
+      expect(result).toBe(tenantId);
+    });
+  });
+
+  describe('When passed tenantId is central tenant', () => {
+    const tenantId = 'id';
+    const stripes = {
+      okapi: {
+        tenant: 'tenantId',
+      },
+      user: {
+        user: {
+          tenants: [
+            {
+              id: tenantId,
+              isPrimary: true,
+            }
+          ],
+        },
+      },
+    };
+
+    it('should return central tenant id', () => {
+      const result = getTenantId(stripes, tenantId);
+
+      expect(result).toBe(tenantId);
+    });
+  });
+
+  describe('When passed tenantId is not equal current tenant id', () => {
+    const tenantId = 'id';
+    const centralTenantId = 'tenantId_2';
+    const stripes = {
+      okapi: {
+        tenant: 'tenantId',
+      },
+      user: {
+        user: {
+          tenants: [
+            {
+              id: centralTenantId,
+              isPrimary: true,
+            }
+          ],
+        },
+      },
+    };
+
+    it('should return central tenant id', () => {
+      const result = getTenantId(stripes, tenantId);
+
+      expect(result).toBe(centralTenantId);
+    });
+  });
+
+  describe('When tenantId is not passed', () => {
+    const tenantId = 'id';
+    const stripes = {
+      okapi: {
+        tenant: tenantId,
+      },
+      user: {
+        user: {
+          tenants: [
+            {
+              id: 'tenantId',
+              isPrimary: true,
+            }
+          ],
+        },
+      },
+    };
+
+    it('should return central tenant id', () => {
+      const result = getTenantId(stripes);
+
+      expect(result).toBe(tenantId);
+    });
+  });
+});
+
+describe('getRequestConfig', () => {
+  getHeaderWithCredentials.mockImplementation(({
+    tenant,
+    token,
+  }) => ({
+    tenant,
+    token,
+  }));
+
+  describe('When multi tenant env', () => {
+    const tenantId = 'id';
+    const stripes = {
+      hasInterface: () => true,
+      okapi: {
+        tenant: tenantId,
+        token: 'token',
+      },
+      user: {
+        user: {
+          tenants: [
+            {
+              id: tenantId,
+              isPrimary: true,
+            }
+          ],
+        },
+      },
+    };
+
+    it('should return multi tenant config', () => {
+      const config = getRequestConfig(REQUEST_ACTION_NAMES.CREATE_REQUEST, stripes, tenantId);
+      const expectedResult = {
+        url: MULTI_TENANT_URLS[REQUEST_ACTION_NAMES.CREATE_REQUEST],
+        tenant: tenantId,
+        token: stripes.okapi.token,
+      };
+
+      expect(config).toEqual(expectedResult);
+    });
+  });
+
+  describe('When single tenant env', () => {
+    const stripes = {
+      hasInterface: () => false,
+      okapi: {
+        tenant: 'tenant',
+        token: 'token',
+      },
+    };
+
+    it('should return multi tenant config', () => {
+      const config = getRequestConfig(REQUEST_ACTION_NAMES.CREATE_REQUEST, stripes);
+      const expectedResult = {
+        url: SINGLE_TENANT_URLS[REQUEST_ACTION_NAMES.CREATE_REQUEST],
+        tenant: stripes.okapi.tenant,
+        token: stripes.okapi.token,
+      };
+
+      expect(config).toEqual(expectedResult);
+    });
   });
 });

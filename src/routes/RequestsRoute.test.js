@@ -81,6 +81,11 @@ const testIds = {
   rowCheckbox: 'rowCheckbox',
   selectRequestCheckbox: 'selectRequestCheckbox',
 };
+const requestConfig = {
+  url: 'url',
+  headers: {},
+  credentials: {},
+};
 
 jest.spyOn(React, 'createRef').mockReturnValue(createRefMock);
 jest.spyOn(document, 'getElementById').mockReturnValue(createDocumentRefMock);
@@ -97,6 +102,7 @@ jest.mock('../utils', () => ({
   getFormattedYears: jest.fn(),
   getInstanceQueryString: jest.fn(),
   getNextSelectedRowsState: jest.fn(),
+  getRequestConfig: jest.fn(() => requestConfig),
 }));
 jest.mock('./utils', () => ({
   ...jest.requireActual('./utils'),
@@ -203,6 +209,11 @@ const mockedRequest = {
   },
   id: 'requestId',
 };
+const userData = {
+  requester: {
+    personal: {},
+  }
+};
 
 SearchAndSort.mockImplementation(jest.fn(({
   paneTitleRef,
@@ -228,6 +239,7 @@ SearchAndSort.mockImplementation(jest.fn(({
   customPaneSub,
   columnMapping,
   resultsFormatter,
+  onCreate,
 }) => {
   const onClickActions = () => {
     onDuplicate(records[0]);
@@ -278,6 +290,11 @@ SearchAndSort.mockImplementation(jest.fn(({
             values: ['Value4', 'Value5']
           })}
         >onFilterChange
+        </button>
+        <button
+          type="button"
+          onClick={() => onCreate({}, userData)}
+        >Create request
         </button>
       </div>
       {actionMenu({ onToggle: jest.fn() })}
@@ -613,6 +630,23 @@ describe('RequestsRoute', () => {
       await userEvent.click(screen.getAllByRole('button', { name: 'onBeforeGetContent' })[1]);
 
       expect(printSearchSlipsLabel).toBeInTheDocument();
+    });
+
+    it('should handle request creation', () => {
+      const createRequestButton = screen.getByText('Create request');
+      const expectedArgs = [
+        `${defaultProps.stripes.okapi.url}/${requestConfig.url}`,
+        {
+          method: 'POST',
+          body: JSON.stringify({}),
+          headers: requestConfig.headers,
+          credentials: requestConfig.credentials,
+        }
+      ];
+
+      fireEvent.click(createRequestButton);
+
+      expect(global.fetch).toHaveBeenCalledWith(...expectedArgs);
     });
   });
 
@@ -1255,9 +1289,11 @@ describe('RequestsRoute', () => {
       });
 
       it('should return correct url', () => {
-        const expectedResult = `users?${mockedQueryValue}`;
+        const expectedResult = {
+          url: `users?${mockedQueryValue}`,
+        };
 
-        expect(queryString).toBe(expectedResult);
+        expect(queryString).toEqual(expectedResult);
       });
     });
 
@@ -1279,9 +1315,11 @@ describe('RequestsRoute', () => {
         });
 
         it('should return correct url', () => {
-          const expectedResult = `circulation/items-by-instance?${mockedQueryValue}`;
+          const expectedResult = {
+            url: `circulation/items-by-instance?${mockedQueryValue}`,
+          };
 
-          expect(queryString).toBe(expectedResult);
+          expect(queryString).toEqual(expectedResult);
         });
       });
 
@@ -1302,9 +1340,11 @@ describe('RequestsRoute', () => {
         });
 
         it('should return correct url', () => {
-          const expectedResult = `circulation/items-by-instance?${mockedQueryValue}`;
+          const expectedResult = {
+            url: `circulation/items-by-instance?${mockedQueryValue}`,
+          };
 
-          expect(queryString).toBe(expectedResult);
+          expect(queryString).toEqual(expectedResult);
         });
       });
     });
@@ -1332,9 +1372,11 @@ describe('RequestsRoute', () => {
       });
 
       it('should return correct url', () => {
-        const expectedResult = `circulation/items-by-instance?${mockedQueryValue}`;
+        const expectedResult = {
+          url: `circulation/items-by-instance?${mockedQueryValue}`,
+        };
 
-        expect(queryString).toBe(expectedResult);
+        expect(queryString).toEqual(expectedResult);
       });
     });
 
@@ -1355,9 +1397,11 @@ describe('RequestsRoute', () => {
       });
 
       it('should return correct url', () => {
-        const expectedResult = `circulation/loans?${mockedQueryValue}`;
+        const expectedResult = {
+          url: `circulation/loans?${mockedQueryValue}`,
+        };
 
-        expect(queryString).toBe(expectedResult);
+        expect(queryString).toEqual(expectedResult);
       });
     });
 
@@ -1385,9 +1429,11 @@ describe('RequestsRoute', () => {
       });
 
       it('should return correct url', () => {
-        const expectedResult = `circulation/requests?${mockedQueryValue}`;
+        const expectedResult = {
+          url: `circulation/requests?${mockedQueryValue}`,
+        };
 
-        expect(queryString).toBe(expectedResult);
+        expect(queryString).toEqual(expectedResult);
       });
     });
 
@@ -1415,9 +1461,11 @@ describe('RequestsRoute', () => {
       });
 
       it('should return correct url', () => {
-        const expectedResult = `circulation/requests?${mockedQueryValue}`;
+        const expectedResult = {
+          url: `circulation/requests?${mockedQueryValue}`,
+        };
 
-        expect(queryString).toBe(expectedResult);
+        expect(queryString).toEqual(expectedResult);
       });
     });
 
@@ -1438,9 +1486,11 @@ describe('RequestsRoute', () => {
       });
 
       it('should return correct url', () => {
-        const expectedResult = `request-preference-storage/request-preference?${mockedQueryValue}`;
+        const expectedResult = {
+          url: `request-preference-storage/request-preference?${mockedQueryValue}`,
+        };
 
-        expect(queryString).toBe(expectedResult);
+        expect(queryString).toEqual(expectedResult);
       });
     });
 
@@ -1461,9 +1511,11 @@ describe('RequestsRoute', () => {
       });
 
       it('should return correct url', () => {
-        const expectedResult = `holdings-storage/holdings?${mockedQueryValue}`;
+        const expectedResult = {
+          url: `holdings-storage/holdings?${mockedQueryValue}`,
+        };
 
-        expect(queryString).toBe(expectedResult);
+        expect(queryString).toEqual(expectedResult);
       });
     });
 
@@ -1474,33 +1526,42 @@ describe('RequestsRoute', () => {
       const instanceId = 'instanceIdUrl';
 
       it('should return url with "itemId"', () => {
-        const expectedUrl = `circulation/requests/allowed-service-points?requesterId=${requesterId}&operation=${operation}&itemId=${itemId}`;
+        const expectedResult = {
+          url: `${requestConfig.url}?requesterId=${requesterId}&operation=${operation}&itemId=${itemId}`,
+          headers: requestConfig.headers,
+        };
 
         expect(urls.requestTypes({
           requesterId,
           itemId,
           operation,
-        })).toBe(expectedUrl);
+        })).toEqual(expectedResult);
       });
 
       it('should return url with "instanceId"', () => {
-        const expectedUrl = `circulation/requests/allowed-service-points?requesterId=${requesterId}&operation=${operation}&instanceId=${instanceId}`;
+        const expectedResult = {
+          url: `${requestConfig.url}?requesterId=${requesterId}&operation=${operation}&instanceId=${instanceId}`,
+          headers: requestConfig.headers,
+        };
 
         expect(urls.requestTypes({
           requesterId,
           instanceId,
           operation,
-        })).toBe(expectedUrl);
+        })).toEqual(expectedResult);
       });
 
       it('should return url with "requestId"', () => {
         const requestId = 'requestId';
-        const expectedUrl = `circulation/requests/allowed-service-points?operation=${operation}&requestId=${requestId}`;
+        const expectedResult = {
+          url: `${requestConfig.url}?operation=${operation}&requestId=${requestId}`,
+          headers: requestConfig.headers,
+        };
 
         expect(urls.requestTypes({
           requestId,
           operation,
-        })).toBe(expectedUrl);
+        })).toEqual(expectedResult);
       });
     });
   });
