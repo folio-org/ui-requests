@@ -1,7 +1,6 @@
 {
     "requester.name": "Nome do solicitante",
     "requester.username": "Nome de usuário",
-    "requestMeta.detailLabel": "Detalhes sobre a solicitação",
     "requestMeta.information": "Informações sobre a solicitação",
     "requestMeta.type": "Tipo de solicitação",
     "requestMeta.status": "Status da solicitação",
@@ -292,5 +291,6 @@
     "requests.printButtonLabel": "Imprimir",
     "requests.instances.rows.select": "Selecionar instância",
     "rows.recordsSelected": "{count, number} {count, plural, one {registro} other {registros}} selecionados",
-    "printPickSlipsSelected": "Imprimir os comprovantes de retirada selecionados para {sp}"
+    "printPickSlipsSelected": "Imprimir os comprovantes de retirada selecionados para {sp}",
+    "request.detail.title": "Detalhes da requisição"
 }

@@ -1,7 +1,6 @@
 {
     "requester.name": "请求者名称",
     "requester.username": "用户名",
-    "requestMeta.detailLabel": "请求详情",
     "requestMeta.information": "请求信息",
     "requestMeta.type": "请求类型",
     "requestMeta.status": "请求状态",
@@ -292,5 +291,6 @@
     "requests.printButtonLabel": "Print",
     "requests.instances.rows.select": "Select instance",
     "rows.recordsSelected": "{count, number} {count, plural, one {record} other {records}} selected",
-    "printPickSlipsSelected": "Print selected pick slips for {sp}"
+    "printPickSlipsSelected": "Print selected pick slips for {sp}",
+    "request.detail.title": "Request details"
 }
