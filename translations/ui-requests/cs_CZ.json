@@ -1,7 +1,6 @@
 {
     "requester.name": "Jméno čtenáře",
     "requester.username": "Uživatelské jméno",
-    "requestMeta.detailLabel": "Detail žádanky",
     "requestMeta.information": "Informace o žádance",
     "requestMeta.type": "Typ žádanky",
     "requestMeta.status": "Stav žádanky",
@@ -292,5 +291,6 @@
     "requests.printButtonLabel": "Tisk",
     "requests.instances.rows.select": "Vybrat titul",
     "rows.recordsSelected": "{count, number} {count, plural, one {záznam} other {záznamů}} vybráno",
-    "printPickSlipsSelected": "Vytisknout vybrané cirkulační lístky žádanek pro {sp}"
+    "printPickSlipsSelected": "Vytisknout vybrané cirkulační lístky žádanek pro {sp}",
+    "request.detail.title": "Detaily žádanky"
 }
