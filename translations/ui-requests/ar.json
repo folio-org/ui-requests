@@ -1,7 +1,6 @@
 {
     "requester.name": "اسم مقدم الطلب",
     "requester.username": "اسم المستخدم",
-    "requestMeta.detailLabel": "تفاصيل الطلب",
     "requestMeta.information": "معلومات الطلب",
     "requestMeta.type": "نوع الطلب",
     "requestMeta.status": "حالة الطلب",
@@ -292,5 +291,6 @@
     "requests.printButtonLabel": "Print",
     "requests.instances.rows.select": "Select instance",
     "rows.recordsSelected": "{count, number} {count, plural, one {record} other {records}} selected",
-    "printPickSlipsSelected": "Print selected pick slips for {sp}"
+    "printPickSlipsSelected": "Print selected pick slips for {sp}",
+    "request.detail.title": "Request details"
 }

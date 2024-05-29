@@ -1,7 +1,6 @@
 {
     "requester.name": "Name Benutzer- in",
     "requester.username": "Kennung",
-    "requestMeta.detailLabel": "Detail der Bestandsanfrage",
     "requestMeta.information": "Informationen zur Bestandsanfrage",
     "requestMeta.type": "Bestandsanfragetyp",
     "requestMeta.status": "Status der Bestandsanfrage",
@@ -292,5 +291,6 @@
     "requests.printButtonLabel": "Druck",
     "requests.instances.rows.select": "Instanz auswählen",
     "rows.recordsSelected": "{count, number} {count, plural, one {Datensatz} other {Datensätze}} ausgewählt",
-    "printPickSlipsSelected": "Ausgewählte Entnahmezettel für {sp} drucken"
+    "printPickSlipsSelected": "Ausgewählte Entnahmezettel für {sp} drucken",
+    "request.detail.title": "Request details"
 }

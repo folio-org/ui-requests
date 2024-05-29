@@ -1,7 +1,6 @@
 {
     "requester.name": "Nome del richiedente",
     "requester.username": "Username",
-    "requestMeta.detailLabel": "Dettagli richiesta",
     "requestMeta.information": "Richiesta informazioni",
     "requestMeta.type": "Tipologia richiesta",
     "requestMeta.status": "Stato richiesta",
@@ -292,5 +291,6 @@
     "requests.printButtonLabel": "Print",
     "requests.instances.rows.select": "Select instance",
     "rows.recordsSelected": "{count, number} {count, plural, one {record} other {records}} selected",
-    "printPickSlipsSelected": "Print selected pick slips for {sp}"
+    "printPickSlipsSelected": "Print selected pick slips for {sp}",
+    "request.detail.title": "Request details"
 }
