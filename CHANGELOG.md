@@ -7,6 +7,7 @@
 * Set up default pickup service point if it is available. Refs UIREQ-1095.
 * Remove bigtests from github actions. Refs UIREQ-1099.
 * Fix Request detail pane capitalization. Refs UIREQ-1106.
+* Update the column labels. Refs UIREQ-1104.
 
 ## [9.1.1] (https://github.com/folio-org/ui-checkin/tree/v9.1.1) (2024-03-27)
 [Full Changelog](https://github.com/folio-org/ui-checkin/compare/v9.1.0...v9.1.1)
