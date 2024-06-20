@@ -1,6 +1,6 @@
 {
   "name": "@folio/requests",
-  "version": "9.2.0",
+  "version": "10.0.0",
   "description": "Requests manager",
   "repository": "folio-org/ui-requests",
   "publishConfig": {
@@ -31,7 +31,8 @@
       "request-storage": "6.0",
       "pick-slips": "0.1",
       "search-slips": "0.1",
-      "automated-patron-blocks": "0.1"
+      "automated-patron-blocks": "0.1",
+      "instance-items": "0.1"
     },
     "permissionSets": [
       {

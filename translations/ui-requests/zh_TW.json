@@ -1,7 +1,6 @@
 {
     "requester.name": "預約者名稱",
     "requester.username": "使用者名稱",
-    "requestMeta.detailLabel": "預約詳細資料",
     "requestMeta.information": "預約資料",
     "requestMeta.type": "預約類型",
     "requestMeta.status": "預約狀態",
@@ -292,5 +291,6 @@
     "requests.printButtonLabel": "列印",
     "requests.instances.rows.select": "選擇實例",
     "rows.recordsSelected": "{count, number} {count, plural, one {記錄} other {記錄}}已選擇",
-    "printPickSlipsSelected": "列印為{sp}選擇的預約取書單"
+    "printPickSlipsSelected": "列印為{sp}選擇的預約取書單",
+    "request.detail.title": "Request details"
 }

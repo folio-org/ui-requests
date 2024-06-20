@@ -18,7 +18,6 @@ import {
   defer,
   pick,
   isBoolean,
-  isNil,
 } from 'lodash';
 
 import {
@@ -843,7 +842,7 @@ class RequestForm extends React.Component {
       });
   }
 
-  findInstance = async (instanceId, holdingsRecordId, isValidation = false) => {
+  findInstance = async (instanceId, isValidation = false) => {
     const {
       findResource,
       form,
@@ -855,12 +854,8 @@ class RequestForm extends React.Component {
       isItemOrInstanceLoading: true,
     });
 
-    const resultInstanceId = isNil(instanceId)
-      ? await findResource(RESOURCE_TYPES.HOLDING, holdingsRecordId).then((holding) => holding.holdingsRecords[0].instanceId)
-      : instanceId;
-
     if (isValidation) {
-      return findResource(RESOURCE_TYPES.INSTANCE, resultInstanceId)
+      return findResource(RESOURCE_TYPES.INSTANCE, instanceId)
         .then((result) => {
           return Boolean(result?.id);
         })
@@ -873,7 +868,7 @@ class RequestForm extends React.Component {
         isRequestTypesReceived: false,
       });
 
-      return findResource(RESOURCE_TYPES.INSTANCE, resultInstanceId)
+      return findResource(RESOURCE_TYPES.INSTANCE, instanceId)
         .then((instance) => {
           if (!instance?.id) {
             this.setState({
@@ -1007,15 +1002,16 @@ class RequestForm extends React.Component {
     form.change(REQUEST_FORM_FIELD_NAMES.INSTANCE_ID, null);
 
     if (isCreateTlr) {
-      onSetSelectedItem(undefined);
       this.setState({
         requestTypes: {},
         isRequestTypesReceived: false,
       });
 
       if (selectedItem) {
-        this.findInstance(null, selectedItem.holdingsRecordId);
+        this.findInstance(selectedItem.instanceId);
       }
+
+      onSetSelectedItem(undefined);
     } else if (selectedInstance) {
       form.change(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, DEFAULT_REQUEST_TYPE_VALUE);
       resetFieldState(form, REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE);
