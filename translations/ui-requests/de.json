@@ -1,7 +1,6 @@
 {
     "requester.name": "Name Benutzer- in",
     "requester.username": "Kennung",
-    "requestMeta.detailLabel": "Detail der Bestandsanfrage",
     "requestMeta.information": "Informationen zur Bestandsanfrage",
     "requestMeta.type": "Bestandsanfragetyp",
     "requestMeta.status": "Status der Bestandsanfrage",
@@ -80,7 +79,7 @@
     "requestMeta.type.holds": "Vormerkungen",
     "requestMeta.type.pages": "Ausleihbestellungen",
     "actions.edit": "Bearbeiten",
-    "item.location.name": "Effektiver Standort",
+    "item.location.name": "Tatsächlicher Standort",
     "proxy.name": "Name Vollmachtnehmer/-in",
     "deliveryAddress": "Lieferadresse",
     "requester.patronGroup.group": "Personengruppe",
@@ -99,7 +98,7 @@
     "pickupServicePoint.name": "Abholservicestelle",
     "item.id": "Exemplar-ID",
     "item.location.libraryName": "Bibliothek",
-    "item.location.code": "Effektiver Standortcode",
+    "item.location.code": "Tatsächlicher Standortcode",
     "requestQueue": "Bestandsanfrage-Warteliste",
     "location": "Standort",
     "materialType": "Materialart",
@@ -131,7 +130,7 @@
     "cancellationReason": "Stornierungsgrund",
     "cancellationAdditionalInformation": "Zusätzliche Informationen für Benutzer/-in",
     "printPickSlips": "Entnahmezettel für {sp} drucken",
-    "item.effectiveLocation": "Effektiver Standort",
+    "item.effectiveLocation": "Tatsächlicher Standort",
     "requestMeta.tags": "Tags",
     "filters.requestType.holds": "Vormerkungen",
     "filters.requestType.pages": "Ausleihbestellungen",
@@ -292,5 +291,6 @@
     "requests.printButtonLabel": "Druck",
     "requests.instances.rows.select": "Instanz auswählen",
     "rows.recordsSelected": "{count, number} {count, plural, one {Datensatz} other {Datensätze}} ausgewählt",
-    "printPickSlipsSelected": "Ausgewählte Entnahmezettel für {sp} drucken"
+    "printPickSlipsSelected": "Ausgewählte Entnahmezettel für {sp} drucken",
+    "request.detail.title": "Bestandsanfragendetails"
 }

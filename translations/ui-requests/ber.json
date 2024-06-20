@@ -1,7 +1,6 @@
 {
     "requester.name": "Requester name",
     "requester.username": "Username",
-    "requestMeta.detailLabel": "Request Detail",
     "requestMeta.information": "Request information",
     "requestMeta.type": "Request type",
     "requestMeta.status": "Request status",
@@ -69,8 +68,8 @@
     "requests.type": "Type",
     "requests.status": "Request status",
     "requests.requester": "Requester",
-    "requests.requesterBarcode": "Requester Barcode",
-    "requests.requestDate": "Request Date",
+    "requests.requesterBarcode": "Requester barcode",
+    "requests.requestDate": "Request date",
     "requests.proxy": "Proxy",
     "requests.itemBarcode": "Item barcode",
     "requestMeta.type.recall": "Recall",
@@ -288,9 +287,10 @@
     "errors.itemOfThisInstanceAlreadyRequested": "This requester already has an open request for one of the instance's items",
     "documentTitle.search": "Requests - {query} - Search",
     "item.displaySummary": "Display summary",
-    "requests.singlePrint": "Single Print",
+    "requests.singlePrint": "Single print",
     "requests.printButtonLabel": "Print",
     "requests.instances.rows.select": "Select instance",
     "rows.recordsSelected": "{count, number} {count, plural, one {record} other {records}} selected",
-    "printPickSlipsSelected": "Print selected pick slips for {sp}"
+    "printPickSlipsSelected": "Print selected pick slips for {sp}",
+    "request.detail.title": "Request details"
 }

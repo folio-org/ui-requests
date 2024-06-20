@@ -13,6 +13,7 @@
 * Requests app.: Moving request (ECS with mod-tlr enabled). Refs UIREQ-1100.
 * Hide Action menu on secondary requests (ECS + mod-tlr). Refs UIREQ-1105.
 * Fix Request detail pane capitalization. Refs UIREQ-1106.
+* Update the column labels. Refs UIREQ-1104.
 * *BREAKING* Use `circulation/items-by-instance` endpoint to get item and instance information. Refs UIREQ-1091.
 
 ## [9.1.1] (https://github.com/folio-org/ui-checkin/tree/v9.1.1) (2024-03-27)
