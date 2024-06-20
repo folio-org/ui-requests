@@ -287,7 +287,7 @@
     "errors.itemOfThisInstanceAlreadyRequested": "This requester already has an open request for one of the instance's items",
     "documentTitle.search": "Requests - {query} - Search",
     "item.displaySummary": "Display summary",
-    "requests.singlePrint": "Single Print",
+    "requests.singlePrint": "Single print",
     "requests.printButtonLabel": "Print",
     "requests.instances.rows.select": "Select instance",
     "rows.recordsSelected": "{count, number} {count, plural, one {record} other {records}} selected",

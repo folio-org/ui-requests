@@ -286,7 +286,7 @@
     "errors.movingRequestToTheSameItem": "Není povoleno přesunout požadavek na úroveň názvu stránky na stejnou jednotku",
     "errors.itemOfThisInstanceAlreadyRequested": "Tento čtenář již má otevřenou žádanku pro jeden exemplář titulu",
     "documentTitle.search": "Žádanky - {query} - Vyhledat",
-    "item.displaySummary": "Zobrazit souhrn",
+    "item.displaySummary": "Souhrn zobrazení",
     "requests.singlePrint": "Jeden výtisk",
     "requests.printButtonLabel": "Tisk",
     "requests.instances.rows.select": "Vybrat titul",
