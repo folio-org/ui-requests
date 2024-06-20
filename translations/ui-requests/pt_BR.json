@@ -68,7 +68,7 @@
     "requests.type": "Tipo",
     "requests.status": "Status da requisição",
     "requests.requester": "Requerente",
-    "requests.requesterBarcode": "Código de barras do requerente",
+    "requests.requesterBarcode": "Código de barras do solicitante",
     "requests.requestDate": "Data da solicitação",
     "requests.proxy": "Procurador",
     "requests.itemBarcode": "Código de barras do item",
