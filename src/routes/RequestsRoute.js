@@ -66,6 +66,7 @@ import {
   INPUT_REQUEST_SEARCH_SELECTOR,
   SETTINGS_SCOPES,
   SETTINGS_KEYS,
+  ITEM_QUERIES,
 } from '../constants';
 import {
   buildUrl,
@@ -123,20 +124,24 @@ export const urls = {
   },
   item: (value, idType) => {
     let query;
+    const itemQueryParam = ITEM_QUERIES[idType];
 
     if (isArray(value)) {
-      query = `(${value.map((valueItem) => `${idType}=="${valueItem}"`).join(' or ')})`;
+      const queryElements = value.map((valueItem) => `${itemQueryParam}=="${valueItem}"`);
+
+      query = `(${queryElements.join(' or ')})`;
     } else {
-      query = `(${idType}=="${value}")`;
+      query = `(${itemQueryParam}=="${value}")`;
     }
 
     query = stringify({ query });
-    return `inventory/items?${query}`;
+
+    return `circulation/items-by-instance?${query}`;
   },
   instance: (value) => {
     const query = stringify({ query: getInstanceQueryString(value) });
 
-    return `inventory/instances?${query}`;
+    return `circulation/items-by-instance?${query}`;
   },
   loan: (value) => {
     const query = stringify({ query: `(itemId=="${value}") and status.name==Open` });
@@ -337,27 +342,6 @@ class RequestsRoute extends React.Component {
         query: 'query=(pickupLocation==true) sortby name',
         limit: MAX_RECORDS,
       },
-    },
-    itemUniquenessValidator: {
-      type: 'okapi',
-      records: 'items',
-      accumulate: 'true',
-      path: 'inventory/items',
-      fetch: false,
-    },
-    userUniquenessValidator: {
-      type: 'okapi',
-      records: 'users',
-      accumulate: 'true',
-      path: 'users',
-      fetch: false,
-    },
-    instanceUniquenessValidator: {
-      type: 'okapi',
-      records: 'instances',
-      accumulate: true,
-      path: 'inventory/instances',
-      fetch: false,
     },
     patronBlocks: {
       type: 'okapi',

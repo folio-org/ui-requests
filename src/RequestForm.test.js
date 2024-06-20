@@ -309,22 +309,14 @@ describe('RequestForm', () => {
       });
 
       describe('Initial render', () => {
-        const holding = {
-          holdingsRecords: [
-            {
-              instanceId: 'instanceId',
-            }
-          ],
-        };
         const selectedItem = {
+          instanceId: 'instanceId',
           holdingsRecordId: 'holdingsRecordId',
         };
         let findResource;
 
         beforeEach(() => {
-          findResource = jest.fn()
-            .mockResolvedValueOnce(holding)
-            .mockResolvedValueOnce(null);
+          findResource = jest.fn().mockResolvedValueOnce(null);
 
           const props = {
             ...basicProps,
@@ -364,8 +356,8 @@ describe('RequestForm', () => {
           expect(basicProps.onSetSelectedItem).toHaveBeenCalledWith(undefined);
         });
 
-        it('should get instance id if it is not provided', () => {
-          const expectedArgs = [RESOURCE_TYPES.HOLDING, selectedItem.holdingsRecordId];
+        it('should get instance information', () => {
+          const expectedArgs = [RESOURCE_TYPES.INSTANCE, selectedItem.instanceId];
           const tlrCheckbox = screen.getByTestId(testIds.tlrCheckbox);
 
           fireEvent.click(tlrCheckbox);
@@ -1233,7 +1225,6 @@ describe('RequestForm', () => {
             },
           };
           const itemResult = {
-            totalRecords: 1,
             items: [
               {
                 id: 'itemId',
@@ -1375,7 +1366,6 @@ describe('RequestForm', () => {
 
         describe('When item is not found', () => {
           const itemResult = {
-            totalRecords: 0,
             items: [],
           };
           let findResource;
@@ -1473,7 +1463,6 @@ describe('RequestForm', () => {
       const initialItemId = 'itemId';
       const updatedItemId = 'updatedItemId';
       const itemResult = {
-        totalRecords: 0,
         items: [],
       };
 
@@ -1558,13 +1547,8 @@ describe('RequestForm', () => {
           },
         };
         const instanceResult = {
-          totalRecords: 1,
-          instances: [
-            {
-              id: initialInstanceId,
-              hrid: 'hrid',
-            }
-          ],
+          id: initialInstanceId,
+          hrid: 'hrid',
         };
         const requestTypesResult = {
           'Page': [
@@ -1617,8 +1601,8 @@ describe('RequestForm', () => {
 
         it('should set instance information', () => {
           const expectedArgs = [
-            [REQUEST_FORM_FIELD_NAMES.INSTANCE_ID, instanceResult.instances[0].id],
-            [REQUEST_FORM_FIELD_NAMES.INSTANCE_HRID, instanceResult.instances[0].hrid]
+            [REQUEST_FORM_FIELD_NAMES.INSTANCE_ID, instanceResult.id],
+            [REQUEST_FORM_FIELD_NAMES.INSTANCE_HRID, instanceResult.hrid]
           ];
 
           expectedArgs.forEach(args => {
@@ -1635,14 +1619,14 @@ describe('RequestForm', () => {
         it('should get information about open instance requests', () => {
           const expectedArgs = [
             'requestsForInstance',
-            instanceResult.instances[0].id
+            instanceResult.id
           ];
 
           expect(findResource).toHaveBeenCalledWith(...expectedArgs);
         });
 
         it('should set selected instance', () => {
-          expect(basicProps.onSetSelectedInstance).toHaveBeenCalledWith(instanceResult.instances[0]);
+          expect(basicProps.onSetSelectedInstance).toHaveBeenCalledWith(instanceResult);
         });
 
         it('should handle instance id field change', () => {
@@ -1665,10 +1649,7 @@ describe('RequestForm', () => {
       });
 
       describe('When instance is not found', () => {
-        const instanceResult = {
-          totalRecords: 0,
-          instances: [],
-        };
+        const instanceResult = {};
         let findResource;
 
         beforeEach(() => {

@@ -322,6 +322,11 @@ export const RESOURCE_KEYS = {
   barcode: 'barcode',
 };
 
+export const ITEM_QUERIES = {
+  [RESOURCE_KEYS.id]: 'item.id',
+  [RESOURCE_KEYS.barcode]: 'items.barcode',
+};
+
 export const REQUEST_FORM_FIELD_NAMES = {
   CREATE_TLR: 'createTitleLevelRequest',
   FULFILLMENT_PREFERENCE: 'fulfillmentPreference',

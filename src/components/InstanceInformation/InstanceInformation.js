@@ -68,7 +68,7 @@ class InstanceInformation extends Component {
     if (instanceId && shouldValidateId) {
       this.setState({ shouldValidateId: false });
 
-      const instance = await findInstance(instanceId, null, true);
+      const instance = await findInstance(instanceId, true);
 
       return !instance
         ? <FormattedMessage id="ui-requests.errors.instanceUuidOrHridDoesNotExist" />

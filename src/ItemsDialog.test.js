@@ -45,20 +45,6 @@ describe('ItemsDialog', () => {
   const testTitle = 'testTitle';
   const testInstanceId = 'testInstanceId';
   const testMutator = {
-    holdings: {
-      GET: jest.fn(() => (new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(
-            [{
-              id: '1',
-            }, {
-              id: '2',
-            }]
-          );
-        });
-      }))),
-      reset: jest.fn(),
-    },
     items: {
       GET: jest.fn(() => (new Promise((resolve) => {
         setTimeout(() => {
@@ -120,8 +106,6 @@ describe('ItemsDialog', () => {
     Paneset.mockClear();
     Loading.mockClear();
     onClose.mockClear();
-    testMutator.holdings.GET.mockClear();
-    testMutator.holdings.reset.mockClear();
     testMutator.items.GET.mockClear();
     testMutator.items.reset.mockClear();
     testMutator.requests.GET.mockClear();
@@ -272,7 +256,6 @@ describe('ItemsDialog', () => {
         });
         const allItemStatuses = Object.values(itemStatuses);
         const newMutator = {
-          ...testMutator,
           items: {
             GET: jest.fn(() => (new Promise((resolve) => {
               setTimeout(() => {

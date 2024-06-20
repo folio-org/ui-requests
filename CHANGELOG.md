@@ -1,6 +1,6 @@
 # Change history for ui-requests
 
-## 9.2.0 IN PROGRESS
+## 10.0.0 IN PROGRESS
 
 * Use settings/entries endpoint to get settings information. Refs UIREQ-1062.
 * Use Save & close button label stripes-component translation key. Refs UIREQ-1073.
@@ -13,6 +13,7 @@
 * Requests app.: Moving request (ECS with mod-tlr enabled). Refs UIREQ-1100.
 * Hide Action menu on secondary requests (ECS + mod-tlr). Refs UIREQ-1105.
 * Fix Request detail pane capitalization. Refs UIREQ-1106.
+* *BREAKING* Use `circulation/items-by-instance` endpoint to get item and instance information. Refs UIREQ-1091.
 
 ## [9.1.1] (https://github.com/folio-org/ui-checkin/tree/v9.1.1) (2024-03-27)
 [Full Changelog](https://github.com/folio-org/ui-checkin/compare/v9.1.0...v9.1.1)
