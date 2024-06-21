@@ -13,6 +13,8 @@ import {
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 
+import { stripesShape } from '@folio/stripes/core';
+
 import RequestForm from './RequestForm';
 import {
   getRequestLevelValue,
@@ -205,6 +207,7 @@ RequestFormContainer.propTypes = {
   request: PropTypes.object,
   parentResources: PropTypes.object,
   onSubmit: PropTypes.func.isRequired,
+  stripes: stripesShape.isRequired,
 };
 
 export default RequestFormContainer;

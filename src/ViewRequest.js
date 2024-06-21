@@ -67,7 +67,7 @@ import {
   isVirtualItem,
   isVirtualPatron,
   getRequestErrorMessage,
-  getRequestConfig,
+  getRequestUrl,
 } from './utils';
 import urls from './routes/urls';
 
@@ -260,19 +260,12 @@ class ViewRequest extends React.Component {
     delete updatedRecord.numberOfReorderableRequests;
     delete updatedRecord.holdShelfExpirationTime;
 
-    const {
-      url,
-      headers,
-      credentials,
-    } = getRequestConfig(REQUEST_ACTION_NAMES.EDIT_REQUEST, stripes); // todo: check if necessary to add tenantId as a third param
+    const url = getRequestUrl(REQUEST_ACTION_NAMES.EDIT_REQUEST, stripes);
 
     fetch(`${stripes.okapi.url}/${url}`, {
       method: 'PUT',
-      body: JSON.stringify(updatedRecord),
-      headers,
-      credentials,
+      body: JSON.stringify(updatedRecord), // todo: check if headers and credentials required and were not passed automatically
     })
-    // this.props.mutator.selectedRequest.PUT(updatedRecord)
       .then(() => {
         onCloseEdit();
         this.callout.current.sendCallout({
