@@ -23,7 +23,7 @@ import {
   Row,
   NoValue,
 } from '@folio/stripes/components';
-import { getHeaderWithCredentials } from '@folio/stripes/util';
+import { checkIfUserInCentralTenant } from '@folio/stripes/core';
 
 import {
   requestTypeOptionMap,
@@ -38,7 +38,7 @@ import {
   DCB_USER,
   SLIPS_TYPE,
   REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS,
-  MULTI_TENANT_URLS,
+  CENTRAL_TENANT_URLS,
   SINGLE_TENANT_URLS,
 } from './constants';
 
@@ -365,15 +365,19 @@ export const getRequestLevelValue = (value) => {
 export const getInstanceQueryString = (hrid, id) => `("hrid"=="${hrid}" or "id"=="${id || hrid}")`;
 
 export const generateUserName = (user) => {
-  const {
-    firstName,
-    lastName,
-    middleName,
-  } = user;
+  if (user) {
+    const {
+      firstName,
+      lastName,
+      middleName,
+    } = user;
 
-  const shownMiddleName = middleName ? ` ${middleName}` : '';
+    const shownMiddleName = middleName ? ` ${middleName}` : '';
 
-  return `${lastName}${firstName ? ', ' + firstName + shownMiddleName : ''}`;
+    return `${lastName}${firstName ? ', ' + firstName + shownMiddleName : ''}`;
+  }
+
+  return '';
 };
 
 export const handleKeyCommand = (handler, { disabled } = {}) => {
@@ -517,45 +521,13 @@ export const isMultiDataTenant = (stripes) => {
   return stripes.hasInterface('consortia') && stripes.hasInterface('ecs-tlr');
 };
 
-export const getTenantId = (stripes, tenantId) => {
-  const centralTenantId = stripes.user.user.tenants.find(({ isPrimary }) => isPrimary).id;
-
-  if (
-    stripes.okapi.tenant === centralTenantId ||
-    tenantId === centralTenantId ||
-    (tenantId && tenantId !== stripes.okapi.tenant)
-  ) {
-    return centralTenantId;
-  }
-
-  return stripes.okapi.tenant;
-};
-
-export const getRequestConfig = (actionName, stripes, tenantId) => {
+export const getRequestUrl = (actionName, stripes) => {
   const isMultiTenant = isMultiDataTenant(stripes);
+  const isUserInCentralTenant = checkIfUserInCentralTenant(stripes);
 
-  // for multi tenant envs
-  if (isMultiTenant) {
-    const tenant = getTenantId(stripes, tenantId);
-    const requestOptions = getHeaderWithCredentials({
-      tenant,
-      token: stripes.okapi.token,
-    });
-
-    return {
-      url: MULTI_TENANT_URLS[actionName],
-      ...requestOptions,
-    };
+  if (isMultiTenant && isUserInCentralTenant) {
+    return CENTRAL_TENANT_URLS[actionName];
   }
 
-  // for single tenant envs
-  const requestOptions = getHeaderWithCredentials({
-    tenant: stripes.okapi.tenant,
-    token: stripes.okapi.token,
-  });
-
-  return {
-    url: SINGLE_TENANT_URLS[actionName],
-    ...requestOptions,
-  };
+  return SINGLE_TENANT_URLS[actionName];
 };

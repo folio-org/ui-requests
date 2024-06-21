@@ -55,7 +55,6 @@ import {
   requestTypesTranslations,
   requestStatusesTranslations,
   REQUEST_LAYERS,
-  REQUEST_ACTION_NAMES,
 } from './constants';
 import {
   toUserAddress,
@@ -67,7 +66,6 @@ import {
   isVirtualItem,
   isVirtualPatron,
   getRequestErrorMessage,
-  getRequestConfig,
 } from './utils';
 import urls from './routes/urls';
 
@@ -150,9 +148,6 @@ class ViewRequest extends React.Component {
     }),
     query: PropTypes.object,
     stripes: PropTypes.shape({
-      okapi: PropTypes.shape({
-        url: PropTypes.string.isRequired,
-      }).isRequired,
       hasPerm: PropTypes.func.isRequired,
       connect: PropTypes.func.isRequired,
       logger: PropTypes.shape({
@@ -235,10 +230,6 @@ class ViewRequest extends React.Component {
   }
 
   update(record) {
-    const {
-      stripes,
-      onCloseEdit,
-    } = this.props;
     const requestFromProps = this.getRequestFromProps() || {};
     const updatedRecord = {
       ...requestFromProps,
@@ -260,36 +251,22 @@ class ViewRequest extends React.Component {
     delete updatedRecord.numberOfReorderableRequests;
     delete updatedRecord.holdShelfExpirationTime;
 
-    const {
-      url,
-      headers,
-      credentials,
-    } = getRequestConfig(REQUEST_ACTION_NAMES.EDIT_REQUEST, stripes); // todo: check if necessary to add tenantId as a third param
-
-    fetch(`${stripes.okapi.url}/${url}`, {
-      method: 'PUT',
-      body: JSON.stringify(updatedRecord),
-      headers,
-      credentials,
-    })
-    // this.props.mutator.selectedRequest.PUT(updatedRecord)
-      .then(() => {
-        onCloseEdit();
-        this.callout.current.sendCallout({
-          message: (
-            <FormattedMessage
-              id="ui-requests.editRequest.success"
-              values={{ requester: generateUserName(record.requester.personal) }}
-            />
-          ),
-        });
-      })
-      .catch(() => {
-        this.callout.current.sendCallout({
-          message: <FormattedMessage id="ui-requests.editRequest.fail" />,
-          type: 'error',
-        });
+    this.props.mutator.selectedRequest.PUT(updatedRecord).then(() => {
+      this.props.onCloseEdit();
+      this.callout.current.sendCallout({
+        message: (
+          <FormattedMessage
+            id="ui-requests.editRequest.success"
+            values={{ requester: generateUserName(record.requester.personal) }}
+          />
+        ),
       });
+    }).catch(() => {
+      this.callout.current.sendCallout({
+        message: <FormattedMessage id="ui-requests.editRequest.fail" />,
+        type: 'error',
+      });
+    });
   }
 
   cancelRequest(cancellationInfo) {

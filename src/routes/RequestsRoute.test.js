@@ -81,11 +81,7 @@ const testIds = {
   rowCheckbox: 'rowCheckbox',
   selectRequestCheckbox: 'selectRequestCheckbox',
 };
-const requestConfig = {
-  url: 'url',
-  headers: {},
-  credentials: {},
-};
+const requestUrl = 'url';
 
 jest.spyOn(React, 'createRef').mockReturnValue(createRefMock);
 jest.spyOn(document, 'getElementById').mockReturnValue(createDocumentRefMock);
@@ -102,7 +98,9 @@ jest.mock('../utils', () => ({
   getFormattedYears: jest.fn(),
   getInstanceQueryString: jest.fn(),
   getNextSelectedRowsState: jest.fn(),
-  getRequestConfig: jest.fn(() => requestConfig),
+  isMultiDataTenant: jest.fn(),
+  generateUserName: jest.fn(),
+  getRequestUrl: jest.fn(() => requestUrl),
 }));
 jest.mock('./utils', () => ({
   ...jest.requireActual('./utils'),
@@ -178,6 +176,7 @@ global.fetch = jest.fn(() => Promise.resolve({
       }
     ],
   }),
+  ok: true,
 }));
 
 const RequestFilterData = {
@@ -294,7 +293,8 @@ SearchAndSort.mockImplementation(jest.fn(({
         <button
           type="button"
           onClick={() => onCreate({}, userData)}
-        >Create request
+        >
+          Create request
         </button>
       </div>
       {actionMenu({ onToggle: jest.fn() })}
@@ -635,12 +635,10 @@ describe('RequestsRoute', () => {
     it('should handle request creation', () => {
       const createRequestButton = screen.getByText('Create request');
       const expectedArgs = [
-        `${defaultProps.stripes.okapi.url}/${requestConfig.url}`,
+        `${defaultProps.stripes.okapi.url}/${requestUrl}`,
         {
           method: 'POST',
           body: JSON.stringify({}),
-          headers: requestConfig.headers,
-          credentials: requestConfig.credentials,
         }
       ];
 
@@ -1289,11 +1287,9 @@ describe('RequestsRoute', () => {
       });
 
       it('should return correct url', () => {
-        const expectedResult = {
-          url: `users?${mockedQueryValue}`,
-        };
+        const expectedResult = `users?${mockedQueryValue}`;
 
-        expect(queryString).toEqual(expectedResult);
+        expect(queryString).toBe(expectedResult);
       });
     });
 
@@ -1315,11 +1311,9 @@ describe('RequestsRoute', () => {
         });
 
         it('should return correct url', () => {
-          const expectedResult = {
-            url: `circulation/items-by-instance?${mockedQueryValue}`,
-          };
+          const expectedResult = `circulation/items-by-instance?${mockedQueryValue}`;
 
-          expect(queryString).toEqual(expectedResult);
+          expect(queryString).toBe(expectedResult);
         });
       });
 
@@ -1340,11 +1334,9 @@ describe('RequestsRoute', () => {
         });
 
         it('should return correct url', () => {
-          const expectedResult = {
-            url: `circulation/items-by-instance?${mockedQueryValue}`,
-          };
+          const expectedResult = `circulation/items-by-instance?${mockedQueryValue}`;
 
-          expect(queryString).toEqual(expectedResult);
+          expect(queryString).toBe(expectedResult);
         });
       });
     });
@@ -1372,11 +1364,9 @@ describe('RequestsRoute', () => {
       });
 
       it('should return correct url', () => {
-        const expectedResult = {
-          url: `circulation/items-by-instance?${mockedQueryValue}`,
-        };
+        const expectedResult = `circulation/items-by-instance?${mockedQueryValue}`;
 
-        expect(queryString).toEqual(expectedResult);
+        expect(queryString).toBe(expectedResult);
       });
     });
 
@@ -1397,11 +1387,9 @@ describe('RequestsRoute', () => {
       });
 
       it('should return correct url', () => {
-        const expectedResult = {
-          url: `circulation/loans?${mockedQueryValue}`,
-        };
+        const expectedResult = `circulation/loans?${mockedQueryValue}`;
 
-        expect(queryString).toEqual(expectedResult);
+        expect(queryString).toBe(expectedResult);
       });
     });
 
@@ -1429,11 +1417,9 @@ describe('RequestsRoute', () => {
       });
 
       it('should return correct url', () => {
-        const expectedResult = {
-          url: `circulation/requests?${mockedQueryValue}`,
-        };
+        const expectedResult = `circulation/requests?${mockedQueryValue}`;
 
-        expect(queryString).toEqual(expectedResult);
+        expect(queryString).toBe(expectedResult);
       });
     });
 
@@ -1461,11 +1447,9 @@ describe('RequestsRoute', () => {
       });
 
       it('should return correct url', () => {
-        const expectedResult = {
-          url: `circulation/requests?${mockedQueryValue}`,
-        };
+        const expectedResult = `circulation/requests?${mockedQueryValue}`;
 
-        expect(queryString).toEqual(expectedResult);
+        expect(queryString).toBe(expectedResult);
       });
     });
 
@@ -1486,11 +1470,9 @@ describe('RequestsRoute', () => {
       });
 
       it('should return correct url', () => {
-        const expectedResult = {
-          url: `request-preference-storage/request-preference?${mockedQueryValue}`,
-        };
+        const expectedResult = `request-preference-storage/request-preference?${mockedQueryValue}`;
 
-        expect(queryString).toEqual(expectedResult);
+        expect(queryString).toBe(expectedResult);
       });
     });
 
@@ -1511,11 +1493,9 @@ describe('RequestsRoute', () => {
       });
 
       it('should return correct url', () => {
-        const expectedResult = {
-          url: `holdings-storage/holdings?${mockedQueryValue}`,
-        };
+        const expectedResult = `holdings-storage/holdings?${mockedQueryValue}`;
 
-        expect(queryString).toEqual(expectedResult);
+        expect(queryString).toBe(expectedResult);
       });
     });
 
@@ -1526,42 +1506,33 @@ describe('RequestsRoute', () => {
       const instanceId = 'instanceIdUrl';
 
       it('should return url with "itemId"', () => {
-        const expectedResult = {
-          url: `${requestConfig.url}?requesterId=${requesterId}&operation=${operation}&itemId=${itemId}`,
-          headers: requestConfig.headers,
-        };
+        const expectedResult = `${requestUrl}?requesterId=${requesterId}&operation=${operation}&itemId=${itemId}`;
 
         expect(urls.requestTypes({
           requesterId,
           itemId,
           operation,
-        })).toEqual(expectedResult);
+        })).toBe(expectedResult);
       });
 
       it('should return url with "instanceId"', () => {
-        const expectedResult = {
-          url: `${requestConfig.url}?requesterId=${requesterId}&operation=${operation}&instanceId=${instanceId}`,
-          headers: requestConfig.headers,
-        };
+        const expectedResult = `${requestUrl}?requesterId=${requesterId}&operation=${operation}&instanceId=${instanceId}`;
 
         expect(urls.requestTypes({
           requesterId,
           instanceId,
           operation,
-        })).toEqual(expectedResult);
+        })).toBe(expectedResult);
       });
 
       it('should return url with "requestId"', () => {
         const requestId = 'requestId';
-        const expectedResult = {
-          url: `${requestConfig.url}?operation=${operation}&requestId=${requestId}`,
-          headers: requestConfig.headers,
-        };
+        const expectedResult = `${requestUrl}?operation=${operation}&requestId=${requestId}`;
 
         expect(urls.requestTypes({
           requestId,
           operation,
-        })).toEqual(expectedResult);
+        })).toBe(expectedResult);
       });
     });
   });

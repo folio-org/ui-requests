@@ -409,18 +409,15 @@ export const SETTINGS_KEYS = {
 
 export const REQUEST_ACTION_NAMES = {
   CREATE_REQUEST: 'CREATE_REQUEST',
-  EDIT_REQUEST: 'EDIT_REQUEST',
   GET_SERVICE_POINTS: 'GET_SERVICE_POINTS',
 };
 
 export const SINGLE_TENANT_URLS = {
   [REQUEST_ACTION_NAMES.CREATE_REQUEST]: 'circulation/requests',
-  [REQUEST_ACTION_NAMES.EDIT_REQUEST]: 'circulation/requests',
   [REQUEST_ACTION_NAMES.GET_SERVICE_POINTS]: 'circulation/requests/allowed-service-points',
 };
 
-export const MULTI_TENANT_URLS = {
+export const CENTRAL_TENANT_URLS = {
   [REQUEST_ACTION_NAMES.CREATE_REQUEST]: 'tlr/ecs-tlr',
-  [REQUEST_ACTION_NAMES.EDIT_REQUEST]: 'circulation/requests',
   [REQUEST_ACTION_NAMES.GET_SERVICE_POINTS]: 'tlr/allowed-service-points',
 };

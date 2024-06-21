@@ -441,7 +441,7 @@ class RequestForm extends React.Component {
     if (selectedResource?.id && user?.id) {
       const resourceTypeId = getResourceTypeId(isTitleLevelRequest);
 
-      this.findRequestTypes(selectedResource.id, user.id, resourceTypeId, selectedResource.tenantId);
+      this.findRequestTypes(selectedResource.id, user.id, resourceTypeId);
     }
   }
 
@@ -670,7 +670,7 @@ class RequestForm extends React.Component {
     }
   }
 
-  findRequestTypes = (resourceId, requesterId, resourceType, tenantId) => {
+  findRequestTypes = (resourceId, requesterId, resourceType) => {
     const {
       findResource,
       form,
@@ -689,7 +689,6 @@ class RequestForm extends React.Component {
         operation: REQUEST_OPERATIONS.CREATE,
         [resourceType]: resourceId,
         requesterId,
-        tenantId,
       };
       form.change(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, DEFAULT_REQUEST_TYPE_VALUE);
     }
@@ -816,7 +815,7 @@ class RequestForm extends React.Component {
         })
         .then(item => {
           if (item && selectedUser?.id) {
-            this.findRequestTypes(item.id, selectedUser.id, ID_TYPE_MAP.ITEM_ID, item.tenantId);
+            this.findRequestTypes(item.id, selectedUser.id, ID_TYPE_MAP.ITEM_ID);
           }
 
           return item;
@@ -891,7 +890,7 @@ class RequestForm extends React.Component {
         })
         .then(instance => {
           if (instance && selectedUser?.id) {
-            this.findRequestTypes(instance.id, selectedUser.id, ID_TYPE_MAP.INSTANCE_ID, instance.tenantId);
+            this.findRequestTypes(instance.id, selectedUser.id, ID_TYPE_MAP.INSTANCE_ID);
           }
 
           return instance;

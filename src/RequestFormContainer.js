@@ -16,7 +16,6 @@ import PropTypes from 'prop-types';
 import RequestForm from './RequestForm';
 import {
   getRequestLevelValue,
-  isMultiDataTenant,
 } from './utils';
 import {
   fulfillmentTypeMap,
@@ -28,7 +27,6 @@ const RequestFormContainer = ({
   parentResources,
   request,
   onSubmit,
-  stripes,
   ...rest
 }) => {
   const {
@@ -167,13 +165,7 @@ const RequestFormContainer = ({
     unset(requestData, 'keyOfInstanceIdField');
     unset(requestData, 'keyOfRequestTypeField');
 
-    if (isMultiDataTenant(stripes)) {
-      unset(requestData, 'item');
-      unset(requestData, 'requester');
-      unset(requestData, 'holdingsRecordId');
-    }
-
-    return onSubmit(requestData, data.requester.personal);
+    return onSubmit(requestData);
   };
 
   return (
