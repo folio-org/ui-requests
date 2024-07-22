@@ -45,6 +45,8 @@
   "requests.requesterBarcode": "Requester barcode",
   "requests.requestDate": "Request date",
   "requests.proxy": "Proxy",
+  "requests.copies": "# Copies",
+  "requests.printed": "Printed",
   "requests.queuePosition": "Queue position",
   "requests.itemBarcode": "Item barcode",
   "requests.callNumber": "Effective call number string",

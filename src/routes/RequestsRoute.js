@@ -1239,6 +1239,8 @@ class RequestsRoute extends React.Component {
       requesterBarcode: <FormattedMessage id="ui-requests.requests.requesterBarcode" />,
       singlePrint: <FormattedMessage id="ui-requests.requests.singlePrint" />,
       proxy: <FormattedMessage id="ui-requests.requests.proxy" />,
+      copies: <FormattedMessage id="ui-requests.requests.copies" />,
+      printed: <FormattedMessage id="ui-requests.requests.printed" />,
     };
 
     const {
@@ -1483,6 +1485,7 @@ class RequestsRoute extends React.Component {
                 itemBarcode: { max: 140 },
                 type: { max: 100 },
                 select: { max: 30 },
+                copies: { max: 95 },
               }}
               columnMapping={columnLabels}
               resultsRowClickHandlers={false}
