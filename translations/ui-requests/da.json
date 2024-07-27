@@ -292,5 +292,7 @@
     "requests.instances.rows.select": "Select instance",
     "rows.recordsSelected": "{count, number} {count, plural, one {record} other {records}} selected",
     "printPickSlipsSelected": "Print selected pick slips for {sp}",
-    "request.detail.title": "Request details"
+    "request.detail.title": "Request details",
+    "requests.copies": "# Copies",
+    "requests.printed": "Printed"
 }
