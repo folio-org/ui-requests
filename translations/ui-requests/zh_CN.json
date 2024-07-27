@@ -292,5 +292,7 @@
     "requests.instances.rows.select": "选择实例",
     "rows.recordsSelected": "{count, number} {count, plural, one {记录} other {记录}}已选",
     "printPickSlipsSelected": "打印{sp}选定的选取单",
-    "request.detail.title": "申请详细信息"
+    "request.detail.title": "申请详细信息",
+    "requests.copies": "# Copies",
+    "requests.printed": "Printed"
 }

@@ -292,5 +292,7 @@
     "requests.instances.rows.select": "Instanz auswählen",
     "rows.recordsSelected": "{count, number} {count, plural, one {Datensatz} other {Datensätze}} ausgewählt",
     "printPickSlipsSelected": "Ausgewählte Entnahmezettel für {sp} drucken",
-    "request.detail.title": "Bestandsanfragendetails"
+    "request.detail.title": "Bestandsanfragendetails",
+    "requests.copies": "# Copies",
+    "requests.printed": "Printed"
 }
