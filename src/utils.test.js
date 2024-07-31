@@ -34,6 +34,7 @@ import {
   selectedRowsNonPrintable,
   isPrintable,
   getNextSelectedRowsState,
+  extractPickSlipRequestIds,
 } from './utils';
 
 import {
@@ -643,6 +644,24 @@ describe('getNextSelectedRowsState', () => {
     expect(result).not.toBe(selectedRows);
   });
 });
+
+describe('extractPickSlipRequestIds', () => {
+  it('should return an array of request IDs', () => {
+    const pickSlipsData = [
+      { request: { requestID: '123' } },
+      { request: { requestID: '456' } },
+    ];
+    const result = extractPickSlipRequestIds(pickSlipsData);
+    expect(result).toEqual(['123', '456']);
+  });
+
+  it('should handle empty pickSlipsData array', () => {
+    const pickSlipsData = [];
+    const result = extractPickSlipRequestIds(pickSlipsData);
+    expect(result).toEqual([]);
+  });
+});
+
 describe('isPrintable', () => {
   it('should return true when pickSlips contain a match for requestId', () => {
     const requestId = '123';

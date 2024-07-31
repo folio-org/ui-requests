@@ -9,6 +9,7 @@
 * Fix Request detail pane capitalization. Refs UIREQ-1106.
 * Update the column labels. Refs UIREQ-1104.
 * Add "Printed" and "# Copies" columns in "Show Columns" list and Request records table. Refs UIREQ-1118.
+* Update printing details on printing pick slips. Refs UIREQ-1122.
 
 ## [9.1.1] (https://github.com/folio-org/ui-checkin/tree/v9.1.1) (2024-03-27)
 [Full Changelog](https://github.com/folio-org/ui-checkin/compare/v9.1.0...v9.1.1)

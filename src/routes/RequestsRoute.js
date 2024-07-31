@@ -78,6 +78,7 @@ import {
   getSelectedSlipDataMulti,
   selectedRowsNonPrintable,
   getNextSelectedRowsState,
+  extractPickSlipRequestIds
 } from '../utils';
 import packageInfo from '../../package';
 import CheckboxColumn from '../components/CheckboxColumn';
@@ -443,6 +444,15 @@ class RequestsRoute extends React.Component {
         query: '(module==SETTINGS and configName==TLR)',
       },
     },
+    savePrintDetails: {
+      type: 'okapi',
+      POST: {
+        path: 'circulation/print-events-entry',
+      },
+      fetch: false,
+      clientGeneratePk: false,
+      throwErrors: false,
+    },
   };
 
   static propTypes = {
@@ -488,6 +498,9 @@ class RequestsRoute extends React.Component {
         reset: PropTypes.func.isRequired,
         GET: PropTypes.func.isRequired,
       }).isRequired,
+      savePrintDetails: PropTypes.shape({
+        POST: PropTypes.func,
+      }),
     }).isRequired,
     resources: PropTypes.shape({
       addressTypes: PropTypes.shape({
@@ -1171,22 +1184,44 @@ class RequestsRoute extends React.Component {
     );
   };
 
-  onBeforeGetContentForPrintButton = (onToggle) => (
-    new Promise(resolve => {
+  filterSelectedPickSlipsData = (pickSlipsData, selectedRow) => {
+    console.log('pick lsip -----------', pickSlipsData);
+    const selectedRequestIds = new Set(Object.keys(selectedRow));
+    return pickSlipsData
+      .filter(entry => selectedRequestIds.has(entry.request?.requestID));
+  }
+
+  savePrintEventDetails = (requestIds) => {
+    const isoDate = moment.tz('UTC').format();
+    this.props.mutator.savePrintDetails.POST({
+      'requestIds' : requestIds,
+      'requesterName' : this.props.stripes.user.user.username,
+      'requesterId' : this.props.stripes.user.user.id,
+      'printEventDate' : isoDate
+    });
+  }
+
+  onBeforeGetContentForPrintButton = (onToggle, slipsType, slipsData) => {
+    if (slipsType === SLIPS_TYPE.PICK_SLIP) { // add enable print log settings check
+      const requestIds = extractPickSlipRequestIds(slipsData);
+      this.savePrintEventDetails(requestIds);
+    }
+    return new Promise(resolve => {
       this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
       onToggle();
       // without the timeout the printing process starts right away
       // and the callout and onToggle above are blocked
       setTimeout(() => resolve(), 1000);
-    })
-  );
+    });
+  };
 
-  onBeforeGetContentForSinglePrintButton = () => (
-    new Promise(resolve => {
+  onBeforeGetContentForSinglePrintButton = (requestId) => {
+    this.savePrintEventDetails([requestId]); // add enable print log settings check
+    return new Promise(resolve => {
       this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
       setTimeout(() => resolve(), 1000);
-    })
-  );
+    });
+  }
 
   printContentRefs = {};
 
@@ -1369,7 +1404,7 @@ class RequestsRoute extends React.Component {
                   disabled={isPickSlipsEmpty}
                   template={pickSlipsPrintTemplate}
                   contentRef={this.pickSlipsPrintContentRef}
-                  onBeforeGetContent={() => this.onBeforeGetContentForPrintButton(onToggle)}
+                  onBeforeGetContent={() => this.onBeforeGetContentForPrintButton(onToggle, SLIPS_TYPE.PICK_SLIP, pickSlips)}
                 >
                   <FormattedMessage
                     id="ui-requests.printPickSlips"
@@ -1383,14 +1418,20 @@ class RequestsRoute extends React.Component {
                   template={pickSlipsPrintTemplate}
                   contentRef={this.printSelectedContentRef}
                   onBeforeGetContent={
-                    () => new Promise(resolve => {
-                      this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
-                      onToggle();
-                      // without the timeout the printing process starts right away
-                      // and the callout and onToggle above are blocked
-                      setTimeout(() => resolve(), 1000);
-                      multiSelectPickSlipData = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
-                    })
+                    () => {
+                      const selectedPickSlips = this.filterSelectedPickSlipsData(pickSlips, selectedRows);
+                      const pickSlipsRequestIds = extractPickSlipRequestIds(selectedPickSlips);
+                      this.savePrintEventDetails(pickSlipsRequestIds); // add enable print log settings check
+
+                      return new Promise(resolve => {
+                        this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
+                        onToggle();
+                        // without the timeout the printing process starts right away
+                        // and the callout and onToggle above are blocked
+                        setTimeout(() => resolve(), 1000);
+                        multiSelectPickSlipData = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
+                      });
+                    }
                     }
                 >
                   <FormattedMessage
@@ -1414,7 +1455,7 @@ class RequestsRoute extends React.Component {
                     disabled={isSearchSlipsEmpty}
                     template={searchSlipsPrintTemplate}
                     contentRef={this.searchSlipsPrintContentRef}
-                    onBeforeGetContent={() => this.onBeforeGetContentForPrintButton(onToggle)}
+                    onBeforeGetContent={() => this.onBeforeGetContentForPrintButton(onToggle, SLIPS_TYPE.SEARCH_SLIP_HOLD_REQUESTS)}
                   >
                     <FormattedMessage
                       id="ui-requests.printSearchSlips"

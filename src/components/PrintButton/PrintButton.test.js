@@ -21,6 +21,7 @@ const props = {
   onBeforePrint: jest.fn(),
   onBeforeGetContent: jest.fn(),
 };
+const singlePrintProps = { ...props, requestId: 'rick' };
 
 jest.mock('react-to-print', () => jest.fn(({
   trigger,
@@ -96,7 +97,24 @@ describe('PrintButton', () => {
     });
   });
 
-  describe('When button is enabled', () => {
+  describe('When button is enabled and single pickSlip is printed', () => {
+    it('should handle print before content getting', async () => {
+      render(
+        <PrintButton
+          {...singlePrintProps}
+        />
+      );
+      const triggerButton = screen.getByText(props.children);
+
+      fireEvent.click(triggerButton);
+
+      await waitFor(() => {
+        expect(props.onBeforeGetContent).toHaveBeenCalledWith('rick');
+      });
+    });
+  });
+
+  describe('When button is disabled', () => {
     let wrapper;
 
     beforeEach(() => {

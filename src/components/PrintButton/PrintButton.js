@@ -13,6 +13,7 @@ import css from './PrintButton.css';
 class PrintButton extends React.Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
+    requestId: PropTypes.string,
     onAfterPrint: PropTypes.func,
     onBeforePrint: PropTypes.func,
     onBeforeGetContent: PropTypes.func,
@@ -36,7 +37,11 @@ class PrintButton extends React.Component {
 
   handlePrintBeforeGetContent = () => {
     this.eventObject.event.stopPropagation();
-    this.props.onBeforeGetContent();
+    if (this.props.requestId) {
+      this.props.onBeforeGetContent(this.props.requestId);
+    } else {
+      this.props.onBeforeGetContent();
+    }
   }
 
   renderTriggerButton = () => {

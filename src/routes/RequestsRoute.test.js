@@ -336,6 +336,9 @@ describe('RequestsRoute', () => {
       url: '{{ env.FOLIO_MD_REGISTRY }}/_/proxy/modules',
     },
     mutator: {
+      savePrintDetails: {
+        POST: jest.fn().mockResolvedValue(),
+      },
       activeRecord: {
         update: jest.fn(),
       },
@@ -405,7 +408,11 @@ describe('RequestsRoute', () => {
         getState: jest.fn(() => ({ okapi: { token: 'token' } })),
       },
       timezone: 'America/New_York',
-      user: {},
+      user: {
+        user: {
+          username: 'rick'
+        }
+      },
     },
     resources: {
       addressTypes: {
@@ -435,7 +442,12 @@ describe('RequestsRoute', () => {
       pickSlips: {
         records: [
           {
-            name: 'pick slip',
+            item: {
+              title: 'test title'
+            },
+            request: {
+              requestID: '393030bc-669e-4a41-81e9-3427c25a3b39',
+            }
           }
         ],
       },
