@@ -1185,7 +1185,6 @@ class RequestsRoute extends React.Component {
   };
 
   filterSelectedPickSlipsData = (pickSlipsData, selectedRow) => {
-    console.log('pick lsip -----------', pickSlipsData);
     const selectedRequestIds = new Set(Object.keys(selectedRow));
     return pickSlipsData
       .filter(entry => selectedRequestIds.has(entry.request?.requestID));

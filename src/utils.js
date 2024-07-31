@@ -241,7 +241,7 @@ export const getNextSelectedRowsState = (selectedRows, row) => {
 
 export const extractPickSlipRequestIds = (pickSlipsData) => {
   return pickSlipsData.map(pickSlip => pickSlip?.request?.requestID);
-}
+};
 
 export const convertToSlipData = (source, intl, timeZone, locale, slipName = SLIPS_TYPE.PICK_SLIP) => {
   return source.map(pickSlip => {
