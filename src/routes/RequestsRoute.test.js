@@ -96,6 +96,7 @@ jest.mock('../utils', () => ({
   getFormattedYears: jest.fn(),
   getInstanceQueryString: jest.fn(),
   getNextSelectedRowsState: jest.fn(),
+  extractPickSlipRequestIds: jest.fn(),
 }));
 jest.mock('./utils', () => ({
   ...jest.requireActual('./utils'),
