@@ -9,6 +9,8 @@
 * Fix Request detail pane capitalization. Refs UIREQ-1106.
 * Update the column labels. Refs UIREQ-1104.
 * Add "Printed" and "# Copies" columns in "Show Columns" list and Request records table. Refs UIREQ-1118.
+* Populate the token 'request.barcodeImage' in the pick slip. Refs UIREQ-1117.
+* Populate the token "staffUsername" in the pick slip. Refs UIREQ-1124.
 
 ## [9.1.1] (https://github.com/folio-org/ui-checkin/tree/v9.1.1) (2024-03-27)
 [Full Changelog](https://github.com/folio-org/ui-checkin/compare/v9.1.0...v9.1.1)
