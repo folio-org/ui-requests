@@ -78,6 +78,7 @@ import {
   getSelectedSlipDataMulti,
   selectedRowsNonPrintable,
   getNextSelectedRowsState,
+  getPrintDetails,
 } from '../utils';
 import packageInfo from '../../package';
 import CheckboxColumn from '../components/CheckboxColumn';
@@ -240,6 +241,8 @@ export const getListFormatter = (
   'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
   'callNumber': rq => effectiveCallNumber(rq.item),
   'servicePoint': rq => get(rq, 'pickupServicePoint.name', DEFAULT_FORMATTER_VALUE),
+  'copies': rq => get(rq, 'printDetails.count', DEFAULT_FORMATTER_VALUE),
+  'printed': rq => (rq.printDetails ? getPrintDetails(rq.printDetails) : DEFAULT_FORMATTER_VALUE),
 });
 
 export const buildHoldRecords = (records) => {

@@ -53,6 +53,11 @@ export function getFullName(user) {
   return `${lastName}${displayedFirstName ? ', ' : ' '}${displayedFirstName} ${middleName}`;
 }
 
+export const getPrintDetails = (printDetails) => {
+  const fullName = getFullName(printDetails?.lastPrintRequester);
+  return fullName + ' ' + printDetails?.lastPrintedDate;
+};
+
 export const createUserHighlightBoxLink = (linkText, id) => {
   return linkText ? <Link to={`/users/view/${id}`}>{linkText}</Link> : '';
 };
