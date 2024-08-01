@@ -164,6 +164,11 @@ export const requestableItemStatuses = [
   itemStatuses.RESTRICTED,
 ];
 
+export const PRINT_DETAILS_REPORT_HEADERS = {
+  COPIES: 'printDetails.count',
+  PRINTED: 'printDetails.lastPrintedDetails',
+};
+
 export const reportHeaders = [
   'requestType',
   'status',
@@ -197,6 +202,8 @@ export const reportHeaders = [
   'proxy.barcode',
   'tags.tagList',
   'patronComments',
+  PRINT_DETAILS_REPORT_HEADERS.COPIES,
+  PRINT_DETAILS_REPORT_HEADERS.PRINTED,
 ];
 
 export const expiredHoldsReportHeaders = [

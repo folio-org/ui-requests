@@ -64,6 +64,7 @@ import {
   fulfillmentTypeMap,
   DEFAULT_REQUEST_TYPE_VALUE,
   INPUT_REQUEST_SEARCH_SELECTOR,
+  PRINT_DETAILS_REPORT_HEADERS,
 } from '../constants';
 import {
   buildUrl,
@@ -113,6 +114,12 @@ export const getPrintHoldRequestsEnabled = (printHoldRequests) => {
   } = value ? JSON.parse(value) : {};
 
   return printHoldRequestsEnabled;
+};
+
+export const getCsvFields = (isPrintDetailsEnabled, columnHeaders) => {
+  if (isPrintDetailsEnabled) return columnHeaders;
+  return columnHeaders.filter(column => column.value !== PRINT_DETAILS_REPORT_HEADERS.COPIES &&
+    column.value !== PRINT_DETAILS_REPORT_HEADERS.PRINTED);
 };
 
 export const urls = {
@@ -446,6 +453,15 @@ class RequestsRoute extends React.Component {
         query: '(module==SETTINGS and configName==TLR)',
       },
     },
+    circulationSettings: {
+      throwErrors: false,
+      type: 'okapi',
+      records: 'circulationSettings',
+      path: 'circulation/settings',
+      params: {
+        query: '(name=printEventLogFeature)',
+      },
+    }
   };
 
   static propTypes = {
@@ -491,6 +507,9 @@ class RequestsRoute extends React.Component {
         reset: PropTypes.func.isRequired,
         GET: PropTypes.func.isRequired,
       }).isRequired,
+      circulationSettings: PropTypes.shape({
+        GET: PropTypes.func,
+      }),
     }).isRequired,
     resources: PropTypes.shape({
       addressTypes: PropTypes.shape({
@@ -524,6 +543,10 @@ class RequestsRoute extends React.Component {
       }),
       printHoldRequests: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object).isRequired,
+      }),
+      circulationSettings: PropTypes.shape({
+        hasLoaded: PropTypes.bool.isRequired,
+        records: PropTypes.arrayOf(PropTypes.object),
       }),
     }).isRequired,
     stripes: PropTypes.shape({
@@ -734,7 +757,7 @@ class RequestsRoute extends React.Component {
   }
 
   // Export function for the CSV search report action
-  async exportData() {
+  async exportData(isPrintDetailsEnabled) {
     this.setState({ csvReportPending: true });
 
     // Build a custom query for the CSV record export, which has to include
@@ -749,15 +772,15 @@ class RequestsRoute extends React.Component {
       queryString = `(requesterId=="${queryTerm}" or requester.barcode="${queryTerm}*" or item.title="${queryTerm}*" or item.barcode=="${queryTerm}*" or itemId=="${queryTerm}")`;
       queryClauses.push(queryString);
     }
-
     if (filterQuery) queryClauses.push(filterQuery);
 
     queryString = queryClauses.join(' and ');
     const records = await this.fetchReportData(this.props.mutator.reportRecords, queryString);
     const recordsToCSV = this.buildRecords(records);
+    const csvFields = getCsvFields(isPrintDetailsEnabled, this.columnHeadersMap);
 
     exportCsv(recordsToCSV, {
-      onlyFields: this.columnHeadersMap,
+      onlyFields: csvFields,
       excludeFields: ['id'],
     });
 
@@ -818,6 +841,14 @@ class RequestsRoute extends React.Component {
       if (record.requester) {
         const { firstName, middleName, lastName } = record.requester;
         record.requester.name = `${firstName || ''} ${middleName || ''} ${lastName || ''}`;
+      }
+      if (record.printDetails) {
+        const { firstName = '', middleName = '', lastName = '' } = record.printDetails.lastPrintRequester;
+        const lastPrintedDate = record.printDetails.lastPrintedDate || '';
+        const fullName = [firstName, middleName, lastName].filter(Boolean).join(' ');
+        const date = lastPrintedDate ? `, ${lastPrintedDate}` : '';
+
+        record.printDetails.lastPrintedDetails = `${fullName}${date}`;
       }
       if (record.loan) {
         const { dueDate } = record.loan;
@@ -1222,30 +1253,6 @@ class RequestsRoute extends React.Component {
   }
 
   render() {
-    const columnLabels = {
-      select: <Checkbox
-        data-testid="selectRequestCheckbox"
-        checked={this.getIsAllRowsSelected()}
-        aria-label={<FormattedMessage id="ui-requests.instances.rows.select" />}
-        onChange={this.toggleAllRows}
-      />,
-      requestDate: <FormattedMessage id="ui-requests.requests.requestDate" />,
-      title: <FormattedMessage id="ui-requests.requests.title" />,
-      year: <FormattedMessage id="ui-requests.requests.year" />,
-      itemBarcode: <FormattedMessage id="ui-requests.requests.itemBarcode" />,
-      callNumber: <FormattedMessage id="ui-requests.requests.callNumber" />,
-      type: <FormattedMessage id="ui-requests.requests.type" />,
-      requestStatus: <FormattedMessage id="ui-requests.requests.status" />,
-      position: <FormattedMessage id="ui-requests.requests.queuePosition" />,
-      servicePoint: <FormattedMessage id="ui-requests.requests.servicePoint" />,
-      requester: <FormattedMessage id="ui-requests.requests.requester" />,
-      requesterBarcode: <FormattedMessage id="ui-requests.requests.requesterBarcode" />,
-      singlePrint: <FormattedMessage id="ui-requests.requests.singlePrint" />,
-      proxy: <FormattedMessage id="ui-requests.requests.proxy" />,
-      copies: <FormattedMessage id="ui-requests.requests.copies" />,
-      printed: <FormattedMessage id="ui-requests.requests.printed" />,
-    };
-
     const {
       resources,
       mutator,
@@ -1279,11 +1286,39 @@ class RequestsRoute extends React.Component {
     const servicePoints = get(resources, 'servicePoints.records', []);
     const cancellationReasons = get(resources, 'cancellationReasons.records', []);
     const requestCount = get(resources, 'records.other.totalRecords', 0);
+    const isViewPrintDetailsEnabled =
+      get(resources, 'circulationSettings.records[0].value.enablePrintLog') === 'true';
     const initialValues = dupRequest ||
     {
       requestType: DEFAULT_REQUEST_TYPE_VALUE,
       fulfillmentPreference: fulfillmentTypeMap.HOLD_SHELF,
       createTitleLevelRequest: createTitleLevelRequestsByDefault,
+    };
+
+    const columnLabels = {
+      select: <Checkbox
+        data-testid="selectRequestCheckbox"
+        checked={this.getIsAllRowsSelected()}
+        aria-label={<FormattedMessage id="ui-requests.instances.rows.select" />}
+        onChange={this.toggleAllRows}
+      />,
+      requestDate: <FormattedMessage id="ui-requests.requests.requestDate" />,
+      title: <FormattedMessage id="ui-requests.requests.title" />,
+      year: <FormattedMessage id="ui-requests.requests.year" />,
+      itemBarcode: <FormattedMessage id="ui-requests.requests.itemBarcode" />,
+      callNumber: <FormattedMessage id="ui-requests.requests.callNumber" />,
+      type: <FormattedMessage id="ui-requests.requests.type" />,
+      requestStatus: <FormattedMessage id="ui-requests.requests.status" />,
+      position: <FormattedMessage id="ui-requests.requests.queuePosition" />,
+      servicePoint: <FormattedMessage id="ui-requests.requests.servicePoint" />,
+      requester: <FormattedMessage id="ui-requests.requests.requester" />,
+      requesterBarcode: <FormattedMessage id="ui-requests.requests.requesterBarcode" />,
+      singlePrint: <FormattedMessage id="ui-requests.requests.singlePrint" />,
+      proxy: <FormattedMessage id="ui-requests.requests.proxy" />,
+      ...(isViewPrintDetailsEnabled && {
+        copies: <FormattedMessage id="ui-requests.requests.copies" />,
+        printed: <FormattedMessage id="ui-requests.requests.printed" />,
+      }),
     };
 
     const isPickSlipsArePending = resources?.pickSlips?.isPending;
@@ -1339,7 +1374,7 @@ class RequestsRoute extends React.Component {
               onClick={() => {
                 this.context.sendCallout({ message: <FormattedMessage id="ui-requests.csvReportInProgress" /> });
                 onToggle();
-                this.exportData();
+                this.exportData(isViewPrintDetailsEnabled);
               }}
             >
               <FormattedMessage id="ui-requests.exportSearchResultsToCsv" />
