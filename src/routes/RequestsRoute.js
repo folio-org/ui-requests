@@ -78,7 +78,6 @@ import {
   getSelectedSlipDataMulti,
   selectedRowsNonPrintable,
   getNextSelectedRowsState,
-  extractPickSlipRequestIds
 } from '../utils';
 import packageInfo from '../../package';
 import CheckboxColumn from '../components/CheckboxColumn';
@@ -113,6 +112,10 @@ export const getPrintHoldRequestsEnabled = (printHoldRequests) => {
   } = value ? JSON.parse(value) : {};
 
   return printHoldRequestsEnabled;
+};
+
+export const extractPickSlipRequestIds = (pickSlipsData) => {
+  return pickSlipsData.map(pickSlip => pickSlip['request.requestID']);
 };
 
 export const urls = {
@@ -1184,24 +1187,20 @@ class RequestsRoute extends React.Component {
     );
   };
 
-  filterSelectedPickSlipsData = (pickSlipsData, selectedRow) => {
-    const selectedRequestIds = new Set(Object.keys(selectedRow));
-    return pickSlipsData
-      .filter(entry => selectedRequestIds.has(entry.request?.requestID));
-  }
-
   savePrintEventDetails = (requestIds) => {
-    const isoDate = moment.tz('UTC').format();
+    const printTimeStamp = moment.tz('UTC').format();
+    const { id: loggedInUserId, username: loggedInUsername } = this.props.stripes.user.user;
+
     this.props.mutator.savePrintDetails.POST({
       'requestIds' : requestIds,
-      'requesterName' : this.props.stripes.user.user.username,
-      'requesterId' : this.props.stripes.user.user.id,
-      'printEventDate' : isoDate
+      'requesterName' : loggedInUsername,
+      'requesterId' : loggedInUserId,
+      'printEventDate' : printTimeStamp
     });
   }
 
-  onBeforeGetContentForPrintButton = (onToggle, slipsType, slipsData) => {
-    if (slipsType === SLIPS_TYPE.PICK_SLIP) { // add enable print log settings check
+  onBeforeGetContentForPrintButton = (onToggle, slipType, slipsData) => {
+    if (slipType === SLIPS_TYPE.PICK_SLIP) { // TODO: add enable print log settings check
       const requestIds = extractPickSlipRequestIds(slipsData);
       this.savePrintEventDetails(requestIds);
     }
@@ -1215,7 +1214,8 @@ class RequestsRoute extends React.Component {
   };
 
   onBeforeGetContentForSinglePrintButton = (requestId) => {
-    this.savePrintEventDetails([requestId]); // add enable print log settings check
+    this.savePrintEventDetails([requestId]); // TODO: add enable print log settings check
+
     return new Promise(resolve => {
       this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
       setTimeout(() => resolve(), 1000);
@@ -1403,7 +1403,7 @@ class RequestsRoute extends React.Component {
                   disabled={isPickSlipsEmpty}
                   template={pickSlipsPrintTemplate}
                   contentRef={this.pickSlipsPrintContentRef}
-                  onBeforeGetContent={() => this.onBeforeGetContentForPrintButton(onToggle, SLIPS_TYPE.PICK_SLIP, pickSlips)}
+                  onBeforeGetContent={() => this.onBeforeGetContentForPrintButton(onToggle, SLIPS_TYPE.PICK_SLIP, pickSlipsData)}
                 >
                   <FormattedMessage
                     id="ui-requests.printPickSlips"
@@ -1418,9 +1418,9 @@ class RequestsRoute extends React.Component {
                   contentRef={this.printSelectedContentRef}
                   onBeforeGetContent={
                     () => {
-                      const selectedPickSlips = this.filterSelectedPickSlipsData(pickSlips, selectedRows);
+                      const selectedPickSlips = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
                       const pickSlipsRequestIds = extractPickSlipRequestIds(selectedPickSlips);
-                      this.savePrintEventDetails(pickSlipsRequestIds); // add enable print log settings check
+                      this.savePrintEventDetails(pickSlipsRequestIds); // TODO: add enable print log settings check
 
                       return new Promise(resolve => {
                         this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
