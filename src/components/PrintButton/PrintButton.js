@@ -37,8 +37,12 @@ class PrintButton extends React.Component {
 
   handlePrintBeforeGetContent = () => {
     this.eventObject.event.stopPropagation();
+    this.props.onBeforeGetContent();
+  }
+
+  handleBeforePrint = () => {
     const singlePrintRequestId = this.props.requestId;
-    this.props.onBeforeGetContent(singlePrintRequestId);
+    this.props.onBeforePrint(singlePrintRequestId);
   }
 
   renderTriggerButton = () => {
@@ -65,7 +69,6 @@ class PrintButton extends React.Component {
   render() {
     const {
       onAfterPrint,
-      onBeforePrint,
     } = this.props;
 
     return (
@@ -74,7 +77,7 @@ class PrintButton extends React.Component {
         removeAfterPrint
         trigger={this.renderTriggerButton}
         onAfterPrint={onAfterPrint}
-        onBeforePrint={onBeforePrint}
+        onBeforePrint={this.handleBeforePrint}
         onBeforeGetContent={this.handlePrintBeforeGetContent}
       />
     );
