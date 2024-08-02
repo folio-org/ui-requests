@@ -114,6 +114,10 @@ export const getPrintHoldRequestsEnabled = (printHoldRequests) => {
   return printHoldRequestsEnabled;
 };
 
+export const extractPickSlipRequestIds = (pickSlipsData) => {
+  return pickSlipsData.map(pickSlip => pickSlip['request.requestID']);
+};
+
 export const urls = {
   user: (value, idType) => {
     const query = stringify({ query: `(${idType}=="${value}")` });
@@ -205,6 +209,7 @@ export const getListFormatter = (
     pickSlipsPrintTemplate,
     toggleRowSelection,
     onBeforeGetContentForSinglePrintButton,
+    onBeforePrintForSinglePrintButton,
   }
 ) => ({
   'select': rq => (
@@ -228,6 +233,7 @@ export const getListFormatter = (
       pickSlipsToCheck={pickSlipsToCheck}
       pickSlipsPrintTemplate={pickSlipsPrintTemplate}
       onBeforeGetContentForSinglePrintButton={onBeforeGetContentForSinglePrintButton}
+      onBeforePrintForSinglePrintButton={onBeforePrintForSinglePrintButton}
       pickSlipsData={pickSlipsData}
       getPrintContentRef={getPrintContentRef}
     />),
@@ -443,6 +449,15 @@ class RequestsRoute extends React.Component {
         query: '(module==SETTINGS and configName==TLR)',
       },
     },
+    savePrintDetails: {
+      type: 'okapi',
+      POST: {
+        path: 'circulation/print-events-entry',
+      },
+      fetch: false,
+      clientGeneratePk: false,
+      throwErrors: false,
+    },
   };
 
   static propTypes = {
@@ -488,6 +503,9 @@ class RequestsRoute extends React.Component {
         reset: PropTypes.func.isRequired,
         GET: PropTypes.func.isRequired,
       }).isRequired,
+      savePrintDetails: PropTypes.shape({
+        POST: PropTypes.func,
+      }),
     }).isRequired,
     resources: PropTypes.shape({
       addressTypes: PropTypes.shape({
@@ -1171,6 +1189,18 @@ class RequestsRoute extends React.Component {
     );
   };
 
+  savePrintEventDetails = (requestIds) => {
+    const printTimeStamp = moment.tz('UTC').format();
+    const { id: loggedInUserId, username: loggedInUsername } = this.props.stripes.user.user;
+
+    this.props.mutator.savePrintDetails.POST({
+      'requestIds' : requestIds,
+      'requesterName' : loggedInUsername,
+      'requesterId' : loggedInUserId,
+      'printEventDate' : printTimeStamp
+    });
+  }
+
   onBeforeGetContentForPrintButton = (onToggle) => (
     new Promise(resolve => {
       this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
@@ -1181,12 +1211,23 @@ class RequestsRoute extends React.Component {
     })
   );
 
+  onBeforePrintForPrintButton = (slipType, slipsData) => {
+    if (slipType === SLIPS_TYPE.PICK_SLIP) { // TODO: add enable print log settings check
+      const requestIds = extractPickSlipRequestIds(slipsData);
+      this.savePrintEventDetails(requestIds);
+    }
+  };
+
   onBeforeGetContentForSinglePrintButton = () => (
     new Promise(resolve => {
       this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
       setTimeout(() => resolve(), 1000);
     })
   );
+
+  onBeforePrintForSinglePrintButton = (requestId) => {
+    this.savePrintEventDetails([requestId]); // TODO: add enable print log settings check
+  }
 
   printContentRefs = {};
 
@@ -1307,6 +1348,7 @@ class RequestsRoute extends React.Component {
         pickSlipsPrintTemplate,
         toggleRowSelection: this.toggleRowSelection,
         onBeforeGetContentForSinglePrintButton: this.onBeforeGetContentForSinglePrintButton,
+        onBeforePrintForSinglePrintButton: this.onBeforePrintForSinglePrintButton,
       }
     );
 
@@ -1370,6 +1412,7 @@ class RequestsRoute extends React.Component {
                   template={pickSlipsPrintTemplate}
                   contentRef={this.pickSlipsPrintContentRef}
                   onBeforeGetContent={() => this.onBeforeGetContentForPrintButton(onToggle)}
+                  onBeforePrint={() => this.onBeforePrintForPrintButton(SLIPS_TYPE.PICK_SLIP, pickSlipsData)}
                 >
                   <FormattedMessage
                     id="ui-requests.printPickSlips"
@@ -1392,6 +1435,13 @@ class RequestsRoute extends React.Component {
                       multiSelectPickSlipData = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
                     })
                     }
+                  onBeforePrint={
+                    () => {
+                      const selectedPickSlips = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
+                      const pickSlipsRequestIds = extractPickSlipRequestIds(selectedPickSlips);
+                      this.savePrintEventDetails(pickSlipsRequestIds); // TODO: add enable print log settings check
+                    }
+                  }
                 >
                   <FormattedMessage
                     id="ui-requests.printPickSlipsSelected"
@@ -1415,6 +1465,7 @@ class RequestsRoute extends React.Component {
                     template={searchSlipsPrintTemplate}
                     contentRef={this.searchSlipsPrintContentRef}
                     onBeforeGetContent={() => this.onBeforeGetContentForPrintButton(onToggle)}
+                    onBeforePrint={() => this.onBeforePrintForPrintButton(SLIPS_TYPE.SEARCH_SLIP_HOLD_REQUESTS)}
                   >
                     <FormattedMessage
                       id="ui-requests.printSearchSlips"
