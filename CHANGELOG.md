@@ -9,6 +9,7 @@
 * Fix Request detail pane capitalization. Refs UIREQ-1106.
 * Update the column labels. Refs UIREQ-1104.
 * Add "Printed" and "# Copies" columns in "Show Columns" list and Request records table. Refs UIREQ-1118.
+* Update printing details on printing pick slips. Refs UIREQ-1122.
 * Populate the token 'request.barcodeImage' in the pick slip. Refs UIREQ-1117.
 * Populate the token "staffUsername" in the pick slip. Refs UIREQ-1124.
 

@@ -644,6 +644,7 @@ describe('getNextSelectedRowsState', () => {
     expect(result).not.toBe(selectedRows);
   });
 });
+
 describe('isPrintable', () => {
   it('should return true when pickSlips contain a match for requestId', () => {
     const requestId = '123';

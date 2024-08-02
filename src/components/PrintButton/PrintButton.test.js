@@ -21,14 +21,17 @@ const props = {
   onBeforePrint: jest.fn(),
   onBeforeGetContent: jest.fn(),
 };
+const singlePrintProps = { ...props, requestId: 'rick' };
 
 jest.mock('react-to-print', () => jest.fn(({
   trigger,
   content,
   onBeforeGetContent,
+  onBeforePrint,
 }) => {
   const handleClick = () => {
     Promise.resolve(onBeforeGetContent());
+    Promise.resolve(onBeforePrint());
   };
 
   return (
@@ -60,7 +63,7 @@ describe('PrintButton', () => {
       const expectedProps = {
         removeAfterPrint: true,
         onAfterPrint: props.onAfterPrint,
-        onBeforePrint: props.onBeforePrint,
+        onBeforePrint: expect.any(Function),
         onBeforeGetContent: expect.any(Function),
         content: expect.any(Function),
         trigger: expect.any(Function),
@@ -94,9 +97,36 @@ describe('PrintButton', () => {
         expect(props.onBeforeGetContent).toHaveBeenCalled();
       });
     });
+
+    it('should handle onBeforePrint method when the print is triggered', async () => {
+      const triggerButton = screen.getByText(props.children);
+
+      fireEvent.click(triggerButton);
+
+      await waitFor(() => {
+        expect(props.onBeforePrint).toHaveBeenCalled();
+      });
+    });
   });
 
-  describe('When button is enabled', () => {
+  describe('When button is enabled and single pickSlip is printed', () => {
+    it('should handle onBeforePrint method when the print is triggered', async () => {
+      render(
+        <PrintButton
+          {...singlePrintProps}
+        />
+      );
+      const triggerButton = screen.getByText(props.children);
+
+      fireEvent.click(triggerButton);
+
+      await waitFor(() => {
+        expect(props.onBeforePrint).toHaveBeenCalledWith('rick');
+      });
+    });
+  });
+
+  describe('When button is disabled', () => {
     let wrapper;
 
     beforeEach(() => {
