@@ -96,6 +96,7 @@ jest.mock('../utils', () => ({
   getFormattedYears: jest.fn(),
   getInstanceQueryString: jest.fn(),
   getNextSelectedRowsState: jest.fn(),
+  extractPickSlipRequestIds: jest.fn(),
 }));
 jest.mock('./utils', () => ({
   ...jest.requireActual('./utils'),
@@ -116,17 +117,25 @@ jest.mock('../components', () => ({
   LoadingButton: jest.fn(() => null),
   PrintButton: jest.fn(({
     onBeforeGetContent,
+    onBeforePrint,
     children,
-  }) => (
-    <div>
-      <button
-        type="button"
-        onClick={onBeforeGetContent}
-      >onBeforeGetContent
-      </button>
-      {children}
-    </div>
-  )),
+  }) => {
+    const handleClick = () => {
+      onBeforeGetContent();
+      onBeforePrint();
+    };
+    return (
+      <div>
+        <button
+          type="button"
+          onClick={handleClick}
+        >
+          PrintButton
+        </button>
+        {children}
+      </div>
+    );
+  }),
   PrintContent: jest.fn(({ printContentTestId }) => <div data-testid={printContentTestId}>PrintContent</div>)
 }));
 jest.mock('../components/RequestsFilters/RequestsFilters', () => ({ onClear }) => {
@@ -145,14 +154,21 @@ jest.mock('../ViewRequest', () => jest.fn());
 jest.mock('../RequestForm', () => jest.fn());
 jest.mock('../components/SinglePrintButtonForPickSlip', () => jest.fn(({
   onBeforeGetContentForSinglePrintButton,
-}) => (
-  <button
-    type="button"
-    data-testid={testIds.singlePrintButton}
-    onClick={onBeforeGetContentForSinglePrintButton}
-  >Print
-  </button>
-)));
+  onBeforePrintForSinglePrintButton,
+}) => {
+  const handleClick = () => {
+    onBeforeGetContentForSinglePrintButton();
+    onBeforePrintForSinglePrintButton();
+  };
+  return (
+    <button
+      type="button"
+      data-testid={testIds.singlePrintButton}
+      onClick={handleClick}
+    >Print
+    </button>
+  );
+}));
 jest.mock('../components/CheckboxColumn/CheckboxColumn', () => jest.fn(({
   toggleRowSelection,
 }) => (
@@ -336,6 +352,9 @@ describe('RequestsRoute', () => {
       url: '{{ env.FOLIO_MD_REGISTRY }}/_/proxy/modules',
     },
     mutator: {
+      savePrintDetails: {
+        POST: jest.fn().mockResolvedValue(),
+      },
       activeRecord: {
         update: jest.fn(),
       },
@@ -405,7 +424,11 @@ describe('RequestsRoute', () => {
         getState: jest.fn(() => ({ okapi: { token: 'token' } })),
       },
       timezone: 'America/New_York',
-      user: {},
+      user: {
+        user: {
+          username: 'rick'
+        }
+      },
     },
     resources: {
       addressTypes: {
@@ -435,7 +458,12 @@ describe('RequestsRoute', () => {
       pickSlips: {
         records: [
           {
-            name: 'pick slip',
+            item: {
+              title: 'test title'
+            },
+            request: {
+              requestID: '393030bc-669e-4a41-81e9-3427c25a3b39',
+            }
           }
         ],
       },
@@ -601,7 +629,7 @@ describe('RequestsRoute', () => {
     it('should render print pick slips label', async () => {
       const printPickSlipsLabel = screen.getByText(labelIds.printPickSlips);
 
-      await userEvent.click(screen.getAllByRole('button', { name: 'onBeforeGetContent' })[0]);
+      await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[0]);
 
       expect(printPickSlipsLabel).toBeInTheDocument();
     });
@@ -609,7 +637,7 @@ describe('RequestsRoute', () => {
     it('should render print search slips label', async () => {
       const printSearchSlipsLabel = screen.getByText(labelIds.printSearchSlips);
 
-      await userEvent.click(screen.getAllByRole('button', { name: 'onBeforeGetContent' })[1]);
+      await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[1]);
 
       expect(printSearchSlipsLabel).toBeInTheDocument();
     });
@@ -967,6 +995,7 @@ describe('RequestsRoute', () => {
     const isPrintableMock = jest.fn(id => id);
     const toggleRowSelectionMock = jest.fn(id => id);
     const onBeforeGetContentForSinglePrintButtonMock = jest.fn(id => id);
+    const onBeforePrintForSinglePrintButtonMock = jest.fn(id => id);
     const listFormatter = getListFormatter(
       {
         getRowURL: getRowURLMock,
@@ -981,6 +1010,7 @@ describe('RequestsRoute', () => {
         pickSlipsPrintTemplate: '',
         toggleRowSelection: toggleRowSelectionMock,
         onBeforeGetContentForSinglePrintButton: onBeforeGetContentForSinglePrintButtonMock,
+        onBeforePrintForSinglePrintButton: onBeforePrintForSinglePrintButtonMock,
       }
     );
     const requestWithData = {
@@ -1021,6 +1051,7 @@ describe('RequestsRoute', () => {
           pickSlipsPrintTemplate: jest.fn(),
           toggleRowSelection: jest.fn(),
           onBeforeGetContentForSinglePrintButton: jest.fn(),
+          onBeforePrintForSinglePrintButton: jest.fn(),
         };
         const formatter = getListFormatter({}, options);
         const result = formatter.select(selectedRequest);
@@ -1042,6 +1073,7 @@ describe('RequestsRoute', () => {
           pickSlipsPrintTemplate: jest.fn(),
           toggleRowSelection: jest.fn(),
           onBeforeGetContentForSinglePrintButton: jest.fn(),
+          onBeforePrintForSinglePrintButton: jest.fn(),
         };
         const formatter = getListFormatter({}, options);
         const singlePrintButton = formatter.singlePrint(selectedRequest);
