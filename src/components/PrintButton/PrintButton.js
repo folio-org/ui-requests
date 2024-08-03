@@ -14,6 +14,7 @@ class PrintButton extends React.Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     requestId: PropTypes.string,
+    isViewPrintDetailsEnabled: PropTypes.bool,
     onAfterPrint: PropTypes.func,
     onBeforePrint: PropTypes.func,
     onBeforeGetContent: PropTypes.func,
@@ -41,8 +42,8 @@ class PrintButton extends React.Component {
   }
 
   handleBeforePrint = () => {
-    const singlePrintRequestId = this.props.requestId;
-    this.props.onBeforePrint(singlePrintRequestId);
+    const { requestId, isViewPrintDetailsEnabled } = this.props;
+    this.props.onBeforePrint(requestId, isViewPrintDetailsEnabled);
   }
 
   renderTriggerButton = () => {
