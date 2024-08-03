@@ -1305,11 +1305,14 @@ describe('RequestsRoute', () => {
 
     describe('printed', () => {
       it('should return printed', () => {
-        const mockPrinted = 'lastName, firstName middleName 8/3/2024,  7:03 PM';
-
         getFullName.mockReturnValueOnce('lastName, firstName middleName');
 
-        expect(listFormatter.printed(requestWithData)).toBe(mockPrinted);
+        const expectedFormattedDate = intl.formatDate(requestWithData.printDetails.lastPrintedDate);
+        const expectedFormattedTime = intl.formatTime(requestWithData.printDetails.lastPrintedDate);
+        const expectedOutput =
+        `lastName, firstName middleName ${expectedFormattedDate}${expectedFormattedTime ? ', ' : ''}${expectedFormattedTime}`;
+
+        expect(listFormatter.printed(requestWithData)).toBe(expectedOutput);
       });
 
       it('should return empty string', () => {
@@ -1360,7 +1363,7 @@ describe('RequestsRoute', () => {
       const expectedFormattedDate = intl.formatDate(lastPrintDetails.lastPrintedDate);
       const expectedFormattedTime = intl.formatTime(lastPrintDetails.lastPrintedDate);
       const expectedOutput =
-        `lastName, firstName middleName ${expectedFormattedDate}${expectedFormattedTime ? ', ' : ' '} ${expectedFormattedTime}`;
+        `lastName, firstName middleName ${expectedFormattedDate}${expectedFormattedTime ? ', ' : ''}${expectedFormattedTime}`;
 
       expect(printedDetails).toBe(expectedOutput);
     });

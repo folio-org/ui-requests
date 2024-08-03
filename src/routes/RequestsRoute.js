@@ -128,7 +128,7 @@ export const getLastPrintedDetails = (printDetails, intl) => {
   const fullName = getFullName(printDetails?.lastPrintRequester);
   const formattedDate = intl.formatDate(printDetails?.lastPrintedDate);
   const formattedTime = intl.formatTime(printDetails?.lastPrintedDate);
-  const localizedDateTime = `${formattedDate}${formattedDate ? ', ' : ' '} ${formattedTime}`;
+  const localizedDateTime = `${formattedDate}${formattedTime ? ', ' : ''}${formattedTime}`;
 
   return fullName + ' ' + localizedDateTime;
 };
