@@ -688,6 +688,12 @@ describe('RequestsRoute', () => {
       expect(printPickSlipsLabel).toBeInTheDocument();
     });
 
+    it('should trigger "mutator.savePrintDetails.POST"', async () => {
+      await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[0]);
+
+      expect(defaultProps.mutator.savePrintDetails.POST).toHaveBeenCalled();
+    });
+
     it('should render print search slips label', async () => {
       const printSearchSlipsLabel = screen.getByText(labelIds.printSearchSlips);
 
@@ -1060,7 +1066,6 @@ describe('RequestsRoute', () => {
         selectedRows: '',
         pickSlipsToCheck: '',
         pickSlipsData: '',
-        isViewPrintDetailsEnabled: true,
         getPrintContentRef: getPrintContentRefMock,
         isPrintableMock,
         pickSlipsPrintTemplate: '',
@@ -1105,7 +1110,6 @@ describe('RequestsRoute', () => {
           selectedRows: [],
           pickSlipsToCheck: [],
           pickSlipsData: {},
-          isViewPrintDetailsEnabled: true,
           getPrintContentRef: jest.fn(),
           pickSlipsPrintTemplate: jest.fn(),
           toggleRowSelection: jest.fn(),
@@ -1129,7 +1133,6 @@ describe('RequestsRoute', () => {
           selectedRows: [],
           pickSlipsToCheck: [],
           pickSlipsData: {},
-          isViewPrintDetailsEnabled: true,
           getPrintContentRef: jest.fn(),
           pickSlipsPrintTemplate: jest.fn(),
           toggleRowSelection: jest.fn(),

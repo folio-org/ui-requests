@@ -13,7 +13,6 @@ const SinglePrintButtonForPickSlip = ({
   pickSlipsToCheck,
   pickSlipsPrintTemplate,
   pickSlipsData,
-  isViewPrintDetailsEnabled,
   onBeforeGetContentForSinglePrintButton,
   onBeforePrintForSinglePrintButton,
   getPrintContentRef,
@@ -27,7 +26,6 @@ const SinglePrintButtonForPickSlip = ({
       disabled={disabled}
       contentRef={getPrintContentRef(request.id)}
       requestId={request.id}
-      isViewPrintDetailsEnabled={isViewPrintDetailsEnabled}
       onBeforeGetContent={onBeforeGetContentForSinglePrintButton}
       onBeforePrint={onBeforePrintForSinglePrintButton}
     >
@@ -48,7 +46,6 @@ SinglePrintButtonForPickSlip.propTypes = {
   pickSlipsToCheck: PropTypes.object.isRequired,
   pickSlipsPrintTemplate: PropTypes.object.isRequired,
   pickSlipsData: PropTypes.object.isRequired,
-  isViewPrintDetailsEnabled: PropTypes.bool.isRequired,
   onBeforeGetContentForSinglePrintButton: PropTypes.func.isRequired,
   onBeforePrintForSinglePrintButton: PropTypes.func.isRequired,
   getPrintContentRef: PropTypes.object.isRequired,

@@ -221,7 +221,6 @@ export const getListFormatter = (
     selectedRows,
     pickSlipsToCheck,
     pickSlipsData,
-    isViewPrintDetailsEnabled,
     getPrintContentRef,
     pickSlipsPrintTemplate,
     toggleRowSelection,
@@ -249,7 +248,6 @@ export const getListFormatter = (
       request={rq}
       pickSlipsToCheck={pickSlipsToCheck}
       pickSlipsPrintTemplate={pickSlipsPrintTemplate}
-      isViewPrintDetailsEnabled={isViewPrintDetailsEnabled}
       onBeforeGetContentForSinglePrintButton={onBeforeGetContentForSinglePrintButton}
       onBeforePrintForSinglePrintButton={onBeforePrintForSinglePrintButton}
       pickSlipsData={pickSlipsData}
@@ -1234,6 +1232,7 @@ class RequestsRoute extends React.Component {
   };
 
   savePrintEventDetails = (requestIds) => {
+    console.log('req ids --', requestIds);
     const currDateTime = new Date();
     const printTimeStamp = currDateTime.toISOString();
     const { id: loggedInUserId, username: loggedInUsername } = this.props.stripes.user.user;
@@ -1268,7 +1267,10 @@ class RequestsRoute extends React.Component {
     })
   );
 
-  onBeforePrintForSinglePrintButton = (requestId, isViewPrintDetailsEnabled) => {
+  onBeforePrintForSinglePrintButton = (requestId) => {
+    const isViewPrintDetailsEnabled =
+      get(this.props.resources, 'circulationSettings.records[0].value.enablePrintLog') === 'true';
+
     if (isViewPrintDetailsEnabled) {
       this.savePrintEventDetails([requestId]);
     }
@@ -1394,7 +1396,6 @@ class RequestsRoute extends React.Component {
         selectedRows,
         pickSlipsToCheck: pickSlips,
         pickSlipsData,
-        isViewPrintDetailsEnabled,
         getPrintContentRef: this.getPrintContentRef,
         pickSlipsPrintTemplate,
         toggleRowSelection: this.toggleRowSelection,

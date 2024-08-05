@@ -24,7 +24,6 @@ const props = {
 const singlePrintProps = {
   ...props,
   requestId: 'rick',
-  isViewPrintDetailsEnabled: true
 };
 
 jest.mock('react-to-print', () => jest.fn(({
@@ -125,7 +124,7 @@ describe('PrintButton', () => {
       fireEvent.click(triggerButton);
 
       await waitFor(() => {
-        expect(props.onBeforePrint).toHaveBeenCalledWith('rick', true);
+        expect(props.onBeforePrint).toHaveBeenCalledWith('rick');
       });
     });
   });
