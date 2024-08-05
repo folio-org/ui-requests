@@ -64,7 +64,7 @@ import {
   fulfillmentTypeMap,
   DEFAULT_REQUEST_TYPE_VALUE,
   INPUT_REQUEST_SEARCH_SELECTOR,
-  PRINT_DETAILS_REPORT_HEADERS,
+  PRINT_DETAILS_COLUMNS,
 } from '../constants';
 import {
   buildUrl,
@@ -116,8 +116,8 @@ export const getPrintHoldRequestsEnabled = (printHoldRequests) => {
 };
 
 export const getCsvFields = (columnHeaders) => (
-  columnHeaders.filter(column => column.value !== PRINT_DETAILS_REPORT_HEADERS.COPIES &&
-    column.value !== PRINT_DETAILS_REPORT_HEADERS.PRINTED)
+  columnHeaders.filter(column => column.value !== PRINT_DETAILS_COLUMNS.COPIES &&
+    column.value !== PRINT_DETAILS_COLUMNS.PRINTED)
 );
 
 export const extractPickSlipRequestIds = (pickSlipsData) => {
@@ -262,7 +262,7 @@ export const getListFormatter = (
   'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
   'callNumber': rq => effectiveCallNumber(rq.item),
   'servicePoint': rq => get(rq, 'pickupServicePoint.name', DEFAULT_FORMATTER_VALUE),
-  'copies': rq => get(rq, 'printDetails.count', DEFAULT_FORMATTER_VALUE),
+  'copies': rq => get(rq, PRINT_DETAILS_COLUMNS.COPIES, DEFAULT_FORMATTER_VALUE),
   'printed': rq => (rq.printDetails ? getLastPrintedDetails(rq.printDetails, intl) : DEFAULT_FORMATTER_VALUE),
 });
 
@@ -280,6 +280,8 @@ export const buildHoldRecords = (records) => {
     return record;
   });
 };
+
+export const viewPrintDetailsPath = 'circulationSettings.records[0].value.enablePrintLog';
 
 class RequestsRoute extends React.Component {
   static contextType = CalloutContext;
@@ -1268,7 +1270,7 @@ class RequestsRoute extends React.Component {
 
   onBeforePrintForSinglePrintButton = (requestId) => {
     const isViewPrintDetailsEnabled =
-      get(this.props.resources, 'circulationSettings.records[0].value.enablePrintLog') === 'true';
+      get(this.props.resources, viewPrintDetailsPath) === 'true';
 
     if (isViewPrintDetailsEnabled) {
       this.savePrintEventDetails([requestId]);
@@ -1341,7 +1343,7 @@ class RequestsRoute extends React.Component {
     const cancellationReasons = get(resources, 'cancellationReasons.records', []);
     const requestCount = get(resources, 'records.other.totalRecords', 0);
     const isViewPrintDetailsEnabled =
-      get(resources, 'circulationSettings.records[0].value.enablePrintLog') === 'true';
+      get(resources, viewPrintDetailsPath) === 'true';
     const initialValues = dupRequest ||
     {
       requestType: DEFAULT_REQUEST_TYPE_VALUE,

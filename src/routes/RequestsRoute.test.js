@@ -64,6 +64,7 @@ import {
   MAX_RECORDS,
   REQUEST_OPERATIONS,
   INPUT_REQUEST_SEARCH_SELECTOR,
+  PRINT_DETAILS_COLUMNS,
 } from '../constants';
 import { historyData } from '../../test/jest/fixtures/historyData';
 
@@ -1375,8 +1376,8 @@ describe('RequestsRoute', () => {
   describe('getCsvFields', () => {
     const columnHeaders = [
       { value: 'patronComments' },
-      { value: 'printDetails.count' },
-      { value: 'printDetails.lastPrintedDetails' },
+      { value: PRINT_DETAILS_COLUMNS.COPIES },
+      { value: PRINT_DETAILS_COLUMNS.PRINTED },
     ];
 
     it('should render getCsvFields() correctly', () => {
