@@ -871,7 +871,7 @@ class RequestsRoute extends React.Component {
         record.requester.name = `${firstName || ''} ${middleName || ''} ${lastName || ''}`;
       }
       if (record.printDetails) {
-        const { firstName = '', middleName = '', lastName = '' } = record.printDetails.lastPrintRequester;
+        const { firstName = '', middleName = '', lastName } = record.printDetails.lastPrintRequester;
         const lastPrintedDate = record.printDetails.lastPrintedDate || '';
         const fullName = [firstName, middleName, lastName].filter(Boolean).join(' ');
         const date = lastPrintedDate ? `, ${lastPrintedDate}` : '';
