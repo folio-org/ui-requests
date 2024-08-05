@@ -1232,7 +1232,6 @@ class RequestsRoute extends React.Component {
   };
 
   savePrintEventDetails = (requestIds) => {
-    console.log('req ids --', requestIds);
     const currDateTime = new Date();
     const printTimeStamp = currDateTime.toISOString();
     const { id: loggedInUserId, username: loggedInUsername } = this.props.stripes.user.user;
@@ -1317,6 +1316,7 @@ class RequestsRoute extends React.Component {
       stripes: {
         timezone,
         locale,
+        user: { user }
       },
     } = this.props;
 
@@ -1382,7 +1382,7 @@ class RequestsRoute extends React.Component {
     const isSearchSlipsEmpty = isEmpty(searchSlips);
     const pickSlipsPrintTemplate = this.getPrintTemplate(SLIPS_TYPE.PICK_SLIP);
     const searchSlipsPrintTemplate = this.getPrintTemplate(SLIPS_TYPE.SEARCH_SLIP_HOLD_REQUESTS);
-    const pickSlipsData = convertToSlipData(pickSlips, intl, timezone, locale, SLIPS_TYPE.PICK_SLIP);
+    const pickSlipsData = convertToSlipData(pickSlips, intl, timezone, locale, SLIPS_TYPE.PICK_SLIP, user);
     const searchSlipsData = convertToSlipData(searchSlips, intl, timezone, locale, SLIPS_TYPE.SEARCH_SLIP_HOLD_REQUESTS);
     let multiSelectPickSlipData = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
 

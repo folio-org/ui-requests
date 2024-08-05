@@ -239,7 +239,7 @@ export const getNextSelectedRowsState = (selectedRows, row) => {
   return newSelectedRows;
 };
 
-export const convertToSlipData = (source, intl, timeZone, locale, slipName = SLIPS_TYPE.PICK_SLIP) => {
+export const convertToSlipData = (source, intl, timeZone, locale, slipName = SLIPS_TYPE.PICK_SLIP, user = {}) => {
   return source.map(pickSlip => {
     const {
       item = {},
@@ -248,9 +248,12 @@ export const convertToSlipData = (source, intl, timeZone, locale, slipName = SLI
       currentDateTime = null,
     } = pickSlip;
 
+    const { username } = user;
+
     return {
       'staffSlip.Name': slipName,
       'staffSlip.currentDateTime': buildLocaleDateAndTime(currentDateTime, timeZone, locale),
+      'staffSlip.staffUsername': username,
       'requester.firstName': requester.firstName,
       'requester.lastName': requester.lastName,
       'requester.middleName': requester.middleName,
@@ -308,6 +311,7 @@ export const convertToSlipData = (source, intl, timeZone, locale, slipName = SLI
         : request.holdShelfExpirationDate,
       'request.requestID': request.requestID,
       'request.patronComments': request.patronComments,
+      'request.barcodeImage': `<Barcode>${request.requestID}</Barcode>`,
     };
   });
 };
