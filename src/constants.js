@@ -139,6 +139,11 @@ export const requestTypesMap = {
   PAGE: 'Page',
 };
 
+export const requestPrintStatusType = {
+  PRINTED: 'Printed',
+  NOT_PRINTED: 'Not printed',
+};
+
 export const iconTypes = {
   times: 'times',
   timesCircle: 'times-circle',
@@ -230,6 +235,7 @@ export const requestFilterTypes = {
   REQUEST_STATUS: 'requestStatus',
   REQUEST_LEVELS: 'requestLevels',
   PICKUP_SERVICE_POINT: 'pickupServicePoints',
+  PRINT_STATUS: 'printStatus',
 };
 
 export const REQUEST_LEVEL_TYPES = {
@@ -257,6 +263,11 @@ export const requestStatusFilters = [
 export const requestLevelFilters = [
   { label: 'ui-requests.filters.requestLevel.item', value: REQUEST_LEVEL_TYPES.ITEM },
   { label: 'ui-requests.filters.requestLevel.title', value: REQUEST_LEVEL_TYPES.TITLE },
+];
+
+export const requestPrintStatusFilters = [
+  { label: 'ui-requests.filters.printStatus.printed', value: requestPrintStatusType.PRINTED },
+  { label: 'ui-requests.filters.printStatus.notPrinted', value: requestPrintStatusType.NOT_PRINTED },
 ];
 
 export const SLIPS_TYPE = {
