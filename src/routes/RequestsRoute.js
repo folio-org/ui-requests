@@ -99,6 +99,7 @@ import {
   isReorderableRequest,
   getFormattedYears,
   getStatusQuery,
+  getFullNameForCsvRecords,
 } from './utils';
 import SinglePrintButtonForPickSlip from '../components/SinglePrintButtonForPickSlip';
 
@@ -883,13 +884,11 @@ class RequestsRoute extends React.Component {
         });
       }
       if (record.requester) {
-        const { firstName, middleName, lastName } = record.requester;
-        record.requester.name = `${firstName || ''} ${middleName || ''} ${lastName || ''}`;
+        record.requester.name = getFullNameForCsvRecords(record.requester);
       }
       if (record.printDetails) {
-        const { firstName = '', middleName = '', lastName } = record.printDetails.lastPrintRequester;
+        const fullName = getFullNameForCsvRecords(record.printDetails.lastPrintRequester);
         const lastPrintedDate = record.printDetails.lastPrintedDate || '';
-        const fullName = [firstName, middleName, lastName].filter(Boolean).join(' ');
         const date = lastPrintedDate ? `, ${lastPrintedDate}` : '';
 
         record.printDetails.lastPrintedDetails = `${fullName}${date}`;
@@ -899,8 +898,7 @@ class RequestsRoute extends React.Component {
         record.loan.dueDate = `${formatDate(dueDate)}, ${formatTime(dueDate)}`;
       }
       if (record.proxy) {
-        const { firstName, middleName, lastName } = record.proxy;
-        record.proxy.name = `${firstName || ''} ${middleName || ''} ${lastName || ''}`;
+        record.proxy.name = getFullNameForCsvRecords(record.proxy);
       }
       if (record.deliveryAddress) {
         const { addressLine1, city, region, postalCode, countryId } = record.deliveryAddress;
