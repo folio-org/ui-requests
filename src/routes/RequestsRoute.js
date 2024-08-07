@@ -115,7 +115,7 @@ export const getPrintHoldRequestsEnabled = (printHoldRequests) => {
   return printHoldRequestsEnabled;
 };
 
-export const getCsvFields = (columnHeaders) => (
+export const getFilteredReportHeaders = (columnHeaders) => (
   columnHeaders.filter(column => column.value !== PRINT_DETAILS_COLUMNS.COPIES &&
     column.value !== PRINT_DETAILS_COLUMNS.PRINTED)
 );
@@ -124,9 +124,9 @@ export const extractPickSlipRequestIds = (pickSlipsData) => {
   return pickSlipsData.map(pickSlip => pickSlip['request.requestID']);
 };
 
-export const getLastPrintedDetails = (printDetails, intl) => {
+export const getLastPrintedDetails = (printDetails, intl, timeZone, locale) => {
   const fullName = getFullName(printDetails?.lastPrintRequester);
-  const formattedDate = intl.formatDate(printDetails?.lastPrintedDate);
+  const formattedDate = intl.formatDate(printDetails?.lastPrintedDate, { timeZone, locale });
   const formattedTime = intl.formatTime(printDetails?.lastPrintedDate);
   const localizedDateTime = `${formattedDate}${formattedTime ? ', ' : ''}${formattedTime}`;
 
@@ -217,10 +217,13 @@ export const getListFormatter = (
     setURL,
   },
   {
+    timezone,
+    locale,
     intl,
     selectedRows,
     pickSlipsToCheck,
     pickSlipsData,
+    isViewPrintDetailsEnabled,
     getPrintContentRef,
     pickSlipsPrintTemplate,
     toggleRowSelection,
@@ -243,16 +246,21 @@ export const getListFormatter = (
     </AppIcon>
   ),
   'requester': rq => (rq.requester ? getFullName(rq.requester) : DEFAULT_FORMATTER_VALUE),
-  'singlePrint': rq => (
-    <SinglePrintButtonForPickSlip
-      request={rq}
-      pickSlipsToCheck={pickSlipsToCheck}
-      pickSlipsPrintTemplate={pickSlipsPrintTemplate}
-      onBeforeGetContentForSinglePrintButton={onBeforeGetContentForSinglePrintButton}
-      onBeforePrintForSinglePrintButton={onBeforePrintForSinglePrintButton}
-      pickSlipsData={pickSlipsData}
-      getPrintContentRef={getPrintContentRef}
-    />),
+  'singlePrint': rq => {
+    const singlePrintButtonProps = {
+      request: rq,
+      pickSlipsToCheck,
+      pickSlipsPrintTemplate,
+      onBeforeGetContentForSinglePrintButton,
+      pickSlipsData,
+      getPrintContentRef,
+      ...(isViewPrintDetailsEnabled && {
+        onBeforePrintForSinglePrintButton
+      }),
+    };
+    return (
+      <SinglePrintButtonForPickSlip {...singlePrintButtonProps} />);
+  },
   'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : DEFAULT_FORMATTER_VALUE),
   'requestStatus': rq => (requestStatusesTranslations[rq.status]
     ? <FormattedMessage id={requestStatusesTranslations[rq.status]} />
@@ -263,7 +271,7 @@ export const getListFormatter = (
   'callNumber': rq => effectiveCallNumber(rq.item),
   'servicePoint': rq => get(rq, 'pickupServicePoint.name', DEFAULT_FORMATTER_VALUE),
   'copies': rq => get(rq, PRINT_DETAILS_COLUMNS.COPIES, DEFAULT_FORMATTER_VALUE),
-  'printed': rq => (rq.printDetails ? getLastPrintedDetails(rq.printDetails, intl) : DEFAULT_FORMATTER_VALUE),
+  'printed': rq => (rq.printDetails ? getLastPrintedDetails(rq.printDetails, intl, timezone, locale) : DEFAULT_FORMATTER_VALUE),
 });
 
 export const buildHoldRecords = (records) => {
@@ -573,7 +581,6 @@ class RequestsRoute extends React.Component {
         records: PropTypes.arrayOf(PropTypes.object).isRequired,
       }),
       circulationSettings: PropTypes.shape({
-        hasLoaded: PropTypes.bool.isRequired,
         records: PropTypes.arrayOf(PropTypes.object),
       }),
     }).isRequired,
@@ -609,6 +616,8 @@ class RequestsRoute extends React.Component {
       createTitleLevelRequestsByDefault = false,
     } = getTlrSettings(props.resources.configs.records[0]?.value);
 
+    const isViewPrintDetailsEnabled = get(props.resources, viewPrintDetailsPath) === 'true';
+
     this.okapiUrl = props.stripes.okapi.url;
 
     this.httpHeadersOptions = {
@@ -640,6 +649,7 @@ class RequestsRoute extends React.Component {
       selectedRows: {},
       titleLevelRequestsFeatureEnabled,
       createTitleLevelRequestsByDefault,
+      isViewPrintDetailsEnabled,
     };
 
     this.pickSlipsPrintContentRef = React.createRef();
@@ -702,6 +712,13 @@ class RequestsRoute extends React.Component {
         titleLevelRequestsFeatureEnabled,
         createTitleLevelRequestsByDefault,
       });
+    }
+
+    const currPrintDetailsSettings = get(this.props.resources, viewPrintDetailsPath);
+    const prevPrintDetailsSettings = get(prevProps.resources, viewPrintDetailsPath);
+    if (currPrintDetailsSettings !== prevPrintDetailsSettings) {
+      const isViewPrintDetailsEnabled = currPrintDetailsSettings === 'true';
+      this.setState({ isViewPrintDetailsEnabled });
     }
 
     if (!this.props.resources.query.instanceId && instanceId) {
@@ -785,7 +802,7 @@ class RequestsRoute extends React.Component {
   }
 
   // Export function for the CSV search report action
-  async exportData(isViewPrintDetailsEnabled) {
+  async exportData() {
     this.setState({ csvReportPending: true });
 
     // Build a custom query for the CSV record export, which has to include
@@ -805,10 +822,11 @@ class RequestsRoute extends React.Component {
     queryString = queryClauses.join(' and ');
     const records = await this.fetchReportData(this.props.mutator.reportRecords, queryString);
     const recordsToCSV = this.buildRecords(records);
-    const csvFields = isViewPrintDetailsEnabled ? this.columnHeadersMap : getCsvFields(this.columnHeadersMap);
+    const onlyFields = this.state.isViewPrintDetailsEnabled ?
+      this.columnHeadersMap : getFilteredReportHeaders(this.columnHeadersMap);
 
     exportCsv(recordsToCSV, {
-      onlyFields: csvFields,
+      onlyFields,
       excludeFields: ['id'],
     });
 
@@ -1269,12 +1287,7 @@ class RequestsRoute extends React.Component {
   );
 
   onBeforePrintForSinglePrintButton = (requestId) => {
-    const isViewPrintDetailsEnabled =
-      get(this.props.resources, viewPrintDetailsPath) === 'true';
-
-    if (isViewPrintDetailsEnabled) {
-      this.savePrintEventDetails([requestId]);
-    }
+    this.savePrintEventDetails([requestId]);
   };
 
   printContentRefs = {};
@@ -1342,8 +1355,6 @@ class RequestsRoute extends React.Component {
     const servicePoints = get(resources, 'servicePoints.records', []);
     const cancellationReasons = get(resources, 'cancellationReasons.records', []);
     const requestCount = get(resources, 'records.other.totalRecords', 0);
-    const isViewPrintDetailsEnabled =
-      get(resources, viewPrintDetailsPath) === 'true';
     const initialValues = dupRequest ||
     {
       requestType: DEFAULT_REQUEST_TYPE_VALUE,
@@ -1371,7 +1382,7 @@ class RequestsRoute extends React.Component {
       requesterBarcode: <FormattedMessage id="ui-requests.requests.requesterBarcode" />,
       singlePrint: <FormattedMessage id="ui-requests.requests.singlePrint" />,
       proxy: <FormattedMessage id="ui-requests.requests.proxy" />,
-      ...(isViewPrintDetailsEnabled && {
+      ...(this.state.isViewPrintDetailsEnabled && {
         copies: <FormattedMessage id="ui-requests.requests.copies" />,
         printed: <FormattedMessage id="ui-requests.requests.printed" />,
       }),
@@ -1394,10 +1405,13 @@ class RequestsRoute extends React.Component {
         setURL: this.setURL,
       },
       {
+        timezone,
+        locale,
         intl,
         selectedRows,
         pickSlipsToCheck: pickSlips,
         pickSlipsData,
+        isViewPrintDetailsEnabled: this.state.isViewPrintDetailsEnabled,
         getPrintContentRef: this.getPrintContentRef,
         pickSlipsPrintTemplate,
         toggleRowSelection: this.toggleRowSelection,
@@ -1432,7 +1446,7 @@ class RequestsRoute extends React.Component {
               onClick={() => {
                 this.context.sendCallout({ message: <FormattedMessage id="ui-requests.csvReportInProgress" /> });
                 onToggle();
-                this.exportData(isViewPrintDetailsEnabled);
+                this.exportData();
               }}
             >
               <FormattedMessage id="ui-requests.exportSearchResultsToCsv" />
@@ -1466,7 +1480,7 @@ class RequestsRoute extends React.Component {
                   template={pickSlipsPrintTemplate}
                   contentRef={this.pickSlipsPrintContentRef}
                   onBeforeGetContent={() => this.onBeforeGetContentForPrintButton(onToggle)}
-                  onBeforePrint={() => isViewPrintDetailsEnabled &&
+                  onBeforePrint={() => this.state.isViewPrintDetailsEnabled &&
                     this.onBeforePrintForPrintButton(pickSlipsData)}
                 >
                   <FormattedMessage
@@ -1492,7 +1506,7 @@ class RequestsRoute extends React.Component {
                     }
                   onBeforePrint={
                     () => {
-                      if (isViewPrintDetailsEnabled) {
+                      if (this.state.isViewPrintDetailsEnabled) {
                         const selectedPickSlips = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
                         this.onBeforePrintForPrintButton(selectedPickSlips);
                       }
