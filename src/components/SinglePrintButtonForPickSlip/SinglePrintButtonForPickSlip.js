@@ -47,7 +47,7 @@ SinglePrintButtonForPickSlip.propTypes = {
   pickSlipsPrintTemplate: PropTypes.object.isRequired,
   pickSlipsData: PropTypes.object.isRequired,
   onBeforeGetContentForSinglePrintButton: PropTypes.func.isRequired,
-  onBeforePrintForSinglePrintButton: PropTypes.func.isRequired,
+  onBeforePrintForSinglePrintButton: PropTypes.func,
   getPrintContentRef: PropTypes.object.isRequired,
 };
 

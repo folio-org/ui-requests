@@ -35,7 +35,7 @@ import RequestsRoute, {
   getListFormatter,
   getPrintHoldRequestsEnabled,
   getLastPrintedDetails,
-  getCsvFields,
+  getFilteredReportHeaders,
   urls,
   DEFAULT_FORMATTER_VALUE,
 } from './RequestsRoute';
@@ -1067,6 +1067,7 @@ describe('RequestsRoute', () => {
         selectedRows: '',
         pickSlipsToCheck: '',
         pickSlipsData: '',
+        isViewPrintDetailsEnabled: 'true',
         getPrintContentRef: getPrintContentRefMock,
         isPrintableMock,
         pickSlipsPrintTemplate: '',
@@ -1373,19 +1374,19 @@ describe('RequestsRoute', () => {
     });
   });
 
-  describe('getCsvFields', () => {
+  describe('getFilteredReportHeaders', () => {
     const columnHeaders = [
       { value: 'patronComments' },
       { value: PRINT_DETAILS_COLUMNS.COPIES },
       { value: PRINT_DETAILS_COLUMNS.PRINTED },
     ];
 
-    it('should render getCsvFields() correctly', () => {
-      expect(getCsvFields(columnHeaders)).toBeTruthy();
+    it('should render getFilteredReportHeaders() correctly', () => {
+      expect(getFilteredReportHeaders(columnHeaders)).toBeTruthy();
     });
 
     it('should return properly filtered column headers', () => {
-      const filteredColumnHeaders = getCsvFields(columnHeaders);
+      const filteredColumnHeaders = getFilteredReportHeaders(columnHeaders);
       const expectedColumnHeaders = [{ value: 'patronComments' }];
 
       expect(filteredColumnHeaders).toEqual(expectedColumnHeaders);
