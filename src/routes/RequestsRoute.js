@@ -115,7 +115,7 @@ export const getPrintHoldRequestsEnabled = (printHoldRequests) => {
   return printHoldRequestsEnabled;
 };
 
-export const getFilteredReportHeaders = (columnHeaders) => (
+export const getColumnHeadersMap = (columnHeaders) => (
   columnHeaders.filter(column => column.value !== PRINT_DETAILS_COLUMNS.COPIES &&
     column.value !== PRINT_DETAILS_COLUMNS.PRINTED)
 );
@@ -124,9 +124,9 @@ export const extractPickSlipRequestIds = (pickSlipsData) => {
   return pickSlipsData.map(pickSlip => pickSlip['request.requestID']);
 };
 
-export const getLastPrintedDetails = (printDetails, intl, timeZone, locale) => {
+export const getLastPrintedDetails = (printDetails, intl) => {
   const fullName = getFullName(printDetails?.lastPrintRequester);
-  const formattedDate = intl.formatDate(printDetails?.lastPrintedDate, { timeZone, locale });
+  const formattedDate = intl.formatDate(printDetails?.lastPrintedDate);
   const formattedTime = intl.formatTime(printDetails?.lastPrintedDate);
   const localizedDateTime = `${formattedDate}${formattedTime ? ', ' : ''}${formattedTime}`;
 
@@ -217,8 +217,6 @@ export const getListFormatter = (
     setURL,
   },
   {
-    timezone,
-    locale,
     intl,
     selectedRows,
     pickSlipsToCheck,
@@ -271,7 +269,7 @@ export const getListFormatter = (
   'callNumber': rq => effectiveCallNumber(rq.item),
   'servicePoint': rq => get(rq, 'pickupServicePoint.name', DEFAULT_FORMATTER_VALUE),
   'copies': rq => get(rq, PRINT_DETAILS_COLUMNS.COPIES, DEFAULT_FORMATTER_VALUE),
-  'printed': rq => (rq.printDetails ? getLastPrintedDetails(rq.printDetails, intl, timezone, locale) : DEFAULT_FORMATTER_VALUE),
+  'printed': rq => (rq.printDetails ? getLastPrintedDetails(rq.printDetails, intl) : DEFAULT_FORMATTER_VALUE),
 });
 
 export const buildHoldRecords = (records) => {
@@ -823,7 +821,7 @@ class RequestsRoute extends React.Component {
     const records = await this.fetchReportData(this.props.mutator.reportRecords, queryString);
     const recordsToCSV = this.buildRecords(records);
     const onlyFields = this.state.isViewPrintDetailsEnabled ?
-      this.columnHeadersMap : getFilteredReportHeaders(this.columnHeadersMap);
+      this.columnHeadersMap : getColumnHeadersMap(this.columnHeadersMap);
 
     exportCsv(recordsToCSV, {
       onlyFields,
@@ -1405,8 +1403,6 @@ class RequestsRoute extends React.Component {
         setURL: this.setURL,
       },
       {
-        timezone,
-        locale,
         intl,
         selectedRows,
         pickSlipsToCheck: pickSlips,
