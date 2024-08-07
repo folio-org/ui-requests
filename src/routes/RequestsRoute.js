@@ -116,7 +116,7 @@ export const getPrintHoldRequestsEnabled = (printHoldRequests) => {
   return printHoldRequestsEnabled;
 };
 
-export const getColumnHeadersMap = (columnHeaders) => (
+export const getFilteredColumnHeadersMap = (columnHeaders) => (
   columnHeaders.filter(column => column.value !== PRINT_DETAILS_COLUMNS.COPIES &&
     column.value !== PRINT_DETAILS_COLUMNS.PRINTED)
 );
@@ -681,6 +681,17 @@ class RequestsRoute extends React.Component {
     const { configs: prevConfigs } = prevProps.resources;
     const { configs } = this.props.resources;
     const instanceId = parse(this.props.location?.search)?.instanceId;
+    const currPrintDetailsSettings = get(this.props.resources, viewPrintDetailsPath);
+    const prevPrintDetailsSettings = get(prevProps.resources, viewPrintDetailsPath);
+
+    if (currPrintDetailsSettings !== prevPrintDetailsSettings) {
+      const isViewPrintDetailsEnabled = currPrintDetailsSettings === 'true';
+      this.setState({ isViewPrintDetailsEnabled });
+
+      if (!isViewPrintDetailsEnabled) {
+        this.columnHeadersMap = getFilteredColumnHeadersMap(this.columnHeadersMap);
+      }
+    }
 
     if (prevExpired.length > 0 && expired.length === 0) {
       // eslint-disable-next-line react/no-did-update-set-state
@@ -711,13 +722,6 @@ class RequestsRoute extends React.Component {
         titleLevelRequestsFeatureEnabled,
         createTitleLevelRequestsByDefault,
       });
-    }
-
-    const currPrintDetailsSettings = get(this.props.resources, viewPrintDetailsPath);
-    const prevPrintDetailsSettings = get(prevProps.resources, viewPrintDetailsPath);
-    if (currPrintDetailsSettings !== prevPrintDetailsSettings) {
-      const isViewPrintDetailsEnabled = currPrintDetailsSettings === 'true';
-      this.setState({ isViewPrintDetailsEnabled });
     }
 
     if (!this.props.resources.query.instanceId && instanceId) {
@@ -821,11 +825,9 @@ class RequestsRoute extends React.Component {
     queryString = queryClauses.join(' and ');
     const records = await this.fetchReportData(this.props.mutator.reportRecords, queryString);
     const recordsToCSV = this.buildRecords(records);
-    const onlyFields = this.state.isViewPrintDetailsEnabled ?
-      this.columnHeadersMap : getColumnHeadersMap(this.columnHeadersMap);
 
     exportCsv(recordsToCSV, {
-      onlyFields,
+      onlyFields: this.columnHeadersMap,
       excludeFields: ['id'],
     });
 
