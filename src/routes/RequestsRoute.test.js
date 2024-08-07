@@ -35,7 +35,7 @@ import RequestsRoute, {
   getListFormatter,
   getPrintHoldRequestsEnabled,
   getLastPrintedDetails,
-  getFilteredReportHeaders,
+  getColumnHeadersMap,
   urls,
   DEFAULT_FORMATTER_VALUE,
 } from './RequestsRoute';
@@ -1374,19 +1374,19 @@ describe('RequestsRoute', () => {
     });
   });
 
-  describe('getFilteredReportHeaders', () => {
+  describe('getColumnHeadersMap', () => {
     const columnHeaders = [
       { value: 'patronComments' },
       { value: PRINT_DETAILS_COLUMNS.COPIES },
       { value: PRINT_DETAILS_COLUMNS.PRINTED },
     ];
 
-    it('should render getFilteredReportHeaders() correctly', () => {
-      expect(getFilteredReportHeaders(columnHeaders)).toBeTruthy();
+    it('should render getColumnHeadersMap() correctly', () => {
+      expect(getColumnHeadersMap(columnHeaders)).toBeTruthy();
     });
 
     it('should return properly filtered column headers', () => {
-      const filteredColumnHeaders = getFilteredReportHeaders(columnHeaders);
+      const filteredColumnHeaders = getColumnHeadersMap(columnHeaders);
       const expectedColumnHeaders = [{ value: 'patronComments' }];
 
       expect(filteredColumnHeaders).toEqual(expectedColumnHeaders);
