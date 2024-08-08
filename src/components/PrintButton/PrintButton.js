@@ -41,8 +41,7 @@ class PrintButton extends React.Component {
   }
 
   handleBeforePrint = () => {
-    const singlePrintRequestId = this.props.requestId;
-    this.props.onBeforePrint(singlePrintRequestId);
+    this.props.onBeforePrint([this.props.requestId]);
   }
 
   renderTriggerButton = () => {
