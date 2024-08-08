@@ -1272,21 +1272,12 @@ class RequestsRoute extends React.Component {
     })
   );
 
-  onBeforePrintForPrintButton = (slipsData) => {
-    const requestIds = extractPickSlipRequestIds(slipsData);
-    this.savePrintEventDetails(requestIds);
-  };
-
   onBeforeGetContentForSinglePrintButton = () => (
     new Promise(resolve => {
       this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
       setTimeout(() => resolve(), 1000);
     })
   );
-
-  onBeforePrintForSinglePrintButton = (requestId) => {
-    this.savePrintEventDetails([requestId]);
-  };
 
   printContentRefs = {};
 
@@ -1343,6 +1334,7 @@ class RequestsRoute extends React.Component {
       selectedRows,
       holdsShelfReportPending,
       createTitleLevelRequestsByDefault,
+      isViewPrintDetailsEnabled,
     } = this.state;
     const isPrintHoldRequestsEnabled = getPrintHoldRequestsEnabled(resources.printHoldRequests);
     const { name: servicePointName } = this.getCurrentServicePointInfo();
@@ -1380,7 +1372,7 @@ class RequestsRoute extends React.Component {
       requesterBarcode: <FormattedMessage id="ui-requests.requests.requesterBarcode" />,
       singlePrint: <FormattedMessage id="ui-requests.requests.singlePrint" />,
       proxy: <FormattedMessage id="ui-requests.requests.proxy" />,
-      ...(this.state.isViewPrintDetailsEnabled && {
+      ...(isViewPrintDetailsEnabled && {
         copies: <FormattedMessage id="ui-requests.requests.copies" />,
         printed: <FormattedMessage id="ui-requests.requests.printed" />,
       }),
@@ -1407,12 +1399,12 @@ class RequestsRoute extends React.Component {
         selectedRows,
         pickSlipsToCheck: pickSlips,
         pickSlipsData,
-        isViewPrintDetailsEnabled: this.state.isViewPrintDetailsEnabled,
+        isViewPrintDetailsEnabled,
         getPrintContentRef: this.getPrintContentRef,
         pickSlipsPrintTemplate,
         toggleRowSelection: this.toggleRowSelection,
         onBeforeGetContentForSinglePrintButton: this.onBeforeGetContentForSinglePrintButton,
-        onBeforePrintForSinglePrintButton: this.onBeforePrintForSinglePrintButton,
+        onBeforePrintForSinglePrintButton: this.savePrintEventDetails,
       }
     );
 
@@ -1476,8 +1468,12 @@ class RequestsRoute extends React.Component {
                   template={pickSlipsPrintTemplate}
                   contentRef={this.pickSlipsPrintContentRef}
                   onBeforeGetContent={() => this.onBeforeGetContentForPrintButton(onToggle)}
-                  onBeforePrint={() => this.state.isViewPrintDetailsEnabled &&
-                    this.onBeforePrintForPrintButton(pickSlipsData)}
+                  onBeforePrint={() => {
+                    if (isViewPrintDetailsEnabled) {
+                      const requestIds = extractPickSlipRequestIds(pickSlipsData);
+                      this.savePrintEventDetails(requestIds);
+                    }
+                  }}
                 >
                   <FormattedMessage
                     id="ui-requests.printPickSlips"
@@ -1502,9 +1498,10 @@ class RequestsRoute extends React.Component {
                     }
                   onBeforePrint={
                     () => {
-                      if (this.state.isViewPrintDetailsEnabled) {
+                      if (isViewPrintDetailsEnabled) {
                         const selectedPickSlips = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
-                        this.onBeforePrintForPrintButton(selectedPickSlips);
+                        const selectedRequestIds = extractPickSlipRequestIds(selectedPickSlips);
+                        this.savePrintEventDetails(selectedRequestIds);
                       }
                     }
                   }
