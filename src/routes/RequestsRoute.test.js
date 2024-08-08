@@ -171,7 +171,7 @@ jest.mock('../components/SinglePrintButtonForPickSlip', () => jest.fn(({
 }) => {
   const handleClick = () => {
     onBeforeGetContentForSinglePrintButton();
-    onBeforePrintForSinglePrintButton('reqId', true);
+    onBeforePrintForSinglePrintButton(['reqId']);
   };
   return (
     <button
@@ -1056,7 +1056,7 @@ describe('RequestsRoute', () => {
     const isPrintableMock = jest.fn(id => id);
     const toggleRowSelectionMock = jest.fn(id => id);
     const onBeforeGetContentForSinglePrintButtonMock = jest.fn(id => id);
-    const onBeforePrintForSinglePrintButtonMock = jest.fn();
+    const onBeforePrintForSinglePrintButtonMock = jest.fn(id => id);
     const listFormatter = getListFormatter(
       {
         getRowURL: getRowURLMock,

@@ -124,7 +124,7 @@ describe('PrintButton', () => {
       fireEvent.click(triggerButton);
 
       await waitFor(() => {
-        expect(props.onBeforePrint).toHaveBeenCalledWith('rick');
+        expect(props.onBeforePrint).toHaveBeenCalledWith(['rick']);
       });
     });
   });

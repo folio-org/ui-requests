@@ -167,7 +167,6 @@ describe('utils', () => {
     it('should return first and last name when middle name is missing', () => {
       const record = {
         firstName: 'firstName',
-        middleName: '',
         lastName: 'lastName',
       };
       expect(getFullNameForCsvRecords(record)).toBe('firstName lastName');
@@ -175,20 +174,15 @@ describe('utils', () => {
 
     it('should return middle and last name when first name is missing', () => {
       const record = {
-        firstName: '',
         middleName: 'middleName',
         lastName: 'lastName',
       };
       expect(getFullNameForCsvRecords(record)).toBe('middleName lastName');
     });
 
-    it('should return only last name when first and middle names are missing', () => {
-      const record = {
-        firstName: '',
-        middleName: '',
-        lastName: 'lastName',
-      };
-      expect(getFullNameForCsvRecords(record)).toBe('lastName');
+    it('should return empty string when all name parts are missing', () => {
+      const record = {};
+      expect(getFullNameForCsvRecords(record)).toBe('');
     });
   });
 });
