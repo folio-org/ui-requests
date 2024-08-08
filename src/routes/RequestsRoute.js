@@ -3,6 +3,8 @@ import {
   isEmpty,
   isArray,
   size,
+  unset,
+  cloneDeep,
 } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -23,6 +25,7 @@ import {
   IfPermission,
   CalloutContext,
   TitleManager,
+  checkIfUserInCentralTenant,
 } from '@folio/stripes/core';
 import {
   Button,
@@ -67,6 +70,7 @@ import {
   SETTINGS_SCOPES,
   SETTINGS_KEYS,
   ITEM_QUERIES,
+  REQUEST_ACTION_NAMES,
 } from '../constants';
 import {
   buildUrl,
@@ -81,6 +85,8 @@ import {
   getSelectedSlipDataMulti,
   selectedRowsNonPrintable,
   getNextSelectedRowsState,
+  getRequestUrl,
+  isMultiDataTenant,
 } from '../utils';
 import packageInfo from '../../package';
 import CheckboxColumn from '../components/CheckboxColumn';
@@ -120,6 +126,7 @@ export const getPrintHoldRequestsEnabled = (printHoldRequests) => {
 export const urls = {
   user: (value, idType) => {
     const query = stringify({ query: `(${idType}=="${value}")` });
+
     return `users?${query}`;
   },
   item: (value, idType) => {
@@ -182,12 +189,14 @@ export const urls = {
     instanceId,
     requestId,
     operation,
-  }) => {
+  }, idType, stripes) => {
+    const url = getRequestUrl(REQUEST_ACTION_NAMES.GET_SERVICE_POINTS, stripes);
+
     if (requestId) {
-      return `circulation/requests/allowed-service-points?operation=${operation}&requestId=${requestId}`;
+      return `${url}?operation=${operation}&requestId=${requestId}`;
     }
 
-    let requestUrl = `circulation/requests/allowed-service-points?requesterId=${requesterId}&operation=${operation}`;
+    let requestUrl = `${url}?requesterId=${requesterId}&operation=${operation}`;
 
     if (itemId) {
       requestUrl = `${requestUrl}&itemId=${itemId}`;
@@ -823,9 +832,12 @@ class RequestsRoute extends React.Component {
 
   // idType can be 'id', 'barcode', etc.
   findResource(resource, value, idType = 'id') {
-    const query = urls[resource](value, idType);
+    const { stripes } = this.props;
+    const query = urls[resource](value, idType, stripes);
 
-    return fetch(`${this.okapiUrl}/${query}`, this.httpHeadersOptions).then(response => response.json());
+    return fetch(`${this.okapiUrl}/${query}`, this.httpHeadersOptions)
+      .then(response => response.json())
+      .catch(() => null);
   }
 
   toggleModal() {
@@ -922,29 +934,49 @@ class RequestsRoute extends React.Component {
     this.props.mutator.activeRecord.update({ patronId: patron.id });
   };
 
-  create = (data) => {
+  create = (requestData) => {
+    const { stripes } = this.props;
+    const userPersonalData = cloneDeep(requestData?.requester?.personal);
+
+    if (isMultiDataTenant(stripes) && checkIfUserInCentralTenant(stripes)) {
+      unset(requestData, 'item');
+      unset(requestData, 'requester');
+      unset(requestData, 'holdingsRecordId');
+    }
+
     const query = new URLSearchParams(this.props.location.search);
     const mode = query.get('mode');
+    const url = getRequestUrl(REQUEST_ACTION_NAMES.CREATE_REQUEST, stripes);
 
-    return this.props.mutator.records.POST(data)
-      .then(() => {
-        this.closeLayer();
+    return fetch(`${this.okapiUrl}/${url}`, {
+      ...this.httpHeadersOptions,
+      method: 'POST',
+      body: JSON.stringify(requestData),
+    })
+      .then((res) => {
+        if (res.ok) {
+          this.closeLayer();
 
-        this.context.sendCallout({
-          message: isDuplicateMode(mode)
-            ? (
-              <FormattedMessage
-                id="ui-requests.duplicateRequest.success"
-                values={{ requester: generateUserName(data.requester.personal) }}
-              />
-            )
-            : (
-              <FormattedMessage
-                id="ui-requests.createRequest.success"
-                values={{ requester: generateUserName(data.requester.personal) }}
-              />
-            ),
-        });
+          this.context.sendCallout({
+            message: isDuplicateMode(mode)
+              ? (
+                <FormattedMessage
+                  id="ui-requests.duplicateRequest.success"
+                  values={{ requester: generateUserName(userPersonalData) }}
+                />
+              )
+              : (
+                <FormattedMessage
+                  id="ui-requests.createRequest.success"
+                  values={{ requester: generateUserName(userPersonalData) }}
+                />
+              ),
+          });
+
+          return res;
+        }
+
+        return Promise.reject(res);
       })
       .catch(resp => {
         this.context.sendCallout({

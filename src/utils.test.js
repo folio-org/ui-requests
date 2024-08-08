@@ -3,6 +3,8 @@ import {
   noop,
 } from 'lodash';
 
+import { checkIfUserInCentralTenant } from '@folio/stripes/core';
+
 import {
   buildTemplate,
   createUserHighlightBoxLink,
@@ -34,6 +36,8 @@ import {
   selectedRowsNonPrintable,
   isPrintable,
   getNextSelectedRowsState,
+  isMultiDataTenant,
+  getRequestUrl,
 } from './utils';
 
 import {
@@ -45,6 +49,9 @@ import {
   DCB_HOLDINGS_RECORD_ID,
   REQUEST_ERROR_MESSAGE_CODE,
   REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS,
+  REQUEST_ACTION_NAMES,
+  CENTRAL_TENANT_URLS,
+  SINGLE_TENANT_URLS,
 } from './constants';
 
 const pickSlipsForSinglePrint = [
@@ -267,6 +274,10 @@ describe('generateUserName', () => {
 
     expect(generateUserName({ firstName, lastName, middleName }))
       .toEqual(lastName);
+  });
+
+  it('should return empty string', () => {
+    expect(generateUserName()).toBe('');
   });
 });
 
@@ -1081,5 +1092,60 @@ describe('getRequestTypeOptions', () => {
     ];
 
     expect(getRequestTypeOptions(requestTypes)).toEqual(expectedResult);
+  });
+});
+
+describe('isMultiDataTenant', () => {
+  describe('When multi data tenant', () => {
+    const stripes = {
+      hasInterface: () => true,
+    };
+
+    it('should return true', () => {
+      const result = isMultiDataTenant(stripes);
+
+      expect(result).toBe(true);
+    });
+  });
+
+  describe('When single data tenant', () => {
+    const stripes = {
+      hasInterface: () => false,
+    };
+
+    it('should return false', () => {
+      const result = isMultiDataTenant(stripes);
+
+      expect(result).toBe(false);
+    });
+  });
+});
+
+describe('getRequestUrl', () => {
+  describe('When central tenant is selected', () => {
+    const stripes = {
+      hasInterface: () => true,
+    };
+
+    checkIfUserInCentralTenant.mockReturnValueOnce(true);
+
+    it('should return url for central tenant env', () => {
+      const url = getRequestUrl(REQUEST_ACTION_NAMES.CREATE_REQUEST, stripes);
+
+      expect(url).toEqual(CENTRAL_TENANT_URLS[REQUEST_ACTION_NAMES.CREATE_REQUEST]);
+    });
+  });
+
+  describe('When single tenant env', () => {
+    const stripes = {
+      hasInterface: () => false,
+    };
+    checkIfUserInCentralTenant.mockReturnValueOnce(false);
+
+    it('should return url for multi tenant env', () => {
+      const url = getRequestUrl(REQUEST_ACTION_NAMES.CREATE_REQUEST, stripes);
+
+      expect(url).toEqual(SINGLE_TENANT_URLS[REQUEST_ACTION_NAMES.CREATE_REQUEST]);
+    });
   });
 });

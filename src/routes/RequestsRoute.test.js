@@ -81,6 +81,7 @@ const testIds = {
   rowCheckbox: 'rowCheckbox',
   selectRequestCheckbox: 'selectRequestCheckbox',
 };
+const requestUrl = 'url';
 
 jest.spyOn(React, 'createRef').mockReturnValue(createRefMock);
 jest.spyOn(document, 'getElementById').mockReturnValue(createDocumentRefMock);
@@ -97,6 +98,9 @@ jest.mock('../utils', () => ({
   getFormattedYears: jest.fn(),
   getInstanceQueryString: jest.fn(),
   getNextSelectedRowsState: jest.fn(),
+  isMultiDataTenant: jest.fn(),
+  generateUserName: jest.fn(),
+  getRequestUrl: jest.fn(() => requestUrl),
 }));
 jest.mock('./utils', () => ({
   ...jest.requireActual('./utils'),
@@ -172,6 +176,7 @@ global.fetch = jest.fn(() => Promise.resolve({
       }
     ],
   }),
+  ok: true,
 }));
 
 const RequestFilterData = {
@@ -203,6 +208,11 @@ const mockedRequest = {
   },
   id: 'requestId',
 };
+const userData = {
+  requester: {
+    personal: {},
+  }
+};
 
 SearchAndSort.mockImplementation(jest.fn(({
   paneTitleRef,
@@ -228,6 +238,7 @@ SearchAndSort.mockImplementation(jest.fn(({
   customPaneSub,
   columnMapping,
   resultsFormatter,
+  onCreate,
 }) => {
   const onClickActions = () => {
     onDuplicate(records[0]);
@@ -278,6 +289,12 @@ SearchAndSort.mockImplementation(jest.fn(({
             values: ['Value4', 'Value5']
           })}
         >onFilterChange
+        </button>
+        <button
+          type="button"
+          onClick={() => onCreate({}, userData)}
+        >
+          Create request
         </button>
       </div>
       {actionMenu({ onToggle: jest.fn() })}
@@ -613,6 +630,21 @@ describe('RequestsRoute', () => {
       await userEvent.click(screen.getAllByRole('button', { name: 'onBeforeGetContent' })[1]);
 
       expect(printSearchSlipsLabel).toBeInTheDocument();
+    });
+
+    it('should handle request creation', () => {
+      const createRequestButton = screen.getByText('Create request');
+      const expectedArgs = [
+        `${defaultProps.stripes.okapi.url}/${requestUrl}`,
+        {
+          method: 'POST',
+          body: JSON.stringify({}),
+        }
+      ];
+
+      fireEvent.click(createRequestButton);
+
+      expect(global.fetch).toHaveBeenCalledWith(...expectedArgs);
     });
   });
 
@@ -1474,33 +1506,33 @@ describe('RequestsRoute', () => {
       const instanceId = 'instanceIdUrl';
 
       it('should return url with "itemId"', () => {
-        const expectedUrl = `circulation/requests/allowed-service-points?requesterId=${requesterId}&operation=${operation}&itemId=${itemId}`;
+        const expectedResult = `${requestUrl}?requesterId=${requesterId}&operation=${operation}&itemId=${itemId}`;
 
         expect(urls.requestTypes({
           requesterId,
           itemId,
           operation,
-        })).toBe(expectedUrl);
+        })).toBe(expectedResult);
       });
 
       it('should return url with "instanceId"', () => {
-        const expectedUrl = `circulation/requests/allowed-service-points?requesterId=${requesterId}&operation=${operation}&instanceId=${instanceId}`;
+        const expectedResult = `${requestUrl}?requesterId=${requesterId}&operation=${operation}&instanceId=${instanceId}`;
 
         expect(urls.requestTypes({
           requesterId,
           instanceId,
           operation,
-        })).toBe(expectedUrl);
+        })).toBe(expectedResult);
       });
 
       it('should return url with "requestId"', () => {
         const requestId = 'requestId';
-        const expectedUrl = `circulation/requests/allowed-service-points?operation=${operation}&requestId=${requestId}`;
+        const expectedResult = `${requestUrl}?operation=${operation}&requestId=${requestId}`;
 
         expect(urls.requestTypes({
           requestId,
           operation,
-        })).toBe(expectedUrl);
+        })).toBe(expectedResult);
       });
     });
   });
