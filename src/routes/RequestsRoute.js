@@ -1236,7 +1236,7 @@ class RequestsRoute extends React.Component {
 
   renderFilters = (onChange) => {
     const { resources } = this.props;
-    const { titleLevelRequestsFeatureEnabled } = this.state;
+    const { titleLevelRequestsFeatureEnabled, isViewPrintDetailsEnabled } = this.state;
 
     return (
       <RequestsFilters
@@ -1245,6 +1245,7 @@ class RequestsRoute extends React.Component {
         onChange={onChange}
         onClear={(name) => onChange({ name, values: [] })}
         titleLevelRequestsFeatureEnabled={titleLevelRequestsFeatureEnabled}
+        isViewPrintDetailsEnabled={isViewPrintDetailsEnabled}
       />
     );
   };
