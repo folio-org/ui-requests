@@ -65,6 +65,7 @@ import {
   DEFAULT_REQUEST_TYPE_VALUE,
   INPUT_REQUEST_SEARCH_SELECTOR,
   PRINT_DETAILS_COLUMNS,
+  requestFilterTypes,
 } from '../constants';
 import {
   buildUrl,
@@ -100,6 +101,8 @@ import {
   getFormattedYears,
   getStatusQuery,
   getFullNameForCsvRecords,
+  getPrintStatusFilteredData,
+  filterRecordsByPrintStatus,
 } from './utils';
 import SinglePrintButtonForPickSlip from '../components/SinglePrintButtonForPickSlip';
 
@@ -649,6 +652,7 @@ class RequestsRoute extends React.Component {
       titleLevelRequestsFeatureEnabled,
       createTitleLevelRequestsByDefault,
       isViewPrintDetailsEnabled,
+      selectedPrintStatusFilters: [],
     };
 
     this.pickSlipsPrintContentRef = React.createRef();
@@ -805,7 +809,7 @@ class RequestsRoute extends React.Component {
   }
 
   // Export function for the CSV search report action
-  async exportData() {
+  async exportData(exportPrintStatusFilteredData) {
     this.setState({ csvReportPending: true });
 
     // Build a custom query for the CSV record export, which has to include
@@ -824,7 +828,9 @@ class RequestsRoute extends React.Component {
 
     queryString = queryClauses.join(' and ');
     const records = await this.fetchReportData(this.props.mutator.reportRecords, queryString);
-    const recordsToCSV = this.buildRecords(records);
+    const printStatusFilteredRecords = exportPrintStatusFilteredData &&
+      filterRecordsByPrintStatus(records, this.state.selectedPrintStatusFilters);
+    const recordsToCSV = this.buildRecords(printStatusFilteredRecords || records);
 
     exportCsv(recordsToCSV, {
       onlyFields: this.columnHeadersMap,
@@ -1196,6 +1202,10 @@ class RequestsRoute extends React.Component {
   }
 
   handleFilterChange = ({ name, values }) => {
+    if (name === requestFilterTypes.PRINT_STATUS) {
+      this.setState({ selectedPrintStatusFilters: values });
+    }
+
     const { mutator } = this.props;
     const newFilters = {
       ...this.getActiveFilters(),
@@ -1336,6 +1346,7 @@ class RequestsRoute extends React.Component {
       holdsShelfReportPending,
       createTitleLevelRequestsByDefault,
       isViewPrintDetailsEnabled,
+      selectedPrintStatusFilters,
     } = this.state;
     const isPrintHoldRequestsEnabled = getPrintHoldRequestsEnabled(resources.printHoldRequests);
     const { name: servicePointName } = this.getCurrentServicePointInfo();
@@ -1389,6 +1400,8 @@ class RequestsRoute extends React.Component {
     const pickSlipsData = convertToSlipData(pickSlips, intl, timezone, locale, SLIPS_TYPE.PICK_SLIP, user);
     const searchSlipsData = convertToSlipData(searchSlips, intl, timezone, locale, SLIPS_TYPE.SEARCH_SLIP_HOLD_REQUESTS);
     let multiSelectPickSlipData = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
+    const displayPrintStatusFilteredData = isViewPrintDetailsEnabled &&
+      resources.records.hasLoaded && selectedPrintStatusFilters.length === 1;
 
     const resultsFormatter = getListFormatter(
       {
@@ -1435,7 +1448,7 @@ class RequestsRoute extends React.Component {
               onClick={() => {
                 this.context.sendCallout({ message: <FormattedMessage id="ui-requests.csvReportInProgress" /> });
                 onToggle();
-                this.exportData();
+                this.exportData(displayPrintStatusFilteredData);
               }}
             >
               <FormattedMessage id="ui-requests.exportSearchResultsToCsv" />
@@ -1610,7 +1623,8 @@ class RequestsRoute extends React.Component {
               customPaneSub={this.renderPaneSub()}
               onCreate={this.create}
               onCloseNewRecord={this.handleCloseNewRecord}
-              parentResources={resources}
+              parentResources={displayPrintStatusFilteredData ?
+                getPrintStatusFilteredData(resources, selectedPrintStatusFilters) : resources}
               parentMutator={mutator}
               detailProps={{
                 onChangePatron: this.onChangePatron,

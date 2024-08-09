@@ -115,6 +115,8 @@ jest.mock('./utils', () => ({
   ...jest.requireActual('./utils'),
   getFormattedYears: jest.fn(),
   getStatusQuery: jest.fn(),
+  filterRecordsByPrintStatus: jest.fn(),
+  getPrintStatusFilteredData: jest.fn(),
 }));
 jest.mock('../components', () => ({
   ErrorModal: jest.fn(({ onClose }) => (
@@ -1067,7 +1069,7 @@ describe('RequestsRoute', () => {
         selectedRows: '',
         pickSlipsToCheck: '',
         pickSlipsData: '',
-        isViewPrintDetailsEnabled: 'true',
+        isViewPrintDetailsEnabled: true,
         getPrintContentRef: getPrintContentRefMock,
         isPrintableMock,
         pickSlipsPrintTemplate: '',
@@ -1302,14 +1304,14 @@ describe('RequestsRoute', () => {
       });
     });
 
-    describe('copies', () => {
-      it('should return copies', () => {
+    describe('when formatting copies column', () => {
+      it('should return copies for copies column', () => {
         expect(listFormatter.copies(requestWithData)).toBe(requestWithData.printDetails.count);
       });
     });
 
-    describe('printed', () => {
-      it('should return printed', () => {
+    describe('when formatting printed column', () => {
+      it('should return last printed details for printed column', () => {
         getFullName.mockReturnValueOnce('lastName, firstName middleName');
 
         const expectedFormattedDate = intl.formatDate(requestWithData.printDetails.lastPrintedDate);
