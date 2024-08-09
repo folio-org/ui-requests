@@ -58,7 +58,7 @@ const props = {
     },
   },
   titleLevelRequestsFeatureEnabled: false,
-  isViewPrintDetailsEnabled: true,
+  isViewPrintDetailsEnabled: false,
 };
 const testIds = {
   [requestFilterTypes.REQUEST_TYPE]: requestFilterTypes.REQUEST_TYPE,
@@ -324,7 +324,20 @@ describe('RequestsFilters', () => {
   });
 
   describe('Print status accordion', () => {
-    describe('when "Enable view print details settings(isViewPrintDetailsEnabled)" is enabled', () => {
+    it('should not render Print status accordion when isViewPrintDetailsEnabled is disabled', () => {
+      expect(screen.queryByTestId(testIds[requestFilterTypes.PRINT_STATUS])).not.toBeInTheDocument();
+    });
+
+    describe('when isViewPrintDetailsEnabled is enabled', () => {
+      const currentProps = {
+        ...props,
+        isViewPrintDetailsEnabled: true,
+      };
+      beforeEach(() => {
+        jest.clearAllMocks();
+        render(<RequestsFilters {...currentProps} />);
+      });
+
       it('should render Print status accordion', () => {
         expect(screen.getByTestId(testIds[requestFilterTypes.PRINT_STATUS])).toBeInTheDocument();
       });
