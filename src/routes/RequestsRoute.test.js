@@ -115,6 +115,8 @@ jest.mock('./utils', () => ({
   ...jest.requireActual('./utils'),
   getFormattedYears: jest.fn(),
   getStatusQuery: jest.fn(),
+  filterRecordsByPrintStatus: jest.fn(),
+  getPrintStatusFilteredData: jest.fn(),
 }));
 jest.mock('../components', () => ({
   ErrorModal: jest.fn(({ onClose }) => (

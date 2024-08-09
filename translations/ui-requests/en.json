@@ -72,6 +72,7 @@
   "requestMeta.holdShelfExpirationDate": "Hold shelf expiration date",
   "requestMeta.queuePosition": "Position in queue",
   "requestMeta.tags": "Tags",
+  "requestMeta.printStatus": "Print status",
 
   "showTags": "Show Tags",
   "errors.instanceUuidOrHridDoesNotExist": "Instance with this HRID or UUID does not exist",
@@ -300,6 +301,9 @@
 
   "filters.requestLevel.item": "Item",
   "filters.requestLevel.title": "Title",
+
+  "filters.printStatus.printed": "Printed",
+  "filters.printStatus.notPrinted": "Not printed",
 
   "permission.moveRequest": "Requests: Move to new item, reorder queue",
   "permission.reorderQueue": "Requests: Reorder queue",
