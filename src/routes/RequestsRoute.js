@@ -677,23 +677,31 @@ class RequestsRoute extends React.Component {
   componentDidUpdate(prevProps) {
     const patronBlocks = get(this.props.resources, ['patronBlocks', 'records'], []);
     const prevBlocks = get(prevProps.resources, ['patronBlocks', 'records'], []);
-    const { submitting } = this.state;
+    const { submitting, isViewPrintDetailsEnabled, selectedPrintStatusFilters } = this.state;
     const prevExpired = prevBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
     const expired = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
     const { id: currentServicePointId } = this.getCurrentServicePointInfo();
     const prevStateServicePointId = get(prevProps.resources.currentServicePoint, 'id');
     const { configs: prevConfigs } = prevProps.resources;
-    const { configs } = this.props.resources;
+    const { configs, query: { filters } } = this.props.resources;
     const instanceId = parse(this.props.location?.search)?.instanceId;
     const currPrintDetailsSettings = get(this.props.resources, viewPrintDetailsPath);
     const prevPrintDetailsSettings = get(prevProps.resources, viewPrintDetailsPath);
 
     if (currPrintDetailsSettings !== prevPrintDetailsSettings) {
-      const isViewPrintDetailsEnabled = currPrintDetailsSettings === 'true';
-      this.setState({ isViewPrintDetailsEnabled });
+      const isPrintDetailsSettingsEnabled = currPrintDetailsSettings === 'true';
+      this.setState({ isViewPrintDetailsEnabled: isPrintDetailsSettingsEnabled });
 
-      if (!isViewPrintDetailsEnabled) {
+      if (!isPrintDetailsSettingsEnabled) {
         this.columnHeadersMap = getFilteredColumnHeadersMap(this.columnHeadersMap);
+      }
+    }
+
+    if (isViewPrintDetailsEnabled && selectedPrintStatusFilters.length === 0 && filters) {
+      const printStatusFilterInQuery = this.getActiveFilters()[requestFilterTypes.PRINT_STATUS];
+
+      if (printStatusFilterInQuery && printStatusFilterInQuery.length === 1) {
+        this.setState({ selectedPrintStatusFilters: [printStatusFilterInQuery[0]] });
       }
     }
 
