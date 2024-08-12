@@ -324,8 +324,10 @@ describe('RequestsFilters', () => {
   });
 
   describe('Print status accordion', () => {
-    it('should not render Print status accordion when isViewPrintDetailsEnabled is disabled', () => {
-      expect(screen.queryByTestId(testIds[requestFilterTypes.PRINT_STATUS])).not.toBeInTheDocument();
+    describe('when isViewPrintDetailsEnabled is disabled', () => {
+      it('should not render Print status accordion', () => {
+        expect(screen.queryByTestId(testIds[requestFilterTypes.PRINT_STATUS])).not.toBeInTheDocument();
+      });
     });
 
     describe('when isViewPrintDetailsEnabled is enabled', () => {

@@ -685,25 +685,9 @@ class RequestsRoute extends React.Component {
     const { configs: prevConfigs } = prevProps.resources;
     const { configs, query: { filters } } = this.props.resources;
     const instanceId = parse(this.props.location?.search)?.instanceId;
-    const currPrintDetailsSettings = get(this.props.resources, viewPrintDetailsPath);
-    const prevPrintDetailsSettings = get(prevProps.resources, viewPrintDetailsPath);
 
-    if (currPrintDetailsSettings !== prevPrintDetailsSettings) {
-      const isPrintDetailsSettingsEnabled = currPrintDetailsSettings === 'true';
-      this.setState({ isViewPrintDetailsEnabled: isPrintDetailsSettingsEnabled });
-
-      if (!isPrintDetailsSettingsEnabled) {
-        this.columnHeadersMap = getFilteredColumnHeadersMap(this.columnHeadersMap);
-      }
-    }
-
-    if (isViewPrintDetailsEnabled && selectedPrintStatusFilters.length === 0 && filters) {
-      const printStatusFilterInQuery = this.getActiveFilters()[requestFilterTypes.PRINT_STATUS];
-
-      if (printStatusFilterInQuery && printStatusFilterInQuery.length === 1) {
-        this.setState({ selectedPrintStatusFilters: [printStatusFilterInQuery[0]] });
-      }
-    }
+    this.handlePrintDetailsSettingsChange(prevProps);
+    this.updateSelectedPrintStatusFilters(isViewPrintDetailsEnabled, selectedPrintStatusFilters, filters);
 
     if (prevExpired.length > 0 && expired.length === 0) {
       // eslint-disable-next-line react/no-did-update-set-state
@@ -742,6 +726,32 @@ class RequestsRoute extends React.Component {
 
     if (!this.props.resources.records.isPending) {
       this.onSearchComplete(this.props.resources.records);
+    }
+  }
+
+  handlePrintDetailsSettingsChange(prevProps) {
+    const currPrintDetailsSettings = get(this.props.resources, viewPrintDetailsPath);
+    const prevPrintDetailsSettings = get(prevProps.resources, viewPrintDetailsPath);
+
+    if (currPrintDetailsSettings !== prevPrintDetailsSettings) {
+      const isPrintDetailsSettingsEnabled = currPrintDetailsSettings === 'true';
+      this.setState({ isViewPrintDetailsEnabled: isPrintDetailsSettingsEnabled });
+
+      if (!isPrintDetailsSettingsEnabled) {
+        this.columnHeadersMap = getFilteredColumnHeadersMap(this.columnHeadersMap);
+      }
+    }
+  }
+
+  updateSelectedPrintStatusFilters(isViewPrintDetailsEnabled, selectedPrintStatusFilters, filters) {
+    if (isViewPrintDetailsEnabled && selectedPrintStatusFilters.length === 0 && filters) {
+      const printStatusFilterInQuery = this.getActiveFilters()[requestFilterTypes.PRINT_STATUS];
+
+      if (printStatusFilterInQuery && printStatusFilterInQuery.length === 1) {
+        this.setState({ selectedPrintStatusFilters: [printStatusFilterInQuery[0]] });
+      }
+    } else if (!isViewPrintDetailsEnabled && filters.includes(requestFilterTypes.PRINT_STATUS)) {
+      this.handleFilterChange({ name: requestFilterTypes.PRINT_STATUS, values: [] });
     }
   }
 
@@ -1410,6 +1420,10 @@ class RequestsRoute extends React.Component {
     let multiSelectPickSlipData = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
     const displayPrintStatusFilteredData = isViewPrintDetailsEnabled &&
       resources.records.hasLoaded && selectedPrintStatusFilters.length === 1;
+    // For 'displayPrintStatusFilteredData' to be true the length of 'selectedPrintStatusFilters' must be 1.
+    // This is because we only filter data when exactly one PrintStatus filter is selected ([Printed] or [Not Printed]).
+    // If the filter array is empty or contains both filters ([] or [Printed, Not Printed]),
+    // no filtering is needed as the data should be used directly from the query response.
 
     const resultsFormatter = getListFormatter(
       {

@@ -48,10 +48,9 @@ export const getFullNameForCsvRecords = (record) => {
 export const filterRecordsByPrintStatus = (records, printStatusFilters) => {
   const isPrintedFilterSelected = printStatusFilters[0] === requestPrintStatusType.PRINTED;
   return records.filter(record => {
-    const hasPrintDetails = record.printDetails != null;
-    const hasCount = record.printDetails?.count !== undefined;
+    const hasCopiesCount = record?.printDetails?.count !== undefined;
 
-    return isPrintedFilterSelected ? hasPrintDetails && hasCount : !hasPrintDetails || !hasCount;
+    return isPrintedFilterSelected ? hasCopiesCount : !hasCopiesCount;
   });
 };
 
