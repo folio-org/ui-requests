@@ -78,6 +78,8 @@
         "subPermissions": [
           "module.requests.enabled",
           "circulation.loans.collection.get",
+          "circulation.settings.collection.get",
+          "circulation.settings.item.get",
           "circulation.requests.collection.get",
           "circulation.requests.item.get",
           "circulation-storage.cancellation-reasons.collection.get",
@@ -120,6 +122,7 @@
           "circulation-storage.request-preferences.collection.get",
           "circulation.pick-slips.get",
           "circulation.search-slips.get",
+          "circulation.print-events-entry.item.post",
           "inventory-storage.locations.item.get"
         ],
         "visible": true
@@ -131,6 +134,7 @@
           "ui-requests.view",
           "circulation.requests.item.put",
           "circulation.requests.allowed-service-points.get",
+          "circulation.print-events-entry.item.post",
           "circulation-storage.requests.collection.delete",
           "circulation-storage.requests.item.put",
           "circulation-storage.requests.item.delete",
