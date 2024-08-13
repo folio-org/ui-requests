@@ -686,9 +686,6 @@ class RequestsRoute extends React.Component {
     const { configs, query: { filters } } = this.props.resources;
     const instanceId = parse(this.props.location?.search)?.instanceId;
 
-    this.handlePrintDetailsSettingsChange(prevProps);
-    this.updateSelectedPrintStatusFilters(isViewPrintDetailsEnabled, selectedPrintStatusFilters, filters);
-
     if (prevExpired.length > 0 && expired.length === 0) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ submitting: false });
@@ -727,6 +724,9 @@ class RequestsRoute extends React.Component {
     if (!this.props.resources.records.isPending) {
       this.onSearchComplete(this.props.resources.records);
     }
+
+    this.handlePrintDetailsSettingsChange(prevProps);
+    this.updateSelectedPrintStatusFilters(isViewPrintDetailsEnabled, selectedPrintStatusFilters, filters);
   }
 
   handlePrintDetailsSettingsChange(prevProps) {
@@ -744,13 +744,23 @@ class RequestsRoute extends React.Component {
   }
 
   updateSelectedPrintStatusFilters(isViewPrintDetailsEnabled, selectedPrintStatusFilters, filters) {
+    /**
+     * Updates the `selectedPrintStatusFilters` state based on pre selected filters when user navigates back to Request App.
+     *
+     * The function performs the following actions:
+     * 1. If `isViewPrintDetailsEnabled` is true and `filters` in query includes 'PRINT STATUS' filter:
+     *    - If Print Status filter contains exactly one value, it updates the state to set `selectedPrintStatusFilters` to this value.
+     *
+     * 2. If `isViewPrintDetailsEnabled` is false and `filters` in query includes 'PRINT STATUS' filter:
+     *    - It clears the 'PRINT STATUS' filter from query by invoking `handleFilterChange`.
+     */
     if (isViewPrintDetailsEnabled && selectedPrintStatusFilters.length === 0 && filters) {
       const printStatusFilterInQuery = this.getActiveFilters()[requestFilterTypes.PRINT_STATUS];
 
       if (printStatusFilterInQuery && printStatusFilterInQuery.length === 1) {
         this.setState({ selectedPrintStatusFilters: [printStatusFilterInQuery[0]] });
       }
-    } else if (!isViewPrintDetailsEnabled && filters.includes(requestFilterTypes.PRINT_STATUS)) {
+    } else if (!isViewPrintDetailsEnabled && filters?.includes(requestFilterTypes.PRINT_STATUS)) {
       this.handleFilterChange({ name: requestFilterTypes.PRINT_STATUS, values: [] });
     }
   }
