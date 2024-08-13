@@ -661,11 +661,20 @@ class RequestsRoute extends React.Component {
     this.printSelectedContentRef = React.createRef();
   }
 
-  static getDerivedStateFromProps(props) {
+  static getDerivedStateFromProps(props, state) {
+    const updatedState = {};
     const layer = (props.resources.query || {}).layer;
+    const currViewPrintDetailsSettings = get(props.resources, viewPrintDetailsPath) === 'true';
+
     if (!layer) {
-      return { dupRequest: null };
+      updatedState.dupRequest = null;
     }
+
+    if (currViewPrintDetailsSettings !== state.isViewPrintDetailsEnabled) {
+      updatedState.isViewPrintDetailsEnabled = currViewPrintDetailsSettings;
+    }
+
+    if (Object.keys(updatedState).length) return updatedState;
 
     return null;
   }
@@ -674,7 +683,7 @@ class RequestsRoute extends React.Component {
     this.setCurrentServicePointId();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     const patronBlocks = get(this.props.resources, ['patronBlocks', 'records'], []);
     const prevBlocks = get(prevProps.resources, ['patronBlocks', 'records'], []);
     const { submitting, isViewPrintDetailsEnabled, selectedPrintStatusFilters } = this.state;
@@ -725,22 +734,11 @@ class RequestsRoute extends React.Component {
       this.onSearchComplete(this.props.resources.records);
     }
 
-    this.handlePrintDetailsSettingsChange(prevProps);
-    this.updateSelectedPrintStatusFilters(isViewPrintDetailsEnabled, selectedPrintStatusFilters, filters);
-  }
-
-  handlePrintDetailsSettingsChange(prevProps) {
-    const currPrintDetailsSettings = get(this.props.resources, viewPrintDetailsPath);
-    const prevPrintDetailsSettings = get(prevProps.resources, viewPrintDetailsPath);
-
-    if (currPrintDetailsSettings !== prevPrintDetailsSettings) {
-      const isPrintDetailsSettingsEnabled = currPrintDetailsSettings === 'true';
-      this.setState({ isViewPrintDetailsEnabled: isPrintDetailsSettingsEnabled });
-
-      if (!isPrintDetailsSettingsEnabled) {
-        this.columnHeadersMap = getFilteredColumnHeadersMap(this.columnHeadersMap);
-      }
+    if (isViewPrintDetailsEnabled !== prevState.isViewPrintDetailsEnabled && !isViewPrintDetailsEnabled) {
+      this.columnHeadersMap = getFilteredColumnHeadersMap(this.columnHeadersMap);
     }
+
+    this.updateSelectedPrintStatusFilters(isViewPrintDetailsEnabled, selectedPrintStatusFilters, filters);
   }
 
   updateSelectedPrintStatusFilters(isViewPrintDetailsEnabled, selectedPrintStatusFilters, filters) {
@@ -749,7 +747,7 @@ class RequestsRoute extends React.Component {
      *
      * The function performs the following actions:
      * 1. If `isViewPrintDetailsEnabled` is true and `filters` in query includes 'PRINT STATUS' filter:
-     *    - If Print Status filter contains exactly one value, it updates the state to set `selectedPrintStatusFilters` to this value.
+     *    - If Print Status filters contains exactly one filter, it updates state to set `selectedPrintStatusFilters` to this filter.
      *
      * 2. If `isViewPrintDetailsEnabled` is false and `filters` in query includes 'PRINT STATUS' filter:
      *    - It clears the 'PRINT STATUS' filter from query by invoking `handleFilterChange`.
@@ -757,7 +755,7 @@ class RequestsRoute extends React.Component {
     if (isViewPrintDetailsEnabled && selectedPrintStatusFilters.length === 0 && filters) {
       const printStatusFilterInQuery = this.getActiveFilters()[requestFilterTypes.PRINT_STATUS];
 
-      if (printStatusFilterInQuery && printStatusFilterInQuery.length === 1) {
+      if (printStatusFilterInQuery?.length === 1) {
         this.setState({ selectedPrintStatusFilters: [printStatusFilterInQuery[0]] });
       }
     } else if (!isViewPrintDetailsEnabled && filters?.includes(requestFilterTypes.PRINT_STATUS)) {
