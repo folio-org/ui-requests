@@ -78,6 +78,8 @@
         "subPermissions": [
           "module.requests.enabled",
           "circulation.loans.collection.get",
+          "circulation.settings.collection.get",
+          "circulation.settings.item.get",
           "circulation.requests.collection.get",
           "circulation.requests.item.get",
           "circulation-storage.cancellation-reasons.collection.get",
