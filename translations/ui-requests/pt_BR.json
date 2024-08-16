@@ -294,5 +294,7 @@
     "printPickSlipsSelected": "Imprimir os comprovantes de retirada selecionados para {sp}",
     "request.detail.title": "Detalhes da requisição",
     "requests.copies": "# Cópias",
-    "requests.printed": "Impresso"
+    "requests.printed": "Impresso",
+    "printDetails.count": "# Cópias",
+    "printDetails.lastPrintedDetails": "Impresso"
 }

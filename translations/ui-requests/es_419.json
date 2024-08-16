@@ -294,5 +294,7 @@
     "printPickSlipsSelected": "Imprimir hojas de selección seleccionadas para {sp}",
     "request.detail.title": "Detalles de la solicitud",
     "requests.copies": "# Copies",
-    "requests.printed": "Printed"
+    "requests.printed": "Printed",
+    "printDetails.count": "# Copies",
+    "printDetails.lastPrintedDetails": "Printed"
 }

@@ -140,7 +140,7 @@
     "filters.requestStatus.pickupExpired": "Geschlossen - abgelaufen",
     "filters.requestStatus.unfilled": "Geschlossen - unerfüllt",
     "filters.requestStatus.awaitingDelivery": "Offen - Warten auf Lieferung",
-    "filters.requestStatus.awaitingPickup": "Offen - Abholregal",
+    "filters.requestStatus.awaitingPickup": "Offen - Abholbereit",
     "filters.requestStatus.inTransit": "Offen - Im Transport",
     "filters.requestStatus.notYetFilled": "Offen - noch nicht erfüllt",
     "exportExpiredHoldShelfToCsv": "Abräumliste für das Abholregal {currentServicePoint} exportieren",
@@ -242,7 +242,7 @@
     "item.status.lostAndPaid": "Verloren und bezahlt",
     "item.status.missing": "Vermisst",
     "item.status.onOrder": "Im Erwerbungsvorgang",
-    "item.status.paged": "Bestellt",
+    "item.status.paged": "zur Ausleihe bestellt",
     "item.status.unavailable": "Nicht verfügbar",
     "item.status.unknown": "Unbekannt",
     "item.status.withdrawn": "Ausgesondert",
@@ -294,5 +294,7 @@
     "printPickSlipsSelected": "Ausgewählte Entnahmezettel für {sp} drucken",
     "request.detail.title": "Bestandsanfragendetails",
     "requests.copies": "# Copies",
-    "requests.printed": "Printed"
+    "requests.printed": "Druck abgeschlossen",
+    "printDetails.count": "# Copies",
+    "printDetails.lastPrintedDetails": "Printed"
 }
