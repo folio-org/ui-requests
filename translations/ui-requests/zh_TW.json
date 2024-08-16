@@ -294,5 +294,7 @@
     "printPickSlipsSelected": "列印為{sp}選擇的預約取書單",
     "request.detail.title": "Request details",
     "requests.copies": "# Copies",
-    "requests.printed": "Printed"
+    "requests.printed": "Printed",
+    "printDetails.count": "# Copies",
+    "printDetails.lastPrintedDetails": "Printed"
 }

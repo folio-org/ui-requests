@@ -11,7 +11,7 @@
     "requester.information": "请求者信息",
     "actions.editRequestLink": "编辑请求对话框",
     "errors.itemBarcodeDoesNotExist": "不存在此条码对应的单件",
-    "errors.userBarcodeDoesNotExist": "不存在此条码对应的读者",
+    "errors.userBarcodeDoesNotExist": "此条码对应的用户不存在",
     "errors.onlyCheckedOutForRecall": "只能召回已出借单件",
     "errors.onlyCheckedOutForHold": "只能预约已出借单件",
     "errors.selectItem": "请选择一个单件",
@@ -293,6 +293,8 @@
     "rows.recordsSelected": "{count, number} {count, plural, one {记录} other {记录}}已选",
     "printPickSlipsSelected": "打印{sp}选定的选取单",
     "request.detail.title": "申请详细信息",
-    "requests.copies": "# Copies",
-    "requests.printed": "Printed"
+    "requests.copies": "# 份数",
+    "requests.printed": "已打印",
+    "printDetails.count": "# Copies",
+    "printDetails.lastPrintedDetails": "Printed"
 }
