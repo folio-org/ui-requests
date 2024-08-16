@@ -663,8 +663,9 @@ class RequestsRoute extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
     const newState = {};
-    const layer = (props.resources.query || {}).layer;
-    const currViewPrintDetailsSettings = get(props.resources, viewPrintDetailsPath) === 'true';
+    const { resources } = props;
+    const layer = (resources.query || {}).layer;
+    const currViewPrintDetailsSettings = get(resources, viewPrintDetailsPath) === 'true';
 
     if (!layer) {
       newState.dupRequest = null;
@@ -675,9 +676,7 @@ class RequestsRoute extends React.Component {
       newState.isViewPrintDetailsEnabled = currViewPrintDetailsSettings;
     }
 
-    if (Object.keys(newState).length) return newState;
-
-    return null;
+    return Object.keys(newState).length ? newState : null;
   }
 
   componentDidMount() {
@@ -739,7 +738,7 @@ class RequestsRoute extends React.Component {
       this.columnHeadersMap = getFilteredColumnHeadersMap(this.columnHeadersMap);
     }
 
-    if (filters && filters.includes(requestFilterTypes.PRINT_STATUS)) {
+    if (filters?.includes(requestFilterTypes.PRINT_STATUS)) {
       const printStatusFilterInQuery = this.getActiveFilters()[requestFilterTypes.PRINT_STATUS];
 
       this.updateSelectedPrintStatusFilters(isViewPrintDetailsEnabled, selectedPrintStatusFilters, printStatusFilterInQuery);
