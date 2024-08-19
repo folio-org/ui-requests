@@ -15,6 +15,11 @@
 * Fix Request detail pane capitalization. Refs UIREQ-1106.
 * Update the column labels. Refs UIREQ-1104.
 * *BREAKING* Use `circulation/items-by-instance` endpoint to get item and instance information. Refs UIREQ-1091.
+* Add "Printed" and "# Copies" columns in "Show Columns" list and Request records table. Refs UIREQ-1118.
+* Update printing details on printing pick slips. Refs UIREQ-1122.
+* Populate the token 'request.barcodeImage' in the pick slip. Refs UIREQ-1117.
+* Populate the token "staffUsername" in the pick slip. Refs UIREQ-1124.
+* Implement availability of "Printed" and "# Copies" columns upon "Enable view print details (Pick slips)" configuration. Refs UIREQ-1121.
 * *BREAKING* Migrate to new endpoints. Refs UIREQ-1113, UIREQ-1115.
 
 ## [9.1.1] (https://github.com/folio-org/ui-checkin/tree/v9.1.1) (2024-03-27)

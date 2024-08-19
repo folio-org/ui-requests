@@ -292,5 +292,9 @@
     "requests.instances.rows.select": "Seleccionar instancia",
     "rows.recordsSelected": "{count, number} {count, plural, one {registro} other {registros}} seleccionados",
     "printPickSlipsSelected": "Imprimir hojas de selección seleccionadas para {sp}",
-    "request.detail.title": "Detalles de la solicitud"
+    "request.detail.title": "Detalles de la solicitud",
+    "requests.copies": "# Copies",
+    "requests.printed": "Printed",
+    "printDetails.count": "# Copies",
+    "printDetails.lastPrintedDetails": "Printed"
 }

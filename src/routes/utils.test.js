@@ -8,6 +8,7 @@ import {
   getFormattedContributors,
   isReorderableRequest,
   getStatusQuery,
+  getFullNameForCsvRecords,
 } from './utils';
 
 describe('utils', () => {
@@ -150,6 +151,38 @@ describe('utils', () => {
 
     it('should return empty string', () => {
       expect(getStatusQuery()).toBe('');
+    });
+  });
+
+  describe('getFullNameForCsvRecords', () => {
+    it('should return full name when all parts are provided', () => {
+      const record = {
+        firstName: 'firstName',
+        middleName: 'middleName',
+        lastName: 'lastName',
+      };
+      expect(getFullNameForCsvRecords(record)).toBe('firstName middleName lastName');
+    });
+
+    it('should return first and last name when middle name is missing', () => {
+      const record = {
+        firstName: 'firstName',
+        lastName: 'lastName',
+      };
+      expect(getFullNameForCsvRecords(record)).toBe('firstName lastName');
+    });
+
+    it('should return middle and last name when first name is missing', () => {
+      const record = {
+        middleName: 'middleName',
+        lastName: 'lastName',
+      };
+      expect(getFullNameForCsvRecords(record)).toBe('middleName lastName');
+    });
+
+    it('should return empty string when all name parts are missing', () => {
+      const record = {};
+      expect(getFullNameForCsvRecords(record)).toBe('');
     });
   });
 });
