@@ -36,3 +36,8 @@ export const isReorderableRequest = request => {
 };
 
 export const getStatusQuery = (statuses = []) => statuses.reduce((acc, val) => `${acc ? acc + ' or ' : acc}status=="${val}"`, '');
+
+export const getFullNameForCsvRecords = (record) => {
+  const { firstName = '', middleName = '', lastName = '' } = record;
+  return [firstName, middleName, lastName].filter(Boolean).join(' ');
+};

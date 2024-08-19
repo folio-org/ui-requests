@@ -45,6 +45,7 @@ import {
   DCB_HOLDINGS_RECORD_ID,
   REQUEST_ERROR_MESSAGE_CODE,
   REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS,
+  SLIPS_TYPE,
 } from './constants';
 
 const pickSlipsForSinglePrint = [
@@ -639,6 +640,7 @@ describe('getNextSelectedRowsState', () => {
     expect(result).not.toBe(selectedRows);
   });
 });
+
 describe('isPrintable', () => {
   it('should return true when pickSlips contain a match for requestId', () => {
     const requestId = '123';
@@ -805,6 +807,9 @@ describe('convertToSlipData', () => {
   const tz = 'America/New_York';
   const locale = 'en';
 
+  const user = {
+    username: 'JonesPaul',
+  };
   const item = {
     title: 'The Long Way to a Small, Angry Planet',
     barcode: '036000291452',
@@ -865,6 +870,7 @@ describe('convertToSlipData', () => {
   const slipData = {
     'staffSlip.Name': 'Pick slip',
     'staffSlip.currentDateTime': buildLocaleDateAndTime(currentDateTime, tz, locale),
+    'staffSlip.staffUsername': 'JonesPaul',
     'requester.firstName': 'Steven',
     'requester.lastName': 'Jones',
     'requester.middleName': 'Jacob',
@@ -912,11 +918,12 @@ describe('convertToSlipData', () => {
     'request.requestDate': '2019-08-31T00:00:00.000+03:00 America/New_York en',
     'request.requestID': 'dd606ca6-a2cb-4723-9a8d-e73b05c42232',
     'request.patronComments': 'Please hurry!',
+    'request.barcodeImage': '<Barcode>dd606ca6-a2cb-4723-9a8d-e73b05c42232</Barcode>',
   };
   const expectSlipData = [slipData];
 
   it('substitutes values', () => {
-    expect(convertToSlipData(pickSlips, intl, tz, locale)).toEqual(expectSlipData);
+    expect(convertToSlipData(pickSlips, intl, tz, locale, SLIPS_TYPE.PICK_SLIP, user)).toEqual(expectSlipData);
   });
 
   it('should convert to slip data wth empty date', () => {
@@ -940,7 +947,7 @@ describe('convertToSlipData', () => {
       'requester.country': '',
     }];
 
-    expect(convertToSlipData(pickSlipsWithEmptyDate, intl, tz, locale)).toEqual(expectSlipDataWithEmptyDate);
+    expect(convertToSlipData(pickSlipsWithEmptyDate, intl, tz, locale, SLIPS_TYPE.PICK_SLIP, user)).toEqual(expectSlipDataWithEmptyDate);
   });
 
   it('handles missing elements', () => {
@@ -960,7 +967,7 @@ describe('convertToSlipData', () => {
         barcode: noop(),
       },
     }];
-    const o = convertToSlipData(sourceWithoutRequesterBarcode, intl, tz, locale);
+    const o = convertToSlipData(sourceWithoutRequesterBarcode, intl, tz, locale, SLIPS_TYPE.PICK_SLIP, user);
 
     expect(o['requester.barcodeImage']).toBeUndefined();
   });
@@ -981,7 +988,7 @@ describe('convertToSlipData', () => {
       'requester.preferredFirstName': 'Steven',
     }];
 
-    expect(convertToSlipData(pickSlipsWithoutPreferredFirstName, intl, tz, locale)).toEqual(expectSlipDataWithoutPreferredFirstName);
+    expect(convertToSlipData(pickSlipsWithoutPreferredFirstName, intl, tz, locale, SLIPS_TYPE.PICK_SLIP, user)).toEqual(expectSlipDataWithoutPreferredFirstName);
   });
 });
 
