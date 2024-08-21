@@ -618,8 +618,6 @@ class RequestsRoute extends React.Component {
       createTitleLevelRequestsByDefault = false,
     } = getTlrSettings(props.resources.configs.records[0]?.value);
 
-    const isViewPrintDetailsEnabled = get(props.resources, viewPrintDetailsPath) === 'true';
-
     this.okapiUrl = props.stripes.okapi.url;
 
     this.httpHeadersOptions = {
@@ -651,7 +649,7 @@ class RequestsRoute extends React.Component {
       selectedRows: {},
       titleLevelRequestsFeatureEnabled,
       createTitleLevelRequestsByDefault,
-      isViewPrintDetailsEnabled,
+      isViewPrintDetailsEnabled: false,
       selectedPrintStatusFilters: [],
     };
 
@@ -662,10 +660,9 @@ class RequestsRoute extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
+    const layer = (props.resources.query || {}).layer;
     const newState = {};
-    const { resources } = props;
-    const layer = (resources.query || {}).layer;
-    const currViewPrintDetailsSettings = get(resources, viewPrintDetailsPath) === 'true';
+    const currViewPrintDetailsSettings = get(props.resources, viewPrintDetailsPath) === 'true';
 
     if (!layer) {
       newState.dupRequest = null;

@@ -252,11 +252,7 @@ SearchAndSort.mockImplementation(jest.fn(({
   massageNewRecord,
   onCloseNewRecord,
   onFilterChange,
-  parentResources: {
-    records: {
-      records,
-    },
-  },
+  parentResources: resources,
   renderFilters,
   resultIsSelected,
   viewRecordOnCollapse,
@@ -265,7 +261,7 @@ SearchAndSort.mockImplementation(jest.fn(({
   resultsFormatter,
 }) => {
   const onClickActions = () => {
-    onDuplicate(records[0]);
+    onDuplicate(resources.records.records[0]);
     buildRecordsForHoldsShelfReport();
     massageNewRecord({});
     resultIsSelected({
@@ -377,7 +373,7 @@ describe('RequestsRoute', () => {
         GET: jest.fn(),
       },
       savePrintDetails: {
-        POST: jest.fn().mockResolvedValue(),
+        POST: jest.fn(),
       },
       activeRecord: {
         update: jest.fn(),
@@ -606,34 +602,8 @@ describe('RequestsRoute', () => {
       expect(printContent).toBeInTheDocument();
     });
 
-    it('should trigger "exportCsv" when "Enable view print details" settings is enabled', async () => {
+    it('should trigger "exportCsv', async () => {
       await userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsToCsv' }));
-
-      await waitFor(() => {
-        expect(exportCsv).toHaveBeenCalled();
-      });
-    });
-
-    it('should trigger "exportCsv" when "Enable view print details" settings is disabled', async () => {
-      const props = {
-        ...defaultProps,
-        resources: {
-          ...defaultProps.resources,
-          circulationSettings: {
-            ...defaultProps.resources.circulationSettings,
-            records: defaultProps.resources.circulationSettings.records.map(record => ({
-              ...record,
-              value: {
-                ...record.value,
-                enablePrintLog: 'false'
-              }
-            }))
-          },
-        }
-      };
-
-      renderComponent(props);
-      await userEvent.click(screen.queryAllByRole('button', { name: 'ui-requests.exportSearchResultsToCsv' })[1]);
 
       await waitFor(() => {
         expect(exportCsv).toHaveBeenCalled();
@@ -1069,7 +1039,6 @@ describe('RequestsRoute', () => {
         selectedRows: '',
         pickSlipsToCheck: '',
         pickSlipsData: '',
-        isViewPrintDetailsEnabled: true,
         getPrintContentRef: getPrintContentRefMock,
         isPrintableMock,
         pickSlipsPrintTemplate: '',
