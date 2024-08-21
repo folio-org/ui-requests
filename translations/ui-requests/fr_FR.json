@@ -294,5 +294,7 @@
     "printPickSlipsSelected": "Print selected pick slips for {sp}",
     "request.detail.title": "Détails de la réservation",
     "requests.copies": "# Exemplaires",
-    "requests.printed": "Imprimé"
+    "requests.printed": "Imprimé",
+    "printDetails.count": "# Copies",
+    "printDetails.lastPrintedDetails": "Printed"
 }

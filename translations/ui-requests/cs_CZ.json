@@ -253,7 +253,7 @@
     "item.status.orderClosed": "Objednávka uzavřena",
     "item.status.restricted": "Omezeno",
     "appMenu.keyboardShortcuts": "Klávesové zkratky",
-    "navigation.app": "Vyhledat požadavek",
+    "navigation.app": "Vyhledat v aplikaci Žádanky",
     "navigation.keyboardShortcuts": "Klávesové zkratky",
     "requests.servicePoint": "Pult služeb pro vyzvednutí",
     "requests.callNumber": "Řetězec efektivní signatury",
@@ -294,5 +294,7 @@
     "printPickSlipsSelected": "Vytisknout vybrané cirkulační lístky žádanek pro {sp}",
     "request.detail.title": "Detaily žádanky",
     "requests.copies": "# Kopie",
-    "requests.printed": "Printed"
+    "requests.printed": "Tištěno",
+    "printDetails.count": "# Kopie",
+    "printDetails.lastPrintedDetails": "Tištěno"
 }
