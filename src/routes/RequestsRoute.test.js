@@ -252,11 +252,7 @@ SearchAndSort.mockImplementation(jest.fn(({
   massageNewRecord,
   onCloseNewRecord,
   onFilterChange,
-  parentResources: {
-    records: {
-      records
-    }
-  },
+  parentResources,
   renderFilters,
   resultIsSelected,
   viewRecordOnCollapse,
@@ -265,7 +261,7 @@ SearchAndSort.mockImplementation(jest.fn(({
   resultsFormatter,
 }) => {
   const onClickActions = () => {
-    onDuplicate(records[0]);
+    onDuplicate(parentResources.records.records[0]);
     buildRecordsForHoldsShelfReport();
     massageNewRecord({});
     resultIsSelected({
@@ -551,94 +547,7 @@ describe('RequestsRoute', () => {
 
   describe('on "Print Status" filter present in query', () => {
     getTlrSettings.mockReturnValueOnce({ createTitleLevelRequestsByDefault: true });
-    beforeEach(() => {
-      SearchAndSort.mockImplementation(jest.fn(({
-        paneTitleRef,
-        actionMenu,
-        detailProps: {
-          onDuplicate,
-          buildRecordsForHoldsShelfReport,
-          onChangePatron,
-          joinRequest,
-        },
-        getHelperResourcePath,
-        massageNewRecord,
-        onCloseNewRecord,
-        onFilterChange,
-        parentResources: resources,
-        renderFilters,
-        resultIsSelected,
-        viewRecordOnCollapse,
-        customPaneSub,
-        columnMapping,
-        resultsFormatter,
-      }) => {
-        const onClickActions = () => {
-          onDuplicate(resources.records.records[0]);
-          buildRecordsForHoldsShelfReport();
-          massageNewRecord({});
-          resultIsSelected({
-            item: {
-              id: 'id',
-            },
-          });
-          viewRecordOnCollapse();
-        };
-        return (
-          // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-          <div>
-            <span>{customPaneSub}</span>
-            <div id={INPUT_REQUEST_SEARCH_SELECTOR} />
-            <div
-              aria-hidden="true"
-              data-testid={testIds.searchAndSort}
-              onKeyDown={onClickActions}
-              onClick={onClickActions}
-            />
-            <p>getHelperResourcePath: {getHelperResourcePath('', 'testID1')}</p>
-            <div>
-              {renderFilters(RequestFilterData.onChange)}
-            </div>
-            <div>
-              <button
-                type="button"
-                onClick={onChangePatron}
-              >onChangePatron
-              </button>
-              <button
-                type="button"
-                onClick={onCloseNewRecord}
-              >onCloseNewRecord
-              </button>
-              <button
-                type="button"
-                onClick={() => joinRequest(request)}
-              >addRequestFields
-              </button>
-              <button
-                type="button"
-                onClick={onFilterChange({
-                  name: 'filter4',
-                  values: ['Value4', 'Value5']
-                })}
-              >onFilterChange
-              </button>
-            </div>
-            {actionMenu({ onToggle: jest.fn() })}
-            <div paneTitleRef={paneTitleRef} />
-            <div>
-              {Object.keys(columnMapping).map(column => columnMapping[column])}
-            </div>
-            <div>
-              {Object.keys(resultsFormatter).map(result => resultsFormatter[result](mockedRequest))}
-            </div>
-          </div>
-        );
-      }));
-    });
-    afterEach(() => {
-      cleanup();
-    });
+
     it('should trigger "mutator.query.update"', async () => {
       const props = {
         ...defaultProps,
