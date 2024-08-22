@@ -783,15 +783,17 @@ describe('RequestsRoute', () => {
       });
     });
 
-    describe('Save Print Logs on pick slips print', () => {
-      it('should trigger "mutator.savePrintDetails.POST" when "isViewPrintDetails" is true', async () => {
+    describe('When "isViewPrintDetailsEnabled" is true', () => {
+      it('should trigger "mutator.savePrintDetails.POST"', async () => {
         renderComponent(defaultProps);
         await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[0]);
 
         expect(defaultProps.mutator.savePrintDetails.POST).toHaveBeenCalled();
       });
+    });
 
-      it('should not trigger "mutator.savePrintDetails.POST" when "isViewPrintDetails" is false', async () => {
+    describe('When "isViewPrintDetailsEnabled" is false', () => {
+      it('should not trigger "mutator.savePrintDetails.POST"', async () => {
         const props = {
           ...defaultProps,
           resources: {

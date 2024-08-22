@@ -1425,10 +1425,12 @@ class RequestsRoute extends React.Component {
     let multiSelectPickSlipData = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
     const displayPrintStatusFilteredData = isViewPrintDetailsEnabled &&
       resources.records.hasLoaded && selectedPrintStatusFilters.length === 1;
-    // For 'displayPrintStatusFilteredData' to be true the length of 'selectedPrintStatusFilters' must be 1.
-    // This is because we only filter data when exactly one PrintStatus filter is selected ([Printed] or [Not Printed]).
-    // If the filter array is empty or contains both filters ([] or [Printed, Not Printed]),
-    // no filtering is needed as the data should be used directly from the query response.
+    /**
+     * For 'displayPrintStatusFilteredData' to be true the length of 'selectedPrintStatusFilters' must be 1.
+     * This is because we only filter data when exactly one PrintStatus filter is selected ([Printed] or [Not Printed]).
+     * If the filter array is empty or contains both filters ([] or [Printed, Not Printed]),
+     * no filtering is needed as the data should be used directly from the query response.
+     */
 
     const resultsFormatter = getListFormatter(
       {
