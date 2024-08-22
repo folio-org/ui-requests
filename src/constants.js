@@ -320,6 +320,7 @@ export const RESOURCE_TYPES = {
   USER: 'user',
   HOLDING: 'holding',
   REQUEST_TYPES: 'requestTypes',
+  ECS_TLR_SETTINGS: 'ecsTlrSettings',
 };
 
 export const ENTER_EVENT_KEY = 'Enter';

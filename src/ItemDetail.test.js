@@ -9,6 +9,7 @@ import ItemDetail from './ItemDetail';
 import { INVALID_REQUEST_HARDCODED_ID } from './constants';
 
 jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   Link: jest.fn(({ to, children }) => <a href={to}>{children}</a>),
 }));
 

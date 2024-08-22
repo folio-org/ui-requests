@@ -34,6 +34,7 @@ import {
   selectedRowsNonPrintable,
   isPrintable,
   getNextSelectedRowsState,
+  isMultiDataTenant,
 } from './utils';
 
 import {
@@ -1088,5 +1089,31 @@ describe('getRequestTypeOptions', () => {
     ];
 
     expect(getRequestTypeOptions(requestTypes)).toEqual(expectedResult);
+  });
+});
+
+describe('isMultiDataTenant', () => {
+  describe('When multi data tenant', () => {
+    const stripes = {
+      hasInterface: () => true,
+    };
+
+    it('should return true', () => {
+      const result = isMultiDataTenant(stripes);
+
+      expect(result).toBe(true);
+    });
+  });
+
+  describe('When single data tenant', () => {
+    const stripes = {
+      hasInterface: () => false,
+    };
+
+    it('should return false', () => {
+      const result = isMultiDataTenant(stripes);
+
+      expect(result).toBe(false);
+    });
   });
 });
