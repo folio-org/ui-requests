@@ -545,30 +545,6 @@ describe('RequestsRoute', () => {
     cleanup();
   });
 
-  describe('on "Print Status" filter present in query', () => {
-    getTlrSettings.mockReturnValueOnce({ createTitleLevelRequestsByDefault: true });
-
-    it('should trigger "mutator.query.update"', async () => {
-      const props = {
-        ...defaultProps,
-        resources: {
-          ...defaultProps.resources,
-          query: {
-            ...defaultProps.resources.query,
-            filters: 'filter1.value1,printStatus.Printed',
-          },
-        }
-      };
-
-      renderComponent(props);
-      const expectFilterValue = { 'filters': 'filter1.value1,printStatus.Printed,filter4.Value4,filter4.Value5' };
-
-      await userEvent.click(screen.getByRole('button', { name: 'onFilterChange' }));
-
-      expect(defaultProps.mutator.query.update).toHaveBeenCalledWith(expectFilterValue);
-    });
-  });
-
   describe('RequestsRoute', () => {
     getTlrSettings.mockReturnValueOnce({ createTitleLevelRequestsByDefault: true });
 
@@ -657,6 +633,26 @@ describe('RequestsRoute', () => {
       await userEvent.click(screen.getByRole('button', { name: 'onFilterChange' }));
 
       expect(defaultProps.mutator.query.update).toBeCalledWith(expectFilterValue);
+    });
+
+    it('should trigger "mutator.query.update" when "Print Status" filters are present in query', async () => {
+      const props = {
+        ...defaultProps,
+        resources: {
+          ...defaultProps.resources,
+          query: {
+            ...defaultProps.resources.query,
+            filters: 'filter1.value1,printStatus.Printed',
+          },
+        }
+      };
+      cleanup();
+      renderComponent(props);
+      const expectFilterValue = { 'filters': 'filter1.value1,printStatus.Printed,filter4.Value4,filter4.Value5' };
+
+      await userEvent.click(screen.getByRole('button', { name: 'onFilterChange' }));
+
+      expect(defaultProps.mutator.query.update).toHaveBeenCalledWith(expectFilterValue);
     });
 
     it('should trigger "mutator.activeRecord.update"', async () => {
