@@ -681,12 +681,6 @@ describe('RequestsRoute', () => {
       expect(printPickSlipsLabel).toBeInTheDocument();
     });
 
-    it('should trigger "mutator.savePrintDetails.POST"', async () => {
-      await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[0]);
-
-      expect(defaultProps.mutator.savePrintDetails.POST).toHaveBeenCalled();
-    });
-
     it('should render print search slips label', async () => {
       const printSearchSlipsLabel = screen.getByText(labelIds.printSearchSlips);
 
@@ -786,6 +780,38 @@ describe('RequestsRoute', () => {
         fireEvent.click(selectRequestCheckbox);
 
         expect(CheckboxColumn).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+      });
+    });
+
+    describe('Save Print Logs on pick slips print', () => {
+      it('should trigger "mutator.savePrintDetails.POST" when "isViewPrintDetails" is true', async () => {
+        renderComponent(defaultProps);
+        await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[0]);
+
+        expect(defaultProps.mutator.savePrintDetails.POST).toHaveBeenCalled();
+      });
+
+      it('should not trigger "mutator.savePrintDetails.POST" when "isViewPrintDetails" is false', async () => {
+        const props = {
+          ...defaultProps,
+          resources: {
+            ...defaultProps.resources,
+            circulationSettings: {
+              ...defaultProps.resources.circulationSettings,
+              records: defaultProps.resources.circulationSettings.records.map(record => ({
+                ...record,
+                value: {
+                  ...record.value,
+                  enablePrintLog: 'false'
+                }
+              }))
+            },
+          }
+        };
+        renderComponent(props);
+        await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[0]);
+
+        expect(defaultProps.mutator.savePrintDetails.POST).not.toHaveBeenCalled();
       });
     });
   });
