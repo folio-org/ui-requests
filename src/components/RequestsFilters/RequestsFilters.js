@@ -19,6 +19,7 @@ import {
 
 import {
   requestFilterTypes,
+  requestPrintStatusFilters,
   requestStatusFilters,
   requestTypeFilters,
 } from '../../constants';
@@ -34,11 +35,13 @@ export default class RequestsFilters extends React.Component {
       requestType: PropTypes.arrayOf(PropTypes.string),
       tags: PropTypes.arrayOf(PropTypes.string),
       pickupServicePoints: PropTypes.arrayOf(PropTypes.string),
+      printStatus: PropTypes.arrayOf(PropTypes.string),
     }).isRequired,
     resources: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
     onClear: PropTypes.func.isRequired,
     titleLevelRequestsFeatureEnabled: PropTypes.bool.isRequired,
+    isViewPrintDetailsEnabled: PropTypes.bool.isRequired,
   };
 
   transformRequestFilterOptions = (source = []) => {
@@ -63,10 +66,12 @@ export default class RequestsFilters extends React.Component {
         requestStatus = [],
         pickupServicePoints = [],
         requestLevels = [],
+        printStatus = [],
       },
       onChange,
       onClear,
       titleLevelRequestsFeatureEnabled,
+      isViewPrintDetailsEnabled,
     } = this.props;
 
     return (
@@ -141,6 +146,26 @@ export default class RequestsFilters extends React.Component {
           onChange={onChange}
           onClear={onClear}
         />
+        {isViewPrintDetailsEnabled && (
+          <Accordion
+            displayClearButton={!isEmpty(printStatus)}
+            id={requestFilterTypes.PRINT_STATUS}
+            data-testid={requestFilterTypes.PRINT_STATUS}
+            header={FilterAccordionHeader}
+            label={<FormattedMessage id="ui-requests.requestMeta.printStatus" />}
+            name={requestFilterTypes.PRINT_STATUS}
+            separator={false}
+            onClearFilter={() => onClear(requestFilterTypes.PRINT_STATUS)}
+          >
+            <CheckboxFilter
+              data-testid={`${requestFilterTypes.PRINT_STATUS}Filter`}
+              dataOptions={this.transformRequestFilterOptions(requestPrintStatusFilters)}
+              name={requestFilterTypes.PRINT_STATUS}
+              selectedValues={printStatus}
+              onChange={onChange}
+            />
+          </Accordion>
+        )}
       </AccordionSet>
     );
   }

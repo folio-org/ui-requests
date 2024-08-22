@@ -65,6 +65,7 @@ import {
   DEFAULT_REQUEST_TYPE_VALUE,
   INPUT_REQUEST_SEARCH_SELECTOR,
   PRINT_DETAILS_COLUMNS,
+  requestFilterTypes,
 } from '../constants';
 import {
   buildUrl,
@@ -100,6 +101,8 @@ import {
   getFormattedYears,
   getStatusQuery,
   getFullNameForCsvRecords,
+  getPrintStatusFilteredData,
+  filterRecordsByPrintStatus,
 } from './utils';
 import SinglePrintButtonForPickSlip from '../components/SinglePrintButtonForPickSlip';
 
@@ -615,8 +618,6 @@ class RequestsRoute extends React.Component {
       createTitleLevelRequestsByDefault = false,
     } = getTlrSettings(props.resources.configs.records[0]?.value);
 
-    const isViewPrintDetailsEnabled = get(props.resources, viewPrintDetailsPath) === 'true';
-
     this.okapiUrl = props.stripes.okapi.url;
 
     this.httpHeadersOptions = {
@@ -648,7 +649,8 @@ class RequestsRoute extends React.Component {
       selectedRows: {},
       titleLevelRequestsFeatureEnabled,
       createTitleLevelRequestsByDefault,
-      isViewPrintDetailsEnabled,
+      isViewPrintDetailsEnabled: false,
+      selectedPrintStatusFilters: [],
     };
 
     this.pickSlipsPrintContentRef = React.createRef();
@@ -657,41 +659,38 @@ class RequestsRoute extends React.Component {
     this.printSelectedContentRef = React.createRef();
   }
 
-  static getDerivedStateFromProps(props) {
+  static getDerivedStateFromProps(props, state) {
     const layer = (props.resources.query || {}).layer;
+    const newState = {};
+    const currViewPrintDetailsSettings = get(props.resources, viewPrintDetailsPath) === 'true';
+
     if (!layer) {
-      return { dupRequest: null };
+      newState.dupRequest = null;
     }
 
-    return null;
+    if (currViewPrintDetailsSettings !== state.isViewPrintDetailsEnabled) {
+      // Update the `isViewPrintDetailsEnabled` state based on user navigation back to Request App.
+      newState.isViewPrintDetailsEnabled = currViewPrintDetailsSettings;
+    }
+
+    return Object.keys(newState).length ? newState : null;
   }
 
   componentDidMount() {
     this.setCurrentServicePointId();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     const patronBlocks = get(this.props.resources, ['patronBlocks', 'records'], []);
     const prevBlocks = get(prevProps.resources, ['patronBlocks', 'records'], []);
-    const { submitting } = this.state;
+    const { submitting, isViewPrintDetailsEnabled, selectedPrintStatusFilters } = this.state;
     const prevExpired = prevBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
     const expired = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
     const { id: currentServicePointId } = this.getCurrentServicePointInfo();
     const prevStateServicePointId = get(prevProps.resources.currentServicePoint, 'id');
     const { configs: prevConfigs } = prevProps.resources;
-    const { configs } = this.props.resources;
+    const { configs, query: { filters } } = this.props.resources;
     const instanceId = parse(this.props.location?.search)?.instanceId;
-    const currPrintDetailsSettings = get(this.props.resources, viewPrintDetailsPath);
-    const prevPrintDetailsSettings = get(prevProps.resources, viewPrintDetailsPath);
-
-    if (currPrintDetailsSettings !== prevPrintDetailsSettings) {
-      const isViewPrintDetailsEnabled = currPrintDetailsSettings === 'true';
-      this.setState({ isViewPrintDetailsEnabled });
-
-      if (!isViewPrintDetailsEnabled) {
-        this.columnHeadersMap = getFilteredColumnHeadersMap(this.columnHeadersMap);
-      }
-    }
 
     if (prevExpired.length > 0 && expired.length === 0) {
       // eslint-disable-next-line react/no-did-update-set-state
@@ -730,6 +729,34 @@ class RequestsRoute extends React.Component {
 
     if (!this.props.resources.records.isPending) {
       this.onSearchComplete(this.props.resources.records);
+    }
+
+    if (isViewPrintDetailsEnabled !== prevState.isViewPrintDetailsEnabled && !isViewPrintDetailsEnabled) {
+      this.columnHeadersMap = getFilteredColumnHeadersMap(this.columnHeadersMap);
+    }
+
+    if (filters?.includes(requestFilterTypes.PRINT_STATUS)) {
+      const printStatusFilterInQuery = this.getActiveFilters()[requestFilterTypes.PRINT_STATUS];
+
+      this.updateSelectedPrintStatusFilters(isViewPrintDetailsEnabled, selectedPrintStatusFilters, printStatusFilterInQuery);
+    }
+  }
+
+  updateSelectedPrintStatusFilters(isViewPrintDetailsEnabled, selectedPrintStatusFilters, printStatusFilterInQuery) {
+    /**
+     * Updates the `selectedPrintStatusFilters` state based on pre selected filters when user navigates back to Request App.
+     *
+     * The function performs the following actions:
+     * 1. If `isViewPrintDetailsEnabled` is true and if `Print Status` filters contains exactly one filter:
+     *    - it updates state to set `selectedPrintStatusFilters` to this one `Print Status` filter.
+     *
+     * 2. If `isViewPrintDetailsEnabled` is false and `filters` in query includes 'PRINT STATUS' filter:
+     *    - it clears the 'PRINT STATUS' filter from query by invoking `handleFilterChange`.
+     */
+    if (isViewPrintDetailsEnabled && selectedPrintStatusFilters.length === 0 && printStatusFilterInQuery?.length === 1) {
+      this.setState({ selectedPrintStatusFilters: [printStatusFilterInQuery[0]] });
+    } else if (!isViewPrintDetailsEnabled && printStatusFilterInQuery?.length) {
+      this.handleFilterChange({ name: requestFilterTypes.PRINT_STATUS, values: [] });
     }
   }
 
@@ -805,7 +832,7 @@ class RequestsRoute extends React.Component {
   }
 
   // Export function for the CSV search report action
-  async exportData() {
+  async exportData(exportPrintStatusFilteredData) {
     this.setState({ csvReportPending: true });
 
     // Build a custom query for the CSV record export, which has to include
@@ -824,7 +851,9 @@ class RequestsRoute extends React.Component {
 
     queryString = queryClauses.join(' and ');
     const records = await this.fetchReportData(this.props.mutator.reportRecords, queryString);
-    const recordsToCSV = this.buildRecords(records);
+    const printStatusFilteredRecords = exportPrintStatusFilteredData &&
+      filterRecordsByPrintStatus(records, this.state.selectedPrintStatusFilters);
+    const recordsToCSV = this.buildRecords(printStatusFilteredRecords || records);
 
     exportCsv(recordsToCSV, {
       onlyFields: this.columnHeadersMap,
@@ -1196,6 +1225,10 @@ class RequestsRoute extends React.Component {
   }
 
   handleFilterChange = ({ name, values }) => {
+    if (name === requestFilterTypes.PRINT_STATUS) {
+      this.setState({ selectedPrintStatusFilters: values });
+    }
+
     const { mutator } = this.props;
     const newFilters = {
       ...this.getActiveFilters(),
@@ -1236,7 +1269,7 @@ class RequestsRoute extends React.Component {
 
   renderFilters = (onChange) => {
     const { resources } = this.props;
-    const { titleLevelRequestsFeatureEnabled } = this.state;
+    const { titleLevelRequestsFeatureEnabled, isViewPrintDetailsEnabled } = this.state;
 
     return (
       <RequestsFilters
@@ -1245,6 +1278,7 @@ class RequestsRoute extends React.Component {
         onChange={onChange}
         onClear={(name) => onChange({ name, values: [] })}
         titleLevelRequestsFeatureEnabled={titleLevelRequestsFeatureEnabled}
+        isViewPrintDetailsEnabled={isViewPrintDetailsEnabled}
       />
     );
   };
@@ -1335,6 +1369,7 @@ class RequestsRoute extends React.Component {
       holdsShelfReportPending,
       createTitleLevelRequestsByDefault,
       isViewPrintDetailsEnabled,
+      selectedPrintStatusFilters,
     } = this.state;
     const isPrintHoldRequestsEnabled = getPrintHoldRequestsEnabled(resources.printHoldRequests);
     const { name: servicePointName } = this.getCurrentServicePointInfo();
@@ -1388,6 +1423,14 @@ class RequestsRoute extends React.Component {
     const pickSlipsData = convertToSlipData(pickSlips, intl, timezone, locale, SLIPS_TYPE.PICK_SLIP, user);
     const searchSlipsData = convertToSlipData(searchSlips, intl, timezone, locale, SLIPS_TYPE.SEARCH_SLIP_HOLD_REQUESTS);
     let multiSelectPickSlipData = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
+    const displayPrintStatusFilteredData = isViewPrintDetailsEnabled &&
+      resources.records.hasLoaded && selectedPrintStatusFilters.length === 1;
+    /**
+     * For 'displayPrintStatusFilteredData' to be true the length of 'selectedPrintStatusFilters' must be 1.
+     * This is because we only filter data when exactly one PrintStatus filter is selected ([Printed] or [Not Printed]).
+     * If the filter array is empty or contains both filters ([] or [Printed, Not Printed]),
+     * no filtering is needed as the data should be used directly from the query response.
+     */
 
     const resultsFormatter = getListFormatter(
       {
@@ -1434,7 +1477,7 @@ class RequestsRoute extends React.Component {
               onClick={() => {
                 this.context.sendCallout({ message: <FormattedMessage id="ui-requests.csvReportInProgress" /> });
                 onToggle();
-                this.exportData();
+                this.exportData(displayPrintStatusFilteredData);
               }}
             >
               <FormattedMessage id="ui-requests.exportSearchResultsToCsv" />
@@ -1609,7 +1652,8 @@ class RequestsRoute extends React.Component {
               customPaneSub={this.renderPaneSub()}
               onCreate={this.create}
               onCloseNewRecord={this.handleCloseNewRecord}
-              parentResources={resources}
+              parentResources={displayPrintStatusFilteredData ?
+                getPrintStatusFilteredData(resources, selectedPrintStatusFilters) : resources}
               parentMutator={mutator}
               detailProps={{
                 onChangePatron: this.onChangePatron,
