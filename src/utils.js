@@ -513,3 +513,7 @@ export function resetFieldState(form, fieldName) {
     form.resetFieldState(fieldName);
   }
 }
+
+export const isMultiDataTenant = (stripes) => {
+  return stripes.hasInterface('consortia') && stripes.hasInterface('ecs-tlr');
+};

@@ -20,6 +20,7 @@
 * Populate the token 'request.barcodeImage' in the pick slip. Refs UIREQ-1117.
 * Populate the token "staffUsername" in the pick slip. Refs UIREQ-1124.
 * Implement availability of "Printed" and "# Copies" columns upon "Enable view print details (Pick slips)" configuration. Refs UIREQ-1121.
+* Hide Duplicate and Move action buttons in ECS env with mod-tlr enabled. Refs UIREQ-1127, UIREQ-1125.
 
 ## [9.1.1] (https://github.com/folio-org/ui-checkin/tree/v9.1.1) (2024-03-27)
 [Full Changelog](https://github.com/folio-org/ui-checkin/compare/v9.1.0...v9.1.1)

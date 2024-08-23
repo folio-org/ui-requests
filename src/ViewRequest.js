@@ -66,6 +66,7 @@ import {
   isVirtualItem,
   isVirtualPatron,
   getRequestErrorMessage,
+  isMultiDataTenant,
 } from './utils';
 import urls from './routes/urls';
 
@@ -75,15 +76,12 @@ const ECS_REQUEST_PHASE = {
   SECONDARY: 'Secondary',
 };
 
-export const isActionMenuVisible = (stripes, isEcsTlrSecondaryRequest, isDCBTransaction) => (
-  isEcsTlrSecondaryRequest
-    ? false
-    : stripes.hasPerm('ui-requests.create')
-    || stripes.hasPerm('ui-requests.edit')
-    || stripes.hasPerm('ui-requests.moveRequest')
-    || stripes.hasPerm('ui-requests.reorderQueue')
-    || !isDCBTransaction
-);
+export const isAnyActionButtonVisible = (visibilityConditions = []) => visibilityConditions.some(condition => condition);
+export const shouldHideMoveAndDuplicate = (stripes, isEcsTlrPrimaryRequest, isEcsTlrSettingReceived, isEcsTlrSettingEnabled) => {
+  return isEcsTlrPrimaryRequest ||
+    (isEcsTlrSettingReceived && isEcsTlrSettingEnabled) ||
+    (isMultiDataTenant(stripes) && !isEcsTlrSettingReceived);
+};
 
 class ViewRequest extends React.Component {
   static manifest = {
@@ -157,6 +155,8 @@ class ViewRequest extends React.Component {
     intl: PropTypes.object,
     tagsEnabled: PropTypes.bool,
     match: PropTypes.object,
+    isEcsTlrSettingReceived: PropTypes.bool.isRequired,
+    isEcsTlrSettingEnabled: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -473,6 +473,8 @@ class ViewRequest extends React.Component {
       stripes,
       patronGroups,
       optionLists: { cancellationReasons },
+      isEcsTlrSettingEnabled,
+      isEcsTlrSettingReceived,
     } = this.props;
     const {
       isCancellingRequest,
@@ -518,11 +520,15 @@ class ViewRequest extends React.Component {
       ? <FormattedDate value={request.requestExpirationDate} />
       : '-';
 
-    const showActionMenu = isActionMenuVisible(stripes, isEcsTlrSecondaryRequest, isDCBTransaction);
-
     const actionMenu = ({ onToggle }) => {
+      if (isEcsTlrSecondaryRequest) {
+        return null;
+      }
+
+      const isMoveAndDuplicateHidden = shouldHideMoveAndDuplicate(stripes, isEcsTlrPrimaryRequest, isEcsTlrSettingReceived, isEcsTlrSettingEnabled);
+
       if (isRequestClosed) {
-        if (!isRequestValid || (requestLevel === REQUEST_LEVEL_TYPES.TITLE && !titleLevelRequestsFeatureEnabled) || isDCBTransaction) {
+        if (!isRequestValid || (requestLevel === REQUEST_LEVEL_TYPES.TITLE && !titleLevelRequestsFeatureEnabled) || isDCBTransaction || isMoveAndDuplicateHidden) {
           return null;
         }
 
@@ -544,10 +550,18 @@ class ViewRequest extends React.Component {
         );
       }
 
-      return (
-        <>
-          <IfPermission perm="ui-requests.edit">
-            {isRequestValid && !isDCBTransaction && !isEcsTlrSecondaryRequest &&
+      const isValidNotDCBTransaction = isRequestValid && !isDCBTransaction;
+      const isEditButtonVisible = isValidNotDCBTransaction && stripes.hasPerm('ui-requests.edit');
+      const isCancelButtonVisible = stripes.hasPerm('ui-requests.edit');
+      const isDuplicateButtonVisible = isValidNotDCBTransaction && !isMoveAndDuplicateHidden && stripes.hasPerm('ui-requests.create');
+      const isMoveButtonVisible = item && isRequestNotFilled && isValidNotDCBTransaction && !isMoveAndDuplicateHidden && stripes.hasPerm('ui-requests.moveRequest');
+      const isReorderQueueButtonVisible = isRequestOpen && isValidNotDCBTransaction && stripes.hasPerm('ui-requests.reorderQueue');
+      const isActionMenuVisible = isAnyActionButtonVisible([isEditButtonVisible, isCancelButtonVisible, isDuplicateButtonVisible, isMoveButtonVisible, isReorderQueueButtonVisible]);
+
+      if (isActionMenuVisible) {
+        return (
+          <>
+            {isEditButtonVisible &&
               <Button
                 buttonStyle="dropdownItem"
                 id="clickable-edit-request"
@@ -562,7 +576,7 @@ class ViewRequest extends React.Component {
                 </Icon>
               </Button>
             }
-            {!isEcsTlrSecondaryRequest &&
+            {isCancelButtonVisible &&
               <Button
                 buttonStyle="dropdownItem"
                 id="clickable-cancel-request"
@@ -576,9 +590,7 @@ class ViewRequest extends React.Component {
                 </Icon>
               </Button>
             }
-          </IfPermission>
-          {isRequestValid && !isDCBTransaction &&
-            <IfPermission perm="ui-requests.create">
+            {isDuplicateButtonVisible &&
               <Button
                 id="duplicate-request"
                 onClick={() => {
@@ -591,10 +603,8 @@ class ViewRequest extends React.Component {
                   <FormattedMessage id="ui-requests.actions.duplicateRequest" />
                 </Icon>
               </Button>
-            </IfPermission>
-          }
-          {item && isRequestNotFilled && isRequestValid && !isDCBTransaction && !isEcsTlrPrimaryRequest && !isEcsTlrSecondaryRequest &&
-            <IfPermission perm="ui-requests.moveRequest">
+            }
+            {isMoveButtonVisible &&
               <Button
                 id="move-request"
                 onClick={() => {
@@ -607,10 +617,8 @@ class ViewRequest extends React.Component {
                   <FormattedMessage id="ui-requests.actions.moveRequest" />
                 </Icon>
               </Button>
-            </IfPermission>
-          }
-          {isRequestOpen && isRequestValid && !isDCBTransaction && !isEcsTlrSecondaryRequest &&
-            <IfPermission perm="ui-requests.reorderQueue">
+            }
+            {isReorderQueueButtonVisible &&
               <Button
                 id="reorder-queue"
                 onClick={() => {
@@ -623,10 +631,12 @@ class ViewRequest extends React.Component {
                   <FormattedMessage id="ui-requests.actions.reorderQueue" />
                 </Icon>
               </Button>
-            </IfPermission>
-          }
-        </>
-      );
+            }
+          </>
+        );
+      }
+
+      return null;
     };
 
     const referredRecordData = {
@@ -657,7 +667,7 @@ class ViewRequest extends React.Component {
         paneTitle={<FormattedMessage id="ui-requests.request.detail.title" />}
         lastMenu={this.renderDetailMenu(request)}
         dismissible
-        {... (showActionMenu ? { actionMenu } : {})}
+        actionMenu={actionMenu}
         onClose={this.props.onClose}
       >
         <ViewRequestShortcutsWrapper

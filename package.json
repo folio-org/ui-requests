@@ -107,7 +107,8 @@
           "inventory-storage.instances.item.get",
           "inventory-storage.instances.collection.get",
           "manualblocks.collection.get",
-          "circulation.requests.hold-shelf-clearance-report.get"
+          "circulation.requests.hold-shelf-clearance-report.get",
+          "circulation.settings.collection.get"
         ],
         "visible": true
       },

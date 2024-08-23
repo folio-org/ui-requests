@@ -20,6 +20,7 @@ import {
   CalloutContext,
   AppIcon,
   TitleManager,
+  checkIfUserInCentralTenant,
 } from '@folio/stripes/core';
 import {
   TextLink,
@@ -28,6 +29,7 @@ import {
 import {
   exportCsv,
   effectiveCallNumber,
+  getHeaderWithCredentials,
 } from '@folio/stripes/util';
 
 import RequestsRoute, {
@@ -46,6 +48,7 @@ import {
   getFullName,
   getInstanceQueryString,
   getNextSelectedRowsState,
+  isMultiDataTenant,
 } from '../utils';
 import {
   getFormattedYears,
@@ -111,6 +114,7 @@ jest.mock('../utils', () => ({
   getInstanceQueryString: jest.fn(),
   getNextSelectedRowsState: jest.fn(),
   extractPickSlipRequestIds: jest.fn(),
+  isMultiDataTenant: jest.fn(),
 }));
 jest.mock('./utils', () => ({
   ...jest.requireActual('./utils'),
@@ -702,6 +706,72 @@ describe('RequestsRoute', () => {
       await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[1]);
 
       expect(printSearchSlipsLabel).toBeInTheDocument();
+    });
+  });
+
+  describe('When multi data tenant', () => {
+    const requestHeaders = { test: 'test' };
+    const fetchSpy = jest.fn();
+    const props = {
+      ...defaultProps,
+      stripes: {
+        ...defaultProps.stripes,
+        user: {
+          user: {
+            ...defaultProps.stripes.user.user,
+            tenants: [{ id: 'tenantId' }],
+          },
+        },
+      },
+    };
+
+    beforeEach(() => {
+      isMultiDataTenant.mockReturnValue(true);
+      getHeaderWithCredentials.mockReturnValue(requestHeaders);
+    });
+
+    afterEach(() => {
+      fetchSpy.mockClear();
+    });
+
+    describe('When user in central tenant', () => {
+      beforeEach(() => {
+        fetchSpy.mockResolvedValueOnce({
+          json: () => ({
+            ecsTlrFeatureEnabled: true,
+          }),
+        });
+        checkIfUserInCentralTenant.mockReturnValueOnce(true);
+        global.fetch = fetchSpy;
+        renderComponent(props);
+      });
+
+      it('should use correct endpoint to get ecs tlr settings', () => {
+        expect(fetchSpy).toHaveBeenCalledWith(`${defaultProps.stripes.okapi.url}/tlr/settings`, requestHeaders);
+      });
+    });
+
+    describe('When user in data tenant', () => {
+      beforeEach(() => {
+        fetchSpy.mockResolvedValueOnce({
+          json: () => ({
+            circulationSettings: [
+              {
+                value: {
+                  enabled: true,
+                },
+              }
+            ],
+          }),
+        });
+        checkIfUserInCentralTenant.mockReturnValueOnce(false);
+        global.fetch = fetchSpy;
+        renderComponent(props);
+      });
+
+      it('should use correct endpoint to get ecs tlr settings', () => {
+        expect(fetchSpy).toHaveBeenCalledWith(`${defaultProps.stripes.okapi.url}/circulation/settings?query=name==ecsTlrFeature`, requestHeaders);
+      });
     });
   });
 
@@ -1665,6 +1735,30 @@ describe('RequestsRoute', () => {
           requestId,
           operation,
         })).toBe(expectedUrl);
+      });
+    });
+
+    describe('ecsTlrSettings', () => {
+      describe('When user in central tenant', () => {
+        it('should return correct endpoint', () => {
+          checkIfUserInCentralTenant.mockReturnValueOnce(true);
+
+          const ecsTlrSettingsEndpoint = 'tlr/settings';
+          const result = urls.ecsTlrSettings();
+
+          expect(result).toBe(ecsTlrSettingsEndpoint);
+        });
+      });
+
+      describe('When user in data tenant', () => {
+        it('should return correct endpoint', () => {
+          checkIfUserInCentralTenant.mockReturnValueOnce(false);
+
+          const ecsTlrSettingsEndpoint = 'circulation/settings?query=name==ecsTlrFeature';
+          const result = urls.ecsTlrSettings();
+
+          expect(result).toBe(ecsTlrSettingsEndpoint);
+        });
       });
     });
   });

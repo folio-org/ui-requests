@@ -11,7 +11,8 @@ import {
 } from '@folio/stripes/components';
 
 import ViewRequest, {
-  isActionMenuVisible,
+  isAnyActionButtonVisible,
+  shouldHideMoveAndDuplicate,
 } from './ViewRequest';
 import RequestForm from './RequestForm';
 import {
@@ -120,6 +121,7 @@ describe('ViewRequest', () => {
     },
     stripes: {
       hasPerm: jest.fn(() => true),
+      hasInterface: jest.fn(() => true),
       connect: jest.fn((component) => component),
       logger: {
         log: jest.fn(),
@@ -130,6 +132,8 @@ describe('ViewRequest', () => {
         id: 'testId',
       },
     },
+    isEcsTlrSettingEnabled: false,
+    isEcsTlrSettingReceived: true,
   };
   const defaultDCBLendingProps = {
     ...defaultProps,
@@ -501,37 +505,39 @@ describe('ViewRequest', () => {
     });
   });
 
-  describe('isActionMenuVisible', () => {
-    let stripes = {
-      hasPerm: () => true,
+  describe('isAnyActionButtonVisible', () => {
+    describe('When visibility conditions are provided', () => {
+      it('should return true', () => {
+        expect(isAnyActionButtonVisible([true, false])).toBe(true);
+      });
+    });
+
+    describe('When visibility conditions are not provided', () => {
+      it('should return false', () => {
+        expect(isAnyActionButtonVisible()).toBe(false);
+      });
+    });
+  });
+
+  describe('shouldHideMoveAndDuplicate', () => {
+    const stripes = {
+      hasInterface: () => true,
     };
 
-    it('should return false when isEcsTlrSecondaryRequest true', () => {
-      expect(isActionMenuVisible(stripes, true, true)).toBeFalsy();
+    it('should return true for primary request', () => {
+      expect(shouldHideMoveAndDuplicate(stripes, true)).toBe(true);
     });
 
-    it('should return true when isDCBTransaction false and all permission true', () => {
-      expect(isActionMenuVisible(stripes, false, false)).toBeTruthy();
+    it('should return true if ecs tlr enabled', () => {
+      expect(shouldHideMoveAndDuplicate(stripes, false, true, true)).toBe(true);
     });
 
-    it('should return true when isDCBTransaction true and all permission true', () => {
-      expect(isActionMenuVisible(stripes, false, true)).toBeTruthy();
+    it('should return true if settings are not received', () => {
+      expect(shouldHideMoveAndDuplicate(stripes, false, false, true)).toBe(true);
     });
 
-    it('should return true when isDCBTransaction false and all permission false', () => {
-      stripes = {
-        hasPerm: () => false,
-      };
-
-      expect(isActionMenuVisible(stripes, false, false)).toBeTruthy();
-    });
-
-    it('should return true when isDCBTransaction true and all permission false', () => {
-      stripes = {
-        hasPerm: () => false,
-      };
-
-      expect(isActionMenuVisible(stripes, false, true)).toBeFalsy();
+    it('should return false', () => {
+      expect(shouldHideMoveAndDuplicate(stripes, false, true, false)).toBe(false);
     });
   });
 });
