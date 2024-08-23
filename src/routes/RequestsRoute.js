@@ -832,26 +832,30 @@ class RequestsRoute extends React.Component {
   }
 
   // Export function for the CSV search report action
-  async exportData(exportPrintStatusFilteredData) {
+  async exportData(isSinglePrintStatusFilterSelected) {
     this.setState({ csvReportPending: true });
 
     // Build a custom query for the CSV record export, which has to include
     // all search and filter parameters
     const queryClauses = [];
+    const queryTerm = this.props.resources?.query?.query;
     let queryString;
 
-    const queryTerm = this.props.resources?.query?.query;
-    const filterQuery = filters2cql(RequestsFiltersConfig, deparseFilters(this.getActiveFilters()));
+    const activeFilters = this.getActiveFilters();
+    const activeFilterKeys = Object.keys(activeFilters);
+    const onlyPrintStatusFilterSelected = activeFilterKeys.length === 1 && activeFilterKeys[0] === requestFilterTypes.PRINT_STATUS;
+    const filterQuery = filters2cql(RequestsFiltersConfig, deparseFilters(activeFilters));
 
     if (queryTerm) {
       queryString = `(requesterId=="${queryTerm}" or requester.barcode="${queryTerm}*" or item.title="${queryTerm}*" or item.barcode=="${queryTerm}*" or itemId=="${queryTerm}")`;
       queryClauses.push(queryString);
     }
     if (filterQuery) queryClauses.push(filterQuery);
+    if (onlyPrintStatusFilterSelected) queryClauses.push('cql.allRecords=1');
 
     queryString = queryClauses.join(' and ');
     const records = await this.fetchReportData(this.props.mutator.reportRecords, queryString);
-    const printStatusFilteredRecords = exportPrintStatusFilteredData &&
+    const printStatusFilteredRecords = isSinglePrintStatusFilterSelected &&
       filterRecordsByPrintStatus(records, this.state.selectedPrintStatusFilters);
     const recordsToCSV = this.buildRecords(printStatusFilteredRecords || records);
 
@@ -1425,6 +1429,7 @@ class RequestsRoute extends React.Component {
     let multiSelectPickSlipData = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
     const displayPrintStatusFilteredData = isViewPrintDetailsEnabled &&
       resources.records.hasLoaded && selectedPrintStatusFilters.length === 1;
+    console.log('displayPrintStatusFilteredData - ', displayPrintStatusFilteredData);
     /**
      * For 'displayPrintStatusFilteredData' to be true the length of 'selectedPrintStatusFilters' must be 1.
      * This is because we only filter data when exactly one PrintStatus filter is selected ([Printed] or [Not Printed]).
