@@ -72,6 +72,7 @@ import {
   ITEM_QUERIES,
   REQUEST_ACTION_NAMES,
   PRINT_DETAILS_COLUMNS,
+  RESOURCE_TYPES,
 } from '../constants';
 import {
   buildUrl,
@@ -225,6 +226,15 @@ export const urls = {
     }
 
     return requestUrl;
+  },
+  ecsTlrSettings: (value, idType, stripes) => {
+    const isUserInCentralTenant = checkIfUserInCentralTenant(stripes);
+
+    if (isUserInCentralTenant) {
+      return 'tlr/settings';
+    }
+
+    return 'circulation/settings?query=name==ecsTlrFeature';
   },
 };
 
@@ -633,6 +643,8 @@ class RequestsRoute extends React.Component {
     this.expiredHoldsReportColumnHeaders = this.getColumnHeaders(expiredHoldsReportHeaders);
 
     this.state = {
+      isEcsTlrSettingReceived: false,
+      isEcsTlrSettingEnabled: false,
       csvReportPending: false,
       submitting: false,
       errorMessage: '',
@@ -662,13 +674,20 @@ class RequestsRoute extends React.Component {
   }
 
   componentDidMount() {
+    const { stripes } = this.props;
+
     this.setCurrentServicePointId();
+
+    if (stripes?.user?.user?.tenants) {
+      this.getEcsTlrSettings();
+    }
   }
 
   componentDidUpdate(prevProps) {
+    const { submitting } = this.state;
+    const { stripes } = this.props;
     const patronBlocks = get(this.props.resources, ['patronBlocks', 'records'], []);
     const prevBlocks = get(prevProps.resources, ['patronBlocks', 'records'], []);
-    const { submitting } = this.state;
     const prevExpired = prevBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
     const expired = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
     const { id: currentServicePointId } = this.getCurrentServicePointInfo();
@@ -725,6 +744,41 @@ class RequestsRoute extends React.Component {
 
     if (!this.props.resources.records.isPending) {
       this.onSearchComplete(this.props.resources.records);
+    }
+
+    if (stripes?.user?.user?.tenants && stripes.user.user !== prevProps.stripes?.user?.user) {
+      this.getEcsTlrSettings();
+    }
+  }
+
+  /* For multi data tenant environments
+  * ECS TLR setting has to be retrieved (Settings>Circulation>Consortium title level requests (TLR)).
+  * In a case if this setting is enabled we should hide Move and Duplicate buttons in action menu. */
+  getEcsTlrSettings = () => {
+    const { stripes } = this.props;
+
+    if (isMultiDataTenant(stripes)) {
+      this.findResource(RESOURCE_TYPES.ECS_TLR_SETTINGS)
+        .then(res => {
+          let isEcsTlrSettingEnabled;
+
+          if (checkIfUserInCentralTenant(stripes)) {
+            isEcsTlrSettingEnabled = res?.ecsTlrFeatureEnabled;
+          } else {
+            isEcsTlrSettingEnabled = res?.circulationSettings?.[0]?.value?.enabled;
+          }
+
+          this.setState({
+            isEcsTlrSettingReceived: true,
+            isEcsTlrSettingEnabled,
+          });
+        })
+        .catch(() => {
+          this.setState({
+            isEcsTlrSettingReceived: false,
+            isEcsTlrSettingEnabled: false,
+          });
+        });
     }
   }
 
@@ -1353,6 +1407,8 @@ class RequestsRoute extends React.Component {
       holdsShelfReportPending,
       createTitleLevelRequestsByDefault,
       isViewPrintDetailsEnabled,
+      isEcsTlrSettingReceived,
+      isEcsTlrSettingEnabled,
     } = this.state;
     const isPrintHoldRequestsEnabled = getPrintHoldRequestsEnabled(resources.printHoldRequests);
     const { name: servicePointName } = this.getCurrentServicePointInfo();
@@ -1647,6 +1703,8 @@ class RequestsRoute extends React.Component {
                 query: resources.query,
                 onDuplicate: this.onDuplicate,
                 buildRecordsForHoldsShelfReport: this.buildRecordsForHoldsShelfReport,
+                isEcsTlrSettingReceived,
+                isEcsTlrSettingEnabled,
               }}
               viewRecordOnCollapse={this.viewRecordOnCollapse}
               viewRecordPerms="ui-requests.view"
