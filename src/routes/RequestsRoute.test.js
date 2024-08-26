@@ -610,6 +610,26 @@ describe('RequestsRoute', () => {
       });
     });
 
+    it('should trigger "exportCsv" when only "Print Status" filter is selected', async () => {
+      const props = {
+        ...defaultProps,
+        resources: {
+          ...defaultProps.resources,
+          query: {
+            ...defaultProps.resources.query,
+            filters: 'printStatus.Printed',
+          },
+        }
+      };
+      cleanup();
+      renderComponent(props);
+      await userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsToCsv' }));
+
+      await waitFor(() => {
+        expect(exportCsv).toHaveBeenCalled();
+      });
+    });
+
     it('should render "ErrorModal"', async () => {
       await userEvent.click(screen.getByTestId('exportExpiredHoldShelfToCsvButton'));
 

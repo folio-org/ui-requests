@@ -832,8 +832,13 @@ class RequestsRoute extends React.Component {
   }
 
   // Export function for the CSV search report action
-  async exportData(exportPrintStatusFilteredData) {
+  async exportData() {
     this.setState({ csvReportPending: true });
+    const { isViewPrintDetailsEnabled, selectedPrintStatusFilters } = this.state;
+
+    const activeFilters = this.getActiveFilters();
+    const activeFilterKeys = Object.keys(activeFilters);
+    const isOnlyPrintStatusFilterSelected = activeFilterKeys.length === 1 && activeFilterKeys[0] === requestFilterTypes.PRINT_STATUS;
 
     // Build a custom query for the CSV record export, which has to include
     // all search and filter parameters
@@ -841,18 +846,20 @@ class RequestsRoute extends React.Component {
     let queryString;
 
     const queryTerm = this.props.resources?.query?.query;
-    const filterQuery = filters2cql(RequestsFiltersConfig, deparseFilters(this.getActiveFilters()));
+    const filterQuery = filters2cql(RequestsFiltersConfig, deparseFilters(activeFilters));
 
     if (queryTerm) {
       queryString = `(requesterId=="${queryTerm}" or requester.barcode="${queryTerm}*" or item.title="${queryTerm}*" or item.barcode=="${queryTerm}*" or itemId=="${queryTerm}")`;
       queryClauses.push(queryString);
     }
     if (filterQuery) queryClauses.push(filterQuery);
+    if (isOnlyPrintStatusFilterSelected) queryClauses.push('cql.allRecords=1');
 
     queryString = queryClauses.join(' and ');
     const records = await this.fetchReportData(this.props.mutator.reportRecords, queryString);
-    const printStatusFilteredRecords = exportPrintStatusFilteredData &&
-      filterRecordsByPrintStatus(records, this.state.selectedPrintStatusFilters);
+
+    const printStatusFilteredRecords = isViewPrintDetailsEnabled && selectedPrintStatusFilters.length === 1 &&
+      filterRecordsByPrintStatus(records, selectedPrintStatusFilters);
     const recordsToCSV = this.buildRecords(printStatusFilteredRecords || records);
 
     exportCsv(recordsToCSV, {
@@ -1415,6 +1422,7 @@ class RequestsRoute extends React.Component {
 
     const isPickSlipsArePending = resources?.pickSlips?.isPending;
     const isSearchSlipsArePending = resources?.searchSlips?.isPending;
+    const isRequestsRecordsLoaded = resources.records.hasLoaded;
     const requestsEmpty = isEmpty(requests);
     const isPickSlipsEmpty = isEmpty(pickSlips);
     const isSearchSlipsEmpty = isEmpty(searchSlips);
@@ -1423,14 +1431,14 @@ class RequestsRoute extends React.Component {
     const pickSlipsData = convertToSlipData(pickSlips, intl, timezone, locale, SLIPS_TYPE.PICK_SLIP, user);
     const searchSlipsData = convertToSlipData(searchSlips, intl, timezone, locale, SLIPS_TYPE.SEARCH_SLIP_HOLD_REQUESTS);
     let multiSelectPickSlipData = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
-    const displayPrintStatusFilteredData = isViewPrintDetailsEnabled &&
-      resources.records.hasLoaded && selectedPrintStatusFilters.length === 1;
     /**
      * For 'displayPrintStatusFilteredData' to be true the length of 'selectedPrintStatusFilters' must be 1.
      * This is because we only filter data when exactly one PrintStatus filter is selected ([Printed] or [Not Printed]).
      * If the filter array is empty or contains both filters ([] or [Printed, Not Printed]),
      * no filtering is needed as the data should be used directly from the query response.
      */
+    const displayPrintStatusFilteredData = isViewPrintDetailsEnabled &&
+    isRequestsRecordsLoaded && selectedPrintStatusFilters.length === 1;
 
     const resultsFormatter = getListFormatter(
       {
@@ -1477,7 +1485,7 @@ class RequestsRoute extends React.Component {
               onClick={() => {
                 this.context.sendCallout({ message: <FormattedMessage id="ui-requests.csvReportInProgress" /> });
                 onToggle();
-                this.exportData(displayPrintStatusFilteredData);
+                this.exportData();
               }}
             >
               <FormattedMessage id="ui-requests.exportSearchResultsToCsv" />
