@@ -1422,6 +1422,7 @@ class RequestsRoute extends React.Component {
 
     const isPickSlipsArePending = resources?.pickSlips?.isPending;
     const isSearchSlipsArePending = resources?.searchSlips?.isPending;
+    const isRequestsRecordsLoaded = resources.records.hasLoaded;
     const requestsEmpty = isEmpty(requests);
     const isPickSlipsEmpty = isEmpty(pickSlips);
     const isSearchSlipsEmpty = isEmpty(searchSlips);
@@ -1437,7 +1438,7 @@ class RequestsRoute extends React.Component {
      * no filtering is needed as the data should be used directly from the query response.
      */
     const displayPrintStatusFilteredData = isViewPrintDetailsEnabled &&
-      resources.records.hasLoaded && selectedPrintStatusFilters.length === 1;
+    isRequestsRecordsLoaded && selectedPrintStatusFilters.length === 1;
 
     const resultsFormatter = getListFormatter(
       {
