@@ -519,3 +519,11 @@ export function resetFieldState(form, fieldName) {
     form.resetFieldState(fieldName);
   }
 }
+
+export const getRequester = (proxy, selectedUser) => {
+  if (proxy && proxy.id !== selectedUser?.id) {
+    return proxy;
+  }
+
+  return selectedUser;
+};
