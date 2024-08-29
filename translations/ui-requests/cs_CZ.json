@@ -296,5 +296,8 @@
     "requests.copies": "# Kopie",
     "requests.printed": "Tištěno",
     "printDetails.count": "# Kopie",
-    "printDetails.lastPrintedDetails": "Tištěno"
+    "printDetails.lastPrintedDetails": "Tištěno",
+    "requestMeta.printStatus": "Stav tisku",
+    "filters.printStatus.printed": "Tištěno",
+    "filters.printStatus.notPrinted": "Nevytištěno"
 }
