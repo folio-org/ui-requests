@@ -14,6 +14,7 @@
 * Populate the token "staffUsername" in the pick slip. Refs UIREQ-1124.
 * Implement availability of "Printed" and "# Copies" columns upon "Enable view print details (Pick slips)" configuration. Refs UIREQ-1121.
 * Implement availability of "Print status" filters upon "Enable view print details (Pick slips)" configuration. Refs UIREQ-1119.
+* Fix issue with Proxy's patron group and delivery address that shown instead of Sponsor's when creating request. Refs UIREQ-1132, UIREQ-1133.
 * Add missing sub-permissions to fetch staff slips records. Refs UIREQ-1129.
 
 ## [9.1.1] (https://github.com/folio-org/ui-checkin/tree/v9.1.1) (2024-03-27)
