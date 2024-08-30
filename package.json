@@ -133,6 +133,8 @@
         "displayName": "Requests: View, edit, cancel",
         "subPermissions": [
           "ui-requests.view",
+          "circulation.pick-slips.get",
+          "circulation.search-slips.get",
           "circulation.requests.item.put",
           "circulation.requests.allowed-service-points.get",
           "circulation.print-events-entry.item.post",
