@@ -296,5 +296,8 @@
     "requests.copies": "# 份数",
     "requests.printed": "已打印",
     "printDetails.count": "# Copies",
-    "printDetails.lastPrintedDetails": "Printed"
+    "printDetails.lastPrintedDetails": "Printed",
+    "requestMeta.printStatus": "Print status",
+    "filters.printStatus.printed": "Printed",
+    "filters.printStatus.notPrinted": "Not printed"
 }
