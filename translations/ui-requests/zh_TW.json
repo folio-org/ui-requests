@@ -292,5 +292,12 @@
     "requests.instances.rows.select": "選擇實例",
     "rows.recordsSelected": "{count, number} {count, plural, one {記錄} other {記錄}}已選擇",
     "printPickSlipsSelected": "列印為{sp}選擇的預約取書單",
-    "request.detail.title": "Request details"
+    "request.detail.title": "Request details",
+    "requests.copies": "# Copies",
+    "requests.printed": "Printed",
+    "printDetails.count": "# Copies",
+    "printDetails.lastPrintedDetails": "Printed",
+    "requestMeta.printStatus": "Print status",
+    "filters.printStatus.printed": "Printed",
+    "filters.printStatus.notPrinted": "Not printed"
 }

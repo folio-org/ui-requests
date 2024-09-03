@@ -6,6 +6,7 @@ const mockStripes = buildStripes();
 jest.mock('@folio/stripes/core', () => ({
   ...jest.requireActual('@folio/stripes/core'),
   AppContextMenu: ({ children }) => (typeof children === 'function' ? children(jest.fn()) : children),
+  checkIfUserInCentralTenant: jest.fn(),
   IntlConsumer: jest.fn(({ children }) => {
     const intl = {
       formatMessage: jest.fn(({ id }) => id),

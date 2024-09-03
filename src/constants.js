@@ -139,6 +139,11 @@ export const requestTypesMap = {
   PAGE: 'Page',
 };
 
+export const requestPrintStatusType = {
+  PRINTED: 'Printed',
+  NOT_PRINTED: 'Not printed',
+};
+
 export const iconTypes = {
   times: 'times',
   timesCircle: 'times-circle',
@@ -163,6 +168,11 @@ export const requestableItemStatuses = [
   itemStatuses.IN_PROCESS,
   itemStatuses.RESTRICTED,
 ];
+
+export const PRINT_DETAILS_COLUMNS = {
+  COPIES: 'printDetails.count',
+  PRINTED: 'printDetails.lastPrintedDetails',
+};
 
 export const reportHeaders = [
   'requestType',
@@ -197,6 +207,8 @@ export const reportHeaders = [
   'proxy.barcode',
   'tags.tagList',
   'patronComments',
+  PRINT_DETAILS_COLUMNS.COPIES,
+  PRINT_DETAILS_COLUMNS.PRINTED,
 ];
 
 export const expiredHoldsReportHeaders = [
@@ -223,6 +235,7 @@ export const requestFilterTypes = {
   REQUEST_STATUS: 'requestStatus',
   REQUEST_LEVELS: 'requestLevels',
   PICKUP_SERVICE_POINT: 'pickupServicePoints',
+  PRINT_STATUS: 'printStatus',
 };
 
 export const REQUEST_LEVEL_TYPES = {
@@ -250,6 +263,11 @@ export const requestStatusFilters = [
 export const requestLevelFilters = [
   { label: 'ui-requests.filters.requestLevel.item', value: REQUEST_LEVEL_TYPES.ITEM },
   { label: 'ui-requests.filters.requestLevel.title', value: REQUEST_LEVEL_TYPES.TITLE },
+];
+
+export const requestPrintStatusFilters = [
+  { label: 'ui-requests.filters.printStatus.printed', value: requestPrintStatusType.PRINTED },
+  { label: 'ui-requests.filters.printStatus.notPrinted', value: requestPrintStatusType.NOT_PRINTED },
 ];
 
 export const SLIPS_TYPE = {
@@ -313,6 +331,7 @@ export const RESOURCE_TYPES = {
   USER: 'user',
   HOLDING: 'holding',
   REQUEST_TYPES: 'requestTypes',
+  ECS_TLR_SETTINGS: 'ecsTlrSettings',
 };
 
 export const ENTER_EVENT_KEY = 'Enter';

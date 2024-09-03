@@ -2,6 +2,7 @@ import React from 'react';
 import {
   stringify,
 } from 'query-string';
+import { createIntl, createIntlCache } from 'react-intl';
 
 import {
   render,
@@ -19,6 +20,7 @@ import {
   CalloutContext,
   AppIcon,
   TitleManager,
+  checkIfUserInCentralTenant,
 } from '@folio/stripes/core';
 import {
   TextLink,
@@ -27,12 +29,15 @@ import {
 import {
   exportCsv,
   effectiveCallNumber,
+  getHeaderWithCredentials,
 } from '@folio/stripes/util';
 
 import RequestsRoute, {
   buildHoldRecords,
   getListFormatter,
   getPrintHoldRequestsEnabled,
+  getLastPrintedDetails,
+  getFilteredColumnHeadersMap,
   urls,
   DEFAULT_FORMATTER_VALUE,
 } from './RequestsRoute';
@@ -43,6 +48,7 @@ import {
   getFullName,
   getInstanceQueryString,
   getNextSelectedRowsState,
+  isMultiDataTenant,
 } from '../utils';
 import {
   getFormattedYears,
@@ -62,6 +68,7 @@ import {
   REQUEST_OPERATIONS,
   INPUT_REQUEST_SEARCH_SELECTOR,
   ITEM_QUERIES,
+  PRINT_DETAILS_COLUMNS,
 } from '../constants';
 import { historyData } from '../../test/jest/fixtures/historyData';
 
@@ -83,6 +90,15 @@ const testIds = {
 };
 const requestUrl = 'url';
 
+const intlCache = createIntlCache();
+const intl = createIntl(
+  {
+    locale: 'en-US',
+    messages: {},
+  },
+  intlCache
+);
+
 jest.spyOn(React, 'createRef').mockReturnValue(createRefMock);
 jest.spyOn(document, 'getElementById').mockReturnValue(createDocumentRefMock);
 
@@ -101,11 +117,14 @@ jest.mock('../utils', () => ({
   isMultiDataTenant: jest.fn(),
   generateUserName: jest.fn(),
   getRequestUrl: jest.fn(() => requestUrl),
+  extractPickSlipRequestIds: jest.fn(),
 }));
 jest.mock('./utils', () => ({
   ...jest.requireActual('./utils'),
   getFormattedYears: jest.fn(),
   getStatusQuery: jest.fn(),
+  filterRecordsByPrintStatus: jest.fn(),
+  getPrintStatusFilteredData: jest.fn(),
 }));
 jest.mock('../components', () => ({
   ErrorModal: jest.fn(({ onClose }) => (
@@ -121,17 +140,25 @@ jest.mock('../components', () => ({
   LoadingButton: jest.fn(() => null),
   PrintButton: jest.fn(({
     onBeforeGetContent,
+    onBeforePrint,
     children,
-  }) => (
-    <div>
-      <button
-        type="button"
-        onClick={onBeforeGetContent}
-      >onBeforeGetContent
-      </button>
-      {children}
-    </div>
-  )),
+  }) => {
+    const handleClick = () => {
+      onBeforeGetContent();
+      onBeforePrint();
+    };
+    return (
+      <div>
+        <button
+          type="button"
+          onClick={handleClick}
+        >
+          PrintButton
+        </button>
+        {children}
+      </div>
+    );
+  }),
   PrintContent: jest.fn(({ printContentTestId }) => <div data-testid={printContentTestId}>PrintContent</div>)
 }));
 jest.mock('../components/RequestsFilters/RequestsFilters', () => ({ onClear }) => {
@@ -150,14 +177,21 @@ jest.mock('../ViewRequest', () => jest.fn());
 jest.mock('../RequestForm', () => jest.fn());
 jest.mock('../components/SinglePrintButtonForPickSlip', () => jest.fn(({
   onBeforeGetContentForSinglePrintButton,
-}) => (
-  <button
-    type="button"
-    data-testid={testIds.singlePrintButton}
-    onClick={onBeforeGetContentForSinglePrintButton}
-  >Print
-  </button>
-)));
+  onBeforePrintForSinglePrintButton,
+}) => {
+  const handleClick = () => {
+    onBeforeGetContentForSinglePrintButton();
+    onBeforePrintForSinglePrintButton(['reqId']);
+  };
+  return (
+    <button
+      type="button"
+      data-testid={testIds.singlePrintButton}
+      onClick={handleClick}
+    >Print
+    </button>
+  );
+}));
 jest.mock('../components/CheckboxColumn/CheckboxColumn', () => jest.fn(({
   toggleRowSelection,
 }) => (
@@ -213,6 +247,11 @@ const userData = {
     personal: {},
   }
 };
+const printDetailsMockData = {
+  count: 11,
+  lastPrintedDate: '2024-08-03T13:33:31.868Z',
+  lastPrintRequester: { firstName: 'firstName', middleName: 'middleName', lastName: 'lastName' },
+};
 
 SearchAndSort.mockImplementation(jest.fn(({
   paneTitleRef,
@@ -227,11 +266,7 @@ SearchAndSort.mockImplementation(jest.fn(({
   massageNewRecord,
   onCloseNewRecord,
   onFilterChange,
-  parentResources: {
-    records: {
-      records,
-    },
-  },
+  parentResources,
   renderFilters,
   resultIsSelected,
   viewRecordOnCollapse,
@@ -241,7 +276,7 @@ SearchAndSort.mockImplementation(jest.fn(({
   onCreate,
 }) => {
   const onClickActions = () => {
-    onDuplicate(records[0]);
+    onDuplicate(parentResources.records.records[0]);
     buildRecordsForHoldsShelfReport();
     massageNewRecord({});
     resultIsSelected({
@@ -341,6 +376,7 @@ describe('RequestsRoute', () => {
         postalCode: '12345',
         countryId: 'US',
       },
+      printDetails: printDetailsMockData,
     }
   ];
   const defaultProps = {
@@ -354,6 +390,12 @@ describe('RequestsRoute', () => {
       url: '{{ env.FOLIO_MD_REGISTRY }}/_/proxy/modules',
     },
     mutator: {
+      circulationSettings: {
+        GET: jest.fn(),
+      },
+      savePrintDetails: {
+        POST: jest.fn(),
+      },
       activeRecord: {
         update: jest.fn(),
       },
@@ -423,7 +465,11 @@ describe('RequestsRoute', () => {
         getState: jest.fn(() => ({ okapi: { token: 'token' } })),
       },
       timezone: 'America/New_York',
-      user: {},
+      user: {
+        user: {
+          username: 'rick'
+        }
+      },
     },
     resources: {
       addressTypes: {
@@ -442,6 +488,13 @@ describe('RequestsRoute', () => {
           value: '{"printHoldRequestsEnabled": true}',
         }],
       },
+      circulationSettings: {
+        records: [{
+          value: {
+            enablePrintLog: 'true',
+          }
+        }]
+      },
       currentServicePoint: {},
       patronBlocks: {
         records: [
@@ -453,7 +506,12 @@ describe('RequestsRoute', () => {
       pickSlips: {
         records: [
           {
-            name: 'pick slip',
+            item: {
+              title: 'test title'
+            },
+            request: {
+              requestID: '393030bc-669e-4a41-81e9-3427c25a3b39',
+            }
           }
         ],
       },
@@ -565,11 +623,31 @@ describe('RequestsRoute', () => {
       expect(printContent).toBeInTheDocument();
     });
 
-    it('should trigger "exportCsv"', async () => {
+    it('should trigger "exportCsv', async () => {
       await userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsToCsv' }));
 
       await waitFor(() => {
-        expect(exportCsv).toBeCalled();
+        expect(exportCsv).toHaveBeenCalled();
+      });
+    });
+
+    it('should trigger "exportCsv" when only "Print Status" filter is selected', async () => {
+      const props = {
+        ...defaultProps,
+        resources: {
+          ...defaultProps.resources,
+          query: {
+            ...defaultProps.resources.query,
+            filters: 'printStatus.Printed',
+          },
+        }
+      };
+      cleanup();
+      renderComponent(props);
+      await userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsToCsv' }));
+
+      await waitFor(() => {
+        expect(exportCsv).toHaveBeenCalled();
       });
     });
 
@@ -598,6 +676,26 @@ describe('RequestsRoute', () => {
       expect(defaultProps.mutator.query.update).toBeCalledWith(expectFilterValue);
     });
 
+    it('should trigger "mutator.query.update" when "Print Status" filters are present in query', async () => {
+      const props = {
+        ...defaultProps,
+        resources: {
+          ...defaultProps.resources,
+          query: {
+            ...defaultProps.resources.query,
+            filters: 'filter1.value1,printStatus.Printed',
+          },
+        }
+      };
+      cleanup();
+      renderComponent(props);
+      const expectFilterValue = { 'filters': 'filter1.value1,printStatus.Printed,filter4.Value4,filter4.Value5' };
+
+      await userEvent.click(screen.getByRole('button', { name: 'onFilterChange' }));
+
+      expect(defaultProps.mutator.query.update).toHaveBeenCalledWith(expectFilterValue);
+    });
+
     it('should trigger "mutator.activeRecord.update"', async () => {
       await userEvent.click(screen.getByRole('button', { name: 'onChangePatron' }));
 
@@ -619,7 +717,7 @@ describe('RequestsRoute', () => {
     it('should render print pick slips label', async () => {
       const printPickSlipsLabel = screen.getByText(labelIds.printPickSlips);
 
-      await userEvent.click(screen.getAllByRole('button', { name: 'onBeforeGetContent' })[0]);
+      await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[0]);
 
       expect(printPickSlipsLabel).toBeInTheDocument();
     });
@@ -627,7 +725,7 @@ describe('RequestsRoute', () => {
     it('should render print search slips label', async () => {
       const printSearchSlipsLabel = screen.getByText(labelIds.printSearchSlips);
 
-      await userEvent.click(screen.getAllByRole('button', { name: 'onBeforeGetContent' })[1]);
+      await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[1]);
 
       expect(printSearchSlipsLabel).toBeInTheDocument();
     });
@@ -645,6 +743,72 @@ describe('RequestsRoute', () => {
       fireEvent.click(createRequestButton);
 
       expect(global.fetch).toHaveBeenCalledWith(...expectedArgs);
+    });
+  });
+
+  describe('When multi data tenant', () => {
+    const requestHeaders = { test: 'test' };
+    const fetchSpy = jest.fn();
+    const props = {
+      ...defaultProps,
+      stripes: {
+        ...defaultProps.stripes,
+        user: {
+          user: {
+            ...defaultProps.stripes.user.user,
+            tenants: [{ id: 'tenantId' }],
+          },
+        },
+      },
+    };
+
+    beforeEach(() => {
+      isMultiDataTenant.mockReturnValue(true);
+      getHeaderWithCredentials.mockReturnValue(requestHeaders);
+    });
+
+    afterEach(() => {
+      fetchSpy.mockClear();
+    });
+
+    describe('When user in central tenant', () => {
+      beforeEach(() => {
+        fetchSpy.mockResolvedValueOnce({
+          json: () => ({
+            ecsTlrFeatureEnabled: true,
+          }),
+        });
+        checkIfUserInCentralTenant.mockReturnValueOnce(true);
+        global.fetch = fetchSpy;
+        renderComponent(props);
+      });
+
+      it('should use correct endpoint to get ecs tlr settings', () => {
+        expect(fetchSpy).toHaveBeenCalledWith(`${defaultProps.stripes.okapi.url}/tlr/settings`, requestHeaders);
+      });
+    });
+
+    describe('When user in data tenant', () => {
+      beforeEach(() => {
+        fetchSpy.mockResolvedValueOnce({
+          json: () => ({
+            circulationSettings: [
+              {
+                value: {
+                  enabled: true,
+                },
+              }
+            ],
+          }),
+        });
+        checkIfUserInCentralTenant.mockReturnValueOnce(false);
+        global.fetch = fetchSpy;
+        renderComponent(props);
+      });
+
+      it('should use correct endpoint to get ecs tlr settings', () => {
+        expect(fetchSpy).toHaveBeenCalledWith(`${defaultProps.stripes.okapi.url}/circulation/settings?query=name==ecsTlrFeature`, requestHeaders);
+      });
     });
   });
 
@@ -738,6 +902,40 @@ describe('RequestsRoute', () => {
         fireEvent.click(selectRequestCheckbox);
 
         expect(CheckboxColumn).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+      });
+    });
+
+    describe('When "isViewPrintDetailsEnabled" is true', () => {
+      it('should trigger "mutator.savePrintDetails.POST"', async () => {
+        renderComponent(defaultProps);
+        await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[0]);
+
+        expect(defaultProps.mutator.savePrintDetails.POST).toHaveBeenCalled();
+      });
+    });
+
+    describe('When "isViewPrintDetailsEnabled" is false', () => {
+      it('should not trigger "mutator.savePrintDetails.POST"', async () => {
+        const props = {
+          ...defaultProps,
+          resources: {
+            ...defaultProps.resources,
+            circulationSettings: {
+              ...defaultProps.resources.circulationSettings,
+              records: defaultProps.resources.circulationSettings.records.map(record => ({
+                ...record,
+                value: {
+                  ...record.value,
+                  enablePrintLog: 'false'
+                }
+              }))
+            },
+          }
+        };
+        renderComponent(props);
+        await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[0]);
+
+        expect(defaultProps.mutator.savePrintDetails.POST).not.toHaveBeenCalled();
       });
     });
   });
@@ -1000,12 +1198,14 @@ describe('RequestsRoute', () => {
     const isPrintableMock = jest.fn(id => id);
     const toggleRowSelectionMock = jest.fn(id => id);
     const onBeforeGetContentForSinglePrintButtonMock = jest.fn(id => id);
+    const onBeforePrintForSinglePrintButtonMock = jest.fn(id => id);
     const listFormatter = getListFormatter(
       {
         getRowURL: getRowURLMock,
         setURL: setURLMock,
       },
       {
+        intl,
         selectedRows: '',
         pickSlipsToCheck: '',
         pickSlipsData: '',
@@ -1014,6 +1214,7 @@ describe('RequestsRoute', () => {
         pickSlipsPrintTemplate: '',
         toggleRowSelection: toggleRowSelectionMock,
         onBeforeGetContentForSinglePrintButton: onBeforeGetContentForSinglePrintButtonMock,
+        onBeforePrintForSinglePrintButton: onBeforePrintForSinglePrintButtonMock,
       }
     );
     const requestWithData = {
@@ -1040,6 +1241,7 @@ describe('RequestsRoute', () => {
       pickupServicePoint: {
         name: 'name',
       },
+      printDetails: printDetailsMockData,
     };
     const requestWithoutData = {};
 
@@ -1047,6 +1249,7 @@ describe('RequestsRoute', () => {
       it('should render CheckboxColumn', () => {
         const selectedRequest = {};
         const options = {
+          intl,
           selectedRows: [],
           pickSlipsToCheck: [],
           pickSlipsData: {},
@@ -1054,6 +1257,7 @@ describe('RequestsRoute', () => {
           pickSlipsPrintTemplate: jest.fn(),
           toggleRowSelection: jest.fn(),
           onBeforeGetContentForSinglePrintButton: jest.fn(),
+          onBeforePrintForSinglePrintButton: jest.fn(),
         };
         const formatter = getListFormatter({}, options);
         const result = formatter.select(selectedRequest);
@@ -1068,6 +1272,7 @@ describe('RequestsRoute', () => {
       it('should render SinglePrintButtonForPickSlip', () => {
         const selectedRequest = {};
         const options = {
+          intl,
           selectedRows: [],
           pickSlipsToCheck: [],
           pickSlipsData: {},
@@ -1075,6 +1280,7 @@ describe('RequestsRoute', () => {
           pickSlipsPrintTemplate: jest.fn(),
           toggleRowSelection: jest.fn(),
           onBeforeGetContentForSinglePrintButton: jest.fn(),
+          onBeforePrintForSinglePrintButton: jest.fn(),
         };
         const formatter = getListFormatter({}, options);
         const singlePrintButton = formatter.singlePrint(selectedRequest);
@@ -1236,6 +1442,29 @@ describe('RequestsRoute', () => {
         expect(listFormatter.servicePoint(requestWithData)).toBe(requestWithData.pickupServicePoint.name);
       });
     });
+
+    describe('when formatting copies column', () => {
+      it('should return copies for copies column', () => {
+        expect(listFormatter.copies(requestWithData)).toBe(requestWithData.printDetails.count);
+      });
+    });
+
+    describe('when formatting printed column', () => {
+      it('should return last printed details for printed column', () => {
+        getFullName.mockReturnValueOnce('lastName, firstName middleName');
+
+        const expectedFormattedDate = intl.formatDate(requestWithData.printDetails.lastPrintedDate);
+        const expectedFormattedTime = intl.formatTime(requestWithData.printDetails.lastPrintedDate);
+        const expectedOutput =
+        `lastName, firstName middleName ${expectedFormattedDate}${expectedFormattedTime ? ', ' : ''}${expectedFormattedTime}`;
+
+        expect(listFormatter.printed(requestWithData)).toBe(expectedOutput);
+      });
+
+      it('should return empty string', () => {
+        expect(listFormatter.printed(requestWithoutData)).toBe(DEFAULT_FORMATTER_VALUE);
+      });
+    });
   });
 
   describe('getPrintHoldRequestsEnabled', () => {
@@ -1259,6 +1488,49 @@ describe('RequestsRoute', () => {
       expect(getPrintHoldRequestsEnabled({
         records: [],
       })).toBeFalsy();
+    });
+  });
+
+  describe('getLastPrintedDetails', () => {
+    const lastPrintDetails = {
+      lastPrintRequester: { firstName: 'firstName', middleName: 'middleName', lastName: 'lastName' },
+      lastPrintedDate: '2024-08-03T13:33:31.868Z',
+    };
+    beforeEach(() => {
+      getFullName.mockClear().mockReturnValue('lastName, firstName middleName');
+    });
+
+    it('should render getLastPrintedDetails() correctly', () => {
+      expect(getLastPrintedDetails(lastPrintDetails, intl)).toBeTruthy();
+    });
+
+    it('should return the formatted full name and date/time correctly', () => {
+      const printedDetails = getLastPrintedDetails(lastPrintDetails, intl);
+      const expectedFormattedDate = intl.formatDate(lastPrintDetails.lastPrintedDate);
+      const expectedFormattedTime = intl.formatTime(lastPrintDetails.lastPrintedDate);
+      const expectedOutput =
+        `lastName, firstName middleName ${expectedFormattedDate}${expectedFormattedTime ? ', ' : ''}${expectedFormattedTime}`;
+
+      expect(printedDetails).toBe(expectedOutput);
+    });
+  });
+
+  describe('getFilteredColumnHeadersMap', () => {
+    const columnHeaders = [
+      { value: 'patronComments' },
+      { value: PRINT_DETAILS_COLUMNS.COPIES },
+      { value: PRINT_DETAILS_COLUMNS.PRINTED },
+    ];
+
+    it('should render getFilteredColumnHeadersMap() correctly', () => {
+      expect(getFilteredColumnHeadersMap(columnHeaders)).toBeTruthy();
+    });
+
+    it('should return properly filtered column headers', () => {
+      const filteredColumnHeaders = getFilteredColumnHeadersMap(columnHeaders);
+      const expectedColumnHeaders = [{ value: 'patronComments' }];
+
+      expect(filteredColumnHeaders).toEqual(expectedColumnHeaders);
     });
   });
 
@@ -1533,6 +1805,30 @@ describe('RequestsRoute', () => {
           requestId,
           operation,
         })).toBe(expectedResult);
+      });
+    });
+
+    describe('ecsTlrSettings', () => {
+      describe('When user in central tenant', () => {
+        it('should return correct endpoint', () => {
+          checkIfUserInCentralTenant.mockReturnValueOnce(true);
+
+          const ecsTlrSettingsEndpoint = 'tlr/settings';
+          const result = urls.ecsTlrSettings();
+
+          expect(result).toBe(ecsTlrSettingsEndpoint);
+        });
+      });
+
+      describe('When user in data tenant', () => {
+        it('should return correct endpoint', () => {
+          checkIfUserInCentralTenant.mockReturnValueOnce(false);
+
+          const ecsTlrSettingsEndpoint = 'circulation/settings?query=name==ecsTlrFeature';
+          const result = urls.ecsTlrSettings();
+
+          expect(result).toBe(ecsTlrSettingsEndpoint);
+        });
       });
     });
   });

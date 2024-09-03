@@ -45,6 +45,8 @@
   "requests.requesterBarcode": "Requester barcode",
   "requests.requestDate": "Request date",
   "requests.proxy": "Proxy",
+  "requests.copies": "# Copies",
+  "requests.printed": "Printed",
   "requests.queuePosition": "Queue position",
   "requests.itemBarcode": "Item barcode",
   "requests.callNumber": "Effective call number string",
@@ -70,6 +72,7 @@
   "requestMeta.holdShelfExpirationDate": "Hold shelf expiration date",
   "requestMeta.queuePosition": "Position in queue",
   "requestMeta.tags": "Tags",
+  "requestMeta.printStatus": "Print status",
 
   "showTags": "Show Tags",
   "errors.instanceUuidOrHridDoesNotExist": "Instance with this HRID or UUID does not exist",
@@ -196,6 +199,8 @@
   "pickupServicePoint.name": "Pickup service point",
   "requester.patronGroup.group": "Requester patron group",
   "tags.tagList": "Tags",
+  "printDetails.count": "# Copies",
+  "printDetails.lastPrintedDetails": "Printed",
 
   "notes.staffNotes": "Staff notes",
   "notes.newStaffNote": "New staff note",
@@ -296,6 +301,9 @@
 
   "filters.requestLevel.item": "Item",
   "filters.requestLevel.title": "Title",
+
+  "filters.printStatus.printed": "Printed",
+  "filters.printStatus.notPrinted": "Not printed",
 
   "permission.moveRequest": "Requests: Move to new item, reorder queue",
   "permission.reorderQueue": "Requests: Reorder queue",

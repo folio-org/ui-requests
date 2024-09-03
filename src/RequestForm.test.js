@@ -35,6 +35,7 @@ import {
   isFormEditing,
   getFulfillmentPreference,
   resetFieldState,
+  getRequester,
 } from './utils';
 
 const testIds = {
@@ -70,6 +71,7 @@ jest.mock('./utils', () => ({
   getDefaultRequestPreferences: jest.fn(),
   isFormEditing: jest.fn(),
   getFulfillmentPreference: jest.fn(),
+  getRequester: jest.fn((proxy, selectedUser) => selectedUser),
 }));
 jest.mock('./components/FulfilmentPreference', () => jest.fn(({
   changeDeliveryAddress,
@@ -1314,6 +1316,10 @@ describe('RequestForm', () => {
             expect(resetFieldState).toHaveBeenCalledWith(...expectedArgs);
           });
 
+          it('should get requester information', () => {
+            expect(getRequester).toHaveBeenCalled();
+          });
+
           it('should get information about loans', () => {
             const expectedArgs = [
               'loan',
@@ -1614,6 +1620,10 @@ describe('RequestForm', () => {
           const expectedArgs = [basicProps.form, REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE];
 
           expect(resetFieldState).toHaveBeenCalledWith(...expectedArgs);
+        });
+
+        it('should get requester information', () => {
+          expect(getRequester).toHaveBeenCalled();
         });
 
         it('should get information about open instance requests', () => {

@@ -1,4 +1,6 @@
+import { cloneDeep } from 'lodash';
 import {
+  requestPrintStatusType,
   requestStatuses,
   requestTypesMap,
 } from '../constants';
@@ -8,6 +10,9 @@ import {
   getFormattedContributors,
   isReorderableRequest,
   getStatusQuery,
+  getFullNameForCsvRecords,
+  filterRecordsByPrintStatus,
+  getPrintStatusFilteredData,
 } from './utils';
 
 describe('utils', () => {
@@ -150,6 +155,108 @@ describe('utils', () => {
 
     it('should return empty string', () => {
       expect(getStatusQuery()).toBe('');
+    });
+  });
+
+  describe('getFullNameForCsvRecords', () => {
+    it('should return full name when all parts are provided', () => {
+      const record = {
+        firstName: 'firstName',
+        middleName: 'middleName',
+        lastName: 'lastName',
+      };
+      expect(getFullNameForCsvRecords(record)).toBe('firstName middleName lastName');
+    });
+
+    it('should return first and last name when middle name is missing', () => {
+      const record = {
+        firstName: 'firstName',
+        lastName: 'lastName',
+      };
+      expect(getFullNameForCsvRecords(record)).toBe('firstName lastName');
+    });
+
+    it('should return middle and last name when first name is missing', () => {
+      const record = {
+        middleName: 'middleName',
+        lastName: 'lastName',
+      };
+      expect(getFullNameForCsvRecords(record)).toBe('middleName lastName');
+    });
+
+    it('should return empty string when all name parts are missing', () => {
+      const record = {};
+      expect(getFullNameForCsvRecords(record)).toBe('');
+    });
+  });
+
+  describe('filterRecordsByPrintStatus', () => {
+    const records = [
+      { id: 'a', printDetails: { count: 5 } },
+      { id: 'b', printDetails: null },
+      { id: 'c', printDetails: undefined },
+    ];
+
+    it('should filter and return only printed records when PRINTED filter is selected', () => {
+      const printStatusFilters = [requestPrintStatusType.PRINTED];
+      const result = filterRecordsByPrintStatus(records, printStatusFilters);
+      expect(result).toEqual([
+        { id: 'a', printDetails: { count: 5 } }
+      ]);
+    });
+
+    it('should filter and return only non-printed records when NOT_PRINTED filter is selected', () => {
+      const printStatusFilters = [requestPrintStatusType.NOT_PRINTED];
+      const result = filterRecordsByPrintStatus(records, printStatusFilters);
+      expect(result).toEqual([
+        { id: 'b', printDetails: null },
+        { id: 'c', printDetails: undefined }
+      ]);
+    });
+  });
+
+  describe('getPrintStatusFilteredData', () => {
+    const resources = {
+      records: {
+        records: [
+          { id: 1, printDetails: { count: 5 } },
+          { id: 2, printDetails: null },
+          { id: 3, printDetails: undefined },
+        ],
+        other: {
+          totalRecords: 3
+        }
+      }
+    };
+
+    it('should return resources with only printed records when PRINTED filter is selected', () => {
+      const printStatusFilters = [requestPrintStatusType.PRINTED];
+      const result = getPrintStatusFilteredData(resources, printStatusFilters);
+
+      expect(result.records.records).toEqual([
+        { id: 1, printDetails: { count: 5 } }
+      ]);
+      expect(result.records.other.totalRecords).toBe(1);
+    });
+
+    it('should return resources with only non-printed records when NOT_PRINTED filter is selected', () => {
+      const printStatusFilters = [requestPrintStatusType.NOT_PRINTED];
+      const result = getPrintStatusFilteredData(resources, printStatusFilters);
+
+      expect(result.records.records).toEqual([
+        { id: 2, printDetails: null },
+        { id: 3, printDetails: undefined }
+      ]);
+      expect(result.records.other.totalRecords).toBe(2);
+    });
+
+    it('should not modify the original resources object', () => {
+      const printStatusFilters = [requestPrintStatusType.PRINTED];
+      const clonedResources = cloneDeep(resources);
+
+      getPrintStatusFilteredData(resources, printStatusFilters);
+
+      expect(resources).toEqual(clonedResources);
     });
   });
 });

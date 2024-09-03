@@ -71,6 +71,9 @@ import {
   SETTINGS_KEYS,
   ITEM_QUERIES,
   REQUEST_ACTION_NAMES,
+  PRINT_DETAILS_COLUMNS,
+  RESOURCE_TYPES,
+  requestFilterTypes,
 } from '../constants';
 import {
   buildUrl,
@@ -107,6 +110,9 @@ import {
   isReorderableRequest,
   getFormattedYears,
   getStatusQuery,
+  getFullNameForCsvRecords,
+  getPrintStatusFilteredData,
+  filterRecordsByPrintStatus,
 } from './utils';
 import SinglePrintButtonForPickSlip from '../components/SinglePrintButtonForPickSlip';
 
@@ -121,6 +127,24 @@ export const getPrintHoldRequestsEnabled = (printHoldRequests) => {
   } = value ? JSON.parse(value) : {};
 
   return printHoldRequestsEnabled;
+};
+
+export const getFilteredColumnHeadersMap = (columnHeaders) => (
+  columnHeaders.filter(column => column.value !== PRINT_DETAILS_COLUMNS.COPIES &&
+    column.value !== PRINT_DETAILS_COLUMNS.PRINTED)
+);
+
+export const extractPickSlipRequestIds = (pickSlipsData) => {
+  return pickSlipsData.map(pickSlip => pickSlip['request.requestID']);
+};
+
+export const getLastPrintedDetails = (printDetails, intl) => {
+  const fullName = getFullName(printDetails?.lastPrintRequester);
+  const formattedDate = intl.formatDate(printDetails?.lastPrintedDate);
+  const formattedTime = intl.formatTime(printDetails?.lastPrintedDate);
+  const localizedDateTime = `${formattedDate}${formattedTime ? ', ' : ''}${formattedTime}`;
+
+  return fullName + ' ' + localizedDateTime;
 };
 
 export const urls = {
@@ -206,6 +230,15 @@ export const urls = {
 
     return requestUrl;
   },
+  ecsTlrSettings: (value, idType, stripes) => {
+    const isUserInCentralTenant = checkIfUserInCentralTenant(stripes);
+
+    if (isUserInCentralTenant) {
+      return 'tlr/settings';
+    }
+
+    return 'circulation/settings?query=name==ecsTlrFeature';
+  },
 };
 
 export const getListFormatter = (
@@ -214,13 +247,16 @@ export const getListFormatter = (
     setURL,
   },
   {
+    intl,
     selectedRows,
     pickSlipsToCheck,
     pickSlipsData,
+    isViewPrintDetailsEnabled,
     getPrintContentRef,
     pickSlipsPrintTemplate,
     toggleRowSelection,
     onBeforeGetContentForSinglePrintButton,
+    onBeforePrintForSinglePrintButton,
   }
 ) => ({
   'select': rq => (
@@ -238,15 +274,21 @@ export const getListFormatter = (
     </AppIcon>
   ),
   'requester': rq => (rq.requester ? getFullName(rq.requester) : DEFAULT_FORMATTER_VALUE),
-  'singlePrint': rq => (
-    <SinglePrintButtonForPickSlip
-      request={rq}
-      pickSlipsToCheck={pickSlipsToCheck}
-      pickSlipsPrintTemplate={pickSlipsPrintTemplate}
-      onBeforeGetContentForSinglePrintButton={onBeforeGetContentForSinglePrintButton}
-      pickSlipsData={pickSlipsData}
-      getPrintContentRef={getPrintContentRef}
-    />),
+  'singlePrint': rq => {
+    const singlePrintButtonProps = {
+      request: rq,
+      pickSlipsToCheck,
+      pickSlipsPrintTemplate,
+      onBeforeGetContentForSinglePrintButton,
+      pickSlipsData,
+      getPrintContentRef,
+      ...(isViewPrintDetailsEnabled && {
+        onBeforePrintForSinglePrintButton
+      }),
+    };
+    return (
+      <SinglePrintButtonForPickSlip {...singlePrintButtonProps} />);
+  },
   'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : DEFAULT_FORMATTER_VALUE),
   'requestStatus': rq => (requestStatusesTranslations[rq.status]
     ? <FormattedMessage id={requestStatusesTranslations[rq.status]} />
@@ -256,6 +298,8 @@ export const getListFormatter = (
   'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
   'callNumber': rq => effectiveCallNumber(rq.item),
   'servicePoint': rq => get(rq, 'pickupServicePoint.name', DEFAULT_FORMATTER_VALUE),
+  'copies': rq => get(rq, PRINT_DETAILS_COLUMNS.COPIES, DEFAULT_FORMATTER_VALUE),
+  'printed': rq => (rq.printDetails ? getLastPrintedDetails(rq.printDetails, intl) : DEFAULT_FORMATTER_VALUE),
 });
 
 export const buildHoldRecords = (records) => {
@@ -272,6 +316,8 @@ export const buildHoldRecords = (records) => {
     return record;
   });
 };
+
+export const viewPrintDetailsPath = 'circulationSettings.records[0].value.enablePrintLog';
 
 class RequestsRoute extends React.Component {
   static contextType = CalloutContext;
@@ -438,6 +484,24 @@ class RequestsRoute extends React.Component {
         query: `(scope==${SETTINGS_SCOPES.CIRCULATION} and key==${SETTINGS_KEYS.GENERAL_TLR})`,
       },
     },
+    circulationSettings: {
+      throwErrors: false,
+      type: 'okapi',
+      records: 'circulationSettings',
+      path: 'circulation/settings',
+      params: {
+        query: '(name=printEventLogFeature)',
+      },
+    },
+    savePrintDetails: {
+      type: 'okapi',
+      POST: {
+        path: 'circulation/print-events-entry',
+      },
+      fetch: false,
+      clientGeneratePk: false,
+      throwErrors: false,
+    },
   };
 
   static propTypes = {
@@ -483,6 +547,12 @@ class RequestsRoute extends React.Component {
         reset: PropTypes.func.isRequired,
         GET: PropTypes.func.isRequired,
       }).isRequired,
+      circulationSettings: PropTypes.shape({
+        GET: PropTypes.func,
+      }),
+      savePrintDetails: PropTypes.shape({
+        POST: PropTypes.func,
+      }),
     }).isRequired,
     resources: PropTypes.shape({
       addressTypes: PropTypes.shape({
@@ -516,6 +586,9 @@ class RequestsRoute extends React.Component {
       }),
       printHoldRequests: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object).isRequired,
+      }),
+      circulationSettings: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.object),
       }),
     }).isRequired,
     stripes: PropTypes.shape({
@@ -571,6 +644,8 @@ class RequestsRoute extends React.Component {
     this.expiredHoldsReportColumnHeaders = this.getColumnHeaders(expiredHoldsReportHeaders);
 
     this.state = {
+      isEcsTlrSettingReceived: false,
+      isEcsTlrSettingEnabled: false,
       csvReportPending: false,
       submitting: false,
       errorMessage: '',
@@ -581,6 +656,8 @@ class RequestsRoute extends React.Component {
       selectedRows: {},
       titleLevelRequestsFeatureEnabled,
       createTitleLevelRequestsByDefault,
+      isViewPrintDetailsEnabled: false,
+      selectedPrintStatusFilters: [],
     };
 
     this.pickSlipsPrintContentRef = React.createRef();
@@ -589,29 +666,48 @@ class RequestsRoute extends React.Component {
     this.printSelectedContentRef = React.createRef();
   }
 
-  static getDerivedStateFromProps(props) {
+  static getDerivedStateFromProps(props, state) {
     const layer = (props.resources.query || {}).layer;
+    const newState = {};
+    const currViewPrintDetailsSettings = get(props.resources, viewPrintDetailsPath) === 'true';
+
     if (!layer) {
-      return { dupRequest: null };
+      newState.dupRequest = null;
     }
 
-    return null;
+    if (currViewPrintDetailsSettings !== state.isViewPrintDetailsEnabled) {
+      // Update the `isViewPrintDetailsEnabled` state based on user navigation back to Request App.
+      newState.isViewPrintDetailsEnabled = currViewPrintDetailsSettings;
+    }
+
+    return Object.keys(newState).length ? newState : null;
   }
 
   componentDidMount() {
+    const { stripes } = this.props;
+
     this.setCurrentServicePointId();
+
+    if (stripes?.user?.user?.tenants) {
+      this.getEcsTlrSettings();
+    }
   }
 
   componentDidUpdate(prevProps) {
+    const {
+      submitting,
+      isViewPrintDetailsEnabled,
+      selectedPrintStatusFilters,
+    } = this.state;
+    const { stripes } = this.props;
     const patronBlocks = get(this.props.resources, ['patronBlocks', 'records'], []);
     const prevBlocks = get(prevProps.resources, ['patronBlocks', 'records'], []);
-    const { submitting } = this.state;
     const prevExpired = prevBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
     const expired = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
     const { id: currentServicePointId } = this.getCurrentServicePointInfo();
     const prevStateServicePointId = get(prevProps.resources.currentServicePoint, 'id');
     const { configs: prevConfigs } = prevProps.resources;
-    const { configs } = this.props.resources;
+    const { configs, query: { filters } } = this.props.resources;
     const instanceId = parse(this.props.location?.search)?.instanceId;
 
     if (prevExpired.length > 0 && expired.length === 0) {
@@ -651,6 +747,69 @@ class RequestsRoute extends React.Component {
 
     if (!this.props.resources.records.isPending) {
       this.onSearchComplete(this.props.resources.records);
+    }
+
+    if (isViewPrintDetailsEnabled !== prevState.isViewPrintDetailsEnabled && !isViewPrintDetailsEnabled) {
+      this.columnHeadersMap = getFilteredColumnHeadersMap(this.columnHeadersMap);
+    }
+
+    if (filters?.includes(requestFilterTypes.PRINT_STATUS)) {
+      const printStatusFilterInQuery = this.getActiveFilters()[requestFilterTypes.PRINT_STATUS];
+
+      this.updateSelectedPrintStatusFilters(isViewPrintDetailsEnabled, selectedPrintStatusFilters, printStatusFilterInQuery);
+    }
+
+    if (stripes?.user?.user?.tenants && stripes.user.user !== prevProps.stripes?.user?.user) {
+      this.getEcsTlrSettings();
+    }
+  }
+
+  /* For multi data tenant environments
+  * ECS TLR setting has to be retrieved (Settings>Circulation>Consortium title level requests (TLR)).
+  * In a case if this setting is enabled we should hide Move and Duplicate buttons in action menu. */
+  getEcsTlrSettings = () => {
+    const { stripes } = this.props;
+
+    if (isMultiDataTenant(stripes)) {
+      this.findResource(RESOURCE_TYPES.ECS_TLR_SETTINGS)
+        .then(res => {
+          let isEcsTlrSettingEnabled;
+
+          if (checkIfUserInCentralTenant(stripes)) {
+            isEcsTlrSettingEnabled = res?.ecsTlrFeatureEnabled;
+          } else {
+            isEcsTlrSettingEnabled = res?.circulationSettings?.[0]?.value?.enabled;
+          }
+
+          this.setState({
+            isEcsTlrSettingReceived: true,
+            isEcsTlrSettingEnabled,
+          });
+        })
+        .catch(() => {
+          this.setState({
+            isEcsTlrSettingReceived: false,
+            isEcsTlrSettingEnabled: false,
+          });
+        });
+    }
+  }
+
+  updateSelectedPrintStatusFilters(isViewPrintDetailsEnabled, selectedPrintStatusFilters, printStatusFilterInQuery) {
+    /**
+     * Updates the `selectedPrintStatusFilters` state based on pre selected filters when user navigates back to Request App.
+     *
+     * The function performs the following actions:
+     * 1. If `isViewPrintDetailsEnabled` is true and if `Print Status` filters contains exactly one filter:
+     *    - it updates state to set `selectedPrintStatusFilters` to this one `Print Status` filter.
+     *
+     * 2. If `isViewPrintDetailsEnabled` is false and `filters` in query includes 'PRINT STATUS' filter:
+     *    - it clears the 'PRINT STATUS' filter from query by invoking `handleFilterChange`.
+     */
+    if (isViewPrintDetailsEnabled && selectedPrintStatusFilters.length === 0 && printStatusFilterInQuery?.length === 1) {
+      this.setState({ selectedPrintStatusFilters: [printStatusFilterInQuery[0]] });
+    } else if (!isViewPrintDetailsEnabled && printStatusFilterInQuery?.length) {
+      this.handleFilterChange({ name: requestFilterTypes.PRINT_STATUS, values: [] });
     }
   }
 
@@ -728,6 +887,11 @@ class RequestsRoute extends React.Component {
   // Export function for the CSV search report action
   async exportData() {
     this.setState({ csvReportPending: true });
+    const { isViewPrintDetailsEnabled, selectedPrintStatusFilters } = this.state;
+
+    const activeFilters = this.getActiveFilters();
+    const activeFilterKeys = Object.keys(activeFilters);
+    const isOnlyPrintStatusFilterSelected = activeFilterKeys.length === 1 && activeFilterKeys[0] === requestFilterTypes.PRINT_STATUS;
 
     // Build a custom query for the CSV record export, which has to include
     // all search and filter parameters
@@ -735,18 +899,21 @@ class RequestsRoute extends React.Component {
     let queryString;
 
     const queryTerm = this.props.resources?.query?.query;
-    const filterQuery = filters2cql(RequestsFiltersConfig, deparseFilters(this.getActiveFilters()));
+    const filterQuery = filters2cql(RequestsFiltersConfig, deparseFilters(activeFilters));
 
     if (queryTerm) {
       queryString = `(requesterId=="${queryTerm}" or requester.barcode="${queryTerm}*" or item.title="${queryTerm}*" or item.barcode=="${queryTerm}*" or itemId=="${queryTerm}")`;
       queryClauses.push(queryString);
     }
-
     if (filterQuery) queryClauses.push(filterQuery);
+    if (isOnlyPrintStatusFilterSelected) queryClauses.push('cql.allRecords=1');
 
     queryString = queryClauses.join(' and ');
     const records = await this.fetchReportData(this.props.mutator.reportRecords, queryString);
-    const recordsToCSV = this.buildRecords(records);
+
+    const printStatusFilteredRecords = isViewPrintDetailsEnabled && selectedPrintStatusFilters.length === 1 &&
+      filterRecordsByPrintStatus(records, selectedPrintStatusFilters);
+    const recordsToCSV = this.buildRecords(printStatusFilteredRecords || records);
 
     exportCsv(recordsToCSV, {
       onlyFields: this.columnHeadersMap,
@@ -808,16 +975,21 @@ class RequestsRoute extends React.Component {
         });
       }
       if (record.requester) {
-        const { firstName, middleName, lastName } = record.requester;
-        record.requester.name = `${firstName || ''} ${middleName || ''} ${lastName || ''}`;
+        record.requester.name = getFullNameForCsvRecords(record.requester);
+      }
+      if (record.printDetails) {
+        const fullName = getFullNameForCsvRecords(record.printDetails.lastPrintRequester);
+        const lastPrintedDate = record.printDetails.lastPrintedDate || '';
+        const date = lastPrintedDate ? `, ${lastPrintedDate}` : '';
+
+        record.printDetails.lastPrintedDetails = `${fullName}${date}`;
       }
       if (record.loan) {
         const { dueDate } = record.loan;
         record.loan.dueDate = `${formatDate(dueDate)}, ${formatTime(dueDate)}`;
       }
       if (record.proxy) {
-        const { firstName, middleName, lastName } = record.proxy;
-        record.proxy.name = `${firstName || ''} ${middleName || ''} ${lastName || ''}`;
+        record.proxy.name = getFullNameForCsvRecords(record.proxy);
       }
       if (record.deliveryAddress) {
         const { addressLine1, city, region, postalCode, countryId } = record.deliveryAddress;
@@ -1136,6 +1308,10 @@ class RequestsRoute extends React.Component {
   }
 
   handleFilterChange = ({ name, values }) => {
+    if (name === requestFilterTypes.PRINT_STATUS) {
+      this.setState({ selectedPrintStatusFilters: values });
+    }
+
     const { mutator } = this.props;
     const newFilters = {
       ...this.getActiveFilters(),
@@ -1176,7 +1352,7 @@ class RequestsRoute extends React.Component {
 
   renderFilters = (onChange) => {
     const { resources } = this.props;
-    const { titleLevelRequestsFeatureEnabled } = this.state;
+    const { titleLevelRequestsFeatureEnabled, isViewPrintDetailsEnabled } = this.state;
 
     return (
       <RequestsFilters
@@ -1185,9 +1361,23 @@ class RequestsRoute extends React.Component {
         onChange={onChange}
         onClear={(name) => onChange({ name, values: [] })}
         titleLevelRequestsFeatureEnabled={titleLevelRequestsFeatureEnabled}
+        isViewPrintDetailsEnabled={isViewPrintDetailsEnabled}
       />
     );
   };
+
+  savePrintEventDetails = (requestIds) => {
+    const currDateTime = new Date();
+    const printTimeStamp = currDateTime.toISOString();
+    const { id: loggedInUserId, username: loggedInUsername } = this.props.stripes.user.user;
+
+    this.props.mutator.savePrintDetails.POST({
+      'requestIds' : requestIds,
+      'requesterName' : loggedInUsername,
+      'requesterId' : loggedInUserId,
+      'printEventDate' : printTimeStamp
+    });
+  }
 
   onBeforeGetContentForPrintButton = (onToggle) => (
     new Promise(resolve => {
@@ -1237,6 +1427,51 @@ class RequestsRoute extends React.Component {
   }
 
   render() {
+    const {
+      resources,
+      mutator,
+      stripes,
+      history,
+      location,
+      intl,
+      stripes: {
+        timezone,
+        locale,
+        user: { user }
+      },
+    } = this.props;
+
+    const {
+      csvReportPending,
+      dupRequest,
+      errorMessage,
+      errorModalData,
+      requests,
+      servicePointId,
+      selectedRows,
+      holdsShelfReportPending,
+      createTitleLevelRequestsByDefault,
+      isViewPrintDetailsEnabled,
+      isEcsTlrSettingReceived,
+      isEcsTlrSettingEnabled,
+      selectedPrintStatusFilters,
+    } = this.state;
+    const isPrintHoldRequestsEnabled = getPrintHoldRequestsEnabled(resources.printHoldRequests);
+    const { name: servicePointName } = this.getCurrentServicePointInfo();
+    const pickSlips = get(resources, 'pickSlips.records', []);
+    const searchSlips = get(resources, 'searchSlips.records', []);
+    const patronGroups = get(resources, 'patronGroups.records', []);
+    const addressTypes = get(resources, 'addressTypes.records', []);
+    const servicePoints = get(resources, 'servicePoints.records', []);
+    const cancellationReasons = get(resources, 'cancellationReasons.records', []);
+    const requestCount = get(resources, 'records.other.totalRecords', 0);
+    const initialValues = dupRequest ||
+    {
+      requestType: DEFAULT_REQUEST_TYPE_VALUE,
+      fulfillmentPreference: fulfillmentTypeMap.HOLD_SHELF,
+      createTitleLevelRequest: createTitleLevelRequestsByDefault,
+    };
+
     const columnLabels = {
       select: <Checkbox
         data-testid="selectRequestCheckbox"
@@ -1257,58 +1492,31 @@ class RequestsRoute extends React.Component {
       requesterBarcode: <FormattedMessage id="ui-requests.requests.requesterBarcode" />,
       singlePrint: <FormattedMessage id="ui-requests.requests.singlePrint" />,
       proxy: <FormattedMessage id="ui-requests.requests.proxy" />,
-    };
-
-    const {
-      resources,
-      mutator,
-      stripes,
-      history,
-      location,
-      intl,
-      stripes: {
-        timezone,
-        locale,
-      },
-    } = this.props;
-
-    const {
-      csvReportPending,
-      dupRequest,
-      errorMessage,
-      errorModalData,
-      requests,
-      servicePointId,
-      selectedRows,
-      holdsShelfReportPending,
-      createTitleLevelRequestsByDefault,
-    } = this.state;
-    const isPrintHoldRequestsEnabled = getPrintHoldRequestsEnabled(resources.printHoldRequests);
-    const { name: servicePointName } = this.getCurrentServicePointInfo();
-    const pickSlips = get(resources, 'pickSlips.records', []);
-    const searchSlips = get(resources, 'searchSlips.records', []);
-    const patronGroups = get(resources, 'patronGroups.records', []);
-    const addressTypes = get(resources, 'addressTypes.records', []);
-    const servicePoints = get(resources, 'servicePoints.records', []);
-    const cancellationReasons = get(resources, 'cancellationReasons.records', []);
-    const requestCount = get(resources, 'records.other.totalRecords', 0);
-    const initialValues = dupRequest ||
-    {
-      requestType: DEFAULT_REQUEST_TYPE_VALUE,
-      fulfillmentPreference: fulfillmentTypeMap.HOLD_SHELF,
-      createTitleLevelRequest: createTitleLevelRequestsByDefault,
+      ...(isViewPrintDetailsEnabled && {
+        copies: <FormattedMessage id="ui-requests.requests.copies" />,
+        printed: <FormattedMessage id="ui-requests.requests.printed" />,
+      }),
     };
 
     const isPickSlipsArePending = resources?.pickSlips?.isPending;
     const isSearchSlipsArePending = resources?.searchSlips?.isPending;
+    const isRequestsRecordsLoaded = resources.records.hasLoaded;
     const requestsEmpty = isEmpty(requests);
     const isPickSlipsEmpty = isEmpty(pickSlips);
     const isSearchSlipsEmpty = isEmpty(searchSlips);
     const pickSlipsPrintTemplate = this.getPrintTemplate(SLIPS_TYPE.PICK_SLIP);
     const searchSlipsPrintTemplate = this.getPrintTemplate(SLIPS_TYPE.SEARCH_SLIP_HOLD_REQUESTS);
-    const pickSlipsData = convertToSlipData(pickSlips, intl, timezone, locale, SLIPS_TYPE.PICK_SLIP);
+    const pickSlipsData = convertToSlipData(pickSlips, intl, timezone, locale, SLIPS_TYPE.PICK_SLIP, user);
     const searchSlipsData = convertToSlipData(searchSlips, intl, timezone, locale, SLIPS_TYPE.SEARCH_SLIP_HOLD_REQUESTS);
     let multiSelectPickSlipData = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
+    /**
+     * For 'displayPrintStatusFilteredData' to be true the length of 'selectedPrintStatusFilters' must be 1.
+     * This is because we only filter data when exactly one PrintStatus filter is selected ([Printed] or [Not Printed]).
+     * If the filter array is empty or contains both filters ([] or [Printed, Not Printed]),
+     * no filtering is needed as the data should be used directly from the query response.
+     */
+    const displayPrintStatusFilteredData = isViewPrintDetailsEnabled &&
+    isRequestsRecordsLoaded && selectedPrintStatusFilters.length === 1;
 
     const resultsFormatter = getListFormatter(
       {
@@ -1316,13 +1524,16 @@ class RequestsRoute extends React.Component {
         setURL: this.setURL,
       },
       {
+        intl,
         selectedRows,
         pickSlipsToCheck: pickSlips,
         pickSlipsData,
+        isViewPrintDetailsEnabled,
         getPrintContentRef: this.getPrintContentRef,
         pickSlipsPrintTemplate,
         toggleRowSelection: this.toggleRowSelection,
         onBeforeGetContentForSinglePrintButton: this.onBeforeGetContentForSinglePrintButton,
+        onBeforePrintForSinglePrintButton: this.savePrintEventDetails,
       }
     );
 
@@ -1386,6 +1597,12 @@ class RequestsRoute extends React.Component {
                   template={pickSlipsPrintTemplate}
                   contentRef={this.pickSlipsPrintContentRef}
                   onBeforeGetContent={() => this.onBeforeGetContentForPrintButton(onToggle)}
+                  onBeforePrint={() => {
+                    if (isViewPrintDetailsEnabled) {
+                      const requestIds = extractPickSlipRequestIds(pickSlipsData);
+                      this.savePrintEventDetails(requestIds);
+                    }
+                  }}
                 >
                   <FormattedMessage
                     id="ui-requests.printPickSlips"
@@ -1408,6 +1625,15 @@ class RequestsRoute extends React.Component {
                       multiSelectPickSlipData = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
                     })
                     }
+                  onBeforePrint={
+                    () => {
+                      if (isViewPrintDetailsEnabled) {
+                        const selectedPickSlips = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
+                        const selectedRequestIds = extractPickSlipRequestIds(selectedPickSlips);
+                        this.savePrintEventDetails(selectedRequestIds);
+                      }
+                    }
+                  }
                 >
                   <FormattedMessage
                     id="ui-requests.printPickSlipsSelected"
@@ -1501,6 +1727,7 @@ class RequestsRoute extends React.Component {
                 itemBarcode: { max: 140 },
                 type: { max: 100 },
                 select: { max: 30 },
+                copies: { max: 95 },
               }}
               columnMapping={columnLabels}
               resultsRowClickHandlers={false}
@@ -1511,7 +1738,8 @@ class RequestsRoute extends React.Component {
               customPaneSub={this.renderPaneSub()}
               onCreate={this.create}
               onCloseNewRecord={this.handleCloseNewRecord}
-              parentResources={resources}
+              parentResources={displayPrintStatusFilteredData ?
+                getPrintStatusFilteredData(resources, selectedPrintStatusFilters) : resources}
               parentMutator={mutator}
               detailProps={{
                 onChangePatron: this.onChangePatron,
@@ -1531,6 +1759,8 @@ class RequestsRoute extends React.Component {
                 query: resources.query,
                 onDuplicate: this.onDuplicate,
                 buildRecordsForHoldsShelfReport: this.buildRecordsForHoldsShelfReport,
+                isEcsTlrSettingReceived,
+                isEcsTlrSettingEnabled,
               }}
               viewRecordOnCollapse={this.viewRecordOnCollapse}
               viewRecordPerms="ui-requests.view"

@@ -40,6 +40,7 @@ const props = {
     pickupServicePoints: ['1'],
     tags: ['Urgent'],
     requestLevels: [],
+    printStatus: ['Printed'],
   },
   onChange,
   onClear,
@@ -57,6 +58,7 @@ const props = {
     },
   },
   titleLevelRequestsFeatureEnabled: false,
+  isViewPrintDetailsEnabled: false,
 };
 const testIds = {
   [requestFilterTypes.REQUEST_TYPE]: requestFilterTypes.REQUEST_TYPE,
@@ -64,6 +66,8 @@ const testIds = {
   [requestFilterTypes.REQUEST_STATUS]: requestFilterTypes.REQUEST_STATUS,
   [`${requestFilterTypes.REQUEST_STATUS}Filter`]: `${requestFilterTypes.REQUEST_STATUS}Filter`,
   [requestFilterTypes.TAGS]: requestFilterTypes.TAGS,
+  [requestFilterTypes.PRINT_STATUS]: requestFilterTypes.PRINT_STATUS,
+  [`${requestFilterTypes.PRINT_STATUS}Filter`]: `${requestFilterTypes.PRINT_STATUS}Filter`,
   requestLevelFilter: 'requestLevelFilter',
   multiSelectionFilter: 'multiSelectionFilter',
   pickupServicePointFilter: 'pickupServicePointFilter',
@@ -72,6 +76,7 @@ const labelIds = {
   [requestFilterTypes.REQUEST_TYPE]: 'ui-requests.requestMeta.type',
   [requestFilterTypes.REQUEST_STATUS]: 'ui-requests.requestMeta.status',
   [requestFilterTypes.TAGS]: 'ui-requests.requestMeta.tags',
+  [requestFilterTypes.PRINT_STATUS]: 'ui-requests.requestMeta.printStatus',
 };
 
 describe('RequestsFilters', () => {
@@ -315,6 +320,64 @@ describe('RequestsFilters', () => {
       };
 
       expect(RequestLevelFilter).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+    });
+  });
+
+  describe('Print status accordion', () => {
+    describe('when isViewPrintDetailsEnabled is disabled', () => {
+      it('should not render Print status accordion', () => {
+        expect(screen.queryByTestId(testIds[requestFilterTypes.PRINT_STATUS])).not.toBeInTheDocument();
+      });
+    });
+
+    describe('when isViewPrintDetailsEnabled is enabled', () => {
+      const currentProps = {
+        ...props,
+        isViewPrintDetailsEnabled: true,
+      };
+      beforeEach(() => {
+        jest.clearAllMocks();
+        render(<RequestsFilters {...currentProps} />);
+      });
+
+      it('should render Print status accordion', () => {
+        expect(screen.getByTestId(testIds[requestFilterTypes.PRINT_STATUS])).toBeInTheDocument();
+      });
+
+      it('should render label for Print status accordion', () => {
+        expect(screen.getByText(labelIds[requestFilterTypes.PRINT_STATUS])).toBeInTheDocument();
+      });
+
+      it('should trigger Print status accordion with correct props', () => {
+        expect(Accordion).toHaveBeenNthCalledWith(4, expect.objectContaining({
+          displayClearButton: true,
+          id: requestFilterTypes.PRINT_STATUS,
+          'data-testid': requestFilterTypes.PRINT_STATUS,
+          name: requestFilterTypes.PRINT_STATUS,
+          onClearFilter: expect.any(Function),
+          header: expect.any(Function),
+          separator: false,
+        }), {});
+      });
+
+      it('should be called onClearFilter with request filter types Print status', async () => {
+        await userEvent.click(screen.getByTestId(`${testIds[requestFilterTypes.PRINT_STATUS]}Button`));
+
+        expect(onClear).toHaveBeenCalledWith(requestFilterTypes.PRINT_STATUS);
+      });
+
+      it('should render CheckboxFilter for Print status accordion', () => {
+        expect(screen.getByTestId(testIds[`${requestFilterTypes.PRINT_STATUS}Filter`])).toBeInTheDocument();
+      });
+
+      it('should trigger CheckboxFilter for Print status accordion with correct props', () => {
+        expect(CheckboxFilter).toHaveBeenNthCalledWith(3, expect.objectContaining({
+          'data-testid': testIds[`${requestFilterTypes.PRINT_STATUS}Filter`],
+          name: requestFilterTypes.PRINT_STATUS,
+          selectedValues: props.activeFilters[requestFilterTypes.PRINT_STATUS],
+          onChange,
+        }), {});
+      });
     });
   });
 });
