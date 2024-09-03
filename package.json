@@ -126,7 +126,9 @@
           "circulation.pick-slips.get",
           "circulation.search-slips.get",
           "circulation.print-events-entry.item.post",
-          "inventory-storage.locations.item.get"
+          "inventory-storage.locations.item.get",
+          "tlr.ecs-tlr-allowed-service-points.get",
+          "tlr.ecs-tlr.post"
         ],
         "visible": true
       },

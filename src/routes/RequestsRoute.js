@@ -372,6 +372,11 @@ class RequestsRoute extends React.Component {
         staticFallback: { params: {} },
       },
     },
+    ecsTlrRecords: {
+      type: 'okapi',
+      path: 'tlr/ecs-tlr',
+      fetch: false,
+    },
     reportRecords: {
       type: 'okapi',
       path: 'circulation/requests',
@@ -693,7 +698,7 @@ class RequestsRoute extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     const {
       submitting,
       isViewPrintDetailsEnabled,
@@ -1109,46 +1114,37 @@ class RequestsRoute extends React.Component {
   create = (requestData) => {
     const { stripes } = this.props;
     const userPersonalData = cloneDeep(requestData?.requester?.personal);
+    let mutator = this.props.mutator.records;
 
     if (isMultiDataTenant(stripes) && checkIfUserInCentralTenant(stripes)) {
       unset(requestData, 'item');
       unset(requestData, 'requester');
       unset(requestData, 'holdingsRecordId');
+
+      mutator = this.props.mutator.ecsTlrRecords;
     }
 
     const query = new URLSearchParams(this.props.location.search);
     const mode = query.get('mode');
-    const url = getRequestUrl(REQUEST_ACTION_NAMES.CREATE_REQUEST, stripes);
 
-    return fetch(`${this.okapiUrl}/${url}`, {
-      ...this.httpHeadersOptions,
-      method: 'POST',
-      body: JSON.stringify(requestData),
-    })
-      .then((res) => {
-        if (res.ok) {
-          this.closeLayer();
-
-          this.context.sendCallout({
-            message: isDuplicateMode(mode)
-              ? (
-                <FormattedMessage
-                  id="ui-requests.duplicateRequest.success"
-                  values={{ requester: generateUserName(userPersonalData) }}
-                />
-              )
-              : (
-                <FormattedMessage
-                  id="ui-requests.createRequest.success"
-                  values={{ requester: generateUserName(userPersonalData) }}
-                />
-              ),
-          });
-
-          return res;
-        }
-
-        return Promise.reject(res);
+    return mutator.POST(requestData)
+      .then(() => {
+        this.closeLayer();
+        this.context.sendCallout({
+          message: isDuplicateMode(mode)
+            ? (
+              <FormattedMessage
+                id="ui-requests.duplicateRequest.success"
+                values={{ requester: generateUserName(userPersonalData) }}
+              />
+            )
+            : (
+              <FormattedMessage
+                id="ui-requests.createRequest.success"
+                values={{ requester: generateUserName(userPersonalData) }}
+              />
+            ),
+        });
       })
       .catch(resp => {
         this.context.sendCallout({
