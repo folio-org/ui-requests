@@ -35,6 +35,7 @@ import {
   isPrintable,
   getNextSelectedRowsState,
   isMultiDataTenant,
+  getRequester,
 } from './utils';
 
 import {
@@ -1115,5 +1116,23 @@ describe('isMultiDataTenant', () => {
 
       expect(result).toBe(false);
     });
+  });
+});
+
+describe('getRequester', () => {
+  const selectedUser = {
+    id: 'selectedUserId',
+  };
+
+  it('should return proxy user', () => {
+    const proxy = {
+      id: 'proxyId',
+    };
+
+    expect(getRequester(proxy, selectedUser)).toEqual(proxy);
+  });
+
+  it('should return selected user', () => {
+    expect(getRequester(null, selectedUser)).toEqual(selectedUser);
   });
 });

@@ -20,7 +20,11 @@
 * Populate the token 'request.barcodeImage' in the pick slip. Refs UIREQ-1117.
 * Populate the token "staffUsername" in the pick slip. Refs UIREQ-1124.
 * Implement availability of "Printed" and "# Copies" columns upon "Enable view print details (Pick slips)" configuration. Refs UIREQ-1121.
+* Implement availability of "Print status" filters upon "Enable view print details (Pick slips)" configuration. Refs UIREQ-1119.
 * Hide Duplicate and Move action buttons in ECS env with mod-tlr enabled. Refs UIREQ-1127, UIREQ-1125.
+* Fix issue with Proxy's patron group and delivery address that shown instead of Sponsor's when creating request. Refs UIREQ-1132, UIREQ-1133.
+* Add missing sub-permissions to fetch staff slips records. Refs UIREQ-1129.
+* Add missing sub-permissions to fetch "pick-slips" and "search-slips" records in "Requests: View, edit, cancel" permission. Refs UIREQ-1137.
 
 ## [9.1.1] (https://github.com/folio-org/ui-checkin/tree/v9.1.1) (2024-03-27)
 [Full Changelog](https://github.com/folio-org/ui-checkin/compare/v9.1.0...v9.1.1)

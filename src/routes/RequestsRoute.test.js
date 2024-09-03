@@ -120,6 +120,8 @@ jest.mock('./utils', () => ({
   ...jest.requireActual('./utils'),
   getFormattedYears: jest.fn(),
   getStatusQuery: jest.fn(),
+  filterRecordsByPrintStatus: jest.fn(),
+  getPrintStatusFilteredData: jest.fn(),
 }));
 jest.mock('../components', () => ({
   ErrorModal: jest.fn(({ onClose }) => (
@@ -255,11 +257,7 @@ SearchAndSort.mockImplementation(jest.fn(({
   massageNewRecord,
   onCloseNewRecord,
   onFilterChange,
-  parentResources: {
-    records: {
-      records,
-    },
-  },
+  parentResources,
   renderFilters,
   resultIsSelected,
   viewRecordOnCollapse,
@@ -268,7 +266,7 @@ SearchAndSort.mockImplementation(jest.fn(({
   resultsFormatter,
 }) => {
   const onClickActions = () => {
-    onDuplicate(records[0]);
+    onDuplicate(parentResources.records.records[0]);
     buildRecordsForHoldsShelfReport();
     massageNewRecord({});
     resultIsSelected({
@@ -380,7 +378,7 @@ describe('RequestsRoute', () => {
         GET: jest.fn(),
       },
       savePrintDetails: {
-        POST: jest.fn().mockResolvedValue(),
+        POST: jest.fn(),
       },
       activeRecord: {
         update: jest.fn(),
@@ -609,7 +607,7 @@ describe('RequestsRoute', () => {
       expect(printContent).toBeInTheDocument();
     });
 
-    it('should trigger "exportCsv" when "Enable view print details" settings is enabled', async () => {
+    it('should trigger "exportCsv', async () => {
       await userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsToCsv' }));
 
       await waitFor(() => {
@@ -617,26 +615,20 @@ describe('RequestsRoute', () => {
       });
     });
 
-    it('should trigger "exportCsv" when "Enable view print details" settings is disabled', async () => {
+    it('should trigger "exportCsv" when only "Print Status" filter is selected', async () => {
       const props = {
         ...defaultProps,
         resources: {
           ...defaultProps.resources,
-          circulationSettings: {
-            ...defaultProps.resources.circulationSettings,
-            records: defaultProps.resources.circulationSettings.records.map(record => ({
-              ...record,
-              value: {
-                ...record.value,
-                enablePrintLog: 'false'
-              }
-            }))
+          query: {
+            ...defaultProps.resources.query,
+            filters: 'printStatus.Printed',
           },
         }
       };
-
+      cleanup();
       renderComponent(props);
-      await userEvent.click(screen.queryAllByRole('button', { name: 'ui-requests.exportSearchResultsToCsv' })[1]);
+      await userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsToCsv' }));
 
       await waitFor(() => {
         expect(exportCsv).toHaveBeenCalled();
@@ -668,6 +660,26 @@ describe('RequestsRoute', () => {
       expect(defaultProps.mutator.query.update).toBeCalledWith(expectFilterValue);
     });
 
+    it('should trigger "mutator.query.update" when "Print Status" filters are present in query', async () => {
+      const props = {
+        ...defaultProps,
+        resources: {
+          ...defaultProps.resources,
+          query: {
+            ...defaultProps.resources.query,
+            filters: 'filter1.value1,printStatus.Printed',
+          },
+        }
+      };
+      cleanup();
+      renderComponent(props);
+      const expectFilterValue = { 'filters': 'filter1.value1,printStatus.Printed,filter4.Value4,filter4.Value5' };
+
+      await userEvent.click(screen.getByRole('button', { name: 'onFilterChange' }));
+
+      expect(defaultProps.mutator.query.update).toHaveBeenCalledWith(expectFilterValue);
+    });
+
     it('should trigger "mutator.activeRecord.update"', async () => {
       await userEvent.click(screen.getByRole('button', { name: 'onChangePatron' }));
 
@@ -692,12 +704,6 @@ describe('RequestsRoute', () => {
       await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[0]);
 
       expect(printPickSlipsLabel).toBeInTheDocument();
-    });
-
-    it('should trigger "mutator.savePrintDetails.POST"', async () => {
-      await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[0]);
-
-      expect(defaultProps.mutator.savePrintDetails.POST).toHaveBeenCalled();
     });
 
     it('should render print search slips label', async () => {
@@ -865,6 +871,40 @@ describe('RequestsRoute', () => {
         fireEvent.click(selectRequestCheckbox);
 
         expect(CheckboxColumn).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+      });
+    });
+
+    describe('When "isViewPrintDetailsEnabled" is true', () => {
+      it('should trigger "mutator.savePrintDetails.POST"', async () => {
+        renderComponent(defaultProps);
+        await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[0]);
+
+        expect(defaultProps.mutator.savePrintDetails.POST).toHaveBeenCalled();
+      });
+    });
+
+    describe('When "isViewPrintDetailsEnabled" is false', () => {
+      it('should not trigger "mutator.savePrintDetails.POST"', async () => {
+        const props = {
+          ...defaultProps,
+          resources: {
+            ...defaultProps.resources,
+            circulationSettings: {
+              ...defaultProps.resources.circulationSettings,
+              records: defaultProps.resources.circulationSettings.records.map(record => ({
+                ...record,
+                value: {
+                  ...record.value,
+                  enablePrintLog: 'false'
+                }
+              }))
+            },
+          }
+        };
+        renderComponent(props);
+        await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[0]);
+
+        expect(defaultProps.mutator.savePrintDetails.POST).not.toHaveBeenCalled();
       });
     });
   });
@@ -1138,7 +1178,6 @@ describe('RequestsRoute', () => {
         selectedRows: '',
         pickSlipsToCheck: '',
         pickSlipsData: '',
-        isViewPrintDetailsEnabled: true,
         getPrintContentRef: getPrintContentRefMock,
         isPrintableMock,
         pickSlipsPrintTemplate: '',

@@ -296,5 +296,8 @@
     "requests.copies": "# Copies",
     "requests.printed": "Druck abgeschlossen",
     "printDetails.count": "# Copies",
-    "printDetails.lastPrintedDetails": "Printed"
+    "printDetails.lastPrintedDetails": "Printed",
+    "requestMeta.printStatus": "Print status",
+    "filters.printStatus.printed": "Printed",
+    "filters.printStatus.notPrinted": "Not printed"
 }

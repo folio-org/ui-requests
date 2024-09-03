@@ -517,3 +517,11 @@ export function resetFieldState(form, fieldName) {
 export const isMultiDataTenant = (stripes) => {
   return stripes.hasInterface('consortia') && stripes.hasInterface('ecs-tlr');
 };
+
+export const getRequester = (proxy, selectedUser) => {
+  if (proxy && proxy.id !== selectedUser?.id) {
+    return proxy;
+  }
+
+  return selectedUser;
+};

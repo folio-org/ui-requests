@@ -181,7 +181,7 @@
     "items.selectItem": "Select item",
     "items.instanceItems": "Autres exemplaires dans {title}",
     "items.instanceItems.notFound": "Aucun exemplaire trouvé",
-    "titleInformation.titleLevelRequests": "Title level requests",
+    "titleInformation.titleLevelRequests": "Réservations au niveau du titre",
     "titleInformation.title": "Titre",
     "titleInformation.contributors": "Contributeur / auteur",
     "titleInformation.publicationsDate": "Date de publication",
@@ -193,7 +193,7 @@
     "itemLevel": "Exemplaire",
     "titleLevel": "Titre",
     "requests.year": "Année",
-    "requests.createTitleLevelRequest": "Create title level request",
+    "requests.createTitleLevelRequest": "Créer une réservation au niveau du titre",
     "errors.instanceUuidOrHridDoesNotExist": "Instance with this HRID or UUID does not exist",
     "errors.selectInstanceRequired": "Please select an instance and hit enter",
     "instance.information": "Title information",
@@ -296,5 +296,8 @@
     "requests.copies": "# Exemplaires",
     "requests.printed": "Imprimé",
     "printDetails.count": "# Copies",
-    "printDetails.lastPrintedDetails": "Printed"
+    "printDetails.lastPrintedDetails": "Printed",
+    "requestMeta.printStatus": "Print status",
+    "filters.printStatus.printed": "Printed",
+    "filters.printStatus.notPrinted": "Not printed"
 }

@@ -77,6 +77,7 @@ import {
   isSubmittingButtonDisabled,
   isFormEditing,
   resetFieldState,
+  getRequester,
 } from './utils';
 
 import css from './requests.css';
@@ -185,7 +186,7 @@ class RequestForm extends React.Component {
     const { titleLevelRequestsFeatureEnabled } = this.getTlrSettings();
 
     this.state = {
-      proxy: {},
+      proxy: null,
       selectedLoan: loan,
       ...getDefaultRequestPreferences(request, initialValues),
       isAwaitingForProxySelection: false,
@@ -451,17 +452,13 @@ class RequestForm extends React.Component {
     const {
       form,
       selectedUser,
-      onSetSelectedUser,
     } = this.props;
 
     if (selectedUser.id === proxy.id) {
-      onSetSelectedUser(selectedUser);
       this.setState({
         proxy: selectedUser,
       });
-      form.change(REQUEST_FORM_FIELD_NAMES.REQUESTER_ID, selectedUser.id);
     } else {
-      onSetSelectedUser(selectedUser);
       this.setState({
         proxy,
         requestTypes: {},
@@ -766,6 +763,7 @@ class RequestForm extends React.Component {
       onSetSelectedItem,
       selectedUser,
     } = this.props;
+    const { proxy } = this.state;
 
     this.setState({
       isItemOrInstanceLoading: true,
@@ -815,7 +813,8 @@ class RequestForm extends React.Component {
         })
         .then(item => {
           if (item && selectedUser?.id) {
-            this.findRequestTypes(item.id, selectedUser.id, ID_TYPE_MAP.ITEM_ID);
+            const requester = getRequester(proxy, selectedUser);
+            this.findRequestTypes(item.id, requester.id, ID_TYPE_MAP.ITEM_ID);
           }
 
           return item;
@@ -848,6 +847,7 @@ class RequestForm extends React.Component {
       onSetSelectedInstance,
       selectedUser,
     } = this.props;
+    const { proxy } = this.state;
 
     this.setState({
       isItemOrInstanceLoading: true,
@@ -890,7 +890,8 @@ class RequestForm extends React.Component {
         })
         .then(instance => {
           if (instance && selectedUser?.id) {
-            this.findRequestTypes(instance.id, selectedUser.id, ID_TYPE_MAP.INSTANCE_ID);
+            const requester = getRequester(proxy, selectedUser);
+            this.findRequestTypes(instance.id, requester.id, ID_TYPE_MAP.INSTANCE_ID);
           }
 
           return instance;
@@ -1131,26 +1132,26 @@ class RequestForm extends React.Component {
     const patronBlocks = onGetPatronManualBlocks(parentResources);
     const automatedPatronBlocks = onGetAutomatedPatronBlocks(parentResources);
     const isEditForm = isFormEditing(request);
-
+    const selectedProxy = getProxy(request, proxy);
+    const requester = getRequester(selectedProxy, selectedUser);
     let deliveryLocations;
     let deliveryLocationsDetail = [];
     let addressDetail;
-    if (selectedUser && selectedUser.personal && selectedUser.personal.addresses) {
-      deliveryLocations = selectedUser.personal.addresses.map((a) => {
+    if (requester?.personal?.addresses) {
+      deliveryLocations = requester.personal.addresses.map((a) => {
         const typeName = find(addressTypes, { id: a.addressTypeId }).addressType;
         return { label: typeName, value: a.addressTypeId };
       });
       deliveryLocations = sortBy(deliveryLocations, ['label']);
-      deliveryLocationsDetail = keyBy(selectedUser.personal.addresses, a => a.addressTypeId);
+      deliveryLocationsDetail = keyBy(requester.personal.addresses, a => a.addressTypeId);
     }
 
     if (selectedAddressTypeId) {
       addressDetail = toUserAddress(deliveryLocationsDetail[selectedAddressTypeId]);
     }
 
-    const patronGroup = getPatronGroup(selectedUser, patronGroups);
+    const patronGroup = getPatronGroup(requester, patronGroups);
     const fulfillmentTypeOptions = getFulfillmentTypeOptions(hasDelivery, optionLists?.fulfillmentTypes || []);
-    const selectedProxy = getProxy(request, proxy);
     const isSubmittingDisabled = isSubmittingButtonDisabled(pristine, submitting);
     const isTitleLevelRequest = createTitleLevelRequest || request?.requestLevel === REQUEST_LEVEL_TYPES.TITLE;
     const getPatronBlockModalOpenStatus = () => {
