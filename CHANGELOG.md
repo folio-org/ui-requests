@@ -1,7 +1,7 @@
 # Change history for ui-requests
 
 ## 9.2.0 IN PROGRESS
-
+TEST
 * Use Save & close button label stripes-component translation key. Refs UIREQ-1073.
 * Include single print and selection print options on results list and actions menu. Refs UIREQ-966.
 * Set up default pickup service point if it is available. Refs UIREQ-1095.
