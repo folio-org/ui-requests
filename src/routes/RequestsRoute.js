@@ -686,7 +686,7 @@ class RequestsRoute extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     const {
       submitting,
       isViewPrintDetailsEnabled,
