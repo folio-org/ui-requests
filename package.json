@@ -126,7 +126,8 @@
           "circulation.pick-slips.get",
           "circulation.search-slips.get",
           "circulation.print-events-entry.item.post",
-          "inventory-storage.locations.item.get"
+          "inventory-storage.locations.item.get",
+          "circulation.items-by-instance.get"
         ],
         "visible": true
       },
