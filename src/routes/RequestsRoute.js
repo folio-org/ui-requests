@@ -376,6 +376,7 @@ class RequestsRoute extends React.Component {
       type: 'okapi',
       path: 'tlr/ecs-tlr',
       fetch: false,
+      throwErrors: false,
     },
     reportRecords: {
       type: 'okapi',
