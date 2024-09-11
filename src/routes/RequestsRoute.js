@@ -1129,8 +1129,16 @@ class RequestsRoute extends React.Component {
     const mode = query.get('mode');
 
     return mutator.POST(requestData)
-      .then(() => {
-        this.closeLayer();
+      .then((res) => {
+        const {
+          match: {
+            path,
+          },
+          history,
+        } = this.props;
+
+        history.push(`${path}/view/${res?.primaryRequestId || res?.id}`);
+
         this.context.sendCallout({
           message: isDuplicateMode(mode)
             ? (
