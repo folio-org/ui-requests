@@ -71,6 +71,7 @@ import {
   SETTINGS_KEYS,
   ITEM_QUERIES,
   REQUEST_ACTION_NAMES,
+  CENTRAL_TENANT_URLS,
   PRINT_DETAILS_COLUMNS,
   RESOURCE_TYPES,
   requestFilterTypes,
@@ -374,7 +375,7 @@ class RequestsRoute extends React.Component {
     },
     ecsTlrRecords: {
       type: 'okapi',
-      path: 'tlr/ecs-tlr',
+      path: CENTRAL_TENANT_URLS[REQUEST_ACTION_NAMES.CREATE_REQUEST],
       fetch: false,
       throwErrors: false,
     },
@@ -515,6 +516,9 @@ class RequestsRoute extends React.Component {
     mutator: PropTypes.shape({
       records: PropTypes.shape({
         GET: PropTypes.func,
+        POST: PropTypes.func,
+      }),
+      ecsTlrRecords: PropTypes.shape({
         POST: PropTypes.func,
       }),
       reportRecords: PropTypes.shape({
@@ -1129,8 +1133,16 @@ class RequestsRoute extends React.Component {
     const mode = query.get('mode');
 
     return mutator.POST(requestData)
-      .then(() => {
-        this.closeLayer();
+      .then((res) => {
+        const {
+          match: {
+            path,
+          },
+          history,
+        } = this.props;
+
+        history.push(`${path}/view/${res?.primaryRequestId || res?.id}`);
+
         this.context.sendCallout({
           message: isDuplicateMode(mode)
             ? (
