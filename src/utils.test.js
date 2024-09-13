@@ -29,6 +29,7 @@ import {
   resetFieldState,
   getRequestTypeOptions,
   isVirtualItem,
+  getRequester,
 } from './utils';
 
 import {
@@ -857,5 +858,23 @@ describe('getRequestTypeOptions', () => {
     ];
 
     expect(getRequestTypeOptions(requestTypes)).toEqual(expectedResult);
+  });
+});
+
+describe('getRequester', () => {
+  const selectedUser = {
+    id: 'selectedUserId',
+  };
+
+  it('should return proxy user', () => {
+    const proxy = {
+      id: 'proxyId',
+    };
+
+    expect(getRequester(proxy, selectedUser)).toEqual(proxy);
+  });
+
+  it('should return selected user', () => {
+    expect(getRequester(null, selectedUser)).toEqual(selectedUser);
   });
 });

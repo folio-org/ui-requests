@@ -1,7 +1,14 @@
 # Change history for ui-requests
 
-## [9.1.1] (https://github.com/folio-org/ui-checkin/tree/v9.1.1) (2024-03-27)
-[Full Changelog](https://github.com/folio-org/ui-checkin/compare/v9.1.0...v9.1.1)
+## [9.1.2] (https://github.com/folio-org/ui-requests/tree/v9.1.2) (2024-09-13)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.1.1...v9.1.2)
+
+* Remove bigtests from github actions. Refs UIREQ-1099.
+* Fix issue with Proxy's patron group and delivery address that shown instead of Sponsor's when creating request. Refs UIREQ-1132, UIREQ-1133.
+* Update upload-artifact actions from v1 and v2 to v4. Refs UIREQ-1150.
+
+## [9.1.1] (https://github.com/folio-org/ui-requests/tree/v9.1.1) (2024-03-27)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.1.0...v9.1.1)
 
 * Add support for Barcode tag with sanitize. Refs UIREQ-1080, UIREQ-1082.
 
