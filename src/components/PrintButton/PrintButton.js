@@ -41,9 +41,7 @@ class PrintButton extends React.Component {
   }
 
   handleBeforePrint = async () => {
-    console.log('in PrintButton before await');
     await this.props.onBeforePrint([this.props.requestId]);
-    console.log('in PrintButton after await');
   };
 
   renderTriggerButton = () => {
