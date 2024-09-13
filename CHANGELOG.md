@@ -18,6 +18,7 @@
 * Add missing sub-permissions to fetch staff slips records. Refs UIREQ-1129.
 * Add missing sub-permissions to fetch "pick-slips" and "search-slips" records in "Requests: View, edit, cancel" permission. Refs UIREQ-1137.
 * Update upload-artifact actions from v1 and v2 to v4. Refs UIREQ-1150.
+* Optimize performance of the "print-events-entry" API to reduce slowness during the initial call. Refs UIREQ-1130.
 
 ## [9.1.1] (https://github.com/folio-org/ui-checkin/tree/v9.1.1) (2024-03-27)
 [Full Changelog](https://github.com/folio-org/ui-checkin/compare/v9.1.0...v9.1.1)

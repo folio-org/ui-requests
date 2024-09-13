@@ -40,9 +40,9 @@ class PrintButton extends React.Component {
     this.props.onBeforeGetContent();
   }
 
-  handleBeforePrint = () => {
-    this.props.onBeforePrint([this.props.requestId]);
-  }
+  handleBeforePrint = async () => {
+    await this.props.onBeforePrint([this.props.requestId]);
+  };
 
   renderTriggerButton = () => {
     const fieldsToSkip = ['contentRef', 'onBeforePrint', 'onAfterPrint', 'onBeforeGetContent'];
