@@ -1294,10 +1294,8 @@ class RequestsRoute extends React.Component {
     const currDateTime = new Date();
     const printTimeStamp = currDateTime.toISOString();
     const { id: loggedInUserId, username: loggedInUsername } = this.props.stripes.user.user;
-    console.log('in savePrintEvent()');
 
     try {
-      console.log('in try of savePrintEvent()');
       await this.props.mutator.savePrintDetails.POST({
         'requestIds': requestIds,
         'requesterName': loggedInUsername,
@@ -1529,9 +1527,7 @@ class RequestsRoute extends React.Component {
                   onBeforePrint={async () => {
                     if (isViewPrintDetailsEnabled) {
                       const requestIds = extractPickSlipRequestIds(pickSlipsData);
-                      console.log('in ReqRoute before await');
                       await this.savePrintEventDetails(requestIds);
-                      console.log('in ReqRoute after await');
                     }
                   }}
                 >

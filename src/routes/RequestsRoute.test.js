@@ -136,8 +136,8 @@ jest.mock('../components', () => ({
     children,
   }) => {
     const handleClick = () => {
-      onBeforeGetContent();
-      onBeforePrint();
+      Promise.resolve(onBeforeGetContent());
+      Promise.resolve(onBeforePrint());
     };
     return (
       <div>
