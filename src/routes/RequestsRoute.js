@@ -1290,18 +1290,25 @@ class RequestsRoute extends React.Component {
     );
   };
 
-  savePrintEventDetails = (requestIds) => {
+  savePrintEventDetails = async (requestIds) => {
     const currDateTime = new Date();
     const printTimeStamp = currDateTime.toISOString();
     const { id: loggedInUserId, username: loggedInUsername } = this.props.stripes.user.user;
+    console.log('in savePrintEvent()');
 
-    this.props.mutator.savePrintDetails.POST({
-      'requestIds' : requestIds,
-      'requesterName' : loggedInUsername,
-      'requesterId' : loggedInUserId,
-      'printEventDate' : printTimeStamp
-    });
-  }
+    try {
+      console.log('in try of savePrintEvent()');
+      await this.props.mutator.savePrintDetails.POST({
+        'requestIds': requestIds,
+        'requesterName': loggedInUsername,
+        'requesterId': loggedInUserId,
+        'printEventDate': printTimeStamp
+      });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Failed to save print event details:', error);
+    }
+  };
 
   onBeforeGetContentForPrintButton = (onToggle) => (
     new Promise(resolve => {
@@ -1519,10 +1526,12 @@ class RequestsRoute extends React.Component {
                   template={pickSlipsPrintTemplate}
                   contentRef={this.pickSlipsPrintContentRef}
                   onBeforeGetContent={() => this.onBeforeGetContentForPrintButton(onToggle)}
-                  onBeforePrint={() => {
+                  onBeforePrint={async () => {
                     if (isViewPrintDetailsEnabled) {
                       const requestIds = extractPickSlipRequestIds(pickSlipsData);
-                      this.savePrintEventDetails(requestIds);
+                      console.log('in ReqRoute before await');
+                      await this.savePrintEventDetails(requestIds);
+                      console.log('in ReqRoute after await');
                     }
                   }}
                 >
@@ -1548,11 +1557,11 @@ class RequestsRoute extends React.Component {
                     })
                     }
                   onBeforePrint={
-                    () => {
+                    async () => {
                       if (isViewPrintDetailsEnabled) {
                         const selectedPickSlips = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
                         const selectedRequestIds = extractPickSlipRequestIds(selectedPickSlips);
-                        this.savePrintEventDetails(selectedRequestIds);
+                        await this.savePrintEventDetails(selectedRequestIds);
                       }
                     }
                   }
