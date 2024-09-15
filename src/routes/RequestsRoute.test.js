@@ -246,6 +246,7 @@ const userData = {
     personal: {},
   }
 };
+const createRequestButtonLabel = 'Create request';
 const printDetailsMockData = {
   count: 11,
   lastPrintedDate: '2024-08-03T13:33:31.868Z',
@@ -326,9 +327,9 @@ SearchAndSort.mockImplementation(jest.fn(({
         </button>
         <button
           type="button"
-          onClick={() => onCreate({}, userData)}
+          onClick={() => onCreate(userData)}
         >
-          Create request
+          {createRequestButtonLabel}
         </button>
       </div>
       {actionMenu({ onToggle: jest.fn() })}
@@ -728,28 +729,72 @@ describe('RequestsRoute', () => {
 
       expect(printSearchSlipsLabel).toBeInTheDocument();
     });
+  });
 
-    it.skip('should handle request creation', () => {
-      const createRequestButton = screen.getByText('Create request');
-      const expectedArgs = [
-        `${defaultProps.stripes.okapi.url}/${requestUrl}`,
-        {
-          method: 'POST',
-          body: JSON.stringify({}),
-        }
-      ];
+  describe('When single data tenant', () => {
+    const response = {
+      id: 'responseId',
+    };
+    const props = {
+      ...defaultProps,
+      mutator: {
+        ...defaultProps.mutator,
+        records: {
+          ...defaultProps.mutator.records,
+          POST: jest.fn().mockResolvedValue(response),
+        },
+      },
+    };
+
+    beforeEach(() => {
+      isMultiDataTenant.mockReturnValue(false);
+      renderComponent(props);
+    });
+
+    it('should handle request creation', () => {
+      const createRequestButton = screen.getByText(createRequestButtonLabel);
 
       fireEvent.click(createRequestButton);
 
-      expect(global.fetch).toHaveBeenCalledWith(...expectedArgs);
+      expect(props.mutator.records.POST).toHaveBeenCalledWith(userData);
+    });
+
+    it('should redirect to details page', async () => {
+      const createRequestButton = screen.getByText(createRequestButtonLabel);
+
+      fireEvent.click(createRequestButton);
+
+      await waitFor(() => {
+        expect(props.history.push).toHaveBeenCalledWith(`${props.match.path}/view/${response.id}`);
+      });
+    });
+
+    it('should send callout', async () => {
+      const createRequestButton = screen.getByText(createRequestButtonLabel);
+
+      sendCallout.mockClear();
+      fireEvent.click(createRequestButton);
+
+      await waitFor(() => {
+        expect(sendCallout).toHaveBeenCalled();
+      });
     });
   });
 
   describe('When multi data tenant', () => {
     const requestHeaders = { test: 'test' };
     const fetchSpy = jest.fn();
+    const response = {
+      id: 'responseId',
+    };
     const props = {
       ...defaultProps,
+      mutator: {
+        ...defaultProps.mutator,
+        ecsTlrRecords: {
+          POST: jest.fn().mockResolvedValue(response),
+        },
+      },
       stripes: {
         ...defaultProps.stripes,
         user: {
@@ -777,13 +822,21 @@ describe('RequestsRoute', () => {
             ecsTlrFeatureEnabled: true,
           }),
         });
-        checkIfUserInCentralTenant.mockReturnValueOnce(true);
+        checkIfUserInCentralTenant.mockReturnValue(true);
         global.fetch = fetchSpy;
         renderComponent(props);
       });
 
       it('should use correct endpoint to get ecs tlr settings', () => {
         expect(fetchSpy).toHaveBeenCalledWith(`${defaultProps.stripes.okapi.url}/tlr/settings`, requestHeaders);
+      });
+
+      it('should handle request creation', () => {
+        const createRequestButton = screen.getByText(createRequestButtonLabel);
+
+        fireEvent.click(createRequestButton);
+
+        expect(props.mutator.ecsTlrRecords.POST).toHaveBeenCalledWith(userData);
       });
     });
 
