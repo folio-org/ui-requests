@@ -23,6 +23,7 @@ import {
   Row,
   NoValue,
 } from '@folio/stripes/components';
+import { checkIfUserInCentralTenant } from '@folio/stripes/core';
 
 import {
   requestTypeOptionMap,
@@ -37,6 +38,8 @@ import {
   DCB_USER,
   SLIPS_TYPE,
   REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS,
+  CENTRAL_TENANT_URLS,
+  SINGLE_TENANT_URLS,
 } from './constants';
 
 import css from './requests.css';
@@ -366,15 +369,19 @@ export const getRequestLevelValue = (value) => {
 export const getInstanceQueryString = (hrid, id) => `("hrid"=="${hrid}" or "id"=="${id || hrid}")`;
 
 export const generateUserName = (user) => {
-  const {
-    firstName,
-    lastName,
-    middleName,
-  } = user;
+  if (user) {
+    const {
+      firstName,
+      lastName,
+      middleName,
+    } = user;
 
-  const shownMiddleName = middleName ? ` ${middleName}` : '';
+    const shownMiddleName = middleName ? ` ${middleName}` : '';
 
-  return `${lastName}${firstName ? ', ' + firstName + shownMiddleName : ''}`;
+    return `${lastName}${firstName ? ', ' + firstName + shownMiddleName : ''}`;
+  }
+
+  return '';
 };
 
 export const handleKeyCommand = (handler, { disabled } = {}) => {
@@ -524,4 +531,15 @@ export const getRequester = (proxy, selectedUser) => {
   }
 
   return selectedUser;
+};
+
+export const getRequestUrl = (actionName, stripes) => {
+  const isMultiTenant = isMultiDataTenant(stripes);
+  const isUserInCentralTenant = checkIfUserInCentralTenant(stripes);
+
+  if (isMultiTenant && isUserInCentralTenant) {
+    return CENTRAL_TENANT_URLS[actionName];
+  }
+
+  return SINGLE_TENANT_URLS[actionName];
 };

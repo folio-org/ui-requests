@@ -3,6 +3,8 @@ import {
   isEmpty,
   isArray,
   size,
+  unset,
+  cloneDeep,
 } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -68,6 +70,8 @@ import {
   SETTINGS_SCOPES,
   SETTINGS_KEYS,
   ITEM_QUERIES,
+  REQUEST_ACTION_NAMES,
+  CENTRAL_TENANT_URLS,
   PRINT_DETAILS_COLUMNS,
   RESOURCE_TYPES,
   requestFilterTypes,
@@ -85,6 +89,7 @@ import {
   getSelectedSlipDataMulti,
   selectedRowsNonPrintable,
   getNextSelectedRowsState,
+  getRequestUrl,
   isMultiDataTenant,
 } from '../utils';
 import packageInfo from '../../package';
@@ -146,6 +151,7 @@ export const getLastPrintedDetails = (printDetails, intl) => {
 export const urls = {
   user: (value, idType) => {
     const query = stringify({ query: `(${idType}=="${value}")` });
+
     return `users?${query}`;
   },
   item: (value, idType) => {
@@ -208,12 +214,14 @@ export const urls = {
     instanceId,
     requestId,
     operation,
-  }) => {
+  }, idType, stripes) => {
+    const url = getRequestUrl(REQUEST_ACTION_NAMES.GET_SERVICE_POINTS, stripes);
+
     if (requestId) {
-      return `circulation/requests/allowed-service-points?operation=${operation}&requestId=${requestId}`;
+      return `${url}?operation=${operation}&requestId=${requestId}`;
     }
 
-    let requestUrl = `circulation/requests/allowed-service-points?requesterId=${requesterId}&operation=${operation}`;
+    let requestUrl = `${url}?requesterId=${requesterId}&operation=${operation}`;
 
     if (itemId) {
       requestUrl = `${requestUrl}&itemId=${itemId}`;
@@ -365,6 +373,12 @@ class RequestsRoute extends React.Component {
         staticFallback: { params: {} },
       },
     },
+    ecsTlrRecords: {
+      type: 'okapi',
+      path: CENTRAL_TENANT_URLS[REQUEST_ACTION_NAMES.CREATE_REQUEST],
+      fetch: false,
+      throwErrors: false,
+    },
     reportRecords: {
       type: 'okapi',
       path: 'circulation/requests',
@@ -502,6 +516,9 @@ class RequestsRoute extends React.Component {
     mutator: PropTypes.shape({
       records: PropTypes.shape({
         GET: PropTypes.func,
+        POST: PropTypes.func,
+      }),
+      ecsTlrRecords: PropTypes.shape({
         POST: PropTypes.func,
       }),
       reportRecords: PropTypes.shape({
@@ -1000,7 +1017,9 @@ class RequestsRoute extends React.Component {
     const { stripes } = this.props;
     const query = urls[resource](value, idType, stripes);
 
-    return fetch(`${this.okapiUrl}/${query}`, this.httpHeadersOptions).then(response => response.json());
+    return fetch(`${this.okapiUrl}/${query}`, this.httpHeadersOptions)
+      .then(response => response.json())
+      .catch(() => null);
   }
 
   toggleModal() {
@@ -1097,26 +1116,45 @@ class RequestsRoute extends React.Component {
     this.props.mutator.activeRecord.update({ patronId: patron.id });
   };
 
-  create = (data) => {
+  create = (requestData) => {
+    const { stripes } = this.props;
+    const userPersonalData = cloneDeep(requestData?.requester?.personal);
+    let mutator = this.props.mutator.records;
+
+    if (isMultiDataTenant(stripes) && checkIfUserInCentralTenant(stripes)) {
+      unset(requestData, 'item');
+      unset(requestData, 'requester');
+      unset(requestData, 'holdingsRecordId');
+
+      mutator = this.props.mutator.ecsTlrRecords;
+    }
+
     const query = new URLSearchParams(this.props.location.search);
     const mode = query.get('mode');
 
-    return this.props.mutator.records.POST(data)
-      .then(() => {
-        this.closeLayer();
+    return mutator.POST(requestData)
+      .then((res) => {
+        const {
+          match: {
+            path,
+          },
+          history,
+        } = this.props;
+
+        history.push(`${path}/view/${res?.primaryRequestId || res?.id}`);
 
         this.context.sendCallout({
           message: isDuplicateMode(mode)
             ? (
               <FormattedMessage
                 id="ui-requests.duplicateRequest.success"
-                values={{ requester: generateUserName(data.requester.personal) }}
+                values={{ requester: generateUserName(userPersonalData) }}
               />
             )
             : (
               <FormattedMessage
                 id="ui-requests.createRequest.success"
-                values={{ requester: generateUserName(data.requester.personal) }}
+                values={{ requester: generateUserName(userPersonalData) }}
               />
             ),
         });

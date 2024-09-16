@@ -88,6 +88,7 @@ const testIds = {
   rowCheckbox: 'rowCheckbox',
   selectRequestCheckbox: 'selectRequestCheckbox',
 };
+const requestUrl = 'url';
 
 const intlCache = createIntlCache();
 const intl = createIntl(
@@ -115,6 +116,8 @@ jest.mock('../utils', () => ({
   getNextSelectedRowsState: jest.fn(),
   extractPickSlipRequestIds: jest.fn(),
   isMultiDataTenant: jest.fn(),
+  generateUserName: jest.fn(),
+  getRequestUrl: jest.fn(() => requestUrl),
 }));
 jest.mock('./utils', () => ({
   ...jest.requireActual('./utils'),
@@ -238,6 +241,12 @@ const mockedRequest = {
   },
   id: 'requestId',
 };
+const userData = {
+  requester: {
+    personal: {},
+  }
+};
+const createRequestButtonLabel = 'Create request';
 const printDetailsMockData = {
   count: 11,
   lastPrintedDate: '2024-08-03T13:33:31.868Z',
@@ -264,6 +273,7 @@ SearchAndSort.mockImplementation(jest.fn(({
   customPaneSub,
   columnMapping,
   resultsFormatter,
+  onCreate,
 }) => {
   const onClickActions = () => {
     onDuplicate(parentResources.records.records[0]);
@@ -314,6 +324,12 @@ SearchAndSort.mockImplementation(jest.fn(({
             values: ['Value4', 'Value5']
           })}
         >onFilterChange
+        </button>
+        <button
+          type="button"
+          onClick={() => onCreate(userData)}
+        >
+          {createRequestButtonLabel}
         </button>
       </div>
       {actionMenu({ onToggle: jest.fn() })}
@@ -715,11 +731,70 @@ describe('RequestsRoute', () => {
     });
   });
 
+  describe('When single data tenant', () => {
+    const response = {
+      id: 'responseId',
+    };
+    const props = {
+      ...defaultProps,
+      mutator: {
+        ...defaultProps.mutator,
+        records: {
+          ...defaultProps.mutator.records,
+          POST: jest.fn().mockResolvedValue(response),
+        },
+      },
+    };
+
+    beforeEach(() => {
+      isMultiDataTenant.mockReturnValue(false);
+      renderComponent(props);
+    });
+
+    it('should handle request creation', () => {
+      const createRequestButton = screen.getByText(createRequestButtonLabel);
+
+      fireEvent.click(createRequestButton);
+
+      expect(props.mutator.records.POST).toHaveBeenCalledWith(userData);
+    });
+
+    it('should redirect to details page', async () => {
+      const createRequestButton = screen.getByText(createRequestButtonLabel);
+
+      fireEvent.click(createRequestButton);
+
+      await waitFor(() => {
+        expect(props.history.push).toHaveBeenCalledWith(`${props.match.path}/view/${response.id}`);
+      });
+    });
+
+    it('should send callout', async () => {
+      const createRequestButton = screen.getByText(createRequestButtonLabel);
+
+      sendCallout.mockClear();
+      fireEvent.click(createRequestButton);
+
+      await waitFor(() => {
+        expect(sendCallout).toHaveBeenCalled();
+      });
+    });
+  });
+
   describe('When multi data tenant', () => {
     const requestHeaders = { test: 'test' };
     const fetchSpy = jest.fn();
+    const response = {
+      id: 'responseId',
+    };
     const props = {
       ...defaultProps,
+      mutator: {
+        ...defaultProps.mutator,
+        ecsTlrRecords: {
+          POST: jest.fn().mockResolvedValue(response),
+        },
+      },
       stripes: {
         ...defaultProps.stripes,
         user: {
@@ -747,13 +822,21 @@ describe('RequestsRoute', () => {
             ecsTlrFeatureEnabled: true,
           }),
         });
-        checkIfUserInCentralTenant.mockReturnValueOnce(true);
+        checkIfUserInCentralTenant.mockReturnValue(true);
         global.fetch = fetchSpy;
         renderComponent(props);
       });
 
       it('should use correct endpoint to get ecs tlr settings', () => {
         expect(fetchSpy).toHaveBeenCalledWith(`${defaultProps.stripes.okapi.url}/tlr/settings`, requestHeaders);
+      });
+
+      it('should handle request creation', () => {
+        const createRequestButton = screen.getByText(createRequestButtonLabel);
+
+        fireEvent.click(createRequestButton);
+
+        expect(props.mutator.ecsTlrRecords.POST).toHaveBeenCalledWith(userData);
       });
     });
 
@@ -1747,33 +1830,33 @@ describe('RequestsRoute', () => {
       const instanceId = 'instanceIdUrl';
 
       it('should return url with "itemId"', () => {
-        const expectedUrl = `circulation/requests/allowed-service-points?requesterId=${requesterId}&operation=${operation}&itemId=${itemId}`;
+        const expectedResult = `${requestUrl}?requesterId=${requesterId}&operation=${operation}&itemId=${itemId}`;
 
         expect(urls.requestTypes({
           requesterId,
           itemId,
           operation,
-        })).toBe(expectedUrl);
+        })).toBe(expectedResult);
       });
 
       it('should return url with "instanceId"', () => {
-        const expectedUrl = `circulation/requests/allowed-service-points?requesterId=${requesterId}&operation=${operation}&instanceId=${instanceId}`;
+        const expectedResult = `${requestUrl}?requesterId=${requesterId}&operation=${operation}&instanceId=${instanceId}`;
 
         expect(urls.requestTypes({
           requesterId,
           instanceId,
           operation,
-        })).toBe(expectedUrl);
+        })).toBe(expectedResult);
       });
 
       it('should return url with "requestId"', () => {
         const requestId = 'requestId';
-        const expectedUrl = `circulation/requests/allowed-service-points?operation=${operation}&requestId=${requestId}`;
+        const expectedResult = `${requestUrl}?operation=${operation}&requestId=${requestId}`;
 
         expect(urls.requestTypes({
           requestId,
           operation,
-        })).toBe(expectedUrl);
+        })).toBe(expectedResult);
       });
     });
 
