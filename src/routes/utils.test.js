@@ -1,6 +1,4 @@
-import { cloneDeep } from 'lodash';
 import {
-  requestPrintStatusType,
   requestStatuses,
   requestTypesMap,
 } from '../constants';
