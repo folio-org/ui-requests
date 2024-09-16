@@ -65,7 +65,6 @@ import {
   DEFAULT_REQUEST_TYPE_VALUE,
   INPUT_REQUEST_SEARCH_SELECTOR,
   PRINT_DETAILS_COLUMNS,
-  requestFilterTypes,
 } from '../constants';
 import {
   buildUrl,
@@ -101,8 +100,6 @@ import {
   getFormattedYears,
   getStatusQuery,
   getFullNameForCsvRecords,
-  getPrintStatusFilteredData,
-  filterRecordsByPrintStatus,
 } from './utils';
 import SinglePrintButtonForPickSlip from '../components/SinglePrintButtonForPickSlip';
 
@@ -290,8 +287,6 @@ export const buildHoldRecords = (records) => {
     return record;
   });
 };
-
-export const viewPrintDetailsPath = 'circulationSettings.records[0].value.enablePrintLog';
 
 class RequestsRoute extends React.Component {
   static contextType = CalloutContext;
@@ -650,7 +645,6 @@ class RequestsRoute extends React.Component {
       titleLevelRequestsFeatureEnabled,
       createTitleLevelRequestsByDefault,
       isViewPrintDetailsEnabled: false,
-      selectedPrintStatusFilters: [],
     };
 
     this.pickSlipsPrintContentRef = React.createRef();
@@ -662,7 +656,7 @@ class RequestsRoute extends React.Component {
   static getDerivedStateFromProps(props, state) {
     const layer = (props.resources.query || {}).layer;
     const newState = {};
-    const currViewPrintDetailsSettings = get(props.resources, viewPrintDetailsPath) === 'true';
+    const currViewPrintDetailsSettings = get(props.resources, 'circulationSettings.records[0].value.enablePrintLog') === 'true';
 
     if (!layer) {
       newState.dupRequest = null;
@@ -683,13 +677,13 @@ class RequestsRoute extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const patronBlocks = get(this.props.resources, ['patronBlocks', 'records'], []);
     const prevBlocks = get(prevProps.resources, ['patronBlocks', 'records'], []);
-    const { submitting, isViewPrintDetailsEnabled, selectedPrintStatusFilters } = this.state;
+    const { submitting, isViewPrintDetailsEnabled } = this.state;
     const prevExpired = prevBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
     const expired = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
     const { id: currentServicePointId } = this.getCurrentServicePointInfo();
     const prevStateServicePointId = get(prevProps.resources.currentServicePoint, 'id');
     const { configs: prevConfigs } = prevProps.resources;
-    const { configs, query: { filters } } = this.props.resources;
+    const { configs } = this.props.resources;
     const instanceId = parse(this.props.location?.search)?.instanceId;
 
     if (prevExpired.length > 0 && expired.length === 0) {
@@ -733,30 +727,6 @@ class RequestsRoute extends React.Component {
 
     if (isViewPrintDetailsEnabled !== prevState.isViewPrintDetailsEnabled && !isViewPrintDetailsEnabled) {
       this.columnHeadersMap = getFilteredColumnHeadersMap(this.columnHeadersMap);
-    }
-
-    if (filters?.includes(requestFilterTypes.PRINT_STATUS)) {
-      const printStatusFilterInQuery = this.getActiveFilters()[requestFilterTypes.PRINT_STATUS];
-
-      this.updateSelectedPrintStatusFilters(isViewPrintDetailsEnabled, selectedPrintStatusFilters, printStatusFilterInQuery);
-    }
-  }
-
-  updateSelectedPrintStatusFilters(isViewPrintDetailsEnabled, selectedPrintStatusFilters, printStatusFilterInQuery) {
-    /**
-     * Updates the `selectedPrintStatusFilters` state based on pre selected filters when user navigates back to Request App.
-     *
-     * The function performs the following actions:
-     * 1. If `isViewPrintDetailsEnabled` is true and if `Print Status` filters contains exactly one filter:
-     *    - it updates state to set `selectedPrintStatusFilters` to this one `Print Status` filter.
-     *
-     * 2. If `isViewPrintDetailsEnabled` is false and `filters` in query includes 'PRINT STATUS' filter:
-     *    - it clears the 'PRINT STATUS' filter from query by invoking `handleFilterChange`.
-     */
-    if (isViewPrintDetailsEnabled && selectedPrintStatusFilters.length === 0 && printStatusFilterInQuery?.length === 1) {
-      this.setState({ selectedPrintStatusFilters: [printStatusFilterInQuery[0]] });
-    } else if (!isViewPrintDetailsEnabled && printStatusFilterInQuery?.length) {
-      this.handleFilterChange({ name: requestFilterTypes.PRINT_STATUS, values: [] });
     }
   }
 
@@ -834,33 +804,23 @@ class RequestsRoute extends React.Component {
   // Export function for the CSV search report action
   async exportData() {
     this.setState({ csvReportPending: true });
-    const { isViewPrintDetailsEnabled, selectedPrintStatusFilters } = this.state;
-
-    const activeFilters = this.getActiveFilters();
-    const activeFilterKeys = Object.keys(activeFilters);
-    const isOnlyPrintStatusFilterSelected = activeFilterKeys.length === 1 && activeFilterKeys[0] === requestFilterTypes.PRINT_STATUS;
 
     // Build a custom query for the CSV record export, which has to include
     // all search and filter parameters
-    const queryClauses = [];
     let queryString;
-
+    const queryClauses = [];
     const queryTerm = this.props.resources?.query?.query;
-    const filterQuery = filters2cql(RequestsFiltersConfig, deparseFilters(activeFilters));
+    const filterQuery = filters2cql(RequestsFiltersConfig, deparseFilters(this.getActiveFilters()));
 
     if (queryTerm) {
       queryString = `(requesterId=="${queryTerm}" or requester.barcode="${queryTerm}*" or item.title="${queryTerm}*" or item.barcode=="${queryTerm}*" or itemId=="${queryTerm}")`;
       queryClauses.push(queryString);
     }
     if (filterQuery) queryClauses.push(filterQuery);
-    if (isOnlyPrintStatusFilterSelected) queryClauses.push('cql.allRecords=1');
 
     queryString = queryClauses.join(' and ');
     const records = await this.fetchReportData(this.props.mutator.reportRecords, queryString);
-
-    const printStatusFilteredRecords = isViewPrintDetailsEnabled && selectedPrintStatusFilters.length === 1 &&
-      filterRecordsByPrintStatus(records, selectedPrintStatusFilters);
-    const recordsToCSV = this.buildRecords(printStatusFilteredRecords || records);
+    const recordsToCSV = this.buildRecords(records);
 
     exportCsv(recordsToCSV, {
       onlyFields: this.columnHeadersMap,
@@ -925,6 +885,7 @@ class RequestsRoute extends React.Component {
         record.requester.name = getFullNameForCsvRecords(record.requester);
       }
       if (record.printDetails) {
+        // change data mapping here ...
         const fullName = getFullNameForCsvRecords(record.printDetails.lastPrintRequester);
         const lastPrintedDate = record.printDetails.lastPrintedDate || '';
         const date = lastPrintedDate ? `, ${lastPrintedDate}` : '';
@@ -1232,10 +1193,6 @@ class RequestsRoute extends React.Component {
   }
 
   handleFilterChange = ({ name, values }) => {
-    if (name === requestFilterTypes.PRINT_STATUS) {
-      this.setState({ selectedPrintStatusFilters: values });
-    }
-
     const { mutator } = this.props;
     const newFilters = {
       ...this.getActiveFilters(),
@@ -1381,7 +1338,6 @@ class RequestsRoute extends React.Component {
       holdsShelfReportPending,
       createTitleLevelRequestsByDefault,
       isViewPrintDetailsEnabled,
-      selectedPrintStatusFilters,
     } = this.state;
     const isPrintHoldRequestsEnabled = getPrintHoldRequestsEnabled(resources.printHoldRequests);
     const { name: servicePointName } = this.getCurrentServicePointInfo();
@@ -1427,7 +1383,6 @@ class RequestsRoute extends React.Component {
 
     const isPickSlipsArePending = resources?.pickSlips?.isPending;
     const isSearchSlipsArePending = resources?.searchSlips?.isPending;
-    const isRequestsRecordsLoaded = resources.records.hasLoaded;
     const requestsEmpty = isEmpty(requests);
     const isPickSlipsEmpty = isEmpty(pickSlips);
     const isSearchSlipsEmpty = isEmpty(searchSlips);
@@ -1436,14 +1391,6 @@ class RequestsRoute extends React.Component {
     const pickSlipsData = convertToSlipData(pickSlips, intl, timezone, locale, SLIPS_TYPE.PICK_SLIP, user);
     const searchSlipsData = convertToSlipData(searchSlips, intl, timezone, locale, SLIPS_TYPE.SEARCH_SLIP_HOLD_REQUESTS);
     let multiSelectPickSlipData = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
-    /**
-     * For 'displayPrintStatusFilteredData' to be true the length of 'selectedPrintStatusFilters' must be 1.
-     * This is because we only filter data when exactly one PrintStatus filter is selected ([Printed] or [Not Printed]).
-     * If the filter array is empty or contains both filters ([] or [Printed, Not Printed]),
-     * no filtering is needed as the data should be used directly from the query response.
-     */
-    const displayPrintStatusFilteredData = isViewPrintDetailsEnabled &&
-    isRequestsRecordsLoaded && selectedPrintStatusFilters.length === 1;
 
     const resultsFormatter = getListFormatter(
       {
@@ -1665,8 +1612,7 @@ class RequestsRoute extends React.Component {
               customPaneSub={this.renderPaneSub()}
               onCreate={this.create}
               onCloseNewRecord={this.handleCloseNewRecord}
-              parentResources={displayPrintStatusFilteredData ?
-                getPrintStatusFilteredData(resources, selectedPrintStatusFilters) : resources}
+              parentResources={resources}
               parentMutator={mutator}
               detailProps={{
                 onChangePatron: this.onChangePatron,

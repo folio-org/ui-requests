@@ -44,22 +44,3 @@ export const getFullNameForCsvRecords = (record) => {
   const { firstName = '', middleName = '', lastName = '' } = record;
   return [firstName, middleName, lastName].filter(Boolean).join(' ');
 };
-
-export const filterRecordsByPrintStatus = (records, printStatusFilters) => {
-  const isPrintedFilterSelected = printStatusFilters[0] === requestPrintStatusType.PRINTED;
-  return records.filter(record => {
-    const hasCopiesCount = record?.printDetails?.count !== undefined;
-
-    return isPrintedFilterSelected ? hasCopiesCount : !hasCopiesCount;
-  });
-};
-
-export const getPrintStatusFilteredData = (resources, printStatusFilters) => {
-  const clonedResources = cloneDeep(resources);
-  const filteredRecords = filterRecordsByPrintStatus(clonedResources.records.records, printStatusFilters);
-
-  clonedResources.records.records = filteredRecords;
-  clonedResources.records.other.totalRecords = filteredRecords.length;
-
-  return clonedResources;
-};
