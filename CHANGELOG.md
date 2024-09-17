@@ -26,6 +26,7 @@
 * Add missing sub-permissions to fetch staff slips records. Refs UIREQ-1129.
 * Add missing sub-permissions to fetch "pick-slips" and "search-slips" records in "Requests: View, edit, cancel" permission. Refs UIREQ-1137.
 * Update permissions set to be able to get item/instance information. Refs UIREQ-1148.
+* *BREAKING* Migrate to new endpoints to get request types and to create a new request. Refs UIREQ-1113.
 
 ## [9.1.1] (https://github.com/folio-org/ui-checkin/tree/v9.1.1) (2024-03-27)
 [Full Changelog](https://github.com/folio-org/ui-checkin/compare/v9.1.0...v9.1.1)
