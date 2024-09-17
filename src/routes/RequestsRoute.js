@@ -127,8 +127,8 @@ export const extractPickSlipRequestIds = (pickSlipsData) => {
 
 export const getLastPrintedDetails = (printDetails, intl) => {
   const fullName = getFullName(printDetails?.lastPrintRequester);
-  const formattedDate = intl.formatDate(printDetails?.lastPrintedDate);
-  const formattedTime = intl.formatTime(printDetails?.lastPrintedDate);
+  const formattedDate = intl.formatDate(printDetails?.printEventDate);
+  const formattedTime = intl.formatTime(printDetails?.printEventDate);
   const localizedDateTime = `${formattedDate}${formattedTime ? ', ' : ''}${formattedTime}`;
 
   return fullName + ' ' + localizedDateTime;
@@ -269,7 +269,7 @@ export const getListFormatter = (
   'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
   'callNumber': rq => effectiveCallNumber(rq.item),
   'servicePoint': rq => get(rq, 'pickupServicePoint.name', DEFAULT_FORMATTER_VALUE),
-  'copies': rq => get(rq, PRINT_DETAILS_COLUMNS.COPIES, DEFAULT_FORMATTER_VALUE),
+  'copies': rq => get(rq, 'printDetails.printCount', DEFAULT_FORMATTER_VALUE),
   'printed': rq => (rq.printDetails ? getLastPrintedDetails(rq.printDetails, intl) : DEFAULT_FORMATTER_VALUE),
 });
 
@@ -333,6 +333,8 @@ class RequestsRoute extends React.Component {
               'requestDate': 'requestDate',
               'position': 'position/number',
               'proxy': 'proxy',
+              'copies': 'printDetails.printCount/number',
+              'printed': 'printDetails.printEventDate',
             },
             RequestsFiltersConfig,
             2, // do not fetch unless we have a query or a filter
@@ -1639,7 +1641,7 @@ class RequestsRoute extends React.Component {
               renderFilters={this.renderFilters}
               resultIsSelected={this.resultIsSelected}
               onFilterChange={this.handleFilterChange}
-              sortableColumns={['requestDate', 'title', 'year', 'itemBarcode', 'callNumber', 'type', 'requestStatus', 'position', 'servicePoint', 'requester', 'requesterBarcode', 'proxy']}
+              sortableColumns={['requestDate', 'title', 'year', 'itemBarcode', 'callNumber', 'type', 'requestStatus', 'position', 'servicePoint', 'requester', 'requesterBarcode', 'proxy', 'copies', 'printed']}
               pageAmount={100}
               pagingType={MCLPagingTypes.PREV_NEXT}
             />
