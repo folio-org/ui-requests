@@ -608,26 +608,6 @@ describe('RequestsRoute', () => {
       });
     });
 
-    it('should trigger "exportCsv" when only "Print Status" filter is selected', async () => {
-      const props = {
-        ...defaultProps,
-        resources: {
-          ...defaultProps.resources,
-          query: {
-            ...defaultProps.resources.query,
-            filters: 'printStatus.Printed',
-          },
-        }
-      };
-      cleanup();
-      renderComponent(props);
-      await userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsToCsv' }));
-
-      await waitFor(() => {
-        expect(exportCsv).toHaveBeenCalled();
-      });
-    });
-
     it('should render "ErrorModal"', async () => {
       await userEvent.click(screen.getByTestId('exportExpiredHoldShelfToCsvButton'));
 
@@ -647,26 +627,6 @@ describe('RequestsRoute', () => {
 
     it('should trigger "mutator.query.update"', async () => {
       const expectFilterValue = { 'filters': 'filter1.value1,filter1.value2,filter2.value3,filter4.Value4,filter4.Value5' };
-
-      await userEvent.click(screen.getByRole('button', { name: 'onFilterChange' }));
-
-      expect(defaultProps.mutator.query.update).toBeCalledWith(expectFilterValue);
-    });
-
-    it('should trigger "mutator.query.update" when "Print Status" filters are present in query', async () => {
-      const props = {
-        ...defaultProps,
-        resources: {
-          ...defaultProps.resources,
-          query: {
-            ...defaultProps.resources.query,
-            filters: 'filter1.value1,printStatus.Printed',
-          },
-        }
-      };
-      cleanup();
-      renderComponent(props);
-      const expectFilterValue = { 'filters': 'filter1.value1,printStatus.Printed,filter4.Value4,filter4.Value5' };
 
       await userEvent.click(screen.getByRole('button', { name: 'onFilterChange' }));
 

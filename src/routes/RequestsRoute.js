@@ -807,8 +807,9 @@ class RequestsRoute extends React.Component {
 
     // Build a custom query for the CSV record export, which has to include
     // all search and filter parameters
-    let queryString;
     const queryClauses = [];
+    let queryString;
+
     const queryTerm = this.props.resources?.query?.query;
     const filterQuery = filters2cql(RequestsFiltersConfig, deparseFilters(this.getActiveFilters()));
 
@@ -885,7 +886,6 @@ class RequestsRoute extends React.Component {
         record.requester.name = getFullNameForCsvRecords(record.requester);
       }
       if (record.printDetails) {
-        // change data mapping here ...
         const fullName = getFullNameForCsvRecords(record.printDetails.lastPrintRequester);
         const lastPrintedDate = record.printDetails.lastPrintedDate || '';
         const date = lastPrintedDate ? `, ${lastPrintedDate}` : '';
@@ -1639,7 +1639,8 @@ class RequestsRoute extends React.Component {
               renderFilters={this.renderFilters}
               resultIsSelected={this.resultIsSelected}
               onFilterChange={this.handleFilterChange}
-              sortableColumns={['requestDate', 'title', 'year', 'itemBarcode', 'callNumber', 'type', 'requestStatus', 'position', 'servicePoint', 'requester', 'requesterBarcode', 'proxy']}
+              sortableColumns={['requestDate', 'title', 'year', 'itemBarcode', 'callNumber', 'type', 'requestStatus',
+                'position', 'servicePoint', 'requester', 'requesterBarcode', 'proxy']}
               pageAmount={100}
               pagingType={MCLPagingTypes.PREV_NEXT}
             />
