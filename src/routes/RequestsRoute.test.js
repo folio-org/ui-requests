@@ -232,8 +232,8 @@ const mockedRequest = {
   id: 'requestId',
 };
 const printDetailsMockData = {
-  count: 11,
-  lastPrintedDate: '2024-08-03T13:33:31.868Z',
+  printCount: 11,
+  printEventDate: '2024-08-03T13:33:31.868Z',
   lastPrintRequester: { firstName: 'firstName', middleName: 'middleName', lastName: 'lastName' },
 };
 
@@ -1301,7 +1301,7 @@ describe('RequestsRoute', () => {
 
     describe('when formatting copies column', () => {
       it('should return copies for copies column', () => {
-        expect(listFormatter.copies(requestWithData)).toBe(requestWithData.printDetails.count);
+        expect(listFormatter.copies(requestWithData)).toBe(requestWithData.printDetails.printCount);
       });
     });
 
@@ -1309,8 +1309,8 @@ describe('RequestsRoute', () => {
       it('should return last printed details for printed column', () => {
         getFullName.mockReturnValueOnce('lastName, firstName middleName');
 
-        const expectedFormattedDate = intl.formatDate(requestWithData.printDetails.lastPrintedDate);
-        const expectedFormattedTime = intl.formatTime(requestWithData.printDetails.lastPrintedDate);
+        const expectedFormattedDate = intl.formatDate(requestWithData.printDetails.printEventDate);
+        const expectedFormattedTime = intl.formatTime(requestWithData.printDetails.printEventDate);
         const expectedOutput =
         `lastName, firstName middleName ${expectedFormattedDate}${expectedFormattedTime ? ', ' : ''}${expectedFormattedTime}`;
 
@@ -1362,8 +1362,8 @@ describe('RequestsRoute', () => {
 
     it('should return the formatted full name and date/time correctly', () => {
       const printedDetails = getLastPrintedDetails(lastPrintDetails, intl);
-      const expectedFormattedDate = intl.formatDate(lastPrintDetails.lastPrintedDate);
-      const expectedFormattedTime = intl.formatTime(lastPrintDetails.lastPrintedDate);
+      const expectedFormattedDate = intl.formatDate(lastPrintDetails.printEventDate);
+      const expectedFormattedTime = intl.formatTime(lastPrintDetails.printEventDate);
       const expectedOutput =
         `lastName, firstName middleName ${expectedFormattedDate}${expectedFormattedTime ? ', ' : ''}${expectedFormattedTime}`;
 

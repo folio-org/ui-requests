@@ -199,7 +199,7 @@
   "pickupServicePoint.name": "Pickup service point",
   "requester.patronGroup.group": "Requester patron group",
   "tags.tagList": "Tags",
-  "printDetails.count": "# Copies",
+  "printDetails.printCount": "# Copies",
   "printDetails.lastPrintedDetails": "Printed",
 
   "notes.staffNotes": "Staff notes",

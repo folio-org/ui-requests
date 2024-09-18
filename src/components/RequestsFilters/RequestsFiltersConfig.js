@@ -38,21 +38,6 @@ export default [
     }
   },
   {
-    name: requestFilterTypes.PRINT_STATUS,
-    cql: 'printDetails.isPrinted',
-    values: [],
-    operator: '==',
-    parse: (value) => {
-      if (value.length === 1 && value.includes('Printed')) {
-        return '(printDetails.isPrinted==true)';
-      } else if (value.length === 1 && value.includes('Not printed')) {
-        return '(cql.allRecords=1 NOT printDetails.isPrinted="")';
-      } else {
-        return '(cql.allRecords=1 NOT printDetails.printed="" or printDetails.printed==true)';
-      }
-    }
-  },
-  {
     name: requestFilterTypes.PICKUP_SERVICE_POINT,
     cql: 'pickupServicePointId',
     values: [],

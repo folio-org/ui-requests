@@ -889,7 +889,7 @@ class RequestsRoute extends React.Component {
       }
       if (record.printDetails) {
         const fullName = getFullNameForCsvRecords(record.printDetails.lastPrintRequester);
-        const lastPrintedDate = record.printDetails.lastPrintedDate || '';
+        const lastPrintedDate = record.printDetails.printEventDate || '';
         const date = lastPrintedDate ? `, ${lastPrintedDate}` : '';
 
         record.printDetails.lastPrintedDetails = `${fullName}${date}`;
