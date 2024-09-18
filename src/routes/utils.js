@@ -41,3 +41,10 @@ export const getFullNameForCsvRecords = (record) => {
   const { firstName = '', middleName = '', lastName = '' } = record;
   return [firstName, middleName, lastName].filter(Boolean).join(' ');
 };
+
+export const processQuerySortString = (str) => {
+  const removeSubstrings = ['printed', 'copies', '-copies', '-printed'];
+  const remainingParts = str.split(',').filter(part => !removeSubstrings.includes(part));
+
+  return remainingParts.join(',') || '';
+};

@@ -9,6 +9,7 @@ import {
   isReorderableRequest,
   getStatusQuery,
   getFullNameForCsvRecords,
+  processQuerySortString,
 } from './utils';
 
 describe('utils', () => {
@@ -183,6 +184,32 @@ describe('utils', () => {
     it('should return empty string when all name parts are missing', () => {
       const record = {};
       expect(getFullNameForCsvRecords(record)).toBe('');
+    });
+  });
+
+  describe('processQuerySortString', () => {
+    it('should return the same string if no removable substrings are present', () => {
+      const input = 'title,requestDate';
+      const expectedOutput = 'title,requestDate';
+      expect(processQuerySortString(input)).toBe(expectedOutput);
+    });
+
+    it('should remove removable substrings and return non-removable substrings', () => {
+      const input = 'title,printed';
+      const expectedOutput = 'title';
+      expect(processQuerySortString(input)).toBe(expectedOutput);
+    });
+
+    it('should return an empty string when the input is empty', () => {
+      const input = '';
+      const expectedOutput = '';
+      expect(processQuerySortString(input)).toBe(expectedOutput);
+    });
+
+    it('should return an empty string when only removable substrings are present', () => {
+      const input = 'printed,copies';
+      const expectedOutput = '';
+      expect(processQuerySortString(input)).toBe(expectedOutput);
     });
   });
 });

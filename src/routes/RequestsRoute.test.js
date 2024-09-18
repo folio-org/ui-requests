@@ -501,6 +501,7 @@ describe('RequestsRoute', () => {
       },
       query: {
         filters: 'filter1.value1,filter1.value2,filter2.value3',
+        sort: 'printed, requestDate',
         instanceId: 'instanceId',
         query: 'testQueryTerm',
       },

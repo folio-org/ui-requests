@@ -100,6 +100,7 @@ import {
   getFormattedYears,
   getStatusQuery,
   getFullNameForCsvRecords,
+  processQuerySortString,
 } from './utils';
 import SinglePrintButtonForPickSlip from '../components/SinglePrintButtonForPickSlip';
 
@@ -685,7 +686,7 @@ class RequestsRoute extends React.Component {
     const { id: currentServicePointId } = this.getCurrentServicePointInfo();
     const prevStateServicePointId = get(prevProps.resources.currentServicePoint, 'id');
     const { configs: prevConfigs } = prevProps.resources;
-    const { configs } = this.props.resources;
+    const { configs, query } = this.props.resources;
     const instanceId = parse(this.props.location?.search)?.instanceId;
 
     if (prevExpired.length > 0 && expired.length === 0) {
@@ -729,6 +730,13 @@ class RequestsRoute extends React.Component {
 
     if (isViewPrintDetailsEnabled !== prevState.isViewPrintDetailsEnabled && !isViewPrintDetailsEnabled) {
       this.columnHeadersMap = getFilteredColumnHeadersMap(this.columnHeadersMap);
+    }
+
+    if (!isViewPrintDetailsEnabled && (query.sort?.includes('printed') || query.sort?.includes('copies'))) {
+      // Remove 'copies' and 'printed' from query sorting when the user disables
+      // 'Enable view print details (Pick slips)' in settings and returns to the Requests App.
+      const sort = processQuerySortString(query.sort);
+      this.props.mutator.query.update({ sort });
     }
   }
 
