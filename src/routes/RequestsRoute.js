@@ -686,8 +686,9 @@ class RequestsRoute extends React.Component {
     const { id: currentServicePointId } = this.getCurrentServicePointInfo();
     const prevStateServicePointId = get(prevProps.resources.currentServicePoint, 'id');
     const { configs: prevConfigs } = prevProps.resources;
-    const { configs, query } = this.props.resources;
-    const instanceId = parse(this.props.location?.search)?.instanceId;
+    const { resources, location, mutator } = this.props;
+    const { configs, query } = resources;
+    const instanceId = parse(location?.search)?.instanceId;
 
     if (prevExpired.length > 0 && expired.length === 0) {
       // eslint-disable-next-line react/no-did-update-set-state
@@ -698,8 +699,8 @@ class RequestsRoute extends React.Component {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ submitting: true });
       expired.forEach(p => {
-        this.props.mutator.activeRecord.update({ blockId: p.id });
-        this.props.mutator.patronBlocks.DELETE({ id: p.id });
+        mutator.activeRecord.update({ blockId: p.id });
+        mutator.patronBlocks.DELETE({ id: p.id });
       });
     }
 
@@ -720,12 +721,12 @@ class RequestsRoute extends React.Component {
       });
     }
 
-    if (!this.props.resources.query.instanceId && instanceId) {
-      this.props.mutator.query.update({ instanceId });
+    if (!query.instanceId && instanceId) {
+      mutator.query.update({ instanceId });
     }
 
-    if (!this.props.resources.records.isPending) {
-      this.onSearchComplete(this.props.resources.records);
+    if (!resources.records.isPending) {
+      this.onSearchComplete(resources.records);
     }
 
     if (isViewPrintDetailsEnabled !== prevState.isViewPrintDetailsEnabled && !isViewPrintDetailsEnabled) {
@@ -736,7 +737,7 @@ class RequestsRoute extends React.Component {
       // Remove 'copies' and 'printed' from query sorting when the user disables
       // 'Enable view print details (Pick slips)' in settings and returns to the Requests App.
       const sort = processQuerySortString(query.sort);
-      this.props.mutator.query.update({ sort });
+      mutator.query.update({ sort });
     }
   }
 
