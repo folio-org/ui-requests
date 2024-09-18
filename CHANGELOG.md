@@ -16,6 +16,7 @@
 * Add missing sub-permissions to fetch staff slips records. Refs UIREQ-1129.
 * Add missing sub-permissions to fetch "pick-slips" and "search-slips" records in "Requests: View, edit, cancel" permission. Refs UIREQ-1137.
 * Optimize performance of the "print-events-entry" API to reduce slowness during the initial call. Refs UIREQ-1130.
+* Revert Custom "Print Status" filter code implementation. Refs UIREQ-1146.
 
 ## [9.1.2] (https://github.com/folio-org/ui-requests/tree/v9.1.2) (2024-09-13)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.1.1...v9.1.2)
