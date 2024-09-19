@@ -100,7 +100,7 @@ import {
   getFormattedYears,
   getStatusQuery,
   getFullNameForCsvRecords,
-  processQuerySortString,
+  updateQuerySortString,
 } from './utils';
 import SinglePrintButtonForPickSlip from '../components/SinglePrintButtonForPickSlip';
 
@@ -270,7 +270,7 @@ export const getListFormatter = (
   'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
   'callNumber': rq => effectiveCallNumber(rq.item),
   'servicePoint': rq => get(rq, 'pickupServicePoint.name', DEFAULT_FORMATTER_VALUE),
-  'copies': rq => get(rq, 'printDetails.printCount', DEFAULT_FORMATTER_VALUE),
+  'copies': rq => get(rq, PRINT_DETAILS_COLUMNS.COPIES, DEFAULT_FORMATTER_VALUE),
   'printed': rq => (rq.printDetails ? getLastPrintedDetails(rq.printDetails, intl) : DEFAULT_FORMATTER_VALUE),
 });
 
@@ -736,7 +736,7 @@ class RequestsRoute extends React.Component {
     if (!isViewPrintDetailsEnabled && (query.sort?.includes('printed') || query.sort?.includes('copies'))) {
       // Remove 'copies' and 'printed' from query sorting when the user disables
       // 'Enable view print details (Pick slips)' in settings and returns to the Requests App.
-      const sort = processQuerySortString(query.sort);
+      const sort = updateQuerySortString(query.sort);
       mutator.query.update({ sort });
     }
   }

@@ -9,7 +9,7 @@ import {
   isReorderableRequest,
   getStatusQuery,
   getFullNameForCsvRecords,
-  processQuerySortString,
+  updateQuerySortString,
 } from './utils';
 
 describe('utils', () => {
@@ -187,23 +187,23 @@ describe('utils', () => {
     });
   });
 
-  describe('processQuerySortString', () => {
+  describe('updateQuerySortString', () => {
     it('should return the same string if no removable substrings are present', () => {
       const prop = 'title,requestDate';
       const expectedOutput = 'title,requestDate';
-      expect(processQuerySortString(prop)).toBe(expectedOutput);
+      expect(updateQuerySortString(prop)).toBe(expectedOutput);
     });
 
     it('should remove removable substrings and return non-removable substrings', () => {
       const prop = 'title,printed';
       const expectedOutput = 'title';
-      expect(processQuerySortString(prop)).toBe(expectedOutput);
+      expect(updateQuerySortString(prop)).toBe(expectedOutput);
     });
 
     it('should return "requestDate" when only removable substrings are present', () => {
       const prop = 'printed,copies';
       const expectedOutput = 'requestDate';
-      expect(processQuerySortString(prop)).toBe(expectedOutput);
+      expect(updateQuerySortString(prop)).toBe(expectedOutput);
     });
   });
 });
