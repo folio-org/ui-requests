@@ -62,7 +62,7 @@ describe('UI Requests', () => {
   it('should close keyboard shortcuts modal on clicking close button', () => {
     fireEvent.click(screen.getByText(labelIds.keyboardShortcuts));
 
-    const button = screen.getByRole('button', { name: /stripes-components.dismissModal/i });
+    const button = screen.getByLabelText('stripes-components.dismissModal');
 
     fireEvent.click(button);
 

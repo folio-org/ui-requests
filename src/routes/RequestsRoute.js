@@ -100,6 +100,7 @@ import {
   getFormattedYears,
   getStatusQuery,
   getFullNameForCsvRecords,
+  updateQuerySortString,
 } from './utils';
 import SinglePrintButtonForPickSlip from '../components/SinglePrintButtonForPickSlip';
 
@@ -127,8 +128,8 @@ export const extractPickSlipRequestIds = (pickSlipsData) => {
 
 export const getLastPrintedDetails = (printDetails, intl) => {
   const fullName = getFullName(printDetails?.lastPrintRequester);
-  const formattedDate = intl.formatDate(printDetails?.lastPrintedDate);
-  const formattedTime = intl.formatTime(printDetails?.lastPrintedDate);
+  const formattedDate = intl.formatDate(printDetails?.printEventDate);
+  const formattedTime = intl.formatTime(printDetails?.printEventDate);
   const localizedDateTime = `${formattedDate}${formattedTime ? ', ' : ''}${formattedTime}`;
 
   return fullName + ' ' + localizedDateTime;
@@ -333,6 +334,8 @@ class RequestsRoute extends React.Component {
               'requestDate': 'requestDate',
               'position': 'position/number',
               'proxy': 'proxy',
+              'copies': 'printDetails.printCount/number',
+              'printed': 'printDetails.printEventDate',
             },
             RequestsFiltersConfig,
             2, // do not fetch unless we have a query or a filter
@@ -683,8 +686,9 @@ class RequestsRoute extends React.Component {
     const { id: currentServicePointId } = this.getCurrentServicePointInfo();
     const prevStateServicePointId = get(prevProps.resources.currentServicePoint, 'id');
     const { configs: prevConfigs } = prevProps.resources;
-    const { configs } = this.props.resources;
-    const instanceId = parse(this.props.location?.search)?.instanceId;
+    const { resources, location, mutator } = this.props;
+    const { configs, query } = resources;
+    const instanceId = parse(location?.search)?.instanceId;
 
     if (prevExpired.length > 0 && expired.length === 0) {
       // eslint-disable-next-line react/no-did-update-set-state
@@ -695,8 +699,8 @@ class RequestsRoute extends React.Component {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ submitting: true });
       expired.forEach(p => {
-        this.props.mutator.activeRecord.update({ blockId: p.id });
-        this.props.mutator.patronBlocks.DELETE({ id: p.id });
+        mutator.activeRecord.update({ blockId: p.id });
+        mutator.patronBlocks.DELETE({ id: p.id });
       });
     }
 
@@ -717,16 +721,23 @@ class RequestsRoute extends React.Component {
       });
     }
 
-    if (!this.props.resources.query.instanceId && instanceId) {
-      this.props.mutator.query.update({ instanceId });
+    if (!query.instanceId && instanceId) {
+      mutator.query.update({ instanceId });
     }
 
-    if (!this.props.resources.records.isPending) {
-      this.onSearchComplete(this.props.resources.records);
+    if (!resources.records.isPending) {
+      this.onSearchComplete(resources.records);
     }
 
     if (isViewPrintDetailsEnabled !== prevState.isViewPrintDetailsEnabled && !isViewPrintDetailsEnabled) {
       this.columnHeadersMap = getFilteredColumnHeadersMap(this.columnHeadersMap);
+    }
+
+    if (!isViewPrintDetailsEnabled && (query.sort?.includes('printed') || query.sort?.includes('copies'))) {
+      // Remove 'copies' and 'printed' from query sorting when the user disables
+      // 'Enable view print details (Pick slips)' in settings and returns to the Requests App.
+      const sort = updateQuerySortString(query.sort);
+      mutator.query.update({ sort });
     }
   }
 
@@ -887,7 +898,7 @@ class RequestsRoute extends React.Component {
       }
       if (record.printDetails) {
         const fullName = getFullNameForCsvRecords(record.printDetails.lastPrintRequester);
-        const lastPrintedDate = record.printDetails.lastPrintedDate || '';
+        const lastPrintedDate = record.printDetails.printEventDate || '';
         const date = lastPrintedDate ? `, ${lastPrintedDate}` : '';
 
         record.printDetails.lastPrintedDetails = `${fullName}${date}`;
@@ -1640,7 +1651,7 @@ class RequestsRoute extends React.Component {
               resultIsSelected={this.resultIsSelected}
               onFilterChange={this.handleFilterChange}
               sortableColumns={['requestDate', 'title', 'year', 'itemBarcode', 'callNumber', 'type', 'requestStatus',
-                'position', 'servicePoint', 'requester', 'requesterBarcode', 'proxy']}
+                'position', 'servicePoint', 'requester', 'requesterBarcode', 'proxy', 'copies', 'printed']}
               pageAmount={100}
               pagingType={MCLPagingTypes.PREV_NEXT}
             />
