@@ -189,27 +189,21 @@ describe('utils', () => {
 
   describe('processQuerySortString', () => {
     it('should return the same string if no removable substrings are present', () => {
-      const input = 'title,requestDate';
+      const prop = 'title,requestDate';
       const expectedOutput = 'title,requestDate';
-      expect(processQuerySortString(input)).toBe(expectedOutput);
+      expect(processQuerySortString(prop)).toBe(expectedOutput);
     });
 
     it('should remove removable substrings and return non-removable substrings', () => {
-      const input = 'title,printed';
+      const prop = 'title,printed';
       const expectedOutput = 'title';
-      expect(processQuerySortString(input)).toBe(expectedOutput);
+      expect(processQuerySortString(prop)).toBe(expectedOutput);
     });
 
-    it('should return an empty string when the input is empty', () => {
-      const input = '';
-      const expectedOutput = '';
-      expect(processQuerySortString(input)).toBe(expectedOutput);
-    });
-
-    it('should return an empty string when only removable substrings are present', () => {
-      const input = 'printed,copies';
-      const expectedOutput = '';
-      expect(processQuerySortString(input)).toBe(expectedOutput);
+    it('should return "requestDate" when only removable substrings are present', () => {
+      const prop = 'printed,copies';
+      const expectedOutput = 'requestDate';
+      expect(processQuerySortString(prop)).toBe(expectedOutput);
     });
   });
 });

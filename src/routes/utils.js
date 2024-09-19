@@ -46,5 +46,5 @@ export const processQuerySortString = (queryString) => {
   const substringsToRemove = ['printed', 'copies', '-copies', '-printed'];
   const filteredQueryString = queryString.split(',').filter(part => !substringsToRemove.includes(part));
 
-  return filteredQueryString.join(',') || '';
+  return filteredQueryString.join(',') || 'requestDate';
 };

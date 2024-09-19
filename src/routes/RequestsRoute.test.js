@@ -798,14 +798,14 @@ describe('RequestsRoute', () => {
         expect(defaultProps.mutator.savePrintDetails.POST).not.toHaveBeenCalled();
       });
 
-      it('should trigger "mutator.query.update" when "copies" is present in the query sort string', async () => {
+      it('should trigger "mutator.query.update" when "copies" is present in the query sort string', () => {
         renderComponent(getPropsWithSortInQuery('copies,requestDate'));
         const expectedProps = { 'sort': 'requestDate' };
 
         expect(defaultProps.mutator.query.update).toHaveBeenCalledWith(expectedProps);
       });
 
-      it('should trigger "mutator.query.update" when "printed" is present in the query sort string', async () => {
+      it('should trigger "mutator.query.update" when "printed" is present in the query sort string', () => {
         renderComponent(getPropsWithSortInQuery('-printed,requestDate'));
         const expectedProps = { 'sort': 'requestDate' };
 
