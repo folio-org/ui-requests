@@ -42,9 +42,9 @@ export const getFullNameForCsvRecords = (record) => {
   return [firstName, middleName, lastName].filter(Boolean).join(' ');
 };
 
-export const processQuerySortString = (str) => {
-  const removeSubstrings = ['printed', 'copies', '-copies', '-printed'];
-  const remainingParts = str.split(',').filter(part => !removeSubstrings.includes(part));
+export const processQuerySortString = (queryString) => {
+  const substringsToRemove = ['printed', 'copies', '-copies', '-printed'];
+  const filteredQueryString = queryString.split(',').filter(part => !substringsToRemove.includes(part));
 
-  return remainingParts.join(',') || '';
+  return filteredQueryString.join(',') || '';
 };

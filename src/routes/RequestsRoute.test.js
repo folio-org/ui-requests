@@ -501,7 +501,6 @@ describe('RequestsRoute', () => {
       },
       query: {
         filters: 'filter1.value1,filter1.value2,filter2.value3',
-        sort: 'printed, requestDate',
         instanceId: 'instanceId',
         query: 'testQueryTerm',
       },
@@ -772,27 +771,45 @@ describe('RequestsRoute', () => {
     });
 
     describe('When "isViewPrintDetailsEnabled" is false', () => {
-      it('should not trigger "mutator.savePrintDetails.POST"', async () => {
-        const props = {
-          ...defaultProps,
-          resources: {
-            ...defaultProps.resources,
-            circulationSettings: {
-              ...defaultProps.resources.circulationSettings,
-              records: defaultProps.resources.circulationSettings.records.map(record => ({
-                ...record,
-                value: {
-                  ...record.value,
-                  enablePrintLog: 'false'
-                }
-              }))
-            },
+      const getPropsWithSortInQuery = (sortString = '') => ({
+        ...defaultProps,
+        resources: {
+          ...defaultProps.resources,
+          circulationSettings: {
+            ...defaultProps.resources.circulationSettings,
+            records: defaultProps.resources.circulationSettings.records.map(record => ({
+              ...record,
+              value: {
+                ...record.value,
+                enablePrintLog: 'false'
+              }
+            }))
+          },
+          query: {
+            ...defaultProps.resources.query,
+            sort: sortString,
           }
-        };
-        renderComponent(props);
+        }
+      });
+      it('should not trigger "mutator.savePrintDetails.POST"', async () => {
+        renderComponent(getPropsWithSortInQuery());
         await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[0]);
 
         expect(defaultProps.mutator.savePrintDetails.POST).not.toHaveBeenCalled();
+      });
+
+      it('should trigger "mutator.query.update" when "copies" is present in the query sort string', async () => {
+        renderComponent(getPropsWithSortInQuery('copies,requestDate'));
+        const expectedProps = { 'sort': 'requestDate' };
+
+        expect(defaultProps.mutator.query.update).toHaveBeenCalledWith(expectedProps);
+      });
+
+      it('should trigger "mutator.query.update" when "printed" is present in the query sort string', async () => {
+        renderComponent(getPropsWithSortInQuery('-printed,requestDate'));
+        const expectedProps = { 'sort': 'requestDate' };
+
+        expect(defaultProps.mutator.query.update).toHaveBeenCalledWith(expectedProps);
       });
     });
   });
