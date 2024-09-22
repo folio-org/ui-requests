@@ -811,6 +811,32 @@ describe('RequestsRoute', () => {
 
         expect(defaultProps.mutator.query.update).toHaveBeenCalledWith(expectedProps);
       });
+
+      it('should trigger "mutator.query.update" when any of "Print Status" is present in the query filter string', () => {
+        cleanup();
+        renderComponent({
+          ...defaultProps,
+          resources: {
+            ...defaultProps.resources,
+            circulationSettings: {
+              ...defaultProps.resources.circulationSettings,
+              records: defaultProps.resources.circulationSettings.records.map(record => ({
+                ...record,
+                value: {
+                  ...record.value,
+                  enablePrintLog: 'false'
+                }
+              }))
+            },
+            query: {
+              ...defaultProps.resources.query,
+              filters: 'printStatus.Printed',
+            },
+          }
+        });
+
+        expect(defaultProps.mutator.query.update).toHaveBeenCalled();
+      });
     });
   });
 

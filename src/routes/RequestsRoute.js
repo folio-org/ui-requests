@@ -65,6 +65,7 @@ import {
   DEFAULT_REQUEST_TYPE_VALUE,
   INPUT_REQUEST_SEARCH_SELECTOR,
   PRINT_DETAILS_COLUMNS,
+  requestFilterTypes,
 } from '../constants';
 import {
   buildUrl,
@@ -733,11 +734,21 @@ class RequestsRoute extends React.Component {
       this.columnHeadersMap = getFilteredColumnHeadersMap(this.columnHeadersMap);
     }
 
-    if (!isViewPrintDetailsEnabled && (query.sort?.includes('printed') || query.sort?.includes('copies'))) {
+    if (!isViewPrintDetailsEnabled) {
+      const printStatusFilterInQuery = this.getActiveFilters()[requestFilterTypes.PRINT_STATUS];
+
+      // If `isViewPrintDetailsEnabled` is false and `filters` in query includes 'PRINT STATUS' filter :-
+      // it clears the 'PRINT STATUS' filter from query filters by invoking `handleFilterChange`.
+      if (printStatusFilterInQuery?.length) {
+        this.handleFilterChange({ name: requestFilterTypes.PRINT_STATUS, values: [] });
+      }
+
       // Remove 'copies' and 'printed' from query sorting when the user disables
       // 'Enable view print details (Pick slips)' in settings and returns to the Requests App.
-      const sort = updateQuerySortString(query.sort);
-      mutator.query.update({ sort });
+      if (query.sort?.includes('printed') || query.sort?.includes('copies')) {
+        const sort = updateQuerySortString(query.sort);
+        mutator.query.update({ sort });
+      }
     }
   }
 
