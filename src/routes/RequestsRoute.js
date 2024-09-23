@@ -678,7 +678,7 @@ class RequestsRoute extends React.Component {
     this.setCurrentServicePointId();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const patronBlocks = get(this.props.resources, ['patronBlocks', 'records'], []);
     const prevBlocks = get(prevProps.resources, ['patronBlocks', 'records'], []);
     const { submitting, isViewPrintDetailsEnabled } = this.state;
@@ -730,25 +730,35 @@ class RequestsRoute extends React.Component {
       this.onSearchComplete(resources.records);
     }
 
-    if (isViewPrintDetailsEnabled !== prevState.isViewPrintDetailsEnabled && !isViewPrintDetailsEnabled) {
-      this.columnHeadersMap = getFilteredColumnHeadersMap(this.columnHeadersMap);
+    if (!isViewPrintDetailsEnabled) {
+      this.handlePrintDetailsDisabled();
     }
 
-    if (!isViewPrintDetailsEnabled) {
-      const printStatusFilterInQuery = this.getActiveFilters()[requestFilterTypes.PRINT_STATUS];
+    this.columnHeadersMap = isViewPrintDetailsEnabled ? this.columnHeadersMap :
+      getFilteredColumnHeadersMap(this.columnHeadersMap);
+  }
 
-      // If `isViewPrintDetailsEnabled` is false and `filters` in query includes 'PRINT STATUS' filter :-
-      // it clears the 'PRINT STATUS' filter from query filters by invoking `handleFilterChange`.
-      if (printStatusFilterInQuery?.length) {
-        this.handleFilterChange({ name: requestFilterTypes.PRINT_STATUS, values: [] });
-      }
+  handlePrintDetailsDisabled() {
+    /**
+     * The function handles the following actions when `isViewPrintDetailsEnabled` is false:
+     *
+     * 1. If `filters` in query includes 'PRINT STATUS' filter:
+     *    - it clears the 'PRINT STATUS' filter from query by invoking `handleFilterChange`.
+     *
+     * 2. If `sort` in query includes sort by 'printed' or 'copies' column:
+     *    - it removes sorting by 'printed' or 'copies' from the sort query. If both are being sorted,
+     *    the sorting is updated to 'requestDate' instead.
+    */
+    const { resources: { query }, mutator } = this.props;
+    const printStatusFilterInQuery = this.getActiveFilters()[requestFilterTypes.PRINT_STATUS];
 
-      // Remove 'copies' and 'printed' from query sorting when the user disables
-      // 'Enable view print details (Pick slips)' in settings and returns to the Requests App.
-      if (query.sort?.includes('printed') || query.sort?.includes('copies')) {
-        const sort = updateQuerySortString(query.sort);
-        mutator.query.update({ sort });
-      }
+    if (printStatusFilterInQuery?.length) {
+      this.handleFilterChange({ name: requestFilterTypes.PRINT_STATUS, values: [] });
+    }
+
+    if (query.sort?.includes('printed') || query.sort?.includes('copies')) {
+      const sort = updateQuerySortString(query.sort);
+      mutator.query.update({ sort });
     }
   }
 
