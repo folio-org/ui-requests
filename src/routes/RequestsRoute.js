@@ -733,9 +733,6 @@ class RequestsRoute extends React.Component {
     if (!isViewPrintDetailsEnabled) {
       this.handlePrintDetailsDisabled();
     }
-
-    this.columnHeadersMap = isViewPrintDetailsEnabled ? this.columnHeadersMap :
-      getFilteredColumnHeadersMap(this.columnHeadersMap);
   }
 
   handlePrintDetailsDisabled() {
@@ -854,6 +851,9 @@ class RequestsRoute extends React.Component {
     queryString = queryClauses.join(' and ');
     const records = await this.fetchReportData(this.props.mutator.reportRecords, queryString);
     const recordsToCSV = this.buildRecords(records);
+
+    this.columnHeadersMap = this.state.isViewPrintDetailsEnabled ? this.columnHeadersMap :
+      getFilteredColumnHeadersMap(this.columnHeadersMap);
 
     exportCsv(recordsToCSV, {
       onlyFields: this.columnHeadersMap,
