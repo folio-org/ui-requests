@@ -600,7 +600,7 @@ describe('RequestsRoute', () => {
       expect(printContent).toBeInTheDocument();
     });
 
-    it('should trigger "exportCsv', async () => {
+    it('should trigger "exportCsv"', async () => {
       await userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsToCsv' }));
 
       await waitFor(() => {
@@ -791,11 +791,21 @@ describe('RequestsRoute', () => {
           }
         }
       });
+
       it('should not trigger "mutator.savePrintDetails.POST"', async () => {
         renderComponent(getPropsWithSortInQuery());
         await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[0]);
 
         expect(defaultProps.mutator.savePrintDetails.POST).not.toHaveBeenCalled();
+      });
+
+      it('should trigger "exportCsv"', async () => {
+        renderComponent(getPropsWithSortInQuery());
+        await userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsToCsv' }));
+
+        await waitFor(() => {
+          expect(exportCsv).toHaveBeenCalled();
+        });
       });
 
       it('should trigger "mutator.query.update" when "copies" is present in the query sort string', () => {
@@ -810,6 +820,31 @@ describe('RequestsRoute', () => {
         const expectedProps = { 'sort': 'requestDate' };
 
         expect(defaultProps.mutator.query.update).toHaveBeenCalledWith(expectedProps);
+      });
+
+      it('should trigger "mutator.query.update" when any of "Print Status" is present in the query filter string', () => {
+        renderComponent({
+          ...defaultProps,
+          resources: {
+            ...defaultProps.resources,
+            circulationSettings: {
+              ...defaultProps.resources.circulationSettings,
+              records: defaultProps.resources.circulationSettings.records.map(record => ({
+                ...record,
+                value: {
+                  ...record.value,
+                  enablePrintLog: 'false'
+                }
+              }))
+            },
+            query: {
+              ...defaultProps.resources.query,
+              filters: 'printStatus.Printed',
+            },
+          }
+        });
+
+        expect(defaultProps.mutator.query.update).toHaveBeenCalled();
       });
     });
   });
