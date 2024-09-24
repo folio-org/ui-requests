@@ -295,9 +295,9 @@
     "request.detail.title": "Détails de la réservation",
     "requests.copies": "# Exemplaires",
     "requests.printed": "Imprimé",
-    "printDetails.count": "# Copies",
     "printDetails.lastPrintedDetails": "Printed",
     "requestMeta.printStatus": "Print status",
     "filters.printStatus.printed": "Printed",
-    "filters.printStatus.notPrinted": "Not printed"
+    "filters.printStatus.notPrinted": "Not printed",
+    "printDetails.printCount": "# Copies"
 }

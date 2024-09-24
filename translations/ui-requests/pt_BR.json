@@ -295,9 +295,9 @@
     "request.detail.title": "Detalhes da requisição",
     "requests.copies": "# Cópias",
     "requests.printed": "Impresso",
-    "printDetails.count": "# Cópias",
     "printDetails.lastPrintedDetails": "Impresso",
     "requestMeta.printStatus": "Status de impressão",
     "filters.printStatus.printed": "Impresso",
-    "filters.printStatus.notPrinted": "Não impresso"
+    "filters.printStatus.notPrinted": "Não impresso",
+    "printDetails.printCount": "# Copies"
 }
