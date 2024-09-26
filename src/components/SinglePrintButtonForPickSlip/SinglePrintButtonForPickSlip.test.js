@@ -61,6 +61,7 @@ describe('SinglePrintButtonForPickSlip', () => {
     ],
     onBeforeGetContentForSinglePrintButton: jest.fn(),
     onBeforePrintForSinglePrintButton: jest.fn(),
+    onAfterPrintForSinglePrintButton: jest.fn(),
     getPrintContentRef: mockAccordionStatusRef,
   };
 
