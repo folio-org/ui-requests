@@ -568,7 +568,6 @@ class RequestsRoute extends React.Component {
         }),
         records: PropTypes.arrayOf(PropTypes.object),
       }),
-      resultOffset: PropTypes.number.isRequired,
       staffSlips: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object).isRequired,
       }),
@@ -1320,7 +1319,7 @@ class RequestsRoute extends React.Component {
     })
   );
 
-  onAfterPrintForSinglePrintButton = () => {
+  onAfterPrintForPrintButton = () => {
     if (this.state.isViewPrintDetailsEnabled) {
       this.props.mutator.resultOffset.replace(0);
     }
@@ -1452,7 +1451,7 @@ class RequestsRoute extends React.Component {
         toggleRowSelection: this.toggleRowSelection,
         onBeforeGetContentForSinglePrintButton: this.onBeforeGetContentForSinglePrintButton,
         onBeforePrintForSinglePrintButton: this.savePrintEventDetails,
-        onAfterPrintForSinglePrintButton: this.onAfterPrintForSinglePrintButton,
+        onAfterPrintForSinglePrintButton: this.onAfterPrintForPrintButton,
       }
     );
 
@@ -1522,7 +1521,7 @@ class RequestsRoute extends React.Component {
                       await this.savePrintEventDetails(requestIds);
                     }
                   }}
-                  onAfterPrint={() => this.onAfterPrintForSinglePrintButton()}
+                  onAfterPrint={() => this.onAfterPrintForPrintButton()}
                 >
                   <FormattedMessage
                     id="ui-requests.printPickSlips"
@@ -1554,7 +1553,7 @@ class RequestsRoute extends React.Component {
                       }
                     }
                   }
-                  onAfterPrint={() => this.onAfterPrintForSinglePrintButton()}
+                  onAfterPrint={() => this.onAfterPrintForPrintButton()}
                 >
                   <FormattedMessage
                     id="ui-requests.printPickSlipsSelected"
