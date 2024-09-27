@@ -1557,9 +1557,9 @@ class RequestsRoute extends React.Component {
                   }
                   onAfterPrint={() => {
                     if (isViewPrintDetailsEnabled) {
-                      if (selectedRows && this.props.mutator.resultOffset) {
-                        this.setState({ selectedRows: {} });
+                      if (selectedRows && mutator.resultOffset) {
                         mutator.resultOffset.replace(0);
+                        this.setState({ selectedRows: {} });
                       }
                     }
                   }}
