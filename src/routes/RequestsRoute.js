@@ -258,7 +258,7 @@ export const getListFormatter = (
       getPrintContentRef,
       ...(isViewPrintDetailsEnabled && {
         onBeforePrintForSinglePrintButton,
-        onAfterPrintForSinglePrintButton
+        onAfterPrintForSinglePrintButton,
       }),
     };
     return (
@@ -1521,7 +1521,7 @@ class RequestsRoute extends React.Component {
                       await this.savePrintEventDetails(requestIds);
                     }
                   }}
-                  onAfterPrint={() => this.onAfterPrintForPrintButton()}
+                  onAfterPrint={this.onAfterPrintForPrintButton}
                 >
                   <FormattedMessage
                     id="ui-requests.printPickSlips"
@@ -1553,7 +1553,7 @@ class RequestsRoute extends React.Component {
                       }
                     }
                   }
-                  onAfterPrint={() => this.onAfterPrintForPrintButton()}
+                  onAfterPrint={this.onAfterPrintForPrintButton}
                 >
                   <FormattedMessage
                     id="ui-requests.printPickSlipsSelected"
