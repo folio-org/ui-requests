@@ -568,6 +568,7 @@ class RequestsRoute extends React.Component {
         }),
         records: PropTypes.arrayOf(PropTypes.object),
       }),
+      resultOffset: PropTypes.number.isRequired,
       staffSlips: PropTypes.shape({
         records: PropTypes.arrayOf(PropTypes.object).isRequired,
       }),
@@ -1556,11 +1557,9 @@ class RequestsRoute extends React.Component {
                     }
                   }
                   onAfterPrint={() => {
-                    if (isViewPrintDetailsEnabled) {
-                      if (selectedRows && mutator.resultOffset) {
-                        mutator.resultOffset.replace(0);
-                        this.setState({ selectedRows: {} });
-                      }
+                    if (isViewPrintDetailsEnabled && resources.resultOffset) {
+                      mutator.resultOffset.replace(0);
+                      this.setState({ selectedRows: {} });
                     }
                   }}
                 >
