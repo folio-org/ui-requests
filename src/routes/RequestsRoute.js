@@ -1321,7 +1321,9 @@ class RequestsRoute extends React.Component {
   );
 
   onAfterPrintForSinglePrintButton = () => {
-    this.props.mutator.resultOffset.replace(0);
+    if (this.state.isViewPrintDetailsEnabled) {
+      this.props.mutator.resultOffset.replace(0);
+    }
   }
 
   printContentRefs = {};
@@ -1520,11 +1522,7 @@ class RequestsRoute extends React.Component {
                       await this.savePrintEventDetails(requestIds);
                     }
                   }}
-                  onAfterPrint={() => {
-                    if (isViewPrintDetailsEnabled) {
-                      mutator.resultOffset.replace(0);
-                    }
-                  }}
+                  onAfterPrint={() => this.onAfterPrintForSinglePrintButton()}
                 >
                   <FormattedMessage
                     id="ui-requests.printPickSlips"
@@ -1556,12 +1554,7 @@ class RequestsRoute extends React.Component {
                       }
                     }
                   }
-                  onAfterPrint={() => {
-                    if (isViewPrintDetailsEnabled && resources.resultOffset) {
-                      mutator.resultOffset.replace(0);
-                      this.setState({ selectedRows: {} });
-                    }
-                  }}
+                  onAfterPrint={() => this.onAfterPrintForSinglePrintButton()}
                 >
                   <FormattedMessage
                     id="ui-requests.printPickSlipsSelected"
