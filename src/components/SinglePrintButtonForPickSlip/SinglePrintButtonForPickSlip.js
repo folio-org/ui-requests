@@ -15,6 +15,7 @@ const SinglePrintButtonForPickSlip = ({
   pickSlipsData,
   onBeforeGetContentForSinglePrintButton,
   onBeforePrintForSinglePrintButton,
+  onAfterPrintForSinglePrintButton,
   getPrintContentRef,
 }) => {
   const disabled = !isPrintable(request.id, pickSlipsToCheck);
@@ -28,6 +29,7 @@ const SinglePrintButtonForPickSlip = ({
       requestId={request.id}
       onBeforeGetContent={onBeforeGetContentForSinglePrintButton}
       onBeforePrint={onBeforePrintForSinglePrintButton}
+      onAfterPrint={onAfterPrintForSinglePrintButton}
     >
       <FormattedMessage id="ui-requests.requests.printButtonLabel" />
       <PrintContent
@@ -48,6 +50,7 @@ SinglePrintButtonForPickSlip.propTypes = {
   pickSlipsData: PropTypes.object.isRequired,
   onBeforeGetContentForSinglePrintButton: PropTypes.func.isRequired,
   onBeforePrintForSinglePrintButton: PropTypes.func,
+  onAfterPrintForSinglePrintButton: PropTypes.func,
   getPrintContentRef: PropTypes.object.isRequired,
 };
 

@@ -230,6 +230,7 @@ export const getListFormatter = (
     toggleRowSelection,
     onBeforeGetContentForSinglePrintButton,
     onBeforePrintForSinglePrintButton,
+    onAfterPrintForSinglePrintButton,
   }
 ) => ({
   'select': rq => (
@@ -256,7 +257,8 @@ export const getListFormatter = (
       pickSlipsData,
       getPrintContentRef,
       ...(isViewPrintDetailsEnabled && {
-        onBeforePrintForSinglePrintButton
+        onBeforePrintForSinglePrintButton,
+        onAfterPrintForSinglePrintButton,
       }),
     };
     return (
@@ -510,6 +512,9 @@ class RequestsRoute extends React.Component {
       }),
       query: PropTypes.object,
       requestCount: PropTypes.shape({
+        replace: PropTypes.func,
+      }),
+      resultOffset: PropTypes.shape({
         replace: PropTypes.func,
       }),
       resultCount: PropTypes.shape({
@@ -1314,6 +1319,12 @@ class RequestsRoute extends React.Component {
     })
   );
 
+  onAfterPrintForPrintButton = () => {
+    if (this.state.isViewPrintDetailsEnabled) {
+      this.props.mutator.resultOffset.replace(0);
+    }
+  }
+
   printContentRefs = {};
 
   getPrintContentRef = (rqId) => {
@@ -1440,6 +1451,7 @@ class RequestsRoute extends React.Component {
         toggleRowSelection: this.toggleRowSelection,
         onBeforeGetContentForSinglePrintButton: this.onBeforeGetContentForSinglePrintButton,
         onBeforePrintForSinglePrintButton: this.savePrintEventDetails,
+        onAfterPrintForSinglePrintButton: this.onAfterPrintForPrintButton,
       }
     );
 
@@ -1509,6 +1521,7 @@ class RequestsRoute extends React.Component {
                       await this.savePrintEventDetails(requestIds);
                     }
                   }}
+                  onAfterPrint={this.onAfterPrintForPrintButton}
                 >
                   <FormattedMessage
                     id="ui-requests.printPickSlips"
@@ -1540,6 +1553,7 @@ class RequestsRoute extends React.Component {
                       }
                     }
                   }
+                  onAfterPrint={this.onAfterPrintForPrintButton}
                 >
                   <FormattedMessage
                     id="ui-requests.printPickSlipsSelected"

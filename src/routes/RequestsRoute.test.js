@@ -131,11 +131,13 @@ jest.mock('../components', () => ({
   PrintButton: jest.fn(({
     onBeforeGetContent,
     onBeforePrint,
+    onAfterPrint,
     children,
   }) => {
     const handleClick = () => {
       Promise.resolve(onBeforeGetContent());
       Promise.resolve(onBeforePrint());
+      Promise.resolve(onAfterPrint());
     };
     return (
       <div>
@@ -168,10 +170,12 @@ jest.mock('../RequestForm', () => jest.fn());
 jest.mock('../components/SinglePrintButtonForPickSlip', () => jest.fn(({
   onBeforeGetContentForSinglePrintButton,
   onBeforePrintForSinglePrintButton,
+  onAfterPrintForSinglePrintButton,
 }) => {
   const handleClick = () => {
     onBeforeGetContentForSinglePrintButton();
     onBeforePrintForSinglePrintButton(['reqId']);
+    onAfterPrintForSinglePrintButton();
   };
   return (
     <button
@@ -378,6 +382,9 @@ describe('RequestsRoute', () => {
       },
       currentServicePoint: {
         update: jest.fn(),
+      },
+      resultOffset: {
+        replace: jest.fn(),
       },
       expiredHolds: {
         GET: jest.fn(() => ({
@@ -767,6 +774,15 @@ describe('RequestsRoute', () => {
         await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[0]);
 
         expect(defaultProps.mutator.savePrintDetails.POST).toHaveBeenCalled();
+      });
+
+      it('should trigger "mutator.resultOffset.replace"', async () => {
+        renderComponent(defaultProps);
+        await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[0]);
+
+        waitFor(() => {
+          expect(defaultProps.mutator.resultOffset.replace).toHaveBeenCalledWith(0);
+        });
       });
     });
 
