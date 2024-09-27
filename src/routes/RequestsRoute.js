@@ -1519,6 +1519,11 @@ class RequestsRoute extends React.Component {
                       await this.savePrintEventDetails(requestIds);
                     }
                   }}
+                  onAfterPrint={() => {
+                    if (isViewPrintDetailsEnabled) {
+                      mutator.resultOffset.replace(0);
+                    }
+                  }}
                 >
                   <FormattedMessage
                     id="ui-requests.printPickSlips"
@@ -1550,6 +1555,14 @@ class RequestsRoute extends React.Component {
                       }
                     }
                   }
+                  onAfterPrint={() => {
+                    if (isViewPrintDetailsEnabled) {
+                      if (selectedRows && this.props.mutator.resultOffset) {
+                        this.setState({ selectedRows: {} });
+                        mutator.resultOffset.replace(0);
+                      }
+                    }
+                  }}
                 >
                   <FormattedMessage
                     id="ui-requests.printPickSlipsSelected"

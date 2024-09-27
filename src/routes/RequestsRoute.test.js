@@ -131,11 +131,13 @@ jest.mock('../components', () => ({
   PrintButton: jest.fn(({
     onBeforeGetContent,
     onBeforePrint,
+    onAfterPrint,
     children,
   }) => {
     const handleClick = () => {
       Promise.resolve(onBeforeGetContent());
       Promise.resolve(onBeforePrint());
+      Promise.resolve(onAfterPrint());
     };
     return (
       <div>
