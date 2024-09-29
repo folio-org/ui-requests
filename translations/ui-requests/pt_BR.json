@@ -299,5 +299,5 @@
     "requestMeta.printStatus": "Status de impressão",
     "filters.printStatus.printed": "Impresso",
     "filters.printStatus.notPrinted": "Não impresso",
-    "printDetails.printCount": "# Copies"
+    "printDetails.printCount": "# Cópias"
 }
