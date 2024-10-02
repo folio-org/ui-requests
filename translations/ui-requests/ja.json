@@ -295,9 +295,9 @@
     "request.detail.title": "リクエスト詳細",
     "requests.copies": "# Copies",
     "requests.printed": "Printed",
-    "printDetails.count": "# Copies",
     "printDetails.lastPrintedDetails": "Printed",
     "requestMeta.printStatus": "Print status",
     "filters.printStatus.printed": "Printed",
-    "filters.printStatus.notPrinted": "Not printed"
+    "filters.printStatus.notPrinted": "Not printed",
+    "printDetails.printCount": "# Copies"
 }

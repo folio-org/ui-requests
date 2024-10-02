@@ -1,12 +1,11 @@
 # Change history for ui-requests
 
-## 10.0.0 IN PROGRESS
+## 9.2.0 IN PROGRESS
 
 * Use settings/entries endpoint to get settings information. Refs UIREQ-1062.
 * Use Save & close button label stripes-component translation key. Refs UIREQ-1073.
 * Include single print and selection print options on results list and actions menu. Refs UIREQ-966.
 * Set up default pickup service point if it is available. Refs UIREQ-1095.
-* Remove bigtests from github actions. Refs UIREQ-1099.
 * Requests app.: Editing requests (ECS with mod-tlr enabled). Refs UIREQ-1088.
 * Requests app.: Cancelling request (ECS with mod-tlr enabled). Refs UIREQ-1090.
 * Requests app.: Reorder request queue (ECS with mod-tlr enabled). Refs UIREQ-1098.
@@ -22,14 +21,25 @@
 * Implement availability of "Printed" and "# Copies" columns upon "Enable view print details (Pick slips)" configuration. Refs UIREQ-1121.
 * Implement availability of "Print status" filters upon "Enable view print details (Pick slips)" configuration. Refs UIREQ-1119.
 * Hide Duplicate and Move action buttons in ECS env with mod-tlr enabled. Refs UIREQ-1127, UIREQ-1125.
-* Fix issue with Proxy's patron group and delivery address that shown instead of Sponsor's when creating request. Refs UIREQ-1132, UIREQ-1133.
 * Add missing sub-permissions to fetch staff slips records. Refs UIREQ-1129.
 * Add missing sub-permissions to fetch "pick-slips" and "search-slips" records in "Requests: View, edit, cancel" permission. Refs UIREQ-1137.
 * Update permissions set to be able to get item/instance information. Refs UIREQ-1148.
+* Optimize performance of the "print-events-entry" API to reduce slowness during the initial call. Refs UIREQ-1130.
 * *BREAKING* Migrate to new endpoints to get request types and to create a new request. Refs UIREQ-1113.
+* Revert Custom "Print Status" filter code implementation. Refs UIREQ-1146.
+* Add sorting to 'Printed' and '# Copies' columns in the Request App. Refs UIREQ-1140.
+* Implement "Print Status" filters as server-side filters. Refs UIREQ-1147.
+* Navigate to first page when saving the pick slip print log from beyond the first page. Refs UIREQ-1145.
 
-## [9.1.1] (https://github.com/folio-org/ui-checkin/tree/v9.1.1) (2024-03-27)
-[Full Changelog](https://github.com/folio-org/ui-checkin/compare/v9.1.0...v9.1.1)
+## [9.1.2] (https://github.com/folio-org/ui-requests/tree/v9.1.2) (2024-09-13)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.1.1...v9.1.2)
+
+* Remove bigtests from github actions. Refs UIREQ-1099.
+* Fix issue with Proxy's patron group and delivery address that shown instead of Sponsor's when creating request. Refs UIREQ-1132, UIREQ-1133.
+* Update upload-artifact actions from v1 and v2 to v4. Refs UIREQ-1150.
+
+## [9.1.1] (https://github.com/folio-org/ui-requests/tree/v9.1.1) (2024-03-27)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.1.0...v9.1.1)
 
 * Add support for Barcode tag with sanitize. Refs UIREQ-1080, UIREQ-1082.
 

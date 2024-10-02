@@ -81,6 +81,40 @@ describe('RequestsFiltersConfig', () => {
     expect(pickupServicePointFilter).toEqual(expectedResult);
   });
 
+  describe('Print Status Filter configuration', () => {
+    it('should correctly match the filter configuration for printStatus', () => {
+      const printStatusFilter = filtersConfig.find(f => f.name === 'printStatus');
+      const expectedResult = {
+        name: 'printStatus',
+        cql: 'printStatus',
+        values: [],
+        operator: '==',
+        parse: expect.any(Function),
+      };
+
+      expect(printStatusFilter).toEqual(expectedResult);
+    });
+
+    it('should generate the correct query string for the "Printed" filter', () => {
+      const printStatusFilter = filtersConfig.find(f => f.name === 'printStatus');
+
+      expect(printStatusFilter.parse(['Printed'])).toEqual('printDetails.isPrinted==true');
+    });
+
+    it('should generate the correct query string for the "Not printed" filter', () => {
+      const printStatusFilter = filtersConfig.find(f => f.name === 'printStatus');
+
+      expect(printStatusFilter.parse(['Not printed'])).toEqual('cql.allRecords=1 NOT printDetails.isPrinted=""');
+    });
+
+    it('should generate the correct query string for a combination of "Printed" and "Not printed" filters', () => {
+      const printStatusFilter = filtersConfig.find(f => f.name === 'printStatus');
+
+      expect(printStatusFilter.parse(['Printed', 'Not printed']))
+        .toEqual('(cql.allRecords=1 NOT printDetails.printed="" or printDetails.printed==true)');
+    });
+  });
+
   describe('escapingForSpecialCharactersWhichCanBreakCQL', () => {
     it('should return empty string', () => {
       expect(escapingForSpecialCharactersWhichCanBreakCQL()).toBe('');

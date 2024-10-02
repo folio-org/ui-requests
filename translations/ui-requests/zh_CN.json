@@ -295,9 +295,9 @@
     "request.detail.title": "申请详细信息",
     "requests.copies": "# 份数",
     "requests.printed": "已打印",
-    "printDetails.count": "# Copies",
     "printDetails.lastPrintedDetails": "Printed",
     "requestMeta.printStatus": "Print status",
     "filters.printStatus.printed": "Printed",
-    "filters.printStatus.notPrinted": "Not printed"
+    "filters.printStatus.notPrinted": "Not printed",
+    "printDetails.printCount": "# Copies"
 }

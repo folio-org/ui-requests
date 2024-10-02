@@ -1,7 +1,4 @@
-import { cloneDeep } from 'lodash';
-
 import {
-  requestPrintStatusType,
   requestStatuses,
   requestTypesMap,
 } from '../constants';
@@ -45,21 +42,9 @@ export const getFullNameForCsvRecords = (record) => {
   return [firstName, middleName, lastName].filter(Boolean).join(' ');
 };
 
-export const filterRecordsByPrintStatus = (records, printStatusFilters) => {
-  const isPrintedFilterSelected = printStatusFilters[0] === requestPrintStatusType.PRINTED;
-  return records.filter(record => {
-    const hasCopiesCount = record?.printDetails?.count !== undefined;
+export const updateQuerySortString = (queryString) => {
+  const substringsToRemove = ['printed', 'copies', '-copies', '-printed'];
+  const filteredQueryString = queryString.split(',').filter(part => !substringsToRemove.includes(part));
 
-    return isPrintedFilterSelected ? hasCopiesCount : !hasCopiesCount;
-  });
-};
-
-export const getPrintStatusFilteredData = (resources, printStatusFilters) => {
-  const clonedResources = cloneDeep(resources);
-  const filteredRecords = filterRecordsByPrintStatus(clonedResources.records.records, printStatusFilters);
-
-  clonedResources.records.records = filteredRecords;
-  clonedResources.records.other.totalRecords = filteredRecords.length;
-
-  return clonedResources;
+  return filteredQueryString.join(',') || 'requestDate';
 };

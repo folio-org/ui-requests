@@ -169,7 +169,7 @@
     "requestDate": "Datum žádanky",
     "holdShelfExpirationTime": "Čas expirace pro vyzvednutí rezervace z regálu",
     "csvReportPending": "Generuje se výstup CSV. Počkejte prosím.",
-    "csvReportInProgress": "Generuje se výstup o výsledcích CSV. U větších setů výsledků to může nějakou dobu trvat. Prosím, buďte trpěliví.",
+    "csvReportInProgress": "Generuje se výstup o výsledcích CSV. U větších sad výsledků to může nějakou dobu trvat. Prosím, buďte trpěliví.",
     "patronComments": "Komentáře čtenáře",
     "override": "Přepsat",
     "actions.label": "Akce",
@@ -286,7 +286,7 @@
     "errors.movingRequestToTheSameItem": "Není povoleno přesunout požadavek na úroveň názvu stránky na stejnou jednotku",
     "errors.itemOfThisInstanceAlreadyRequested": "Tento čtenář již má otevřenou žádanku pro jeden exemplář titulu",
     "documentTitle.search": "Žádanky - {query} - Vyhledat",
-    "item.displaySummary": "Souhrn zobrazení",
+    "item.displaySummary": "Zobrazit shrnutí",
     "requests.singlePrint": "Jeden výtisk",
     "requests.printButtonLabel": "Tisk",
     "requests.instances.rows.select": "Vybrat titul",
@@ -295,9 +295,9 @@
     "request.detail.title": "Detaily žádanky",
     "requests.copies": "# Kopie",
     "requests.printed": "Tištěno",
-    "printDetails.count": "# Kopie",
     "printDetails.lastPrintedDetails": "Tištěno",
     "requestMeta.printStatus": "Stav tisku",
     "filters.printStatus.printed": "Tištěno",
-    "filters.printStatus.notPrinted": "Nevytištěno"
+    "filters.printStatus.notPrinted": "Nevytištěno",
+    "printDetails.printCount": "# Kopie"
 }

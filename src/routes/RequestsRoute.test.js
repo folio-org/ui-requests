@@ -123,8 +123,6 @@ jest.mock('./utils', () => ({
   ...jest.requireActual('./utils'),
   getFormattedYears: jest.fn(),
   getStatusQuery: jest.fn(),
-  filterRecordsByPrintStatus: jest.fn(),
-  getPrintStatusFilteredData: jest.fn(),
 }));
 jest.mock('../components', () => ({
   ErrorModal: jest.fn(({ onClose }) => (
@@ -141,11 +139,13 @@ jest.mock('../components', () => ({
   PrintButton: jest.fn(({
     onBeforeGetContent,
     onBeforePrint,
+    onAfterPrint,
     children,
   }) => {
     const handleClick = () => {
-      onBeforeGetContent();
-      onBeforePrint();
+      Promise.resolve(onBeforeGetContent());
+      Promise.resolve(onBeforePrint());
+      Promise.resolve(onAfterPrint());
     };
     return (
       <div>
@@ -178,10 +178,12 @@ jest.mock('../RequestForm', () => jest.fn());
 jest.mock('../components/SinglePrintButtonForPickSlip', () => jest.fn(({
   onBeforeGetContentForSinglePrintButton,
   onBeforePrintForSinglePrintButton,
+  onAfterPrintForSinglePrintButton,
 }) => {
   const handleClick = () => {
     onBeforeGetContentForSinglePrintButton();
     onBeforePrintForSinglePrintButton(['reqId']);
+    onAfterPrintForSinglePrintButton();
   };
   return (
     <button
@@ -248,8 +250,8 @@ const userData = {
 };
 const createRequestButtonLabel = 'Create request';
 const printDetailsMockData = {
-  count: 11,
-  lastPrintedDate: '2024-08-03T13:33:31.868Z',
+  printCount: 11,
+  printEventDate: '2024-08-03T13:33:31.868Z',
   lastPrintRequester: { firstName: 'firstName', middleName: 'middleName', lastName: 'lastName' },
 };
 
@@ -401,6 +403,9 @@ describe('RequestsRoute', () => {
       },
       currentServicePoint: {
         update: jest.fn(),
+      },
+      resultOffset: {
+        replace: jest.fn(),
       },
       expiredHolds: {
         GET: jest.fn(() => ({
@@ -623,27 +628,7 @@ describe('RequestsRoute', () => {
       expect(printContent).toBeInTheDocument();
     });
 
-    it('should trigger "exportCsv', async () => {
-      await userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsToCsv' }));
-
-      await waitFor(() => {
-        expect(exportCsv).toHaveBeenCalled();
-      });
-    });
-
-    it('should trigger "exportCsv" when only "Print Status" filter is selected', async () => {
-      const props = {
-        ...defaultProps,
-        resources: {
-          ...defaultProps.resources,
-          query: {
-            ...defaultProps.resources.query,
-            filters: 'printStatus.Printed',
-          },
-        }
-      };
-      cleanup();
-      renderComponent(props);
+    it('should trigger "exportCsv"', async () => {
       await userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsToCsv' }));
 
       await waitFor(() => {
@@ -670,26 +655,6 @@ describe('RequestsRoute', () => {
 
     it('should trigger "mutator.query.update"', async () => {
       const expectFilterValue = { 'filters': 'filter1.value1,filter1.value2,filter2.value3,filter4.Value4,filter4.Value5' };
-
-      await userEvent.click(screen.getByRole('button', { name: 'onFilterChange' }));
-
-      expect(defaultProps.mutator.query.update).toBeCalledWith(expectFilterValue);
-    });
-
-    it('should trigger "mutator.query.update" when "Print Status" filters are present in query', async () => {
-      const props = {
-        ...defaultProps,
-        resources: {
-          ...defaultProps.resources,
-          query: {
-            ...defaultProps.resources.query,
-            filters: 'filter1.value1,printStatus.Printed',
-          },
-        }
-      };
-      cleanup();
-      renderComponent(props);
-      const expectFilterValue = { 'filters': 'filter1.value1,printStatus.Printed,filter4.Value4,filter4.Value5' };
 
       await userEvent.click(screen.getByRole('button', { name: 'onFilterChange' }));
 
@@ -964,11 +929,71 @@ describe('RequestsRoute', () => {
 
         expect(defaultProps.mutator.savePrintDetails.POST).toHaveBeenCalled();
       });
+
+      it('should trigger "mutator.resultOffset.replace"', async () => {
+        renderComponent(defaultProps);
+        await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[0]);
+
+        waitFor(() => {
+          expect(defaultProps.mutator.resultOffset.replace).toHaveBeenCalledWith(0);
+        });
+      });
     });
 
     describe('When "isViewPrintDetailsEnabled" is false', () => {
+      const getPropsWithSortInQuery = (sortString = '') => ({
+        ...defaultProps,
+        resources: {
+          ...defaultProps.resources,
+          circulationSettings: {
+            ...defaultProps.resources.circulationSettings,
+            records: defaultProps.resources.circulationSettings.records.map(record => ({
+              ...record,
+              value: {
+                ...record.value,
+                enablePrintLog: 'false'
+              }
+            }))
+          },
+          query: {
+            ...defaultProps.resources.query,
+            sort: sortString,
+          }
+        }
+      });
+
       it('should not trigger "mutator.savePrintDetails.POST"', async () => {
-        const props = {
+        renderComponent(getPropsWithSortInQuery());
+        await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[0]);
+
+        expect(defaultProps.mutator.savePrintDetails.POST).not.toHaveBeenCalled();
+      });
+
+      it('should trigger "exportCsv"', async () => {
+        renderComponent(getPropsWithSortInQuery());
+        await userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsToCsv' }));
+
+        await waitFor(() => {
+          expect(exportCsv).toHaveBeenCalled();
+        });
+      });
+
+      it('should trigger "mutator.query.update" when "copies" is present in the query sort string', () => {
+        renderComponent(getPropsWithSortInQuery('copies,requestDate'));
+        const expectedProps = { 'sort': 'requestDate' };
+
+        expect(defaultProps.mutator.query.update).toHaveBeenCalledWith(expectedProps);
+      });
+
+      it('should trigger "mutator.query.update" when "printed" is present in the query sort string', () => {
+        renderComponent(getPropsWithSortInQuery('-printed,requestDate'));
+        const expectedProps = { 'sort': 'requestDate' };
+
+        expect(defaultProps.mutator.query.update).toHaveBeenCalledWith(expectedProps);
+      });
+
+      it('should trigger "mutator.query.update" when any of "Print Status" is present in the query filter string', () => {
+        renderComponent({
           ...defaultProps,
           resources: {
             ...defaultProps.resources,
@@ -982,12 +1007,14 @@ describe('RequestsRoute', () => {
                 }
               }))
             },
+            query: {
+              ...defaultProps.resources.query,
+              filters: 'printStatus.Printed',
+            },
           }
-        };
-        renderComponent(props);
-        await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[0]);
+        });
 
-        expect(defaultProps.mutator.savePrintDetails.POST).not.toHaveBeenCalled();
+        expect(defaultProps.mutator.query.update).toHaveBeenCalled();
       });
     });
   });
@@ -1497,7 +1524,7 @@ describe('RequestsRoute', () => {
 
     describe('when formatting copies column', () => {
       it('should return copies for copies column', () => {
-        expect(listFormatter.copies(requestWithData)).toBe(requestWithData.printDetails.count);
+        expect(listFormatter.copies(requestWithData)).toBe(requestWithData.printDetails.printCount);
       });
     });
 
@@ -1505,8 +1532,8 @@ describe('RequestsRoute', () => {
       it('should return last printed details for printed column', () => {
         getFullName.mockReturnValueOnce('lastName, firstName middleName');
 
-        const expectedFormattedDate = intl.formatDate(requestWithData.printDetails.lastPrintedDate);
-        const expectedFormattedTime = intl.formatTime(requestWithData.printDetails.lastPrintedDate);
+        const expectedFormattedDate = intl.formatDate(requestWithData.printDetails.printEventDate);
+        const expectedFormattedTime = intl.formatTime(requestWithData.printDetails.printEventDate);
         const expectedOutput =
         `lastName, firstName middleName ${expectedFormattedDate}${expectedFormattedTime ? ', ' : ''}${expectedFormattedTime}`;
 
@@ -1558,8 +1585,8 @@ describe('RequestsRoute', () => {
 
     it('should return the formatted full name and date/time correctly', () => {
       const printedDetails = getLastPrintedDetails(lastPrintDetails, intl);
-      const expectedFormattedDate = intl.formatDate(lastPrintDetails.lastPrintedDate);
-      const expectedFormattedTime = intl.formatTime(lastPrintDetails.lastPrintedDate);
+      const expectedFormattedDate = intl.formatDate(lastPrintDetails.printEventDate);
+      const expectedFormattedTime = intl.formatTime(lastPrintDetails.printEventDate);
       const expectedOutput =
         `lastName, firstName middleName ${expectedFormattedDate}${expectedFormattedTime ? ', ' : ''}${expectedFormattedTime}`;
 

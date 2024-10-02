@@ -39,6 +39,7 @@ import {
   isMultiDataTenant,
   getRequestUrl,
   getRequester,
+  getFullName,
 } from './utils';
 
 import {
@@ -1173,5 +1174,58 @@ describe('getRequester', () => {
 
   it('should return selected user', () => {
     expect(getRequester(null, selectedUser)).toEqual(selectedUser);
+  });
+});
+
+describe('getFullName', () => {
+  it('should return full name with last name, preferred first name, and middle name', () => {
+    const user = {
+      personal: {
+        lastName: 'Doe',
+        firstName: 'John',
+        middleName: 'A.',
+        preferredFirstName: 'Johnny'
+      }
+    };
+    expect(getFullName(user)).toBe('Doe, Johnny A.');
+  });
+
+  it('should return full name with last name, first name, and middle name when preferred first name is absent', () => {
+    const user = {
+      personal: {
+        lastName: 'Doe',
+        firstName: 'John',
+        middleName: 'A.'
+      }
+    };
+    expect(getFullName(user)).toBe('Doe, John A.');
+  });
+
+  it('should return full name without middle name when middle name is missing', () => {
+    const user = {
+      personal: {
+        lastName: 'Doe',
+        firstName: 'John'
+      }
+    };
+    expect(getFullName(user)).toBe('Doe, John');
+  });
+
+  it('should return only last name if first name is missing and middle name is null', () => {
+    const user = {
+      personal: {
+        lastName: 'Doe',
+        middleName: null
+      }
+    };
+    expect(getFullName(user)).toBe('Doe');
+  });
+
+  it('should handle case when user has no personal information', () => {
+    const user = {
+      lastName: 'Doe',
+      firstName: 'John'
+    };
+    expect(getFullName(user)).toBe('Doe, John');
   });
 });

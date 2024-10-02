@@ -170,7 +170,7 @@ export const requestableItemStatuses = [
 ];
 
 export const PRINT_DETAILS_COLUMNS = {
-  COPIES: 'printDetails.count',
+  COPIES: 'printDetails.printCount',
   PRINTED: 'printDetails.lastPrintedDetails',
 };
 

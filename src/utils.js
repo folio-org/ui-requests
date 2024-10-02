@@ -44,16 +44,15 @@ import {
 
 import css from './requests.css';
 
-// eslint-disable-next-line import/prefer-default-export
 export function getFullName(user) {
   const userNameObj = user?.personal || user;
-  const lastName = get(userNameObj, ['lastName'], '');
-  const firstName = get(userNameObj, ['firstName'], '');
-  const middleName = get(userNameObj, ['middleName'], '');
-  const preferredFirstName = get(userNameObj, ['preferredFirstName'], '');
+  const lastName = get(userNameObj, ['lastName']);
+  const firstName = get(userNameObj, ['firstName']) ?? '';
+  const middleName = get(userNameObj, ['middleName']) ?? '';
+  const preferredFirstName = get(userNameObj, ['preferredFirstName']) ?? '';
   const displayedFirstName = preferredFirstName || firstName;
 
-  return `${lastName}${displayedFirstName ? ', ' : ' '}${displayedFirstName} ${middleName}`;
+  return `${lastName}${displayedFirstName ? ', ' : ''}${displayedFirstName}${middleName ? ' ' : ''}${middleName}`;
 }
 
 export const createUserHighlightBoxLink = (linkText, id) => {
