@@ -37,7 +37,6 @@ class InstanceInformation extends Component {
     values: PropTypes.object.isRequired,
     onSetSelectedInstance: PropTypes.func.isRequired,
     isLoading: PropTypes.bool.isRequired,
-    instanceId: PropTypes.string.isRequired,
     request: PropTypes.object,
     instanceRequestCount: PropTypes.number,
     selectedInstance: PropTypes.object,
@@ -159,7 +158,6 @@ class InstanceInformation extends Component {
       values,
       isLoading,
       instanceRequestCount,
-      instanceId,
     } = this.props;
     const {
       isInstanceClicked,
@@ -247,7 +245,7 @@ class InstanceInformation extends Component {
           {
             isTitleInfoVisible &&
               <TitleInformation
-                instanceId={request?.instanceId || selectedInstance.id || instanceId}
+                instanceId={request?.instanceId || selectedInstance.id}
                 titleLevelRequestsCount={titleLevelRequestsCount}
                 title={selectedInstance.title}
                 contributors={selectedInstance.contributors || selectedInstance.contributorNames}

@@ -35,7 +35,6 @@ class ItemInformation extends Component {
     request: PropTypes.object.isRequired,
     onSetSelectedItem: PropTypes.func.isRequired,
     itemRequestCount: PropTypes.number.isRequired,
-    instanceId: PropTypes.string.isRequired,
     isLoading: PropTypes.bool.isRequired,
     submitting: PropTypes.bool.isRequired,
     isItemIdRequest: PropTypes.bool.isRequired,
@@ -162,7 +161,6 @@ class ItemInformation extends Component {
       isLoading,
       selectedItem,
       request,
-      instanceId,
       selectedLoan,
       itemRequestCount,
     } = this.props;
@@ -235,7 +233,7 @@ class ItemInformation extends Component {
             selectedItem &&
               <ItemDetail
                 request={request}
-                currentInstanceId={instanceId}
+                currentInstanceId={selectedItem.instanceId}
                 item={selectedItem}
                 loan={selectedLoan}
                 requestCount={itemRequestCount}
