@@ -168,7 +168,7 @@
     "printInProgress": "正在加载打印选项。可能需要几秒钟，请耐心等待。",
     "requestDate": "requestDate",
     "holdShelfExpirationTime": "holdShelfExpirationTime",
-    "csvReportPending": "csvReportPending",
+    "csvReportPending": "正在生成 CSV 报告。请等待。",
     "csvReportInProgress": "正在生成CSV结果报告。对于较大的结果集，可能需要一些时间。请耐心等待。",
     "patronComments": "读者备注",
     "override": "越权",
@@ -295,9 +295,9 @@
     "request.detail.title": "申请详细信息",
     "requests.copies": "# 份数",
     "requests.printed": "已打印",
-    "printDetails.lastPrintedDetails": "Printed",
-    "requestMeta.printStatus": "Print status",
-    "filters.printStatus.printed": "Printed",
-    "filters.printStatus.notPrinted": "Not printed",
-    "printDetails.printCount": "# Copies"
+    "printDetails.lastPrintedDetails": "已打印",
+    "requestMeta.printStatus": "打印状态",
+    "filters.printStatus.printed": "已打印",
+    "filters.printStatus.notPrinted": "未打印",
+    "printDetails.printCount": "# 份数"
 }
