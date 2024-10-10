@@ -143,7 +143,6 @@ class RequestForm extends React.Component {
     values: PropTypes.object.isRequired,
     form: PropTypes.object.isRequired,
     blocked: PropTypes.bool.isRequired,
-    instanceId: PropTypes.string.isRequired,
     isPatronBlocksOverridden: PropTypes.bool.isRequired,
     onSubmit: PropTypes.func,
     parentMutator: PropTypes.shape({
@@ -160,7 +159,6 @@ class RequestForm extends React.Component {
     onSetSelectedInstance: PropTypes.func.isRequired,
     onSetBlocked: PropTypes.func.isRequired,
     onSetIsPatronBlocksOverridden: PropTypes.func.isRequired,
-    onSetInstanceId: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -717,22 +715,21 @@ class RequestForm extends React.Component {
   findItemRelatedResources(item) {
     const {
       findResource,
-      onSetInstanceId,
     } = this.props;
-    if (!item) return null;
+
+    if (!item) {
+      return null;
+    }
 
     return Promise.all(
       [
         findResource('loan', item.id),
         findResource('requestsForItem', item.id),
-        findResource(RESOURCE_TYPES.HOLDING, item.holdingsRecordId),
       ],
     ).then((results) => {
       const selectedLoan = results[0]?.loans?.[0];
       const itemRequestCount = results[1]?.requests?.length;
-      const holdingsRecord = results[2]?.holdingsRecords?.[0];
 
-      onSetInstanceId(holdingsRecord?.instanceId);
       this.setState({
         itemRequestCount,
         selectedLoan,
@@ -811,6 +808,11 @@ class RequestForm extends React.Component {
 
           return foundItem;
         })
+        .catch(() => {
+          onSetSelectedItem(null);
+
+          return null;
+        })
         .then(item => {
           if (item && selectedUser?.id) {
             const requester = getRequester(proxy, selectedUser);
@@ -887,6 +889,11 @@ class RequestForm extends React.Component {
           });
 
           return instance;
+        })
+        .catch(() => {
+          onSetSelectedInstance(null);
+
+          return null;
         })
         .then(instance => {
           if (instance && selectedUser?.id) {
@@ -1093,7 +1100,6 @@ class RequestForm extends React.Component {
       selectedUser,
       selectedInstance,
       isPatronBlocksOverridden,
-      instanceId,
       blocked,
       values,
       onCancel,
@@ -1283,7 +1289,6 @@ class RequestForm extends React.Component {
                               onSetSelectedInstance={onSetSelectedInstance}
                               isLoading={isItemOrInstanceLoading}
                               instanceRequestCount={instanceRequestCount}
-                              instanceId={instanceId}
                             />
                           </div>
                         </Accordion>
@@ -1305,7 +1310,6 @@ class RequestForm extends React.Component {
                               onSetSelectedItem={onSetSelectedItem}
                               values={values}
                               itemRequestCount={itemRequestCount}
-                              instanceId={instanceId}
                               selectedLoan={selectedLoan}
                               isLoading={isItemOrInstanceLoading}
                             />

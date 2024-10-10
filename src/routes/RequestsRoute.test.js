@@ -1827,29 +1827,6 @@ describe('RequestsRoute', () => {
       });
     });
 
-    describe('holding', () => {
-      const value = 'value';
-      let queryString;
-
-      beforeEach(() => {
-        queryString = urls.holding(value, idType);
-      });
-
-      it('should trigger "stringify" with correct argument', () => {
-        const expectedArgument = {
-          query: `(${idType}=="${value}")`,
-        };
-
-        expect(stringify).toHaveBeenCalledWith(expectedArgument);
-      });
-
-      it('should return correct url', () => {
-        const expectedResult = `holdings-storage/holdings?${mockedQueryValue}`;
-
-        expect(queryString).toBe(expectedResult);
-      });
-    });
-
     describe('requestTypes', () => {
       const requesterId = 'requesterIdUrl';
       const operation = REQUEST_OPERATIONS.CREATE;
