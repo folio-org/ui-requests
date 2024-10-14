@@ -30,6 +30,7 @@
 * Add sorting to 'Printed' and '# Copies' columns in the Request App. Refs UIREQ-1140.
 * Implement "Print Status" filters as server-side filters. Refs UIREQ-1147.
 * Navigate to first page when saving the pick slip print log from beyond the first page. Refs UIREQ-1145.
+* Also support okapiInterfaces `inventory` `14.0`. Refs UIREQ-1160.
 * Use `instanceId` param for ILR from items response. Refs UIREQ-1149.
 
 ## [9.1.2] (https://github.com/folio-org/ui-requests/tree/v9.1.2) (2024-09-13)
