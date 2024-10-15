@@ -1116,7 +1116,6 @@ class RequestsRoute extends React.Component {
     if (isMultiDataTenant(stripes) && checkIfUserInCentralTenant(stripes)) {
       unset(requestData, 'item');
       unset(requestData, 'requester');
-      unset(requestData, 'holdingsRecordId');
 
       mutator = this.props.mutator.ecsTlrRecords;
     }
