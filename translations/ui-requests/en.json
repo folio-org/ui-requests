@@ -305,8 +305,8 @@
   "filters.printStatus.printed": "Printed",
   "filters.printStatus.notPrinted": "Not printed",
 
-  "permission.moveRequest": "Requests: Move to new item, reorder queue",
-  "permission.reorderQueue": "Requests: Reorder queue",
+  "permission.moveRequest.execute": "Requests: Move to new item, reorder queue",
+  "permission.reorderQueue.execute": "Requests: Reorder queue",
   "permission.all": "Requests: All permissions",
   "permission.view": "Requests: View",
   "permission.create": "Requests: View, create",
