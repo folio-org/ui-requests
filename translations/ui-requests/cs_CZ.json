@@ -150,8 +150,6 @@
     "item.callNumberComponents.callNumber": "Efektivní signatura",
     "item.callNumberComponents.suffix": "Suffix efektivní signatury",
     "item.chronology": "Chronologie",
-    "permission.moveRequest": "Požadavky: Přejít na novou jednotku, změnit pořadí fronty",
-    "permission.reorderQueue": "Žádanky: Změna pořadí ve frontě",
     "permission.all": "Žádanky: Všechna oprávnění",
     "permission.view": "Žádanky: Zobrazit",
     "permission.create": "Žádanky: Zobrazit, vytvořit",
@@ -299,5 +297,7 @@
     "requestMeta.printStatus": "Stav tisku",
     "filters.printStatus.printed": "Tištěno",
     "filters.printStatus.notPrinted": "Nevytištěno",
-    "printDetails.printCount": "# Kopie"
+    "printDetails.printCount": "# Kopie",
+    "permission.moveRequest.execute": "Requests: Move to new item, reorder queue",
+    "permission.reorderQueue.execute": "Requests: Reorder queue"
 }

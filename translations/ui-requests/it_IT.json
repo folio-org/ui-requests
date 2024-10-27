@@ -150,8 +150,6 @@
     "item.callNumberComponents.callNumber": "Collocazione effettiva",
     "item.callNumberComponents.suffix": "Suffisso collocazione effettiva",
     "item.chronology": "Cronologia",
-    "permission.moveRequest": "Richieste: sposta la richiesta, riordina coda",
-    "permission.reorderQueue": "Richieste: riordina coda",
     "permission.all": "Richieste: tutte le autorizzazioni",
     "permission.view": "Richieste: visualizza",
     "permission.create": "Richieste: Visualizzare, creare",
@@ -299,5 +297,7 @@
     "requestMeta.printStatus": "Print status",
     "filters.printStatus.printed": "Printed",
     "filters.printStatus.notPrinted": "Not printed",
-    "printDetails.printCount": "# Copies"
+    "printDetails.printCount": "# Copies",
+    "permission.moveRequest.execute": "Requests: Move to new item, reorder queue",
+    "permission.reorderQueue.execute": "Requests: Reorder queue"
 }

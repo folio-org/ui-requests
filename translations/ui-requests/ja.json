@@ -150,8 +150,6 @@
     "item.callNumberComponents.callNumber": "Effective call number",
     "item.callNumberComponents.suffix": "有効な請求記号の接尾語",
     "item.chronology": "Chronology",
-    "permission.moveRequest": "Requests: Move to new item, reorder queue",
-    "permission.reorderQueue": "Requests: Reorder queue",
     "permission.all": "リクエスト：すべての権限",
     "permission.view": "リクエスト: 表示",
     "permission.create": "リクエスト: 表示、作成",
@@ -299,5 +297,7 @@
     "requestMeta.printStatus": "Print status",
     "filters.printStatus.printed": "Printed",
     "filters.printStatus.notPrinted": "Not printed",
-    "printDetails.printCount": "# Copies"
+    "printDetails.printCount": "# Copies",
+    "permission.moveRequest.execute": "Requests: Move to new item, reorder queue",
+    "permission.reorderQueue.execute": "Requests: Reorder queue"
 }

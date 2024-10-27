@@ -150,8 +150,6 @@
     "item.callNumberComponents.callNumber": "Aktualna sygnatura",
     "item.callNumberComponents.suffix": "Sufiks efektywnej sygnatury",
     "item.chronology": "Chronologia",
-    "permission.moveRequest": "Zamówienia: przejdź do nowego egzemplarza, zmień kolejkę",
-    "permission.reorderQueue": "Zamówienia: kolejka zamówień",
     "permission.all": "Zamówienia: wszystkie uprawnienia",
     "permission.view": "Zamówienie: wyświetlanie",
     "permission.create": "Zamówienie: wyświetlanie, tworzenie",
@@ -189,7 +187,7 @@
     "titleInformation.identifiers": "ISBN(s)",
     "instance.title": "Tytuł",
     "instance.contributorNames": "Współtwórca",
-    "requestLevel": "Request level",
+    "requestLevel": "Poziom rezerwacji",
     "itemLevel": "Egzemplarz",
     "titleLevel": "Tytuł",
     "requests.year": "Rok",
@@ -299,5 +297,7 @@
     "requestMeta.printStatus": "Print status",
     "filters.printStatus.printed": "Printed",
     "filters.printStatus.notPrinted": "Not printed",
-    "printDetails.printCount": "# Copies"
+    "printDetails.printCount": "# Copies",
+    "permission.moveRequest.execute": "Requests: Move to new item, reorder queue",
+    "permission.reorderQueue.execute": "Requests: Reorder queue"
 }

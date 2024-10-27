@@ -150,8 +150,6 @@
     "item.callNumberComponents.callNumber": "Número de llamada efectivo",
     "item.callNumberComponents.suffix": "Sufijo de número de llamada efectivo",
     "item.chronology": "Cronología",
-    "permission.moveRequest": "Solicitudes: mover a un ítem nuevo, reordenar la cola",
-    "permission.reorderQueue": "Solicitudes: Reordenar la cola",
     "permission.all": "Solicitudes: Todos los permisos",
     "permission.view": "Solicitudes: Ver",
     "permission.create": "Solicitudes: Ver, crear",
@@ -299,5 +297,7 @@
     "requestMeta.printStatus": "Print status",
     "filters.printStatus.printed": "Printed",
     "filters.printStatus.notPrinted": "Not printed",
-    "printDetails.printCount": "# Copies"
+    "printDetails.printCount": "# Copies",
+    "permission.moveRequest.execute": "Requests: Move to new item, reorder queue",
+    "permission.reorderQueue.execute": "Requests: Reorder queue"
 }

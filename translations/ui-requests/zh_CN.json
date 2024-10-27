@@ -150,8 +150,6 @@
     "item.callNumberComponents.callNumber": "有效的索书号",
     "item.callNumberComponents.suffix": "有效的索书号后缀",
     "item.chronology": "年表",
-    "permission.moveRequest": "请求：移至新单件，重新排序队列",
-    "permission.reorderQueue": "请求：重新排序队列",
     "permission.all": "请求：所有权限",
     "permission.view": "请求：查看",
     "permission.create": "请求：查看、创建",
@@ -299,5 +297,7 @@
     "requestMeta.printStatus": "打印状态",
     "filters.printStatus.printed": "已打印",
     "filters.printStatus.notPrinted": "未打印",
-    "printDetails.printCount": "# 份数"
+    "printDetails.printCount": "# 份数",
+    "permission.moveRequest.execute": "Requests: Move to new item, reorder queue",
+    "permission.reorderQueue.execute": "Requests: Reorder queue"
 }
