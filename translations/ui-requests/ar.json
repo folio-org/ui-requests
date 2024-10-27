@@ -150,8 +150,6 @@
     "item.callNumberComponents.callNumber": "رقم الاستدعاء الفعلي",
     "item.callNumberComponents.suffix": "لاحقة رقم الاستدعاء الفعلي",
     "item.chronology": "التسلسل الزمني",
-    "permission.moveRequest": "الطلبات: انقل إلى مادة جديدة، أعد ترتيب الصف",
-    "permission.reorderQueue": "الطلبات: أعد ترتيب الصف",
     "permission.all": "الطلبات: كل الصلاحيات",
     "permission.view": "الطلبات: اعرض",
     "permission.create": "الطلبات: اعرض، أنشئ",
@@ -299,5 +297,7 @@
     "requestMeta.printStatus": "Print status",
     "filters.printStatus.printed": "Printed",
     "filters.printStatus.notPrinted": "Not printed",
-    "printDetails.printCount": "# Copies"
+    "printDetails.printCount": "# Copies",
+    "permission.moveRequest.execute": "Requests: Move to new item, reorder queue",
+    "permission.reorderQueue.execute": "Requests: Reorder queue"
 }

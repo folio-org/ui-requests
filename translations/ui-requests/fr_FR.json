@@ -150,8 +150,6 @@
     "item.callNumberComponents.callNumber": "Cote intégrale",
     "item.callNumberComponents.suffix": "Suffixe de la cote intégrale",
     "item.chronology": "Chronologie",
-    "permission.moveRequest": "Réservations : déplacer vers un nouvel exemplaire, réorganiser la file d'attente",
-    "permission.reorderQueue": "Réservations : réorganiser la file d'attente",
     "permission.all": "Réservations : toutes les autorisations",
     "permission.view": "Réservations : Afficher",
     "permission.create": "Réservations : afficher, créer",
@@ -299,5 +297,7 @@
     "requestMeta.printStatus": "Print status",
     "filters.printStatus.printed": "Printed",
     "filters.printStatus.notPrinted": "Not printed",
-    "printDetails.printCount": "# Copies"
+    "printDetails.printCount": "# Copies",
+    "permission.moveRequest.execute": "Requests: Move to new item, reorder queue",
+    "permission.reorderQueue.execute": "Requests: Reorder queue"
 }
