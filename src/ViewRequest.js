@@ -554,8 +554,8 @@ class ViewRequest extends React.Component {
       const isEditButtonVisible = isValidNotDCBTransaction && stripes.hasPerm('ui-requests.edit');
       const isCancelButtonVisible = stripes.hasPerm('ui-requests.edit');
       const isDuplicateButtonVisible = isValidNotDCBTransaction && !isMoveAndDuplicateHidden && stripes.hasPerm('ui-requests.create');
-      const isMoveButtonVisible = item && isRequestNotFilled && isValidNotDCBTransaction && !isMoveAndDuplicateHidden && stripes.hasPerm('ui-requests.moveRequest');
-      const isReorderQueueButtonVisible = isRequestOpen && isValidNotDCBTransaction && stripes.hasPerm('ui-requests.reorderQueue');
+      const isMoveButtonVisible = item && isRequestNotFilled && isValidNotDCBTransaction && !isMoveAndDuplicateHidden && stripes.hasPerm('ui-requests.moveRequest.execute');
+      const isReorderQueueButtonVisible = isRequestOpen && isValidNotDCBTransaction && stripes.hasPerm('ui-requests.reorderQueue.execute');
       const isActionMenuVisible = isAnyActionButtonVisible([isEditButtonVisible, isCancelButtonVisible, isDuplicateButtonVisible, isMoveButtonVisible, isReorderQueueButtonVisible]);
 
       if (isActionMenuVisible) {

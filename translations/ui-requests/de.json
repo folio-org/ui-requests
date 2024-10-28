@@ -150,8 +150,6 @@
     "item.callNumberComponents.callNumber": "Effektive Signatur",
     "item.callNumberComponents.suffix": "Effektive Signatur Suffix",
     "item.chronology": "Chronologie",
-    "permission.moveRequest": "Bestandsanfragen: Verschieben zu neuem Exemplar, Warteliste neu anordnen",
-    "permission.reorderQueue": "Bestandsanfragen: Warteliste neu anordnen",
     "permission.all": "Bestandsanfragen: Alle Berechtigungen",
     "permission.view": "Bestandsanfragen: Anzeigen",
     "permission.create": "Bestandsanfragen: Anzeigen, erstellen",
@@ -250,7 +248,7 @@
     "item.status.availableInASR": "Im automatischen Magazin verfügbar",
     "item.status.retrievingFromASR": "Aus dem automatischen Magazin abgerufen",
     "item.status.missingFromASR": "Im automatischen Magazin vermisst",
-    "item.status.orderClosed": "Bestellung abgeschlossen",
+    "item.status.orderClosed": "Erwerbungsvorgang abgeschlossen",
     "item.status.restricted": "Beschränkt",
     "appMenu.keyboardShortcuts": "Tastenkürzel",
     "navigation.app": "Suche in Bestandsanfragen",
@@ -299,5 +297,7 @@
     "requestMeta.printStatus": "Status Druckausgabe",
     "filters.printStatus.printed": "Druck abgeschlossen",
     "filters.printStatus.notPrinted": "Nicht gedruckt",
-    "printDetails.printCount": "# Copies"
+    "printDetails.printCount": "# Copies",
+    "permission.moveRequest.execute": "Requests: Move to new item, reorder queue",
+    "permission.reorderQueue.execute": "Requests: Reorder queue"
 }

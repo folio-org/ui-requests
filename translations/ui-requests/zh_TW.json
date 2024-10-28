@@ -150,8 +150,6 @@
     "item.callNumberComponents.callNumber": "有效的索書號",
     "item.callNumberComponents.suffix": "有效索書號後綴",
     "item.chronology": "年表",
-    "permission.moveRequest": "預約：移至新單件，序列重新排序",
-    "permission.reorderQueue": "預約：序列重新排序",
     "permission.all": "預約：所有權限",
     "permission.view": "預約：檢視",
     "permission.create": "預約：檢視、建立",
@@ -299,5 +297,7 @@
     "requestMeta.printStatus": "Print status",
     "filters.printStatus.printed": "Printed",
     "filters.printStatus.notPrinted": "Not printed",
-    "printDetails.printCount": "# Copies"
+    "printDetails.printCount": "# Copies",
+    "permission.moveRequest.execute": "Requests: Move to new item, reorder queue",
+    "permission.reorderQueue.execute": "Requests: Reorder queue"
 }

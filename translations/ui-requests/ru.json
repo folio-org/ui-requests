@@ -150,8 +150,6 @@
     "item.callNumberComponents.callNumber": "Актуальный шифр хранения",
     "item.callNumberComponents.suffix": "Актуальный суффикс шифра хранения",
     "item.chronology": "Chronology",
-    "permission.moveRequest": "Заказы: Переходить к следующему экземпляру, изменять очередь",
-    "permission.reorderQueue": "Заказы: Изменять очередь",
     "permission.all": "Заказы: Все разрешения",
     "permission.view": "Заказы: Просматривать",
     "permission.create": "Заказы: Просматривать, создавать",
@@ -299,5 +297,7 @@
     "requestMeta.printStatus": "Print status",
     "filters.printStatus.printed": "Printed",
     "filters.printStatus.notPrinted": "Not printed",
-    "printDetails.printCount": "# Copies"
+    "printDetails.printCount": "# Copies",
+    "permission.moveRequest.execute": "Requests: Move to new item, reorder queue",
+    "permission.reorderQueue.execute": "Requests: Reorder queue"
 }

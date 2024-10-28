@@ -40,18 +40,20 @@
         "displayName": "UI: Requests module is enabled"
       },
       {
-        "permissionName": "ui-requests.moveRequest",
+        "permissionName": "ui-requests.moveRequest.execute",
         "displayName": "Requests: Move to new item, reorder queue",
+        "replaces": ["ui-requests.moveRequest"],
         "visible": true,
         "subPermissions": [
           "circulation.requests.item.move.post",
           "circulation.rules.request-policy.get",
-          "ui-requests.reorderQueue"
+          "ui-requests.reorderQueue.execute"
         ]
       },
       {
-        "permissionName": "ui-requests.reorderQueue",
+        "permissionName": "ui-requests.reorderQueue.execute",
         "displayName": "Requests: Reorder queue",
+        "replaces": ["ui-requests.reorderQueue"],
         "visible": true,
         "subPermissions": [
           "circulation.requests.queue.collection.get",
@@ -68,8 +70,8 @@
           "ui-requests.view",
           "ui-requests.create",
           "ui-requests.edit",
-          "ui-requests.moveRequest",
-          "ui-requests.reorderQueue"
+          "ui-requests.moveRequest.execute",
+          "ui-requests.reorderQueue.execute"
         ],
         "visible": true
       },
