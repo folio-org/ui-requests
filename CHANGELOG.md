@@ -35,6 +35,7 @@
 * Send `holdingsRecordId` param for Item level requests. Refs UIREQ-1167.
 * Review and cleanup Module Descriptor. Refs UIREQ-1156.
 * Add `tlr.settings.get` permission. Refs UIREQ-1169.
+* Add `mod-settings.global.read.circulation` permission. Refs UIREQ-1170.
 
 ## [9.1.2] (https://github.com/folio-org/ui-requests/tree/v9.1.2) (2024-09-13)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.1.1...v9.1.2)
