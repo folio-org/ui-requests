@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 9.2.0 IN PROGRESS
+## [10.0.0] (https://github.com/folio-org/ui-requests/tree/v10.0.0) (2024-10-31)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.1.2...v10.0.0)
 
 * Use Save & close button label stripes-component translation key. Refs UIREQ-1073.
 * Include single print and selection print options on results list and actions menu. Refs UIREQ-966.
