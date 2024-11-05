@@ -88,8 +88,6 @@ const testIds = {
   rowCheckbox: 'rowCheckbox',
   selectRequestCheckbox: 'selectRequestCheckbox',
 };
-const requestUrl = 'url';
-
 const intlCache = createIntlCache();
 const intl = createIntl(
   {
@@ -117,7 +115,6 @@ jest.mock('../utils', () => ({
   extractPickSlipRequestIds: jest.fn(),
   isMultiDataTenant: jest.fn(),
   generateUserName: jest.fn(),
-  getRequestUrl: jest.fn(() => requestUrl),
 }));
 jest.mock('./utils', () => ({
   ...jest.requireActual('./utils'),
@@ -444,6 +441,9 @@ describe('RequestsRoute', () => {
         GET: jest.fn(),
         POST: jest.fn().mockResolvedValue(),
       },
+      circulationRequests: {
+        POST: jest.fn().mockResolvedValue(),
+      },
       reportRecords: {
         GET: jest.fn().mockReturnValueOnce(mockRecordValues).mockRejectedValue(),
         reset: jest.fn(),
@@ -704,8 +704,7 @@ describe('RequestsRoute', () => {
       ...defaultProps,
       mutator: {
         ...defaultProps.mutator,
-        records: {
-          ...defaultProps.mutator.records,
+        circulationRequests: {
           POST: jest.fn().mockResolvedValue(response),
         },
       },
@@ -721,7 +720,7 @@ describe('RequestsRoute', () => {
 
       fireEvent.click(createRequestButton);
 
-      expect(props.mutator.records.POST).toHaveBeenCalledWith(userData);
+      expect(props.mutator.circulationRequests.POST).toHaveBeenCalledWith(userData);
     });
 
     it('should redirect to details page', async () => {
@@ -756,7 +755,7 @@ describe('RequestsRoute', () => {
       ...defaultProps,
       mutator: {
         ...defaultProps.mutator,
-        ecsTlrRecords: {
+        circulationRequests: {
           POST: jest.fn().mockResolvedValue(response),
         },
       },
@@ -801,7 +800,7 @@ describe('RequestsRoute', () => {
 
         fireEvent.click(createRequestButton);
 
-        expect(props.mutator.ecsTlrRecords.POST).toHaveBeenCalledWith(userData);
+        expect(props.mutator.circulationRequests.POST).toHaveBeenCalledWith(userData);
       });
     });
 
@@ -1662,7 +1661,7 @@ describe('RequestsRoute', () => {
         });
 
         it('should return correct url', () => {
-          const expectedResult = `circulation/items-by-instance?${mockedQueryValue}`;
+          const expectedResult = `circulation-bff/requests/search-instances?${mockedQueryValue}`;
 
           expect(queryString).toBe(expectedResult);
         });
@@ -1685,7 +1684,7 @@ describe('RequestsRoute', () => {
         });
 
         it('should return correct url', () => {
-          const expectedResult = `circulation/items-by-instance?${mockedQueryValue}`;
+          const expectedResult = `circulation-bff/requests/search-instances?${mockedQueryValue}`;
 
           expect(queryString).toBe(expectedResult);
         });
@@ -1715,7 +1714,7 @@ describe('RequestsRoute', () => {
       });
 
       it('should return correct url', () => {
-        const expectedResult = `circulation/items-by-instance?${mockedQueryValue}`;
+        const expectedResult = `circulation-bff/requests/search-instances?${mockedQueryValue}`;
 
         expect(queryString).toBe(expectedResult);
       });
@@ -1832,6 +1831,7 @@ describe('RequestsRoute', () => {
       const operation = REQUEST_OPERATIONS.CREATE;
       const itemId = 'itemIdUrl';
       const instanceId = 'instanceIdUrl';
+      const requestUrl = 'circulation-bff/requests/allowed-service-points';
 
       it('should return url with "itemId"', () => {
         const expectedResult = `${requestUrl}?requesterId=${requesterId}&operation=${operation}&itemId=${itemId}`;

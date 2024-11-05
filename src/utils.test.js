@@ -3,8 +3,6 @@ import {
   noop,
 } from 'lodash';
 
-import { checkIfUserInCentralTenant } from '@folio/stripes/core';
-
 import {
   buildTemplate,
   createUserHighlightBoxLink,
@@ -37,7 +35,6 @@ import {
   isPrintable,
   getNextSelectedRowsState,
   isMultiDataTenant,
-  getRequestUrl,
   getRequester,
   getFullName,
 } from './utils';
@@ -1126,35 +1123,6 @@ describe('isMultiDataTenant', () => {
       const result = isMultiDataTenant(stripes);
 
       expect(result).toBe(false);
-    });
-  });
-});
-
-describe('getRequestUrl', () => {
-  describe('When central tenant is selected', () => {
-    const stripes = {
-      hasInterface: () => true,
-    };
-
-    checkIfUserInCentralTenant.mockReturnValueOnce(true);
-
-    it('should return url for central tenant env', () => {
-      const url = getRequestUrl(REQUEST_ACTION_NAMES.CREATE_REQUEST, stripes);
-
-      expect(url).toEqual(CENTRAL_TENANT_URLS[REQUEST_ACTION_NAMES.CREATE_REQUEST]);
-    });
-  });
-
-  describe('When single tenant env', () => {
-    const stripes = {
-      hasInterface: () => false,
-    };
-    checkIfUserInCentralTenant.mockReturnValueOnce(false);
-
-    it('should return url for multi tenant env', () => {
-      const url = getRequestUrl(REQUEST_ACTION_NAMES.CREATE_REQUEST, stripes);
-
-      expect(url).toEqual(SINGLE_TENANT_URLS[REQUEST_ACTION_NAMES.CREATE_REQUEST]);
     });
   });
 });

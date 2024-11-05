@@ -36,6 +36,7 @@
 * Review and cleanup Module Descriptor. Refs UIREQ-1156.
 * Add `tlr.settings.get` permission. Refs UIREQ-1169.
 * Add `mod-settings.global.read.circulation` permission. Refs UIREQ-1170.
+* *BREAKING* Migrate to new `mod-circulation-bff` endpoints. Refs UIREQ-1134.
 
 ## [9.1.2] (https://github.com/folio-org/ui-requests/tree/v9.1.2) (2024-09-13)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.1.1...v9.1.2)
