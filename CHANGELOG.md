@@ -1,41 +1,45 @@
 # Change history for ui-requests
 
-## 9.2.0 IN PROGRESS
-
+## IN PROGRESS
 * Use settings/entries endpoint to get settings information. Refs UIREQ-1062.
-* Use Save & close button label stripes-component translation key. Refs UIREQ-1073.
-* Include single print and selection print options on results list and actions menu. Refs UIREQ-966.
-* Set up default pickup service point if it is available. Refs UIREQ-1095.
 * Requests app.: Editing requests (ECS with mod-tlr enabled). Refs UIREQ-1088.
 * Requests app.: Cancelling request (ECS with mod-tlr enabled). Refs UIREQ-1090.
 * Requests app.: Reorder request queue (ECS with mod-tlr enabled). Refs UIREQ-1098.
 * Requests app.: Moving request (ECS with mod-tlr enabled). Refs UIREQ-1100.
 * Hide Action menu on secondary requests (ECS + mod-tlr). Refs UIREQ-1105.
+* *BREAKING* Use `circulation/items-by-instance` endpoint to get item and instance information. Refs UIREQ-1091.
+* Hide Duplicate and Move action buttons in ECS env with mod-tlr enabled. Refs UIREQ-1127, UIREQ-1125.
+* Update permissions set to be able to get item/instance information. Refs UIREQ-1148.
+* *BREAKING* Migrate to new endpoints to get request types and to create a new request. Refs UIREQ-1113.
+* Use `instanceId` param for ILR from items response. Refs UIREQ-1149.
+* Send `holdingsRecordId` param for Item level requests. Refs UIREQ-1167.
+* Add `tlr.settings.get` permission. Refs UIREQ-1169.
+* Add `mod-settings.global.read.circulation` permission. Refs UIREQ-1170.
+
+## [10.0.0] (https://github.com/folio-org/ui-requests/tree/v10.0.0) (2024-10-31)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.1.2...v10.0.0)
+
+* Use Save & close button label stripes-component translation key. Refs UIREQ-1073.
+* Include single print and selection print options on results list and actions menu. Refs UIREQ-966.
+* Set up default pickup service point if it is available. Refs UIREQ-1095.
 * Fix Request detail pane capitalization. Refs UIREQ-1106.
 * Update the column labels. Refs UIREQ-1104.
-* *BREAKING* Use `circulation/items-by-instance` endpoint to get item and instance information. Refs UIREQ-1091.
 * Add "Printed" and "# Copies" columns in "Show Columns" list and Request records table. Refs UIREQ-1118.
 * Update printing details on printing pick slips. Refs UIREQ-1122.
 * Populate the token 'request.barcodeImage' in the pick slip. Refs UIREQ-1117.
 * Populate the token "staffUsername" in the pick slip. Refs UIREQ-1124.
 * Implement availability of "Printed" and "# Copies" columns upon "Enable view print details (Pick slips)" configuration. Refs UIREQ-1121.
 * Implement availability of "Print status" filters upon "Enable view print details (Pick slips)" configuration. Refs UIREQ-1119.
-* Hide Duplicate and Move action buttons in ECS env with mod-tlr enabled. Refs UIREQ-1127, UIREQ-1125.
 * Add missing sub-permissions to fetch staff slips records. Refs UIREQ-1129.
 * Add missing sub-permissions to fetch "pick-slips" and "search-slips" records in "Requests: View, edit, cancel" permission. Refs UIREQ-1137.
-* Update permissions set to be able to get item/instance information. Refs UIREQ-1148.
 * Optimize performance of the "print-events-entry" API to reduce slowness during the initial call. Refs UIREQ-1130.
-* *BREAKING* Migrate to new endpoints to get request types and to create a new request. Refs UIREQ-1113.
 * Revert Custom "Print Status" filter code implementation. Refs UIREQ-1146.
 * Add sorting to 'Printed' and '# Copies' columns in the Request App. Refs UIREQ-1140.
 * Implement "Print Status" filters as server-side filters. Refs UIREQ-1147.
 * Navigate to first page when saving the pick slip print log from beyond the first page. Refs UIREQ-1145.
 * Also support okapiInterfaces `inventory` `14.0`. Refs UIREQ-1160.
-* Use `instanceId` param for ILR from items response. Refs UIREQ-1149.
-* Send `holdingsRecordId` param for Item level requests. Refs UIREQ-1167.
 * Review and cleanup Module Descriptor. Refs UIREQ-1156.
-* Add `tlr.settings.get` permission. Refs UIREQ-1169.
-* Add `mod-settings.global.read.circulation` permission. Refs UIREQ-1170.
+* *BREAKING* Update `ui-plugin-find-instances` to version `8.0.0`. Refs UIREQ-1172.
 
 ## [9.1.2] (https://github.com/folio-org/ui-requests/tree/v9.1.2) (2024-09-13)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.1.1...v9.1.2)

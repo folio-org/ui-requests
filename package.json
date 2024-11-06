@@ -216,7 +216,7 @@
     "react-router-dom": "^5.2.0"
   },
   "optionalDependencies": {
-    "@folio/plugin-find-instance": "^7.0.0",
+    "@folio/plugin-find-instance": "^8.0.0",
     "@folio/plugin-find-user": "^7.0.0"
   }
 }
