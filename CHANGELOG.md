@@ -1,6 +1,6 @@
 # Change history for ui-requests
 
-## IN PROGRESS
+## 11.0.0 (IN PROGRESS)
 * Use settings/entries endpoint to get settings information. Refs UIREQ-1062.
 * Requests app.: Editing requests (ECS with mod-tlr enabled). Refs UIREQ-1088.
 * Requests app.: Cancelling request (ECS with mod-tlr enabled). Refs UIREQ-1090.
