@@ -55,8 +55,10 @@
         "replaces": ["ui-requests.reorderQueue"],
         "visible": true,
         "subPermissions": [
-          "circulation.requests.queue.collection.get",
-          "circulation.requests.queue.reorder.collection.post",
+          "circulation.requests.queue-item.collection.get",
+          "circulation.requests.queue-instance.collection.get",
+          "circulation.requests.queue.item-reorder.collection.post",
+          "circulation.requests.queue.instance-reorder.collection.post",
           "circulation.requests.allowed-service-points.get",
           "circulation.rules.request-policy.get"
         ]
