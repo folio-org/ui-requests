@@ -15,6 +15,7 @@
 * Send `holdingsRecordId` param for Item level requests. Refs UIREQ-1167.
 * Add `tlr.settings.get` permission. Refs UIREQ-1169.
 * Add `mod-settings.global.read.circulation` permission. Refs UIREQ-1170.
+* Add `mod-settings.entries.collection.get` permission. Refs UIREQ-1177.
 
 ## [10.0.0] (https://github.com/folio-org/ui-requests/tree/v10.0.0) (2024-10-31)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.1.2...v10.0.0)
