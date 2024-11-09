@@ -111,7 +111,8 @@
           "circulation.requests.hold-shelf-clearance-report.get",
           "circulation.settings.collection.get",
           "tlr.settings.get",
-          "mod-settings.global.read.circulation"
+          "mod-settings.global.read.circulation",
+          "mod-settings.entries.collection.get"
         ],
         "visible": true
       },
