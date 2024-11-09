@@ -220,7 +220,7 @@ ItemsDialog.manifest = {
   items: {
     type: 'okapi',
     records: 'items',
-    path: 'circulation/items-by-instance',
+    path: 'circulation-bff/requests/search-instances',
     accumulate: true,
     fetch: false,
   },

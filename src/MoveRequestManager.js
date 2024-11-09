@@ -156,7 +156,7 @@ class MoveRequestManager extends React.Component {
         token: stripes.store.getState().okapi.token,
       })
     };
-    const url = `${stripes.okapi.url}/circulation/requests/allowed-service-points?requestId=${request.id}&itemId=${selectedItem.id}&operation=${REQUEST_OPERATIONS.MOVE}`;
+    const url = `${stripes.okapi.url}/circulation-bff/requests/allowed-service-points?requestId=${request.id}&itemId=${selectedItem.id}&operation=${REQUEST_OPERATIONS.MOVE}`;
 
     this.setState({
       isRequestTypesLoading: true,
