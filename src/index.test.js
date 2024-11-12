@@ -29,6 +29,9 @@ describe('UI Requests', () => {
     history: {
       push: jest.fn(),
     },
+    resources: {
+      configs: {},
+    },
   };
 
   beforeEach(() => {
@@ -41,8 +44,8 @@ describe('UI Requests', () => {
     );
   });
 
-  it('should render RequestsRoute', () => {
-    expect(screen.getByText('RequestsRoute')).toBeInTheDocument();
+  it('should not render RequestsRoute', () => {
+    expect(screen.queryByText('RequestsRoute')).not.toBeInTheDocument();
   });
 
   it('should render "Request app Search" nav item', () => {
