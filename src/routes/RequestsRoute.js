@@ -16,7 +16,7 @@ import {
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 
 import {
   AppIcon,
@@ -1288,7 +1288,7 @@ class RequestsRoute extends React.Component {
     const slipTypeInLowerCase = slipType.toLowerCase();
     const slipTemplate = staffSlips.find(slip => slip.name.toLowerCase() === slipTypeInLowerCase);
 
-    return sanitize(get(slipTemplate, 'template', ''), { ADD_TAGS: ['Barcode'] });
+    return DOMPurify.sanitize(get(slipTemplate, 'template', ''), { ADD_TAGS: ['Barcode'] });
   }
 
   handleFilterChange = ({ name, values }) => {
