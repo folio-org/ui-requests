@@ -3,7 +3,6 @@ import {
   isEmpty,
   isArray,
   size,
-  unset,
   cloneDeep,
 } from 'lodash';
 import React from 'react';
@@ -17,7 +16,7 @@ import {
   FormattedMessage,
   injectIntl,
 } from 'react-intl';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 
 import {
   AppIcon,
@@ -70,8 +69,6 @@ import {
   SETTINGS_SCOPES,
   SETTINGS_KEYS,
   ITEM_QUERIES,
-  REQUEST_ACTION_NAMES,
-  CENTRAL_TENANT_URLS,
   PRINT_DETAILS_COLUMNS,
   RESOURCE_TYPES,
   requestFilterTypes,
@@ -89,7 +86,6 @@ import {
   getSelectedSlipDataMulti,
   selectedRowsNonPrintable,
   getNextSelectedRowsState,
-  getRequestUrl,
   isMultiDataTenant,
 } from '../utils';
 import packageInfo from '../../package';
@@ -167,12 +163,12 @@ export const urls = {
 
     query = stringify({ query });
 
-    return `circulation/items-by-instance?${query}`;
+    return `circulation-bff/requests/search-instances?${query}`;
   },
   instance: (value) => {
     const query = stringify({ query: getInstanceQueryString(value) });
 
-    return `circulation/items-by-instance?${query}`;
+    return `circulation-bff/requests/search-instances?${query}`;
   },
   loan: (value) => {
     const query = stringify({ query: `(itemId=="${value}") and status.name==Open` });
@@ -208,14 +204,12 @@ export const urls = {
     instanceId,
     requestId,
     operation,
-  }, idType, stripes) => {
-    const url = getRequestUrl(REQUEST_ACTION_NAMES.GET_SERVICE_POINTS, stripes);
-
+  }) => {
     if (requestId) {
-      return `${url}?operation=${operation}&requestId=${requestId}`;
+      return `circulation-bff/requests/allowed-service-points?operation=${operation}&requestId=${requestId}`;
     }
 
-    let requestUrl = `${url}?requesterId=${requesterId}&operation=${operation}`;
+    let requestUrl = `circulation-bff/requests/allowed-service-points?requesterId=${requesterId}&operation=${operation}`;
 
     if (itemId) {
       requestUrl = `${requestUrl}&itemId=${itemId}`;
@@ -369,9 +363,9 @@ class RequestsRoute extends React.Component {
         staticFallback: { params: {} },
       },
     },
-    ecsTlrRecords: {
+    circulationRequests: {
       type: 'okapi',
-      path: CENTRAL_TENANT_URLS[REQUEST_ACTION_NAMES.CREATE_REQUEST],
+      path: 'circulation-bff/requests',
       fetch: false,
       throwErrors: false,
     },
@@ -514,7 +508,7 @@ class RequestsRoute extends React.Component {
         GET: PropTypes.func,
         POST: PropTypes.func,
       }),
-      ecsTlrRecords: PropTypes.shape({
+      circulationRequests: PropTypes.shape({
         POST: PropTypes.func,
       }),
       reportRecords: PropTypes.shape({
@@ -1109,21 +1103,11 @@ class RequestsRoute extends React.Component {
   };
 
   create = (requestData) => {
-    const { stripes } = this.props;
     const userPersonalData = cloneDeep(requestData?.requester?.personal);
-    let mutator = this.props.mutator.records;
-
-    if (isMultiDataTenant(stripes) && checkIfUserInCentralTenant(stripes)) {
-      unset(requestData, 'item');
-      unset(requestData, 'requester');
-
-      mutator = this.props.mutator.ecsTlrRecords;
-    }
-
     const query = new URLSearchParams(this.props.location.search);
     const mode = query.get('mode');
 
-    return mutator.POST(requestData)
+    return this.props.mutator.circulationRequests.POST(requestData)
       .then((res) => {
         const {
           match: {
@@ -1304,7 +1288,7 @@ class RequestsRoute extends React.Component {
     const slipTypeInLowerCase = slipType.toLowerCase();
     const slipTemplate = staffSlips.find(slip => slip.name.toLowerCase() === slipTypeInLowerCase);
 
-    return sanitize(get(slipTemplate, 'template', ''), { ADD_TAGS: ['Barcode'] });
+    return DOMPurify.sanitize(get(slipTemplate, 'template', ''), { ADD_TAGS: ['Barcode'] });
   }
 
   handleFilterChange = ({ name, values }) => {

@@ -188,7 +188,7 @@ describe('MoveRequestManager', () => {
     });
 
     it('should trigger fetch with correct argument', () => {
-      const expectedUrl = `${basicProps.stripes.okapi.url}/circulation/requests/allowed-service-points?requestId=${basicProps.request.id}&itemId=${selectedItem.id}&operation=${REQUEST_OPERATIONS.MOVE}`;
+      const expectedUrl = `${basicProps.stripes.okapi.url}/circulation-bff/requests/allowed-service-points?requestId=${basicProps.request.id}&itemId=${selectedItem.id}&operation=${REQUEST_OPERATIONS.MOVE}`;
 
       expect(global.fetch).toHaveBeenCalledWith(expectedUrl, {});
     });

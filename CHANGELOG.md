@@ -1,6 +1,6 @@
 # Change history for ui-requests
 
-## IN PROGRESS
+## 11.0.0 (IN PROGRESS)
 * Use settings/entries endpoint to get settings information. Refs UIREQ-1062.
 * Requests app.: Editing requests (ECS with mod-tlr enabled). Refs UIREQ-1088.
 * Requests app.: Cancelling request (ECS with mod-tlr enabled). Refs UIREQ-1090.
@@ -15,6 +15,9 @@
 * Send `holdingsRecordId` param for Item level requests. Refs UIREQ-1167.
 * Add `tlr.settings.get` permission. Refs UIREQ-1169.
 * Add `mod-settings.global.read.circulation` permission. Refs UIREQ-1170.
+* Add `mod-settings.entries.collection.get` permission. Refs UIREQ-1177.
+* *BREAKING* Migrate to new `mod-circulation-bff` endpoints. Refs UIREQ-1134.
+* Fix DOMPurify import. Refs UIREQ-1180.
 
 ## [10.0.0] (https://github.com/folio-org/ui-requests/tree/v10.0.0) (2024-10-31)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v9.1.2...v10.0.0)
