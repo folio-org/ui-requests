@@ -42,11 +42,11 @@ import RequestsRoute, {
 import CheckboxColumn from '../../../components/CheckboxColumn';
 import {
   duplicateRequest,
-  getTlrSettings,
   getFullName,
   getInstanceQueryString,
   getNextSelectedRowsState,
 } from '../../../utils';
+import { getTlrSettings } from '../../utils';
 import {
   getFormattedYears,
   getStatusQuery,
@@ -104,12 +104,14 @@ jest.mock('query-string', () => ({
 jest.mock('../../../utils', () => ({
   ...jest.requireActual('../../../utils'),
   duplicateRequest: jest.fn((request) => request),
-  getTlrSettings: jest.fn(() => ({})),
   getFullName: jest.fn(),
   getFormattedYears: jest.fn(),
   getInstanceQueryString: jest.fn(),
   getNextSelectedRowsState: jest.fn(),
   extractPickSlipRequestIds: jest.fn(),
+}));
+jest.mock('../../utils', () => ({
+  getTlrSettings: jest.fn(() => ({})),
 }));
 jest.mock('../../../routes/utils', () => ({
   ...jest.requireActual('../../../routes/utils'),
@@ -166,7 +168,8 @@ jest.mock('../../../components/RequestsFilters', () => ({ onClear }) => {
   );
 });
 jest.mock('../../components/ViewRequest/ViewRequest', () => jest.fn());
-jest.mock('../../components/RequestForm', () => jest.fn());
+jest.mock('../../components/RequestForm/RequestForm', () => jest.fn());
+jest.mock('../../components/RequestFormContainer/RequestFormContainer', () => jest.fn());
 jest.mock('../../../components/SinglePrintButtonForPickSlip', () => jest.fn(({
   onBeforeGetContentForSinglePrintButton,
   onBeforePrintForSinglePrintButton,

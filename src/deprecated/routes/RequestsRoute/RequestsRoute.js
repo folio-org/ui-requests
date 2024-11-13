@@ -80,6 +80,7 @@ import {
   selectedRowsNonPrintable,
   getNextSelectedRowsState,
 } from '../../../utils';
+import { getTlrSettings } from '../../utils';
 import packageInfo from '../../../../package';
 import CheckboxColumn from '../../../components/CheckboxColumn';
 
@@ -101,7 +102,7 @@ import {
   getStatusQuery,
   getFullNameForCsvRecords,
   updateQuerySortString,
-} from '../../../utils';
+} from '../../../routes/utils';
 import SinglePrintButtonForPickSlip from '../../../components/SinglePrintButtonForPickSlip';
 
 const INITIAL_RESULT_COUNT = 30;
@@ -133,14 +134,6 @@ export const getLastPrintedDetails = (printDetails, intl) => {
   const localizedDateTime = `${formattedDate}${formattedTime ? ', ' : ''}${formattedTime}`;
 
   return fullName + ' ' + localizedDateTime;
-};
-
-const getTlrSettings = (settings) => {
-  try {
-    return JSON.parse(settings);
-  } catch (error) {
-    return {};
-  }
 };
 
 export const urls = {

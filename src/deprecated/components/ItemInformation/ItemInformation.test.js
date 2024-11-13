@@ -21,7 +21,7 @@ import {
   RESOURCE_KEYS,
   ENTER_EVENT_KEY,
   BASE_SPINNER_PROPS,
-} from '../../constants';
+} from '../../../constants';
 
 jest.mock('../../../utils', () => ({
   isFormEditing: jest.fn(() => false),

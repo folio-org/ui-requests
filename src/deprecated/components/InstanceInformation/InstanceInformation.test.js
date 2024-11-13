@@ -24,7 +24,7 @@ import {
   BASE_SPINNER_PROPS,
   ENTER_EVENT_KEY,
   REQUEST_FORM_FIELD_NAMES,
-} from '../../constants';
+} from '../../../constants';
 
 jest.mock('../../../utils', () => ({
   memoizeValidation: (fn) => () => fn,

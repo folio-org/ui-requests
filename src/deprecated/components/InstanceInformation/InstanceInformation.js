@@ -17,7 +17,7 @@ import {
   BASE_SPINNER_PROPS,
   ENTER_EVENT_KEY,
   REQUEST_FORM_FIELD_NAMES,
-} from '../../constants';
+} from '../../../constants';
 import { TitleInformation } from '../../../components';
 import {
   isFormEditing,

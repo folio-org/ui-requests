@@ -23,20 +23,21 @@ import RequesterInformation from '../../../components/RequesterInformation';
 import {
   REQUEST_LEVEL_TYPES,
   createModes,
-  RESOURCE_TYPES, REQUEST_LAYERS,
+  REQUEST_LAYERS,
   REQUEST_FORM_FIELD_NAMES,
   DEFAULT_REQUEST_TYPE_VALUE,
   RESOURCE_KEYS,
   REQUEST_OPERATIONS,
 } from '../../../constants';
+import { RESOURCE_TYPES } from '../../constants';
 import {
-  getTlrSettings,
   getDefaultRequestPreferences,
   isFormEditing,
   getFulfillmentPreference,
   resetFieldState,
   getRequester,
 } from '../../../utils';
+import { getTlrSettings } from '../../utils';
 
 const testIds = {
   tlrCheckbox: 'tlrCheckbox',
@@ -63,15 +64,17 @@ const item = {
 
 jest.mock('../../../utils', () => ({
   ...jest.requireActual('../../../utils'),
-  getTlrSettings: jest.fn(() => ({
-    titleLevelRequestsFeatureEnabled: true,
-  })),
   getRequestLevelValue: jest.fn(),
   resetFieldState: jest.fn(),
   getDefaultRequestPreferences: jest.fn(),
   isFormEditing: jest.fn(),
   getFulfillmentPreference: jest.fn(),
   getRequester: jest.fn((proxy, selectedUser) => selectedUser),
+}));
+jest.mock('../../utils', () => ({
+  getTlrSettings: jest.fn(() => ({
+    titleLevelRequestsFeatureEnabled: true,
+  })),
 }));
 jest.mock('../../../components/FulfilmentPreference', () => jest.fn(({
   changeDeliveryAddress,
@@ -96,7 +99,7 @@ jest.mock('../../../components/FulfilmentPreference', () => jest.fn(({
     </>
   );
 }));
-jest.mock('./components/RequesterInformation', () => jest.fn(({
+jest.mock('../../../components/RequesterInformation', () => jest.fn(({
   findUser,
 }) => {
   const handleChange = () => {
@@ -111,8 +114,8 @@ jest.mock('./components/RequesterInformation', () => jest.fn(({
     />
   );
 }));
-jest.mock('./components/RequestInformation', () => jest.fn(() => <div />));
-jest.mock('./components/ItemInformation', () => jest.fn(({
+jest.mock('../../../components/RequestInformation', () => jest.fn(() => <div />));
+jest.mock('../ItemInformation/ItemInformation', () => jest.fn(({
   findItem,
   triggerValidation,
 }) => {
@@ -129,7 +132,7 @@ jest.mock('./components/ItemInformation', () => jest.fn(({
     />
   );
 }));
-jest.mock('./components/InstanceInformation', () => jest.fn(({
+jest.mock('../InstanceInformation/InstanceInformation', () => jest.fn(({
   findInstance,
   triggerValidation,
 }) => {
@@ -147,7 +150,7 @@ jest.mock('./components/InstanceInformation', () => jest.fn(({
   );
 }));
 jest.mock('@folio/stripes/final-form', () => () => jest.fn((component) => component));
-jest.mock('./PatronBlockModal', () => jest.fn(({
+jest.mock('../../../PatronBlockModal', () => jest.fn(({
   onOverride,
   onClose,
 }) => (
@@ -168,10 +171,10 @@ jest.mock('./PatronBlockModal', () => jest.fn(({
     </button>
   </>
 )));
-jest.mock('./CancelRequestDialog', () => jest.fn(() => <div />));
-jest.mock('./components/TitleInformation', () => jest.fn(() => <div />));
-jest.mock('./ItemDetail', () => jest.fn(() => <div />));
-jest.mock('./ItemsDialog', () => jest.fn(({
+jest.mock('../../../CancelRequestDialog', () => jest.fn(() => <div />));
+jest.mock('../../../components/TitleInformation', () => jest.fn(() => <div />));
+jest.mock('../../../ItemDetail', () => jest.fn(() => <div />));
+jest.mock('../ItemsDialog/ItemsDialog', () => jest.fn(({
   onClose,
   onRowClick,
 }) => {
@@ -198,7 +201,7 @@ jest.mock('./ItemsDialog', () => jest.fn(({
     </>
   );
 }));
-jest.mock('./PositionLink', () => jest.fn(() => <div />));
+jest.mock('../../../PositionLink', () => jest.fn(() => <div />));
 
 describe('RequestForm', () => {
   const labelIds = {

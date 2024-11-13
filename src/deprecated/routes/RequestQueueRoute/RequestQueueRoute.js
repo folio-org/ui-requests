@@ -13,14 +13,7 @@ import { requestStatuses } from '../../../constants';
 import {
   isPageRequest,
 } from '../../../utils';
-
-const getTlrSettings = (settings) => {
-  try {
-    return JSON.parse(settings);
-  } catch (error) {
-    return {};
-  }
-};
+import { getTlrSettings } from '../../utils';
 
 class RequestQueueRoute extends React.Component {
   static getRequest(props) {

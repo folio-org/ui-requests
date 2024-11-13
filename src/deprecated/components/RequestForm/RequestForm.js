@@ -79,6 +79,7 @@ import {
   resetFieldState,
   getRequester,
 } from '../../../utils';
+import { getTlrSettings } from '../../utils';
 
 import css from './RequestForm.css';
 
@@ -96,13 +97,6 @@ export const getRequestInformation = (values, selectedInstance, selectedItem, re
     isTitleLevelRequest,
     selectedResource,
   };
-};
-const getTlrSettings = (settings) => {
-  try {
-    return JSON.parse(settings);
-  } catch (error) {
-    return {};
-  }
 };
 
 class RequestForm extends React.Component {

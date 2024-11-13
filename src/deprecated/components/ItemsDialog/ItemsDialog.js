@@ -29,7 +29,7 @@ import {
   requestableItemStatuses,
   MAX_RECORDS,
   OPEN_REQUESTS_STATUSES,
-} from '../../constants';
+} from '../../../constants';
 import { Loading } from '../../../components';
 import { getStatusQuery } from '../../../routes/utils';
 

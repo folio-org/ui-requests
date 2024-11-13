@@ -22,8 +22,10 @@ jest.mock('../../../views/RequestQueueView', () => {
   };
 });
 jest.mock('../../../utils', () => ({
-  getTlrSettings: jest.fn(() => ({ titleLevelRequestsFeatureEnabled: false })),
   isPageRequest: jest.fn(),
+}));
+jest.mock('../../utils', () => ({
+  getTlrSettings: jest.fn(() => ({ titleLevelRequestsFeatureEnabled: false })),
 }));
 
 const baseMockResources = {
