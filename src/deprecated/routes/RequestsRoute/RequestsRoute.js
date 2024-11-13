@@ -1625,7 +1625,6 @@ class RequestsRoute extends React.Component {
             />
           }
           <TitleManager page={pageTitle} />
-          <h1>DEPRECATED</h1>
           <div data-test-request-instances>
             <SearchAndSort
               paneTitleRef={this.paneTitleRef}

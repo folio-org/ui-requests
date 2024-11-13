@@ -58,6 +58,7 @@
         "subPermissions": [
           "circulation.requests.queue.collection.get",
           "circulation.requests.queue.reorder.collection.post",
+          "circulation.requests.allowed-service-points.get",
           "circulation-bff.requests.allowed-service-points.get",
           "circulation.rules.request-policy.get"
         ]
@@ -122,6 +123,8 @@
         "subPermissions": [
           "ui-requests.view",
           "automated-patron-blocks.collection.get",
+          "circulation.requests.item.post",
+          "circulation.requests.allowed-service-points.get",
           "circulation-bff.requests.allowed-service-points.get",
           "circulation-storage.requests.item.post",
           "circulation-storage.request-preferences.collection.get",
@@ -143,6 +146,7 @@
           "circulation.pick-slips.get",
           "circulation.search-slips.get",
           "circulation.requests.item.put",
+          "circulation.requests.allowed-service-points.get",
           "circulation-bff.requests.allowed-service-points.get",
           "circulation.print-events-entry.item.post",
           "circulation-storage.staff-slips.collection.get",

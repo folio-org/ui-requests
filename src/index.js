@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Route, Switch } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
@@ -28,10 +29,6 @@ import {
 } from './routes';
 import DeprecatedRequestsRoute from './deprecated/routes/RequestsRoute/RequestsRoute';
 import DeprecatedRequestQueueRoute from './deprecated/routes/RequestQueueRoute/RequestQueueRoute';
-import {
-  SETTINGS_KEYS,
-  SETTINGS_SCOPES,
-} from './constants';
 
 const RequestsRouting = (props) => {
   const {
@@ -78,13 +75,9 @@ const RequestsRouting = (props) => {
       { 'shortcut': 'search', 'label': 'Go to Search & Filter pane' },
       { 'shortcut': 'openShortcutModal', 'label': 'View keyboard shortcuts list' },
     ]);
-  const isEcsEnv = props.resources.configs?.records?.[0]?.value?.createTitleLevelRequestsByDefault;
-  const isEcsSettingsLoaded = props.resources.configs?.hasLoaded;
-  const FinalRequestRoute = isEcsEnv ? RequestsRoute : DeprecatedRequestsRoute;
-  const FinalRequestQueueRoute = isEcsEnv ? RequestQueueRoute : DeprecatedRequestQueueRoute;
-
-  console.log('isEcsEnv: ', isEcsEnv);
-  console.log('isEcsSettingsLoaded: ', isEcsSettingsLoaded);
+  const enableEcsRequests = props.stripes?.config?.enableEcsRequests;
+  const FinalRequestRoute = enableEcsRequests ? RequestsRoute : DeprecatedRequestsRoute;
+  const FinalRequestQueueRoute = enableEcsRequests ? RequestQueueRoute : DeprecatedRequestQueueRoute;
 
   return (
     <>
@@ -115,15 +108,10 @@ const RequestsRouting = (props) => {
             )}
           </AppContextMenu>
           <Switch>
-            {
-              isEcsSettingsLoaded ?
-                <Route
-                  path={`${path}/view/:requestId/:id/reorder`}
-                  // component={isEcsEnv ? RequestQueueRoute : DeprecatedRequestQueueRoute}
-                  component={FinalRequestQueueRoute}
-                /> :
-                null
-            }
+            <Route
+              path={`${path}/view/:requestId/:id/reorder`}
+              component={FinalRequestQueueRoute}
+            />
             <Route
               path={`${path}/notes/new`}
               component={NoteCreateRoute}
@@ -136,15 +124,10 @@ const RequestsRouting = (props) => {
               path={`${path}/notes/:noteId`}
               component={NoteViewRoute}
             />
-            {
-              isEcsSettingsLoaded ?
-                <Route
-                  path={path}
-                  // render={() => isEcsEnv ? <RequestsRoute {...props} /> : <DeprecatedRequestsRoute {...props} />}
-                  render={() => <FinalRequestRoute {...props} />}
-                /> :
-                null
-            }
+            <Route
+              path={path}
+              render={() => <FinalRequestRoute {...props} />}
+            />
           </Switch>
         </HasCommand>
       </CommandList>
@@ -162,20 +145,16 @@ const RequestsRouting = (props) => {
   );
 };
 
-RequestsRouting.manifest = {
-  configs: {
-    type: 'okapi',
-    records: 'items',
-    path: 'settings/entries',
-    params: {
-      query: `(scope==${SETTINGS_SCOPES.CIRCULATION} and key==${SETTINGS_KEYS.GENERAL_TLR})`,
-    },
-  },
-};
-
 RequestsRouting.propTypes = {
   match: ReactRouterPropTypes.match,
-  history: ReactRouterPropTypes.history
+  history: ReactRouterPropTypes.history,
+  stripes: PropTypes.shape({
+    stripes: PropTypes.shape({
+      config: PropTypes.shape({
+        enableEcsRequests: PropTypes.bool,
+      }),
+    }),
+  }).isRequired,
 };
 
 export default RequestsRouting;
