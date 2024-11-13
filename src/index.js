@@ -149,10 +149,8 @@ RequestsRouting.propTypes = {
   match: ReactRouterPropTypes.match,
   history: ReactRouterPropTypes.history,
   stripes: PropTypes.shape({
-    stripes: PropTypes.shape({
-      config: PropTypes.shape({
-        enableEcsRequests: PropTypes.bool,
-      }),
+    config: PropTypes.shape({
+      enableEcsRequests: PropTypes.bool,
     }),
   }).isRequired,
 };

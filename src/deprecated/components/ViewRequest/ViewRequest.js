@@ -66,16 +66,10 @@ import {
   isVirtualPatron,
   getRequestErrorMessage,
 } from '../../../utils';
+import { getTlrSettings } from '../../utils';
 import urls from '../../../routes/urls';
 
 const CREATE_SUCCESS = 'CREATE_SUCCESS';
-const getTlrSettings = (settings) => {
-  try {
-    return JSON.parse(settings);
-  } catch (error) {
-    return {};
-  }
-};
 
 class ViewRequest extends React.Component {
   static manifest = {
