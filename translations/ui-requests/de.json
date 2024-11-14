@@ -297,7 +297,7 @@
     "requestMeta.printStatus": "Status Druckausgabe",
     "filters.printStatus.printed": "Druck abgeschlossen",
     "filters.printStatus.notPrinted": "Nicht gedruckt",
-    "printDetails.printCount": "# Copies",
-    "permission.moveRequest.execute": "Requests: Move to new item, reorder queue",
-    "permission.reorderQueue.execute": "Requests: Reorder queue"
+    "printDetails.printCount": "# Exemplare",
+    "permission.moveRequest.execute": "Bestandsanfragen: Verschieben zu neuem Exemplar, Warteliste neu anordnen",
+    "permission.reorderQueue.execute": "Bestandsanfragen: Warteliste neu anordnen"
 }
