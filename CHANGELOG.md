@@ -1,6 +1,9 @@
 # Change history for ui-requests
 
 ## 11.0.0 IN PROGRESS
+
+## [10.0.1] (https://github.com/folio-org/ui-requests/tree/v10.0.1) (2024-11-13)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v10.0.0...v10.0.1)
 * Fix DOMPurify import. Refs UIREQ-1180.
 
 ## [10.0.0] (https://github.com/folio-org/ui-requests/tree/v10.0.0) (2024-10-31)
