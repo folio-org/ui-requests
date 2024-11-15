@@ -75,9 +75,9 @@ const RequestsRouting = (props) => {
       { 'shortcut': 'search', 'label': 'Go to Search & Filter pane' },
       { 'shortcut': 'openShortcutModal', 'label': 'View keyboard shortcuts list' },
     ]);
-  const enableEcsRequests = props.stripes?.config?.enableEcsRequests;
-  const FinalRequestRoute = enableEcsRequests ? RequestsRoute : DeprecatedRequestsRoute;
-  const FinalRequestQueueRoute = enableEcsRequests ? RequestQueueRoute : DeprecatedRequestQueueRoute;
+  const isEnabledEcsRequests = props.stripes?.config?.enableEcsRequests;
+  const FinalRequestRoute = isEnabledEcsRequests ? RequestsRoute : DeprecatedRequestsRoute;
+  const FinalRequestQueueRoute = isEnabledEcsRequests ? RequestQueueRoute : DeprecatedRequestQueueRoute;
 
   return (
     <>
