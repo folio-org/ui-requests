@@ -2,6 +2,8 @@
 
 ## 11.0.0 IN PROGRESS
 
+* Update permission checks of ui-users. Refs UIREQ-1187.
+
 ## [10.0.1] (https://github.com/folio-org/ui-requests/tree/v10.0.1) (2024-11-13)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v10.0.0...v10.0.1)
 * Fix DOMPurify import. Refs UIREQ-1180.
