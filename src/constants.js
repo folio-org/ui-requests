@@ -329,8 +329,8 @@ export const RESOURCE_TYPES = {
   ITEM: 'item',
   INSTANCE: 'instance',
   USER: 'user',
-  HOLDING: 'holding',
   REQUEST_TYPES: 'requestTypes',
+  ECS_TLR_SETTINGS: 'ecsTlrSettings',
 };
 
 export const ENTER_EVENT_KEY = 'Enter';
@@ -338,6 +338,11 @@ export const ENTER_EVENT_KEY = 'Enter';
 export const RESOURCE_KEYS = {
   id: 'id',
   barcode: 'barcode',
+};
+
+export const ITEM_QUERIES = {
+  [RESOURCE_KEYS.id]: 'item.id',
+  [RESOURCE_KEYS.barcode]: 'items.barcode',
 };
 
 export const REQUEST_FORM_FIELD_NAMES = {
@@ -411,3 +416,11 @@ export const DCB_USER = {
 
 export const DCB_INSTANCE_ID = '9d1b77e4-f02e-4b7f-b296-3f2042ddac54';
 export const DCB_HOLDINGS_RECORD_ID = '10cd3a5a-d36f-4c7a-bc4f-e1ae3cf820c9';
+
+export const SETTINGS_SCOPES = {
+  CIRCULATION: 'circulation',
+};
+
+export const SETTINGS_KEYS = {
+  GENERAL_TLR: 'generalTlr',
+};

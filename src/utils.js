@@ -354,13 +354,7 @@ export function parseErrorMessage(errorMessage) {
     ));
 }
 
-export const getTlrSettings = (settings) => {
-  try {
-    return JSON.parse(settings);
-  } catch (error) {
-    return {};
-  }
-};
+export const getTlrSettings = (settings) => settings || {};
 
 export const getRequestLevelValue = (value) => {
   return value
@@ -371,15 +365,19 @@ export const getRequestLevelValue = (value) => {
 export const getInstanceQueryString = (hrid, id) => `("hrid"=="${hrid}" or "id"=="${id || hrid}")`;
 
 export const generateUserName = (user) => {
-  const {
-    firstName,
-    lastName,
-    middleName,
-  } = user;
+  if (user) {
+    const {
+      firstName,
+      lastName,
+      middleName,
+    } = user;
 
-  const shownMiddleName = middleName ? ` ${middleName}` : '';
+    const shownMiddleName = middleName ? ` ${middleName}` : '';
 
-  return `${lastName}${firstName ? ', ' + firstName + shownMiddleName : ''}`;
+    return `${lastName}${firstName ? ', ' + firstName + shownMiddleName : ''}`;
+  }
+
+  return '';
 };
 
 export const handleKeyCommand = (handler, { disabled } = {}) => {
@@ -518,6 +516,10 @@ export function resetFieldState(form, fieldName) {
     form.resetFieldState(fieldName);
   }
 }
+
+export const isMultiDataTenant = (stripes) => {
+  return stripes.hasInterface('consortia') && stripes.hasInterface('ecs-tlr');
+};
 
 export const getRequester = (proxy, selectedUser) => {
   if (proxy && proxy.id !== selectedUser?.id) {

@@ -55,7 +55,6 @@ describe('RequestFormContainer', () => {
         },
         selectedInstance: defaultProps.request.instance,
         isPatronBlocksOverridden: false,
-        instanceId: '',
         onGetPatronManualBlocks: expect.any(Function),
         onGetAutomatedPatronBlocks: expect.any(Function),
         onSetBlocked: expect.any(Function),
@@ -63,7 +62,6 @@ describe('RequestFormContainer', () => {
         onSetSelectedUser: expect.any(Function),
         onSetSelectedInstance: expect.any(Function),
         onSetIsPatronBlocksOverridden: expect.any(Function),
-        onSetInstanceId: expect.any(Function),
         onSubmit: expect.any(Function),
       };
 
@@ -100,6 +98,10 @@ describe('RequestFormContainer', () => {
       };
       const props = {
         ...defaultProps,
+        request: {
+          ...defaultProps.request,
+          instanceId: null,
+        },
         itemId: 'itemId',
         item: {
           id: 'id',
@@ -107,6 +109,7 @@ describe('RequestFormContainer', () => {
       };
       const selectedItem = {
         holdingsRecordId: 'holdingsRecordId',
+        instanceId: 'instanceId',
       };
       const selectItemLabel = 'Select Item';
 
@@ -144,7 +147,7 @@ describe('RequestFormContainer', () => {
         const expectedArg = {
           holdingsRecordId: selectedItem.holdingsRecordId,
           fulfillmentPreference: fulfillmentTypeMap.HOLD_SHELF,
-          instanceId: defaultProps.request.instanceId,
+          instanceId: selectedItem.instanceId,
           requestLevel: REQUEST_LEVEL_TYPES.ITEM,
           pickupServicePointId: submitData.pickupServicePointId,
           item: submitData.item,

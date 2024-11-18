@@ -48,7 +48,6 @@ const basicProps = {
   selectedLoan: {},
   selectedItem: {},
   itemRequestCount: 1,
-  instanceId: 'instanceId',
   isLoading: false,
   submitting: false,
   isItemIdRequest: true,
@@ -546,10 +545,18 @@ describe('ItemInformation', () => {
     });
 
     describe('when item is selected', () => {
+      const props = {
+        ...basicProps,
+        selectedItem: {
+          id: 'itemId',
+          instanceId: 'instanceId',
+        },
+      };
+
       beforeEach(() => {
         render(
           <ItemInformation
-            {...basicProps}
+            {...props}
           />
         );
       });
@@ -557,7 +564,7 @@ describe('ItemInformation', () => {
       it('should render "ItemDetail" with correct props', () => {
         const expectedProps = {
           request: basicProps.request,
-          currentInstanceId: basicProps.instanceId,
+          currentInstanceId: basicProps.selectedItem.instanceId,
           item: basicProps.selectedItem,
           loan: basicProps.selectedLoan,
           requestCount: basicProps.itemRequestCount,
