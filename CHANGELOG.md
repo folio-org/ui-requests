@@ -17,9 +17,11 @@
 * Add `mod-settings.global.read.circulation` permission. Refs UIREQ-1170.
 * Add `mod-settings.entries.collection.get` permission. Refs UIREQ-1177.
 * *BREAKING* Migrate to new `mod-circulation-bff` endpoints. Refs UIREQ-1134.
+* Implement feature toggle for ECS and not ECS envs. Refs UIREQ-1171.
 
 ## [10.0.1] (https://github.com/folio-org/ui-requests/tree/v10.0.1) (2024-11-13)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v10.0.0...v10.0.1)
+
 * Fix DOMPurify import. Refs UIREQ-1180.
 
 ## [10.0.0] (https://github.com/folio-org/ui-requests/tree/v10.0.0) (2024-10-31)
