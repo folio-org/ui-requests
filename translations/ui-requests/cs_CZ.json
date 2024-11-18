@@ -298,6 +298,6 @@
     "filters.printStatus.printed": "Tištěno",
     "filters.printStatus.notPrinted": "Nevytištěno",
     "printDetails.printCount": "# Kopie",
-    "permission.moveRequest.execute": "Requests: Move to new item, reorder queue",
-    "permission.reorderQueue.execute": "Requests: Reorder queue"
+    "permission.moveRequest.execute": "Požadavky: Přejít na novou jednotku, změnit pořadí fronty",
+    "permission.reorderQueue.execute": "Žádanky: Změna pořadí ve frontě"
 }
