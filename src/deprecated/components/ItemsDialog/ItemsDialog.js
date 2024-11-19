@@ -29,9 +29,9 @@ import {
   requestableItemStatuses,
   MAX_RECORDS,
   OPEN_REQUESTS_STATUSES,
-} from './constants';
-import { Loading } from './components';
-import { getStatusQuery } from './routes/utils';
+} from '../../../constants';
+import { Loading } from '../../../components';
+import { getStatusQuery } from '../../../routes/utils';
 
 import css from './ItemsDialog.css';
 
@@ -86,17 +86,28 @@ const ItemsDialog = ({
   const [items, setItems] = useState([]);
   const { formatMessage } = useIntl();
 
-  const fetchItems = () => {
-    const query = `id==${instanceId}`;
+  const fetchHoldings = () => {
+    const query = `instanceId==${instanceId}`;
+    mutator.holdings.reset();
 
-    mutator.items.reset();
+    return mutator.holdings.GET({ params: { query, limit: MAX_RECORDS } });
+  };
 
-    return mutator.items.GET({
-      params: {
-        query,
-        limit: MAX_RECORDS,
-      },
-    });
+  const fetchItems = async (holdings) => {
+    const chunkedItems = chunk(holdings, CHUNK_SIZE);
+    const data = [];
+
+    for (const itemChunk of chunkedItems) {
+      const query = itemChunk.map(i => `holdingsRecordId==${i.id}`).join(' or ');
+
+      mutator.items.reset();
+      // eslint-disable-next-line no-await-in-loop
+      const result = await mutator.items.GET({ params: { query, limit: MAX_RECORDS } });
+
+      data.push(...result);
+    }
+
+    return data;
   };
 
   const fetchRequests = async (itemsList) => {
@@ -125,7 +136,8 @@ const ItemsDialog = ({
     const getItems = async () => {
       setAreItemsBeingLoaded(true);
 
-      let itemsList = await fetchItems();
+      const holdings = await fetchHoldings();
+      let itemsList = await fetchItems(holdings);
 
       if (skippedItemId) {
         itemsList = itemsList.filter(item => requestableItemStatuses.includes(item.status?.name));
@@ -217,10 +229,17 @@ const ItemsDialog = ({
 };
 
 ItemsDialog.manifest = {
+  holdings: {
+    type: 'okapi',
+    records: 'holdingsRecords',
+    path: 'holdings-storage/holdings',
+    accumulate: true,
+    fetch: false,
+  },
   items: {
     type: 'okapi',
     records: 'items',
-    path: 'circulation-bff/requests/search-instances',
+    path: 'inventory/items',
     accumulate: true,
     fetch: false,
   },
@@ -246,6 +265,10 @@ ItemsDialog.propTypes = {
   skippedItemId: PropTypes.string,
   onRowClick: PropTypes.func,
   mutator: PropTypes.shape({
+    holdings: PropTypes.shape({
+      GET: PropTypes.func.isRequired,
+      reset: PropTypes.func.isRequired,
+    }).isRequired,
     items: PropTypes.shape({
       GET: PropTypes.func.isRequired,
       reset: PropTypes.func.isRequired,

@@ -18,6 +18,7 @@ import {
   defer,
   pick,
   isBoolean,
+  isNil,
 } from 'lodash';
 
 import {
@@ -36,38 +37,37 @@ import {
 } from '@folio/stripes/components';
 import stripesFinalForm from '@folio/stripes/final-form';
 
-import RequestFormShortcutsWrapper from './components/RequestFormShortcutsWrapper';
-import CancelRequestDialog from './CancelRequestDialog';
-import PatronBlockModal from './PatronBlockModal';
+import RequestFormShortcutsWrapper from '../../../components/RequestFormShortcutsWrapper';
+import CancelRequestDialog from '../../../CancelRequestDialog';
+import PatronBlockModal from '../../../PatronBlockModal';
 import {
   ErrorModal,
-  ItemInformation,
-  InstanceInformation,
   RequestInformation,
   RequesterInformation,
   FulfilmentPreference,
-} from './components';
-import ItemsDialog from './ItemsDialog';
+} from '../../../components';
+import ItemInformation from '../ItemInformation/ItemInformation';
+import InstanceInformation from '../InstanceInformation/InstanceInformation';
+import ItemsDialog from '../ItemsDialog/ItemsDialog';
 import {
   iconTypes,
   fulfillmentTypeMap,
   createModes,
   REQUEST_LEVEL_TYPES,
-  RESOURCE_TYPES,
   RESOURCE_KEYS,
   REQUEST_FORM_FIELD_NAMES,
   DEFAULT_REQUEST_TYPE_VALUE,
   requestTypeOptionMap,
   REQUEST_LAYERS,
   REQUEST_OPERATIONS,
-} from './constants';
+} from '../../../constants';
+import { RESOURCE_TYPES } from '../../constants';
 import {
   handleKeyCommand,
   toUserAddress,
   getPatronGroup,
   isDelivery,
   parseErrorMessage,
-  getTlrSettings,
   getFulfillmentTypeOptions,
   getDefaultRequestPreferences,
   getFulfillmentPreference,
@@ -78,9 +78,10 @@ import {
   isFormEditing,
   resetFieldState,
   getRequester,
-} from './utils';
+} from '../../../utils';
+import { getTlrSettings } from '../../utils';
 
-import css from './requests.css';
+import css from './RequestForm.css';
 
 export const ID_TYPE_MAP = {
   ITEM_ID: 'itemId',
@@ -143,6 +144,7 @@ class RequestForm extends React.Component {
     values: PropTypes.object.isRequired,
     form: PropTypes.object.isRequired,
     blocked: PropTypes.bool.isRequired,
+    instanceId: PropTypes.string.isRequired,
     isPatronBlocksOverridden: PropTypes.bool.isRequired,
     onSubmit: PropTypes.func,
     parentMutator: PropTypes.shape({
@@ -159,6 +161,7 @@ class RequestForm extends React.Component {
     onSetSelectedInstance: PropTypes.func.isRequired,
     onSetBlocked: PropTypes.func.isRequired,
     onSetIsPatronBlocksOverridden: PropTypes.func.isRequired,
+    onSetInstanceId: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -715,21 +718,22 @@ class RequestForm extends React.Component {
   findItemRelatedResources(item) {
     const {
       findResource,
+      onSetInstanceId,
     } = this.props;
-
-    if (!item) {
-      return null;
-    }
+    if (!item) return null;
 
     return Promise.all(
       [
         findResource('loan', item.id),
         findResource('requestsForItem', item.id),
+        findResource(RESOURCE_TYPES.HOLDING, item.holdingsRecordId),
       ],
     ).then((results) => {
       const selectedLoan = results[0]?.loans?.[0];
       const itemRequestCount = results[1]?.requests?.length;
+      const holdingsRecord = results[2]?.holdingsRecords?.[0];
 
+      onSetInstanceId(holdingsRecord?.instanceId);
       this.setState({
         itemRequestCount,
         selectedLoan,
@@ -769,7 +773,7 @@ class RequestForm extends React.Component {
     if (isValidation) {
       return findResource(RESOURCE_TYPES.ITEM, value, key)
         .then((result) => {
-          return result?.items?.length;
+          return result.totalRecords;
         })
         .finally(() => {
           this.setState({ isItemOrInstanceLoading: false });
@@ -784,7 +788,7 @@ class RequestForm extends React.Component {
         .then((result) => {
           this.setItemIdRequest(key, isBarcodeRequired);
 
-          if (!result || result?.items?.length === 0) {
+          if (!result || result.totalRecords === 0) {
             this.setState({
               isItemOrInstanceLoading: false,
             });
@@ -792,26 +796,21 @@ class RequestForm extends React.Component {
             return null;
           }
 
-          const foundItem = result.items?.find(item => item[key] === value);
+          const item = result.items[0];
 
-          form.change(REQUEST_FORM_FIELD_NAMES.ITEM_ID, foundItem.id);
-          form.change(REQUEST_FORM_FIELD_NAMES.ITEM_BARCODE, foundItem.barcode);
+          form.change(REQUEST_FORM_FIELD_NAMES.ITEM_ID, item.id);
+          form.change(REQUEST_FORM_FIELD_NAMES.ITEM_BARCODE, item.barcode);
           resetFieldState(form, REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE);
 
           // Setting state here is redundant with what follows, but it lets us
           // display the matched item as quickly as possible, without waiting for
           // the slow loan and request lookups
-          onSetSelectedItem(foundItem);
+          onSetSelectedItem(item);
           this.setState({
             isItemOrInstanceLoading: false,
           });
 
-          return foundItem;
-        })
-        .catch(() => {
-          onSetSelectedItem(null);
-
-          return null;
+          return item;
         })
         .then(item => {
           if (item && selectedUser?.id) {
@@ -826,7 +825,7 @@ class RequestForm extends React.Component {
   }
 
   findInstanceRelatedResources(instance) {
-    if (!instance?.id) {
+    if (!instance) {
       return null;
     }
 
@@ -842,7 +841,7 @@ class RequestForm extends React.Component {
       });
   }
 
-  findInstance = async (instanceId, isValidation = false) => {
+  findInstance = async (instanceId, holdingsRecordId, isValidation = false) => {
     const {
       findResource,
       form,
@@ -855,10 +854,14 @@ class RequestForm extends React.Component {
       isItemOrInstanceLoading: true,
     });
 
+    const resultInstanceId = isNil(instanceId)
+      ? await findResource(RESOURCE_TYPES.HOLDING, holdingsRecordId).then((holding) => holding.holdingsRecords[0].instanceId)
+      : instanceId;
+
     if (isValidation) {
-      return findResource(RESOURCE_TYPES.INSTANCE, instanceId)
+      return findResource(RESOURCE_TYPES.INSTANCE, resultInstanceId)
         .then((result) => {
-          return Boolean(result?.id);
+          return result.totalRecords;
         })
         .finally(() => {
           this.setState({ isItemOrInstanceLoading: false });
@@ -869,15 +872,17 @@ class RequestForm extends React.Component {
         isRequestTypesReceived: false,
       });
 
-      return findResource(RESOURCE_TYPES.INSTANCE, instanceId)
-        .then((instance) => {
-          if (!instance?.id) {
+      return findResource(RESOURCE_TYPES.INSTANCE, resultInstanceId)
+        .then((result) => {
+          if (!result || result.totalRecords === 0) {
             this.setState({
               isItemOrInstanceLoading: false,
             });
 
             return null;
           }
+
+          const instance = result.instances[0];
 
           form.change(REQUEST_FORM_FIELD_NAMES.INSTANCE_ID, instance.id);
           form.change(REQUEST_FORM_FIELD_NAMES.INSTANCE_HRID, instance.hrid);
@@ -889,11 +894,6 @@ class RequestForm extends React.Component {
           });
 
           return instance;
-        })
-        .catch(() => {
-          onSetSelectedInstance(null);
-
-          return null;
         })
         .then(instance => {
           if (instance && selectedUser?.id) {
@@ -1009,16 +1009,15 @@ class RequestForm extends React.Component {
     form.change(REQUEST_FORM_FIELD_NAMES.INSTANCE_ID, null);
 
     if (isCreateTlr) {
+      onSetSelectedItem(undefined);
       this.setState({
         requestTypes: {},
         isRequestTypesReceived: false,
       });
 
       if (selectedItem) {
-        this.findInstance(selectedItem.instanceId);
+        this.findInstance(null, selectedItem.holdingsRecordId);
       }
-
-      onSetSelectedItem(undefined);
     } else if (selectedInstance) {
       form.change(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, DEFAULT_REQUEST_TYPE_VALUE);
       resetFieldState(form, REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE);
@@ -1100,6 +1099,7 @@ class RequestForm extends React.Component {
       selectedUser,
       selectedInstance,
       isPatronBlocksOverridden,
+      instanceId,
       blocked,
       values,
       onCancel,
@@ -1289,6 +1289,7 @@ class RequestForm extends React.Component {
                               onSetSelectedInstance={onSetSelectedInstance}
                               isLoading={isItemOrInstanceLoading}
                               instanceRequestCount={instanceRequestCount}
+                              instanceId={instanceId}
                             />
                           </div>
                         </Accordion>
@@ -1310,6 +1311,7 @@ class RequestForm extends React.Component {
                               onSetSelectedItem={onSetSelectedItem}
                               values={values}
                               itemRequestCount={itemRequestCount}
+                              instanceId={instanceId}
                               selectedLoan={selectedLoan}
                               isLoading={isItemOrInstanceLoading}
                             />

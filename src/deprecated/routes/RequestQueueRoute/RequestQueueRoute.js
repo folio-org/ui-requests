@@ -7,17 +7,13 @@ import {
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { stripesConnect } from '@folio/stripes/core';
 
-import RequestQueueView from '../views/RequestQueueView';
-import urls from './urls';
+import RequestQueueView from '../../../views/RequestQueueView';
+import urls from '../../../routes/urls';
+import { requestStatuses } from '../../../constants';
 import {
-  requestStatuses,
-  SETTINGS_SCOPES,
-  SETTINGS_KEYS,
-} from '../constants';
-import {
-  getTlrSettings,
   isPageRequest,
-} from '../utils';
+} from '../../../utils';
+import { getTlrSettings } from '../../utils';
 
 class RequestQueueRoute extends React.Component {
   static getRequest(props) {
@@ -33,10 +29,10 @@ class RequestQueueRoute extends React.Component {
   static manifest = {
     configs: {
       type: 'okapi',
-      records: 'items',
-      path: 'settings/entries',
+      records: 'configs',
+      path: 'configurations/entries',
       params: {
-        query: `(scope==${SETTINGS_SCOPES.CIRCULATION} and key==${SETTINGS_KEYS.GENERAL_TLR})`,
+        query: '(module==SETTINGS and configName==TLR)',
       },
     },
     addressTypes: {

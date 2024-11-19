@@ -13,15 +13,15 @@ import {
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 
-import RequestForm from './RequestForm';
+import RequestForm from '../RequestForm/RequestForm';
 import {
   getRequestLevelValue,
-} from './utils';
+} from '../../../utils';
 import {
   fulfillmentTypeMap,
   REQUEST_LEVEL_TYPES,
-  RESOURCE_TYPES,
-} from './constants';
+} from '../../../constants';
+import { RESOURCE_TYPES } from '../../constants';
 
 const RequestFormContainer = ({
   parentResources,
@@ -39,6 +39,7 @@ const RequestFormContainer = ({
   const [selectedUser, setSelectedUser] = useState({ ...requester, id: requesterId });
   const [selectedInstance, setSelectedInstance] = useState(request?.instance);
   const [isPatronBlocksOverridden, setIsPatronBlocksOverridden] = useState(false);
+  const [instanceId, setInstanceId] = useState('');
   const [blocked, setBlocked] = useState(false);
 
   const setItem = (optedItem) => {
@@ -59,6 +60,10 @@ const RequestFormContainer = ({
 
   const setStateIsPatronBlocksOverridden = (value) => {
     setIsPatronBlocksOverridden(value);
+  };
+
+  const setStateInstanceId = (id) => {
+    setInstanceId(id);
   };
 
   const getPatronManualBlocks = (resources) => {
@@ -137,7 +142,7 @@ const RequestFormContainer = ({
       };
     }
 
-    requestData.instanceId = request?.instanceId || selectedInstance?.id || selectedItem?.instanceId;
+    requestData.instanceId = request?.instanceId || instanceId || selectedInstance?.id;
     requestData.requestLevel = request?.requestLevel || getRequestLevelValue(requestData.createTitleLevelRequest);
 
     if (requestData.requestLevel === REQUEST_LEVEL_TYPES.ITEM) {
@@ -174,6 +179,7 @@ const RequestFormContainer = ({
       selectedUser={selectedUser}
       selectedInstance={selectedInstance}
       isPatronBlocksOverridden={isPatronBlocksOverridden}
+      instanceId={instanceId}
       onGetPatronManualBlocks={getPatronManualBlocks}
       onGetAutomatedPatronBlocks={getAutomatedPatronBlocks}
       onSetBlocked={setIsBlocked}
@@ -181,6 +187,7 @@ const RequestFormContainer = ({
       onSetSelectedUser={setUser}
       onSetSelectedInstance={setInstance}
       onSetIsPatronBlocksOverridden={setStateIsPatronBlocksOverridden}
+      onSetInstanceId={setStateInstanceId}
       onSubmit={handleSubmit}
     />
   );

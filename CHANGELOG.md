@@ -1,11 +1,29 @@
 # Change history for ui-requests
 
-## 11.0.0 IN PROGRESS
+## 11.0.0 (IN PROGRESS)
+* Use settings/entries endpoint to get settings information. Refs UIREQ-1062.
+* Requests app.: Editing requests (ECS with mod-tlr enabled). Refs UIREQ-1088.
+* Requests app.: Cancelling request (ECS with mod-tlr enabled). Refs UIREQ-1090.
+* Requests app.: Reorder request queue (ECS with mod-tlr enabled). Refs UIREQ-1098.
+* Requests app.: Moving request (ECS with mod-tlr enabled). Refs UIREQ-1100.
+* Hide Action menu on secondary requests (ECS + mod-tlr). Refs UIREQ-1105.
+* *BREAKING* Use `circulation/items-by-instance` endpoint to get item and instance information. Refs UIREQ-1091.
+* Hide Duplicate and Move action buttons in ECS env with mod-tlr enabled. Refs UIREQ-1127, UIREQ-1125.
+* Update permissions set to be able to get item/instance information. Refs UIREQ-1148.
+* *BREAKING* Migrate to new endpoints to get request types and to create a new request. Refs UIREQ-1113.
+* Use `instanceId` param for ILR from items response. Refs UIREQ-1149.
+* Send `holdingsRecordId` param for Item level requests. Refs UIREQ-1167.
+* Add `tlr.settings.get` permission. Refs UIREQ-1169.
+* Add `mod-settings.global.read.circulation` permission. Refs UIREQ-1170.
+* Add `mod-settings.entries.collection.get` permission. Refs UIREQ-1177.
+* *BREAKING* Migrate to new `mod-circulation-bff` endpoints. Refs UIREQ-1134.
+* Implement feature toggle for ECS and not ECS envs. Refs UIREQ-1171.
 
 * Update permission checks of ui-users. Refs UIREQ-1187.
 
 ## [10.0.1] (https://github.com/folio-org/ui-requests/tree/v10.0.1) (2024-11-13)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v10.0.0...v10.0.1)
+
 * Fix DOMPurify import. Refs UIREQ-1180.
 
 ## [10.0.0] (https://github.com/folio-org/ui-requests/tree/v10.0.0) (2024-10-31)

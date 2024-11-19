@@ -31,7 +31,8 @@
       "request-storage": "6.0",
       "pick-slips": "0.1",
       "search-slips": "0.1",
-      "automated-patron-blocks": "0.1"
+      "automated-patron-blocks": "0.1",
+      "circulation-bff-requests": "1.0"
     },
     "permissionSets": [
       {
@@ -58,6 +59,7 @@
           "circulation.requests.queue.collection.get",
           "circulation.requests.queue.reorder.collection.post",
           "circulation.requests.allowed-service-points.get",
+          "circulation-bff.requests.allowed-service-points.get",
           "circulation.rules.request-policy.get"
         ]
       },
@@ -80,7 +82,6 @@
         "subPermissions": [
           "module.requests.enabled",
           "circulation.loans.collection.get",
-          "circulation.settings.collection.get",
           "circulation.settings.item.get",
           "circulation.requests.collection.get",
           "circulation.requests.item.get",
@@ -108,7 +109,11 @@
           "inventory-storage.instances.item.get",
           "inventory-storage.instances.collection.get",
           "manualblocks.collection.get",
-          "circulation.requests.hold-shelf-clearance-report.get"
+          "circulation.requests.hold-shelf-clearance-report.get",
+          "circulation.settings.collection.get",
+          "tlr.settings.get",
+          "mod-settings.global.read.circulation",
+          "mod-settings.entries.collection.get"
         ],
         "visible": true
       },
@@ -120,13 +125,16 @@
           "automated-patron-blocks.collection.get",
           "circulation.requests.item.post",
           "circulation.requests.allowed-service-points.get",
+          "circulation-bff.requests.allowed-service-points.get",
           "circulation-storage.requests.item.post",
           "circulation-storage.request-preferences.collection.get",
           "circulation-storage.staff-slips.collection.get",
           "circulation.pick-slips.get",
           "circulation.search-slips.get",
           "circulation.print-events-entry.item.post",
-          "inventory-storage.locations.item.get"
+          "inventory-storage.locations.item.get",
+          "circulation-bff.requests.search-instances.get",
+          "circulation-bff.requests.post"
         ],
         "visible": true
       },
@@ -139,6 +147,7 @@
           "circulation.search-slips.get",
           "circulation.requests.item.put",
           "circulation.requests.allowed-service-points.get",
+          "circulation-bff.requests.allowed-service-points.get",
           "circulation.print-events-entry.item.post",
           "circulation-storage.staff-slips.collection.get",
           "circulation-storage.requests.collection.delete",

@@ -10,30 +10,27 @@ import {
   defaultKeyboardShortcuts,
 } from '@folio/stripes/components';
 
-import ViewRequest, {
-  isAnyActionButtonVisible,
-  shouldHideMoveAndDuplicate,
-} from './ViewRequest';
-import RequestForm from './RequestForm';
+import ViewRequest from './ViewRequest';
+import RequestForm from '../RequestForm/RequestForm';
 import {
   INVALID_REQUEST_HARDCODED_ID,
   requestStatuses,
   REQUEST_LEVEL_TYPES,
   DCB_INSTANCE_ID,
   DCB_HOLDINGS_RECORD_ID,
-} from './constants';
+} from '../../../constants';
 import {
   duplicateRecordShortcut,
   editRecordShortcut,
-} from '../test/jest/helpers/shortcuts';
+} from '../../../../test/jest/helpers';
 
-jest.mock('./RequestForm', () => jest.fn(() => null));
-jest.mock('./MoveRequestManager', () => jest.fn(() => null));
-jest.mock('./ItemDetail', () => jest.fn(() => null));
-jest.mock('./UserDetail', () => jest.fn(() => null));
-jest.mock('./CancelRequestDialog', () => jest.fn(() => null));
-jest.mock('./PositionLink', () => jest.fn(() => null));
-jest.mock('./components/TitleInformation', () => jest.fn(() => null));
+jest.mock('../RequestForm/RequestForm', () => jest.fn(() => null));
+jest.mock('../MoveRequestManager/MoveRequestManager', () => jest.fn(() => null));
+jest.mock('../../../ItemDetail', () => jest.fn(() => null));
+jest.mock('../../../UserDetail', () => jest.fn(() => null));
+jest.mock('../../../CancelRequestDialog', () => jest.fn(() => null));
+jest.mock('../../../PositionLink', () => jest.fn(() => null));
+jest.mock('../../../components/TitleInformation', () => jest.fn(() => null));
 
 describe('ViewRequest', () => {
   const labelIds = {
@@ -79,11 +76,7 @@ describe('ViewRequest', () => {
   };
   const mockedConfig = {
     records: [
-      {
-        value: {
-          titleLevelRequestsFeatureEnabled: true,
-        },
-      }
+      { value: '{"titleLevelRequestsFeatureEnabled":true}' },
     ],
   };
   const defaultProps = {
@@ -121,7 +114,6 @@ describe('ViewRequest', () => {
     },
     stripes: {
       hasPerm: jest.fn(() => true),
-      hasInterface: jest.fn(() => true),
       connect: jest.fn((component) => component),
       logger: {
         log: jest.fn(),
@@ -132,8 +124,6 @@ describe('ViewRequest', () => {
         id: 'testId',
       },
     },
-    isEcsTlrSettingEnabled: false,
-    isEcsTlrSettingReceived: true,
   };
   const defaultDCBLendingProps = {
     ...defaultProps,
@@ -205,9 +195,7 @@ describe('ViewRequest', () => {
         describe('request is valid', () => {
           describe('TLR in enabled', () => {
             beforeAll(() => {
-              mockedConfig.records[0].value = {
-                titleLevelRequestsFeatureEnabled: true,
-              };
+              mockedConfig.records[0].value = '{"titleLevelRequestsFeatureEnabled":true}';
             });
 
             it('should render "Duplicate" button', () => {
@@ -217,9 +205,7 @@ describe('ViewRequest', () => {
 
           describe('TLR in disabled', () => {
             beforeAll(() => {
-              mockedConfig.records[0].value = {
-                titleLevelRequestsFeatureEnabled: false,
-              };
+              mockedConfig.records[0].value = '{"titleLevelRequestsFeatureEnabled":false}';
             });
 
             it('should not render "Duplicate" button', () => {
@@ -502,42 +488,6 @@ describe('ViewRequest', () => {
           expect(defaultProps.stripes.hasPerm).toHaveBeenCalled();
         });
       });
-    });
-  });
-
-  describe('isAnyActionButtonVisible', () => {
-    describe('When visibility conditions are provided', () => {
-      it('should return true', () => {
-        expect(isAnyActionButtonVisible([true, false])).toBe(true);
-      });
-    });
-
-    describe('When visibility conditions are not provided', () => {
-      it('should return false', () => {
-        expect(isAnyActionButtonVisible()).toBe(false);
-      });
-    });
-  });
-
-  describe('shouldHideMoveAndDuplicate', () => {
-    const stripes = {
-      hasInterface: () => true,
-    };
-
-    it('should return true for primary request', () => {
-      expect(shouldHideMoveAndDuplicate(stripes, true)).toBe(true);
-    });
-
-    it('should return true if ecs tlr enabled', () => {
-      expect(shouldHideMoveAndDuplicate(stripes, false, true, true)).toBe(true);
-    });
-
-    it('should return true if settings are not received', () => {
-      expect(shouldHideMoveAndDuplicate(stripes, false, false, true)).toBe(true);
-    });
-
-    it('should return false', () => {
-      expect(shouldHideMoveAndDuplicate(stripes, false, true, false)).toBe(false);
     });
   });
 });

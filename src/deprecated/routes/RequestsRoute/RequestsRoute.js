@@ -3,7 +3,6 @@ import {
   isEmpty,
   isArray,
   size,
-  cloneDeep,
 } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -24,7 +23,6 @@ import {
   IfPermission,
   CalloutContext,
   TitleManager,
-  checkIfUserInCentralTenant,
 } from '@folio/stripes/core';
 import {
   Button,
@@ -48,8 +46,8 @@ import {
   getHeaderWithCredentials,
 } from '@folio/stripes/util';
 
-import ViewRequest from '../ViewRequest';
-import RequestFormContainer from '../RequestFormContainer';
+import ViewRequest from '../../components/ViewRequest/ViewRequest';
+import RequestFormContainer from '../../components/RequestFormContainer/RequestFormContainer';
 
 import {
   reportHeaders,
@@ -66,19 +64,14 @@ import {
   fulfillmentTypeMap,
   DEFAULT_REQUEST_TYPE_VALUE,
   INPUT_REQUEST_SEARCH_SELECTOR,
-  SETTINGS_SCOPES,
-  SETTINGS_KEYS,
-  ITEM_QUERIES,
   PRINT_DETAILS_COLUMNS,
-  RESOURCE_TYPES,
   requestFilterTypes,
-} from '../constants';
+} from '../../../constants';
 import {
   buildUrl,
   getFullName,
   duplicateRequest,
   convertToSlipData,
-  getTlrSettings,
   getInstanceQueryString,
   isDuplicateMode,
   generateUserName,
@@ -86,31 +79,31 @@ import {
   getSelectedSlipDataMulti,
   selectedRowsNonPrintable,
   getNextSelectedRowsState,
-  isMultiDataTenant,
-} from '../utils';
-import packageInfo from '../../package';
-import CheckboxColumn from '../components/CheckboxColumn';
+} from '../../../utils';
+import { getTlrSettings } from '../../utils';
+import packageInfo from '../../../../package';
+import CheckboxColumn from '../../../components/CheckboxColumn';
 
 import {
   PrintButton,
   PrintContent,
   ErrorModal,
   LoadingButton,
-} from '../components';
+} from '../../../components';
 
 import {
   RequestsFilters,
   RequestsFiltersConfig,
-} from '../components/RequestsFilters';
-import RequestsRouteShortcutsWrapper from '../components/RequestsRouteShortcutsWrapper';
+} from '../../../components/RequestsFilters';
+import RequestsRouteShortcutsWrapper from '../../../components/RequestsRouteShortcutsWrapper';
 import {
   isReorderableRequest,
   getFormattedYears,
   getStatusQuery,
   getFullNameForCsvRecords,
   updateQuerySortString,
-} from './utils';
-import SinglePrintButtonForPickSlip from '../components/SinglePrintButtonForPickSlip';
+} from '../../../routes/utils';
+import SinglePrintButtonForPickSlip from '../../../components/SinglePrintButtonForPickSlip';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
@@ -146,29 +139,24 @@ export const getLastPrintedDetails = (printDetails, intl) => {
 export const urls = {
   user: (value, idType) => {
     const query = stringify({ query: `(${idType}=="${value}")` });
-
     return `users?${query}`;
   },
   item: (value, idType) => {
     let query;
-    const itemQueryParam = ITEM_QUERIES[idType];
 
     if (isArray(value)) {
-      const queryElements = value.map((valueItem) => `${itemQueryParam}=="${valueItem}"`);
-
-      query = `(${queryElements.join(' or ')})`;
+      query = `(${value.map((valueItem) => `${idType}=="${valueItem}"`).join(' or ')})`;
     } else {
-      query = `(${itemQueryParam}=="${value}")`;
+      query = `(${idType}=="${value}")`;
     }
 
     query = stringify({ query });
-
-    return `circulation-bff/requests/search-instances?${query}`;
+    return `inventory/items?${query}`;
   },
   instance: (value) => {
     const query = stringify({ query: getInstanceQueryString(value) });
 
-    return `circulation-bff/requests/search-instances?${query}`;
+    return `inventory/instances?${query}`;
   },
   loan: (value) => {
     const query = stringify({ query: `(itemId=="${value}") and status.name==Open` });
@@ -198,6 +186,11 @@ export const urls = {
 
     return `request-preference-storage/request-preference?${query}`;
   },
+  holding: (value, idType) => {
+    const query = stringify({ query: `(${idType}=="${value}")` });
+
+    return `holdings-storage/holdings?${query}`;
+  },
   requestTypes: ({
     requesterId,
     itemId,
@@ -206,10 +199,10 @@ export const urls = {
     operation,
   }) => {
     if (requestId) {
-      return `circulation-bff/requests/allowed-service-points?operation=${operation}&requestId=${requestId}`;
+      return `circulation/requests/allowed-service-points?operation=${operation}&requestId=${requestId}`;
     }
 
-    let requestUrl = `circulation-bff/requests/allowed-service-points?requesterId=${requesterId}&operation=${operation}`;
+    let requestUrl = `circulation/requests/allowed-service-points?requesterId=${requesterId}&operation=${operation}`;
 
     if (itemId) {
       requestUrl = `${requestUrl}&itemId=${itemId}`;
@@ -218,15 +211,6 @@ export const urls = {
     }
 
     return requestUrl;
-  },
-  ecsTlrSettings: (value, idType, stripes) => {
-    const isUserInCentralTenant = checkIfUserInCentralTenant(stripes);
-
-    if (isUserInCentralTenant) {
-      return 'tlr/settings';
-    }
-
-    return 'circulation/settings?query=name==ecsTlrFeature';
   },
 };
 
@@ -363,12 +347,6 @@ class RequestsRoute extends React.Component {
         staticFallback: { params: {} },
       },
     },
-    circulationRequests: {
-      type: 'okapi',
-      path: 'circulation-bff/requests',
-      fetch: false,
-      throwErrors: false,
-    },
     reportRecords: {
       type: 'okapi',
       path: 'circulation/requests',
@@ -394,6 +372,27 @@ class RequestsRoute extends React.Component {
         query: 'query=(pickupLocation==true) sortby name',
         limit: MAX_RECORDS,
       },
+    },
+    itemUniquenessValidator: {
+      type: 'okapi',
+      records: 'items',
+      accumulate: 'true',
+      path: 'inventory/items',
+      fetch: false,
+    },
+    userUniquenessValidator: {
+      type: 'okapi',
+      records: 'users',
+      accumulate: 'true',
+      path: 'users',
+      fetch: false,
+    },
+    instanceUniquenessValidator: {
+      type: 'okapi',
+      records: 'instances',
+      accumulate: true,
+      path: 'inventory/instances',
+      fetch: false,
     },
     patronBlocks: {
       type: 'okapi',
@@ -475,10 +474,10 @@ class RequestsRoute extends React.Component {
     },
     configs: {
       type: 'okapi',
-      records: 'items',
-      path: 'settings/entries',
+      records: 'configs',
+      path: 'configurations/entries',
       params: {
-        query: `(scope==${SETTINGS_SCOPES.CIRCULATION} and key==${SETTINGS_KEYS.GENERAL_TLR})`,
+        query: '(module==SETTINGS and configName==TLR)',
       },
     },
     circulationSettings: {
@@ -506,9 +505,6 @@ class RequestsRoute extends React.Component {
     mutator: PropTypes.shape({
       records: PropTypes.shape({
         GET: PropTypes.func,
-        POST: PropTypes.func,
-      }),
-      circulationRequests: PropTypes.shape({
         POST: PropTypes.func,
       }),
       reportRecords: PropTypes.shape({
@@ -647,8 +643,6 @@ class RequestsRoute extends React.Component {
     this.expiredHoldsReportColumnHeaders = this.getColumnHeaders(expiredHoldsReportHeaders);
 
     this.state = {
-      isEcsTlrSettingReceived: false,
-      isEcsTlrSettingEnabled: false,
       csvReportPending: false,
       submitting: false,
       errorMessage: '',
@@ -686,23 +680,13 @@ class RequestsRoute extends React.Component {
   }
 
   componentDidMount() {
-    const { stripes } = this.props;
-
     this.setCurrentServicePointId();
-
-    if (stripes?.user?.user?.tenants) {
-      this.getEcsTlrSettings();
-    }
   }
 
   componentDidUpdate(prevProps) {
-    const { stripes } = this.props;
-    const {
-      submitting,
-      isViewPrintDetailsEnabled,
-    } = this.state;
     const patronBlocks = get(this.props.resources, ['patronBlocks', 'records'], []);
     const prevBlocks = get(prevProps.resources, ['patronBlocks', 'records'], []);
+    const { submitting, isViewPrintDetailsEnabled } = this.state;
     const prevExpired = prevBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
     const expired = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
     const { id: currentServicePointId } = this.getCurrentServicePointInfo();
@@ -753,41 +737,6 @@ class RequestsRoute extends React.Component {
 
     if (!isViewPrintDetailsEnabled) {
       this.handlePrintDetailsDisabled();
-    }
-
-    if (stripes?.user?.user?.tenants && stripes.user.user !== prevProps.stripes?.user?.user) {
-      this.getEcsTlrSettings();
-    }
-  }
-
-  /* For multi data tenant environments
-  * ECS TLR setting has to be retrieved (Settings>Circulation>Consortium title level requests (TLR)).
-  * In a case if this setting is enabled we should hide Move and Duplicate buttons in action menu. */
-  getEcsTlrSettings = () => {
-    const { stripes } = this.props;
-
-    if (isMultiDataTenant(stripes)) {
-      this.findResource(RESOURCE_TYPES.ECS_TLR_SETTINGS)
-        .then(res => {
-          let isEcsTlrSettingEnabled;
-
-          if (checkIfUserInCentralTenant(stripes)) {
-            isEcsTlrSettingEnabled = res?.ecsTlrFeatureEnabled;
-          } else {
-            isEcsTlrSettingEnabled = res?.circulationSettings?.[0]?.value?.enabled;
-          }
-
-          this.setState({
-            isEcsTlrSettingReceived: true,
-            isEcsTlrSettingEnabled,
-          });
-        })
-        .catch(() => {
-          this.setState({
-            isEcsTlrSettingReceived: false,
-            isEcsTlrSettingEnabled: false,
-          });
-        });
     }
   }
 
@@ -1000,12 +949,9 @@ class RequestsRoute extends React.Component {
 
   // idType can be 'id', 'barcode', etc.
   findResource(resource, value, idType = 'id') {
-    const { stripes } = this.props;
-    const query = urls[resource](value, idType, stripes);
+    const query = urls[resource](value, idType);
 
-    return fetch(`${this.okapiUrl}/${query}`, this.httpHeadersOptions)
-      .then(response => response.json())
-      .catch(() => null);
+    return fetch(`${this.okapiUrl}/${query}`, this.httpHeadersOptions).then(response => response.json());
   }
 
   toggleModal() {
@@ -1102,34 +1048,26 @@ class RequestsRoute extends React.Component {
     this.props.mutator.activeRecord.update({ patronId: patron.id });
   };
 
-  create = (requestData) => {
-    const userPersonalData = cloneDeep(requestData?.requester?.personal);
+  create = (data) => {
     const query = new URLSearchParams(this.props.location.search);
     const mode = query.get('mode');
 
-    return this.props.mutator.circulationRequests.POST(requestData)
-      .then((res) => {
-        const {
-          match: {
-            path,
-          },
-          history,
-        } = this.props;
-
-        history.push(`${path}/view/${res?.primaryRequestId || res?.id}`);
+    return this.props.mutator.records.POST(data)
+      .then(() => {
+        this.closeLayer();
 
         this.context.sendCallout({
           message: isDuplicateMode(mode)
             ? (
               <FormattedMessage
                 id="ui-requests.duplicateRequest.success"
-                values={{ requester: generateUserName(userPersonalData) }}
+                values={{ requester: generateUserName(data.requester.personal) }}
               />
             )
             : (
               <FormattedMessage
                 id="ui-requests.createRequest.success"
-                values={{ requester: generateUserName(userPersonalData) }}
+                values={{ requester: generateUserName(data.requester.personal) }}
               />
             ),
         });
@@ -1443,8 +1381,6 @@ class RequestsRoute extends React.Component {
       holdsShelfReportPending,
       createTitleLevelRequestsByDefault,
       isViewPrintDetailsEnabled,
-      isEcsTlrSettingReceived,
-      isEcsTlrSettingEnabled,
     } = this.state;
     const isPrintHoldRequestsEnabled = getPrintHoldRequestsEnabled(resources.printHoldRequests);
     const { name: servicePointName } = this.getCurrentServicePointInfo();
@@ -1742,8 +1678,6 @@ class RequestsRoute extends React.Component {
                 query: resources.query,
                 onDuplicate: this.onDuplicate,
                 buildRecordsForHoldsShelfReport: this.buildRecordsForHoldsShelfReport,
-                isEcsTlrSettingReceived,
-                isEcsTlrSettingEnabled,
               }}
               viewRecordOnCollapse={this.viewRecordOnCollapse}
               viewRecordPerms="ui-requests.view"

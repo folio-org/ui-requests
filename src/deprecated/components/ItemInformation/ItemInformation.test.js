@@ -14,20 +14,20 @@ import {
 } from '@folio/stripes/components';
 
 import ItemInformation from './ItemInformation';
-import ItemDetail from '../../ItemDetail';
-import { isFormEditing } from '../../utils';
+import ItemDetail from '../../../ItemDetail';
+import { isFormEditing } from '../../../utils';
 import {
   REQUEST_FORM_FIELD_NAMES,
   RESOURCE_KEYS,
   ENTER_EVENT_KEY,
   BASE_SPINNER_PROPS,
-} from '../../constants';
+} from '../../../constants';
 
-jest.mock('../../utils', () => ({
+jest.mock('../../../utils', () => ({
   isFormEditing: jest.fn(() => false),
   memoizeValidation: (fn) => () => fn,
 }));
-jest.mock('../../ItemDetail', () => jest.fn(() => <div>Item Details</div>));
+jest.mock('../../../ItemDetail', () => jest.fn(() => <div>Item Details</div>));
 
 const basicProps = {
   triggerValidation: jest.fn(),
@@ -48,6 +48,7 @@ const basicProps = {
   selectedLoan: {},
   selectedItem: {},
   itemRequestCount: 1,
+  instanceId: 'instanceId',
   isLoading: false,
   submitting: false,
   isItemIdRequest: true,
@@ -545,18 +546,10 @@ describe('ItemInformation', () => {
     });
 
     describe('when item is selected', () => {
-      const props = {
-        ...basicProps,
-        selectedItem: {
-          id: 'itemId',
-          instanceId: 'instanceId',
-        },
-      };
-
       beforeEach(() => {
         render(
           <ItemInformation
-            {...props}
+            {...basicProps}
           />
         );
       });
@@ -564,7 +557,7 @@ describe('ItemInformation', () => {
       it('should render "ItemDetail" with correct props', () => {
         const expectedProps = {
           request: basicProps.request,
-          currentInstanceId: basicProps.selectedItem.instanceId,
+          currentInstanceId: basicProps.instanceId,
           item: basicProps.selectedItem,
           loan: basicProps.selectedLoan,
           requestCount: basicProps.itemRequestCount,
