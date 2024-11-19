@@ -19,6 +19,8 @@
 * *BREAKING* Migrate to new `mod-circulation-bff` endpoints. Refs UIREQ-1134.
 * Implement feature toggle for ECS and not ECS envs. Refs UIREQ-1171.
 
+* Update permission checks of ui-users. Refs UIREQ-1187.
+
 ## [10.0.1] (https://github.com/folio-org/ui-requests/tree/v10.0.1) (2024-11-13)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v10.0.0...v10.0.1)
 
