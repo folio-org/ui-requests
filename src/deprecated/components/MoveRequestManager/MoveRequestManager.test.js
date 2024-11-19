@@ -8,14 +8,14 @@ import {
 import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import MoveRequestManager from './MoveRequestManager';
-import ItemsDialog from './ItemsDialog';
-import ChooseRequestTypeDialog from './ChooseRequestTypeDialog';
-import ErrorModal from './components/ErrorModal';
+import ItemsDialog from '../ItemsDialog/ItemsDialog';
+import ChooseRequestTypeDialog from '../../../ChooseRequestTypeDialog';
+import ErrorModal from '../../../components/ErrorModal';
 import {
   REQUEST_OPERATIONS,
   requestTypeOptionMap,
   requestTypesMap,
-} from './constants';
+} from '../../../constants';
 
 const labelIds = {
   requestNotAllowed: 'ui-requests.requestNotAllowed',
@@ -70,7 +70,7 @@ const selectedItem = {
   },
 };
 
-jest.mock('./ItemsDialog', () => jest.fn(({
+jest.mock('../ItemsDialog/ItemsDialog', () => jest.fn(({
   children,
   onRowClick,
 }) => {
@@ -86,7 +86,7 @@ jest.mock('./ItemsDialog', () => jest.fn(({
     </div>
   );
 }));
-jest.mock('./ChooseRequestTypeDialog', () => jest.fn(({
+jest.mock('../../../ChooseRequestTypeDialog', () => jest.fn(({
   onConfirm,
   onCancel
 }) => (
@@ -105,7 +105,7 @@ jest.mock('./ChooseRequestTypeDialog', () => jest.fn(({
     </button>
   </div>
 )));
-jest.mock('./components/ErrorModal', () => jest.fn(({
+jest.mock('../../../components/ErrorModal', () => jest.fn(({
   label,
   onClose,
 }) => (
@@ -188,7 +188,7 @@ describe('MoveRequestManager', () => {
     });
 
     it('should trigger fetch with correct argument', () => {
-      const expectedUrl = `${basicProps.stripes.okapi.url}/circulation-bff/requests/allowed-service-points?requestId=${basicProps.request.id}&itemId=${selectedItem.id}&operation=${REQUEST_OPERATIONS.MOVE}`;
+      const expectedUrl = `${basicProps.stripes.okapi.url}/circulation/requests/allowed-service-points?requestId=${basicProps.request.id}&itemId=${selectedItem.id}&operation=${REQUEST_OPERATIONS.MOVE}`;
 
       expect(global.fetch).toHaveBeenCalledWith(expectedUrl, {});
     });

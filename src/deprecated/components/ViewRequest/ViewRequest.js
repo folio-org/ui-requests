@@ -41,47 +41,35 @@ import {
   NotesSmartAccordion,
 } from '@folio/stripes/smart-components';
 
-import ViewRequestShortcutsWrapper from './components/ViewRequestShortcutsWrapper';
-import CancelRequestDialog from './CancelRequestDialog';
-import ItemDetail from './ItemDetail';
-import TitleInformation from './components/TitleInformation';
-import UserDetail from './UserDetail';
-import RequestFormContainer from './RequestFormContainer';
-import PositionLink from './PositionLink';
-import MoveRequestManager from './MoveRequestManager';
+import ViewRequestShortcutsWrapper from '../../../components/ViewRequestShortcutsWrapper';
+import CancelRequestDialog from '../../../CancelRequestDialog';
+import ItemDetail from '../../../ItemDetail';
+import TitleInformation from '../../../components/TitleInformation';
+import UserDetail from '../../../UserDetail';
+import RequestFormContainer from '../RequestFormContainer/RequestFormContainer';
+import PositionLink from '../../../PositionLink';
+import MoveRequestManager from '../MoveRequestManager/MoveRequestManager';
 import {
   requestStatuses,
   REQUEST_LEVEL_TYPES,
   requestTypesTranslations,
   requestStatusesTranslations,
   REQUEST_LAYERS,
-} from './constants';
+} from '../../../constants';
 import {
   toUserAddress,
   isDelivery,
   getFullName,
-  getTlrSettings,
   generateUserName,
   isValidRequest,
   isVirtualItem,
   isVirtualPatron,
   getRequestErrorMessage,
-  isMultiDataTenant,
-} from './utils';
-import urls from './routes/urls';
+} from '../../../utils';
+import { getTlrSettings } from '../../utils';
+import urls from '../../../routes/urls';
 
 const CREATE_SUCCESS = 'CREATE_SUCCESS';
-const ECS_REQUEST_PHASE = {
-  PRIMARY: 'Primary',
-  SECONDARY: 'Secondary',
-};
-
-export const isAnyActionButtonVisible = (visibilityConditions = []) => visibilityConditions.some(condition => condition);
-export const shouldHideMoveAndDuplicate = (stripes, isEcsTlrPrimaryRequest, isEcsTlrSettingReceived, isEcsTlrSettingEnabled) => {
-  return isEcsTlrPrimaryRequest ||
-    (isEcsTlrSettingReceived && isEcsTlrSettingEnabled) ||
-    (isMultiDataTenant(stripes) && !isEcsTlrSettingReceived);
-};
 
 class ViewRequest extends React.Component {
   static manifest = {
@@ -139,9 +127,7 @@ class ViewRequest extends React.Component {
         other: PropTypes.shape({
           totalRecords: PropTypes.number,
         }),
-        records: PropTypes.arrayOf(PropTypes.shape({
-          ecsRequestPhase: PropTypes.object,
-        })),
+        records: PropTypes.arrayOf(PropTypes.object),
       }),
     }),
     query: PropTypes.object,
@@ -155,8 +141,6 @@ class ViewRequest extends React.Component {
     intl: PropTypes.object,
     tagsEnabled: PropTypes.bool,
     match: PropTypes.object,
-    isEcsTlrSettingReceived: PropTypes.bool.isRequired,
-    isEcsTlrSettingEnabled: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -473,8 +457,6 @@ class ViewRequest extends React.Component {
       stripes,
       patronGroups,
       optionLists: { cancellationReasons },
-      isEcsTlrSettingEnabled,
-      isEcsTlrSettingReceived,
     } = this.props;
     const {
       isCancellingRequest,
@@ -486,8 +468,7 @@ class ViewRequest extends React.Component {
       item,
       requester
     } = request;
-    const isEcsTlrPrimaryRequest = request?.ecsRequestPhase === ECS_REQUEST_PHASE.PRIMARY;
-    const isEcsTlrSecondaryRequest = request?.ecsRequestPhase === ECS_REQUEST_PHASE.SECONDARY;
+
     const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');
     const isRequestClosed = requestStatus.startsWith('Closed');
@@ -520,15 +501,14 @@ class ViewRequest extends React.Component {
       ? <FormattedDate value={request.requestExpirationDate} />
       : '-';
 
+    const showActionMenu = stripes.hasPerm('ui-requests.create')
+      || stripes.hasPerm('ui-requests.edit')
+      || stripes.hasPerm('ui-requests.moveRequest.execute')
+      || stripes.hasPerm('ui-requests.reorderQueue.execute') || !isDCBTransaction;
+
     const actionMenu = ({ onToggle }) => {
-      if (isEcsTlrSecondaryRequest) {
-        return null;
-      }
-
-      const isMoveAndDuplicateHidden = shouldHideMoveAndDuplicate(stripes, isEcsTlrPrimaryRequest, isEcsTlrSettingReceived, isEcsTlrSettingEnabled);
-
       if (isRequestClosed) {
-        if (!isRequestValid || (requestLevel === REQUEST_LEVEL_TYPES.TITLE && !titleLevelRequestsFeatureEnabled) || isDCBTransaction || isMoveAndDuplicateHidden) {
+        if (!isRequestValid || (requestLevel === REQUEST_LEVEL_TYPES.TITLE && !titleLevelRequestsFeatureEnabled) || isDCBTransaction) {
           return null;
         }
 
@@ -550,18 +530,11 @@ class ViewRequest extends React.Component {
         );
       }
 
-      const isValidNotDCBTransaction = isRequestValid && !isDCBTransaction;
-      const isEditButtonVisible = isValidNotDCBTransaction && stripes.hasPerm('ui-requests.edit');
-      const isCancelButtonVisible = stripes.hasPerm('ui-requests.edit');
-      const isDuplicateButtonVisible = isValidNotDCBTransaction && !isMoveAndDuplicateHidden && stripes.hasPerm('ui-requests.create');
-      const isMoveButtonVisible = item && isRequestNotFilled && isValidNotDCBTransaction && !isMoveAndDuplicateHidden && stripes.hasPerm('ui-requests.moveRequest.execute');
-      const isReorderQueueButtonVisible = isRequestOpen && isValidNotDCBTransaction && stripes.hasPerm('ui-requests.reorderQueue.execute');
-      const isActionMenuVisible = isAnyActionButtonVisible([isEditButtonVisible, isCancelButtonVisible, isDuplicateButtonVisible, isMoveButtonVisible, isReorderQueueButtonVisible]);
-
-      if (isActionMenuVisible) {
-        return (
-          <>
-            {isEditButtonVisible &&
+      return (
+        <>
+          <IfPermission perm="ui-requests.edit">
+            {
+              isRequestValid && !isDCBTransaction &&
               <Button
                 buttonStyle="dropdownItem"
                 id="clickable-edit-request"
@@ -576,21 +549,22 @@ class ViewRequest extends React.Component {
                 </Icon>
               </Button>
             }
-            {isCancelButtonVisible &&
-              <Button
-                buttonStyle="dropdownItem"
-                id="clickable-cancel-request"
-                onClick={() => {
-                  this.setState({ isCancellingRequest: true });
-                  onToggle();
-                }}
-              >
-                <Icon icon="times-circle">
-                  <FormattedMessage id="ui-requests.cancel.cancelRequest" />
-                </Icon>
-              </Button>
-            }
-            {isDuplicateButtonVisible &&
+            <Button
+              buttonStyle="dropdownItem"
+              id="clickable-cancel-request"
+              onClick={() => {
+                this.setState({ isCancellingRequest: true });
+                onToggle();
+              }}
+            >
+              <Icon icon="times-circle">
+                <FormattedMessage id="ui-requests.cancel.cancelRequest" />
+              </Icon>
+            </Button>
+          </IfPermission>
+          {
+            isRequestValid && !isDCBTransaction &&
+            <IfPermission perm="ui-requests.create">
               <Button
                 id="duplicate-request"
                 onClick={() => {
@@ -603,8 +577,10 @@ class ViewRequest extends React.Component {
                   <FormattedMessage id="ui-requests.actions.duplicateRequest" />
                 </Icon>
               </Button>
-            }
-            {isMoveButtonVisible &&
+            </IfPermission>
+          }
+          {item && isRequestNotFilled && isRequestValid && !isDCBTransaction &&
+            <IfPermission perm="ui-requests.moveRequest.execute">
               <Button
                 id="move-request"
                 onClick={() => {
@@ -617,8 +593,9 @@ class ViewRequest extends React.Component {
                   <FormattedMessage id="ui-requests.actions.moveRequest" />
                 </Icon>
               </Button>
-            }
-            {isReorderQueueButtonVisible &&
+            </IfPermission> }
+          {isRequestOpen && isRequestValid && !isDCBTransaction &&
+            <IfPermission perm="ui-requests.reorderQueue.execute">
               <Button
                 id="reorder-queue"
                 onClick={() => {
@@ -631,12 +608,9 @@ class ViewRequest extends React.Component {
                   <FormattedMessage id="ui-requests.actions.reorderQueue" />
                 </Icon>
               </Button>
-            }
-          </>
-        );
-      }
-
-      return null;
+            </IfPermission> }
+        </>
+      );
     };
 
     const referredRecordData = {
@@ -667,7 +641,7 @@ class ViewRequest extends React.Component {
         paneTitle={<FormattedMessage id="ui-requests.request.detail.title" />}
         lastMenu={this.renderDetailMenu(request)}
         dismissible
-        actionMenu={actionMenu}
+        {... (showActionMenu ? { actionMenu } : {})}
         onClose={this.props.onClose}
       >
         <ViewRequestShortcutsWrapper

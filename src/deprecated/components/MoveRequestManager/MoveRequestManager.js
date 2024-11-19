@@ -14,11 +14,11 @@ import {
   getHeaderWithCredentials,
 } from '@folio/stripes/util';
 
-import ItemsDialog from './ItemsDialog';
-import ChooseRequestTypeDialog from './ChooseRequestTypeDialog';
-import ErrorModal from './components/ErrorModal';
-import { getRequestTypeOptions } from './utils';
-import { REQUEST_OPERATIONS } from './constants';
+import ItemsDialog from '../ItemsDialog/ItemsDialog';
+import ChooseRequestTypeDialog from '../../../ChooseRequestTypeDialog';
+import ErrorModal from '../../../components/ErrorModal';
+import { getRequestTypeOptions } from '../../../utils';
+import { REQUEST_OPERATIONS } from '../../../constants';
 
 class MoveRequestManager extends React.Component {
   static propTypes = {
@@ -156,7 +156,7 @@ class MoveRequestManager extends React.Component {
         token: stripes.store.getState().okapi.token,
       })
     };
-    const url = `${stripes.okapi.url}/circulation-bff/requests/allowed-service-points?requestId=${request.id}&itemId=${selectedItem.id}&operation=${REQUEST_OPERATIONS.MOVE}`;
+    const url = `${stripes.okapi.url}/circulation/requests/allowed-service-points?requestId=${request.id}&itemId=${selectedItem.id}&operation=${REQUEST_OPERATIONS.MOVE}`;
 
     this.setState({
       isRequestTypesLoading: true,

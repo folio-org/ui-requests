@@ -29,6 +29,11 @@ describe('UI Requests', () => {
     history: {
       push: jest.fn(),
     },
+    stripes: {
+      config: {
+        enableEcsRequests: true,
+      },
+    },
   };
 
   beforeEach(() => {
@@ -42,7 +47,7 @@ describe('UI Requests', () => {
   });
 
   it('should render RequestsRoute', () => {
-    expect(screen.getByText('RequestsRoute')).toBeInTheDocument();
+    expect(screen.queryByText('RequestsRoute')).toBeInTheDocument();
   });
 
   it('should render "Request app Search" nav item', () => {

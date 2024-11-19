@@ -17,14 +17,14 @@ import {
   RESOURCE_KEYS,
   ENTER_EVENT_KEY,
   BASE_SPINNER_PROPS,
-} from '../../constants';
-import ItemDetail from '../../ItemDetail';
+} from '../../../constants';
+import ItemDetail from '../../../ItemDetail';
 import {
   isFormEditing,
   memoizeValidation,
-} from '../../utils';
+} from '../../../utils';
 
-import css from '../../requests.css';
+import css from './ItemInformation.css';
 
 class ItemInformation extends Component {
   static propTypes = {
@@ -35,6 +35,7 @@ class ItemInformation extends Component {
     request: PropTypes.object.isRequired,
     onSetSelectedItem: PropTypes.func.isRequired,
     itemRequestCount: PropTypes.number.isRequired,
+    instanceId: PropTypes.string.isRequired,
     isLoading: PropTypes.bool.isRequired,
     submitting: PropTypes.bool.isRequired,
     isItemIdRequest: PropTypes.bool.isRequired,
@@ -161,6 +162,7 @@ class ItemInformation extends Component {
       isLoading,
       selectedItem,
       request,
+      instanceId,
       selectedLoan,
       itemRequestCount,
     } = this.props;
@@ -233,7 +235,7 @@ class ItemInformation extends Component {
             selectedItem &&
               <ItemDetail
                 request={request}
-                currentInstanceId={selectedItem.instanceId}
+                currentInstanceId={instanceId}
                 item={selectedItem}
                 loan={selectedLoan}
                 requestCount={itemRequestCount}

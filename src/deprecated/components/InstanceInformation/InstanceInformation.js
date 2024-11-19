@@ -17,14 +17,14 @@ import {
   BASE_SPINNER_PROPS,
   ENTER_EVENT_KEY,
   REQUEST_FORM_FIELD_NAMES,
-} from '../../constants';
-import { TitleInformation } from '..';
+} from '../../../constants';
+import { TitleInformation } from '../../../components';
 import {
   isFormEditing,
   memoizeValidation,
-} from '../../utils';
+} from '../../../utils';
 
-import css from '../../requests.css';
+import css from './InstanceInformation.css';
 
 export const INSTANCE_SEGMENT_FOR_PLUGIN = 'instances';
 
@@ -37,6 +37,7 @@ class InstanceInformation extends Component {
     values: PropTypes.object.isRequired,
     onSetSelectedInstance: PropTypes.func.isRequired,
     isLoading: PropTypes.bool.isRequired,
+    instanceId: PropTypes.string.isRequired,
     request: PropTypes.object,
     instanceRequestCount: PropTypes.number,
     selectedInstance: PropTypes.object,
@@ -67,7 +68,7 @@ class InstanceInformation extends Component {
     if (instanceId && shouldValidateId) {
       this.setState({ shouldValidateId: false });
 
-      const instance = await findInstance(instanceId, true);
+      const instance = await findInstance(instanceId, null, true);
 
       return !instance
         ? <FormattedMessage id="ui-requests.errors.instanceUuidOrHridDoesNotExist" />
@@ -158,6 +159,7 @@ class InstanceInformation extends Component {
       values,
       isLoading,
       instanceRequestCount,
+      instanceId,
     } = this.props;
     const {
       isInstanceClicked,
@@ -245,7 +247,7 @@ class InstanceInformation extends Component {
           {
             isTitleInfoVisible &&
               <TitleInformation
-                instanceId={request?.instanceId || selectedInstance.id}
+                instanceId={request?.instanceId || selectedInstance.id || instanceId}
                 titleLevelRequestsCount={titleLevelRequestsCount}
                 title={selectedInstance.title}
                 contributors={selectedInstance.contributors || selectedInstance.contributorNames}

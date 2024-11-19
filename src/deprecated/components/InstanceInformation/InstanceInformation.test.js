@@ -18,19 +18,19 @@ import { Pluggable } from '@folio/stripes/core';
 import InstanceInformation, {
   INSTANCE_SEGMENT_FOR_PLUGIN,
 } from './InstanceInformation';
-import { TitleInformation } from '..';
-import { isFormEditing } from '../../utils';
+import { TitleInformation } from '../../../components';
+import { isFormEditing } from '../../../utils';
 import {
   BASE_SPINNER_PROPS,
   ENTER_EVENT_KEY,
   REQUEST_FORM_FIELD_NAMES,
-} from '../../constants';
+} from '../../../constants';
 
-jest.mock('../../utils', () => ({
+jest.mock('../../../utils', () => ({
   memoizeValidation: (fn) => () => fn,
   isFormEditing: jest.fn(() => false),
 }));
-jest.mock('..', () => ({
+jest.mock('../../../components', () => ({
   TitleInformation: jest.fn(() => <div>TitleInformation</div>),
 }));
 
@@ -52,13 +52,13 @@ const basicProps = {
   },
   selectedInstance: {
     title: 'instance title',
-    id: 'instanceId',
     contributors: {},
     publication: {},
     editions: {},
     identifiers: {},
   },
   instanceRequestCount: 1,
+  instanceId: 'instanceId',
   isLoading: false,
   submitting: false,
 };
@@ -584,6 +584,26 @@ describe('InstanceInformation', () => {
     });
 
     describe('when instance is selected', () => {
+      it('should render "TitleInformation" with correct props', () => {
+        render(
+          <InstanceInformation
+            {...basicProps}
+          />
+        );
+
+        const expectedProps = {
+          instanceId: basicProps.instanceId,
+          titleLevelRequestsCount: basicProps.instanceRequestCount,
+          title: basicProps.selectedInstance.title,
+          contributors: basicProps.selectedInstance.contributors,
+          publications: basicProps.selectedInstance.publication,
+          editions: basicProps.selectedInstance.editions,
+          identifiers: basicProps.selectedInstance.identifiers,
+        };
+
+        expect(TitleInformation).toHaveBeenCalledWith(expectedProps, {});
+      });
+
       it('should render "TitleInformation" with "request.instanceId"', () => {
         const instanceId = 'instanceId';
         const props = {
@@ -607,13 +627,21 @@ describe('InstanceInformation', () => {
       });
 
       it('should render "TitleInformation" with "selectedInstance.id"', () => {
+        const selectedInstanceId = 'selectedInstanceId';
+        const props = {
+          ...basicProps,
+          selectedInstance: {
+            ...basicProps.selectedInstance,
+            id: selectedInstanceId,
+          },
+        };
         const expectedProps = {
-          instanceId: basicProps.selectedInstance.id,
+          instanceId: selectedInstanceId,
         };
 
         render(
           <InstanceInformation
-            {...basicProps}
+            {...props}
           />
         );
 
