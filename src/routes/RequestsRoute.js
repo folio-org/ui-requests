@@ -441,13 +441,13 @@ class RequestsRoute extends React.Component {
     pickSlips: {
       type: 'okapi',
       records: 'pickSlips',
-      path: 'circulation/pick-slips/%{currentServicePoint.id}',
+      path: 'circulation-bff/pick-slips/%{currentServicePoint.id}',
       throwErrors: false,
     },
     searchSlips: {
       type: 'okapi',
       records: 'searchSlips',
-      path: 'circulation/search-slips/%{currentServicePoint.id}',
+      path: 'circulation-bff/search-slips/%{currentServicePoint.id}',
       throwErrors: false,
     },
     printHoldRequests: {
