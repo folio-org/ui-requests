@@ -27,6 +27,7 @@ const RequestFormContainer = ({
   parentResources,
   request,
   onSubmit,
+  isEcsTlrSettingEnabled,
   ...rest
 }) => {
   const {
@@ -182,6 +183,7 @@ const RequestFormContainer = ({
       onSetSelectedInstance={setInstance}
       onSetIsPatronBlocksOverridden={setStateIsPatronBlocksOverridden}
       onSubmit={handleSubmit}
+      isEcsTlrSettingEnabled={isEcsTlrSettingEnabled}
     />
   );
 };
@@ -190,6 +192,7 @@ RequestFormContainer.propTypes = {
   request: PropTypes.object,
   parentResources: PropTypes.object,
   onSubmit: PropTypes.func.isRequired,
+  isEcsTlrSettingEnabled: PropTypes.bool.isRequired,
 };
 
 export default RequestFormContainer;

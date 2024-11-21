@@ -65,6 +65,7 @@ const basicProps = {
   },
   isLoading: false,
   submitting: false,
+  isEcsTlrSettingEnabled: false,
 };
 const labelIds = {
   selectUserError: 'ui-requests.errors.selectUser',
@@ -246,6 +247,7 @@ describe('RequesterInformation', () => {
         proxy: basicProps.selectedProxy,
         onSelectProxy: basicProps.onSelectProxy,
         onCloseProxy: basicProps.handleCloseProxy,
+        isEcsTlrSettingEnabled: basicProps.isEcsTlrSettingEnabled,
       };
 
       render(

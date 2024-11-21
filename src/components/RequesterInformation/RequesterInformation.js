@@ -50,6 +50,7 @@ class RequesterInformation extends Component {
     handleCloseProxy: PropTypes.func.isRequired,
     findUser: PropTypes.func.isRequired,
     triggerUserBarcodeValidation: PropTypes.func.isRequired,
+    isEcsTlrSettingEnabled: PropTypes.bool.isRequired,
     stripes: stripesShape.isRequired,
     selectedUser: PropTypes.object,
     isLoading: PropTypes.bool,
@@ -210,6 +211,7 @@ class RequesterInformation extends Component {
       onSelectProxy,
       handleCloseProxy,
       isLoading,
+      isEcsTlrSettingEnabled,
     } = this.props;
     const {
       isUserClicked,
@@ -293,6 +295,7 @@ class RequesterInformation extends Component {
               proxy={selectedProxy}
               onSelectProxy={onSelectProxy}
               onCloseProxy={handleCloseProxy}
+              isEcsTlrSettingEnabled={isEcsTlrSettingEnabled}
             />
           }
           {
