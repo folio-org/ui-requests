@@ -13,6 +13,7 @@ import {
   getFullName,
   userHighlightBox,
   getPatronGroup,
+  isProxyFunctionalityAvailable,
 } from './utils';
 
 class UserDetail extends React.Component {
@@ -23,6 +24,7 @@ class UserDetail extends React.Component {
     proxy: PropTypes.object,
     request: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
+    isEcsTlrSettingEnabled: PropTypes.bool.isRequired,
     selectedDelivery: PropTypes.bool,
   };
 
@@ -41,6 +43,7 @@ class UserDetail extends React.Component {
       deliveryAddress,
       pickupServicePoint,
       selectedDelivery,
+      isEcsTlrSettingEnabled,
     } = this.props;
 
     const id = user?.id ?? request.requesterId;
@@ -51,7 +54,7 @@ class UserDetail extends React.Component {
     let proxyName;
     let proxyBarcode;
     let proxyId;
-    if (proxy) {
+    if (isProxyFunctionalityAvailable(isEcsTlrSettingEnabled) && proxy) {
       proxyName = getFullName(proxy);
       proxyBarcode = proxy?.barcode || <NoValue />;
       proxyId = proxy.id || request.proxyUserId;

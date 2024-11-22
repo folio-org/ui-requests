@@ -67,6 +67,7 @@ import {
   isVirtualPatron,
   getRequestErrorMessage,
   isMultiDataTenant,
+  isProxyFunctionalityAvailable,
 } from './utils';
 import urls from './routes/urls';
 
@@ -230,6 +231,7 @@ class ViewRequest extends React.Component {
   }
 
   update(record) {
+    const { isEcsTlrSettingEnabled } = this.props;
     const requestFromProps = this.getRequestFromProps() || {};
     const updatedRecord = {
       ...requestFromProps,
@@ -250,6 +252,11 @@ class ViewRequest extends React.Component {
     delete updatedRecord.itemRequestCount;
     delete updatedRecord.numberOfReorderableRequests;
     delete updatedRecord.holdShelfExpirationTime;
+
+    if (!isProxyFunctionalityAvailable(isEcsTlrSettingEnabled)) {
+      delete updatedRecord.proxy;
+      delete updatedRecord.proxyUserId;
+    }
 
     this.props.mutator.selectedRequest.PUT(updatedRecord).then(() => {
       this.props.onCloseEdit();
@@ -381,6 +388,7 @@ class ViewRequest extends React.Component {
       findResource,
       patronGroups,
       parentMutator,
+      isEcsTlrSettingEnabled,
     } = this.props;
     const {
       titleLevelRequestsFeatureEnabled,
@@ -425,6 +433,7 @@ class ViewRequest extends React.Component {
                 parentMutator={parentMutator}
                 findResource={findResource}
                 isTlrEnabledOnEditPage={titleLevelRequestsFeatureEnabled}
+                isEcsTlrSettingEnabled={isEcsTlrSettingEnabled}
               />
             </Layer>
           ) }
@@ -821,6 +830,7 @@ class ViewRequest extends React.Component {
                   selectedDelivery={selectedDelivery}
                   deliveryAddress={deliveryAddressDetail}
                   pickupServicePoint={getPickupServicePointName}
+                  isEcsTlrSettingEnabled={isEcsTlrSettingEnabled}
                 />
               </Accordion>
               <NotesSmartAccordion

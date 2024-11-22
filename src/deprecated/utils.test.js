@@ -1,4 +1,7 @@
-import { getTlrSettings } from './utils';
+import {
+  getTlrSettings,
+  getRequester,
+} from './utils';
 
 describe('utils', () => {
   describe('getTlrSettings', () => {
@@ -13,6 +16,24 @@ describe('utils', () => {
 
     it('should return empty object if nothing passed', () => {
       expect(getTlrSettings()).toEqual({});
+    });
+  });
+
+  describe('getRequester', () => {
+    const selectedUser = {
+      id: 'selectedUserId',
+    };
+
+    it('should return proxy user', () => {
+      const proxy = {
+        id: 'proxyId',
+      };
+
+      expect(getRequester(proxy, selectedUser)).toEqual(proxy);
+    });
+
+    it('should return selected user', () => {
+      expect(getRequester(null, selectedUser)).toEqual(selectedUser);
     });
   });
 });

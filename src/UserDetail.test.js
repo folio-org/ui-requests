@@ -33,6 +33,7 @@ const basicProps = {
     lastName: 'userLastName',
   },
   selectedDelivery: true,
+  isEcsTlrSettingEnabled: false,
 };
 const labelIds = {
   proxy: 'ui-requests.requester.proxy',
@@ -54,6 +55,7 @@ jest.mock('./utils', () => ({
   getPatronGroup: jest.fn(() => ({
     group: 'testPatronGroup',
   })),
+  isProxyFunctionalityAvailable: jest.fn(() => true),
 }));
 
 describe('UserDetail', () => {

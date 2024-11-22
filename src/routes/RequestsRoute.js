@@ -72,6 +72,7 @@ import {
   PRINT_DETAILS_COLUMNS,
   RESOURCE_TYPES,
   requestFilterTypes,
+  PROXY_COLUMNS,
 } from '../constants';
 import {
   buildUrl,
@@ -87,6 +88,7 @@ import {
   selectedRowsNonPrintable,
   getNextSelectedRowsState,
   isMultiDataTenant,
+  isProxyFunctionalityAvailable,
 } from '../utils';
 import packageInfo from '../../package';
 import CheckboxColumn from '../components/CheckboxColumn';
@@ -247,6 +249,7 @@ export const getListFormatter = (
     onBeforeGetContentForSinglePrintButton,
     onBeforePrintForSinglePrintButton,
     onAfterPrintForSinglePrintButton,
+    isProxyAvailable,
   }
 ) => ({
   'select': rq => (
@@ -257,7 +260,7 @@ export const getListFormatter = (
     />),
   'itemBarcode': rq => (rq.item ? rq.item.barcode : DEFAULT_FORMATTER_VALUE),
   'position': rq => (rq.position || DEFAULT_FORMATTER_VALUE),
-  'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : DEFAULT_FORMATTER_VALUE),
+  ...(isProxyAvailable ? { 'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : DEFAULT_FORMATTER_VALUE) } : {}),
   'requestDate': rq => (
     <AppIcon size="small" app="requests">
       <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
@@ -888,6 +891,8 @@ class RequestsRoute extends React.Component {
 
   // Export function for the CSV search report action
   async exportData() {
+    const { isEcsTlrSettingEnabled } = this.state;
+
     this.setState({ csvReportPending: true });
 
     // Build a custom query for the CSV record export, which has to include
@@ -910,9 +915,12 @@ class RequestsRoute extends React.Component {
 
     this.columnHeadersMap = this.state.isViewPrintDetailsEnabled ? this.columnHeadersMap :
       getFilteredColumnHeadersMap(this.columnHeadersMap);
+    const finalColumnHeadersMap = isProxyFunctionalityAvailable(isEcsTlrSettingEnabled) ?
+      this.columnHeadersMap :
+      this.columnHeadersMap.filter(({ value }) => (value !== PROXY_COLUMNS.BARCODE && value !== PROXY_COLUMNS.NAME));
 
     exportCsv(recordsToCSV, {
-      onlyFields: this.columnHeadersMap,
+      onlyFields: finalColumnHeadersMap,
       excludeFields: ['id'],
     });
 
@@ -953,6 +961,7 @@ class RequestsRoute extends React.Component {
   };
 
   buildRecords(recordsLoaded) {
+    const { isEcsTlrSettingEnabled } = this.state;
     const result = JSON.parse(JSON.stringify(recordsLoaded)); // Do not mutate the actual resource
     const { formatDate, formatTime } = this.props.intl;
 
@@ -984,7 +993,7 @@ class RequestsRoute extends React.Component {
         const { dueDate } = record.loan;
         record.loan.dueDate = `${formatDate(dueDate)}, ${formatTime(dueDate)}`;
       }
-      if (record.proxy) {
+      if (isProxyFunctionalityAvailable(isEcsTlrSettingEnabled) && record.proxy) {
         record.proxy.name = getFullNameForCsvRecords(record.proxy);
       }
       if (record.deliveryAddress) {
@@ -1446,6 +1455,7 @@ class RequestsRoute extends React.Component {
       isEcsTlrSettingReceived,
       isEcsTlrSettingEnabled,
     } = this.state;
+    const isProxyAvailable = isProxyFunctionalityAvailable(isEcsTlrSettingEnabled);
     const isPrintHoldRequestsEnabled = getPrintHoldRequestsEnabled(resources.printHoldRequests);
     const { name: servicePointName } = this.getCurrentServicePointInfo();
     const pickSlips = get(resources, 'pickSlips.records', []);
@@ -1481,7 +1491,7 @@ class RequestsRoute extends React.Component {
       requester: <FormattedMessage id="ui-requests.requests.requester" />,
       requesterBarcode: <FormattedMessage id="ui-requests.requests.requesterBarcode" />,
       singlePrint: <FormattedMessage id="ui-requests.requests.singlePrint" />,
-      proxy: <FormattedMessage id="ui-requests.requests.proxy" />,
+      ...(isProxyAvailable ? { proxy: <FormattedMessage id="ui-requests.requests.proxy" /> } : {}),
       ...(isViewPrintDetailsEnabled && {
         copies: <FormattedMessage id="ui-requests.requests.copies" />,
         printed: <FormattedMessage id="ui-requests.requests.printed" />,
@@ -1516,6 +1526,7 @@ class RequestsRoute extends React.Component {
         onBeforeGetContentForSinglePrintButton: this.onBeforeGetContentForSinglePrintButton,
         onBeforePrintForSinglePrintButton: this.savePrintEventDetails,
         onAfterPrintForSinglePrintButton: this.onAfterPrintForPrintButton,
+        isProxyAvailable,
       }
     );
 
@@ -1668,7 +1679,7 @@ class RequestsRoute extends React.Component {
         'position',
         'requester',
         'requesterBarcode',
-        'proxy',
+        ...(isProxyAvailable ? ['proxy'] : []),
       ],
     };
     const pageTitle = this.getPageTitle();
@@ -1752,7 +1763,7 @@ class RequestsRoute extends React.Component {
               resultIsSelected={this.resultIsSelected}
               onFilterChange={this.handleFilterChange}
               sortableColumns={['requestDate', 'title', 'year', 'itemBarcode', 'callNumber', 'type', 'requestStatus',
-                'position', 'servicePoint', 'requester', 'requesterBarcode', 'proxy', 'copies', 'printed']}
+                'position', 'servicePoint', 'requester', 'requesterBarcode', ...(isProxyAvailable ? ['proxy'] : []), 'copies', 'printed']}
               pageAmount={100}
               pagingType={MCLPagingTypes.PREV_NEXT}
             />

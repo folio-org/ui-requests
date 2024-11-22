@@ -1293,6 +1293,7 @@ describe('RequestsRoute', () => {
         toggleRowSelection: toggleRowSelectionMock,
         onBeforeGetContentForSinglePrintButton: onBeforeGetContentForSinglePrintButtonMock,
         onBeforePrintForSinglePrintButton: onBeforePrintForSinglePrintButtonMock,
+        isProxyAvailable: true,
       }
     );
     const requestWithData = {

@@ -14,6 +14,7 @@ import { ProxyManager } from '@folio/stripes/smart-components';
 import {
   getFullName,
   userHighlightBox,
+  isProxyFunctionalityAvailable,
 } from './utils';
 
 class UserForm extends React.Component {
@@ -24,6 +25,7 @@ class UserForm extends React.Component {
     proxy: PropTypes.object,
     stripes: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
+    isEcsTlrSettingEnabled: PropTypes.bool.isRequired,
     request: PropTypes.object,
   };
 
@@ -43,17 +45,19 @@ class UserForm extends React.Component {
       proxy,
       patronGroup,
       request,
+      isEcsTlrSettingEnabled,
     } = this.props;
-
+    const isProxyAvailable = isProxyFunctionalityAvailable(isEcsTlrSettingEnabled);
     const id = user?.id ?? request.requesterId;
     const name = getFullName(user);
     const barcode = user.barcode;
     const isEditable = !!request;
+    const isProxyManagerAvailable = isProxyAvailable && !isEditable;
 
     let proxyName;
     let proxyBarcode;
     let proxyId;
-    if (proxy) {
+    if (isProxyAvailable && proxy) {
       proxyName = getFullName(proxy);
       proxyBarcode = proxy?.barcode || '-';
       proxyId = proxy.id;
@@ -78,7 +82,7 @@ class UserForm extends React.Component {
 
         {proxySection}
 
-        { !isEditable &&
+        {isProxyManagerAvailable &&
           <this.connectedProxyManager
             patron={user}
             proxy={proxy}
