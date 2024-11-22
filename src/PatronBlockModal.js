@@ -8,7 +8,7 @@ import {
   Modal,
   Row
 } from '@folio/stripes/components';
-import { IfPermission } from '@folio/stripes/core';
+import { IfAnyPermission } from '@folio/stripes/core';
 
 const PatronBlockModal = ({
   open,
@@ -55,14 +55,14 @@ const PatronBlockModal = ({
         <Col xs={6}>
           <Row end="xs">
             <Col>
-              <IfPermission perm="ui-users.overridePatronBlock">
+              <IfAnyPermission perm="ui-users.overridePatronBlock,ui-users.override-patron-block.execute">
                 <Button
                   data-test-override-patron-block
                   onClick={onOverride}
                 >
                   <FormattedMessage id="ui-requests.override" />
                 </Button>
-              </IfPermission>
+              </IfAnyPermission>
               <Button onClick={onClose}>
                 <FormattedMessage id="ui-requests.close" />
               </Button>
