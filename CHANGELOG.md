@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
 ## 11.0.0 (IN PROGRESS)
+* Consistency update permission after change them in mod-circulation. Refs UIREQ-1194.
 * Use settings/entries endpoint to get settings information. Refs UIREQ-1062.
 * Requests app.: Editing requests (ECS with mod-tlr enabled). Refs UIREQ-1088.
 * Requests app.: Cancelling request (ECS with mod-tlr enabled). Refs UIREQ-1090.
