@@ -1,5 +1,9 @@
 # Change history for ui-requests
 
+## [10.0.2] (https://github.com/folio-org/ui-requests/tree/v10.0.2) (2024-11-22)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v10.0.1...v10.0.2)
+* Update permission checks of ui-users. Refs UIREQ-1187.
+
 ## [10.0.1] (https://github.com/folio-org/ui-requests/tree/v10.0.1) (2024-11-13)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v10.0.0...v10.0.1)
 * Fix DOMPurify import. Refs UIREQ-1180.
