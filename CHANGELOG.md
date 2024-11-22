@@ -19,8 +19,11 @@
 * Add `mod-settings.entries.collection.get` permission. Refs UIREQ-1177.
 * *BREAKING* Migrate to new `mod-circulation-bff` endpoints. Refs UIREQ-1134.
 * Implement feature toggle for ECS and not ECS envs. Refs UIREQ-1171.
-* Update permission checks of ui-users. Refs UIREQ-1187.
 * Hide proxy functionality for ECS with mod-tlr enabled. Refs UIREQ-1185.
+
+## [10.0.2] (https://github.com/folio-org/ui-requests/tree/v10.0.2) (2024-11-22)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v10.0.1...v10.0.2)
+* Update permission checks of ui-users. Refs UIREQ-1187.
 
 ## [10.0.1] (https://github.com/folio-org/ui-requests/tree/v10.0.1) (2024-11-13)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v10.0.0...v10.0.1)
