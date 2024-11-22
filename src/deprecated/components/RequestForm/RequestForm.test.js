@@ -35,9 +35,11 @@ import {
   isFormEditing,
   getFulfillmentPreference,
   resetFieldState,
-  getRequester,
 } from '../../../utils';
-import { getTlrSettings } from '../../utils';
+import {
+  getTlrSettings,
+  getRequester,
+} from '../../utils';
 
 const testIds = {
   tlrCheckbox: 'tlrCheckbox',
@@ -69,12 +71,12 @@ jest.mock('../../../utils', () => ({
   getDefaultRequestPreferences: jest.fn(),
   isFormEditing: jest.fn(),
   getFulfillmentPreference: jest.fn(),
-  getRequester: jest.fn((proxy, selectedUser) => selectedUser),
 }));
 jest.mock('../../utils', () => ({
   getTlrSettings: jest.fn(() => ({
     titleLevelRequestsFeatureEnabled: true,
   })),
+  getRequester: jest.fn((proxy, selectedUser) => selectedUser),
 }));
 jest.mock('../../../components/FulfilmentPreference', () => jest.fn(({
   changeDeliveryAddress,

@@ -174,6 +174,11 @@ export const PRINT_DETAILS_COLUMNS = {
   PRINTED: 'printDetails.lastPrintedDetails',
 };
 
+export const PROXY_COLUMNS = {
+  NAME: 'proxy.name',
+  BARCODE: 'proxy.barcode',
+};
+
 export const reportHeaders = [
   'requestType',
   'status',
@@ -203,8 +208,8 @@ export const reportHeaders = [
   'fulfillmentPreference',
   'pickupServicePoint.name',
   'deliveryAddress',
-  'proxy.name',
-  'proxy.barcode',
+  PROXY_COLUMNS.NAME,
+  PROXY_COLUMNS.BARCODE,
   'tags.tagList',
   'patronComments',
   PRINT_DETAILS_COLUMNS.COPIES,

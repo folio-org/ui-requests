@@ -76,6 +76,7 @@ jest.mock('./utils', () => ({
   isFormEditing: jest.fn(),
   getFulfillmentPreference: jest.fn(),
   getRequester: jest.fn((proxy, selectedUser) => selectedUser),
+  isProxyFunctionalityAvailable: jest.fn(() => true),
 }));
 jest.mock('./components/FulfilmentPreference', () => jest.fn(({
   changeDeliveryAddress,

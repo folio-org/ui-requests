@@ -37,6 +37,7 @@ import {
   isMultiDataTenant,
   getRequester,
   getFullName,
+  isProxyFunctionalityAvailable,
 } from './utils';
 
 import {
@@ -1138,7 +1139,13 @@ describe('getRequester', () => {
   });
 
   it('should return selected user', () => {
-    expect(getRequester(null, selectedUser)).toEqual(selectedUser);
+    expect(getRequester(null, selectedUser, false)).toEqual(selectedUser);
+  });
+});
+
+describe('isProxyFunctionalityAvailable', () => {
+  it('should return proxy availability', () => {
+    expect(isProxyFunctionalityAvailable(true)).toBe(false);
   });
 });
 

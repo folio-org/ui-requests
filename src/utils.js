@@ -521,8 +521,12 @@ export const isMultiDataTenant = (stripes) => {
   return stripes.hasInterface('consortia') && stripes.hasInterface('ecs-tlr');
 };
 
-export const getRequester = (proxy, selectedUser) => {
-  if (proxy && proxy.id !== selectedUser?.id) {
+export const isProxyFunctionalityAvailable = (isEcsTlrSettingEnabled) => {
+  return !isEcsTlrSettingEnabled;
+};
+
+export const getRequester = (proxy, selectedUser, isEcsTlrSettingEnabled) => {
+  if (isProxyFunctionalityAvailable(isEcsTlrSettingEnabled) && proxy && proxy.id !== selectedUser?.id) {
     return proxy;
   }
 

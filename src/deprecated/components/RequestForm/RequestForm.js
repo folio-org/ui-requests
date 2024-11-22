@@ -77,9 +77,11 @@ import {
   isSubmittingButtonDisabled,
   isFormEditing,
   resetFieldState,
-  getRequester,
 } from '../../../utils';
-import { getTlrSettings } from '../../utils';
+import {
+  getTlrSettings,
+  getRequester,
+} from '../../utils';
 
 import css from './RequestForm.css';
 
