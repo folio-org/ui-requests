@@ -125,6 +125,7 @@
         "subPermissions": [
           "ui-requests.view",
           "automated-patron-blocks.collection.get",
+          "patron-blocks.automated-patron-blocks.collection.get",
           "circulation.requests.item.post",
           "circulation.requests.allowed-service-points.get",
           "circulation-bff.requests.allowed-service-points.get",
