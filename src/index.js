@@ -27,8 +27,6 @@ import {
   RequestQueueRoute,
   RequestsRoute,
 } from './routes';
-import DeprecatedRequestsRoute from './deprecated/routes/RequestsRoute/RequestsRoute';
-import DeprecatedRequestQueueRoute from './deprecated/routes/RequestQueueRoute/RequestQueueRoute';
 
 const RequestsRouting = (props) => {
   const {
@@ -75,9 +73,6 @@ const RequestsRouting = (props) => {
       { 'shortcut': 'search', 'label': 'Go to Search & Filter pane' },
       { 'shortcut': 'openShortcutModal', 'label': 'View keyboard shortcuts list' },
     ]);
-  const isEnabledEcsRequests = props.stripes?.config?.enableEcsRequests;
-  const FinalRequestRoute = isEnabledEcsRequests ? RequestsRoute : DeprecatedRequestsRoute;
-  const FinalRequestQueueRoute = isEnabledEcsRequests ? RequestQueueRoute : DeprecatedRequestQueueRoute;
 
   return (
     <>
@@ -110,7 +105,7 @@ const RequestsRouting = (props) => {
           <Switch>
             <Route
               path={`${path}/view/:requestId/:id/reorder`}
-              component={FinalRequestQueueRoute}
+              component={RequestQueueRoute}
             />
             <Route
               path={`${path}/notes/new`}
@@ -126,7 +121,7 @@ const RequestsRouting = (props) => {
             />
             <Route
               path={path}
-              render={() => <FinalRequestRoute {...props} />}
+              render={() => <RequestsRoute {...props} />}
             />
           </Switch>
         </HasCommand>
@@ -148,11 +143,6 @@ const RequestsRouting = (props) => {
 RequestsRouting.propTypes = {
   match: ReactRouterPropTypes.match,
   history: ReactRouterPropTypes.history,
-  stripes: PropTypes.shape({
-    config: PropTypes.shape({
-      enableEcsRequests: PropTypes.bool,
-    }),
-  }).isRequired,
 };
 
 export default RequestsRouting;
