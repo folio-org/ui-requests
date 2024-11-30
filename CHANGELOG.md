@@ -1,6 +1,8 @@
 # Change history for ui-requests
 
-## 11.0.0 (IN PROGRESS)
+## [11.0.0] (https://github.com/folio-org/ui-requests/tree/v11.0.0) (2024-11-30)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v10.0.2...v11.0.0)
+
 * Consistency update permission after change them in mod-circulation. Refs UIREQ-1194.
 * Use settings/entries endpoint to get settings information. Refs UIREQ-1062.
 * Requests app.: Editing requests (ECS with mod-tlr enabled). Refs UIREQ-1088.
