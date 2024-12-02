@@ -292,6 +292,7 @@ export const getListFormatter = (
   'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
   'callNumber': rq => effectiveCallNumber(rq.item),
   'servicePoint': rq => get(rq, 'pickupServicePoint.name', DEFAULT_FORMATTER_VALUE),
+  'retrievalServicePoint': rq => get(rq, 'item.retrievalServicePointName', DEFAULT_FORMATTER_VALUE),
   'copies': rq => get(rq, PRINT_DETAILS_COLUMNS.COPIES, DEFAULT_FORMATTER_VALUE),
   'printed': rq => (rq.printDetails ? getLastPrintedDetails(rq.printDetails, intl) : DEFAULT_FORMATTER_VALUE),
 });
@@ -1488,6 +1489,7 @@ class RequestsRoute extends React.Component {
       requestStatus: <FormattedMessage id="ui-requests.requests.status" />,
       position: <FormattedMessage id="ui-requests.requests.queuePosition" />,
       servicePoint: <FormattedMessage id="ui-requests.requests.servicePoint" />,
+      retrievalServicePoint: <FormattedMessage id="ui-requests.requests.retrievalServicePoint" />,
       requester: <FormattedMessage id="ui-requests.requests.requester" />,
       requesterBarcode: <FormattedMessage id="ui-requests.requests.requesterBarcode" />,
       singlePrint: <FormattedMessage id="ui-requests.requests.singlePrint" />,

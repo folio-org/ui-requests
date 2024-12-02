@@ -51,6 +51,7 @@
   "requests.itemBarcode": "Item barcode",
   "requests.callNumber": "Effective call number string",
   "requests.servicePoint": "Pickup service point",
+  "requests.retrievalServicePoint": "Retrieval service point",
   "requests.createTitleLevelRequest": "Create title level request",
   "requests.singlePrint": "Single print",
   "requests.printButtonLabel": "Print",
