@@ -31,8 +31,7 @@
       "request-storage": "6.0",
       "pick-slips": "0.1",
       "search-slips": "0.1",
-      "automated-patron-blocks": "0.1",
-      "circulation-bff-requests": "1.0"
+      "automated-patron-blocks": "0.1"
     },
     "permissionSets": [
       {

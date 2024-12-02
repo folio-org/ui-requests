@@ -1,5 +1,9 @@
 # Change history for ui-requests
 
+## [11.1.0] IN PROGRESS
+
+* Remove "circulation-bff-requests" okapi interface. Refs UIREQ-1203.
+
 ## [11.0.0] (https://github.com/folio-org/ui-requests/tree/v11.0.0) (2024-11-30)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v10.0.2...v11.0.0)
 
