@@ -354,6 +354,7 @@ class RequestsRoute extends React.Component {
               'requestStatus': 'status',
               'servicePoint': 'searchIndex.pickupServicePointName',
               'requesterBarcode': 'requester.barcode',
+              'retrievalServicePoint': 'item.retrievalServicePointName',
               'requestDate': 'requestDate',
               'position': 'position/number',
               'proxy': 'proxy',
@@ -1489,9 +1490,9 @@ class RequestsRoute extends React.Component {
       requestStatus: <FormattedMessage id="ui-requests.requests.status" />,
       position: <FormattedMessage id="ui-requests.requests.queuePosition" />,
       servicePoint: <FormattedMessage id="ui-requests.requests.servicePoint" />,
-      retrievalServicePoint: <FormattedMessage id="ui-requests.requests.retrievalServicePoint" />,
       requester: <FormattedMessage id="ui-requests.requests.requester" />,
       requesterBarcode: <FormattedMessage id="ui-requests.requests.requesterBarcode" />,
+      retrievalServicePoint: <FormattedMessage id="ui-requests.requests.retrievalServicePoint" />,
       singlePrint: <FormattedMessage id="ui-requests.requests.singlePrint" />,
       ...(isProxyAvailable ? { proxy: <FormattedMessage id="ui-requests.requests.proxy" /> } : {}),
       ...(isViewPrintDetailsEnabled && {
@@ -1765,7 +1766,7 @@ class RequestsRoute extends React.Component {
               resultIsSelected={this.resultIsSelected}
               onFilterChange={this.handleFilterChange}
               sortableColumns={['requestDate', 'title', 'year', 'itemBarcode', 'callNumber', 'type', 'requestStatus',
-                'position', 'servicePoint', 'requester', 'requesterBarcode', ...(isProxyAvailable ? ['proxy'] : []), 'copies', 'printed']}
+                'position', 'servicePoint', 'requester', 'requesterBarcode', 'retrievalServicePoint', ...(isProxyAvailable ? ['proxy'] : []), 'copies', 'printed']}
               pageAmount={100}
               pagingType={MCLPagingTypes.PREV_NEXT}
             />
