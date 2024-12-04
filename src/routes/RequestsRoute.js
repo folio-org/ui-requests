@@ -273,6 +273,7 @@ export const getListFormatter = (
   'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
   'callNumber': rq => effectiveCallNumber(rq.item),
   'servicePoint': rq => get(rq, 'pickupServicePoint.name', DEFAULT_FORMATTER_VALUE),
+  'retrievalServicePoint': rq => get(rq, 'item.retrievalServicePointName', DEFAULT_FORMATTER_VALUE),
   'copies': rq => get(rq, PRINT_DETAILS_COLUMNS.COPIES, DEFAULT_FORMATTER_VALUE),
   'printed': rq => (rq.printDetails ? getLastPrintedDetails(rq.printDetails, intl) : DEFAULT_FORMATTER_VALUE),
 });
@@ -334,6 +335,7 @@ class RequestsRoute extends React.Component {
               'requestStatus': 'status',
               'servicePoint': 'searchIndex.pickupServicePointName',
               'requesterBarcode': 'requester.barcode',
+              'retrievalServicePoint': 'item.retrievalServicePointName',
               'requestDate': 'requestDate',
               'position': 'position/number',
               'proxy': 'proxy',
@@ -1416,6 +1418,7 @@ class RequestsRoute extends React.Component {
       servicePoint: <FormattedMessage id="ui-requests.requests.servicePoint" />,
       requester: <FormattedMessage id="ui-requests.requests.requester" />,
       requesterBarcode: <FormattedMessage id="ui-requests.requests.requesterBarcode" />,
+      retrievalServicePoint: <FormattedMessage id="ui-requests.requests.retrievalServicePoint" />,
       singlePrint: <FormattedMessage id="ui-requests.requests.singlePrint" />,
       proxy: <FormattedMessage id="ui-requests.requests.proxy" />,
       ...(isViewPrintDetailsEnabled && {
@@ -1686,7 +1689,7 @@ class RequestsRoute extends React.Component {
               resultIsSelected={this.resultIsSelected}
               onFilterChange={this.handleFilterChange}
               sortableColumns={['requestDate', 'title', 'year', 'itemBarcode', 'callNumber', 'type', 'requestStatus',
-                'position', 'servicePoint', 'requester', 'requesterBarcode', 'proxy', 'copies', 'printed']}
+                'position', 'servicePoint', 'retrievalServicePoint', 'requester', 'requesterBarcode', 'proxy', 'copies', 'printed']}
               pageAmount={100}
               pagingType={MCLPagingTypes.PREV_NEXT}
             />

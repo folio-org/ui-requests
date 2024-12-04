@@ -235,6 +235,7 @@ export const requestFilterTypes = {
   REQUEST_STATUS: 'requestStatus',
   REQUEST_LEVELS: 'requestLevels',
   PICKUP_SERVICE_POINT: 'pickupServicePoints',
+  RETRIEVAL_SERVICE_POINT: 'retrievalServicePoints',
   PRINT_STATUS: 'printStatus',
 };
 
