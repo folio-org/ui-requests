@@ -52,13 +52,13 @@ const basicProps = {
   },
   selectedInstance: {
     title: 'instance title',
+    id: 'instanceId',
     contributors: {},
     publication: {},
     editions: {},
     identifiers: {},
   },
   instanceRequestCount: 1,
-  instanceId: 'instanceId',
   isLoading: false,
   submitting: false,
 };
@@ -584,26 +584,6 @@ describe('InstanceInformation', () => {
     });
 
     describe('when instance is selected', () => {
-      it('should render "TitleInformation" with correct props', () => {
-        render(
-          <InstanceInformation
-            {...basicProps}
-          />
-        );
-
-        const expectedProps = {
-          instanceId: basicProps.instanceId,
-          titleLevelRequestsCount: basicProps.instanceRequestCount,
-          title: basicProps.selectedInstance.title,
-          contributors: basicProps.selectedInstance.contributors,
-          publications: basicProps.selectedInstance.publication,
-          editions: basicProps.selectedInstance.editions,
-          identifiers: basicProps.selectedInstance.identifiers,
-        };
-
-        expect(TitleInformation).toHaveBeenCalledWith(expectedProps, {});
-      });
-
       it('should render "TitleInformation" with "request.instanceId"', () => {
         const instanceId = 'instanceId';
         const props = {
@@ -627,21 +607,13 @@ describe('InstanceInformation', () => {
       });
 
       it('should render "TitleInformation" with "selectedInstance.id"', () => {
-        const selectedInstanceId = 'selectedInstanceId';
-        const props = {
-          ...basicProps,
-          selectedInstance: {
-            ...basicProps.selectedInstance,
-            id: selectedInstanceId,
-          },
-        };
         const expectedProps = {
-          instanceId: selectedInstanceId,
+          instanceId: basicProps.selectedInstance.id,
         };
 
         render(
           <InstanceInformation
-            {...props}
+            {...basicProps}
           />
         );
 

@@ -19,6 +19,7 @@ const basicProps = {
     barcode: 'userBarcode',
     id: 'userId',
   },
+  isEcsTlrSettingEnabled: false,
 };
 const labelIds = {
   proxyTitle: 'ui-requests.requester.proxy',
@@ -38,6 +39,7 @@ jest.mock('./utils', () => ({
       <span>{barcode}</span>
     </>
   )),
+  isProxyFunctionalityAvailable: jest.fn(() => true),
 }));
 
 describe('UserForm', () => {

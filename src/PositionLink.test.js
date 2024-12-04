@@ -10,6 +10,7 @@ import {
 import PositionLink from './PositionLink';
 
 jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   Link: jest.fn(({ to, children }) => <a href={to}>{children}</a>),
 }));
 

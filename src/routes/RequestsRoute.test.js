@@ -20,6 +20,7 @@ import {
   CalloutContext,
   AppIcon,
   TitleManager,
+  checkIfUserInCentralTenant,
 } from '@folio/stripes/core';
 import {
   TextLink,
@@ -28,6 +29,7 @@ import {
 import {
   exportCsv,
   effectiveCallNumber,
+  getHeaderWithCredentials,
 } from '@folio/stripes/util';
 
 import RequestsRoute, {
@@ -46,6 +48,7 @@ import {
   getFullName,
   getInstanceQueryString,
   getNextSelectedRowsState,
+  isMultiDataTenant,
 } from '../utils';
 import {
   getFormattedYears,
@@ -64,6 +67,7 @@ import {
   MAX_RECORDS,
   REQUEST_OPERATIONS,
   INPUT_REQUEST_SEARCH_SELECTOR,
+  ITEM_QUERIES,
   PRINT_DETAILS_COLUMNS,
 } from '../constants';
 import { historyData } from '../../test/jest/fixtures/historyData';
@@ -84,7 +88,6 @@ const testIds = {
   rowCheckbox: 'rowCheckbox',
   selectRequestCheckbox: 'selectRequestCheckbox',
 };
-
 const intlCache = createIntlCache();
 const intl = createIntl(
   {
@@ -110,6 +113,8 @@ jest.mock('../utils', () => ({
   getInstanceQueryString: jest.fn(),
   getNextSelectedRowsState: jest.fn(),
   extractPickSlipRequestIds: jest.fn(),
+  isMultiDataTenant: jest.fn(),
+  generateUserName: jest.fn(),
 }));
 jest.mock('./utils', () => ({
   ...jest.requireActual('./utils'),
@@ -235,6 +240,12 @@ const mockedRequest = {
   },
   id: 'requestId',
 };
+const userData = {
+  requester: {
+    personal: {},
+  }
+};
+const createRequestButtonLabel = 'Create request';
 const printDetailsMockData = {
   printCount: 11,
   printEventDate: '2024-08-03T13:33:31.868Z',
@@ -261,6 +272,7 @@ SearchAndSort.mockImplementation(jest.fn(({
   customPaneSub,
   columnMapping,
   resultsFormatter,
+  onCreate,
 }) => {
   const onClickActions = () => {
     onDuplicate(parentResources.records.records[0]);
@@ -311,6 +323,12 @@ SearchAndSort.mockImplementation(jest.fn(({
             values: ['Value4', 'Value5']
           })}
         >onFilterChange
+        </button>
+        <button
+          type="button"
+          onClick={() => onCreate(userData)}
+        >
+          {createRequestButtonLabel}
         </button>
       </div>
       {actionMenu({ onToggle: jest.fn() })}
@@ -421,6 +439,9 @@ describe('RequestsRoute', () => {
       },
       records: {
         GET: jest.fn(),
+        POST: jest.fn().mockResolvedValue(),
+      },
+      circulationRequests: {
         POST: jest.fn().mockResolvedValue(),
       },
       reportRecords: {
@@ -672,6 +693,138 @@ describe('RequestsRoute', () => {
       await userEvent.click(screen.getAllByRole('button', { name: 'PrintButton' })[1]);
 
       expect(printSearchSlipsLabel).toBeInTheDocument();
+    });
+  });
+
+  describe('When single data tenant', () => {
+    const response = {
+      id: 'responseId',
+    };
+    const props = {
+      ...defaultProps,
+      mutator: {
+        ...defaultProps.mutator,
+        circulationRequests: {
+          POST: jest.fn().mockResolvedValue(response),
+        },
+      },
+    };
+
+    beforeEach(() => {
+      isMultiDataTenant.mockReturnValue(false);
+      renderComponent(props);
+    });
+
+    it('should handle request creation', () => {
+      const createRequestButton = screen.getByText(createRequestButtonLabel);
+
+      fireEvent.click(createRequestButton);
+
+      expect(props.mutator.circulationRequests.POST).toHaveBeenCalledWith(userData);
+    });
+
+    it('should redirect to details page', async () => {
+      const createRequestButton = screen.getByText(createRequestButtonLabel);
+
+      fireEvent.click(createRequestButton);
+
+      await waitFor(() => {
+        expect(props.history.push).toHaveBeenCalledWith(`${props.match.path}/view/${response.id}`);
+      });
+    });
+
+    it('should send callout', async () => {
+      const createRequestButton = screen.getByText(createRequestButtonLabel);
+
+      sendCallout.mockClear();
+      fireEvent.click(createRequestButton);
+
+      await waitFor(() => {
+        expect(sendCallout).toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('When multi data tenant', () => {
+    const requestHeaders = { test: 'test' };
+    const fetchSpy = jest.fn();
+    const response = {
+      id: 'responseId',
+    };
+    const props = {
+      ...defaultProps,
+      mutator: {
+        ...defaultProps.mutator,
+        circulationRequests: {
+          POST: jest.fn().mockResolvedValue(response),
+        },
+      },
+      stripes: {
+        ...defaultProps.stripes,
+        user: {
+          user: {
+            ...defaultProps.stripes.user.user,
+            tenants: [{ id: 'tenantId' }],
+          },
+        },
+      },
+    };
+
+    beforeEach(() => {
+      isMultiDataTenant.mockReturnValue(true);
+      getHeaderWithCredentials.mockReturnValue(requestHeaders);
+    });
+
+    afterEach(() => {
+      fetchSpy.mockClear();
+    });
+
+    describe('When user in central tenant', () => {
+      beforeEach(() => {
+        fetchSpy.mockResolvedValueOnce({
+          json: () => ({
+            ecsTlrFeatureEnabled: true,
+          }),
+        });
+        checkIfUserInCentralTenant.mockReturnValue(true);
+        global.fetch = fetchSpy;
+        renderComponent(props);
+      });
+
+      it('should use correct endpoint to get ecs tlr settings', () => {
+        expect(fetchSpy).toHaveBeenCalledWith(`${defaultProps.stripes.okapi.url}/tlr/settings`, requestHeaders);
+      });
+
+      it('should handle request creation', () => {
+        const createRequestButton = screen.getByText(createRequestButtonLabel);
+
+        fireEvent.click(createRequestButton);
+
+        expect(props.mutator.circulationRequests.POST).toHaveBeenCalledWith(userData);
+      });
+    });
+
+    describe('When user in data tenant', () => {
+      beforeEach(() => {
+        fetchSpy.mockResolvedValueOnce({
+          json: () => ({
+            circulationSettings: [
+              {
+                value: {
+                  enabled: true,
+                },
+              }
+            ],
+          }),
+        });
+        checkIfUserInCentralTenant.mockReturnValueOnce(false);
+        global.fetch = fetchSpy;
+        renderComponent(props);
+      });
+
+      it('should use correct endpoint to get ecs tlr settings', () => {
+        expect(fetchSpy).toHaveBeenCalledWith(`${defaultProps.stripes.okapi.url}/circulation/settings?query=name==ecsTlrFeature`, requestHeaders);
+      });
     });
   });
 
@@ -1140,6 +1293,7 @@ describe('RequestsRoute', () => {
         toggleRowSelection: toggleRowSelectionMock,
         onBeforeGetContentForSinglePrintButton: onBeforeGetContentForSinglePrintButtonMock,
         onBeforePrintForSinglePrintButton: onBeforePrintForSinglePrintButtonMock,
+        isProxyAvailable: true,
       }
     );
     const requestWithData = {
@@ -1147,6 +1301,8 @@ describe('RequestsRoute', () => {
       select: 'test value',
       item: {
         barcode: 'itemBarcode',
+        retrievalServicePointId: '3a40852d-49fd-4df2-a1f9-6e2641a6e91f',
+        retrievalServicePointName: 'Circ Desk 1',
       },
       position: 'position',
       proxy: {},
@@ -1368,6 +1524,12 @@ describe('RequestsRoute', () => {
       });
     });
 
+    describe('retrieval service point', () => {
+      it('should return retrieval service point', () => {
+        expect(listFormatter.retrievalServicePoint(requestWithData)).toBe(requestWithData.item.retrievalServicePointName);
+      });
+    });
+
     describe('when formatting copies column', () => {
       it('should return copies for copies column', () => {
         expect(listFormatter.copies(requestWithData)).toBe(requestWithData.printDetails.printCount);
@@ -1461,7 +1623,7 @@ describe('RequestsRoute', () => {
 
   describe('urls', () => {
     const mockedQueryValue = 'testQuery';
-    const idType = 'idType';
+    const idType = 'id';
 
     beforeEach(() => {
       stringify.mockReturnValue(mockedQueryValue);
@@ -1501,14 +1663,14 @@ describe('RequestsRoute', () => {
 
         it('should trigger "stringify" with correct argument', () => {
           const expectedArgument = {
-            query: `(${idType}=="${value[0]}" or ${idType}=="${value[1]}")`,
+            query: `(${ITEM_QUERIES[idType]}=="${value[0]}" or ${ITEM_QUERIES[idType]}=="${value[1]}")`,
           };
 
           expect(stringify).toHaveBeenCalledWith(expectedArgument);
         });
 
         it('should return correct url', () => {
-          const expectedResult = `inventory/items?${mockedQueryValue}`;
+          const expectedResult = `circulation-bff/requests/search-instances?${mockedQueryValue}`;
 
           expect(queryString).toBe(expectedResult);
         });
@@ -1524,14 +1686,14 @@ describe('RequestsRoute', () => {
 
         it('should trigger "stringify" with correct argument', () => {
           const expectedArgument = {
-            query: `(${idType}=="${value}")`,
+            query: `(${ITEM_QUERIES[idType]}=="${value}")`,
           };
 
           expect(stringify).toHaveBeenCalledWith(expectedArgument);
         });
 
         it('should return correct url', () => {
-          const expectedResult = `inventory/items?${mockedQueryValue}`;
+          const expectedResult = `circulation-bff/requests/search-instances?${mockedQueryValue}`;
 
           expect(queryString).toBe(expectedResult);
         });
@@ -1561,7 +1723,7 @@ describe('RequestsRoute', () => {
       });
 
       it('should return correct url', () => {
-        const expectedResult = `inventory/instances?${mockedQueryValue}`;
+        const expectedResult = `circulation-bff/requests/search-instances?${mockedQueryValue}`;
 
         expect(queryString).toBe(expectedResult);
       });
@@ -1673,63 +1835,65 @@ describe('RequestsRoute', () => {
       });
     });
 
-    describe('holding', () => {
-      const value = 'value';
-      let queryString;
-
-      beforeEach(() => {
-        queryString = urls.holding(value, idType);
-      });
-
-      it('should trigger "stringify" with correct argument', () => {
-        const expectedArgument = {
-          query: `(${idType}=="${value}")`,
-        };
-
-        expect(stringify).toHaveBeenCalledWith(expectedArgument);
-      });
-
-      it('should return correct url', () => {
-        const expectedResult = `holdings-storage/holdings?${mockedQueryValue}`;
-
-        expect(queryString).toBe(expectedResult);
-      });
-    });
-
     describe('requestTypes', () => {
       const requesterId = 'requesterIdUrl';
       const operation = REQUEST_OPERATIONS.CREATE;
       const itemId = 'itemIdUrl';
       const instanceId = 'instanceIdUrl';
+      const requestUrl = 'circulation-bff/requests/allowed-service-points';
 
       it('should return url with "itemId"', () => {
-        const expectedUrl = `circulation/requests/allowed-service-points?requesterId=${requesterId}&operation=${operation}&itemId=${itemId}`;
+        const expectedResult = `${requestUrl}?requesterId=${requesterId}&operation=${operation}&itemId=${itemId}`;
 
         expect(urls.requestTypes({
           requesterId,
           itemId,
           operation,
-        })).toBe(expectedUrl);
+        })).toBe(expectedResult);
       });
 
       it('should return url with "instanceId"', () => {
-        const expectedUrl = `circulation/requests/allowed-service-points?requesterId=${requesterId}&operation=${operation}&instanceId=${instanceId}`;
+        const expectedResult = `${requestUrl}?requesterId=${requesterId}&operation=${operation}&instanceId=${instanceId}`;
 
         expect(urls.requestTypes({
           requesterId,
           instanceId,
           operation,
-        })).toBe(expectedUrl);
+        })).toBe(expectedResult);
       });
 
       it('should return url with "requestId"', () => {
         const requestId = 'requestId';
-        const expectedUrl = `circulation/requests/allowed-service-points?operation=${operation}&requestId=${requestId}`;
+        const expectedResult = `${requestUrl}?operation=${operation}&requestId=${requestId}`;
 
         expect(urls.requestTypes({
           requestId,
           operation,
-        })).toBe(expectedUrl);
+        })).toBe(expectedResult);
+      });
+    });
+
+    describe('ecsTlrSettings', () => {
+      describe('When user in central tenant', () => {
+        it('should return correct endpoint', () => {
+          checkIfUserInCentralTenant.mockReturnValueOnce(true);
+
+          const ecsTlrSettingsEndpoint = 'tlr/settings';
+          const result = urls.ecsTlrSettings();
+
+          expect(result).toBe(ecsTlrSettingsEndpoint);
+        });
+      });
+
+      describe('When user in data tenant', () => {
+        it('should return correct endpoint', () => {
+          checkIfUserInCentralTenant.mockReturnValueOnce(false);
+
+          const ecsTlrSettingsEndpoint = 'circulation/settings?query=name==ecsTlrFeature';
+          const result = urls.ecsTlrSettings();
+
+          expect(result).toBe(ecsTlrSettingsEndpoint);
+        });
       });
     });
   });

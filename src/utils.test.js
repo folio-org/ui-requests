@@ -34,8 +34,10 @@ import {
   selectedRowsNonPrintable,
   isPrintable,
   getNextSelectedRowsState,
+  isMultiDataTenant,
   getRequester,
   getFullName,
+  isProxyFunctionalityAvailable,
 } from './utils';
 
 import {
@@ -193,16 +195,12 @@ describe('getTlrSettings', () => {
     createTitleLevelRequestsByDefault: false,
   };
 
-  it('should return parsed settings', () => {
-    expect(getTlrSettings(JSON.stringify(defaultSettings))).toEqual(defaultSettings);
+  it('should return passed settings', () => {
+    expect(getTlrSettings(defaultSettings)).toEqual(defaultSettings);
   });
 
   it('should return empty object if nothing passed', () => {
     expect(getTlrSettings()).toEqual({});
-  });
-
-  it('should return empty object if invalid settings passed', () => {
-    expect(getTlrSettings("{'foo': 1}")).toEqual({});
   });
 });
 
@@ -274,6 +272,10 @@ describe('generateUserName', () => {
 
     expect(generateUserName({ firstName, lastName, middleName }))
       .toEqual(lastName);
+  });
+
+  it('should return empty string', () => {
+    expect(generateUserName()).toBe('');
   });
 });
 
@@ -1097,6 +1099,32 @@ describe('getRequestTypeOptions', () => {
   });
 });
 
+describe('isMultiDataTenant', () => {
+  describe('When multi data tenant', () => {
+    const stripes = {
+      hasInterface: () => true,
+    };
+
+    it('should return true', () => {
+      const result = isMultiDataTenant(stripes);
+
+      expect(result).toBe(true);
+    });
+  });
+
+  describe('When single data tenant', () => {
+    const stripes = {
+      hasInterface: () => false,
+    };
+
+    it('should return false', () => {
+      const result = isMultiDataTenant(stripes);
+
+      expect(result).toBe(false);
+    });
+  });
+});
+
 describe('getRequester', () => {
   const selectedUser = {
     id: 'selectedUserId',
@@ -1111,7 +1139,13 @@ describe('getRequester', () => {
   });
 
   it('should return selected user', () => {
-    expect(getRequester(null, selectedUser)).toEqual(selectedUser);
+    expect(getRequester(null, selectedUser, false)).toEqual(selectedUser);
+  });
+});
+
+describe('isProxyFunctionalityAvailable', () => {
+  it('should return proxy availability', () => {
+    expect(isProxyFunctionalityAvailable(true)).toBe(false);
   });
 });
 

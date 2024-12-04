@@ -18,7 +18,6 @@ import {
   defer,
   pick,
   isBoolean,
-  isNil,
 } from 'lodash';
 
 import {
@@ -79,6 +78,7 @@ import {
   isFormEditing,
   resetFieldState,
   getRequester,
+  isProxyFunctionalityAvailable,
 } from './utils';
 
 import css from './requests.css';
@@ -144,7 +144,6 @@ class RequestForm extends React.Component {
     values: PropTypes.object.isRequired,
     form: PropTypes.object.isRequired,
     blocked: PropTypes.bool.isRequired,
-    instanceId: PropTypes.string.isRequired,
     isPatronBlocksOverridden: PropTypes.bool.isRequired,
     onSubmit: PropTypes.func,
     parentMutator: PropTypes.shape({
@@ -161,7 +160,7 @@ class RequestForm extends React.Component {
     onSetSelectedInstance: PropTypes.func.isRequired,
     onSetBlocked: PropTypes.func.isRequired,
     onSetIsPatronBlocksOverridden: PropTypes.func.isRequired,
-    onSetInstanceId: PropTypes.func.isRequired,
+    isEcsTlrSettingEnabled: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -475,7 +474,9 @@ class RequestForm extends React.Component {
   }
 
   async hasProxies(user) {
-    if (!user) {
+    const { isEcsTlrSettingEnabled } = this.props;
+
+    if (!user || !isProxyFunctionalityAvailable(isEcsTlrSettingEnabled)) {
       this.setState({ isAwaitingForProxySelection: false });
 
       return null;
@@ -512,6 +513,7 @@ class RequestForm extends React.Component {
       onSetIsPatronBlocksOverridden,
       onSetSelectedUser,
       onSetBlocked,
+      isEcsTlrSettingEnabled,
     } = this.props;
 
     this.setState({
@@ -538,7 +540,9 @@ class RequestForm extends React.Component {
 
       return findResource(RESOURCE_TYPES.USER, value, fieldName)
         .then((result) => {
-          this.setState({ isAwaitingForProxySelection: true });
+          if (isProxyFunctionalityAvailable(isEcsTlrSettingEnabled)) {
+            this.setState({ isAwaitingForProxySelection: true });
+          }
 
           if (result.totalRecords === 1) {
             const blocks = onGetPatronManualBlocks(parentResources);
@@ -718,22 +722,21 @@ class RequestForm extends React.Component {
   findItemRelatedResources(item) {
     const {
       findResource,
-      onSetInstanceId,
     } = this.props;
-    if (!item) return null;
+
+    if (!item) {
+      return null;
+    }
 
     return Promise.all(
       [
         findResource('loan', item.id),
         findResource('requestsForItem', item.id),
-        findResource(RESOURCE_TYPES.HOLDING, item.holdingsRecordId),
       ],
     ).then((results) => {
       const selectedLoan = results[0]?.loans?.[0];
       const itemRequestCount = results[1]?.requests?.length;
-      const holdingsRecord = results[2]?.holdingsRecords?.[0];
 
-      onSetInstanceId(holdingsRecord?.instanceId);
       this.setState({
         itemRequestCount,
         selectedLoan,
@@ -763,6 +766,7 @@ class RequestForm extends React.Component {
       form,
       onSetSelectedItem,
       selectedUser,
+      isEcsTlrSettingEnabled,
     } = this.props;
     const { proxy } = this.state;
 
@@ -773,7 +777,7 @@ class RequestForm extends React.Component {
     if (isValidation) {
       return findResource(RESOURCE_TYPES.ITEM, value, key)
         .then((result) => {
-          return result.totalRecords;
+          return result?.items?.length;
         })
         .finally(() => {
           this.setState({ isItemOrInstanceLoading: false });
@@ -788,7 +792,7 @@ class RequestForm extends React.Component {
         .then((result) => {
           this.setItemIdRequest(key, isBarcodeRequired);
 
-          if (!result || result.totalRecords === 0) {
+          if (!result || result?.items?.length === 0) {
             this.setState({
               isItemOrInstanceLoading: false,
             });
@@ -796,25 +800,30 @@ class RequestForm extends React.Component {
             return null;
           }
 
-          const item = result.items[0];
+          const foundItem = result.items?.find(item => item[key] === value);
 
-          form.change(REQUEST_FORM_FIELD_NAMES.ITEM_ID, item.id);
-          form.change(REQUEST_FORM_FIELD_NAMES.ITEM_BARCODE, item.barcode);
+          form.change(REQUEST_FORM_FIELD_NAMES.ITEM_ID, foundItem.id);
+          form.change(REQUEST_FORM_FIELD_NAMES.ITEM_BARCODE, foundItem.barcode);
           resetFieldState(form, REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE);
 
           // Setting state here is redundant with what follows, but it lets us
           // display the matched item as quickly as possible, without waiting for
           // the slow loan and request lookups
-          onSetSelectedItem(item);
+          onSetSelectedItem(foundItem);
           this.setState({
             isItemOrInstanceLoading: false,
           });
 
-          return item;
+          return foundItem;
+        })
+        .catch(() => {
+          onSetSelectedItem(null);
+
+          return null;
         })
         .then(item => {
           if (item && selectedUser?.id) {
-            const requester = getRequester(proxy, selectedUser);
+            const requester = getRequester(proxy, selectedUser, isEcsTlrSettingEnabled);
             this.findRequestTypes(item.id, requester.id, ID_TYPE_MAP.ITEM_ID);
           }
 
@@ -825,7 +834,7 @@ class RequestForm extends React.Component {
   }
 
   findInstanceRelatedResources(instance) {
-    if (!instance) {
+    if (!instance?.id) {
       return null;
     }
 
@@ -841,12 +850,13 @@ class RequestForm extends React.Component {
       });
   }
 
-  findInstance = async (instanceId, holdingsRecordId, isValidation = false) => {
+  findInstance = async (instanceId, isValidation = false) => {
     const {
       findResource,
       form,
       onSetSelectedInstance,
       selectedUser,
+      isEcsTlrSettingEnabled,
     } = this.props;
     const { proxy } = this.state;
 
@@ -854,14 +864,10 @@ class RequestForm extends React.Component {
       isItemOrInstanceLoading: true,
     });
 
-    const resultInstanceId = isNil(instanceId)
-      ? await findResource(RESOURCE_TYPES.HOLDING, holdingsRecordId).then((holding) => holding.holdingsRecords[0].instanceId)
-      : instanceId;
-
     if (isValidation) {
-      return findResource(RESOURCE_TYPES.INSTANCE, resultInstanceId)
+      return findResource(RESOURCE_TYPES.INSTANCE, instanceId)
         .then((result) => {
-          return result.totalRecords;
+          return Boolean(result?.id);
         })
         .finally(() => {
           this.setState({ isItemOrInstanceLoading: false });
@@ -872,17 +878,15 @@ class RequestForm extends React.Component {
         isRequestTypesReceived: false,
       });
 
-      return findResource(RESOURCE_TYPES.INSTANCE, resultInstanceId)
-        .then((result) => {
-          if (!result || result.totalRecords === 0) {
+      return findResource(RESOURCE_TYPES.INSTANCE, instanceId)
+        .then((instance) => {
+          if (!instance?.id) {
             this.setState({
               isItemOrInstanceLoading: false,
             });
 
             return null;
           }
-
-          const instance = result.instances[0];
 
           form.change(REQUEST_FORM_FIELD_NAMES.INSTANCE_ID, instance.id);
           form.change(REQUEST_FORM_FIELD_NAMES.INSTANCE_HRID, instance.hrid);
@@ -895,9 +899,14 @@ class RequestForm extends React.Component {
 
           return instance;
         })
+        .catch(() => {
+          onSetSelectedInstance(null);
+
+          return null;
+        })
         .then(instance => {
           if (instance && selectedUser?.id) {
-            const requester = getRequester(proxy, selectedUser);
+            const requester = getRequester(proxy, selectedUser, isEcsTlrSettingEnabled);
             this.findRequestTypes(instance.id, requester.id, ID_TYPE_MAP.INSTANCE_ID);
           }
 
@@ -1009,15 +1018,16 @@ class RequestForm extends React.Component {
     form.change(REQUEST_FORM_FIELD_NAMES.INSTANCE_ID, null);
 
     if (isCreateTlr) {
-      onSetSelectedItem(undefined);
       this.setState({
         requestTypes: {},
         isRequestTypesReceived: false,
       });
 
       if (selectedItem) {
-        this.findInstance(null, selectedItem.holdingsRecordId);
+        this.findInstance(selectedItem.instanceId);
       }
+
+      onSetSelectedItem(undefined);
     } else if (selectedInstance) {
       form.change(REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE, DEFAULT_REQUEST_TYPE_VALUE);
       resetFieldState(form, REQUEST_FORM_FIELD_NAMES.REQUEST_TYPE);
@@ -1099,7 +1109,6 @@ class RequestForm extends React.Component {
       selectedUser,
       selectedInstance,
       isPatronBlocksOverridden,
-      instanceId,
       blocked,
       values,
       onCancel,
@@ -1111,6 +1120,7 @@ class RequestForm extends React.Component {
       onSetSelectedItem,
       onSetSelectedInstance,
       metadataDisplay,
+      isEcsTlrSettingEnabled,
     } = this.props;
 
     const {
@@ -1139,7 +1149,7 @@ class RequestForm extends React.Component {
     const automatedPatronBlocks = onGetAutomatedPatronBlocks(parentResources);
     const isEditForm = isFormEditing(request);
     const selectedProxy = getProxy(request, proxy);
-    const requester = getRequester(selectedProxy, selectedUser);
+    const requester = getRequester(selectedProxy, selectedUser, isEcsTlrSettingEnabled);
     let deliveryLocations;
     let deliveryLocationsDetail = [];
     let addressDetail;
@@ -1289,7 +1299,6 @@ class RequestForm extends React.Component {
                               onSetSelectedInstance={onSetSelectedInstance}
                               isLoading={isItemOrInstanceLoading}
                               instanceRequestCount={instanceRequestCount}
-                              instanceId={instanceId}
                             />
                           </div>
                         </Accordion>
@@ -1311,7 +1320,6 @@ class RequestForm extends React.Component {
                               onSetSelectedItem={onSetSelectedItem}
                               values={values}
                               itemRequestCount={itemRequestCount}
-                              instanceId={instanceId}
                               selectedLoan={selectedLoan}
                               isLoading={isItemOrInstanceLoading}
                             />
@@ -1333,6 +1341,7 @@ class RequestForm extends React.Component {
                         handleCloseProxy={this.handleCloseProxy}
                         findUser={this.findUser}
                         triggerUserBarcodeValidation={this.triggerUserBarcodeValidation}
+                        isEcsTlrSettingEnabled={isEcsTlrSettingEnabled}
                       />
                     </div>
                   </Accordion>

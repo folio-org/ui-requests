@@ -10,7 +10,10 @@ import {
   defaultKeyboardShortcuts,
 } from '@folio/stripes/components';
 
-import ViewRequest from './ViewRequest';
+import ViewRequest, {
+  isAnyActionButtonVisible,
+  shouldHideMoveAndDuplicate,
+} from './ViewRequest';
 import RequestForm from './RequestForm';
 import {
   INVALID_REQUEST_HARDCODED_ID,
@@ -76,7 +79,11 @@ describe('ViewRequest', () => {
   };
   const mockedConfig = {
     records: [
-      { value: '{"titleLevelRequestsFeatureEnabled":true}' },
+      {
+        value: {
+          titleLevelRequestsFeatureEnabled: true,
+        },
+      }
     ],
   };
   const defaultProps = {
@@ -114,6 +121,7 @@ describe('ViewRequest', () => {
     },
     stripes: {
       hasPerm: jest.fn(() => true),
+      hasInterface: jest.fn(() => true),
       connect: jest.fn((component) => component),
       logger: {
         log: jest.fn(),
@@ -124,6 +132,8 @@ describe('ViewRequest', () => {
         id: 'testId',
       },
     },
+    isEcsTlrSettingEnabled: false,
+    isEcsTlrSettingReceived: true,
   };
   const defaultDCBLendingProps = {
     ...defaultProps,
@@ -195,7 +205,9 @@ describe('ViewRequest', () => {
         describe('request is valid', () => {
           describe('TLR in enabled', () => {
             beforeAll(() => {
-              mockedConfig.records[0].value = '{"titleLevelRequestsFeatureEnabled":true}';
+              mockedConfig.records[0].value = {
+                titleLevelRequestsFeatureEnabled: true,
+              };
             });
 
             it('should render "Duplicate" button', () => {
@@ -205,7 +217,9 @@ describe('ViewRequest', () => {
 
           describe('TLR in disabled', () => {
             beforeAll(() => {
-              mockedConfig.records[0].value = '{"titleLevelRequestsFeatureEnabled":false}';
+              mockedConfig.records[0].value = {
+                titleLevelRequestsFeatureEnabled: false,
+              };
             });
 
             it('should not render "Duplicate" button', () => {
@@ -488,6 +502,42 @@ describe('ViewRequest', () => {
           expect(defaultProps.stripes.hasPerm).toHaveBeenCalled();
         });
       });
+    });
+  });
+
+  describe('isAnyActionButtonVisible', () => {
+    describe('When visibility conditions are provided', () => {
+      it('should return true', () => {
+        expect(isAnyActionButtonVisible([true, false])).toBe(true);
+      });
+    });
+
+    describe('When visibility conditions are not provided', () => {
+      it('should return false', () => {
+        expect(isAnyActionButtonVisible()).toBe(false);
+      });
+    });
+  });
+
+  describe('shouldHideMoveAndDuplicate', () => {
+    const stripes = {
+      hasInterface: () => true,
+    };
+
+    it('should return true for primary request', () => {
+      expect(shouldHideMoveAndDuplicate(stripes, true)).toBe(true);
+    });
+
+    it('should return true if ecs tlr enabled', () => {
+      expect(shouldHideMoveAndDuplicate(stripes, false, true, true)).toBe(true);
+    });
+
+    it('should return true if settings are not received', () => {
+      expect(shouldHideMoveAndDuplicate(stripes, false, false, true)).toBe(true);
+    });
+
+    it('should return false', () => {
+      expect(shouldHideMoveAndDuplicate(stripes, false, true, false)).toBe(false);
     });
   });
 });

@@ -3,6 +3,7 @@ import {
   isEmpty,
   isArray,
   size,
+  cloneDeep,
 } from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -23,6 +24,7 @@ import {
   IfPermission,
   CalloutContext,
   TitleManager,
+  checkIfUserInCentralTenant,
 } from '@folio/stripes/core';
 import {
   Button,
@@ -64,8 +66,13 @@ import {
   fulfillmentTypeMap,
   DEFAULT_REQUEST_TYPE_VALUE,
   INPUT_REQUEST_SEARCH_SELECTOR,
+  SETTINGS_SCOPES,
+  SETTINGS_KEYS,
+  ITEM_QUERIES,
   PRINT_DETAILS_COLUMNS,
+  RESOURCE_TYPES,
   requestFilterTypes,
+  PROXY_COLUMNS,
 } from '../constants';
 import {
   buildUrl,
@@ -80,6 +87,8 @@ import {
   getSelectedSlipDataMulti,
   selectedRowsNonPrintable,
   getNextSelectedRowsState,
+  isMultiDataTenant,
+  isProxyFunctionalityAvailable,
 } from '../utils';
 import packageInfo from '../../package';
 import CheckboxColumn from '../components/CheckboxColumn';
@@ -139,24 +148,29 @@ export const getLastPrintedDetails = (printDetails, intl) => {
 export const urls = {
   user: (value, idType) => {
     const query = stringify({ query: `(${idType}=="${value}")` });
+
     return `users?${query}`;
   },
   item: (value, idType) => {
     let query;
+    const itemQueryParam = ITEM_QUERIES[idType];
 
     if (isArray(value)) {
-      query = `(${value.map((valueItem) => `${idType}=="${valueItem}"`).join(' or ')})`;
+      const queryElements = value.map((valueItem) => `${itemQueryParam}=="${valueItem}"`);
+
+      query = `(${queryElements.join(' or ')})`;
     } else {
-      query = `(${idType}=="${value}")`;
+      query = `(${itemQueryParam}=="${value}")`;
     }
 
     query = stringify({ query });
-    return `inventory/items?${query}`;
+
+    return `circulation-bff/requests/search-instances?${query}`;
   },
   instance: (value) => {
     const query = stringify({ query: getInstanceQueryString(value) });
 
-    return `inventory/instances?${query}`;
+    return `circulation-bff/requests/search-instances?${query}`;
   },
   loan: (value) => {
     const query = stringify({ query: `(itemId=="${value}") and status.name==Open` });
@@ -186,11 +200,6 @@ export const urls = {
 
     return `request-preference-storage/request-preference?${query}`;
   },
-  holding: (value, idType) => {
-    const query = stringify({ query: `(${idType}=="${value}")` });
-
-    return `holdings-storage/holdings?${query}`;
-  },
   requestTypes: ({
     requesterId,
     itemId,
@@ -199,10 +208,10 @@ export const urls = {
     operation,
   }) => {
     if (requestId) {
-      return `circulation/requests/allowed-service-points?operation=${operation}&requestId=${requestId}`;
+      return `circulation-bff/requests/allowed-service-points?operation=${operation}&requestId=${requestId}`;
     }
 
-    let requestUrl = `circulation/requests/allowed-service-points?requesterId=${requesterId}&operation=${operation}`;
+    let requestUrl = `circulation-bff/requests/allowed-service-points?requesterId=${requesterId}&operation=${operation}`;
 
     if (itemId) {
       requestUrl = `${requestUrl}&itemId=${itemId}`;
@@ -211,6 +220,15 @@ export const urls = {
     }
 
     return requestUrl;
+  },
+  ecsTlrSettings: (value, idType, stripes) => {
+    const isUserInCentralTenant = checkIfUserInCentralTenant(stripes);
+
+    if (isUserInCentralTenant) {
+      return 'tlr/settings';
+    }
+
+    return 'circulation/settings?query=name==ecsTlrFeature';
   },
 };
 
@@ -231,6 +249,7 @@ export const getListFormatter = (
     onBeforeGetContentForSinglePrintButton,
     onBeforePrintForSinglePrintButton,
     onAfterPrintForSinglePrintButton,
+    isProxyAvailable,
   }
 ) => ({
   'select': rq => (
@@ -241,7 +260,7 @@ export const getListFormatter = (
     />),
   'itemBarcode': rq => (rq.item ? rq.item.barcode : DEFAULT_FORMATTER_VALUE),
   'position': rq => (rq.position || DEFAULT_FORMATTER_VALUE),
-  'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : DEFAULT_FORMATTER_VALUE),
+  ...(isProxyAvailable ? { 'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : DEFAULT_FORMATTER_VALUE) } : {}),
   'requestDate': rq => (
     <AppIcon size="small" app="requests">
       <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
@@ -349,6 +368,12 @@ class RequestsRoute extends React.Component {
         staticFallback: { params: {} },
       },
     },
+    circulationRequests: {
+      type: 'okapi',
+      path: 'circulation-bff/requests',
+      fetch: false,
+      throwErrors: false,
+    },
     reportRecords: {
       type: 'okapi',
       path: 'circulation/requests',
@@ -374,27 +399,6 @@ class RequestsRoute extends React.Component {
         query: 'query=(pickupLocation==true) sortby name',
         limit: MAX_RECORDS,
       },
-    },
-    itemUniquenessValidator: {
-      type: 'okapi',
-      records: 'items',
-      accumulate: 'true',
-      path: 'inventory/items',
-      fetch: false,
-    },
-    userUniquenessValidator: {
-      type: 'okapi',
-      records: 'users',
-      accumulate: 'true',
-      path: 'users',
-      fetch: false,
-    },
-    instanceUniquenessValidator: {
-      type: 'okapi',
-      records: 'instances',
-      accumulate: true,
-      path: 'inventory/instances',
-      fetch: false,
     },
     patronBlocks: {
       type: 'okapi',
@@ -439,13 +443,13 @@ class RequestsRoute extends React.Component {
     pickSlips: {
       type: 'okapi',
       records: 'pickSlips',
-      path: 'circulation/pick-slips/%{currentServicePoint.id}',
+      path: 'circulation-bff/pick-slips/%{currentServicePoint.id}',
       throwErrors: false,
     },
     searchSlips: {
       type: 'okapi',
       records: 'searchSlips',
-      path: 'circulation/search-slips/%{currentServicePoint.id}',
+      path: 'circulation-bff/search-slips/%{currentServicePoint.id}',
       throwErrors: false,
     },
     printHoldRequests: {
@@ -476,10 +480,10 @@ class RequestsRoute extends React.Component {
     },
     configs: {
       type: 'okapi',
-      records: 'configs',
-      path: 'configurations/entries',
+      records: 'items',
+      path: 'settings/entries',
       params: {
-        query: '(module==SETTINGS and configName==TLR)',
+        query: `(scope==${SETTINGS_SCOPES.CIRCULATION} and key==${SETTINGS_KEYS.GENERAL_TLR})`,
       },
     },
     circulationSettings: {
@@ -507,6 +511,9 @@ class RequestsRoute extends React.Component {
     mutator: PropTypes.shape({
       records: PropTypes.shape({
         GET: PropTypes.func,
+        POST: PropTypes.func,
+      }),
+      circulationRequests: PropTypes.shape({
         POST: PropTypes.func,
       }),
       reportRecords: PropTypes.shape({
@@ -645,6 +652,8 @@ class RequestsRoute extends React.Component {
     this.expiredHoldsReportColumnHeaders = this.getColumnHeaders(expiredHoldsReportHeaders);
 
     this.state = {
+      isEcsTlrSettingReceived: false,
+      isEcsTlrSettingEnabled: false,
       csvReportPending: false,
       submitting: false,
       errorMessage: '',
@@ -682,13 +691,23 @@ class RequestsRoute extends React.Component {
   }
 
   componentDidMount() {
+    const { stripes } = this.props;
+
     this.setCurrentServicePointId();
+
+    if (stripes?.user?.user?.tenants) {
+      this.getEcsTlrSettings();
+    }
   }
 
   componentDidUpdate(prevProps) {
+    const { stripes } = this.props;
+    const {
+      submitting,
+      isViewPrintDetailsEnabled,
+    } = this.state;
     const patronBlocks = get(this.props.resources, ['patronBlocks', 'records'], []);
     const prevBlocks = get(prevProps.resources, ['patronBlocks', 'records'], []);
-    const { submitting, isViewPrintDetailsEnabled } = this.state;
     const prevExpired = prevBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
     const expired = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
     const { id: currentServicePointId } = this.getCurrentServicePointInfo();
@@ -739,6 +758,41 @@ class RequestsRoute extends React.Component {
 
     if (!isViewPrintDetailsEnabled) {
       this.handlePrintDetailsDisabled();
+    }
+
+    if (stripes?.user?.user?.tenants && stripes.user.user !== prevProps.stripes?.user?.user) {
+      this.getEcsTlrSettings();
+    }
+  }
+
+  /* For multi data tenant environments
+  * ECS TLR setting has to be retrieved (Settings>Circulation>Consortium title level requests (TLR)).
+  * In a case if this setting is enabled we should hide Move and Duplicate buttons in action menu. */
+  getEcsTlrSettings = () => {
+    const { stripes } = this.props;
+
+    if (isMultiDataTenant(stripes)) {
+      this.findResource(RESOURCE_TYPES.ECS_TLR_SETTINGS)
+        .then(res => {
+          let isEcsTlrSettingEnabled;
+
+          if (checkIfUserInCentralTenant(stripes)) {
+            isEcsTlrSettingEnabled = res?.ecsTlrFeatureEnabled;
+          } else {
+            isEcsTlrSettingEnabled = res?.circulationSettings?.[0]?.value?.enabled;
+          }
+
+          this.setState({
+            isEcsTlrSettingReceived: true,
+            isEcsTlrSettingEnabled,
+          });
+        })
+        .catch(() => {
+          this.setState({
+            isEcsTlrSettingReceived: false,
+            isEcsTlrSettingEnabled: false,
+          });
+        });
     }
   }
 
@@ -839,6 +893,8 @@ class RequestsRoute extends React.Component {
 
   // Export function for the CSV search report action
   async exportData() {
+    const { isEcsTlrSettingEnabled } = this.state;
+
     this.setState({ csvReportPending: true });
 
     // Build a custom query for the CSV record export, which has to include
@@ -861,9 +917,12 @@ class RequestsRoute extends React.Component {
 
     this.columnHeadersMap = this.state.isViewPrintDetailsEnabled ? this.columnHeadersMap :
       getFilteredColumnHeadersMap(this.columnHeadersMap);
+    const finalColumnHeadersMap = isProxyFunctionalityAvailable(isEcsTlrSettingEnabled) ?
+      this.columnHeadersMap :
+      this.columnHeadersMap.filter(({ value }) => (value !== PROXY_COLUMNS.BARCODE && value !== PROXY_COLUMNS.NAME));
 
     exportCsv(recordsToCSV, {
-      onlyFields: this.columnHeadersMap,
+      onlyFields: finalColumnHeadersMap,
       excludeFields: ['id'],
     });
 
@@ -904,6 +963,7 @@ class RequestsRoute extends React.Component {
   };
 
   buildRecords(recordsLoaded) {
+    const { isEcsTlrSettingEnabled } = this.state;
     const result = JSON.parse(JSON.stringify(recordsLoaded)); // Do not mutate the actual resource
     const { formatDate, formatTime } = this.props.intl;
 
@@ -935,7 +995,7 @@ class RequestsRoute extends React.Component {
         const { dueDate } = record.loan;
         record.loan.dueDate = `${formatDate(dueDate)}, ${formatTime(dueDate)}`;
       }
-      if (record.proxy) {
+      if (isProxyFunctionalityAvailable(isEcsTlrSettingEnabled) && record.proxy) {
         record.proxy.name = getFullNameForCsvRecords(record.proxy);
       }
       if (record.deliveryAddress) {
@@ -951,9 +1011,12 @@ class RequestsRoute extends React.Component {
 
   // idType can be 'id', 'barcode', etc.
   findResource(resource, value, idType = 'id') {
-    const query = urls[resource](value, idType);
+    const { stripes } = this.props;
+    const query = urls[resource](value, idType, stripes);
 
-    return fetch(`${this.okapiUrl}/${query}`, this.httpHeadersOptions).then(response => response.json());
+    return fetch(`${this.okapiUrl}/${query}`, this.httpHeadersOptions)
+      .then(response => response.json())
+      .catch(() => null);
   }
 
   toggleModal() {
@@ -1050,26 +1113,34 @@ class RequestsRoute extends React.Component {
     this.props.mutator.activeRecord.update({ patronId: patron.id });
   };
 
-  create = (data) => {
+  create = (requestData) => {
+    const userPersonalData = cloneDeep(requestData?.requester?.personal);
     const query = new URLSearchParams(this.props.location.search);
     const mode = query.get('mode');
 
-    return this.props.mutator.records.POST(data)
-      .then(() => {
-        this.closeLayer();
+    return this.props.mutator.circulationRequests.POST(requestData)
+      .then((res) => {
+        const {
+          match: {
+            path,
+          },
+          history,
+        } = this.props;
+
+        history.push(`${path}/view/${res?.primaryRequestId || res?.id}`);
 
         this.context.sendCallout({
           message: isDuplicateMode(mode)
             ? (
               <FormattedMessage
                 id="ui-requests.duplicateRequest.success"
-                values={{ requester: generateUserName(data.requester.personal) }}
+                values={{ requester: generateUserName(userPersonalData) }}
               />
             )
             : (
               <FormattedMessage
                 id="ui-requests.createRequest.success"
-                values={{ requester: generateUserName(data.requester.personal) }}
+                values={{ requester: generateUserName(userPersonalData) }}
               />
             ),
         });
@@ -1383,7 +1454,10 @@ class RequestsRoute extends React.Component {
       holdsShelfReportPending,
       createTitleLevelRequestsByDefault,
       isViewPrintDetailsEnabled,
+      isEcsTlrSettingReceived,
+      isEcsTlrSettingEnabled,
     } = this.state;
+    const isProxyAvailable = isProxyFunctionalityAvailable(isEcsTlrSettingEnabled);
     const isPrintHoldRequestsEnabled = getPrintHoldRequestsEnabled(resources.printHoldRequests);
     const { name: servicePointName } = this.getCurrentServicePointInfo();
     const pickSlips = get(resources, 'pickSlips.records', []);
@@ -1420,7 +1494,7 @@ class RequestsRoute extends React.Component {
       requesterBarcode: <FormattedMessage id="ui-requests.requests.requesterBarcode" />,
       retrievalServicePoint: <FormattedMessage id="ui-requests.requests.retrievalServicePoint" />,
       singlePrint: <FormattedMessage id="ui-requests.requests.singlePrint" />,
-      proxy: <FormattedMessage id="ui-requests.requests.proxy" />,
+      ...(isProxyAvailable ? { proxy: <FormattedMessage id="ui-requests.requests.proxy" /> } : {}),
       ...(isViewPrintDetailsEnabled && {
         copies: <FormattedMessage id="ui-requests.requests.copies" />,
         printed: <FormattedMessage id="ui-requests.requests.printed" />,
@@ -1455,6 +1529,7 @@ class RequestsRoute extends React.Component {
         onBeforeGetContentForSinglePrintButton: this.onBeforeGetContentForSinglePrintButton,
         onBeforePrintForSinglePrintButton: this.savePrintEventDetails,
         onAfterPrintForSinglePrintButton: this.onAfterPrintForPrintButton,
+        isProxyAvailable,
       }
     );
 
@@ -1607,7 +1682,7 @@ class RequestsRoute extends React.Component {
         'position',
         'requester',
         'requesterBarcode',
-        'proxy',
+        ...(isProxyAvailable ? ['proxy'] : []),
       ],
     };
     const pageTitle = this.getPageTitle();
@@ -1681,6 +1756,8 @@ class RequestsRoute extends React.Component {
                 query: resources.query,
                 onDuplicate: this.onDuplicate,
                 buildRecordsForHoldsShelfReport: this.buildRecordsForHoldsShelfReport,
+                isEcsTlrSettingReceived,
+                isEcsTlrSettingEnabled,
               }}
               viewRecordOnCollapse={this.viewRecordOnCollapse}
               viewRecordPerms="ui-requests.view"
@@ -1689,7 +1766,7 @@ class RequestsRoute extends React.Component {
               resultIsSelected={this.resultIsSelected}
               onFilterChange={this.handleFilterChange}
               sortableColumns={['requestDate', 'title', 'year', 'itemBarcode', 'callNumber', 'type', 'requestStatus',
-                'position', 'servicePoint', 'retrievalServicePoint', 'requester', 'requesterBarcode', 'proxy', 'copies', 'printed']}
+                'position', 'servicePoint', 'requester', 'requesterBarcode', 'retrievalServicePoint', ...(isProxyAvailable ? ['proxy'] : []), 'copies', 'printed']}
               pageAmount={100}
               pagingType={MCLPagingTypes.PREV_NEXT}
             />
