@@ -1,6 +1,7 @@
 import {
   render,
   screen,
+  fireEvent,
 } from '@folio/jest-config-stripes/testing-library/react';
 
 import { Button } from '@folio/stripes/components';
@@ -23,9 +24,12 @@ jest.mock('./utils', () => ({
 
 const labelIds = {
   chooseRequestType: 'ui-requests.moveRequest.chooseRequestType',
+  confirmButtonLabel: 'ui-requests.moveRequest.confirm',
+  requestTypeError: 'ui-requests.moveRequest.error.itemLevelRequest',
 };
 const testIds = {
   loading: 'loading',
+  requestType: 'requestType',
 };
 
 describe('ChooseRequestTypeDialog', () => {
@@ -84,6 +88,38 @@ describe('ChooseRequestTypeDialog', () => {
 
     it('should not render Loading component', () => {
       expect(screen.queryByTestId(testIds.loading)).not.toBeInTheDocument();
+    });
+
+    it('should handle confirmation after changing request type', () => {
+      const requestType = screen.getByTestId(testIds.requestType);
+      const confirmButton = screen.getByText(labelIds.confirmButtonLabel);
+      const event = {
+        target: {
+          value: '',
+        },
+      };
+
+      fireEvent.change(requestType, event);
+      fireEvent.click(confirmButton);
+
+      expect(mockOnConfirm).toHaveBeenCalledWith(event.target.value);
+    });
+  });
+
+  describe('When request type is not provided', () => {
+    const props = {
+      ...defaultTestProps,
+      requestTypes: [],
+    };
+
+    beforeEach(() => {
+      render(<ChooseRequestTypeDialog {...props} />);
+    });
+
+    it('should render request type error', () => {
+      const requestTypeError = screen.getByText(labelIds.requestTypeError);
+
+      expect(requestTypeError).toBeInTheDocument();
     });
   });
 
