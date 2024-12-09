@@ -1,5 +1,7 @@
 # Change history for ui-requests
 
+* Add optional column "Retrieval service point" to requests search list. Refs UIREQ-1188.
+
 ## [11.0.2] (https://github.com/folio-org/ui-requests/tree/v11.0.2) (2024-12-10)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.1...v11.0.2)
 
