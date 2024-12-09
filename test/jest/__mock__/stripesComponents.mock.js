@@ -180,6 +180,7 @@ jest.mock('@folio/stripes/components', () => ({
       <select {...props}>
         {props.children}
       </select>
+      <span>{props.error}</span>
     </div>)),
   TextArea: jest.fn(({
     'data-testid': testId,
