@@ -27,6 +27,10 @@ jest.mock('./RequestLevelFilter', () => ({
 jest.mock('./PickupServicePointFilter', () => ({
   PickupServicePointFilter: jest.fn((props) => (<div {...props} />)),
 }));
+jest.mock('../../hooks', () => ({
+  ...jest.requireActual('../../hooks'),
+  useRetrievalServicePoints: jest.fn(),
+}));
 jest.mock('@folio/stripes/smart-components', () => ({
   CheckboxFilter: jest.fn((props) => (<div {...props} />)),
   MultiSelectionFilter: jest.fn((props) => (<div {...props} />)),
