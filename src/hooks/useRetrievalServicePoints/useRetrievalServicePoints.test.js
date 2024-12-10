@@ -13,6 +13,19 @@ import { useOkapiKy } from '@folio/stripes/core';
 import useRetrievalServicePoints from './useRetrievalServicePoints';
 import { LOCATIONS_API, SERVICE_POINTS_API } from '../../constants';
 
+const mockTenantId = 'tenantId';
+
+jest.mock('@folio/stripes/core', () => ({
+  ...jest.requireActual('@folio/stripes/core'),
+  useNamespace: jest.fn(() => ['test']),
+  useOkapiKy: jest.fn(),
+  useStripes: jest.fn(() => ({
+    okapi: {
+      tenant: mockTenantId,
+    },
+  })),
+}));
+
 const queryClient = new QueryClient();
 const wrapper = ({ children }) => (
   <QueryClientProvider client={queryClient}>
