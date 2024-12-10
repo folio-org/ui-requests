@@ -15,6 +15,7 @@ import {
 import RequestsFilters from './RequestsFilters';
 import { RequestLevelFilter } from './RequestLevelFilter';
 import { PickupServicePointFilter } from './PickupServicePointFilter';
+import { RetrievalServicePointFilter } from './RetrievalServicePointFilter';
 
 import {
   requestFilterTypes,
@@ -71,6 +72,7 @@ const testIds = {
   requestLevelFilter: 'requestLevelFilter',
   multiSelectionFilter: 'multiSelectionFilter',
   pickupServicePointFilter: 'pickupServicePointFilter',
+  retrievalServicePointFilter: 'retrievalServicePointFilter',
 };
 const labelIds = {
   [requestFilterTypes.REQUEST_TYPE]: 'ui-requests.requestMeta.type',
@@ -255,6 +257,21 @@ describe('RequestsFilters', () => {
         'data-testid': testIds.pickupServicePointFilter,
         activeValues: props.activeFilters.pickupServicePoints,
         servicePoints: props.resources.servicePoints.records,
+        onChange,
+        onClear,
+      }), {});
+    });
+  });
+
+  describe('RetrievalServicePointFilter', () => {
+    it('should render RetrievalServicePointFilter', () => {
+      expect(screen.getByTestId(testIds.retrievalServicePointFilter)).toBeInTheDocument();
+    });
+
+    it('should trigger retrievalServicePointFilter with correct props', () => {
+      expect(RetrievalServicePointFilter).toHaveBeenCalledWith(expect.objectContaining({
+        'data-testid': testIds.retrievalServicePointFilter,
+        activeValues: props.activeFilters.retrievalServicePoints,
         onChange,
         onClear,
       }), {});

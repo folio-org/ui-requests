@@ -44,6 +44,12 @@ export default [
     operator: '==',
   },
   {
+    name: requestFilterTypes.RETRIEVAL_SERVICE_POINT,
+    cql: 'item.retrievalServicePointId',
+    values: [],
+    operator: '==',
+  },
+  {
     name: requestFilterTypes.PRINT_STATUS,
     cql: 'printStatus',
     values: [],

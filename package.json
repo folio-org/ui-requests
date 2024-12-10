@@ -197,6 +197,7 @@
     "inflected": "^2.0.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-query": "^3.39.0",
     "react-intl": "^6.4.4",
     "react-router-dom": "^5.2.0",
     "regenerator-runtime": "^0.13.9"
@@ -220,6 +221,7 @@
     "@folio/stripes": "^9.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-query": "^3.39.0",
     "react-intl": "^6.4.4",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0"

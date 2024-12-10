@@ -1,7 +1,4 @@
-import React, {
-  useCallback,
-  useMemo,
-} from 'react';
+import { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
@@ -18,6 +15,8 @@ import {
   requestFilterTypes,
 } from '../../../constants';
 
+import useRetrievalServicePoints from '../../../hooks/useRetrievalServicePoints/useRetrievalServicePoints';
+
 const RetrievalServicePointFilter = ({
   activeValues,
   onChange,
@@ -28,11 +27,12 @@ const RetrievalServicePointFilter = ({
     onClear(name);
   }, [name, onClear]);
 
-  const filterOptions = [];
+  const { retrievalSPsOptions } = useRetrievalServicePoints();
 
   return (
     <div>
       <Accordion
+        data-testid="retrievalServicePointAccordion"
         displayClearButton={!isEmpty(activeValues)}
         id={name}
         header={FilterAccordionHeader}
@@ -43,7 +43,7 @@ const RetrievalServicePointFilter = ({
       >
         <MultiSelectionFilter
           ariaLabelledBy={`accordion-toggle-button-${name}`}
-          dataOptions={filterOptions}
+          dataOptions={retrievalSPsOptions}
           id="req-retrieval-service-point-filter"
           name={name}
           onChange={onChange}

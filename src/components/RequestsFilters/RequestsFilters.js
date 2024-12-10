@@ -67,7 +67,7 @@ export default class RequestsFilters extends React.Component {
         requestType = [],
         requestStatus = [],
         pickupServicePoints = [],
-        retrievalServicePoints= [],
+        retrievalServicePoints = [],
         requestLevels = [],
         printStatus = [],
       },
@@ -150,6 +150,7 @@ export default class RequestsFilters extends React.Component {
           onClear={onClear}
         />
         <RetrievalServicePointFilter
+          data-testid="retrievalServicePointFilter"
           activeValues={retrievalServicePoints}
           onChange={onChange}
           onClear={onClear}

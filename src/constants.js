@@ -430,3 +430,6 @@ export const SETTINGS_SCOPES = {
 export const SETTINGS_KEYS = {
   GENERAL_TLR: 'generalTlr',
 };
+
+export const LOCATIONS_API = 'locations';
+export const SERVICE_POINTS_API = 'service-points';
