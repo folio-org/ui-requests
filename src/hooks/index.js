@@ -1,0 +1,1 @@
+export { useRetrievalServicePoints } from './useRetrievalServicePoints';
