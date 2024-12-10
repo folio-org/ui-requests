@@ -81,6 +81,7 @@ class ChooseRequestTypeDialog extends React.Component {
         {isLoading ?
           <Loading data-testid="loading" /> :
           <Select
+            data-testid="requestType"
             label={<FormattedMessage id="ui-requests.moveRequest.chooseRequestMessage" />}
             name="requestType"
             onChange={this.selectRequestType}
