@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## [11.1.0] IN PROGRESS
+## [11.0.2] (https://github.com/folio-org/ui-requests/tree/v11.0.2) (2024-12-10)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.1...v11.0.2)
 
 * Migrate from `mod-circulation` to `mod-circulation-bff` for `Print pick slips` and `Print search slips`. Refs UIREQ-1154.
 
