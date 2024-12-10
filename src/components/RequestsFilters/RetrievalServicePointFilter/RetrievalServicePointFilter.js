@@ -15,7 +15,7 @@ import {
   requestFilterTypes,
 } from '../../../constants';
 
-import useRetrievalServicePoints from '../../../hooks/useRetrievalServicePoints/useRetrievalServicePoints';
+import { useRetrievalServicePoints } from '../../../hooks';
 
 const RetrievalServicePointFilter = ({
   activeValues,
