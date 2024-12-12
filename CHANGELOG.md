@@ -4,6 +4,7 @@
 
 * Migrate from `mod-circulation` to `mod-circulation-bff` for `Print pick slips` and `Print search slips`. Refs UIREQ-1154.
 * Increase code coverage for src/ChooseRequestTypeDialog.js by Jest/RTL tests. Refs UIREQ-1044.
+* Increase code coverage for src/ViewRequest.js by Jest/RTL tests. Refs UIREQ-1046.
 
 ## [11.0.1] (https://github.com/folio-org/ui-requests/tree/v11.0.1) (2024-12-02)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.0...v11.0.1)

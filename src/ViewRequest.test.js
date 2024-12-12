@@ -1,13 +1,17 @@
-import moment from 'moment-timezone';
+import React from 'react';
 
 import {
   render,
   screen,
+  waitFor,
 } from '@folio/jest-config-stripes/testing-library/react';
+import userEvent from '@folio/jest-config-stripes/testing-library/user-event';
 
 import {
   CommandList,
   defaultKeyboardShortcuts,
+  Icon,
+  PaneHeaderIconButton,
 } from '@folio/stripes/components';
 
 import ViewRequest, {
@@ -15,25 +19,118 @@ import ViewRequest, {
   shouldHideMoveAndDuplicate,
 } from './ViewRequest';
 import RequestForm from './RequestForm';
+import MoveRequestManager from './MoveRequestManager';
+import CancelRequestDialog from './CancelRequestDialog';
+import UserDetail from './UserDetail';
+import ItemDetail from './ItemDetail';
 import {
   INVALID_REQUEST_HARDCODED_ID,
   requestStatuses,
   REQUEST_LEVEL_TYPES,
   DCB_INSTANCE_ID,
   DCB_HOLDINGS_RECORD_ID,
+  REQUEST_LAYERS,
+  fulfillmentTypeMap,
 } from './constants';
+import {
+  isProxyFunctionalityAvailable,
+  toUserAddress,
+} from './utils';
 import {
   duplicateRecordShortcut,
   editRecordShortcut,
 } from '../test/jest/helpers/shortcuts';
 
+const testIds = {
+  requestForm: 'requestForm',
+  moveRequestManager: 'moveRequestManager',
+  cancelRequestButton: 'cancelRequestButton',
+  saveRequestButton: 'saveRequestButton',
+  moveRequestButton: 'moveRequestButton',
+  cancelMoveButton: 'cancelMoveButton',
+};
+const updatedRecordRequester = {
+  requester: {
+    personal: {
+      firstName: 'firstName',
+    },
+  },
+};
+const requestQueueUrl = 'requestQueueUrl/';
+
 jest.mock('./RequestForm', () => jest.fn(() => null));
-jest.mock('./MoveRequestManager', () => jest.fn(() => null));
+jest.mock('./MoveRequestManager', () => jest.fn(({
+  onMove,
+  onCancelMove,
+}) => {
+  return (
+    <div data-testid={testIds.moveRequestManager}>
+      <button
+        type="button"
+        data-testid={testIds.moveRequestButton}
+        onClick={onMove}
+      >
+        Move
+      </button>
+      <button
+        type="button"
+        data-testid={testIds.cancelMoveButton}
+        onClick={onCancelMove}
+      >
+        Cancel
+      </button>
+    </div>
+  );
+}));
 jest.mock('./ItemDetail', () => jest.fn(() => null));
 jest.mock('./UserDetail', () => jest.fn(() => null));
 jest.mock('./CancelRequestDialog', () => jest.fn(() => null));
 jest.mock('./PositionLink', () => jest.fn(() => null));
 jest.mock('./components/TitleInformation', () => jest.fn(() => null));
+jest.mock('./RequestFormContainer', () => jest.fn(({
+  onSubmit,
+  onCancelRequest,
+}) => {
+  const handleSubmit = () => {
+    onSubmit(updatedRecordRequester);
+  };
+  const cancelRequest = () => {
+    onCancelRequest({});
+  };
+
+  return (
+    <>
+      <form
+        data-testid={testIds.requestForm}
+        onSubmit={handleSubmit}
+      >
+        <button
+          type="button"
+          data-testid={testIds.cancelRequestButton}
+          onClick={cancelRequest}
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          data-testid={testIds.saveRequestButton}
+          onClick={handleSubmit}
+        >
+          Save
+        </button>
+      </form>
+
+    </>
+  );
+}));
+jest.mock('./utils', () => ({
+  ...jest.requireActual('./utils'),
+  toUserAddress: jest.fn(),
+  isProxyFunctionalityAvailable: jest.fn(() => true),
+}));
+jest.mock('./routes/urls', () => ({
+  requestQueueView: jest.fn(() => requestQueueUrl),
+}));
 
 describe('ViewRequest', () => {
   const labelIds = {
@@ -43,6 +140,10 @@ describe('ViewRequest', () => {
     moveRequest: 'ui-requests.actions.moveRequest',
     reorderQueue: 'ui-requests.actions.reorderQueue',
     requestDetailTitle: 'ui-requests.request.detail.title',
+    showTags: 'ui-requests.showTags',
+    noItemInformation: 'ui-requests.item.noInformation',
+    cancellationReason: 'ui-requests.cancellationReason',
+    cancellationAdditionalInformation: 'ui-requests.cancellationAdditionalInformation',
   };
   const mockedRequest = {
     instance: {
@@ -59,6 +160,13 @@ describe('ViewRequest', () => {
     metadata: {
       createdDate: 'createdDate',
     },
+    requester: {
+      id: 'requesterId',
+    },
+    proxy: {
+      id: 'proxyUserId',
+    },
+    proxyUserId: 'proxyUserId',
   };
   const mockedRequestWithDCBUser = {
     ...mockedRequest,
@@ -99,10 +207,22 @@ describe('ViewRequest', () => {
     onClose: jest.fn(),
     onCloseEdit: jest.fn(),
     buildRecordsForHoldsShelfReport: jest.fn(),
+    patronGroups: [
+      {
+        id: 'groupId',
+        name: 'groupName',
+      }
+    ],
     optionLists: {
       cancellationReasons: [
-        { id: '1' },
-        { id: '2' },
+        {
+          id: 'id_1',
+          name: 'name_1',
+        },
+        {
+          id: 'id_2',
+          name: 'name_2',
+        },
       ],
       servicePoints: [
         { id: 'servicePoint' },
@@ -134,6 +254,13 @@ describe('ViewRequest', () => {
     },
     isEcsTlrSettingEnabled: false,
     isEcsTlrSettingReceived: true,
+    onDuplicate: jest.fn(),
+    onEdit: jest.fn(),
+  };
+  const openRequest = {
+    ...mockedRequest,
+    fulfillmentPreference: fulfillmentTypeMap.HOLD_SHELF,
+    status: requestStatuses.NOT_YET_FILLED,
   };
   const defaultDCBLendingProps = {
     ...defaultProps,
@@ -176,26 +303,6 @@ describe('ViewRequest', () => {
       expect(screen.getByText(labelIds.requestDetailTitle)).toBeInTheDocument();
     });
 
-    describe('when work with request editing', () => {
-      beforeAll(() => {
-        mockedLocation.search = '?layer=edit';
-      });
-
-      it('should set "createTitleLevelRequest" to false when try to edit existed request', () => {
-        const expectedResult = {
-          initialValues : {
-            requestExpirationDate: null,
-            holdShelfExpirationDate: mockedRequest.holdShelfExpirationDate,
-            holdShelfExpirationTime: moment(mockedRequest.holdShelfExpirationDate).format('HH:mm'),
-            createTitleLevelRequest: false,
-            ...mockedRequest,
-          },
-        };
-
-        expect(RequestForm).toHaveBeenCalledWith(expect.objectContaining(expectedResult), {});
-      });
-    });
-
     describe('when not working with request editing', () => {
       beforeAll(() => {
         mockedLocation.search = null;
@@ -203,7 +310,7 @@ describe('ViewRequest', () => {
 
       describe('when current request is closed', () => {
         describe('request is valid', () => {
-          describe('TLR in enabled', () => {
+          describe('TLR is enabled', () => {
             beforeAll(() => {
               mockedConfig.records[0].value = {
                 titleLevelRequestsFeatureEnabled: true,
@@ -213,9 +320,17 @@ describe('ViewRequest', () => {
             it('should render "Duplicate" button', () => {
               expect(screen.getByText(labelIds.duplicateRequest)).toBeInTheDocument();
             });
+
+            it('should trigger "onDuplicate"', async () => {
+              const duplicateButton = screen.getByText(labelIds.duplicateRequest);
+
+              await userEvent.click(duplicateButton);
+
+              expect(defaultProps.onDuplicate).toHaveBeenCalledWith(defaultProps.resources.selectedRequest.records[0]);
+            });
           });
 
-          describe('TLR in disabled', () => {
+          describe('TLR is disabled', () => {
             beforeAll(() => {
               mockedConfig.records[0].value = {
                 titleLevelRequestsFeatureEnabled: false,
@@ -502,6 +617,690 @@ describe('ViewRequest', () => {
           expect(defaultProps.stripes.hasPerm).toHaveBeenCalled();
         });
       });
+    });
+  });
+
+  describe('Component updating', () => {
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    describe('When new request is loaded', () => {
+      const newProps = {
+        ...defaultProps,
+        resources: {
+          selectedRequest: {
+            hasLoaded: true,
+            records: [
+              {
+                ...mockedRequest,
+                instance: {
+                  title: 'instanceTitle',
+                },
+                item: {
+                  barcode: 'itemBarcode',
+                },
+                id: 'id',
+              },
+            ],
+          },
+        },
+        parentResources: {
+          configs: {
+            records: [
+              {
+                value: {
+                  test: 1,
+                  titleLevelRequestsFeatureEnabled: false,
+                },
+              }
+            ],
+          },
+        },
+      };
+
+      beforeEach(() => {
+        const { rerender } = render(<ViewRequest {...defaultProps} />);
+
+        rerender(<ViewRequest {...newProps} />);
+      });
+
+      it('should trigger "joinRequest"', () => {
+        expect(defaultProps.joinRequest).toHaveBeenCalled();
+      });
+    });
+
+    describe('When new request is loading', () => {
+      const newProps = {
+        ...defaultProps,
+        resources: {
+          selectedRequest: {
+            hasLoaded: false,
+            records: [mockedRequest],
+          },
+        },
+      };
+
+      beforeEach(() => {
+        const { rerender } = render(<ViewRequest {...defaultProps} />);
+
+        rerender(<ViewRequest {...newProps} />);
+      });
+
+      it('should not trigger "joinRequest"', () => {
+        expect(defaultProps.joinRequest).toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('Request updating', () => {
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    describe('When proxy functionality available', () => {
+      const props = {
+        ...defaultProps,
+        mutator: {
+          selectedRequest: {
+            PUT: jest.fn(() => Promise.resolve({})),
+          },
+        },
+        location: {
+          search: '?layer=edit',
+          layer: REQUEST_LAYERS.EDIT,
+        },
+      };
+      const sendCalloutMock = jest.fn();
+
+      beforeEach(() => {
+        jest.spyOn(React, 'createRef').mockReturnValue({
+          current: {
+            sendCallout: sendCalloutMock,
+          },
+        });
+        render(<ViewRequest {...props} />);
+      });
+
+      it('should send correct data for record updating', async () => {
+        const saveButton = screen.getByTestId(testIds.saveRequestButton);
+        const dataToSubmit = {
+          proxy: mockedRequest.proxy,
+          proxyUserId: mockedRequest.proxyUserId,
+          id: mockedRequest.id,
+          instance: mockedRequest.instance,
+          item: mockedRequest.item,
+          metadata: mockedRequest.metadata,
+          pickupServicePointId: mockedRequest.pickupServicePointId,
+          requestLevel: mockedRequest.requestLevel,
+          status: mockedRequest.status,
+          holdShelfExpirationDate: mockedRequest.holdShelfExpirationDate,
+          requester: updatedRecordRequester.requester,
+        };
+
+        await userEvent.click(saveButton);
+
+        expect(props.mutator.selectedRequest.PUT).toHaveBeenCalledWith(dataToSubmit);
+      });
+    });
+
+    describe('When proxy functionality is not available', () => {
+      const props = {
+        ...defaultProps,
+        mutator: {
+          selectedRequest: {
+            PUT: jest.fn(() => Promise.resolve({})),
+          },
+        },
+        location: {
+          search: '?layer=edit',
+          layer: REQUEST_LAYERS.EDIT,
+        },
+      };
+      const sendCalloutMock = jest.fn();
+
+      beforeEach(() => {
+        isProxyFunctionalityAvailable.mockReturnValueOnce(false);
+        jest.spyOn(React, 'createRef').mockReturnValue({
+          current: {
+            sendCallout: sendCalloutMock,
+          },
+        });
+        render(<ViewRequest {...props} />);
+      });
+
+      it('should send correct data for record updating', async () => {
+        const saveButton = screen.getByTestId(testIds.saveRequestButton);
+        const dataToSubmit = {
+          id: mockedRequest.id,
+          instance: mockedRequest.instance,
+          status: mockedRequest.status,
+          item: mockedRequest.item,
+          metadata: mockedRequest.metadata,
+          pickupServicePointId: mockedRequest.pickupServicePointId,
+          requestLevel: mockedRequest.requestLevel,
+          holdShelfExpirationDate: mockedRequest.holdShelfExpirationDate,
+          requester: updatedRecordRequester.requester,
+        };
+
+        await userEvent.click(saveButton);
+
+        expect(props.mutator.selectedRequest.PUT).toHaveBeenCalledWith(dataToSubmit);
+      });
+    });
+
+    describe('When error happens', () => {
+      const props = {
+        ...defaultProps,
+        mutator: {
+          selectedRequest: {
+            PUT: jest.fn(() => Promise.resolve({})),
+          },
+        },
+        location: {
+          layer: REQUEST_LAYERS.EDIT,
+          search: '?layer=edit',
+        },
+        onCloseEdit: jest.fn(() => throw new Error('error message')),
+      };
+      const sendCalloutMock = jest.fn();
+
+      beforeEach(() => {
+        jest.spyOn(React, 'createRef').mockReturnValue({
+          current: {
+            sendCallout: sendCalloutMock,
+          },
+        });
+        render(<ViewRequest {...props} />);
+      });
+
+      it('should show error callout', async () => {
+        const saveButton = screen.getByTestId(testIds.saveRequestButton);
+
+        userEvent.click(saveButton);
+
+        await waitFor(() => {
+          expect(sendCalloutMock).toHaveBeenCalledWith(expect.objectContaining({ type: 'error' }));
+        });
+      });
+    });
+  });
+
+  describe('Request canceling via RequestFormContainer', () => {
+    const props = {
+      ...defaultProps,
+      mutator: {
+        selectedRequest: {
+          PUT: jest.fn(() => Promise.resolve({})),
+        },
+      },
+      location: {
+        search: '?layer=edit',
+        layer: REQUEST_LAYERS.EDIT,
+      },
+    };
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    beforeEach(async () => {
+      render(<ViewRequest {...props} />);
+
+      const cancelButton = screen.getByTestId(testIds.cancelRequestButton);
+
+      await userEvent.click(cancelButton);
+    });
+
+    it('should send correct data for record canceling', () => {
+      expect(props.mutator.selectedRequest.PUT).toHaveBeenCalledWith(mockedRequest);
+    });
+
+    it('should trigger "onCloseEdit"', () => {
+      expect(props.onCloseEdit).toHaveBeenCalled();
+    });
+
+    it('should trigger "buildRecordsForHoldsShelfReport"', () => {
+      expect(props.buildRecordsForHoldsShelfReport).toHaveBeenCalled();
+    });
+  });
+
+  describe('Request canceling via action menu', () => {
+    const props = {
+      ...defaultProps,
+      resources: {
+        selectedRequest: {
+          hasLoaded: true,
+          records: [
+            {
+              ...defaultProps.resources.selectedRequest.records[0],
+              status: requestStatuses.NOT_YET_FILLED,
+            },
+          ],
+        },
+      },
+    };
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    beforeEach(() => {
+      render(<ViewRequest {...props} />);
+    });
+
+    it('should trigger CancelRequestDialog with correct "open" prop', async () => {
+      const cancelButton = screen.getByText(labelIds.cancelRequest);
+      const expectedProps = {
+        open: true,
+      };
+
+      CancelRequestDialog.mockClear();
+      await userEvent.click(cancelButton);
+
+      expect(CancelRequestDialog).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+    });
+  });
+
+  describe('Request moving', () => {
+    const props = {
+      ...defaultProps,
+      resources: {
+        selectedRequest: {
+          hasLoaded: true,
+          records: [openRequest],
+        },
+      },
+    };
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    beforeEach(async () => {
+      render(<ViewRequest {...props} />);
+
+      const moveRequestButton = screen.getByText(labelIds.moveRequest);
+
+      await userEvent.click(moveRequestButton);
+    });
+
+    it('should trigger "MoveRequestManager" with correct props', () => {
+      const expectedProps = {
+        onMove: expect.any(Function),
+        onCancelMove: expect.any(Function),
+        request: props.resources.selectedRequest.records[0],
+      };
+
+      expect(MoveRequestManager).toHaveBeenCalledWith(expectedProps, {});
+    });
+
+    it('should not trigger "MoveRequestManager"', async () => {
+      const cancelMoveButton = screen.getByTestId(testIds.cancelMoveButton);
+
+      await userEvent.click(cancelMoveButton);
+
+      const moveRequestManager = screen.queryByTestId(testIds.moveRequestManager);
+
+      expect(moveRequestManager).not.toBeInTheDocument();
+    });
+
+    it('should trigger "history.push" after request moving', async () => {
+      const moveRequestButton = screen.getByTestId(testIds.moveRequestButton);
+      const expectedArgs = [`${requestQueueUrl}${props.location.search}`, { afterMove: true }];
+
+      await userEvent.click(moveRequestButton);
+
+      expect(props.history.push).toHaveBeenCalledWith(...expectedArgs);
+    });
+  });
+
+  describe('Request reordering', () => {
+    const props = {
+      ...defaultProps,
+      resources: {
+        selectedRequest: {
+          hasLoaded: true,
+          records: [openRequest],
+        },
+      },
+    };
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    beforeEach(() => {
+      render(<ViewRequest {...props} />);
+    });
+
+    it('should trigger "history.push" after clicking on reorder request button', async () => {
+      const reorderQueueButton = screen.getByText(labelIds.reorderQueue);
+      const expectedArgs = [
+        `${requestQueueUrl}${props.location.search}`,
+        { request: props.resources.selectedRequest.records[0] }
+      ];
+
+      await userEvent.click(reorderQueueButton);
+
+      expect(props.history.push).toHaveBeenCalledWith(...expectedArgs);
+    });
+  });
+
+  describe('Request editing', () => {
+    const props = {
+      ...defaultProps,
+      resources: {
+        selectedRequest: {
+          hasLoaded: true,
+          records: [openRequest],
+        },
+      },
+    };
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    beforeEach(() => {
+      render(<ViewRequest {...props} />);
+    });
+
+    it('should trigger "onEdit" after clicking on edit button', async () => {
+      const editButton = screen.getByText(labelIds.edit);
+
+      await userEvent.click(editButton);
+
+      expect(props.onEdit).toHaveBeenCalled();
+    });
+  });
+
+  describe('Request duplicating', () => {
+    const props = {
+      ...defaultProps,
+      resources: {
+        selectedRequest: {
+          hasLoaded: true,
+          records: [openRequest],
+        },
+      },
+    };
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    beforeEach(() => {
+      render(<ViewRequest {...props} />);
+    });
+
+    it('should trigger "onDuplicate" after clicking on duplicate button', async () => {
+      const duplicateButton = screen.getByText(labelIds.duplicateRequest);
+
+      await userEvent.click(duplicateButton);
+
+      expect(props.onDuplicate).toHaveBeenCalled();
+    });
+  });
+
+  describe('Detail menu', () => {
+    const props = {
+      ...defaultProps,
+      resources: {
+        selectedRequest: {
+          hasLoaded: true,
+          records: [],
+        },
+      },
+      tagsEnabled: true,
+      tagsToggle: jest.fn(),
+    };
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    beforeEach(() => {
+      render(<ViewRequest {...props} />);
+    });
+
+    it('should trigger "PaneHeaderIconButton" with correct props', () => {
+      const expectedProps = {
+        icon: 'tag',
+        id: 'clickable-show-tags',
+        onClick: props.tagsToggle,
+        badgeCount: 0,
+        ariaLabel: [labelIds.showTags],
+        disabled: false,
+      };
+
+      expect(PaneHeaderIconButton).toHaveBeenCalledWith(expectedProps, {});
+    });
+  });
+
+  describe('Item details', () => {
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    describe('When item information is provided', () => {
+      const props = {
+        ...defaultProps,
+        resources: {
+          selectedRequest: {
+            hasLoaded: true,
+            records: [{
+              ...openRequest,
+              requestCount: 1,
+              loan: {
+                id: 'loanId',
+              },
+            }],
+          },
+        },
+      };
+
+      beforeEach(() => {
+        render(<ViewRequest {...props} />);
+      });
+
+      it('should trigger "ItemDetail" with correct props', async () => {
+        const request = props.resources.selectedRequest.records[0];
+        const expectedProps = {
+          request,
+          item: request.item,
+          loan: request.loan,
+          requestCount: request.requestCount,
+        };
+
+        expect(ItemDetail).toHaveBeenCalledWith(expectedProps, {});
+      });
+    });
+
+    describe('When item information is not provided', () => {
+      const props = {
+        ...defaultProps,
+        resources: {
+          selectedRequest: {
+            hasLoaded: true,
+            records: [{
+              ...openRequest,
+              item: undefined,
+            }],
+          },
+        },
+      };
+
+      beforeEach(() => {
+        render(<ViewRequest {...props} />);
+      });
+
+      it('should render no item information message', () => {
+        const noItemInformationMessage = screen.getByText(labelIds.noItemInformation, { exact: false });
+
+        expect(noItemInformationMessage).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('When cancellation reason is provided', () => {
+    const props = {
+      ...defaultProps,
+      resources: {
+        selectedRequest: {
+          hasLoaded: true,
+          records: [{
+            ...openRequest,
+            cancellationReasonId: defaultProps.optionLists.cancellationReasons[0].id,
+          }],
+        },
+      },
+    };
+
+    beforeEach(() => {
+      render(<ViewRequest {...props} />);
+    });
+
+    it('should render cancellation reason label', () => {
+      const cancellationReasonLabel = screen.getByText(labelIds.cancellationReason);
+
+      expect(cancellationReasonLabel).toBeInTheDocument();
+    });
+
+    it('should render cancellation reason value', () => {
+      const cancellationReasonValue = screen.getByText(defaultProps.optionLists.cancellationReasons[0].name);
+
+      expect(cancellationReasonValue).toBeInTheDocument();
+    });
+  });
+
+  describe('When cancellation additional information is provided', () => {
+    const cancellationAdditionalInformation = 'cancellationAdditionalInformation';
+    const props = {
+      ...defaultProps,
+      resources: {
+        selectedRequest: {
+          hasLoaded: true,
+          records: [{
+            ...openRequest,
+            cancellationReasonId: defaultProps.optionLists.cancellationReasons[0].id,
+            cancellationAdditionalInformation,
+          }],
+        },
+      },
+    };
+
+    beforeEach(() => {
+      render(<ViewRequest {...props} />);
+    });
+
+    it('should render cancellation additional information label', () => {
+      const cancellationInformationLabel = screen.getByText(labelIds.cancellationAdditionalInformation);
+
+      expect(cancellationInformationLabel).toBeInTheDocument();
+    });
+
+    it('should render cancellation additional information value', () => {
+      const cancellationInformationValue = screen.getByText(cancellationAdditionalInformation);
+
+      expect(cancellationInformationValue).toBeInTheDocument();
+    });
+  });
+
+  describe('When fulfilment preference is delivery', () => {
+    const props = {
+      ...defaultProps,
+      resources: {
+        selectedRequest: {
+          hasLoaded: true,
+          records: [{
+            ...openRequest,
+            fulfillmentPreference: fulfillmentTypeMap.DELIVERY,
+            deliveryAddressTypeId: 'deliveryAddressTypeId',
+          }],
+        },
+      },
+    };
+    const deliveryAddressDetail = 'deliveryAddressDetail';
+
+    beforeEach(() => {
+      toUserAddress.mockReturnValueOnce(deliveryAddressDetail);
+      render(<ViewRequest {...props} />);
+    });
+
+    it('should render "UserDetail" with delivery information', () => {
+      const request = props.resources.selectedRequest.records[0];
+      const expectedProps = {
+        deliveryAddress: deliveryAddressDetail,
+        user:request.requester,
+        proxy: request.proxy,
+        selectedDelivery: true,
+        patronGroups: props.patronGroups,
+        stripes: props.stripes,
+        request,
+      };
+
+      expect(UserDetail).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+    });
+  });
+
+  describe('When fulfilment preference is hold shelf', () => {
+    const props = {
+      ...defaultProps,
+      resources: {
+        selectedRequest: {
+          hasLoaded: true,
+          records: [openRequest],
+        },
+      },
+    };
+
+    beforeEach(() => {
+      render(<ViewRequest {...props} />);
+    });
+
+    it('should render "UserDetail" without delivery information', () => {
+      const request = props.resources.selectedRequest.records[0];
+      const expectedProps = {
+        deliveryAddress: undefined,
+        user:request.requester,
+        proxy: request.proxy,
+        selectedDelivery: false,
+        patronGroups: props.patronGroups,
+        stripes: props.stripes,
+        request,
+      };
+
+      expect(UserDetail).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+    });
+  });
+
+  describe('Spinner', () => {
+    const props = {
+      ...defaultProps,
+      resources: {
+        selectedRequest: {
+          hasLoaded: true,
+          records: [],
+        },
+      },
+    };
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    beforeEach(() => {
+      render(<ViewRequest {...props} />);
+    });
+
+    it('should trigger spinner "Icon" with correct props', () => {
+      const expectedProps = {
+        icon: 'spinner-ellipsis',
+        width: '100px',
+      };
+
+      expect(Icon).toHaveBeenCalledWith(expectedProps, {});
     });
   });
 
