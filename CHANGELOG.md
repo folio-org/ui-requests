@@ -2,9 +2,14 @@
 
 ## [11.1.0] IN PROGRESS
 
-* Migrate from `mod-circulation` to `mod-circulation-bff` for `Print pick slips` and `Print search slips`. Refs UIREQ-1154.
+* Add optional column "Retrieval service point" to requests search list. Refs UIREQ-1188.
 * Increase code coverage for src/ChooseRequestTypeDialog.js by Jest/RTL tests. Refs UIREQ-1044.
 * Increase code coverage for src/ViewRequest.js by Jest/RTL tests. Refs UIREQ-1046.
+
+## [11.0.2] (https://github.com/folio-org/ui-requests/tree/v11.0.2) (2024-12-10)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.1...v11.0.2)
+
+* Migrate from `mod-circulation` to `mod-circulation-bff` for `Print pick slips` and `Print search slips`. Refs UIREQ-1154.
 
 ## [11.0.1] (https://github.com/folio-org/ui-requests/tree/v11.0.1) (2024-12-02)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.0...v11.0.1)
