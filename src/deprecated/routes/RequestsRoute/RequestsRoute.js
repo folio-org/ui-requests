@@ -265,7 +265,6 @@ export const getListFormatter = (
       <SinglePrintButtonForPickSlip {...singlePrintButtonProps} />);
   },
   'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : DEFAULT_FORMATTER_VALUE),
-  'retrievalServicePoint': rq => get(rq, 'item.retrievalServicePointName', DEFAULT_FORMATTER_VALUE),
   'requestStatus': rq => (requestStatusesTranslations[rq.status]
     ? <FormattedMessage id={requestStatusesTranslations[rq.status]} />
     : <NoValue />),
@@ -335,7 +334,6 @@ class RequestsRoute extends React.Component {
               'requestStatus': 'status',
               'servicePoint': 'searchIndex.pickupServicePointName',
               'requesterBarcode': 'requester.barcode',
-              'retrievalServicePoint': 'item.retrievalServicePointName',
               'requestDate': 'requestDate',
               'position': 'position/number',
               'proxy': 'proxy',
@@ -1418,7 +1416,6 @@ class RequestsRoute extends React.Component {
       servicePoint: <FormattedMessage id="ui-requests.requests.servicePoint" />,
       requester: <FormattedMessage id="ui-requests.requests.requester" />,
       requesterBarcode: <FormattedMessage id="ui-requests.requests.requesterBarcode" />,
-      retrievalServicePoint: <FormattedMessage id="ui-requests.requests.retrievalServicePoint" />,
       singlePrint: <FormattedMessage id="ui-requests.requests.singlePrint" />,
       proxy: <FormattedMessage id="ui-requests.requests.proxy" />,
       ...(isViewPrintDetailsEnabled && {
@@ -1689,7 +1686,7 @@ class RequestsRoute extends React.Component {
               resultIsSelected={this.resultIsSelected}
               onFilterChange={this.handleFilterChange}
               sortableColumns={['requestDate', 'title', 'year', 'itemBarcode', 'callNumber', 'type', 'requestStatus',
-                'position', 'servicePoint', 'requester', 'requesterBarcode', 'retrievalServicePoint', 'proxy', 'copies', 'printed']}
+                'position', 'servicePoint', 'requester', 'requesterBarcode', 'proxy', 'copies', 'printed']}
               pageAmount={100}
               pagingType={MCLPagingTypes.PREV_NEXT}
             />
