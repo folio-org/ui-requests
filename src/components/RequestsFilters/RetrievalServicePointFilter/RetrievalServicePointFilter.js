@@ -36,7 +36,7 @@ const RetrievalServicePointFilter = ({
         displayClearButton={!isEmpty(activeValues)}
         id={name}
         header={FilterAccordionHeader}
-        label={<FormattedMessage id="ui-requests.retrievalServicePoint.name" />}
+        label={<FormattedMessage id="ui-requests.requests.retrievalServicePoint" />}
         name={name}
         separator={false}
         onClearFilter={clearFilter}
