@@ -30,19 +30,6 @@ jest.mock('./PickupServicePointFilter', () => ({
 jest.mock('./RetrievalServicePointFilter', () => ({
   RetrievalServicePointFilter: jest.fn((props) => (<div {...props} />)),
 }));
-jest.mock('../../hooks', () => ({
-  ...jest.requireActual('../../hooks'),
-  useRetrievalServicePoints: jest.fn().mockReturnValue([
-    {
-      value: '3a40852d-49fd-4df2-a1f9-6e2641a6e91f',
-      label: 'Circ desk 1',
-    },
-    {
-      value: '9d1b77e8-f02e-4b7f-b296-3f2042ddac54',
-      label: 'Circ desk 2',
-    },
-  ]),
-}));
 jest.mock('@folio/stripes/smart-components', () => ({
   CheckboxFilter: jest.fn((props) => (<div {...props} />)),
   MultiSelectionFilter: jest.fn((props) => (<div {...props} />)),
