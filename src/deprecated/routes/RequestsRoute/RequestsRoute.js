@@ -94,7 +94,7 @@ import {
 import {
   RequestsFilters,
   RequestsFiltersConfig,
-} from '../../../components/RequestsFilters';
+} from '../../RequestsFilters';
 import RequestsRouteShortcutsWrapper from '../../../components/RequestsRouteShortcutsWrapper';
 import {
   isReorderableRequest,
