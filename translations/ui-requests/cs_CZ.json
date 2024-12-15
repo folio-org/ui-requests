@@ -299,5 +299,6 @@
     "filters.printStatus.notPrinted": "Nevytištěno",
     "printDetails.printCount": "# Kopie",
     "permission.moveRequest.execute": "Požadavky: Přejít na novou jednotku, změnit pořadí fronty",
-    "permission.reorderQueue.execute": "Žádanky: Změna pořadí ve frontě"
+    "permission.reorderQueue.execute": "Žádanky: Změna pořadí ve frontě",
+    "requests.retrievalServicePoint": "Retrieval service point"
 }
