@@ -33,15 +33,15 @@ export const getIdentifiers = (data, separator, limit) => data.slice(0, limit).m
 
 const TitleInformation = (props) => {
   const {
-    titleLevelRequestsLink,
+    titleLevelRequestsLink = true,
     holdingsRecordId,
     instanceId,
     titleLevelRequestsCount,
     title,
-    contributors,
-    publications,
-    editions,
-    identifiers,
+    contributors = [],
+    publications = [],
+    editions = [],
+    identifiers = [],
     intl:{
       formatMessage,
     },
@@ -93,14 +93,6 @@ const TitleInformation = (props) => {
       </Row>
     </>
   );
-};
-
-TitleInformation.defaultProps = {
-  contributors: [],
-  publications: [],
-  editions: [],
-  identifiers: [],
-  titleLevelRequestsLink: true,
 };
 
 TitleInformation.propTypes = {
