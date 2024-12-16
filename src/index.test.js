@@ -29,11 +29,6 @@ describe('UI Requests', () => {
     history: {
       push: jest.fn(),
     },
-    stripes: {
-      config: {
-        enableEcsRequests: true,
-      },
-    },
   };
 
   beforeEach(() => {

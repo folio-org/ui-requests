@@ -40,6 +40,7 @@
 * Implement feature toggle for ECS and not ECS envs. Refs UIREQ-1171.
 * Hide proxy functionality for ECS with mod-tlr enabled. Refs UIREQ-1185.
 * Update permission after mod-patron-blocks permission changes. Refs UIREQ-1201.
+* Remove feature toggle functionality. Refs UIREQ-1199.
 
 ## [10.0.2] (https://github.com/folio-org/ui-requests/tree/v10.0.2) (2024-11-22)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v10.0.1...v10.0.2)
