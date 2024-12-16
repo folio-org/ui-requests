@@ -1,6 +1,6 @@
 {
   "name": "@folio/requests",
-  "version": "11.0.0",
+  "version": "11.1.0",
   "description": "Requests manager",
   "repository": "folio-org/ui-requests",
   "publishConfig": {
@@ -31,8 +31,7 @@
       "request-storage": "6.0",
       "pick-slips": "0.1",
       "search-slips": "0.1",
-      "automated-patron-blocks": "0.1",
-      "circulation-bff-requests": "1.0"
+      "automated-patron-blocks": "0.1"
     },
     "permissionSets": [
       {
@@ -134,6 +133,8 @@
           "circulation-storage.staff-slips.collection.get",
           "circulation.pick-slips.get",
           "circulation.search-slips.get",
+          "circulation-bff.pick-slips.collection.get",
+          "circulation-bff.search-slips.collection.get",
           "circulation.print-events-entry.item.post",
           "inventory-storage.locations.item.get",
           "circulation-bff.requests.search-instances.get",
@@ -148,6 +149,8 @@
           "ui-requests.view",
           "circulation.pick-slips.get",
           "circulation.search-slips.get",
+          "circulation-bff.pick-slips.collection.get",
+          "circulation-bff.search-slips.collection.get",
           "circulation.requests.item.put",
           "circulation.requests.allowed-service-points.get",
           "circulation-bff.requests.allowed-service-points.get",

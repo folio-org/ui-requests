@@ -1,6 +1,25 @@
 # Change history for ui-requests
 
-## 11.0.0 (IN PROGRESS)
+## [11.1.0] IN PROGRESS
+
+* Add optional column "Retrieval service point" to requests search list. Refs UIREQ-1188.
+* Increase code coverage for src/ChooseRequestTypeDialog.js by Jest/RTL tests. Refs UIREQ-1044.
+* Cleanup retrieval service point implementation from deprecated folder. Refs UIREQ-1211.
+* Increase code coverage for src/ViewRequest.js by Jest/RTL tests. Refs UIREQ-1046.
+
+## [11.0.2] (https://github.com/folio-org/ui-requests/tree/v11.0.2) (2024-12-10)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.1...v11.0.2)
+
+* Migrate from `mod-circulation` to `mod-circulation-bff` for `Print pick slips` and `Print search slips`. Refs UIREQ-1154.
+
+## [11.0.1] (https://github.com/folio-org/ui-requests/tree/v11.0.1) (2024-12-02)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.0...v11.0.1)
+
+* Remove "circulation-bff-requests" okapi interface. Refs UIREQ-1203.
+
+## [11.0.0] (https://github.com/folio-org/ui-requests/tree/v11.0.0) (2024-11-30)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v10.0.2...v11.0.0)
+
 * Consistency update permission after change them in mod-circulation. Refs UIREQ-1194.
 * Use settings/entries endpoint to get settings information. Refs UIREQ-1062.
 * Requests app.: Editing requests (ECS with mod-tlr enabled). Refs UIREQ-1088.

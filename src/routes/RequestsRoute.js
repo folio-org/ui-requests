@@ -292,6 +292,7 @@ export const getListFormatter = (
   'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
   'callNumber': rq => effectiveCallNumber(rq.item),
   'servicePoint': rq => get(rq, 'pickupServicePoint.name', DEFAULT_FORMATTER_VALUE),
+  'retrievalServicePoint': rq => get(rq, 'item.retrievalServicePointName', DEFAULT_FORMATTER_VALUE),
   'copies': rq => get(rq, PRINT_DETAILS_COLUMNS.COPIES, DEFAULT_FORMATTER_VALUE),
   'printed': rq => (rq.printDetails ? getLastPrintedDetails(rq.printDetails, intl) : DEFAULT_FORMATTER_VALUE),
 });
@@ -353,6 +354,7 @@ class RequestsRoute extends React.Component {
               'requestStatus': 'status',
               'servicePoint': 'searchIndex.pickupServicePointName',
               'requesterBarcode': 'requester.barcode',
+              'retrievalServicePoint': 'item.retrievalServicePointName',
               'requestDate': 'requestDate',
               'position': 'position/number',
               'proxy': 'proxy',
@@ -441,13 +443,13 @@ class RequestsRoute extends React.Component {
     pickSlips: {
       type: 'okapi',
       records: 'pickSlips',
-      path: 'circulation/pick-slips/%{currentServicePoint.id}',
+      path: 'circulation-bff/pick-slips/%{currentServicePoint.id}',
       throwErrors: false,
     },
     searchSlips: {
       type: 'okapi',
       records: 'searchSlips',
-      path: 'circulation/search-slips/%{currentServicePoint.id}',
+      path: 'circulation-bff/search-slips/%{currentServicePoint.id}',
       throwErrors: false,
     },
     printHoldRequests: {
@@ -1490,6 +1492,7 @@ class RequestsRoute extends React.Component {
       servicePoint: <FormattedMessage id="ui-requests.requests.servicePoint" />,
       requester: <FormattedMessage id="ui-requests.requests.requester" />,
       requesterBarcode: <FormattedMessage id="ui-requests.requests.requesterBarcode" />,
+      retrievalServicePoint: <FormattedMessage id="ui-requests.requests.retrievalServicePoint" />,
       singlePrint: <FormattedMessage id="ui-requests.requests.singlePrint" />,
       ...(isProxyAvailable ? { proxy: <FormattedMessage id="ui-requests.requests.proxy" /> } : {}),
       ...(isViewPrintDetailsEnabled && {
@@ -1763,7 +1766,7 @@ class RequestsRoute extends React.Component {
               resultIsSelected={this.resultIsSelected}
               onFilterChange={this.handleFilterChange}
               sortableColumns={['requestDate', 'title', 'year', 'itemBarcode', 'callNumber', 'type', 'requestStatus',
-                'position', 'servicePoint', 'requester', 'requesterBarcode', ...(isProxyAvailable ? ['proxy'] : []), 'copies', 'printed']}
+                'position', 'servicePoint', 'requester', 'requesterBarcode', 'retrievalServicePoint', ...(isProxyAvailable ? ['proxy'] : []), 'copies', 'printed']}
               pageAmount={100}
               pagingType={MCLPagingTypes.PREV_NEXT}
             />

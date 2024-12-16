@@ -225,7 +225,7 @@
     "duplicateRequest.success": "La réservation a été créée avec succès pour {requester}",
     "duplicateRequest.fail": "This request was not placed successfully",
     "requests": "{number} réservations",
-    "item.status.agedToLost": "Aged to lost",
+    "item.status.agedToLost": "Considéré comme perdu",
     "item.status.available": "Disponible",
     "item.status.awaitingDelivery": "En attente de livraison",
     "item.status.awaitingPickup": "En attente de retrait",
@@ -299,5 +299,6 @@
     "filters.printStatus.notPrinted": "Not printed",
     "printDetails.printCount": "# Copies",
     "permission.moveRequest.execute": "Requests: Move to new item, reorder queue",
-    "permission.reorderQueue.execute": "Requests: Reorder queue"
+    "permission.reorderQueue.execute": "Requests: Reorder queue",
+    "requests.retrievalServicePoint": "Retrieval service point"
 }
