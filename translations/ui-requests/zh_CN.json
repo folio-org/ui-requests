@@ -298,6 +298,7 @@
     "filters.printStatus.printed": "已打印",
     "filters.printStatus.notPrinted": "未打印",
     "printDetails.printCount": "# 份数",
-    "permission.moveRequest.execute": "Requests: Move to new item, reorder queue",
-    "permission.reorderQueue.execute": "Requests: Reorder queue"
+    "permission.moveRequest.execute": "请求：移至新单件，重新排序队列",
+    "permission.reorderQueue.execute": "请求：重新排序队列",
+    "requests.retrievalServicePoint": "检索服务点"
 }
