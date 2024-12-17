@@ -5,6 +5,7 @@ import {
   useOkapiKy,
   useStripes,
 } from '@folio/stripes/core';
+
 import { LOCATIONS_API, SERVICE_POINTS_API } from '../../constants';
 
 const DEFAULT_DATA = [];
