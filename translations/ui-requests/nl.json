@@ -299,5 +299,6 @@
     "filters.printStatus.notPrinted": "Niet afgedrukt",
     "printDetails.printCount": "# Copies",
     "permission.moveRequest.execute": "Requests: Move to new item, reorder queue",
-    "permission.reorderQueue.execute": "Requests: Reorder queue"
+    "permission.reorderQueue.execute": "Requests: Reorder queue",
+    "requests.retrievalServicePoint": "Ophaalservicepunt"
 }
