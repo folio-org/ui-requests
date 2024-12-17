@@ -58,22 +58,17 @@ const kyResponseMap = {
 };
 
 describe('useRetrievalServicePoints', () => {
-  const setHeaderMock = jest.fn();
-  const kyMock = jest.fn(() => ({
-    extend: jest.fn(({ hooks: { beforeRequest } }) => {
-      beforeRequest.forEach(handler => handler({ headers: { set: setHeaderMock } }));
-
-      return {
-        get: (path) => ({
-          json: () => Promise.resolve(kyResponseMap[path]),
-        }),
-      };
-    }),
-  }));
+  const mockUseOkapiKyValue = {
+    get: jest.fn((path) => ({
+      json: () => Promise.resolve(kyResponseMap[path]),
+    })),
+  };
+  const mockUseOkapiKy = useOkapiKy;
 
   beforeEach(() => {
-    kyMock.mockClear();
-    useOkapiKy.mockImplementation(kyMock);
+    mockUseOkapiKy.mockClear();
+    mockUseOkapiKyValue.get.mockClear();
+    mockUseOkapiKy.mockReturnValue(mockUseOkapiKyValue);
   });
 
   it('should fetch retrieval service points', async () => {

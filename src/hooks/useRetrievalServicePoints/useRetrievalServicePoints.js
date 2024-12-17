@@ -13,7 +13,6 @@ const MAX_RECORDS = 1000;
 
 const useRetrievalServicePoints = (params = {}, options = {}) => {
   const stripes = useStripes();
-  const defaultTenantId = stripes.okapi?.tenant;
   const [namespace] = useNamespace('locations');
   const {
     limit = stripes?.config?.maxUnpagedResourceCount || MAX_RECORDS,
@@ -24,11 +23,6 @@ const useRetrievalServicePoints = (params = {}, options = {}) => {
     tenantId,
   } = options;
   const ky = useOkapiKy({ tenant: tenantId });
-  const api = ky.extend({
-    hooks: {
-      beforeRequest: [(req) => req.headers.set('X-Okapi-Tenant', tenantId || defaultTenantId)],
-    },
-  });
   const searchParams = { limit, query };
 
   const {
@@ -39,11 +33,11 @@ const useRetrievalServicePoints = (params = {}, options = {}) => {
   } = useQuery(
     [namespace],
     async ({ signal }) => {
-      const servicePointsData = await api.get(SERVICE_POINTS_API, { searchParams })
+      const servicePointsData = await ky.get(SERVICE_POINTS_API, { searchParams })
         .json()
         .then(({ servicepoints }) => servicepoints);
 
-      const locationsData = await api.get(LOCATIONS_API, { searchParams, signal })
+      const locationsData = await ky.get(LOCATIONS_API, { searchParams, signal })
         .json()
         .then(({ locations }) => locations);
 

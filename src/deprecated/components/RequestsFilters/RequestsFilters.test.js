@@ -13,17 +13,17 @@ import {
 } from '@folio/stripes/smart-components';
 
 import RequestsFilters from './RequestsFilters';
-import { RequestLevelFilter } from './RequestLevelFilter';
-import { PickupServicePointFilter } from './PickupServicePointFilter';
+import { RequestLevelFilter } from '../../../components/RequestsFilters/RequestLevelFilter';
+import { PickupServicePointFilter } from '../../../components/RequestsFilters/PickupServicePointFilter';
 
 import {
   requestFilterTypes,
-} from '../../constants';
+} from '../../../constants';
 
-jest.mock('./RequestLevelFilter', () => ({
+jest.mock('../../../components/RequestsFilters/RequestLevelFilter', () => ({
   RequestLevelFilter: jest.fn((props) => (<div {...props} />)),
 }));
-jest.mock('./PickupServicePointFilter', () => ({
+jest.mock('../../../components/RequestsFilters/PickupServicePointFilter', () => ({
   PickupServicePointFilter: jest.fn((props) => (<div {...props} />)),
 }));
 jest.mock('@folio/stripes/smart-components', () => ({
