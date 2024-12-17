@@ -18,7 +18,7 @@ import {
 } from '../../../constants';
 
 const RequestLevelFilter = ({
-  activeValues,
+  activeValues = [],
   onChange,
   onClear,
 }) => {
@@ -61,10 +61,6 @@ RequestLevelFilter.propTypes = {
   activeValues: PropTypes.arrayOf(PropTypes.string),
   onChange: PropTypes.func.isRequired,
   onClear: PropTypes.func.isRequired,
-};
-
-RequestLevelFilter.defaultProps = {
-  activeValues: [],
 };
 
 export default RequestLevelFilter;
