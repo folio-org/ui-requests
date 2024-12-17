@@ -4,7 +4,7 @@ import filtersConfig, {
 
 import {
   requestFilterTypes,
-} from '../../constants';
+} from '../../../constants';
 
 describe('RequestsFiltersConfig', () => {
   it('should have a filter for requestType', () => {
