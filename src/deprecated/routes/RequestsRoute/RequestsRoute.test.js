@@ -155,7 +155,7 @@ jest.mock('../../../components', () => ({
   }),
   PrintContent: jest.fn(({ printContentTestId }) => <div data-testid={printContentTestId}>PrintContent</div>)
 }));
-jest.mock('../../../components/RequestsFilters/RequestsFilters', () => ({ onClear }) => {
+jest.mock('../../components/RequestsFilters/RequestsFilters', () => ({ onClear }) => {
   return (
     <div>
       <span>RequestsFilter</span>

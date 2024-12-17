@@ -1,6 +1,4 @@
-import {
-  requestFilterTypes,
-} from '../../constants';
+import { requestFilterTypes } from '../../../constants';
 
 export const escapingForSpecialCharactersWhichCanBreakCQL = (string = '') => string.replace(/[\\"?*]/g, '\\$&');
 
@@ -40,12 +38,6 @@ export default [
   {
     name: requestFilterTypes.PICKUP_SERVICE_POINT,
     cql: 'pickupServicePointId',
-    values: [],
-    operator: '==',
-  },
-  {
-    name: requestFilterTypes.RETRIEVAL_SERVICE_POINT,
-    cql: 'item.retrievalServicePointId',
     values: [],
     operator: '==',
   },
