@@ -300,5 +300,6 @@
     "printDetails.printCount": "# 份数",
     "permission.moveRequest.execute": "请求：移至新单件，重新排序队列",
     "permission.reorderQueue.execute": "请求：重新排序队列",
-    "requests.retrievalServicePoint": "检索服务点"
+    "requests.retrievalServicePoint": "检索服务点",
+    "retrievalServicePoint.name": "Retrieval service point"
 }
