@@ -1,6 +1,4 @@
-import {
-  requestFilterTypes,
-} from '../../constants';
+import { requestFilterTypes } from '../../../constants';
 
 export const escapingForSpecialCharactersWhichCanBreakCQL = (string = '') => string.replace(/[\\"?*]/g, '\\$&');
 

@@ -22,10 +22,10 @@ import {
   requestPrintStatusFilters,
   requestStatusFilters,
   requestTypeFilters,
-} from '../../constants';
+} from '../../../constants';
 
-import { PickupServicePointFilter } from './PickupServicePointFilter';
-import { RequestLevelFilter } from './RequestLevelFilter';
+import { PickupServicePointFilter } from '../../../components/RequestsFilters/PickupServicePointFilter';
+import { RequestLevelFilter } from '../../../components/RequestsFilters/RequestLevelFilter';
 
 export default class RequestsFilters extends React.Component {
   static propTypes = {
