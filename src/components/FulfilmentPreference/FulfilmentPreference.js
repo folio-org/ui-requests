@@ -26,11 +26,11 @@ const {
 
 const FulfilmentPreference = ({
   isEditForm,
-  deliverySelected,
-  deliveryAddress,
+  deliverySelected = false,
+  deliveryAddress = '',
   onChangeAddress,
-  deliveryLocations,
-  fulfillmentTypeOptions,
+  deliveryLocations = [],
+  fulfillmentTypeOptions = [],
   defaultDeliveryAddressTypeId,
   changeDeliveryAddress,
   requestTypes,
@@ -165,13 +165,6 @@ FulfilmentPreference.propTypes = {
   deliveryLocations: PropTypes.arrayOf(PropTypes.object),
   fulfillmentTypeOptions: PropTypes.arrayOf(PropTypes.object),
   deliverySelected: PropTypes.bool,
-};
-
-FulfilmentPreference.defaultProps = {
-  deliveryAddress: '',
-  deliveryLocations: [],
-  fulfillmentTypeOptions: [],
-  deliverySelected: false,
 };
 
 export default FulfilmentPreference;

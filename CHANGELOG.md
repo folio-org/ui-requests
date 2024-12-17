@@ -6,6 +6,7 @@
 * Increase code coverage for src/ChooseRequestTypeDialog.js by Jest/RTL tests. Refs UIREQ-1044.
 * Cleanup retrieval service point implementation from deprecated folder. Refs UIREQ-1211.
 * Increase code coverage for src/ViewRequest.js by Jest/RTL tests. Refs UIREQ-1046.
+* React v19: refactor away from default props for functional components. Refs UIREQ-1101.
 * Add "Retrieval service point" filter. Refs UIREQ-1190.
 
 ## [11.0.2] (https://github.com/folio-org/ui-requests/tree/v11.0.2) (2024-12-10)

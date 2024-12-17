@@ -10,7 +10,7 @@ import css from './PrintContent.css';
 const PrintContent = forwardRef(({
   dataSource,
   template,
-  id,
+  id = 'printContent',
 }, ref) => {
   const templateFn = useMemo(() => buildTemplate(template), [template]);
 
@@ -41,10 +41,6 @@ PrintContent.propTypes = {
   id: PropTypes.string,
   dataSource: PropTypes.arrayOf(PropTypes.object).isRequired,
   template: PropTypes.string.isRequired,
-};
-
-PrintContent.defaultProps = {
-  id: 'printContent',
 };
 
 export default memo(PrintContent, isEqual);
