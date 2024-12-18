@@ -14,10 +14,10 @@ import draggableRowFormatter from './draggableRowFormatter';
 
 export default function SortableList(props) {
   const {
-    droppableId,
+    droppableId = uniqueId('droppable'),
     onDragEnd,
-    rowFormatter,
-    isRowDraggable,
+    rowFormatter = draggableRowFormatter,
+    isRowDraggable = () => true,
     rowProps,
     visibleColumns: originalVisibleColumns,
     columnWidths: originalColumnWidths,
@@ -72,12 +72,6 @@ export default function SortableList(props) {
     </DragDropContext>
   );
 }
-
-SortableList.defaultProps = {
-  droppableId: uniqueId('droppable'),
-  rowFormatter: draggableRowFormatter,
-  isRowDraggable: () => true,
-};
 
 SortableList.propTypes = {
   droppableId: PropTypes.string,
