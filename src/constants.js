@@ -187,6 +187,7 @@ export const reportHeaders = [
   'holdShelfExpirationDate',
   'position',
   'item.barcode',
+  'item.retrievalServicePointName',
   'instance.title',
   'instance.contributorNames',
   'item.location.libraryName',
@@ -219,6 +220,7 @@ export const reportHeaders = [
 export const expiredHoldsReportHeaders = [
   'requester.name',
   'requester.barcode',
+  'item.retrievalServicePointName',
   'instance.title',
   'item.barcode',
   'item.callNumberComponents.prefix',

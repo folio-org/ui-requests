@@ -198,7 +198,7 @@
   "deliveryAddress": "Delivery address",
   "requester.pickupLocation": "Pickup location",
   "pickupServicePoint.name": "Pickup service point",
-  "retrievalServicePoint.name": "Retrieval service point",
+  "item.retrievalServicePointName": "Retrieval service point",
   "requester.patronGroup.group": "Requester patron group",
   "tags.tagList": "Tags",
   "printDetails.printCount": "# Copies",
