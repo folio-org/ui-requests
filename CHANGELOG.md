@@ -8,6 +8,7 @@
 * Increase code coverage for src/ViewRequest.js by Jest/RTL tests. Refs UIREQ-1046.
 * React v19: refactor away from default props for functional components. Refs UIREQ-1101.
 * Add "Retrieval service point" filter. Refs UIREQ-1190.
+* Add icons to requests action menu. Refs UIREQ-1116.
 
 ## [11.0.2] (https://github.com/folio-org/ui-requests/tree/v11.0.2) (2024-12-10)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.1...v11.0.2)
