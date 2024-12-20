@@ -19,8 +19,8 @@ import {
 } from '../../../constants';
 
 const PickupServicePointFilter = ({
-  activeValues,
-  servicePoints,
+  activeValues = [],
+  servicePoints = [],
   onChange,
   onClear,
 }) => {
@@ -65,11 +65,6 @@ PickupServicePointFilter.propTypes = {
   servicePoints: PropTypes.arrayOf(PropTypes.object),
   onChange: PropTypes.func.isRequired,
   onClear: PropTypes.func.isRequired,
-};
-
-PickupServicePointFilter.defaultProps = {
-  activeValues: [],
-  servicePoints: [],
 };
 
 export default PickupServicePointFilter;

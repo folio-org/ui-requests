@@ -234,6 +234,8 @@ const mockedRequest = {
   instanceId: 'instanceId',
   item: {
     barcode: 'itemBarcode',
+    retrievalServicePointId: '3a40852d-49fd-4df2-a1f9-6e2641a6e91f',
+    retrievalServicePointName: 'Circ Desk 1',
   },
   requester: {
     barcode: 'requesterBarcode',
@@ -356,6 +358,10 @@ describe('RequestsRoute', () => {
             name: 'Jane Smith',
           }
         ],
+      },
+      item: {
+        retrievalServicePointId: '3a40852d-49fd-4df2-a1f9-6e2641a6e91f',
+        retrievalServicePointName: 'Circ Desk 1',
       },
       tags: {
         tagList: ['tag1', 'tag2'],
@@ -628,7 +634,7 @@ describe('RequestsRoute', () => {
       expect(printContent).toBeInTheDocument();
     });
 
-    it('should trigger "exportCsv"', async () => {
+    it("should trigger 'exportCsv'", async () => {
       await userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsToCsv' }));
 
       await waitFor(() => {

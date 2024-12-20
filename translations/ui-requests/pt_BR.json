@@ -300,5 +300,6 @@
     "printDetails.printCount": "# Cópias",
     "permission.moveRequest.execute": "Requisições: Mover para novo item, reordenar fila",
     "permission.reorderQueue.execute": "Requisições: Reordenar fila",
-    "requests.retrievalServicePoint": "Ponto de serviço de recuperação"
+    "requests.retrievalServicePoint": "Ponto de serviço de recuperação",
+    "retrievalServicePoint.name": "Retrieval service point"
 }

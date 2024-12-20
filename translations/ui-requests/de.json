@@ -300,5 +300,6 @@
     "printDetails.printCount": "# Exemplare",
     "permission.moveRequest.execute": "Bestandsanfragen: Verschieben zu neuem Exemplar, Warteliste neu anordnen",
     "permission.reorderQueue.execute": "Bestandsanfragen: Warteliste neu anordnen",
-    "requests.retrievalServicePoint": "Retrieval service point"
+    "requests.retrievalServicePoint": "Retrieval service point",
+    "retrievalServicePoint.name": "Retrieval service point"
 }
