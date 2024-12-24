@@ -34,6 +34,7 @@ import {
   DefaultMCLRowFormatter,
   NoValue,
   MCLPagingTypes,
+  Icon,
 } from '@folio/stripes/components';
 import {
   deparseFilters,
@@ -1467,7 +1468,9 @@ class RequestsRoute extends React.Component {
               to={`${this.props.location.pathname}?layer=create`}
               onClick={onToggle}
             >
-              <FormattedMessage id="stripes-smart-components.new" />
+              <Icon icon="plus-sign">
+                <FormattedMessage id="stripes-smart-components.new" />
+              </Icon>
             </Button>
           </IfPermission>
           {csvReportPending ?
@@ -1484,7 +1487,9 @@ class RequestsRoute extends React.Component {
                 this.exportData();
               }}
             >
-              <FormattedMessage id="ui-requests.exportSearchResultsToCsv" />
+              <Icon icon="download">
+                <FormattedMessage id="ui-requests.exportSearchResultsToCsv" />
+              </Icon>
             </Button>
           }
           {
@@ -1503,10 +1508,12 @@ class RequestsRoute extends React.Component {
                     this.exportExpiredHoldsToCSV();
                   }}
                 >
-                  <FormattedMessage
-                    id="ui-requests.exportExpiredHoldShelfToCsv"
-                    values={{ currentServicePoint: servicePointName }}
-                  />
+                  <Icon icon="download">
+                    <FormattedMessage
+                      id="ui-requests.exportExpiredHoldShelfToCsv"
+                      values={{ currentServicePoint: servicePointName }}
+                    />
+                  </Icon>
                 </Button>
                 <PrintButton
                   buttonStyle="dropdownItem"
@@ -1523,10 +1530,12 @@ class RequestsRoute extends React.Component {
                   }}
                   onAfterPrint={this.onAfterPrintForPrintButton}
                 >
-                  <FormattedMessage
-                    id="ui-requests.printPickSlips"
-                    values={{ sp: servicePointName }}
-                  />
+                  <Icon icon="print">
+                    <FormattedMessage
+                      id="ui-requests.printPickSlips"
+                      values={{ sp: servicePointName }}
+                    />
+                  </Icon>
                 </PrintButton>
                 <PrintButton
                   buttonStyle="dropdownItem"
@@ -1555,10 +1564,12 @@ class RequestsRoute extends React.Component {
                   }
                   onAfterPrint={this.onAfterPrintForPrintButton}
                 >
-                  <FormattedMessage
-                    id="ui-requests.printPickSlipsSelected"
-                    values={{ sp: servicePointName }}
-                  />
+                  <Icon icon="print">
+                    <FormattedMessage
+                      id="ui-requests.printPickSlipsSelected"
+                      values={{ sp: servicePointName }}
+                    />
+                  </Icon>
                 </PrintButton>
               </>
           }
@@ -1578,10 +1589,12 @@ class RequestsRoute extends React.Component {
                     contentRef={this.searchSlipsPrintContentRef}
                     onBeforeGetContent={() => this.onBeforeGetContentForPrintButton(onToggle)}
                   >
-                    <FormattedMessage
-                      id="ui-requests.printSearchSlips"
-                      values={{ sp: servicePointName }}
-                    />
+                    <Icon icon="print">
+                      <FormattedMessage
+                        id="ui-requests.printSearchSlips"
+                        values={{ sp: servicePointName }}
+                      />
+                    </Icon>
                   </PrintButton>
               }
             </>
