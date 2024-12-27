@@ -109,7 +109,6 @@
   "errors.movingRequestToTheSameItem": "Not allowed to move title level page request to the same item",
   "errors.itemOfThisInstanceAlreadyRequested": "This requester already has an open request for one of the instance's items",
 
-  "actions.label": "Actions",
   "actions.edit": "Edit",
   "actions.editRequestLink": "Edit Request Dialog",
   "actions.closeNewRequest": "Close New Request",
@@ -244,8 +243,8 @@
   "duplicateRequest.success": "Request has been successfully created for {requester}",
   "duplicateRequest.fail": "This request was not placed successfully",
 
-  "exportExpiredHoldShelfToCsv": "Export hold shelf clearance report for {currentServicePoint}",
-  "exportSearchResultsToCsv": "Export search results to CSV",
+  "exportExpiredHoldShelfCsv": "Hold shelf clearance report {currentServicePoint} (CSV)",
+  "exportSearchResultsCsv": "Export search results (CSV)",
   "noServicePoint.errorMessage": "You must be logged into a service point to access the Hold shelf clearance report. Please add one or more service points to your user record in the Users app. Contact an administrator if you do not have the ability to add service points to your record.",
   "noServicePoint.label": "No service point selected",
 
@@ -282,9 +281,9 @@
   "requestQueue.notYetFilledRequests.noData": "No requests found",
   "cancellationReason": "Cancellation reason",
   "cancellationAdditionalInformation": "Additional information for patron",
-  "printPickSlips": "Print pick slips for {sp}",
-  "printSearchSlips": "Print search slips for {sp}",
-  "printPickSlipsSelected": "Print selected pick slips for {sp}",
+  "printPickSlipsForSp": "Print pick slips {sp}",
+  "printSearchSlipsForSp": "Print search slips {sp}",
+  "printSelectedPickSlipsForSp": "Print selected pick slips {sp}",
 
   "common.cancel": "Cancel",
 

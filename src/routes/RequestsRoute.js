@@ -31,7 +31,6 @@ import {
   Checkbox,
   filters2cql,
   FormattedTime,
-  MenuSection,
   TextLink,
   DefaultMCLRowFormatter,
   NoValue,
@@ -1541,19 +1540,18 @@ class RequestsRoute extends React.Component {
 
     const actionMenu = ({ onToggle, renderColumnsMenu }) => (
       <>
-        <MenuSection label={intl.formatMessage({ id: 'ui-requests.actions.label' })}>
-          <IfPermission perm="ui-requests.create">
-            <Button
-              buttonStyle="dropdownItem"
-              id="clickable-newrequest"
-              to={`${this.props.location.pathname}?layer=create`}
-              onClick={onToggle}
-            >
-              <Icon icon="plus-sign">
-                <FormattedMessage id="stripes-smart-components.new" />
-              </Icon>
-            </Button>
-          </IfPermission>
+        <IfPermission perm="ui-requests.create">
+          <Button
+            buttonStyle="dropdownItem"
+            id="clickable-newrequest"
+            to={`${this.props.location.pathname}?layer=create`}
+            onClick={onToggle}
+          >
+            <Icon icon="plus-sign">
+              <FormattedMessage id="stripes-smart-components.new" />
+            </Icon>
+          </Button>
+        </IfPermission>
           {csvReportPending ?
             <LoadingButton>
               <FormattedMessage id="ui-requests.csvReportPending" />
@@ -1569,93 +1567,93 @@ class RequestsRoute extends React.Component {
               }}
             >
               <Icon icon="download">
-                <FormattedMessage id="ui-requests.exportSearchResultsToCsv" />
+                <FormattedMessage id="ui-requests.exportSearchResultsCsv" />
               </Icon>
             </Button>
           }
-          {
-            isPickSlipsArePending ?
-              <LoadingButton>
-                <FormattedMessage id="ui-requests.pickSlipsLoading" />
-              </LoadingButton> :
-              <>
-                <Button
-                  data-testid="exportExpiredHoldShelfToCsvButton"
-                  buttonStyle="dropdownItem"
-                  id="exportExpiredHoldsToCsvPaneHeaderBtn"
-                  disabled={holdsShelfReportPending || (servicePointId && requestsEmpty)}
-                  onClick={() => {
+        {
+          isPickSlipsArePending ?
+            <LoadingButton>
+              <FormattedMessage id="ui-requests.pickSlipsLoading" />
+            </LoadingButton> :
+            <>
+              <Button
+                data-testid="exportExpiredHoldShelfToCsvButton"
+                buttonStyle="dropdownItem"
+                id="exportExpiredHoldsToCsvPaneHeaderBtn"
+                disabled={holdsShelfReportPending || (servicePointId && requestsEmpty)}
+                onClick={() => {
+                  onToggle();
+                  this.exportExpiredHoldsToCSV();
+                }}
+              >
+                <Icon icon="report">
+                  <FormattedMessage
+                    id="ui-requests.exportExpiredHoldShelfCsv"
+                    values={{ currentServicePoint: servicePointName }}
+                  />
+                </Icon>
+              </Button>
+              <PrintButton
+                buttonStyle="dropdownItem"
+                id="printPickSlipsBtn"
+                disabled={isPickSlipsEmpty}
+                template={pickSlipsPrintTemplate}
+                contentRef={this.pickSlipsPrintContentRef}
+                onBeforeGetContent={() => this.onBeforeGetContentForPrintButton(onToggle)}
+                onBeforePrint={async () => {
+                  if (isViewPrintDetailsEnabled) {
+                    const requestIds = extractPickSlipRequestIds(pickSlipsData);
+                    await this.savePrintEventDetails(requestIds);
+                  }
+                }}
+                onAfterPrint={this.onAfterPrintForPrintButton}
+              >
+                <Icon icon="print">
+                  <FormattedMessage
+                    id="ui-requests.printPickSlipsForSp"
+                    values={{ sp: servicePointName }}
+                  />
+                </Icon>
+              </PrintButton>
+              <PrintButton
+                buttonStyle="dropdownItem"
+                id="printSelectedPickSlipsBtn"
+                disabled={isPrintingDisabled}
+                template={pickSlipsPrintTemplate}
+                contentRef={this.printSelectedContentRef}
+                onBeforeGetContent={
+                  () => new Promise(resolve => {
+                    this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
                     onToggle();
-                    this.exportExpiredHoldsToCSV();
-                  }}
-                >
-                  <Icon icon="download">
-                    <FormattedMessage
-                      id="ui-requests.exportExpiredHoldShelfToCsv"
-                      values={{ currentServicePoint: servicePointName }}
-                    />
-                  </Icon>
-                </Button>
-                <PrintButton
-                  buttonStyle="dropdownItem"
-                  id="printPickSlipsBtn"
-                  disabled={isPickSlipsEmpty}
-                  template={pickSlipsPrintTemplate}
-                  contentRef={this.pickSlipsPrintContentRef}
-                  onBeforeGetContent={() => this.onBeforeGetContentForPrintButton(onToggle)}
-                  onBeforePrint={async () => {
+                    // without the timeout the printing process starts right away
+                    // and the callout and onToggle above are blocked
+                    setTimeout(() => resolve(), 1000);
+                    multiSelectPickSlipData = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
+                  })
+                  }
+                onBeforePrint={
+                  async () => {
                     if (isViewPrintDetailsEnabled) {
-                      const requestIds = extractPickSlipRequestIds(pickSlipsData);
-                      await this.savePrintEventDetails(requestIds);
-                    }
-                  }}
-                  onAfterPrint={this.onAfterPrintForPrintButton}
-                >
-                  <Icon icon="print">
-                    <FormattedMessage
-                      id="ui-requests.printPickSlips"
-                      values={{ sp: servicePointName }}
-                    />
-                  </Icon>
-                </PrintButton>
-                <PrintButton
-                  buttonStyle="dropdownItem"
-                  id="printSelectedPickSlipsBtn"
-                  disabled={isPrintingDisabled}
-                  template={pickSlipsPrintTemplate}
-                  contentRef={this.printSelectedContentRef}
-                  onBeforeGetContent={
-                    () => new Promise(resolve => {
-                      this.context.sendCallout({ message: <FormattedMessage id="ui-requests.printInProgress" /> });
-                      onToggle();
-                      // without the timeout the printing process starts right away
-                      // and the callout and onToggle above are blocked
-                      setTimeout(() => resolve(), 1000);
-                      multiSelectPickSlipData = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
-                    })
-                    }
-                  onBeforePrint={
-                    async () => {
-                      if (isViewPrintDetailsEnabled) {
-                        const selectedPickSlips = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
-                        const selectedRequestIds = extractPickSlipRequestIds(selectedPickSlips);
-                        await this.savePrintEventDetails(selectedRequestIds);
-                      }
+                      const selectedPickSlips = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
+                      const selectedRequestIds = extractPickSlipRequestIds(selectedPickSlips);
+                      await this.savePrintEventDetails(selectedRequestIds);
                     }
                   }
-                  onAfterPrint={this.onAfterPrintForPrintButton}
-                >
-                  <Icon icon="print">
-                    <FormattedMessage
-                      id="ui-requests.printPickSlipsSelected"
-                      values={{ sp: servicePointName }}
-                    />
-                  </Icon>
-                </PrintButton>
-              </>
-          }
-          {
-            isPrintHoldRequestsEnabled &&
+                }
+                onAfterPrint={this.onAfterPrintForPrintButton}
+              >
+                <Icon icon="print">
+                  <FormattedMessage
+                    id="ui-requests.printSelectedPickSlipsForSp"
+                    values={{ sp: servicePointName }}
+                  />
+                </Icon>
+              </PrintButton>
+            </>
+        }
+        {
+          isPrintHoldRequestsEnabled &&
             <>
               {
                 isSearchSlipsArePending ?
@@ -1672,15 +1670,14 @@ class RequestsRoute extends React.Component {
                   >
                     <Icon icon="print">
                       <FormattedMessage
-                        id="ui-requests.printSearchSlips"
+                        id="ui-requests.printSearchSlipsForSp"
                         values={{ sp: servicePointName }}
                       />
                     </Icon>
                   </PrintButton>
               }
             </>
-          }
-        </MenuSection>
+        }
         {renderColumnsMenu}
       </>
     );

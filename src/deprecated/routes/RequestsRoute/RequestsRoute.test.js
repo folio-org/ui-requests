@@ -220,8 +220,8 @@ const request = {
 const labelIds = {
   closedCancelledRequest: requestStatusesTranslations[requestStatuses.CANCELLED],
   requestType: requestTypesTranslations[requestTypesMap.RECALL],
-  printPickSlips: 'ui-requests.printPickSlips',
-  printSearchSlips: 'ui-requests.printSearchSlips',
+  printPickSlips: 'ui-requests.printPickSlipsForSp',
+  printSearchSlips: 'ui-requests.printSearchSlipsForSp',
   titleWithSearch: 'ui-requests.documentTitle.search',
   defaultTitle: 'ui-requests.meta.title',
   recordsSelected: 'ui-requests.rows.recordsSelected',
@@ -611,7 +611,7 @@ describe('RequestsRoute', () => {
     });
 
     it('should trigger "exportCsv"', async () => {
-      await userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsToCsv' }));
+      await userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsCsv' }));
 
       await waitFor(() => {
         expect(exportCsv).toHaveBeenCalled();
@@ -820,7 +820,7 @@ describe('RequestsRoute', () => {
 
       it('should trigger "exportCsv"', async () => {
         renderComponent(getPropsWithSortInQuery());
-        await userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsToCsv' }));
+        await userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsCsv' }));
 
         await waitFor(() => {
           expect(exportCsv).toHaveBeenCalled();
