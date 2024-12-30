@@ -28,7 +28,7 @@ import {
   BASE_SPINNER_PROPS,
 } from '../../constants';
 
-import css from '../../requests.css';
+import css from './RequesterInformation.css';
 
 export const VISIBLE_COLUMNS = ['active', 'name', 'patronGroup', 'username', 'barcode'];
 export const COLUMN_MAPPING = {
@@ -224,7 +224,10 @@ class RequesterInformation extends Component {
         <Col xs={12}>
           {!isEditForm &&
           <Row>
-            <Col xs={9}>
+            <Col
+              xs={12}
+              className={css.fieldWrapper}
+            >
               <FormattedMessage id="ui-requests.requester.scanOrEnterBarcode">
                 {placeholder => {
                   const key = values.keyOfUserBarcodeField ?? 0;
@@ -252,6 +255,7 @@ class RequesterInformation extends Component {
                             onChange={this.handleChange}
                             onBlur={this.handleBlur(input)}
                             onKeyDown={this.onKeyDown}
+                            className={css.requesterBarcodeField}
                           />
                         );
                       }}
@@ -259,26 +263,10 @@ class RequesterInformation extends Component {
                   );
                 }}
               </FormattedMessage>
-              <Pluggable
-                {...this.props}
-                aria-haspopup="true"
-                type="find-user"
-                searchLabel={<FormattedMessage id="ui-requests.requester.findUserPluginLabel" />}
-                searchButtonStyle="link"
-                dataKey="users"
-                selectUser={this.onSelectUser}
-                visibleColumns={VISIBLE_COLUMNS}
-                columnMapping={COLUMN_MAPPING}
-                disableRecordCreation
-                marginTop0
-              />
-            </Col>
-            <Col xs={3}>
               <Button
                 id="clickable-select-requester"
-                buttonStyle="primary noRadius"
+                buttonStyle="default"
                 buttonClass={css.enterButton}
-                fullWidth
                 onClick={this.handleClick}
                 disabled={submitting}
               >
@@ -286,6 +274,19 @@ class RequesterInformation extends Component {
               </Button>
             </Col>
           </Row>}
+          <Pluggable
+            {...this.props}
+            aria-haspopup="true"
+            type="find-user"
+            searchLabel={<FormattedMessage id="ui-requests.requester.findUserPluginLabel" />}
+            searchButtonStyle="link"
+            dataKey="users"
+            selectUser={this.onSelectUser}
+            visibleColumns={VISIBLE_COLUMNS}
+            columnMapping={COLUMN_MAPPING}
+            disableRecordCreation
+            marginTop0
+          />
           {(selectedUser?.id || isEditForm) &&
             <UserForm
               user={request ? request.requester : selectedUser}
