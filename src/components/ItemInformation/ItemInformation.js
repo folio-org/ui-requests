@@ -24,7 +24,7 @@ import {
   memoizeValidation,
 } from '../../utils';
 
-import css from '../../requests.css';
+import css from './ItemInformation.css';
 
 class ItemInformation extends Component {
   static propTypes = {
@@ -176,7 +176,10 @@ class ItemInformation extends Component {
           {
             !isEditForm &&
             <Row>
-              <Col xs={9}>
+              <Col
+                xs={12}
+                className={css.fieldWrapper}
+              >
                 <FormattedMessage id="ui-requests.item.scanOrEnterBarcode">
                   {placeholder => {
                     const key = values.keyOfItemBarcodeField ?? 0;
@@ -204,6 +207,7 @@ class ItemInformation extends Component {
                               onChange={this.handleChange}
                               onBlur={this.handleBlur(input)}
                               onKeyDown={this.onKeyDown}
+                              className={css.itemBarcodeField}
                             />
                           );
                         }}
@@ -211,13 +215,10 @@ class ItemInformation extends Component {
                     );
                   }}
                 </FormattedMessage>
-              </Col>
-              <Col xs={3}>
                 <Button
                   id="clickable-select-item"
-                  buttonStyle="primary noRadius"
+                  buttonStyle="default"
                   buttonClass={css.enterButton}
-                  fullWidth
                   onClick={this.handleClick}
                   disabled={submitting}
                 >

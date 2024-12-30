@@ -176,7 +176,10 @@ class InstanceInformation extends Component {
             !isEditForm &&
             <>
               <Row>
-                <Col xs={9}>
+                <Col
+                  xs={12}
+                  className={css.fieldWrapper}
+                >
                   <FormattedMessage id="ui-requests.instance.scanOrEnterBarcode">
                     {placeholder => {
                       const key = values.keyOfInstanceIdField ?? 0;
@@ -204,6 +207,7 @@ class InstanceInformation extends Component {
                                 onChange={this.handleChange}
                                 onBlur={this.handleBlur(input)}
                                 onKeyDown={this.onKeyDown}
+                                className={css.instanceHridField}
                               />
                             );
                           }}
@@ -211,12 +215,9 @@ class InstanceInformation extends Component {
                       );
                     }}
                   </FormattedMessage>
-                </Col>
-                <Col xs={3}>
                   <Button
-                    buttonStyle="primary noRadius"
+                    buttonStyle="default"
                     buttonClass={css.enterButton}
-                    fullWidth
                     onClick={this.handleClick}
                     disabled={submitting}
                   >
