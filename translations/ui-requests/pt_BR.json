@@ -296,9 +296,9 @@
     "permission.reorderQueue.execute": "Requisições: Reordenar fila",
     "requests.retrievalServicePoint": "Ponto de serviço de recuperação",
     "item.retrievalServicePointName": "Ponto de serviço de recuperação",
-    "exportExpiredHoldShelfCsv": "Hold shelf clearance report {currentServicePoint} (CSV)",
-    "exportSearchResultsCsv": "Export search results (CSV)",
-    "printPickSlipsForSp": "Print pick slips {sp}",
-    "printSearchSlipsForSp": "Print search slips {sp}",
-    "printSelectedPickSlipsForSp": "Print selected pick slips {sp}"
+    "exportExpiredHoldShelfCsv": "Relatório de liberação de prateleira de reserva {currentServicePoint} (CSV)",
+    "exportSearchResultsCsv": "Exportar resultados da busca (CSV)",
+    "printPickSlipsForSp": "Imprimir recibos de retirada {sp}",
+    "printSearchSlipsForSp": "Imprimir recibos de busca {sp}",
+    "printSelectedPickSlipsForSp": "Imprimir recibos de retirada selecionados {sp}"
 }
