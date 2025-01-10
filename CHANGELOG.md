@@ -2,15 +2,20 @@
 
 ## [11.1.0] IN PROGRESS
 
-* Add optional column "Retrieval service point" to requests search list. Refs UIREQ-1188.
 * Increase code coverage for src/ChooseRequestTypeDialog.js by Jest/RTL tests. Refs UIREQ-1044.
-* Cleanup retrieval service point implementation from deprecated folder. Refs UIREQ-1211.
 * Increase code coverage for src/ViewRequest.js by Jest/RTL tests. Refs UIREQ-1046.
 * React v19: refactor away from default props for functional components. Refs UIREQ-1101.
-* Add "Retrieval service point" filter. Refs UIREQ-1190.
-* Include `Retrieval service point` column in csv exports. Refs UIREQ-1191.
 * Add icons to requests action menu. Refs UIREQ-1116.
 * Revise "Enter" button on New request page. Refs UIREQ-1114.
+
+## [11.0.3] (https://github.com/folio-org/ui-requests/tree/v11.0.3) (2025-01-10)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.2...v11.0.3)
+
+* Add optional column "Retrieval service point" to requests search list. Refs UIREQ-1188.
+* Add Sorting and pagination for "Retrieval service point" column. Refs UIREQ-1189.
+* Add "Retrieval service point" filter. Refs UIREQ-1190.
+* Include `Retrieval service point` column in csv exports. Refs UIREQ-1191.
+* Cleanup retrieval service point implementation from deprecated folder. Refs UIREQ-1211.
 
 ## [11.0.2] (https://github.com/folio-org/ui-requests/tree/v11.0.2) (2024-12-10)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.1...v11.0.2)
