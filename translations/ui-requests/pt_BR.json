@@ -87,7 +87,7 @@
     "actions.cancelNewRequest": "Cancelar",
     "close": "Fechar",
     "blockedLabel": "Razão para suspensão",
-    "blockModal": "Usuário bloqueado para fazer requisições",
+    "blockModal": "Usuário suspenso para fazer requisições",
     "detailsButton": "Ver detalhes da suspensão",
     "enter": "Entrar",
     "showTags": "Mostrar tags",
