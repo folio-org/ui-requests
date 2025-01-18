@@ -298,7 +298,7 @@
     "item.retrievalServicePointName": "Retrieval service point",
     "exportExpiredHoldShelfCsv": "Hold shelf clearance report {currentServicePoint} (CSV)",
     "exportSearchResultsCsv": "Export search results (CSV)",
-    "printPickSlipsForSp": "Print pick slips {sp}",
+    "printPickSlipsForSp": "Drukuj rewersy zamówienia {sp}",
     "printSearchSlipsForSp": "Print search slips {sp}",
-    "printSelectedPickSlipsForSp": "Print selected pick slips {sp}"
+    "printSelectedPickSlipsForSp": "Drukuj wybrane rewersy zamówienia {sp}"
 }
