@@ -24,11 +24,9 @@ import {
 import {
   TextLink,
   Checkbox,
+  exportToCsv,
 } from '@folio/stripes/components';
-import {
-  exportCsv,
-  effectiveCallNumber,
-} from '@folio/stripes/util';
+import { effectiveCallNumber } from '@folio/stripes/util';
 
 import RequestsRoute, {
   buildHoldRecords,
@@ -610,11 +608,11 @@ describe('RequestsRoute', () => {
       expect(printContent).toBeInTheDocument();
     });
 
-    it('should trigger "exportCsv"', async () => {
+    it('should trigger "exportToCsv"', async () => {
       await userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsCsv' }));
 
       await waitFor(() => {
-        expect(exportCsv).toHaveBeenCalled();
+        expect(exportToCsv).toHaveBeenCalled();
       });
     });
 
@@ -818,12 +816,12 @@ describe('RequestsRoute', () => {
         expect(defaultProps.mutator.savePrintDetails.POST).not.toHaveBeenCalled();
       });
 
-      it('should trigger "exportCsv"', async () => {
+      it('should trigger "exportToCsv"', async () => {
         renderComponent(getPropsWithSortInQuery());
         await userEvent.click(screen.getByRole('button', { name: 'ui-requests.exportSearchResultsCsv' }));
 
         await waitFor(() => {
-          expect(exportCsv).toHaveBeenCalled();
+          expect(exportToCsv).toHaveBeenCalled();
         });
       });
 

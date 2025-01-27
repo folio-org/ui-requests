@@ -209,4 +209,5 @@ jest.mock('@folio/stripes/components', () => ({
   }),
   TextLink: jest.fn(({ to, children }) => <div><a href={to}>{children}</a></div>),
   Timepicker: jest.fn(() => <div>Timepicker</div>),
+  exportToCsv: jest.fn(),
 }));
