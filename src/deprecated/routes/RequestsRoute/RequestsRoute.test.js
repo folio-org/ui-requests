@@ -259,8 +259,6 @@ SearchAndSort.mockImplementation(jest.fn(({
   onFilterChange,
   parentResources,
   renderFilters,
-  resultIsSelected,
-  viewRecordOnCollapse,
   customPaneSub,
   columnMapping,
   resultsFormatter,
@@ -269,12 +267,6 @@ SearchAndSort.mockImplementation(jest.fn(({
     onDuplicate(parentResources.records.records[0]);
     buildRecordsForHoldsShelfReport();
     massageNewRecord({});
-    resultIsSelected({
-      item: {
-        id: 'id',
-      },
-    });
-    viewRecordOnCollapse();
   };
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
@@ -1121,7 +1113,6 @@ describe('RequestsRoute', () => {
 
   describe('getListFormatter', () => {
     const getRowURLMock = jest.fn(id => id);
-    const setURLMock = jest.fn(id => id);
     const getPrintContentRefMock = jest.fn(id => id);
     const isPrintableMock = jest.fn(id => id);
     const toggleRowSelectionMock = jest.fn(id => id);
@@ -1130,7 +1121,6 @@ describe('RequestsRoute', () => {
     const listFormatter = getListFormatter(
       {
         getRowURL: getRowURLMock,
-        setURL: setURLMock,
       },
       {
         intl,
@@ -1338,7 +1328,6 @@ describe('RequestsRoute', () => {
       it('should render "TextLink" with correct props', () => {
         const expectedProps = {
           to: requestWithData.id,
-          onClick: expect.any(Function),
         };
 
         render(listFormatter.title(requestWithData));
