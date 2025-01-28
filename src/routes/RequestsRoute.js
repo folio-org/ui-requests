@@ -36,6 +36,7 @@ import {
   NoValue,
   MCLPagingTypes,
   Icon,
+  exportToCsv,
 } from '@folio/stripes/components';
 import {
   deparseFilters,
@@ -43,7 +44,6 @@ import {
   SearchAndSort,
 } from '@folio/stripes/smart-components';
 import {
-  exportCsv,
   effectiveCallNumber,
   getHeaderWithCredentials,
 } from '@folio/stripes/util';
@@ -647,7 +647,7 @@ class RequestsRoute extends React.Component {
     this.findResource = this.findResource.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.buildRecords = this.buildRecords.bind(this);
-    // Map to pass into exportCsv
+    // Map to pass into exportToCsv
     this.columnHeadersMap = this.getColumnHeaders(reportHeaders);
     this.expiredHoldsReportColumnHeaders = this.getColumnHeaders(expiredHoldsReportHeaders);
 
@@ -921,7 +921,7 @@ class RequestsRoute extends React.Component {
       this.columnHeadersMap :
       this.columnHeadersMap.filter(({ value }) => (value !== PROXY_COLUMNS.BARCODE && value !== PROXY_COLUMNS.NAME));
 
-    exportCsv(recordsToCSV, {
+    exportToCsv(recordsToCSV, {
       onlyFields: finalColumnHeadersMap,
       excludeFields: ['id'],
     });
@@ -1287,7 +1287,7 @@ class RequestsRoute extends React.Component {
     }
 
     const recordsToCSV = buildHoldRecords(requests);
-    exportCsv(recordsToCSV, {
+    exportToCsv(recordsToCSV, {
       onlyFields: this.expiredHoldsReportColumnHeaders,
       excludeFields: ['id'],
     });
