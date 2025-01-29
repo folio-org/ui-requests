@@ -217,7 +217,6 @@ export const urls = {
 export const getListFormatter = (
   {
     getRowURL,
-    setURL,
   },
   {
     intl,
@@ -269,7 +268,7 @@ export const getListFormatter = (
     ? <FormattedMessage id={requestStatusesTranslations[rq.status]} />
     : <NoValue />),
   'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
-  'title': rq => <TextLink to={getRowURL(rq.id)} onClick={() => setURL(rq.id)}>{(rq.instance ? rq.instance.title : DEFAULT_FORMATTER_VALUE)}</TextLink>,
+  'title': rq => <TextLink to={getRowURL(rq.id)}>{(rq.instance ? rq.instance.title : DEFAULT_FORMATTER_VALUE)}</TextLink>,
   'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
   'callNumber': rq => effectiveCallNumber(rq.item),
   'servicePoint': rq => get(rq, 'pickupServicePoint.name', DEFAULT_FORMATTER_VALUE),
@@ -649,7 +648,6 @@ class RequestsRoute extends React.Component {
       errorModalData: {},
       servicePointId: '',
       requests: [],
-      selectedId: '',
       selectedRows: {},
       titleLevelRequestsFeatureEnabled,
       createTitleLevelRequestsByDefault,
@@ -1007,20 +1005,6 @@ class RequestsRoute extends React.Component {
     } = this.props;
 
     return `${path}/view/${id}${search}`;
-  }
-
-  setURL = (id) => {
-    this.setState({
-      selectedId: id,
-    });
-  }
-
-  resultIsSelected = ({ item }) => item.id === this.state.selectedId;
-
-  viewRecordOnCollapse = () => {
-    this.setState({
-      selectedId: null,
-    });
   }
 
   getHelperResourcePath = (helper, id) => `circulation/requests/${id}`;
@@ -1438,7 +1422,6 @@ class RequestsRoute extends React.Component {
     const resultsFormatter = getListFormatter(
       {
         getRowURL: this.getRowURL,
-        setURL: this.setURL,
       },
       {
         intl,
@@ -1660,7 +1643,7 @@ class RequestsRoute extends React.Component {
                 copies: { max: 95 },
               }}
               columnMapping={columnLabels}
-              resultsRowClickHandlers={false}
+              hasRowClickHandlers={false}
               resultsFormatter={resultsFormatter}
               resultRowFormatter={DefaultMCLRowFormatter}
               newRecordInitialValues={initialValues}
@@ -1689,11 +1672,9 @@ class RequestsRoute extends React.Component {
                 onDuplicate: this.onDuplicate,
                 buildRecordsForHoldsShelfReport: this.buildRecordsForHoldsShelfReport,
               }}
-              viewRecordOnCollapse={this.viewRecordOnCollapse}
               viewRecordPerms="ui-requests.view"
               newRecordPerms="ui-requests.create"
               renderFilters={this.renderFilters}
-              resultIsSelected={this.resultIsSelected}
               onFilterChange={this.handleFilterChange}
               sortableColumns={['requestDate', 'title', 'year', 'itemBarcode', 'callNumber', 'type', 'requestStatus',
                 'position', 'servicePoint', 'requester', 'requesterBarcode', 'proxy', 'copies', 'printed']}

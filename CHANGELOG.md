@@ -8,6 +8,7 @@
 * Add icons to requests action menu. Refs UIREQ-1116.
 * Revise "Enter" button on New request page. Refs UIREQ-1114.
 * Change import of `exportToCsv` from `stripes-util` to `stripes-components`. Refs UIREQ-1138.
+* Fix accessibility issues with requests list. Refs UIREQ-1231.
 
 ## [11.0.3] (https://github.com/folio-org/ui-requests/tree/v11.0.3) (2025-01-10)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.2...v11.0.3)
