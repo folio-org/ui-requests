@@ -296,9 +296,9 @@
     "permission.reorderQueue.execute": "Žádanky: Změna pořadí ve frontě",
     "requests.retrievalServicePoint": "Retrieval service point",
     "item.retrievalServicePointName": "Retrieval service point",
-    "exportExpiredHoldShelfCsv": "Hold shelf clearance report {currentServicePoint} (CSV)",
-    "exportSearchResultsCsv": "Export search results (CSV)",
-    "printPickSlipsForSp": "Print pick slips {sp}",
-    "printSearchSlipsForSp": "Print search slips {sp}",
-    "printSelectedPickSlipsForSp": "Print selected pick slips {sp}"
+    "exportExpiredHoldShelfCsv": "Výstup o vyklizení regálu nevyzvednutých rezervací {currentServicePoint} (CSV)",
+    "exportSearchResultsCsv": "Export výsledků vyhledávání (CSV)",
+    "printPickSlipsForSp": "Vytisknout cirkulační lístky žádanek {sp}",
+    "printSearchSlipsForSp": "Vytisknout vyhledávací lístky {sp}",
+    "printSelectedPickSlipsForSp": "Vytisknout vybrané cirkulační lístky žádanek {sp}"
 }
