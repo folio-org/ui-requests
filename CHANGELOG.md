@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## [11.1.0] IN PROGRESS
+## [11.0.4] (https://github.com/folio-org/ui-requests/tree/v11.0.4) (2025-02-07)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.3...v11.0.4)
 
 * Add `requests ID` as a search parameter for search box. Refs UIREQ-1232.
 
