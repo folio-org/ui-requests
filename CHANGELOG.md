@@ -1,6 +1,6 @@
 # Change history for ui-requests
 
-## [11.1.0] IN PROGRESS
+## [12.0.0] IN PROGRESS
 
 * Increase code coverage for src/ChooseRequestTypeDialog.js by Jest/RTL tests. Refs UIREQ-1044.
 * Increase code coverage for src/ViewRequest.js by Jest/RTL tests. Refs UIREQ-1046.
@@ -9,6 +9,7 @@
 * Revise "Enter" button on New request page. Refs UIREQ-1114.
 * Change import of `exportToCsv` from `stripes-util` to `stripes-components`. Refs UIREQ-1138.
 * Fix accessibility issues with requests list. Refs UIREQ-1231.
+* *BREAKING* Update `react-intl` to `^7`. Refs UIREQ-1259.
 
 ## [11.0.4] (https://github.com/folio-org/ui-requests/tree/v11.0.4) (2025-02-07)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.3...v11.0.4)
