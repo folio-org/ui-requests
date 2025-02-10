@@ -1,6 +1,6 @@
 {
   "name": "@folio/requests",
-  "version": "11.1.0",
+  "version": "12.0.0",
   "description": "Requests manager",
   "repository": "folio-org/ui-requests",
   "publishConfig": {
@@ -175,7 +175,7 @@
     "test": "yarn run test:jest",
     "test:jest": "jest --ci --coverage --colors",
     "build-mod-descriptor": "stripes mod descriptor --full --strict | jq '.[]' > module-descriptor.json ",
-    "formatjs-compile": "formatjs compile-folder --ast --format simple ./translations/ui-requests ./translations/ui-requests/compiled"
+    "formatjs-compile": "stripes translate compile"
   },
   "devDependencies": {
     "@babel/core": "^7.17.12",
@@ -190,7 +190,6 @@
     "@folio/stripes-components": "^12.0.0",
     "@folio/stripes-core": "^10.2.3",
     "@folio/stripes-testing": "^4.4.0",
-    "@formatjs/cli": "^6.1.3",
     "core-js": "^3.6.4",
     "eslint": "^7",
     "eslint-import-resolver-alias": "^1.1.2",
@@ -199,7 +198,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.0",
-    "react-intl": "^6.4.4",
+    "react-intl": "^7.1.5",
     "react-router-dom": "^5.2.0",
     "regenerator-runtime": "^0.13.9"
   },
@@ -223,7 +222,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.0",
-    "react-intl": "^6.4.4",
+    "react-intl": "^7.1.5",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0"
   },
