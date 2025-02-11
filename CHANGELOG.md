@@ -10,6 +10,7 @@
 * Change import of `exportToCsv` from `stripes-util` to `stripes-components`. Refs UIREQ-1138.
 * Fix accessibility issues with requests list. Refs UIREQ-1231.
 * *BREAKING* Update `react-intl` to `^7`. Refs UIREQ-1259.
+* Migrate to shared GA workflows. Refs UIREQ-1257.
 
 ## [11.0.4] (https://github.com/folio-org/ui-requests/tree/v11.0.4) (2025-02-07)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.3...v11.0.4)
