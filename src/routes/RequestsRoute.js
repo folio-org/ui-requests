@@ -1535,24 +1535,24 @@ class RequestsRoute extends React.Component {
             </Icon>
           </Button>
         </IfPermission>
-          {csvReportPending ?
-            <LoadingButton>
-              <FormattedMessage id="ui-requests.csvReportPending" />
-            </LoadingButton> :
-            <Button
-              buttonStyle="dropdownItem"
-              id="exportToCsvPaneHeaderBtn"
-              disabled={!requestCount}
-              onClick={() => {
-                this.context.sendCallout({ message: <FormattedMessage id="ui-requests.csvReportInProgress" /> });
-                onToggle();
-                this.exportData();
-              }}
-            >
-              <Icon icon="download">
-                <FormattedMessage id="ui-requests.exportSearchResultsCsv" />
-              </Icon>
-            </Button>
+        {csvReportPending ?
+          <LoadingButton>
+            <FormattedMessage id="ui-requests.csvReportPending" />
+          </LoadingButton> :
+          <Button
+            buttonStyle="dropdownItem"
+            id="exportToCsvPaneHeaderBtn"
+            disabled={!requestCount}
+            onClick={() => {
+              this.context.sendCallout({ message: <FormattedMessage id="ui-requests.csvReportInProgress" /> });
+              onToggle();
+              this.exportData();
+            }}
+          >
+            <Icon icon="download">
+              <FormattedMessage id="ui-requests.exportSearchResultsCsv" />
+            </Icon>
+          </Button>
           }
         {
           isPickSlipsArePending ?
