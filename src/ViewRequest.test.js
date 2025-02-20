@@ -13,6 +13,7 @@ import {
   Icon,
   PaneHeaderIconButton,
 } from '@folio/stripes/components';
+import { checkIfUserInCentralTenant } from '@folio/stripes/core';
 
 import ViewRequest, {
   isAnyActionButtonVisible,
@@ -288,6 +289,7 @@ describe('ViewRequest', () => {
       <ViewRequest {...props} />
     </CommandList>
   );
+  checkIfUserInCentralTenant.mockReturnValue(true);
 
   describe('Non DCB Transactions', () => {
     beforeEach(() => {
@@ -1336,6 +1338,10 @@ describe('ViewRequest', () => {
 
     it('should return false', () => {
       expect(shouldHideMoveAndDuplicate(stripes, false, true, false)).toBe(false);
+    });
+
+    it('should return true for intermediate request in central tenant', () => {
+      expect(shouldHideMoveAndDuplicate(stripes, false, false, false, true)).toBe(true);
     });
   });
 });
