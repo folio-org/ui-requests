@@ -124,7 +124,7 @@ export const getFilteredColumnHeadersMap = (columnHeaders) => (
 );
 
 export const extractPickSlipRequestIds = (pickSlipsData) => {
-  return pickSlipsData.map(pickSlip => pickSlip['request.requestID']);
+  return [...new Set(pickSlipsData.map(pickSlip => pickSlip['request.requestID']))];
 };
 
 export const getLastPrintedDetails = (printDetails, intl) => {
