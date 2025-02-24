@@ -36,6 +36,7 @@ import RequestsRoute, {
   getFilteredColumnHeadersMap,
   urls,
   DEFAULT_FORMATTER_VALUE,
+  extractPickSlipRequestIds,
 } from './RequestsRoute';
 import CheckboxColumn from '../../../components/CheckboxColumn';
 import {
@@ -1721,6 +1722,12 @@ describe('RequestsRoute', () => {
           operation,
         })).toBe(expectedUrl);
       });
+    });
+  });
+
+  describe('extractPickSlipRequestIds', () => {
+    it('removes duplicate ids', () => {
+      expect(extractPickSlipRequestIds(Array(2).fill({ 'request.requestID': 'mockId0' }))).toEqual(['mockId0']);
     });
   });
 });

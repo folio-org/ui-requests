@@ -12,6 +12,8 @@
 * *BREAKING* Update `react-intl` to `^7`. Refs UIREQ-1259.
 * Migrate to shared GA workflows. Refs UIREQ-1257.
 * *BREAKING* Update stripes-* dependencies to latest version. Refs UIREQ-1258.
+* Hide edit, cancel, move and duplicate buttons for intermediate requests in central tenant. Refs UIREQ-1254.
+* Filter request print tracking data for duplicates. Refs UIREQ-1261.
 * Support new item tokens for printing pick slips, search slips, etc. Fixes UIREQ-1267.
 
 ## [11.0.4] (https://github.com/folio-org/ui-requests/tree/v11.0.4) (2025-02-07)
