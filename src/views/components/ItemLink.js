@@ -2,10 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import {
-  MISSING_VALUE_SYMBOL,
-} from '../../constants';
-
+import { NoValue } from '@folio/stripes/components';
 
 const ItemLink = ({
   request: {
@@ -14,11 +11,9 @@ const ItemLink = ({
     itemId,
     item,
   },
-}) => (
-  item
+}) => item?.barcode
     ? (<Link to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}>{item.barcode}</Link>)
-    : MISSING_VALUE_SYMBOL
-);
+    : <NoValue />;
 
 ItemLink.propTypes = {
   request: PropTypes.shape({

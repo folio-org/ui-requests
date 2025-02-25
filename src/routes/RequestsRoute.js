@@ -116,7 +116,6 @@ import SinglePrintButtonForPickSlip from '../components/SinglePrintButtonForPick
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
-export const DEFAULT_FORMATTER_VALUE = '';
 
 export const getPrintHoldRequestsEnabled = (printHoldRequests) => {
   const value = printHoldRequests.records[0]?.value;
@@ -257,15 +256,15 @@ export const getListFormatter = (
       selectedRows={selectedRows}
       toggleRowSelection={toggleRowSelection}
     />),
-  'itemBarcode': rq => (rq.item ? rq.item.barcode : DEFAULT_FORMATTER_VALUE),
-  'position': rq => (rq.position || DEFAULT_FORMATTER_VALUE),
-  ...(isProxyAvailable ? { 'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : DEFAULT_FORMATTER_VALUE) } : {}),
+  'itemBarcode': rq => (rq?.item?.barcode || <NoValue />),
+  'position': rq => (rq.position || <NoValue />),
+  ...(isProxyAvailable ? { 'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : <NoValue />) } : {}),
   'requestDate': rq => (
     <AppIcon size="small" app="requests">
       <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
     </AppIcon>
   ),
-  'requester': rq => (rq.requester ? getFullName(rq.requester) : DEFAULT_FORMATTER_VALUE),
+  'requester': rq => (rq.requester ? getFullName(rq.requester) : <NoValue />),
   'singlePrint': rq => {
     const singlePrintButtonProps = {
       request: rq,
@@ -282,18 +281,18 @@ export const getListFormatter = (
     return (
       <SinglePrintButtonForPickSlip {...singlePrintButtonProps} />);
   },
-  'requesterBarcode': rq => (rq.requester ? rq.requester.barcode : DEFAULT_FORMATTER_VALUE),
+  'requesterBarcode': rq => (rq?.requester?.barcode || <NoValue />),
   'requestStatus': rq => (requestStatusesTranslations[rq.status]
     ? <FormattedMessage id={requestStatusesTranslations[rq.status]} />
     : <NoValue />),
   'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
-  'title': rq => <TextLink to={getRowURL(rq.id)}>{(rq.instance ? rq.instance.title : DEFAULT_FORMATTER_VALUE)}</TextLink>,
-  'year': rq => getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT),
-  'callNumber': rq => effectiveCallNumber(rq.item),
-  'servicePoint': rq => get(rq, 'pickupServicePoint.name', DEFAULT_FORMATTER_VALUE),
-  'retrievalServicePoint': rq => get(rq, 'item.retrievalServicePointName', DEFAULT_FORMATTER_VALUE),
-  'copies': rq => get(rq, PRINT_DETAILS_COLUMNS.COPIES, DEFAULT_FORMATTER_VALUE),
-  'printed': rq => (rq.printDetails ? getLastPrintedDetails(rq.printDetails, intl) : DEFAULT_FORMATTER_VALUE),
+  'title': rq => <TextLink to={getRowURL(rq.id)}>{(rq.instance ? rq.instance.title : <NoValue />)}</TextLink>,
+  'year': rq => (getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT) || <NoValue />),
+  'callNumber': rq => (effectiveCallNumber(rq.item) || <NoValue />),
+  'servicePoint': rq => get(rq, 'pickupServicePoint.name', <NoValue />),
+  'retrievalServicePoint': rq => get(rq, 'item.retrievalServicePointName', <NoValue />),
+  'copies': rq => get(rq, PRINT_DETAILS_COLUMNS.COPIES, <NoValue />),
+  'printed': rq => (rq.printDetails ? getLastPrintedDetails(rq.printDetails, intl) : <NoValue />),
 });
 
 export const buildHoldRecords = (records) => {

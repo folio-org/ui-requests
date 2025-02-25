@@ -8,6 +8,7 @@ import {
   MultiColumnList,
   Pane,
   Paneset,
+  NoValue,
 } from '@folio/stripes/components';
 
 import {
@@ -409,6 +410,7 @@ describe('ItemsDialog', () => {
 
   describe('formatter', () => {
     const item = {
+      barcode: 'barcode',
       status: {
         name: 'Aged to lost',
       },
@@ -426,6 +428,25 @@ describe('ItemsDialog', () => {
       },
     };
 
+    afterEach(() => {
+      NoValue.mockClear();
+    });
+
+    describe('barcode', () => {
+      it('should return item barcode', () => {
+        expect(formatter.barcode(item)).toBe(item.barcode);
+      });
+
+      it('should trigger NoValue component', () => {
+        render(formatter.barcode({
+          ...item,
+          barcode: undefined,
+        }));
+
+        expect(NoValue).toHaveBeenCalled();
+      });
+    });
+
     describe('itemStatus', () => {
       it('should return formatted message', () => {
         expect(formatter.itemStatus(item).props.id).toEqual('ui-requests.item.status.agedToLost');
@@ -437,11 +458,13 @@ describe('ItemsDialog', () => {
         expect(formatter.location(item)).toEqual('effective location name');
       });
 
-      it('should return default value for effective location name', () => {
-        expect(formatter.location({
+      it('should trigger NoValue component', () => {
+        render(formatter.location({
           ...item,
           effectiveLocation: {},
-        })).toEqual('');
+        }));
+
+        expect(NoValue).toHaveBeenCalled();
       });
     });
 
@@ -457,13 +480,15 @@ describe('ItemsDialog', () => {
           expect(formatter.loanType(item)).toEqual('temporary loan type name');
         });
 
-        it('should return default value for temporary loan type name', () => {
-          expect(formatter.loanType({
+        it('should trigger NoValue component', () => {
+          render(formatter.loanType({
             ...item,
             temporaryLoanType: {
               other: '',
             },
-          })).toEqual('');
+          }));
+
+          expect(NoValue).toHaveBeenCalled();
         });
       });
 
@@ -475,14 +500,16 @@ describe('ItemsDialog', () => {
           })).toEqual('permanent loan type name');
         });
 
-        it('should return default value for permanent loan type name', () => {
-          expect(formatter.loanType({
+        it('should trigger NoValue component', () => {
+          render(formatter.loanType({
             ...item,
             temporaryLoanType: false,
             permanentLoanType: {
               other: '',
             },
-          })).toEqual('');
+          }));
+
+          expect(NoValue).toHaveBeenCalled();
         });
       });
     });

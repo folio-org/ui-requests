@@ -16,6 +16,7 @@
 * Filter request print tracking data for duplicates. Refs UIREQ-1261.
 * Support new item tokens for printing pick slips, search slips, etc. Fixes UIREQ-1267.
 * Make focus indicator visible for instance name on the Requests Queue page. Refs UIREQ-1215.
+* Use NoValue component for absent information. Refs UIREQ-1262.
 
 ## [11.0.4] (https://github.com/folio-org/ui-requests/tree/v11.0.4) (2025-02-07)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.3...v11.0.4)
