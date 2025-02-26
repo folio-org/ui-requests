@@ -4,4 +4,5 @@
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: 15px;
+  padding: 3px 0;
 }
