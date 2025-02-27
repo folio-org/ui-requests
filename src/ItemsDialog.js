@@ -20,6 +20,7 @@ import {
   MultiColumnList,
   Pane,
   Paneset,
+  NoValue,
 } from '@folio/stripes/components';
 import { stripesConnect } from '@folio/stripes/core';
 
@@ -63,10 +64,11 @@ export const COLUMN_MAP = {
 };
 
 export const formatter = {
+  barcode: item => (item?.barcode || <NoValue />),
   itemStatus: item => <FormattedMessage id={itemStatusesTranslations[item.status.name]} />,
-  location: item => get(item, 'effectiveLocation.name', ''),
+  location: item => get(item, 'effectiveLocation.name', <NoValue />),
   materialType: item => item.materialType.name,
-  loanType: item => (item.temporaryLoanType ? get(item, 'temporaryLoanType.name', '') : get(item, 'permanentLoanType.name', '')),
+  loanType: item => (item.temporaryLoanType ? get(item, 'temporaryLoanType.name', <NoValue />) : get(item, 'permanentLoanType.name', <NoValue />)),
 };
 
 export const MAX_HEIGHT = 500;

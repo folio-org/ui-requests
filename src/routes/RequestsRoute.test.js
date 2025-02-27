@@ -26,6 +26,7 @@ import {
   TextLink,
   Checkbox,
   exportToCsv,
+  NoValue,
 } from '@folio/stripes/components';
 import {
   effectiveCallNumber,
@@ -39,7 +40,6 @@ import RequestsRoute, {
   getLastPrintedDetails,
   getFilteredColumnHeadersMap,
   urls,
-  DEFAULT_FORMATTER_VALUE,
   extractPickSlipRequestIds,
 } from './RequestsRoute';
 import CheckboxColumn from '../components/CheckboxColumn';
@@ -1323,6 +1323,10 @@ describe('RequestsRoute', () => {
     };
     const requestWithoutData = {};
 
+    afterEach(() => {
+      NoValue.mockClear();
+    });
+
     describe('select', () => {
       it('should render CheckboxColumn', () => {
         const selectedRequest = {};
@@ -1374,8 +1378,10 @@ describe('RequestsRoute', () => {
         expect(listFormatter.itemBarcode(requestWithData)).toBe(requestWithData.item.barcode);
       });
 
-      it('should return empty string', () => {
-        expect(listFormatter.itemBarcode(requestWithoutData)).toBe(DEFAULT_FORMATTER_VALUE);
+      it('should trigger NoValue component', () => {
+        render(listFormatter.itemBarcode(requestWithoutData));
+
+        expect(NoValue).toHaveBeenCalled();
       });
     });
 
@@ -1384,8 +1390,10 @@ describe('RequestsRoute', () => {
         expect(listFormatter.position(requestWithData)).toBe(requestWithData.position);
       });
 
-      it('should return empty string', () => {
-        expect(listFormatter.position(requestWithoutData)).toBe(DEFAULT_FORMATTER_VALUE);
+      it('should trigger NoValue component', () => {
+        render(listFormatter.position(requestWithoutData));
+
+        expect(NoValue).toHaveBeenCalled();
       });
     });
 
@@ -1398,8 +1406,10 @@ describe('RequestsRoute', () => {
         expect(listFormatter.proxy(requestWithData)).toBe(mockProxy);
       });
 
-      it('should return empty string', () => {
-        expect(listFormatter.proxy(requestWithoutData)).toBe(DEFAULT_FORMATTER_VALUE);
+      it('should trigger NoValue component', () => {
+        render(listFormatter.proxy(requestWithoutData));
+
+        expect(NoValue).toHaveBeenCalled();
       });
     });
 
@@ -1433,8 +1443,10 @@ describe('RequestsRoute', () => {
         expect(listFormatter.requester(requestWithData)).toBe(mockRequester);
       });
 
-      it('should return empty string', () => {
-        expect(listFormatter.requester(requestWithoutData)).toBe(DEFAULT_FORMATTER_VALUE);
+      it('should trigger NoValue component', () => {
+        render(listFormatter.requester(requestWithoutData));
+
+        expect(NoValue).toHaveBeenCalled();
       });
     });
 
@@ -1443,8 +1455,10 @@ describe('RequestsRoute', () => {
         expect(listFormatter.requesterBarcode(requestWithData)).toBe(requestWithData.requester.barcode);
       });
 
-      it('should return empty string', () => {
-        expect(listFormatter.requester(requestWithoutData)).toBe(DEFAULT_FORMATTER_VALUE);
+      it('should trigger NoValue component', () => {
+        render(listFormatter.requesterBarcode(requestWithoutData));
+
+        expect(NoValue).toHaveBeenCalled();
       });
     });
 
@@ -1544,8 +1558,10 @@ describe('RequestsRoute', () => {
         expect(listFormatter.printed(requestWithData)).toBe(expectedOutput);
       });
 
-      it('should return empty string', () => {
-        expect(listFormatter.printed(requestWithoutData)).toBe(DEFAULT_FORMATTER_VALUE);
+      it('should trigger NoValue component', () => {
+        render(listFormatter.printed(requestWithoutData));
+
+        expect(NoValue).toHaveBeenCalled();
       });
     });
   });

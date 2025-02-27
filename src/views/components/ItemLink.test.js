@@ -4,12 +4,9 @@ import {
   render,
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
+import { NoValue } from '@folio/stripes/components';
 
 import ItemLink from './ItemLink';
-
-import {
-  MISSING_VALUE_SYMBOL,
-} from '../../constants';
 
 describe('ItemLink', () => {
   const mockedItem = {
@@ -57,8 +54,8 @@ describe('ItemLink', () => {
       );
     });
 
-    it('should render `-` instead of link', () => {
-      expect(screen.getByText(MISSING_VALUE_SYMBOL)).toBeInTheDocument();
+    it('should trigger NoValue component', () => {
+      expect(NoValue).toHaveBeenCalled();
     });
   });
 });
