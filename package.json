@@ -33,6 +33,9 @@
       "search-slips": "0.1",
       "automated-patron-blocks": "0.1"
     },
+    "optionalOkapiInterfaces": {
+      "circulation-bff-loans": "1.0"
+    },
     "permissionSets": [
       {
         "permissionName": "module.requests.enabled",
