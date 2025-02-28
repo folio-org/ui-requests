@@ -18,6 +18,7 @@ import {
   IfPermission,
   IntlConsumer,
   TitleManager,
+  checkIfUserInCentralTenant,
 } from '@folio/stripes/core';
 import {
   Button,
@@ -75,11 +76,13 @@ const CREATE_SUCCESS = 'CREATE_SUCCESS';
 const ECS_REQUEST_PHASE = {
   PRIMARY: 'Primary',
   SECONDARY: 'Secondary',
+  INTERMEDIATE: 'Intermediate',
 };
 
 export const isAnyActionButtonVisible = (visibilityConditions = []) => visibilityConditions.some(condition => condition);
-export const shouldHideMoveAndDuplicate = (stripes, isEcsTlrPrimaryRequest, isEcsTlrSettingReceived, isEcsTlrSettingEnabled) => {
+export const shouldHideMoveAndDuplicate = (stripes, isEcsTlrPrimaryRequest, isEcsTlrSettingReceived, isEcsTlrSettingEnabled, isEcsIntermediateRequestInCentralTenant) => {
   return isEcsTlrPrimaryRequest ||
+    isEcsIntermediateRequestInCentralTenant ||
     (isEcsTlrSettingReceived && isEcsTlrSettingEnabled) ||
     (isMultiDataTenant(stripes) && !isEcsTlrSettingReceived);
 };
@@ -497,6 +500,8 @@ class ViewRequest extends React.Component {
     } = request;
     const isEcsTlrPrimaryRequest = request?.ecsRequestPhase === ECS_REQUEST_PHASE.PRIMARY;
     const isEcsTlrSecondaryRequest = request?.ecsRequestPhase === ECS_REQUEST_PHASE.SECONDARY;
+    const isEcsIntermediateRequest = request?.ecsRequestPhase === ECS_REQUEST_PHASE.INTERMEDIATE;
+    const isEcsIntermediateRequestInCentralTenant = checkIfUserInCentralTenant(stripes) && isEcsIntermediateRequest;
     const getPickupServicePointName = this.getPickupServicePointName(request);
     const requestStatus = get(request, ['status'], '-');
     const isRequestClosed = requestStatus.startsWith('Closed');
@@ -534,7 +539,7 @@ class ViewRequest extends React.Component {
         return null;
       }
 
-      const isMoveAndDuplicateHidden = shouldHideMoveAndDuplicate(stripes, isEcsTlrPrimaryRequest, isEcsTlrSettingReceived, isEcsTlrSettingEnabled);
+      const isMoveAndDuplicateHidden = shouldHideMoveAndDuplicate(stripes, isEcsTlrPrimaryRequest, isEcsTlrSettingReceived, isEcsTlrSettingEnabled, isEcsIntermediateRequestInCentralTenant);
 
       if (isRequestClosed) {
         if (!isRequestValid || (requestLevel === REQUEST_LEVEL_TYPES.TITLE && !titleLevelRequestsFeatureEnabled) || isDCBTransaction || isMoveAndDuplicateHidden) {
@@ -560,8 +565,8 @@ class ViewRequest extends React.Component {
       }
 
       const isValidNotDCBTransaction = isRequestValid && !isDCBTransaction;
-      const isEditButtonVisible = isValidNotDCBTransaction && stripes.hasPerm('ui-requests.edit');
-      const isCancelButtonVisible = stripes.hasPerm('ui-requests.edit');
+      const isEditButtonVisible = isValidNotDCBTransaction && stripes.hasPerm('ui-requests.edit') && !isEcsIntermediateRequestInCentralTenant;
+      const isCancelButtonVisible = stripes.hasPerm('ui-requests.edit') && !isEcsIntermediateRequestInCentralTenant;
       const isDuplicateButtonVisible = isValidNotDCBTransaction && !isMoveAndDuplicateHidden && stripes.hasPerm('ui-requests.create');
       const isMoveButtonVisible = item && isRequestNotFilled && isValidNotDCBTransaction && !isMoveAndDuplicateHidden && stripes.hasPerm('ui-requests.moveRequest.execute');
       const isReorderQueueButtonVisible = isRequestOpen && isValidNotDCBTransaction && stripes.hasPerm('ui-requests.reorderQueue.execute');
