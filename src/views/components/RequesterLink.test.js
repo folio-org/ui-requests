@@ -4,33 +4,54 @@ import {
   render,
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
+import { NoValue } from '@folio/stripes/components';
 
 import RequesterLink from './RequesterLink';
 
 describe('RequesterLink', () => {
-  const mockedRequester = {
-    barcode: 'testRequesterBarcode',
-  };
-  const mockedRequest = {
-    requesterId: 'testRequesterId',
-    requester: mockedRequester,
-  };
+  describe('When barcode is presented', () => {
+    const mockedRequester = {
+      barcode: 'testRequesterBarcode',
+    };
+    const mockedRequest = {
+      requesterId: 'testRequesterId',
+      requester: mockedRequester,
+    };
 
-  beforeEach(() => {
-    render(
-      <BrowserRouter>
-        <RequesterLink request={mockedRequest} />
-      </BrowserRouter>
-    );
+    beforeEach(() => {
+      render(
+        <BrowserRouter>
+          <RequesterLink request={mockedRequest} />
+        </BrowserRouter>
+      );
+    });
+
+    it('should render `Link` with correct label', () => {
+      expect(screen.getByText(mockedRequester.barcode)).toBeInTheDocument();
+    });
+
+    it('should render `Link` with correct `href` attribute', () => {
+      const expectedResult = `/users/view/${mockedRequest.requesterId}`;
+
+      expect(screen.getByRole('link')).toHaveAttribute('href', expectedResult);
+    });
   });
 
-  it('should render `Link` with correct label', () => {
-    expect(screen.getByText(mockedRequester.barcode)).toBeInTheDocument();
-  });
+  describe('When barcode is not presented', () => {
+    const request = {
+      requester: {},
+    };
 
-  it('should render `Link` with correct `href` attribute', () => {
-    const expectedResult = `/users/view/${mockedRequest.requesterId}`;
+    beforeEach(() => {
+      render(
+        <BrowserRouter>
+          <RequesterLink request={request} />
+        </BrowserRouter>
+      );
+    });
 
-    expect(screen.getByRole('link')).toHaveAttribute('href', expectedResult);
+    it('should trigger NoValue component', () => {
+      expect(NoValue).toHaveBeenCalled();
+    });
   });
 });
