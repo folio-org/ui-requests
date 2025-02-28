@@ -1,5 +1,10 @@
 # Change history for ui-requests
 
+## [11.0.5] (https://github.com/folio-org/ui-requests/tree/v11.0.5) (2025-02-28)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.4...v11.0.5)
+
+* Hide edit, cancel, move and duplicate buttons for intermediate requests in central tenant. Refs UIREQ-1254.
+
 ## [11.0.4] (https://github.com/folio-org/ui-requests/tree/v11.0.4) (2025-02-07)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.3...v11.0.4)
 
