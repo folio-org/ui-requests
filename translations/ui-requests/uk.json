@@ -168,7 +168,7 @@
     "patronComments": "Patron comments",
     "override": "Override",
     "errors.sync.requestQueueLabel": "Request queue is out of sync",
-    "errors.sync.requestQueueBody": "This request queue has been updated by another person or process and may be out of synch.",
+    "errors.sync.requestQueueBody": "Цю чергу запитів було оновлено іншою особою або процесом, вона може бути несинхронізованою.",
     "errors.unknown.requestQueueLabel": "Request queue error",
     "errors.unknown.requestQueueBody": "Request queue reorder failed",
     "requestQueue.refresh": "Refresh queue",
