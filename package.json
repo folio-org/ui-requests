@@ -118,7 +118,14 @@
           "circulation.settings.collection.get",
           "tlr.settings.get",
           "mod-settings.global.read.circulation",
-          "mod-settings.entries.collection.get"
+          "mod-settings.entries.collection.get",
+          "mod-settings.entries.item.get",
+          "circulation.search-slips.get",
+          "circulation.pick-slips.get",
+          "circulation-bff.search-slips.collection.get",
+          "circulation-bff.pick-slips.collection.get",
+          "circulation-storage.staff-slips.collection.get",
+          "tags.collection.get"
         ],
         "visible": true
       },
@@ -134,11 +141,6 @@
           "circulation-bff.requests.allowed-service-points.get",
           "circulation-storage.requests.item.post",
           "circulation-storage.request-preferences.collection.get",
-          "circulation-storage.staff-slips.collection.get",
-          "circulation.pick-slips.get",
-          "circulation.search-slips.get",
-          "circulation-bff.pick-slips.collection.get",
-          "circulation-bff.search-slips.collection.get",
           "circulation.print-events-entry.item.post",
           "inventory-storage.locations.item.get",
           "circulation-bff.requests.search-instances.get",
@@ -151,20 +153,14 @@
         "displayName": "Requests: View, edit, cancel",
         "subPermissions": [
           "ui-requests.view",
-          "circulation.pick-slips.get",
-          "circulation.search-slips.get",
-          "circulation-bff.pick-slips.collection.get",
-          "circulation-bff.search-slips.collection.get",
           "circulation.requests.item.put",
           "circulation.requests.allowed-service-points.get",
           "circulation-bff.requests.allowed-service-points.get",
           "circulation.print-events-entry.item.post",
-          "circulation-storage.staff-slips.collection.get",
           "circulation-storage.requests.collection.delete",
           "circulation-storage.requests.item.put",
           "circulation-storage.requests.item.delete",
           "circulation-storage.request-preferences.collection.get",
-          "tags.collection.get",
           "tags.item.post"
         ],
         "visible": true
