@@ -17,6 +17,7 @@
 * Make focus indicator visible for instance name on the Requests Queue page. Refs UIREQ-1215.
 * Use NoValue component for absent information. Refs UIREQ-1262.
 * Add optionalOkapiInterfaces `circulation-bff-loans` `1.0`. Refs UIREQ-1273.
+* For consistency searching use == instead of = for requester barcode. Refs UIREQ-640.
 * Add missed sub-permissions for "Requests: View" permission. Refs UIREQ-1217.
 
 ## [11.0.5] (https://github.com/folio-org/ui-requests/tree/v11.0.5) (2025-02-28)
