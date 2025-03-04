@@ -8,6 +8,7 @@
   "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
   "barcode": "Barcode",
   "requestQueue": "Request queue",
+  "requestUuid": "Request UUID",
   "location": "Location",
   "materialType": "Material type",
   "loanType": "Loan type",
