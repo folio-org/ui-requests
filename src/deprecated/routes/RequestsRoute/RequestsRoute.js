@@ -42,6 +42,7 @@ import {
   SearchAndSort,
 } from '@folio/stripes/smart-components';
 import {
+  convertToSlipData,
   effectiveCallNumber,
   getHeaderWithCredentials,
 } from '@folio/stripes/util';
@@ -71,7 +72,6 @@ import {
   buildUrl,
   getFullName,
   duplicateRequest,
-  convertToSlipData,
   getInstanceQueryString,
   isDuplicateMode,
   generateUserName,
@@ -1416,8 +1416,13 @@ class RequestsRoute extends React.Component {
     const isSearchSlipsEmpty = isEmpty(searchSlips);
     const pickSlipsPrintTemplate = this.getPrintTemplate(SLIPS_TYPE.PICK_SLIP);
     const searchSlipsPrintTemplate = this.getPrintTemplate(SLIPS_TYPE.SEARCH_SLIP_HOLD_REQUESTS);
-    const pickSlipsData = convertToSlipData(pickSlips, intl, timezone, locale, SLIPS_TYPE.PICK_SLIP, user);
-    const searchSlipsData = convertToSlipData(searchSlips, intl, timezone, locale, SLIPS_TYPE.SEARCH_SLIP_HOLD_REQUESTS);
+    const pickSlipsData = convertToSlipData(pickSlips, intl, timezone, locale, {
+      slipName: SLIPS_TYPE.PICK_SLIP,
+      user,
+    });
+    const searchSlipsData = convertToSlipData(searchSlips, intl, timezone, locale, {
+      slipName: SLIPS_TYPE.SEARCH_SLIP_HOLD_REQUESTS,
+    });
     let multiSelectPickSlipData = getSelectedSlipDataMulti(pickSlipsData, selectedRows);
 
     const resultsFormatter = getListFormatter(

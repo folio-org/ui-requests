@@ -14,7 +14,6 @@ import {
 import queryString from 'query-string';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import moment from 'moment-timezone';
 import { FormattedMessage } from 'react-intl';
 
 import {
@@ -35,7 +34,6 @@ import {
   DCB_INSTANCE_ID,
   DCB_HOLDINGS_RECORD_ID,
   DCB_USER,
-  SLIPS_TYPE,
   REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS,
 } from './constants';
 
@@ -173,13 +171,6 @@ export function buildTemplate(template = '') {
   };
 }
 
-export function buildLocaleDateAndTime(dateTime, timezone, locale) {
-  return moment(dateTime)
-    .tz(timezone)
-    .locale(locale)
-    .format('L LT');
-}
-
 export function getSelectedSlipData(pickSlipsData, selectedRequestId) {
   const sel = pickSlipsData.filter((pickSlip) => {
     return pickSlip['request.requestID'] === selectedRequestId;
@@ -236,90 +227,6 @@ export const getNextSelectedRowsState = (selectedRows, row) => {
   }
 
   return newSelectedRows;
-};
-
-export const convertToSlipData = (source, intl, timeZone, locale, slipName = SLIPS_TYPE.PICK_SLIP, user = {}) => {
-  return source.map(pickSlip => {
-    const {
-      item = {},
-      request = {},
-      requester = {},
-      currentDateTime = null,
-    } = pickSlip;
-
-    const { username } = user;
-
-    return {
-      'staffSlip.Name': slipName,
-      'staffSlip.currentDateTime': buildLocaleDateAndTime(currentDateTime, timeZone, locale),
-      'staffSlip.staffUsername': username,
-      'requester.firstName': requester.firstName,
-      'requester.lastName': requester.lastName,
-      'requester.middleName': requester.middleName,
-      'requester.preferredFirstName': requester.preferredFirstName || requester.firstName,
-      'requester.patronGroup': requester.patronGroup,
-      'requester.addressLine1': requester.addressLine1,
-      'requester.addressLine2': requester.addressLine2,
-      'requester.country': requester.countryId
-        ? intl.formatMessage({ id: `stripes-components.countries.${requester.countryId}` })
-        : requester.countryId,
-      'requester.city': requester.city,
-      'requester.stateProvRegion': requester.region,
-      'requester.zipPostalCode': requester.postalCode,
-      'requester.barcode': requester.barcode,
-      'requester.barcodeImage': `<Barcode>${requester.barcode}</Barcode>`,
-      'requester.departments': requester.departments,
-      'item.title': item.title,
-      'item.primaryContributor': item.primaryContributor,
-      'item.allContributors': item.allContributors,
-      'item.barcode': item.barcode,
-      'item.barcodeImage': `<Barcode>${item.barcode}</Barcode>`,
-      'item.callNumber': item.callNumber,
-      'item.callNumberPrefix': item.callNumberPrefix,
-      'item.callNumberSuffix': item.callNumberSuffix,
-      'item.displaySummary': item.displaySummary,
-      'item.enumeration': item.enumeration,
-      'item.volume': item.volume,
-      'item.chronology': item.chronology,
-      'item.copy': item.copy,
-      'item.yearCaption': item.yearCaption,
-      'item.materialType': item.materialType,
-      'item.loanType': item.loanType,
-      'item.numberOfPieces': item.numberOfPieces,
-      'item.descriptionOfPieces': item.descriptionOfPieces,
-      'item.lastCheckedInDateTime': item.lastCheckedInDateTime
-        ? buildLocaleDateAndTime(item.lastCheckedInDateTime, timeZone, locale)
-        : item.lastCheckedInDateTime,
-      'item.fromServicePoint': item.fromServicePoint,
-      'item.toServicePoint': item.toServicePoint,
-      'item.accessionNumber': item.accessionNumber,
-      'item.administrativeNotes': item.administrativeNotes,
-      'item.datesOfPublication': item.datesOfPublication,
-      'item.editions': item.editions,
-      'item.physicalDescriptions': item.physicalDescriptions,
-      'item.instanceHrid': item.instanceHrid,
-      'item.instanceHridImage': `<Barcode>${item.instanceHrid}</Barcode>`,
-      'item.effectiveLocationInstitution': item.effectiveLocationInstitution,
-      'item.effectiveLocationCampus': item.effectiveLocationCampus,
-      'item.effectiveLocationLibrary': item.effectiveLocationLibrary,
-      'item.effectiveLocationSpecific': item.effectiveLocationSpecific,
-      'item.effectiveLocationPrimaryServicePointName': item.effectiveLocationPrimaryServicePointName,
-      'request.servicePointPickup': request.servicePointPickup,
-      'request.deliveryAddressType': request.deliveryAddressType,
-      'request.requestExpirationDate': request.requestExpirationDate
-        ? intl.formatDate(request.requestExpirationDate, { timeZone, locale })
-        : request.requestExpirationDate,
-      'request.requestDate': request.requestDate
-        ? intl.formatDate(request.requestDate, { timeZone, locale, year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' })
-        : request.requestDate,
-      'request.holdShelfExpirationDate': request.holdShelfExpirationDate
-        ? intl.formatDate(request.holdShelfExpirationDate, { timeZone, locale })
-        : request.holdShelfExpirationDate,
-      'request.requestID': request.requestID,
-      'request.patronComments': request.patronComments,
-      'request.barcodeImage': `<Barcode>${request.requestID}</Barcode>`,
-    };
-  });
 };
 
 export function buildUrl(location, values) {
