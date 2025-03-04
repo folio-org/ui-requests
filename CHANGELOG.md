@@ -13,13 +13,14 @@
 * Migrate to shared GA workflows. Refs UIREQ-1257.
 * *BREAKING* Update stripes-* dependencies to latest version. Refs UIREQ-1258.
 * Filter request print tracking data for duplicates. Refs UIREQ-1261.
-* Support new item tokens for printing pick slips, search slips, etc. Fixes UIREQ-1267.
+* Support new item tokens for printing pick slips, search slips, etc. Refs UIREQ-1267.
 * Make focus indicator visible for instance name on the Requests Queue page. Refs UIREQ-1215.
 * Use NoValue component for absent information. Refs UIREQ-1262.
 * Add optionalOkapiInterfaces `circulation-bff-loans` `1.0`. Refs UIREQ-1273.
 * For consistency searching use == instead of = for requester barcode. Refs UIREQ-640.
 * Add missed sub-permissions for "Requests: View" permission. Refs UIREQ-1217.
 * Requests App - Export Requests app search results list (csv) - Add Request UUID. Refs UIREQ-1264.
+* *BREAKING* Use `convertToSlipData` and supporting functions from `stripes-util`. Refs UIREQ-1263.
 
 ## [11.0.5] (https://github.com/folio-org/ui-requests/tree/v11.0.5) (2025-02-28)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.4...v11.0.5)
