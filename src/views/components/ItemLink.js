@@ -11,9 +11,9 @@ const ItemLink = ({
     itemId,
     item,
   },
-}) => item?.barcode
-    ? (<Link to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}>{item.barcode}</Link>)
-    : <NoValue />;
+}) => (item?.barcode
+  ? (<Link to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}>{item.barcode}</Link>)
+  : <NoValue />);
 
 ItemLink.propTypes = {
   request: PropTypes.shape({

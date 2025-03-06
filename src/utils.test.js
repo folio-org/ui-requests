@@ -38,6 +38,7 @@ import {
   getRequester,
   getFullName,
   isProxyFunctionalityAvailable,
+  removeSlipsWithoutItemBarcode,
 } from './utils';
 
 import {
@@ -1212,5 +1213,11 @@ describe('getFullName', () => {
       firstName: 'John'
     };
     expect(getFullName(user)).toBe('Doe, John');
+  });
+});
+
+describe('removeSlipsWithoutItemBarcode', () => {
+  it('removes slips without item barcode', () => {
+    expect(removeSlipsWithoutItemBarcode([{ item: { barcode: '80085' } }, { item: { someProperty: null } }])).toHaveLength(1);
   });
 });

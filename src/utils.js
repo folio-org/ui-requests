@@ -238,8 +238,10 @@ export const getNextSelectedRowsState = (selectedRows, row) => {
   return newSelectedRows;
 };
 
+export const removeSlipsWithoutItemBarcode = source => source.filter(slip => slip?.item?.barcode !== undefined);
+
 export const convertToSlipData = (source, intl, timeZone, locale, slipName = SLIPS_TYPE.PICK_SLIP, user = {}) => {
-  return source.filter(pickSlip => pickSlip?.item?.barcode !== undefined).map(pickSlip => {
+  return source.map(pickSlip => {
     const {
       item = {},
       request = {},
