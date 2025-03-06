@@ -125,7 +125,8 @@
           "circulation-bff.search-slips.collection.get",
           "circulation-bff.pick-slips.collection.get",
           "circulation-storage.staff-slips.collection.get",
-          "tags.collection.get"
+          "tags.collection.get",
+          "circulation.print-events-entry.item.post"
         ],
         "visible": true
       },
@@ -141,7 +142,6 @@
           "circulation-bff.requests.allowed-service-points.get",
           "circulation-storage.requests.item.post",
           "circulation-storage.request-preferences.collection.get",
-          "circulation.print-events-entry.item.post",
           "inventory-storage.locations.item.get",
           "circulation-bff.requests.search-instances.get",
           "circulation-bff.requests.post"
@@ -156,7 +156,6 @@
           "circulation.requests.item.put",
           "circulation.requests.allowed-service-points.get",
           "circulation-bff.requests.allowed-service-points.get",
-          "circulation.print-events-entry.item.post",
           "circulation-storage.requests.collection.delete",
           "circulation-storage.requests.item.put",
           "circulation-storage.requests.item.delete",
