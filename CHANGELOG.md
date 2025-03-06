@@ -20,6 +20,7 @@
 * For consistency searching use == instead of = for requester barcode. Refs UIREQ-640.
 * Add missed sub-permissions for "Requests: View" permission. Refs UIREQ-1217.
 * Requests App - Export Requests app search results list (csv) - Add Request UUID. Refs UIREQ-1264.
+* Don't include items without barcode in PDF for pick slips. Refs UIREQ-1261.
 
 ## [11.0.5] (https://github.com/folio-org/ui-requests/tree/v11.0.5) (2025-02-28)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.4...v11.0.5)

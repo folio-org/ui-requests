@@ -239,7 +239,7 @@ export const getNextSelectedRowsState = (selectedRows, row) => {
 };
 
 export const convertToSlipData = (source, intl, timeZone, locale, slipName = SLIPS_TYPE.PICK_SLIP, user = {}) => {
-  return source.map(pickSlip => {
+  return source.filter(pickSlip => pickSlip?.item?.barcode !== undefined).map(pickSlip => {
     const {
       item = {},
       request = {},
