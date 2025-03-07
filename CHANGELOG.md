@@ -1,5 +1,11 @@
 # Change history for ui-requests
 
+## [11.0.6] (https://github.com/folio-org/ui-requests/tree/v11.0.6) (2025-03-07)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.5...v11.0.6)
+
+* Filter request print tracking data for duplicates. Refs UIREQ-1261.
+* Requests App - Export Requests app search results list (csv) - Add Request UUID. Refs UIREQ-1264.
+
 ## [11.0.5] (https://github.com/folio-org/ui-requests/tree/v11.0.5) (2025-02-28)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.4...v11.0.5)
 
