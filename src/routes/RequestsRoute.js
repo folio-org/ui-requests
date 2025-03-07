@@ -971,6 +971,8 @@ class RequestsRoute extends React.Component {
       const contributorNamesMap = [];
       const tagListMap = [];
 
+      record.requestUuid = record?.id;
+
       if (record.instance.contributorNames && record.instance.contributorNames.length > 0) {
         record.instance.contributorNames.forEach(item => {
           contributorNamesMap.push(item.name);

@@ -215,6 +215,7 @@ export const reportHeaders = [
   'patronComments',
   PRINT_DETAILS_COLUMNS.COPIES,
   PRINT_DETAILS_COLUMNS.PRINTED,
+  'requestUuid',
 ];
 
 export const expiredHoldsReportHeaders = [
@@ -234,6 +235,7 @@ export const expiredHoldsReportHeaders = [
   'status',
   'holdShelfExpirationDate',
   'patronComments',
+  'requestUuid',
 ];
 
 export const requestFilterTypes = {
