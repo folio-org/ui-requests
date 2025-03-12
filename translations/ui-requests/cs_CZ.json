@@ -226,7 +226,7 @@
     "item.status.awaitingDelivery": "Čeká na doručení",
     "item.status.awaitingPickup": "Čeká na vyzvednutí",
     "item.status.checkedOut": "Vypůjčeno",
-    "item.status.claimedReturned": "Údajně vráceno",
+    "item.status.claimedReturned": "Prohlášeno za vrácené",
     "item.status.declaredLost": "Prohlášeno za ztracené",
     "item.status.inProcess": "Ve zpracování",
     "item.status.inProcessNonRequestable": "Ve zpracování (nelze vyžádat)",
@@ -300,5 +300,6 @@
     "exportSearchResultsCsv": "Export výsledků vyhledávání (CSV)",
     "printPickSlipsForSp": "Vytisknout cirkulační lístky žádanek {sp}",
     "printSearchSlipsForSp": "Vytisknout vyhledávací lístky {sp}",
-    "printSelectedPickSlipsForSp": "Vytisknout vybrané cirkulační lístky žádanek {sp}"
+    "printSelectedPickSlipsForSp": "Vytisknout vybrané cirkulační lístky žádanek {sp}",
+    "requestUuid": "UUID požadavku"
 }
