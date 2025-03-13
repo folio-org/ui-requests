@@ -300,5 +300,6 @@
     "exportSearchResultsCsv": "Exportar resultados da busca (CSV)",
     "printPickSlipsForSp": "Imprimir recibos de retirada {sp}",
     "printSearchSlipsForSp": "Imprimir recibos de busca {sp}",
-    "printSelectedPickSlipsForSp": "Imprimir recibos de retirada selecionados {sp}"
+    "printSelectedPickSlipsForSp": "Imprimir recibos de retirada selecionados {sp}",
+    "requestUuid": "UUID da solicitação"
 }

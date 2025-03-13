@@ -300,5 +300,6 @@
     "exportSearchResultsCsv": "Export search results (CSV)",
     "printPickSlipsForSp": "Print pick slips {sp}",
     "printSearchSlipsForSp": "Print search slips {sp}",
-    "printSelectedPickSlipsForSp": "Print selected pick slips {sp}"
+    "printSelectedPickSlipsForSp": "Print selected pick slips {sp}",
+    "requestUuid": "Request UUID"
 }
