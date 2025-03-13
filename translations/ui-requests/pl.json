@@ -300,5 +300,6 @@
     "exportSearchResultsCsv": "Export search results (CSV)",
     "printPickSlipsForSp": "Drukuj rewersy zamówienia {sp}",
     "printSearchSlipsForSp": "Print search slips {sp}",
-    "printSelectedPickSlipsForSp": "Drukuj wybrane rewersy zamówienia {sp}"
+    "printSelectedPickSlipsForSp": "Drukuj wybrane rewersy zamówienia {sp}",
+    "requestUuid": "UUID rezerwacji"
 }
