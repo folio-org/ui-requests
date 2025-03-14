@@ -21,6 +21,7 @@ import FulfilmentPreference from './components/FulfilmentPreference';
 import RequesterInformation from './components/RequesterInformation';
 import ItemInformation from './components/ItemInformation';
 import InstanceInformation from './components/InstanceInformation';
+import ItemsDialog from './ItemsDialog';
 
 import {
   REQUEST_LEVEL_TYPES,
@@ -1834,25 +1835,63 @@ describe('RequestForm', () => {
   });
 
   describe('Items dialog', () => {
-    beforeEach(() => {
-      renderComponent();
+    describe('When item has a barcode', () => {
+      beforeEach(() => {
+        renderComponent();
+      });
+
+      it('should get information about selected item', () => {
+        const expectedArgs = [RESOURCE_TYPES.ITEM, item.id, RESOURCE_KEYS.id];
+        const itemDialogRow = screen.getByTestId(testIds.itemDialogRow);
+
+        fireEvent.click(itemDialogRow);
+
+        expect(basicProps.findResource).toHaveBeenCalledWith(...expectedArgs);
+      });
+
+      it('should reset selected instance', () => {
+        const itemDialogCloseButton = screen.getByTestId(testIds.itemDialogCloseButton);
+
+        fireEvent.click(itemDialogCloseButton);
+
+        expect(basicProps.onSetSelectedInstance).toHaveBeenCalledWith(undefined);
+      });
     });
 
-    it('should get information about selected item', () => {
-      const expectedArgs = [RESOURCE_TYPES.ITEM, item.id, RESOURCE_KEYS.id];
-      const itemDialogRow = screen.getByTestId(testIds.itemDialogRow);
+    describe('When item does not have a barcode', () => {
+      const selectedItem = {
+        id: 'itemId',
+      };
 
-      fireEvent.click(itemDialogRow);
+      beforeEach(() => {
+        ItemsDialog.mockImplementationOnce(({
+          onRowClick,
+        }) => {
+          const handleRowClick = () => {
+            onRowClick({}, selectedItem);
+          };
 
-      expect(basicProps.findResource).toHaveBeenCalledWith(...expectedArgs);
-    });
+          return (
+            <button
+              data-testid={testIds.itemDialogRow}
+              type="button"
+              onClick={handleRowClick}
+            >
+              Item
+            </button>
+          );
+        });
+        renderComponent();
+      });
 
-    it('should reset selected instance', () => {
-      const itemDialogCloseButton = screen.getByTestId(testIds.itemDialogCloseButton);
+      it('should get information about selected item', () => {
+        const expectedArgs = [RESOURCE_TYPES.ITEM, item.id, RESOURCE_KEYS.id];
+        const itemDialogRow = screen.getByTestId(testIds.itemDialogRow);
 
-      fireEvent.click(itemDialogCloseButton);
+        fireEvent.click(itemDialogRow);
 
-      expect(basicProps.onSetSelectedInstance).toHaveBeenCalledWith(undefined);
+        expect(basicProps.findResource).toHaveBeenCalledWith(...expectedArgs);
+      });
     });
   });
 

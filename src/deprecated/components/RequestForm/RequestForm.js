@@ -1066,6 +1066,10 @@ class RequestForm extends React.Component {
       this.setState({
         isItemIdRequest: false,
       });
+    } else {
+      this.setState({
+        isItemIdRequest: true,
+      });
     }
 
     this.findItem(RESOURCE_KEYS.id, item.id, false, isBarcodeRequired);
