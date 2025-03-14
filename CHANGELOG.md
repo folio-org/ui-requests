@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## [12.0.0] IN PROGRESS
+## [12.0.0] (https://github.com/folio-org/ui-requests/tree/v12.0.0) (2025-03-14)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.6...v12.0.0)
 
 * Increase code coverage for src/ChooseRequestTypeDialog.js by Jest/RTL tests. Refs UIREQ-1044.
 * Increase code coverage for src/ViewRequest.js by Jest/RTL tests. Refs UIREQ-1046.
