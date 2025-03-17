@@ -1,5 +1,9 @@
 # Change history for ui-requests
 
+## 12.1.0 IN PROGRESS
+
+* Fix issue when creating a request with an item that does not have a barcode. Refs UIREQ-1275.
+
 ## [12.0.0] (https://github.com/folio-org/ui-requests/tree/v12.0.0) (2025-03-14)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.6...v12.0.0)
 
@@ -19,7 +23,6 @@
 * Add optionalOkapiInterfaces `circulation-bff-loans` `1.0`. Refs UIREQ-1273.
 * For consistency searching use == instead of = for requester barcode. Refs UIREQ-640.
 * Add missed sub-permissions for "Requests: View" permission. Refs UIREQ-1217.
-* Fix issue when creating a request with an item that does not have a barcode. Refs UIREQ-1275.
 
 ## [11.0.6] (https://github.com/folio-org/ui-requests/tree/v11.0.6) (2025-03-07)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.5...v11.0.6)
