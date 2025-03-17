@@ -1,13 +1,10 @@
 import {
   escape,
-  noop,
 } from 'lodash';
 
 import {
   buildTemplate,
   createUserHighlightBoxLink,
-  convertToSlipData,
-  buildLocaleDateAndTime,
   duplicateRequest,
   escapeValue,
   getTlrSettings,
@@ -49,7 +46,6 @@ import {
   DCB_HOLDINGS_RECORD_ID,
   REQUEST_ERROR_MESSAGE_CODE,
   REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS,
-  SLIPS_TYPE,
 } from './constants';
 
 const pickSlipsForSinglePrint = [
@@ -804,212 +800,6 @@ describe('getSelectedSlipDataMulti', () => {
     const result = getSelectedSlipDataMulti(pickSlipsDataWithRequest, selectedRows);
 
     expect(result).toEqual([]);
-  });
-});
-
-describe('convertToSlipData', () => {
-  const intl = {
-    formatMessage: (o) => o.id,
-    formatDate: (d, options) => `${d} ${options.timeZone} ${options.locale}`,
-  };
-  const tz = 'America/New_York';
-  const locale = 'en';
-
-  const user = {
-    username: 'JonesPaul',
-  };
-  const item = {
-    title: 'The Long Way to a Small, Angry Planet',
-    barcode: '036000291452',
-    status: 'Paged',
-    primaryContributor: 'Chambers, Becky',
-    allContributors: 'Chambers, Becky',
-    enumeration: 'v.70:no.7-12',
-    volume: 'vol.1',
-    chronology: '1984:July-Dec.',
-    yearCaption: '1984; 1985',
-    materialType: 'Book',
-    loanType: 'Can Circulate',
-    copy: 'cp.2',
-    numberOfPieces: '3',
-    descriptionOfPieces: 'Description of three pieces',
-    effectiveLocationSpecific: '3rd Floor',
-    effectiveLocationLibrary: 'Djanogly Learning Resource Centre',
-    effectiveLocationCampus: 'Jubilee Campus',
-    effectiveLocationInstitution: 'Nottingham University',
-    effectiveLocationPrimaryServicePointName: 'Circulation Desk',
-    callNumber: '123456',
-    callNumberPrefix: 'PREFIX',
-    callNumberSuffix: 'SUFFIX',
-    displaySummary: 'Display summary',
-    lastCheckedInDateTime: '2020-02-17T12:12:33.374Z',
-    accessionNumber: 'CMHAT1901',
-    administrativeNotes: 'Plates must be kept with pages',
-    datesOfPublication: '1901',
-    editions: '1st, limited edition from Carnegie Museum',
-    physicalDescriptions: '63 pages plus plates I-XIII.',
-    instanceHrid: 'in00000012368',
-  };
-  const request = {
-    requestID: 'dd606ca6-a2cb-4723-9a8d-e73b05c42232',
-    servicePointPickup: 'Circ Desk 1',
-    requestExpirationDate: '2019-07-30T00:00:00.000+03:00',
-    holdShelfExpirationDate: '2019-08-31T00:00:00.000+03:00',
-    requestDate: '2019-08-31T00:00:00.000+03:00',
-    deliveryAddressType: 'Home',
-    patronComments: 'Please hurry!',
-  };
-  const requester = {
-    firstName: 'Steven',
-    lastName: 'Jones',
-    middleName: 'Jacob',
-    preferredFirstName: 'Paul',
-    patronGroup: 'Undergraduate',
-    barcode: '5694596854',
-    addressLine1: '16 Main St',
-    addressLine2: 'Apt 3a',
-    city: 'Northampton',
-    region: 'MA',
-    postalCode: '01060',
-    countryId: 'US',
-    departments: 'department1; department2',
-  };
-  const currentDateTime = '2023-04-28T06:04:54.296Z';
-  const pickSlips = [{
-    item,
-    request,
-    requester,
-    currentDateTime,
-  }];
-  const slipData = {
-    'staffSlip.Name': 'Pick slip',
-    'staffSlip.currentDateTime': buildLocaleDateAndTime(currentDateTime, tz, locale),
-    'staffSlip.staffUsername': 'JonesPaul',
-    'requester.firstName': 'Steven',
-    'requester.lastName': 'Jones',
-    'requester.middleName': 'Jacob',
-    'requester.preferredFirstName': 'Paul',
-    'requester.patronGroup': 'Undergraduate',
-    'requester.addressLine1': '16 Main St',
-    'requester.addressLine2': 'Apt 3a',
-    'requester.country': 'stripes-components.countries.US',
-    'requester.city': 'Northampton',
-    'requester.stateProvRegion': 'MA',
-    'requester.zipPostalCode': '01060',
-    'requester.barcode': '5694596854',
-    'requester.barcodeImage': '<Barcode>5694596854</Barcode>',
-    'requester.departments': 'department1; department2',
-    'item.fromServicePoint': undefined,
-    'item.toServicePoint': undefined,
-    'item.title': 'The Long Way to a Small, Angry Planet',
-    'item.primaryContributor': 'Chambers, Becky',
-    'item.allContributors': 'Chambers, Becky',
-    'item.barcode': '036000291452',
-    'item.barcodeImage': '<Barcode>036000291452</Barcode>',
-    'item.callNumber': '123456',
-    'item.callNumberPrefix': 'PREFIX',
-    'item.callNumberSuffix': 'SUFFIX',
-    'item.displaySummary': 'Display summary',
-    'item.enumeration': 'v.70:no.7-12',
-    'item.volume': 'vol.1',
-    'item.chronology': '1984:July-Dec.',
-    'item.copy': 'cp.2',
-    'item.yearCaption': '1984; 1985',
-    'item.materialType': 'Book',
-    'item.loanType': 'Can Circulate',
-    'item.numberOfPieces': '3',
-    'item.descriptionOfPieces': 'Description of three pieces',
-    'item.lastCheckedInDateTime': buildLocaleDateAndTime('2020-02-17T12:12:33.374Z', tz, locale),
-    'item.effectiveLocationInstitution': 'Nottingham University',
-    'item.effectiveLocationCampus': 'Jubilee Campus',
-    'item.effectiveLocationLibrary': 'Djanogly Learning Resource Centre',
-    'item.effectiveLocationSpecific': '3rd Floor',
-    'item.effectiveLocationPrimaryServicePointName': 'Circulation Desk',
-    'item.accessionNumber': 'CMHAT1901',
-    'item.administrativeNotes': 'Plates must be kept with pages',
-    'item.datesOfPublication': '1901',
-    'item.editions': '1st, limited edition from Carnegie Museum',
-    'item.physicalDescriptions': '63 pages plus plates I-XIII.',
-    'item.instanceHrid': 'in00000012368',
-    'item.instanceHridImage': '<Barcode>in00000012368</Barcode>',
-    'request.servicePointPickup': 'Circ Desk 1',
-    'request.deliveryAddressType': 'Home',
-    'request.requestExpirationDate': '2019-07-30T00:00:00.000+03:00 America/New_York en',
-    'request.holdShelfExpirationDate': '2019-08-31T00:00:00.000+03:00 America/New_York en',
-    'request.requestDate': '2019-08-31T00:00:00.000+03:00 America/New_York en',
-    'request.requestID': 'dd606ca6-a2cb-4723-9a8d-e73b05c42232',
-    'request.patronComments': 'Please hurry!',
-    'request.barcodeImage': '<Barcode>dd606ca6-a2cb-4723-9a8d-e73b05c42232</Barcode>',
-  };
-  const expectSlipData = [slipData];
-
-  it('substitutes values', () => {
-    expect(convertToSlipData(pickSlips, intl, tz, locale, SLIPS_TYPE.PICK_SLIP, user)).toEqual(expectSlipData);
-  });
-
-  it('should convert to slip data wth empty date', () => {
-    const pickSlipsWithEmptyDate = [{
-      item,
-      request: {
-        ...request,
-        requestExpirationDate: '',
-        holdShelfExpirationDate: '',
-      },
-      requester: {
-        ...requester,
-        countryId: '',
-      },
-      currentDateTime,
-    }];
-    const expectSlipDataWithEmptyDate = [{
-      ...slipData,
-      'request.requestExpirationDate': '',
-      'request.holdShelfExpirationDate': '',
-      'requester.country': '',
-    }];
-
-    expect(convertToSlipData(pickSlipsWithEmptyDate, intl, tz, locale, SLIPS_TYPE.PICK_SLIP, user)).toEqual(expectSlipDataWithEmptyDate);
-  });
-
-  it('handles missing elements', () => {
-    const emptySource = [];
-    const o = convertToSlipData(emptySource, intl, tz, locale);
-
-    expect(o['requester.country']).toBeUndefined();
-    expect(o['request.requestExpirationDate']).toBeUndefined();
-    expect(o['request.holdShelfExpirationDate']).toBeUndefined();
-  });
-
-  it('handles empty requester barcode', () => {
-    const sourceWithoutRequesterBarcode = [{
-      ...pickSlips,
-      requester: {
-        ...pickSlips.requester,
-        barcode: noop(),
-      },
-    }];
-    const o = convertToSlipData(sourceWithoutRequesterBarcode, intl, tz, locale, SLIPS_TYPE.PICK_SLIP, user);
-
-    expect(o['requester.barcodeImage']).toBeUndefined();
-  });
-
-  it('should handle preferred first name when preferred first name is null', () => {
-    const pickSlipsWithoutPreferredFirstName = [{
-      item,
-      request,
-      requester: {
-        ...requester,
-        preferredFirstName: null,
-      },
-      currentDateTime,
-    }];
-
-    const expectSlipDataWithoutPreferredFirstName = [{
-      ...slipData,
-      'requester.preferredFirstName': 'Steven',
-    }];
-
-    expect(convertToSlipData(pickSlipsWithoutPreferredFirstName, intl, tz, locale, SLIPS_TYPE.PICK_SLIP, user)).toEqual(expectSlipDataWithoutPreferredFirstName);
   });
 });
 

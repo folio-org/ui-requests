@@ -73,6 +73,13 @@ import {
 } from '../constants';
 import { historyData } from '../../test/jest/fixtures/historyData';
 
+jest.mock('@folio/stripes/util', () => ({
+  ...jest.requireActual('@folio/stripes/util'),
+  effectiveCallNumber: jest.fn(),
+  getHeaderWithCredentials: jest.fn(),
+  convertToSlipData: jest.fn(() => ([{}])),
+}));
+
 const createRefMock = {
   current: {
     focus: jest.fn(),
