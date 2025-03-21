@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 12.1.0 IN PROGRESS
+## [12.0.1] (https://github.com/folio-org/ui-requests/tree/v12.0.1) (2025-03-21)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v12.0.0...v12.0.1)
 
 * Fix issue when creating a request with an item that does not have a barcode. Refs UIREQ-1275.
 
