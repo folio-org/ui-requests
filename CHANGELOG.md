@@ -2,9 +2,13 @@
 
 ## 13.0.0 IN PROGRESS
 
-* Fix issue when creating a request with an item that does not have a barcode. Refs UIREQ-1275.
 * *BREAKING* Use `convertToSlipData` and supporting functions from `stripes-util`. Refs UIREQ-1263.
 * Replace moment with day.js. Refs UIREQ-1291.
+
+## [12.0.1] (https://github.com/folio-org/ui-requests/tree/v12.0.1) (2025-03-21)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v12.0.0...v12.0.1)
+
+* Fix issue when creating a request with an item that does not have a barcode. Refs UIREQ-1275.
 
 ## [12.0.0] (https://github.com/folio-org/ui-requests/tree/v12.0.0) (2025-03-14)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.6...v12.0.0)
