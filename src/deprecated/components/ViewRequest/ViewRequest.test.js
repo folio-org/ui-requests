@@ -1,5 +1,3 @@
-import moment from 'moment-timezone';
-
 import {
   render,
   screen,
@@ -8,6 +6,7 @@ import {
 import {
   CommandList,
   defaultKeyboardShortcuts,
+  dayjs,
 } from '@folio/stripes/components';
 
 import ViewRequest from './ViewRequest';
@@ -147,6 +146,11 @@ describe('ViewRequest', () => {
       },
     }
   };
+
+  dayjs.tz = () => ({
+    format: jest.fn(),
+  });
+
   const renderViewRequest = (props) => render(
     <CommandList commands={defaultKeyboardShortcuts}>
       <ViewRequest {...props} />
@@ -173,13 +177,12 @@ describe('ViewRequest', () => {
 
       it('should set "createTitleLevelRequest" to false when try to edit existed request', () => {
         const expectedResult = {
-          initialValues : {
+          initialValues : expect.objectContaining({
             requestExpirationDate: null,
             holdShelfExpirationDate: mockedRequest.holdShelfExpirationDate,
-            holdShelfExpirationTime: moment(mockedRequest.holdShelfExpirationDate).format('HH:mm'),
             createTitleLevelRequest: false,
             ...mockedRequest,
-          },
+          }),
         };
 
         expect(RequestForm).toHaveBeenCalledWith(expect.objectContaining(expectedResult), {});

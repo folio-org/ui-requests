@@ -12,6 +12,7 @@ import {
   defaultKeyboardShortcuts,
   Icon,
   PaneHeaderIconButton,
+  dayjs,
 } from '@folio/stripes/components';
 import { checkIfUserInCentralTenant } from '@folio/stripes/core';
 
@@ -284,6 +285,11 @@ describe('ViewRequest', () => {
       },
     }
   };
+
+  dayjs.tz = () => ({
+    format: jest.fn(),
+  });
+
   const renderViewRequest = (props) => render(
     <CommandList commands={defaultKeyboardShortcuts}>
       <ViewRequest {...props} />

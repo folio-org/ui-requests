@@ -10,8 +10,9 @@ import {
   isString,
   unset,
 } from 'lodash';
-import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+
+import { dayjs } from '@folio/stripes/components';
 
 import RequestForm from './RequestForm';
 import {
@@ -65,7 +66,7 @@ const RequestFormContainer = ({
   const getPatronManualBlocks = (resources) => {
     return (resources?.patronBlocks?.records || [])
       .filter(b => b.requests === true)
-      .filter(p => moment(moment(p.expirationDate).format()).isSameOrAfter(moment().format()));
+      .filter(p => dayjs(dayjs(p.expirationDate).format()).isSameOrAfter(dayjs().format()));
   };
 
   const getAutomatedPatronBlocks = (resources) => {
@@ -116,9 +117,9 @@ const RequestFormContainer = ({
     }
     if (holdShelfExpirationDate) {
       // Recombine the values from datepicker and timepicker into a single date/time
-      const date = moment.tz(holdShelfExpirationDate, timeZone).format('YYYY-MM-DD');
+      const date = dayjs.tz(holdShelfExpirationDate, timeZone).format('YYYY-MM-DD');
       const time = holdShelfExpirationTime.replace('Z', '');
-      const combinedDateTime = moment.tz(`${date} ${time}`, timeZone);
+      const combinedDateTime = dayjs.tz(`${date} ${time}`, timeZone);
       requestData.holdShelfExpirationDate = combinedDateTime.utc().format();
     } else {
       unset(requestData, 'holdShelfExpirationDate');

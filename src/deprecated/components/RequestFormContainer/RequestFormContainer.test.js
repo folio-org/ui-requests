@@ -4,6 +4,8 @@ import {
   fireEvent,
 } from '@folio/jest-config-stripes/testing-library/react';
 
+import { dayjs } from '@folio/stripes/components';
+
 import RequestFormContainer from './RequestFormContainer';
 import RequestForm from '../RequestForm/RequestForm';
 import {
@@ -30,6 +32,17 @@ const testIds = {
 };
 
 describe('RequestFormContainer', () => {
+  dayjs.mockImplementation(() => ({
+    format: jest.fn(),
+    isSameOrAfter: jest.fn(),
+  }));
+  dayjs.tz = () => ({
+    format: jest.fn(),
+    utc: () => ({
+      format: jest.fn(() => '02/02/2023'),
+    })
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });

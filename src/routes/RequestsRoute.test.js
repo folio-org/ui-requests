@@ -27,6 +27,7 @@ import {
   Checkbox,
   exportToCsv,
   NoValue,
+  dayjs,
 } from '@folio/stripes/components';
 import {
   effectiveCallNumber,
@@ -560,6 +561,14 @@ describe('RequestsRoute', () => {
     fulfillmentPreference: 'Hold Shelf',
   };
   const sendCallout = jest.fn();
+
+  dayjs.mockImplementation(() => ({
+    format: jest.fn(),
+    isSameOrBefore: jest.fn(),
+    tz: () => ({
+      toISOString: jest.fn(),
+    }),
+  }));
 
   const renderComponent = (props = defaultProps) => {
     const { rerender } = render(

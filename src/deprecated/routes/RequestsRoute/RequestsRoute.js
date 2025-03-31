@@ -10,7 +10,6 @@ import {
   stringify,
   parse,
 } from 'query-string';
-import moment from 'moment-timezone';
 import {
   FormattedMessage,
   injectIntl,
@@ -35,6 +34,7 @@ import {
   MCLPagingTypes,
   Icon,
   exportToCsv,
+  dayjs,
 } from '@folio/stripes/components';
 import {
   deparseFilters,
@@ -684,8 +684,8 @@ class RequestsRoute extends React.Component {
     const patronBlocks = get(this.props.resources, ['patronBlocks', 'records'], []);
     const prevBlocks = get(prevProps.resources, ['patronBlocks', 'records'], []);
     const { submitting, isViewPrintDetailsEnabled } = this.state;
-    const prevExpired = prevBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
-    const expired = patronBlocks.filter(p => moment(moment(p.expirationDate).format()).isSameOrBefore(moment().format()) && p.expirationDate) || [];
+    const prevExpired = prevBlocks.filter(p => dayjs(dayjs(p.expirationDate).format()).isSameOrBefore(dayjs().format()) && p.expirationDate) || [];
+    const expired = patronBlocks.filter(p => dayjs(dayjs(p.expirationDate).format()).isSameOrBefore(dayjs().format()) && p.expirationDate) || [];
     const { id: currentServicePointId } = this.getCurrentServicePointInfo();
     const prevStateServicePointId = get(prevProps.resources.currentServicePoint, 'id');
     const { configs: prevConfigs } = prevProps.resources;
@@ -1012,7 +1012,7 @@ class RequestsRoute extends React.Component {
 
   massageNewRecord = (requestData) => {
     const { intl: { timeZone } } = this.props;
-    const isoDate = moment.tz(timeZone).toISOString();
+    const isoDate = dayjs().tz(timeZone).toISOString();
     Object.assign(requestData, { requestDate: isoDate });
   };
 

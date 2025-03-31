@@ -12,7 +12,6 @@ import {
   FormattedTime,
   injectIntl,
 } from 'react-intl';
-import moment from 'moment-timezone';
 
 import {
   IfPermission,
@@ -34,6 +33,7 @@ import {
   PaneMenu,
   Row,
   NoValue,
+  dayjs,
 } from '@folio/stripes/components';
 import {
   ViewMetaData,
@@ -375,11 +375,12 @@ class ViewRequest extends React.Component {
     if (query.layer === REQUEST_LAYERS.EDIT) {
       // The hold shelf expiration date is stored as a single value (e.g., 20201101T23:59:00-0400),
       // but it's exposed in the UI as separate date- and time-picker components.
-      let momentDate;
+      let date;
+
       if (request.holdShelfExpirationDate) {
-        momentDate = moment.tz(request.holdShelfExpirationDate, this.props.intl.timeZone);
+        date = dayjs.tz(request.holdShelfExpirationDate, this.props.intl.timeZone);
       } else {
-        momentDate = moment();
+        date = dayjs();
       }
 
       return (
@@ -394,7 +395,7 @@ class ViewRequest extends React.Component {
                 initialValues={{
                   requestExpirationDate: null,
                   holdShelfExpirationDate: request.holdShelfExpirationDate,
-                  holdShelfExpirationTime: momentDate.format('HH:mm'),
+                  holdShelfExpirationTime: date.format('HH:mm'),
                   createTitleLevelRequest: false,
                   ...request,
                 }}

@@ -65,6 +65,7 @@ jest.mock('@folio/stripes/components', () => ({
         <button type="button" onClick={onCancel}>{cancelLabel}</button>
       </div>
     </div>)),
+  dayjs: jest.fn(),
   Datepicker: jest.fn(() => <div>Datepicker</div>),
   ErrorModal: jest.fn(({ label, content, buttonLabel, onClose }) => (
     <div>
