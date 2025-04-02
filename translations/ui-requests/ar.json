@@ -301,5 +301,5 @@
     "printPickSlipsForSp": "Print pick slips {sp}",
     "printSearchSlipsForSp": "Print search slips {sp}",
     "printSelectedPickSlipsForSp": "Print selected pick slips {sp}",
-    "requestUuid": "Request UUID"
+    "requestUuid": "طلب معرف عمومي فريد"
 }
