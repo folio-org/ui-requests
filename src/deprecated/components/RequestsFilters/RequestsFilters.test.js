@@ -15,6 +15,7 @@ import {
 import RequestsFilters from './RequestsFilters';
 import { RequestLevelFilter } from '../../../components/RequestsFilters/RequestLevelFilter';
 import { PickupServicePointFilter } from '../../../components/RequestsFilters/PickupServicePointFilter';
+import { RetrievalServicePointFilter } from '../../../components/RequestsFilters/RetrievalServicePointFilter';
 
 import {
   requestFilterTypes,
@@ -25,6 +26,9 @@ jest.mock('../../../components/RequestsFilters/RequestLevelFilter', () => ({
 }));
 jest.mock('../../../components/RequestsFilters/PickupServicePointFilter', () => ({
   PickupServicePointFilter: jest.fn((props) => (<div {...props} />)),
+}));
+jest.mock('../../../components/RequestsFilters/RetrievalServicePointFilter', () => ({
+  RetrievalServicePointFilter: jest.fn((props) => (<div {...props} />)),
 }));
 jest.mock('@folio/stripes/smart-components', () => ({
   CheckboxFilter: jest.fn((props) => (<div {...props} />)),
@@ -38,6 +42,7 @@ const props = {
     requestStatus: ['Open'],
     requestType: ['Hold'],
     pickupServicePoints: ['1'],
+    retrievalServicePoints: ['1', '2'],
     tags: ['Urgent'],
     requestLevels: [],
     printStatus: ['Printed'],
@@ -71,6 +76,7 @@ const testIds = {
   requestLevelFilter: 'requestLevelFilter',
   multiSelectionFilter: 'multiSelectionFilter',
   pickupServicePointFilter: 'pickupServicePointFilter',
+  retrievalServicePointFilter: 'retrievalServicePointFilter',
 };
 const labelIds = {
   [requestFilterTypes.REQUEST_TYPE]: 'ui-requests.requestMeta.type',
@@ -255,6 +261,21 @@ describe('RequestsFilters', () => {
         'data-testid': testIds.pickupServicePointFilter,
         activeValues: props.activeFilters.pickupServicePoints,
         servicePoints: props.resources.servicePoints.records,
+        onChange,
+        onClear,
+      }), {});
+    });
+  });
+
+  describe('RetrievalServicePointFilter', () => {
+    it('should render RetrievalServicePointFilter', () => {
+      expect(screen.getByTestId(testIds.retrievalServicePointFilter)).toBeInTheDocument();
+    });
+
+    it('should trigger retrievalServicePointFilter with correct props', () => {
+      expect(RetrievalServicePointFilter).toHaveBeenCalledWith(expect.objectContaining({
+        'data-testid': testIds.retrievalServicePointFilter,
+        activeValues: props.activeFilters.retrievalServicePoints,
         onChange,
         onClear,
       }), {});
