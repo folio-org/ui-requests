@@ -81,6 +81,18 @@ describe('RequestsFiltersConfig', () => {
     expect(pickupServicePointFilter).toEqual(expectedResult);
   });
 
+  it('should have a filter for retrieval service point', () => {
+    const retrievalServicePointFilter = filtersConfig.find(f => f.name === requestFilterTypes.RETRIEVAL_SERVICE_POINT);
+    const expectedResult = {
+      name: 'retrievalServicePoints',
+      cql: 'item.retrievalServicePointId',
+      values: [],
+      operator: '==',
+    };
+
+    expect(retrievalServicePointFilter).toEqual(expectedResult);
+  });
+
   describe('Print Status Filter configuration', () => {
     it('should correctly match the filter configuration for printStatus', () => {
       const printStatusFilter = filtersConfig.find(f => f.name === 'printStatus');
