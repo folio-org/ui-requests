@@ -942,7 +942,7 @@ class RequestsRoute extends React.Component {
         const { addressLine1, city, region, postalCode, countryId } = record.deliveryAddress;
         record.deliveryAddress = `${addressLine1 || ''} ${city || ''} ${region || ''} ${countryId || ''} ${postalCode || ''}`;
       }
-      if (record.item.retrievalServicePointName) {
+      if (record?.item?.retrievalServicePointName) {
         record.retrievalServicePointName = record.item.retrievalServicePointName;
       }
       record.instance.contributorNames = contributorNamesMap.join('; ');
