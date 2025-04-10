@@ -238,6 +238,8 @@ const mockedRequest = {
   instanceId: 'instanceId',
   item: {
     barcode: 'itemBarcode',
+    retrievalServicePointId: '3a40852d-49fd-4df2-a1f9-6e2641a6e91f',
+    retrievalServicePointName: 'Circ Desk 1',
   },
   requester: {
     barcode: 'requesterBarcode',
@@ -339,6 +341,10 @@ describe('RequestsRoute', () => {
             name: 'Jane Smith',
           }
         ],
+      },
+      item: {
+        retrievalServicePointId: '3a40852d-49fd-4df2-a1f9-6e2641a6e91f',
+        retrievalServicePointName: 'Circ Desk 1',
       },
       tags: {
         tagList: ['tag1', 'tag2'],
@@ -1154,6 +1160,8 @@ describe('RequestsRoute', () => {
       select: 'test value',
       item: {
         barcode: 'itemBarcode',
+        retrievalServicePointId: '3a40852d-49fd-4df2-a1f9-6e2641a6e91f',
+        retrievalServicePointName: 'Circ Desk 1',
       },
       position: 'position',
       proxy: {},
@@ -1385,6 +1393,12 @@ describe('RequestsRoute', () => {
     describe('servicePoint', () => {
       it('should return service point', () => {
         expect(listFormatter.servicePoint(requestWithData)).toBe(requestWithData.pickupServicePoint.name);
+      });
+    });
+
+    describe('retrieval service point', () => {
+      it('should return retrieval service point', () => {
+        expect(listFormatter.retrievalServicePoint(requestWithData)).toBe(requestWithData.item.retrievalServicePointName);
       });
     });
 

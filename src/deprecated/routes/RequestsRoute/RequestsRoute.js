@@ -107,6 +107,7 @@ import SinglePrintButtonForPickSlip from '../../../components/SinglePrintButtonF
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
+const DEFAULT_FORMATTER_VALUE = '';
 
 export const getPrintHoldRequestsEnabled = (printHoldRequests) => {
   const value = printHoldRequests.records[0]?.value;
@@ -271,6 +272,7 @@ export const getListFormatter = (
   'year': rq => (getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT) || <NoValue />),
   'callNumber': rq => (effectiveCallNumber(rq.item) || <NoValue />),
   'servicePoint': rq => get(rq, 'pickupServicePoint.name', <NoValue />),
+  'retrievalServicePoint': rq => get(rq, 'item.retrievalServicePointName', DEFAULT_FORMATTER_VALUE),
   'copies': rq => get(rq, PRINT_DETAILS_COLUMNS.COPIES, <NoValue />),
   'printed': rq => (rq.printDetails ? getLastPrintedDetails(rq.printDetails, intl) : <NoValue />),
 });
@@ -332,6 +334,7 @@ class RequestsRoute extends React.Component {
               'requestStatus': 'status',
               'servicePoint': 'searchIndex.pickupServicePointName',
               'requesterBarcode': 'requester.barcode',
+              'retrievalServicePoint': 'item.retrievalServicePointName',
               'requestDate': 'requestDate',
               'position': 'position/number',
               'proxy': 'proxy',
@@ -939,6 +942,9 @@ class RequestsRoute extends React.Component {
         const { addressLine1, city, region, postalCode, countryId } = record.deliveryAddress;
         record.deliveryAddress = `${addressLine1 || ''} ${city || ''} ${region || ''} ${countryId || ''} ${postalCode || ''}`;
       }
+      if (record?.item?.retrievalServicePointName) {
+        record.retrievalServicePointName = record.item.retrievalServicePointName;
+      }
       record.instance.contributorNames = contributorNamesMap.join('; ');
       if (record.tags) record.tags.tagList = tagListMap.join('; ');
     });
@@ -1401,6 +1407,7 @@ class RequestsRoute extends React.Component {
       servicePoint: <FormattedMessage id="ui-requests.requests.servicePoint" />,
       requester: <FormattedMessage id="ui-requests.requests.requester" />,
       requesterBarcode: <FormattedMessage id="ui-requests.requests.requesterBarcode" />,
+      retrievalServicePoint: <FormattedMessage id="ui-requests.requests.retrievalServicePoint" />,
       singlePrint: <FormattedMessage id="ui-requests.requests.singlePrint" />,
       proxy: <FormattedMessage id="ui-requests.requests.proxy" />,
       ...(isViewPrintDetailsEnabled && {
@@ -1683,7 +1690,7 @@ class RequestsRoute extends React.Component {
               renderFilters={this.renderFilters}
               onFilterChange={this.handleFilterChange}
               sortableColumns={['requestDate', 'title', 'year', 'itemBarcode', 'callNumber', 'type', 'requestStatus',
-                'position', 'servicePoint', 'requester', 'requesterBarcode', 'proxy', 'copies', 'printed']}
+                'position', 'servicePoint', 'requester', 'requesterBarcode', 'retrievalServicePoint', 'proxy', 'copies', 'printed']}
               pageAmount={100}
               pagingType={MCLPagingTypes.PREV_NEXT}
             />

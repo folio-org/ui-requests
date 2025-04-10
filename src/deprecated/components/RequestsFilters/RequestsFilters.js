@@ -26,6 +26,7 @@ import {
 
 import { PickupServicePointFilter } from '../../../components/RequestsFilters/PickupServicePointFilter';
 import { RequestLevelFilter } from '../../../components/RequestsFilters/RequestLevelFilter';
+import { RetrievalServicePointFilter } from '../../../components/RequestsFilters/RetrievalServicePointFilter';
 
 export default class RequestsFilters extends React.Component {
   static propTypes = {
@@ -35,6 +36,7 @@ export default class RequestsFilters extends React.Component {
       requestType: PropTypes.arrayOf(PropTypes.string),
       tags: PropTypes.arrayOf(PropTypes.string),
       pickupServicePoints: PropTypes.arrayOf(PropTypes.string),
+      retrievalServicePoints: PropTypes.arrayOf(PropTypes.string),
       printStatus: PropTypes.arrayOf(PropTypes.string),
     }).isRequired,
     resources: PropTypes.object.isRequired,
@@ -65,6 +67,7 @@ export default class RequestsFilters extends React.Component {
         requestType = [],
         requestStatus = [],
         pickupServicePoints = [],
+        retrievalServicePoints = [],
         requestLevels = [],
         printStatus = [],
       },
@@ -143,6 +146,12 @@ export default class RequestsFilters extends React.Component {
           data-testid="pickupServicePointFilter"
           activeValues={pickupServicePoints}
           servicePoints={this.props.resources?.servicePoints?.records}
+          onChange={onChange}
+          onClear={onClear}
+        />
+        <RetrievalServicePointFilter
+          data-testid="retrievalServicePointFilter"
+          activeValues={retrievalServicePoints}
           onChange={onChange}
           onClear={onClear}
         />
