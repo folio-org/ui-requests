@@ -4,6 +4,9 @@
 
 * *BREAKING* Use `convertToSlipData` and supporting functions from `stripes-util`. Refs UIREQ-1263.
 * Replace moment with day.js. Refs UIREQ-1291.
+
+## [12.0.2] (https://github.com/folio-org/ui-requests/tree/v12.0.2) (2025-04-15)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v12.0.1...v12.0.2)
 * [Retrieval SP filter] Move related code to make the filter enabled for ecs/non-ecs UI. Refs UIREQ-1294.
 
 ## [12.0.1] (https://github.com/folio-org/ui-requests/tree/v12.0.1) (2025-03-21)
