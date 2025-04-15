@@ -31,6 +31,11 @@
 * For consistency searching use == instead of = for requester barcode. Refs UIREQ-640.
 * Add missed sub-permissions for "Requests: View" permission. Refs UIREQ-1217.
 
+## [11.0.7] (https://github.com/folio-org/ui-requests/tree/v11.0.7) (2025-04-14)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.6...v11.0.7)
+
+* Fix issue when creating a request with an item that does not have a barcode. Refs UIREQ-1298.
+
 ## [11.0.6] (https://github.com/folio-org/ui-requests/tree/v11.0.6) (2025-03-07)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.5...v11.0.6)
 
