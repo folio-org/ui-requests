@@ -172,7 +172,7 @@
     "errors.unknown.requestQueueLabel": "Erreur de file d'attente des réservationd",
     "errors.unknown.requestQueueBody": "La réorganisation de la file d'attente des réservations a échoué",
     "requestQueue.refresh": "Actualiser la file d'attente",
-    "items.selectItem": "Select item",
+    "items.selectItem": "Sélectionner l'exemplaire",
     "items.instanceItems": "Autres exemplaires dans {title}",
     "items.instanceItems.notFound": "Aucun exemplaire trouvé",
     "titleInformation.titleLevelRequests": "Réservations au niveau du titre",
