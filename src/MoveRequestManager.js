@@ -24,7 +24,10 @@ class MoveRequestManager extends React.Component {
   static propTypes = {
     onCancelMove: PropTypes.func,
     onMove: PropTypes.func,
-    request: PropTypes.object.isRequired,
+    request: PropTypes.shape({
+      id: PropTypes.string,
+      requestType: PropTypes.string,
+    }).isRequired,
     mutator: PropTypes.shape({
       move: PropTypes.shape({
         POST: PropTypes.func.isRequired,

@@ -35,7 +35,11 @@ export default function draggableRowFormatter(props) {
 
 draggableRowFormatter.propTypes = {
   rowIndex: PropTypes.number,
-  rowData: PropTypes.object,
+  rowData: PropTypes.shape({
+    id: PropTypes.string,
+    requestLevel: PropTypes.string,
+    fulfillmentPreference: PropTypes.string,
+  }),
   rowProps: PropTypes.shape({
     isRowDraggable: PropTypes.bool
   }),

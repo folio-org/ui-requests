@@ -255,11 +255,23 @@ RequestInformation.propTypes = {
   isSelectedUser: PropTypes.bool.isRequired,
   isRequestTypesReceived: PropTypes.bool.isRequired,
   isRequestTypeLoading: PropTypes.bool.isRequired,
-  request: PropTypes.object.isRequired,
-  values: PropTypes.object.isRequired,
-  form: PropTypes.object.isRequired,
+  request: PropTypes.shape({
+    holdShelfExpirationDate: PropTypes.string,
+    status: PropTypes.string,
+  }).isRequired,
+  values: PropTypes.shape({
+    keyOfRequestTypeField: PropTypes.number,
+  }).isRequired,
+  form: PropTypes.shape({
+    change: PropTypes.func,
+  }).isRequired,
   updateRequestPreferencesFields: PropTypes.func.isRequired,
-  requestTypeOptions: PropTypes.arrayOf(PropTypes.object),
+  requestTypeOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      value: PropTypes.string,
+    })
+  ),
 };
 
 export default RequestInformation;

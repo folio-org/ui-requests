@@ -83,7 +83,12 @@ const PatronBlockModal = ({
 PatronBlockModal.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
-  patronBlocks: PropTypes.arrayOf(PropTypes.object),
+  patronBlocks: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      desc: PropTypes.string,
+    })
+  ),
   automatedPatronBlocks: PropTypes.arrayOf(PropTypes.string),
   viewUserPath: PropTypes.func,
   onOverride: PropTypes.func.isRequired,

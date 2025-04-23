@@ -22,11 +22,21 @@ class UserForm extends React.Component {
     onCloseProxy: PropTypes.func.isRequired,
     onSelectProxy: PropTypes.func.isRequired,
     patronGroup: PropTypes.string,
-    proxy: PropTypes.object,
-    stripes: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
+    proxy: PropTypes.shape({
+      id: PropTypes.string,
+      barcode: PropTypes.string,
+    }),
+    stripes: PropTypes.shape({
+      connect: PropTypes.func,
+    }).isRequired,
+    user: PropTypes.shape({
+      id: PropTypes.string,
+      barcode: PropTypes.string,
+    }).isRequired,
     isEcsTlrSettingEnabled: PropTypes.bool.isRequired,
-    request: PropTypes.object,
+    request: PropTypes.shape({
+      requesterId: PropTypes.string,
+    }),
   };
 
   static defaultProps = {

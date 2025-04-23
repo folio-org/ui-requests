@@ -195,8 +195,21 @@ const RequestFormContainer = ({
 };
 
 RequestFormContainer.propTypes = {
-  request: PropTypes.object,
-  parentResources: PropTypes.object,
+  request: PropTypes.shape({
+    requesterId: PropTypes.string,
+    instanceId: PropTypes.string,
+    requestLevel: PropTypes.string,
+    holdingsRecordId: PropTypes.string,
+  }),
+  parentResources: PropTypes.shape({
+    automatedPatronBlocks: PropTypes.shape({
+      records: PropTypes.arrayOf(
+        PropTypes.shape({
+          message: PropTypes.string,
+        })
+      ),
+    }),
+  }),
   onSubmit: PropTypes.func.isRequired,
 };
 

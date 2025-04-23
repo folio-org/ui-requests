@@ -52,11 +52,25 @@ const reorder = (list, startIndex, endIndex) => {
 class RequestQueueView extends React.Component {
   static propTypes = {
     data: PropTypes.shape({
-      notYetFilledRequests: PropTypes.arrayOf(PropTypes.object).isRequired,
-      inProgressRequests: PropTypes.arrayOf(PropTypes.object).isRequired,
-      item: PropTypes.object,
-      holding: PropTypes.object,
-      request: PropTypes.object,
+      notYetFilledRequests: PropTypes.arrayOf(PropTypes.shape({
+        position: PropTypes.number,
+      })).isRequired,
+      inProgressRequests: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string,
+        status: PropTypes.string,
+        position: PropTypes.number,
+      })).isRequired,
+      request: PropTypes.shape({
+        instanceId: PropTypes.string,
+        instance: PropTypes.shape({
+          title: PropTypes.string,
+          contributorNames: PropTypes.arrayOf(
+            PropTypes.shape({
+              name: PropTypes.string,
+            })
+          ),
+        }),
+      }),
     }),
     isTlrEnabled: PropTypes.bool.isRequired,
     onClose: PropTypes.func,

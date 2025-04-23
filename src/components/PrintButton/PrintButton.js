@@ -17,7 +17,11 @@ class PrintButton extends React.Component {
     onAfterPrint: PropTypes.func,
     onBeforePrint: PropTypes.func,
     onBeforeGetContent: PropTypes.func,
-    contentRef: PropTypes.object,
+    contentRef: PropTypes.shape({
+      current: PropTypes.shape({
+        focus: PropTypes.func,
+      }),
+    }),
     disabled: PropTypes.bool,
   };
 

@@ -61,9 +61,19 @@ export default function DraggableRow(props) {
 
 DraggableRow.propTypes = {
   cells: PropTypes.arrayOf(PropTypes.element),
-  provided: PropTypes.object,
-  snapshot: PropTypes.object,
+  provided: PropTypes.shape({
+    dragHandleProps: PropTypes.shape({
+      role: PropTypes.string,
+    }),
+  }),
+  snapshot: PropTypes.shape({
+    mode: PropTypes.string,
+  }),
   rowClass: PropTypes.string,
   rowIndex: PropTypes.number,
-  rowProps: PropTypes.object,
+  rowProps: PropTypes.shape({
+    style: PropTypes.shape({
+      minWidth: PropTypes.string,
+    }),
+  }),
 };

@@ -48,7 +48,11 @@ const FulfillmentRequestsData = ({ contentData }) => {
 
 FulfillmentRequestsData.propTypes = {
   contentData: PropTypes.arrayOf(
-    PropTypes.object
+    PropTypes.shape({
+      id: PropTypes.string,
+      status: PropTypes.string,
+      position: PropTypes.number,
+    })
   ).isRequired,
 };
 

@@ -55,7 +55,11 @@ const NotYetFilledRequestsData = ({
 
 NotYetFilledRequestsData.propTypes = {
   contentData: PropTypes.arrayOf(
-    PropTypes.object
+    PropTypes.shape({
+      id: PropTypes.string,
+      status: PropTypes.string,
+      position: PropTypes.number,
+    }),
   ).isRequired,
   onDragEnd: PropTypes.func.isRequired,
   isRowDraggable: PropTypes.func.isRequired,

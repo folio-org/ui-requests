@@ -62,7 +62,12 @@ const PickupServicePointFilter = ({
 
 PickupServicePointFilter.propTypes = {
   activeValues: PropTypes.arrayOf(PropTypes.string),
-  servicePoints: PropTypes.arrayOf(PropTypes.object),
+  servicePoints: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      id: PropTypes.string,
+    })
+  ),
   onChange: PropTypes.func.isRequired,
   onClear: PropTypes.func.isRequired,
 };

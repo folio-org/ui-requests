@@ -40,7 +40,12 @@ class CancelRequestDialog extends React.Component {
     }),
     resources: PropTypes.shape({
       cancellationReasons: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(
+          PropTypes.shape({
+            id: PropTypes.string,
+            name: PropTypes.string,
+          })
+        ),
       }),
     }),
     stripes: PropTypes.shape({

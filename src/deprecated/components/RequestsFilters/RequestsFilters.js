@@ -39,7 +39,15 @@ export default class RequestsFilters extends React.Component {
       retrievalServicePoints: PropTypes.arrayOf(PropTypes.string),
       printStatus: PropTypes.arrayOf(PropTypes.string),
     }).isRequired,
-    resources: PropTypes.object.isRequired,
+    resources: PropTypes.shape({
+      tags: PropTypes.shape({
+        records: PropTypes.arrayOf(
+          PropTypes.shape({
+            label: PropTypes.string,
+          })
+        ),
+      }),
+    }).isRequired,
     onChange: PropTypes.func.isRequired,
     onClear: PropTypes.func.isRequired,
     titleLevelRequestsFeatureEnabled: PropTypes.bool.isRequired,

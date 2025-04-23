@@ -9,7 +9,7 @@ const RequesterLink = ({
     requesterId,
     requester: { barcode },
   },
-}) => barcode ? <Link to={`/users/view/${requesterId}`}>{barcode}</Link> : <NoValue />;
+}) => (barcode ? <Link to={`/users/view/${requesterId}`}>{barcode}</Link> : <NoValue />);
 
 RequesterLink.propTypes = {
   request: PropTypes.shape({

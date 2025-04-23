@@ -33,13 +33,24 @@ class InstanceInformation extends Component {
     triggerValidation: PropTypes.func.isRequired,
     findInstance: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
-    form: PropTypes.object.isRequired,
-    values: PropTypes.object.isRequired,
+    form: PropTypes.shape({
+      change: PropTypes.func,
+    }).isRequired,
+    values: PropTypes.shape({
+      instance: PropTypes.shape({
+        hrid: PropTypes.string,
+      }),
+    }).isRequired,
     onSetSelectedInstance: PropTypes.func.isRequired,
     isLoading: PropTypes.bool.isRequired,
-    request: PropTypes.object,
+    request: PropTypes.shape({
+      id: PropTypes.string,
+    }),
     instanceRequestCount: PropTypes.number,
-    selectedInstance: PropTypes.object,
+    selectedInstance: PropTypes.shape({
+      id: PropTypes.string,
+      title: PropTypes.string,
+    }),
   };
 
   constructor(props) {
