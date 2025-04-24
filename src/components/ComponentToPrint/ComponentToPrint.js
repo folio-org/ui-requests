@@ -28,7 +28,13 @@ const ComponentToPrint = ({ dataSource, templateFn }) => {
 
 ComponentToPrint.propTypes = {
   templateFn: PropTypes.func.isRequired,
-  dataSource: PropTypes.object.isRequired,
+  dataSource: PropTypes.arrayOf(
+    PropTypes.shape({
+      request: PropTypes.shape({
+        requestID: PropTypes.string,
+      }),
+    })
+  ).isRequired,
 };
 
 export default ComponentToPrint;

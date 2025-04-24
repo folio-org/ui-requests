@@ -156,14 +156,37 @@ FulfilmentPreference.propTypes = {
   isEditForm: PropTypes.bool.isRequired,
   defaultDeliveryAddressTypeId: PropTypes.string.isRequired,
   changeDeliveryAddress: PropTypes.func.isRequired,
-  requestTypes: PropTypes.object.isRequired,
-  request: PropTypes.object.isRequired,
-  form: PropTypes.object.isRequired,
-  values: PropTypes.object.isRequired,
+  requestTypes: PropTypes.shape({
+    Page: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string,
+      })
+    ),
+  }).isRequired,
+  request: PropTypes.shape({
+    status: PropTypes.string,
+  }).isRequired,
+  form: PropTypes.shape({
+    change: PropTypes.func,
+  }).isRequired,
+  values: PropTypes.shape({
+    requestType: PropTypes.string,
+  }).isRequired,
   onChangeAddress: PropTypes.func.isRequired,
   deliveryAddress: PropTypes.node,
-  deliveryLocations: PropTypes.arrayOf(PropTypes.object),
-  fulfillmentTypeOptions: PropTypes.arrayOf(PropTypes.object),
+  deliveryLocations: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string,
+      label: PropTypes.string,
+    })
+  ),
+  fulfillmentTypeOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      labelTranslationPath: PropTypes.string,
+      value: PropTypes.string,
+    })
+  ),
   deliverySelected: PropTypes.bool,
 };
 

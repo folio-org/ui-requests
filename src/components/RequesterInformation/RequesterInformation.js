@@ -40,8 +40,14 @@ export const COLUMN_MAPPING = {
 
 class RequesterInformation extends Component {
   static propTypes = {
-    form: PropTypes.object.isRequired,
-    values: PropTypes.object.isRequired,
+    form: PropTypes.shape({
+      change: PropTypes.func,
+    }).isRequired,
+    values: PropTypes.shape({
+      requester: PropTypes.shape({
+        barcode: PropTypes.string,
+      }),
+    }).isRequired,
     onSetSelectedUser: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
     onSetIsPatronBlocksOverridden: PropTypes.func.isRequired,
@@ -52,12 +58,19 @@ class RequesterInformation extends Component {
     triggerUserBarcodeValidation: PropTypes.func.isRequired,
     isEcsTlrSettingEnabled: PropTypes.bool.isRequired,
     stripes: stripesShape.isRequired,
-    selectedUser: PropTypes.object,
+    selectedUser: PropTypes.shape({
+      id: PropTypes.string,
+    }),
     isLoading: PropTypes.bool,
-    request: PropTypes.object,
-    optionLists: PropTypes.object,
-    selectedProxy: PropTypes.object,
-    patronGroup: PropTypes.object,
+    request: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+    selectedProxy: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+    patronGroup: PropTypes.shape({
+      group: PropTypes.string,
+    }),
   };
 
   constructor(props) {

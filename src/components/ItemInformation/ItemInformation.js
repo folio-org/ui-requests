@@ -30,16 +30,29 @@ class ItemInformation extends Component {
   static propTypes = {
     triggerValidation: PropTypes.func.isRequired,
     findItem: PropTypes.func.isRequired,
-    form: PropTypes.object.isRequired,
-    values: PropTypes.object.isRequired,
-    request: PropTypes.object.isRequired,
+    form: PropTypes.shape({
+      change: PropTypes.func,
+    }).isRequired,
+    values: PropTypes.shape({
+      item: PropTypes.shape({
+        barcode: PropTypes.string,
+      }),
+    }).isRequired,
+    request: PropTypes.shape({
+      id: PropTypes.string,
+    }).isRequired,
     onSetSelectedItem: PropTypes.func.isRequired,
     itemRequestCount: PropTypes.number.isRequired,
     isLoading: PropTypes.bool.isRequired,
     submitting: PropTypes.bool.isRequired,
     isItemIdRequest: PropTypes.bool.isRequired,
-    selectedLoan: PropTypes.object,
-    selectedItem: PropTypes.object,
+    selectedLoan: PropTypes.shape({
+      dueDate: PropTypes.string,
+    }),
+    selectedItem: PropTypes.shape({
+      id: PropTypes.string,
+      barcode: PropTypes.string,
+    }),
   };
 
   constructor(props) {

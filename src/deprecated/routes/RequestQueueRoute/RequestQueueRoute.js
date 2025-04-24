@@ -102,24 +102,54 @@ class RequestQueueRoute extends React.Component {
     location: ReactRouterPropTypes.location,
     resources: PropTypes.shape({
       items: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(
+          PropTypes.shape({
+            id: PropTypes.string,
+          })
+        ),
       }),
       request: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(
+          PropTypes.shape({
+            id: PropTypes.string,
+          })
+        ),
       }),
       requests: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        isPending: PropTypes.bool,
+        records: PropTypes.arrayOf(
+          PropTypes.shape({
+            id: PropTypes.string,
+          })
+        ),
       }).isRequired,
       configs: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object).isRequired,
+        records: PropTypes.arrayOf(
+          PropTypes.shape({
+            value: PropTypes.shape({
+              titleLevelRequestsFeatureEnabled: PropTypes.bool,
+            })
+          })
+        ).isRequired,
         hasLoaded: PropTypes.bool.isRequired,
       }).isRequired,
     }),
-    match: PropTypes.object.isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        requestId: PropTypes.string,
+      }),
+    }).isRequired,
     mutator: PropTypes.shape({
-      reorderInstanceQueue: PropTypes.object.isRequired,
-      reorderItemQueue: PropTypes.object.isRequired,
-      requests: PropTypes.object.isRequired,
+      reorderInstanceQueue: PropTypes.shape({
+        POST: PropTypes.func,
+      }).isRequired,
+      reorderItemQueue: PropTypes.shape({
+        POST: PropTypes.func,
+      }).isRequired,
+      requests: PropTypes.shape({
+        reset: PropTypes.func,
+        GET: PropTypes.func,
+      }).isRequired,
     }),
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,

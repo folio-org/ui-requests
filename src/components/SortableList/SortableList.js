@@ -78,9 +78,50 @@ SortableList.propTypes = {
   onDragEnd: PropTypes.func,
   rowFormatter: PropTypes.func,
   isRowDraggable: PropTypes.func,
-  rowProps: PropTypes.object,
+  rowProps: PropTypes.shape({
+    additionalClasses: PropTypes.arrayOf(PropTypes.string),
+  }),
   visibleColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
-  columnWidths: PropTypes.object.isRequired,
-  columnMapping: PropTypes.object.isRequired,
-  formatter: PropTypes.object.isRequired,
+  columnWidths: PropTypes.shape({
+    chronology: PropTypes.shape({
+      max: PropTypes.number,
+    }),
+    enumeration: PropTypes.shape({
+      max: PropTypes.number,
+    }),
+    fulfillmentStatus: PropTypes.shape({
+      max: PropTypes.number,
+    }),
+    itemBarcode: PropTypes.shape({
+      max: PropTypes.number,
+    }),
+  }).isRequired,
+  columnMapping: PropTypes.shape({
+    chronology: PropTypes.shape({
+      props: PropTypes.shape({
+        id: PropTypes.string,
+      }),
+    }),
+    enumeration: PropTypes.shape({
+      props: PropTypes.shape({
+        id: PropTypes.string,
+      }),
+    }),
+    fulfillmentStatus: PropTypes.shape({
+      props: PropTypes.shape({
+        id: PropTypes.string,
+      }),
+    }),
+    itemBarcode: PropTypes.shape({
+      props: PropTypes.shape({
+        id: PropTypes.string,
+      }),
+    }),
+  }).isRequired,
+  formatter: PropTypes.shape({
+    chronology: PropTypes.func,
+    enumeration: PropTypes.func,
+    fulfillmentStatus: PropTypes.func,
+    itemBarcode: PropTypes.func,
+  }).isRequired,
 };

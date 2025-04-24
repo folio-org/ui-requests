@@ -133,9 +133,46 @@ const ItemDetail = ({
 
 ItemDetail.propTypes = {
   currentInstanceId: PropTypes.string,
-  request: PropTypes.object,
-  item: PropTypes.object.isRequired,
-  loan: PropTypes.object,
+  request: PropTypes.shape({
+    itemId: PropTypes.string,
+    instanceId: PropTypes.string,
+    holdingsRecordId: PropTypes.string,
+    itemRequestCount: PropTypes.number,
+    instance: PropTypes.shape({
+      title: PropTypes.string,
+      contributorNames: PropTypes.arrayOf(
+        PropTypes.shape({
+          name: PropTypes.string,
+        })
+      ),
+    }),
+  }),
+  item: PropTypes.shape({
+    id: PropTypes.string,
+    barcode: PropTypes.string,
+    holdingsRecordId: PropTypes.string,
+    title: PropTypes.string,
+    contributorNames: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+      })
+    ),
+    effectiveLocation: PropTypes.shape({
+      name: PropTypes.string,
+    }),
+    location: PropTypes.shape({
+      name: PropTypes.string,
+    }),
+    status: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({
+        name: PropTypes.string,
+      }),
+    ]),
+  }),
+  loan: PropTypes.shape({
+    dueDate: PropTypes.string,
+  }),
   requestCount: PropTypes.number,
 };
 

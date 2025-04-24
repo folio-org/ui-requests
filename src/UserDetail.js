@@ -19,11 +19,24 @@ import {
 class UserDetail extends React.Component {
   static propTypes = {
     deliveryAddress: PropTypes.node,
-    patronGroups: PropTypes.arrayOf(PropTypes.object),
+    patronGroups: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+      })
+    ),
     pickupServicePoint: PropTypes.string,
-    proxy: PropTypes.object,
-    request: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
+    proxy: PropTypes.shape({
+      id: PropTypes.string,
+      barcode: PropTypes.string,
+    }),
+    request: PropTypes.shape({
+      requesterId: PropTypes.string,
+      proxyUserId: PropTypes.string,
+    }).isRequired,
+    user: PropTypes.shape({
+      id: PropTypes.string,
+      barcode: PropTypes.string,
+    }).isRequired,
     isEcsTlrSettingEnabled: PropTypes.bool.isRequired,
     selectedDelivery: PropTypes.bool,
   };

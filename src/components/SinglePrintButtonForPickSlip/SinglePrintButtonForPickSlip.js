@@ -45,13 +45,25 @@ SinglePrintButtonForPickSlip.propTypes = {
   request: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }),
-  pickSlipsToCheck: PropTypes.object.isRequired,
-  pickSlipsPrintTemplate: PropTypes.object.isRequired,
-  pickSlipsData: PropTypes.object.isRequired,
+  pickSlipsToCheck: PropTypes.arrayOf(
+    PropTypes.shape({
+      request: PropTypes.shape({
+        requestID: PropTypes.string,
+      }),
+    })
+  ).isRequired,
+  pickSlipsPrintTemplate: PropTypes.string.isRequired,
+  pickSlipsData: PropTypes.arrayOf(
+    PropTypes.shape({
+      request: PropTypes.shape({
+        requestID: PropTypes.string,
+      }),
+    })
+  ).isRequired,
   onBeforeGetContentForSinglePrintButton: PropTypes.func.isRequired,
   onBeforePrintForSinglePrintButton: PropTypes.func,
   onAfterPrintForSinglePrintButton: PropTypes.func,
-  getPrintContentRef: PropTypes.object.isRequired,
+  getPrintContentRef: PropTypes.func.isRequired,
 };
 
 export default SinglePrintButtonForPickSlip;

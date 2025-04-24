@@ -111,7 +111,9 @@ TitleInformation.propTypes = {
   identifiers: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.string,
   })),
-  intl: PropTypes.object.isRequired,
+  intl: PropTypes.shape({
+    formatMessage: PropTypes.func,
+  }).isRequired,
 };
 
 export default injectIntl(TitleInformation);

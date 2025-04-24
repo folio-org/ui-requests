@@ -113,13 +113,36 @@ class ViewRequest extends React.Component {
     onEdit: PropTypes.func,
     onDuplicate: PropTypes.func,
     buildRecordsForHoldsShelfReport: PropTypes.func.isRequired,
-    optionLists: PropTypes.object,
+    optionLists: PropTypes.shape({
+      servicePoints: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.string,
+        })
+      ),
+    }),
     tagsToggle: PropTypes.func,
     paneWidth: PropTypes.string,
-    patronGroups: PropTypes.arrayOf(PropTypes.object),
-    parentMutator: PropTypes.object,
+    patronGroups: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+      })
+    ),
+    parentMutator: PropTypes.shape({
+      proxy: PropTypes.shape({
+        reset: PropTypes.func,
+        GET: PropTypes.func,
+      }),
+    }),
     parentResources: PropTypes.shape({
-      configs: PropTypes.object.isRequired,
+      configs: PropTypes.shape({
+        records: PropTypes.arrayOf(
+          PropTypes.shape({
+            value: PropTypes.shape({
+              titleLevelRequestsFeatureEnabled: PropTypes.bool,
+            }),
+          })
+        )
+      }).isRequired,
     }).isRequired,
     resources: PropTypes.shape({
       selectedRequest: PropTypes.shape({
@@ -127,10 +150,16 @@ class ViewRequest extends React.Component {
         other: PropTypes.shape({
           totalRecords: PropTypes.number,
         }),
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(
+          PropTypes.shape({
+            id: PropTypes.string,
+          })
+        ),
       }),
     }),
-    query: PropTypes.object,
+    query: PropTypes.shape({
+      mode: PropTypes.string,
+    }),
     stripes: PropTypes.shape({
       hasPerm: PropTypes.func.isRequired,
       connect: PropTypes.func.isRequired,
@@ -138,9 +167,15 @@ class ViewRequest extends React.Component {
         log: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
-    intl: PropTypes.object,
+    intl: PropTypes.shape({
+      formatMessage: PropTypes.func,
+    }),
     tagsEnabled: PropTypes.bool,
-    match: PropTypes.object,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        id: PropTypes.string,
+      })
+    }),
   };
 
   static defaultProps = {

@@ -505,7 +505,11 @@ class RequestsRoute extends React.Component {
   };
 
   static propTypes = {
-    intl: PropTypes.object,
+    intl: PropTypes.shape({
+      formatDate: PropTypes.func,
+      formatTime: PropTypes.func,
+      formatMessage: PropTypes.func,
+    }).isRequired,
     mutator: PropTypes.shape({
       records: PropTypes.shape({
         GET: PropTypes.func,
@@ -517,7 +521,9 @@ class RequestsRoute extends React.Component {
       reportRecords: PropTypes.shape({
         GET: PropTypes.func,
       }),
-      query: PropTypes.object,
+      query: PropTypes.shape({
+        update: PropTypes.func,
+      }),
       requestCount: PropTypes.shape({
         replace: PropTypes.func,
       }),
@@ -563,38 +569,79 @@ class RequestsRoute extends React.Component {
     resources: PropTypes.shape({
       addressTypes: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(
+          PropTypes.shape({
+            id: PropTypes.string,
+            addressType: PropTypes.string,
+          })
+        ),
       }),
-      currentServicePoint: PropTypes.object.isRequired,
-      query: PropTypes.object,
+      currentServicePoint: PropTypes.shape({
+        id: PropTypes.string,
+      }).isRequired,
+      query: PropTypes.shape({
+        instanceId: PropTypes.string,
+      }),
       records: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
         isPending: PropTypes.bool.isRequired,
         other: PropTypes.shape({
           totalRecords: PropTypes.number,
         }),
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(
+          PropTypes.shape({
+            id: PropTypes.string,
+          })
+        ),
       }),
       staffSlips: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object).isRequired,
+        records: PropTypes.arrayOf(
+          PropTypes.shape({
+            name: PropTypes.string,
+          })
+        ).isRequired,
       }),
       pickSlips: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object).isRequired,
+        records: PropTypes.arrayOf(
+          PropTypes.shape({
+            currentDateTime: PropTypes.string,
+          })
+        ).isRequired,
         isPending: PropTypes.bool,
       }),
       searchSlips: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object).isRequired,
+        records: PropTypes.arrayOf(
+          PropTypes.shape({
+            currentDateTime: PropTypes.string,
+          })
+        ).isRequired,
         isPending: PropTypes.bool,
       }),
       configs: PropTypes.shape({
         hasLoaded: PropTypes.bool.isRequired,
-        records: PropTypes.arrayOf(PropTypes.object).isRequired,
+        records: PropTypes.arrayOf(
+          PropTypes.shape({
+            value: PropTypes.shape({
+              titleLevelRequestsFeatureEnabled: PropTypes.bool,
+            })
+          })
+        ).isRequired,
       }),
       printHoldRequests: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object).isRequired,
+        records: PropTypes.arrayOf(
+          PropTypes.shape({
+            value: PropTypes.string,
+          })
+        ),
       }),
       circulationSettings: PropTypes.shape({
-        records: PropTypes.arrayOf(PropTypes.object),
+        records: PropTypes.arrayOf(
+          PropTypes.shape({
+            value: PropTypes.shape({
+              enablePrintLog: PropTypes.string,
+            }),
+          })
+        ),
       }),
     }).isRequired,
     stripes: PropTypes.shape({
@@ -609,16 +656,25 @@ class RequestsRoute extends React.Component {
       store: PropTypes.shape({
         getState: PropTypes.func.isRequired,
       }),
-      user: PropTypes.object.isRequired,
+      user: PropTypes.shape({
+        user: PropTypes.shape({
+          id: PropTypes.string,
+          username: PropTypes.string,
+        })
+      }).isRequired,
       timezone: PropTypes.string.isRequired,
       locale: PropTypes.string.isRequired,
     }).isRequired,
-    history: PropTypes.object,
+    history: PropTypes.shape({
+      push: PropTypes.func,
+    }),
     location: PropTypes.shape({
       search: PropTypes.string,
       pathname: PropTypes.string,
     }).isRequired,
-    match: PropTypes.object.isRequired,
+    match: PropTypes.shape({
+      path: PropTypes.string,
+    }).isRequired,
   };
 
   constructor(props) {

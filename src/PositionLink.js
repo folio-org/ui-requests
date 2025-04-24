@@ -38,6 +38,8 @@ export default function PositionLink({
 }
 
 PositionLink.propTypes = {
-  request: PropTypes.object,
+  request: PropTypes.shape({
+    status: PropTypes.string,
+  }),
   isTlrEnabled: PropTypes.bool.isRequired,
 };

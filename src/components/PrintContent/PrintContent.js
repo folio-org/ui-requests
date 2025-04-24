@@ -39,7 +39,13 @@ const PrintContent = forwardRef(({
 
 PrintContent.propTypes = {
   id: PropTypes.string,
-  dataSource: PropTypes.arrayOf(PropTypes.object).isRequired,
+  dataSource: PropTypes.arrayOf(
+    PropTypes.shape({
+      request: PropTypes.shape({
+        requestID: PropTypes.string,
+      }),
+    })
+  ).isRequired,
   template: PropTypes.string.isRequired,
 };
 

@@ -112,9 +112,18 @@ class RequestForm extends React.Component {
     errorMessage: PropTypes.string,
     handleSubmit: PropTypes.func.isRequired,
     findResource: PropTypes.func.isRequired,
-    request: PropTypes.object,
+    request: PropTypes.shape({
+      id: PropTypes.string,
+      instanceId: PropTypes.string,
+      itemId: PropTypes.string,
+      requesterId: PropTypes.string,
+    }),
     metadataDisplay: PropTypes.func,
-    initialValues: PropTypes.object,
+    initialValues: PropTypes.shape({
+      requesterId: PropTypes.string,
+      deliveryAddressTypeId: PropTypes.string,
+      fulfillmentPreference: PropTypes.string,
+    }),
     location: PropTypes.shape({
       pathname: PropTypes.string.isRequired,
       search: PropTypes.string,
@@ -122,29 +131,64 @@ class RequestForm extends React.Component {
     onCancel: PropTypes.func.isRequired,
     onCancelRequest: PropTypes.func,
     pristine: PropTypes.bool,
-    resources: PropTypes.shape({
-      query: PropTypes.object,
-    }),
     submitting: PropTypes.bool,
     toggleModal: PropTypes.func,
     optionLists: PropTypes.shape({
-      addressTypes: PropTypes.arrayOf(PropTypes.object),
-      fulfillmentTypes: PropTypes.arrayOf(PropTypes.object),
-      servicePoints: PropTypes.arrayOf(PropTypes.object),
+      addressTypes: PropTypes.arrayOf(
+        PropTypes.shape({
+          addressTypeId: PropTypes.string,
+        })
+      ),
+      fulfillmentTypes: PropTypes.arrayOf(
+        PropTypes.shape({
+          label: PropTypes.string,
+          id: PropTypes.string,
+        })
+      ),
     }),
-    patronGroups: PropTypes.arrayOf(PropTypes.object),
-    parentResources: PropTypes.object,
+    patronGroups: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+      })
+    ),
+    parentResources: PropTypes.shape({
+      configs: PropTypes.shape({
+        records: PropTypes.arrayOf(
+          PropTypes.shape({
+            value: PropTypes.string,
+          })
+        ),
+      }),
+    }),
     history: PropTypes.shape({
       push: PropTypes.func,
     }),
-    intl: PropTypes.object,
+    intl: PropTypes.shape({
+      formatMessage: PropTypes.func,
+    }).isRequired,
     onChangePatron: PropTypes.func,
-    query: PropTypes.object,
-    selectedItem: PropTypes.object,
-    selectedInstance: PropTypes.object,
-    selectedUser: PropTypes.object,
-    values: PropTypes.object.isRequired,
-    form: PropTypes.object.isRequired,
+    query: PropTypes.shape({
+      mode: PropTypes.string,
+      userBarcode: PropTypes.string,
+      itemBarcode: PropTypes.string,
+      itemId: PropTypes.string,
+      instanceId: PropTypes.string,
+    }),
+    selectedItem: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+    selectedInstance: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+    selectedUser: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+    values: PropTypes.shape({
+      requestType: PropTypes.string,
+    }).isRequired,
+    form: PropTypes.shape({
+      change: PropTypes.func,
+    }).isRequired,
     blocked: PropTypes.bool.isRequired,
     instanceId: PropTypes.string.isRequired,
     isPatronBlocksOverridden: PropTypes.bool.isRequired,
