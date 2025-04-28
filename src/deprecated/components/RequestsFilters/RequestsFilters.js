@@ -47,6 +47,12 @@ export default class RequestsFilters extends React.Component {
           })
         ),
       }),
+      servicePoints: PropTypes.shape({
+        records: PropTypes.arrayOf(PropTypes.shape({
+          name: PropTypes.string,
+          id: PropTypes.string,
+        })),
+      }),
     }).isRequired,
     onChange: PropTypes.func.isRequired,
     onClear: PropTypes.func.isRequired,

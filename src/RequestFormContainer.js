@@ -195,6 +195,9 @@ RequestFormContainer.propTypes = {
     instanceId: PropTypes.string,
     requestLevel: PropTypes.string,
     holdingsRecordId: PropTypes.string,
+    instance: PropTypes.shape({
+      id: PropTypes.string,
+    }),
   }),
   parentResources: PropTypes.shape({
     automatedPatronBlocks: PropTypes.shape({

@@ -135,6 +135,11 @@ class ViewRequest extends React.Component {
           id: PropTypes.string,
         })
       ),
+      cancellationReasons: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.string,
+        })
+      ),
     }),
     tagsToggle: PropTypes.func,
     paneWidth: PropTypes.string,
@@ -185,6 +190,7 @@ class ViewRequest extends React.Component {
     }).isRequired,
     intl: PropTypes.shape({
       formatMessage: PropTypes.func,
+      timeZone: PropTypes.string,
     }),
     tagsEnabled: PropTypes.bool,
     match: PropTypes.shape({

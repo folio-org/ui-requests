@@ -166,7 +166,8 @@ FulfilmentPreference.propTypes = {
   }).isRequired,
   request: PropTypes.shape({
     status: PropTypes.string,
-  }).isRequired,
+    requestType: PropTypes.string,
+  }),
   form: PropTypes.shape({
     change: PropTypes.func,
   }).isRequired,

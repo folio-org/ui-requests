@@ -37,12 +37,13 @@ class ItemInformation extends Component {
       item: PropTypes.shape({
         barcode: PropTypes.string,
       }),
+      keyOfItemBarcodeField: PropTypes.number,
     }).isRequired,
     request: PropTypes.shape({
       id: PropTypes.string,
-    }).isRequired,
+    }),
     onSetSelectedItem: PropTypes.func.isRequired,
-    itemRequestCount: PropTypes.number.isRequired,
+    itemRequestCount: PropTypes.number,
     instanceId: PropTypes.string.isRequired,
     isLoading: PropTypes.bool.isRequired,
     submitting: PropTypes.bool.isRequired,
@@ -53,6 +54,7 @@ class ItemInformation extends Component {
     selectedItem: PropTypes.shape({
       id: PropTypes.string,
       barcode: PropTypes.string,
+      instanceId: PropTypes.string,
     }),
   };
 

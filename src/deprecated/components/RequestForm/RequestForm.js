@@ -117,12 +117,25 @@ class RequestForm extends React.Component {
       instanceId: PropTypes.string,
       itemId: PropTypes.string,
       requesterId: PropTypes.string,
+      item: PropTypes.shape({
+        id: PropTypes.string,
+      }),
+      requester: PropTypes.shape({
+        id: PropTypes.string,
+      }),
+      loan: PropTypes.shape({
+        id: PropTypes.string,
+      }),
+      requestLevel: PropTypes.string,
     }),
     metadataDisplay: PropTypes.func,
     initialValues: PropTypes.shape({
       requesterId: PropTypes.string,
       deliveryAddressTypeId: PropTypes.string,
       fulfillmentPreference: PropTypes.string,
+      item: PropTypes.shape({
+        id: PropTypes.string,
+      }),
     }),
     location: PropTypes.shape({
       pathname: PropTypes.string.isRequired,
@@ -159,6 +172,9 @@ class RequestForm extends React.Component {
           })
         ),
       }),
+      automatedPatronBlocks: PropTypes.shape({
+        isPending: PropTypes.bool,
+      }),
     }),
     history: PropTypes.shape({
       push: PropTypes.func,
@@ -173,21 +189,31 @@ class RequestForm extends React.Component {
       itemBarcode: PropTypes.string,
       itemId: PropTypes.string,
       instanceId: PropTypes.string,
+      userId: PropTypes.string,
+      layer: PropTypes.string,
     }),
     selectedItem: PropTypes.shape({
       id: PropTypes.string,
+      instanceId: PropTypes.string,
     }),
     selectedInstance: PropTypes.shape({
       id: PropTypes.string,
+      title: PropTypes.string,
     }),
     selectedUser: PropTypes.shape({
       id: PropTypes.string,
     }),
     values: PropTypes.shape({
       requestType: PropTypes.string,
+      createTitleLevelRequest: PropTypes.bool,
+      keyOfItemBarcodeField: PropTypes.number,
+      keyOfUserBarcodeField: PropTypes.number,
+      keyOfInstanceIdField: PropTypes.number,
+      keyOfRequestTypeField: PropTypes.number,
     }).isRequired,
     form: PropTypes.shape({
-      change: PropTypes.func,
+      change: PropTypes.func.isRequired,
+      reset: PropTypes.func.isRequired,
     }).isRequired,
     blocked: PropTypes.bool.isRequired,
     instanceId: PropTypes.string.isRequired,

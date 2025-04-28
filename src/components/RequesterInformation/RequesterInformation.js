@@ -47,6 +47,7 @@ class RequesterInformation extends Component {
       requester: PropTypes.shape({
         barcode: PropTypes.string,
       }),
+      keyOfUserBarcodeField: PropTypes.number,
     }).isRequired,
     onSetSelectedUser: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
@@ -56,7 +57,7 @@ class RequesterInformation extends Component {
     handleCloseProxy: PropTypes.func.isRequired,
     findUser: PropTypes.func.isRequired,
     triggerUserBarcodeValidation: PropTypes.func.isRequired,
-    isEcsTlrSettingEnabled: PropTypes.bool.isRequired,
+    isEcsTlrSettingEnabled: PropTypes.bool,
     stripes: stripesShape.isRequired,
     selectedUser: PropTypes.shape({
       id: PropTypes.string,
@@ -64,6 +65,9 @@ class RequesterInformation extends Component {
     isLoading: PropTypes.bool,
     request: PropTypes.shape({
       id: PropTypes.string,
+      requester: PropTypes.shape({
+        id: PropTypes.string,
+      }),
     }),
     selectedProxy: PropTypes.shape({
       id: PropTypes.string,

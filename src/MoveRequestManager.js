@@ -27,6 +27,11 @@ class MoveRequestManager extends React.Component {
     request: PropTypes.shape({
       id: PropTypes.string,
       requestType: PropTypes.string,
+      instanceId: PropTypes.string,
+      itemId: PropTypes.string,
+      instance: PropTypes.shape({
+        title: PropTypes.string,
+      }),
     }).isRequired,
     mutator: PropTypes.shape({
       move: PropTypes.shape({

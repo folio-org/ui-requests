@@ -32,12 +32,13 @@ class UserDetail extends React.Component {
     request: PropTypes.shape({
       requesterId: PropTypes.string,
       proxyUserId: PropTypes.string,
+      fulfillmentPreference: PropTypes.string,
     }).isRequired,
     user: PropTypes.shape({
       id: PropTypes.string,
       barcode: PropTypes.string,
     }).isRequired,
-    isEcsTlrSettingEnabled: PropTypes.bool.isRequired,
+    isEcsTlrSettingEnabled: PropTypes.bool,
     selectedDelivery: PropTypes.bool,
   };
 
