@@ -294,12 +294,12 @@
     "printDetails.printCount": "# Exemplare",
     "permission.moveRequest.execute": "Bestandsanfragen: Verschieben zu neuem Exemplar, Warteliste neu anordnen",
     "permission.reorderQueue.execute": "Bestandsanfragen: Warteliste neu anordnen",
-    "requests.retrievalServicePoint": "Retrieval service point",
-    "item.retrievalServicePointName": "Retrieval service point",
-    "exportExpiredHoldShelfCsv": "Hold shelf clearance report {currentServicePoint} (CSV)",
-    "exportSearchResultsCsv": "Export search results (CSV)",
-    "printPickSlipsForSp": "Print pick slips {sp}",
-    "printSearchSlipsForSp": "Print search slips {sp}",
-    "printSelectedPickSlipsForSp": "Print selected pick slips {sp}",
-    "requestUuid": "Request UUID"
+    "requests.retrievalServicePoint": "Abruf Servicestelle",
+    "item.retrievalServicePointName": "Abruf Servicestelle",
+    "exportExpiredHoldShelfCsv": "Abräumliste für das Abholregal {currentServicePoint} (CSV)",
+    "exportSearchResultsCsv": "Suchergebnisse exportieren (CSV)",
+    "printPickSlipsForSp": "Entnahmezettel drucken {sp}",
+    "printSearchSlipsForSp": "Suchzettel drucken {sp}",
+    "printSelectedPickSlipsForSp": "Ausgewählte Entnahmezettel drucken {sp}",
+    "requestUuid": "Bestandsanfrage-UUID"
 }

@@ -116,7 +116,7 @@
     "requestQueue.deliveryType": "Dostawa: {type}",
     "requestQueue.requesterName": "Rezerwujący",
     "requestQueue.requesterBarcode": "Kod kreskowy rezerwującego",
-    "requestQueue.patronGroup": "Grupa czytelnika",
+    "requestQueue.patronGroup": "Grupa czytelników",
     "requestQueue.requestDate": "Data rezerwacji",
     "requestQueue.requestType": "Rodzaj",
     "requestQueue.requestExpirationDate": "Ważność rezerwacji",

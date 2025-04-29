@@ -191,7 +191,7 @@
     "errors.instanceUuidOrHridDoesNotExist": "Titul s tímto HRID nebo UUID neexistuje",
     "errors.selectInstanceRequired": "Vyberte prosím titul a stiskněte Enter",
     "instance.information": "Informace o názvu",
-    "instance.scanOrEnterBarcode": "Zadat HRID nebo UUID",
+    "instance.scanOrEnterBarcode": "Zadejte HRID nebo UUID",
     "instance.value": "HRID nebo UUID titulu",
     "item.noInformation": "K této žádosti nejsou k dispozici žádné informace o jednotce.",
     "title.information": "Informace o názvu",
@@ -301,5 +301,5 @@
     "printPickSlipsForSp": "Vytisknout cirkulační lístky žádanek {sp}",
     "printSearchSlipsForSp": "Vytisknout vyhledávací lístky {sp}",
     "printSelectedPickSlipsForSp": "Vytisknout vybrané cirkulační lístky žádanek {sp}",
-    "requestUuid": "UUID požadavku"
+    "requestUuid": "Požadavek (UUID)"
 }
