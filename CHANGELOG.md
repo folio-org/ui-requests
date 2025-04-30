@@ -1,5 +1,10 @@
 # Change history for ui-requests
 
+## [11.0.8] (https://github.com/folio-org/ui-requests/tree/v11.0.8) (2025-04-30)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.7...v11.0.8)
+
+* Requests export to CSV does not work for Hold TLR. Refs UIREQ-1292.
+
 ## [11.0.7] (https://github.com/folio-org/ui-requests/tree/v11.0.7) (2025-04-14)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.6...v11.0.7)
 
