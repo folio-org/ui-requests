@@ -36,6 +36,11 @@
 * For consistency searching use == instead of = for requester barcode. Refs UIREQ-640.
 * Add missed sub-permissions for "Requests: View" permission. Refs UIREQ-1217.
 
+## [11.0.8] (https://github.com/folio-org/ui-requests/tree/v11.0.8) (2025-04-30)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.7...v11.0.8)
+
+* Requests export to CSV does not work for Hold TLR. Refs UIREQ-1292.
+
 ## [11.0.7] (https://github.com/folio-org/ui-requests/tree/v11.0.7) (2025-04-14)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.6...v11.0.7)
 
