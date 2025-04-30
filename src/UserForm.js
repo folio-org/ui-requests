@@ -33,7 +33,7 @@ class UserForm extends React.Component {
       id: PropTypes.string,
       barcode: PropTypes.string,
     }).isRequired,
-    isEcsTlrSettingEnabled: PropTypes.bool.isRequired,
+    isEcsTlrSettingEnabled: PropTypes.bool,
     request: PropTypes.shape({
       requesterId: PropTypes.string,
     }),

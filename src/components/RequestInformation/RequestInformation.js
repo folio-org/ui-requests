@@ -248,7 +248,7 @@ const RequestInformation = ({
 
 RequestInformation.propTypes = {
   isTlrEnabledOnEditPage: PropTypes.bool.isRequired,
-  MetadataDisplay: PropTypes.func.isRequired,
+  MetadataDisplay: PropTypes.elementType.isRequired,
   isTitleLevelRequest: PropTypes.bool.isRequired,
   isSelectedInstance: PropTypes.bool.isRequired,
   isSelectedItem: PropTypes.bool.isRequired,
@@ -258,7 +258,12 @@ RequestInformation.propTypes = {
   request: PropTypes.shape({
     holdShelfExpirationDate: PropTypes.string,
     status: PropTypes.string,
-  }).isRequired,
+    requestType: PropTypes.string,
+    patronComments: PropTypes.string,
+    metadata: PropTypes.shape({
+      createdDate: PropTypes.string,
+    }),
+  }),
   values: PropTypes.shape({
     keyOfRequestTypeField: PropTypes.number,
   }).isRequired,

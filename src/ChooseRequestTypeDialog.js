@@ -16,7 +16,10 @@ class ChooseRequestTypeDialog extends React.Component {
     isLoading: PropTypes.bool.isRequired,
     onConfirm: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
-    requestTypes: PropTypes.arrayOf(PropTypes.string),
+    requestTypes: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string,
+      value: PropTypes.string,
+    })),
     open: PropTypes.bool,
   };
 

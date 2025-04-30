@@ -81,7 +81,7 @@ const ItemsDialog = ({
   onRowClick = noop,
   mutator,
   skippedItemId,
-  title,
+  title = '',
   instanceId,
 }) => {
   const [areItemsBeingLoaded, setAreItemsBeingLoaded] = useState(false);
@@ -252,10 +252,6 @@ ItemsDialog.manifest = {
     accumulate: true,
     fetch: false,
   },
-};
-
-ItemsDialog.defaultProps = {
-  title: '',
 };
 
 ItemsDialog.propTypes = {

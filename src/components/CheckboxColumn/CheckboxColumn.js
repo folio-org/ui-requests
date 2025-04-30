@@ -41,7 +41,11 @@ CheckboxColumn.propTypes = {
   request: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }),
-  selectedRows: PropTypes.func.isRequired,
+  selectedRows: PropTypes.objectOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  ).isRequired,
   toggleRowSelection: PropTypes.func.isRequired,
 };
 

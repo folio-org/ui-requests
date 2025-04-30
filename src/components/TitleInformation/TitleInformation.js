@@ -97,7 +97,7 @@ const TitleInformation = (props) => {
 
 TitleInformation.propTypes = {
   titleLevelRequestsLink: PropTypes.bool,
-  titleLevelRequestsCount: PropTypes.number.isRequired,
+  titleLevelRequestsCount: PropTypes.number,
   holdingsRecordId: PropTypes.string.isRequired,
   instanceId: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,

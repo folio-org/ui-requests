@@ -65,9 +65,16 @@ DraggableRow.propTypes = {
     dragHandleProps: PropTypes.shape({
       role: PropTypes.string,
     }),
+    draggableProps: PropTypes.shape({
+      style: PropTypes.shape({
+        transform: PropTypes.string,
+        transition: PropTypes.string,
+      }),
+    }),
   }),
   snapshot: PropTypes.shape({
     mode: PropTypes.string,
+    isDragging: PropTypes.bool,
   }),
   rowClass: PropTypes.string,
   rowIndex: PropTypes.number,
@@ -75,5 +82,6 @@ DraggableRow.propTypes = {
     style: PropTypes.shape({
       minWidth: PropTypes.string,
     }),
+    additionalClasses: PropTypes.arrayOf(PropTypes.string),
   }),
 };

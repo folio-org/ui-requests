@@ -40,17 +40,33 @@ class InstanceInformation extends Component {
       instance: PropTypes.shape({
         hrid: PropTypes.string,
       }),
+      keyOfInstanceIdField: PropTypes.number,
     }).isRequired,
     onSetSelectedInstance: PropTypes.func.isRequired,
     isLoading: PropTypes.bool.isRequired,
     instanceId: PropTypes.string.isRequired,
     request: PropTypes.shape({
       id: PropTypes.string,
+      instanceId: PropTypes.string,
+      titleRequestCount: PropTypes.number,
     }),
     instanceRequestCount: PropTypes.number,
     selectedInstance: PropTypes.shape({
       id: PropTypes.string,
       title: PropTypes.string,
+      contributors: PropTypes.arrayOf(PropTypes.shape({
+        name: PropTypes.string,
+      })),
+      contributorNames: PropTypes.arrayOf(PropTypes.shape({
+        name: PropTypes.string,
+      })),
+      publication: PropTypes.arrayOf(PropTypes.shape({
+        dateOfPublication: PropTypes.string,
+      })),
+      identifiers: PropTypes.arrayOf(PropTypes.shape({
+        value: PropTypes.string,
+      })),
+      editions: PropTypes.arrayOf(PropTypes.string),
     }),
   };
 

@@ -40,6 +40,7 @@ export default function PositionLink({
 PositionLink.propTypes = {
   request: PropTypes.shape({
     status: PropTypes.string,
+    numberOfReorderableRequests: PropTypes.number,
   }),
-  isTlrEnabled: PropTypes.bool.isRequired,
+  isTlrEnabled: PropTypes.bool,
 };
