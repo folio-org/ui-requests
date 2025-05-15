@@ -4,9 +4,12 @@
 
 * *BREAKING* Use `convertToSlipData` and supporting functions from `stripes-util`. Refs UIREQ-1263.
 * Replace moment with day.js. Refs UIREQ-1291.
+* Reduce count of eslint errors after update eslint-config-stripes. Refs UIREQ-1289.
+* Remove barcode hyperlink from the Central tenant request Item information section. Refs UIREQ-1306.
 
 ## [12.0.2] (https://github.com/folio-org/ui-requests/tree/v12.0.2) (2025-04-15)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v12.0.1...v12.0.2)
+
 * [Retrieval SP filter] Move related code to make the filter enabled for ecs/non-ecs UI. Refs UIREQ-1294.
 
 ## [12.0.1] (https://github.com/folio-org/ui-requests/tree/v12.0.1) (2025-03-21)
@@ -33,6 +36,16 @@
 * Add optionalOkapiInterfaces `circulation-bff-loans` `1.0`. Refs UIREQ-1273.
 * For consistency searching use == instead of = for requester barcode. Refs UIREQ-640.
 * Add missed sub-permissions for "Requests: View" permission. Refs UIREQ-1217.
+
+## [11.0.8] (https://github.com/folio-org/ui-requests/tree/v11.0.8) (2025-04-30)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.7...v11.0.8)
+
+* Requests export to CSV does not work for Hold TLR. Refs UIREQ-1292.
+
+## [11.0.7] (https://github.com/folio-org/ui-requests/tree/v11.0.7) (2025-04-14)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.6...v11.0.7)
+
+* Fix issue when creating a request with an item that does not have a barcode. Refs UIREQ-1298.
 
 ## [11.0.6] (https://github.com/folio-org/ui-requests/tree/v11.0.6) (2025-03-07)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.5...v11.0.6)
