@@ -4,6 +4,10 @@ import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
 import {
+  checkIfUserInCentralTenant,
+  useStripes,
+} from '@folio/stripes/core';
+import {
   Col,
   KeyValue,
   Row,
@@ -31,6 +35,7 @@ const ItemDetail = ({
   loan,
   requestCount,
 }) => {
+  const stripes = useStripes();
   const itemId = request?.itemId || item.id;
 
   if (!itemId && !item.barcode) {
@@ -59,7 +64,7 @@ const ItemDetail = ({
   const isRequestValid = isValidRequest({ instanceId, holdingsRecordId });
   const recordLink = () => {
     if (itemId) {
-      return isRequestValid && !isVirtualItem(instanceId, holdingsRecordId)
+      return isRequestValid && !isVirtualItem(instanceId, holdingsRecordId) && !checkIfUserInCentralTenant(stripes)
         ? <Link to={`/inventory/view/${instanceId}/${holdingsRecordId}/${itemId}`}>{item.barcode || itemId}</Link>
         : (item.barcode || itemId);
     }
