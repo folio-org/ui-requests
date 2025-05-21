@@ -1,5 +1,8 @@
 # Change history for ui-requests
 
+## [11.0.9] (https://github.com/folio-org/ui-requests/tree/v11.0.9) (2025-05-21)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.8...v11.0.9)
+
 * Remove barcode hyperlink from the Central tenant request Item information section. Refs UIREQ-1306.
 
 ## [11.0.8] (https://github.com/folio-org/ui-requests/tree/v11.0.8) (2025-04-30)
