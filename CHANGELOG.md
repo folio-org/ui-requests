@@ -5,7 +5,6 @@
 * *BREAKING* Use `convertToSlipData` and supporting functions from `stripes-util`. Refs UIREQ-1263.
 * Replace moment with day.js. Refs UIREQ-1291.
 * Reduce count of eslint errors after update eslint-config-stripes. Refs UIREQ-1289.
-* Remove barcode hyperlink from the Central tenant request Item information section. Refs UIREQ-1306.
 
 ## [12.0.2] (https://github.com/folio-org/ui-requests/tree/v12.0.2) (2025-04-15)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v12.0.1...v12.0.2)
@@ -36,6 +35,11 @@
 * Add optionalOkapiInterfaces `circulation-bff-loans` `1.0`. Refs UIREQ-1273.
 * For consistency searching use == instead of = for requester barcode. Refs UIREQ-640.
 * Add missed sub-permissions for "Requests: View" permission. Refs UIREQ-1217.
+
+## [11.0.9] (https://github.com/folio-org/ui-requests/tree/v11.0.9) (2025-05-21)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.8...v11.0.9)
+
+* Remove barcode hyperlink from the Central tenant request Item information section. Refs UIREQ-1306.
 
 ## [11.0.8] (https://github.com/folio-org/ui-requests/tree/v11.0.8) (2025-04-30)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v11.0.7...v11.0.8)
