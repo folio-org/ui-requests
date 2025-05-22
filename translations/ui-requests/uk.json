@@ -143,7 +143,7 @@
     "filters.requestStatus.inTransit": "Open - In transit",
     "filters.requestStatus.notYetFilled": "Open - Not yet filled",
     "common.cancel": "Cancel",
-    "item.callNumberComponents.prefix": "Effective call number prefix",
+    "item.callNumberComponents.prefix": "Префікс для ефективного шифру",
     "item.callNumberComponents.callNumber": "Effective call number",
     "item.callNumberComponents.suffix": "Effective call number suffix",
     "item.chronology": "Chronology",

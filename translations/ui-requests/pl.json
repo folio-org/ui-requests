@@ -284,7 +284,7 @@
     "requests.printButtonLabel": "Drukuj",
     "requests.instances.rows.select": "Select instance",
     "rows.recordsSelected": "{count, number} {count, plural, one {record} other {records}} selected",
-    "request.detail.title": "Request details",
+    "request.detail.title": "Szczegóły rezerwacji",
     "requests.copies": "# Copies",
     "requests.printed": "Printed",
     "printDetails.lastPrintedDetails": "Printed",
