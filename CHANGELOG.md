@@ -6,6 +6,11 @@
 * Replace moment with day.js. Refs UIREQ-1291.
 * Reduce count of eslint errors after update eslint-config-stripes. Refs UIREQ-1289.
 
+## [12.0.3] (https://github.com/folio-org/ui-requests/tree/v12.0.3) (2025-05-28)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v12.0.2...v12.0.3)
+
+* Remove barcode hyperlink from the Central tenant request Item information section. Refs UIREQ-1306.
+
 ## [12.0.2] (https://github.com/folio-org/ui-requests/tree/v12.0.2) (2025-04-15)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v12.0.1...v12.0.2)
 
