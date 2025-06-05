@@ -105,9 +105,14 @@ const ItemDetail = ({
             {effectiveLocationName}
           </KeyValue>
         </Col>
-        <Col xs={8}>
+        <Col xs={4}>
           <KeyValue label={<FormattedMessage id="ui-requests.item.callNumber" />}>
             {effectiveCallNumberString}
+          </KeyValue>
+        </Col>
+        <Col xs={4}>
+          <KeyValue label={<FormattedMessage id="ui-requests.loanType" />}>
+            {item.temporaryLoanType?.name || item.permanentLoanType?.name}
           </KeyValue>
         </Col>
       </Row>
