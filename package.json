@@ -31,7 +31,8 @@
       "request-storage": "6.0",
       "pick-slips": "0.1",
       "search-slips": "0.1",
-      "automated-patron-blocks": "0.1"
+      "automated-patron-blocks": "0.1",
+      "loan-policy-storage": "2.3"
     },
     "optionalOkapiInterfaces": {
       "circulation-bff-loans": "1.0"
@@ -126,6 +127,7 @@
           "circulation-bff.pick-slips.collection.get",
           "circulation-storage.staff-slips.collection.get",
           "tags.collection.get",
+          "circulation-storage.loan-policies.item.get",
           "circulation.print-events-entry.item.post"
         ],
         "visible": true

@@ -24,6 +24,7 @@ jest.mock('@folio/stripes/core', () => ({
     />
   ),
   stripesConnect: Component => props => <Component {...props} />,
+  useOkapiKy: jest.fn(),
   Pluggable: jest.fn(({
     searchLabel,
     selectInstance = () => {},

@@ -1430,6 +1430,7 @@ class RequestForm extends React.Component {
                       isSelectedUser={Boolean(selectedUser?.id)}
                       values={values}
                       form={form}
+                      loan={selectedLoan}
                     />
                     {isFulfilmentPreferenceVisible &&
                       <FulfilmentPreference
