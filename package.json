@@ -126,6 +126,7 @@
           "circulation-bff.pick-slips.collection.get",
           "circulation-storage.staff-slips.collection.get",
           "tags.collection.get",
+          "circulation-storage.loan-policies.item.get",
           "circulation.print-events-entry.item.post"
         ],
         "visible": true

@@ -1,8 +1,9 @@
-import { useCallback } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'react-final-form';
 import { get } from 'lodash';
 import PropTypes from 'prop-types';
+import { useOkapiKy } from '@folio/stripes/core';
 
 import {
   Col,
@@ -52,6 +53,7 @@ const RequestInformation = ({
   values,
   form,
   updateRequestPreferencesFields,
+  loan,
 }) => {
   const isEditForm = isFormEditing(request);
   const holdShelfExpireDate = get(request, ['status'], '') === requestStatuses.AWAITING_PICKUP
@@ -81,6 +83,19 @@ const RequestInformation = ({
     input.onChange(e);
     updateRequestPreferencesFields();
   };
+
+  const okapiKy = useOkapiKy();
+  const [loanPolicy, setLoanPolicy] = useState();
+
+  useEffect(() => {
+    if (loan?.loanPolicyId) {
+      okapiKy(`loan-policy-storage/loan-policies/${loan.loanPolicyId}`).then(res => {
+        res.json().then(policy => {
+          setLoanPolicy(policy);
+        });
+      });
+    }
+  }, [loan?.loanPolicyId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -149,6 +164,7 @@ const RequestInformation = ({
                   }}
                 </Field>
               }
+              {loanPolicy?.loansPolicy?.forUseAtLocation && <b><FormattedMessage id="ui-requests.forUseAtLocation" /></b>}
             </Col>
             <Col xs={2}>
               {isEditForm &&

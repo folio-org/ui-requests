@@ -14,6 +14,7 @@
   "loanType": "Loan type",
   "fulfillmentPreference": "Request fulfillment preference",
   "requestType": "Request type",
+  "forUseAtLocation": "For use at location",
   "status": "Request status",
   "requestDate": "Request date",
   "requestExpirationDate": "Request expiration date",
