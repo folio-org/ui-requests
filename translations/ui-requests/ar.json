@@ -301,5 +301,6 @@
     "printPickSlipsForSp": "طباعة قسائم الالتقاط {sp}",
     "printSearchSlipsForSp": "طباعة قسائم البحث {sp}",
     "printSelectedPickSlipsForSp": "طباعة قسائم الالتقاط المحددة {sp}",
-    "requestUuid": "طلب معرف عمومي فريد"
+    "requestUuid": "طلب معرف عمومي فريد",
+    "forUseAtLocation": "For use at location"
 }
