@@ -301,5 +301,6 @@
     "printPickSlipsForSp": "Afhaalbonnen printen {sp}",
     "printSearchSlipsForSp": "Zoekbonnen printen {sp}",
     "printSelectedPickSlipsForSp": "Geselecteerde afhaalbonnen printen {sp}",
-    "requestUuid": "Aanvraag UUID"
+    "requestUuid": "Aanvraag UUID",
+    "forUseAtLocation": "For use at location"
 }

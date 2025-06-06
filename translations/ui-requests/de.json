@@ -301,5 +301,6 @@
     "printPickSlipsForSp": "Entnahmezettel drucken {sp}",
     "printSearchSlipsForSp": "Suchzettel drucken {sp}",
     "printSelectedPickSlipsForSp": "Ausgewählte Entnahmezettel drucken {sp}",
-    "requestUuid": "Bestandsanfrage-UUID"
+    "requestUuid": "Bestandsanfrage-UUID",
+    "forUseAtLocation": "For use at location"
 }
