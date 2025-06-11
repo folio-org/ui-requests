@@ -41,7 +41,7 @@ import css from './requests.css';
 
 export function getFullName(user) {
   const userNameObj = user?.personal || user;
-  const lastName = get(userNameObj, ['lastName']);
+  const lastName = get(userNameObj, ['lastName']) ?? '';
   const firstName = get(userNameObj, ['firstName']) ?? '';
   const middleName = get(userNameObj, ['middleName']) ?? '';
   const preferredFirstName = get(userNameObj, ['preferredFirstName']) ?? '';
@@ -66,7 +66,7 @@ export function userHighlightBox(title, name, id, barcode) {
             {title}
           </Headline>
           <div>
-            {recordLink}
+            {recordLink || <FormattedMessage id="ui-requests.errors.user.unknown" />}
             {' '}
             <FormattedMessage id="ui-requests.barcode" />:
             {' '}
