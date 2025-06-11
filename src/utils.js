@@ -40,6 +40,8 @@ import {
 import css from './requests.css';
 
 export function getFullName(user) {
+  if (!user) return null;
+
   const userNameObj = user?.personal || user;
   const lastName = get(userNameObj, ['lastName']);
   const firstName = get(userNameObj, ['firstName']) ?? '';

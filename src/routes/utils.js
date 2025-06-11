@@ -2,6 +2,7 @@ import {
   requestStatuses,
   requestTypesMap,
 } from '../constants';
+import { getFullName } from '../utils';
 
 const YEAR_SEPARATOR = ', ';
 const YEAR_REGEX = /^([1-9][0-9]{0,3})$/;
@@ -38,7 +39,8 @@ export const isReorderableRequest = request => {
 export const getStatusQuery = (statuses = []) => statuses.reduce((acc, val) => `${acc ? acc + ' or ' : acc}status=="${val}"`, '');
 
 export const getFullNameForCsvRecords = (record) => {
-  const { firstName = '', middleName = '', lastName = '' } = record;
+  const { firstName = '', middleName = '', lastName = '' } = record || {};
+
   return [firstName, middleName, lastName].filter(Boolean).join(' ');
 };
 
@@ -47,4 +49,20 @@ export const updateQuerySortString = (queryString) => {
   const filteredQueryString = queryString.split(',').filter(part => !substringsToRemove.includes(part));
 
   return filteredQueryString.join(',') || 'requestDate';
+};
+
+export const getPrintedDetails = (record) => {
+  const fullName = getFullNameForCsvRecords(record.printDetails.lastPrintRequester);
+  const lastPrintedDate = record.printDetails.printEventDate || '';
+
+  return [fullName, lastPrintedDate].filter(Boolean).join(', ');
+};
+
+export const getLastPrintedDetails = (printDetails, intl) => {
+  const fullName = getFullName(printDetails?.lastPrintRequester);
+  const formattedDate = intl.formatDate(printDetails?.printEventDate);
+  const formattedTime = intl.formatTime(printDetails?.printEventDate);
+  const localizedDateTime = `${formattedDate}${formattedTime ? ', ' : ''}${formattedTime}`;
+
+  return [fullName, localizedDateTime].filter(Boolean).join(' ');
 };
