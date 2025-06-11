@@ -34,6 +34,7 @@ import RequestsRoute, {
   buildHoldRecords,
   getListFormatter,
   getPrintHoldRequestsEnabled,
+  getLastPrintedDetails,
   getFilteredColumnHeadersMap,
   urls,
   extractPickSlipRequestIds,
@@ -1448,6 +1449,30 @@ describe('RequestsRoute', () => {
       expect(getPrintHoldRequestsEnabled({
         records: [],
       })).toBeFalsy();
+    });
+  });
+
+  describe('getLastPrintedDetails', () => {
+    const lastPrintDetails = {
+      lastPrintRequester: { firstName: 'firstName', middleName: 'middleName', lastName: 'lastName' },
+      lastPrintedDate: '2024-08-03T13:33:31.868Z',
+    };
+    beforeEach(() => {
+      getFullName.mockClear().mockReturnValue('lastName, firstName middleName');
+    });
+
+    it('should render getLastPrintedDetails() correctly', () => {
+      expect(getLastPrintedDetails(lastPrintDetails, intl)).toBeTruthy();
+    });
+
+    it('should return the formatted full name and date/time correctly', () => {
+      const printedDetails = getLastPrintedDetails(lastPrintDetails, intl);
+      const expectedFormattedDate = intl.formatDate(lastPrintDetails.printEventDate);
+      const expectedFormattedTime = intl.formatTime(lastPrintDetails.printEventDate);
+      const expectedOutput =
+        `lastName, firstName middleName ${expectedFormattedDate}${expectedFormattedTime ? ', ' : ''}${expectedFormattedTime}`;
+
+      expect(printedDetails).toBe(expectedOutput);
     });
   });
 

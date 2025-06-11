@@ -1,4 +1,3 @@
-import { createIntl, createIntlCache } from 'react-intl';
 import {
   requestStatuses,
   requestTypesMap,
@@ -12,7 +11,6 @@ import {
   getFullNameForCsvRecords,
   updateQuerySortString,
   getPrintedDetails,
-  getLastPrintedDetails,
 } from './utils';
 
 describe('utils', () => {
@@ -245,32 +243,6 @@ describe('utils', () => {
       };
 
       expect(getPrintedDetails(record)).toBe('John Doe, date1');
-    });
-  });
-
-  describe('getLastPrintedDetails', () => {
-    const intlCache = createIntlCache();
-    const intl = createIntl(
-      {
-        locale: 'en-US',
-        messages: {},
-      },
-      intlCache
-    );
-
-    const lastPrintDetails = {
-      lastPrintRequester: { firstName: 'firstName', middleName: 'middleName', lastName: 'lastName' },
-      lastPrintedDate: '2024-08-03T13:33:31.868Z',
-    };
-
-    it('should return the formatted full name and date/time correctly', () => {
-      const printedDetails = getLastPrintedDetails(lastPrintDetails, intl);
-      const expectedFormattedDate = intl.formatDate(lastPrintDetails.printEventDate);
-      const expectedFormattedTime = intl.formatTime(lastPrintDetails.printEventDate);
-      const expectedOutput =
-        `lastName, firstName middleName ${expectedFormattedDate}${expectedFormattedTime ? ', ' : ''}${expectedFormattedTime}`;
-
-      expect(printedDetails).toBe(expectedOutput);
     });
   });
 });

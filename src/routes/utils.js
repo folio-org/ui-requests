@@ -2,7 +2,6 @@ import {
   requestStatuses,
   requestTypesMap,
 } from '../constants';
-import { getFullName } from '../utils';
 
 const YEAR_SEPARATOR = ', ';
 const YEAR_REGEX = /^([1-9][0-9]{0,3})$/;
@@ -56,13 +55,4 @@ export const getPrintedDetails = (record) => {
   const lastPrintedDate = record.printDetails.printEventDate || '';
 
   return [fullName, lastPrintedDate].filter(Boolean).join(', ');
-};
-
-export const getLastPrintedDetails = (printDetails, intl) => {
-  const fullName = getFullName(printDetails?.lastPrintRequester);
-  const formattedDate = intl.formatDate(printDetails?.printEventDate);
-  const formattedTime = intl.formatTime(printDetails?.printEventDate);
-  const localizedDateTime = `${formattedDate}${formattedTime ? ', ' : ''}${formattedTime}`;
-
-  return [fullName, localizedDateTime].filter(Boolean).join(' ');
 };

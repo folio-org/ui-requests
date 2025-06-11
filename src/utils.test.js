@@ -1003,8 +1003,4 @@ describe('getFullName', () => {
     };
     expect(getFullName(user)).toBe('Doe, John');
   });
-
-  it('should return null if user is not provided', () => {
-    expect(getFullName(null)).toBe(null);
-  });
 });

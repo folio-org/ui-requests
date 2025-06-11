@@ -112,7 +112,6 @@ import {
   getFullNameForCsvRecords,
   updateQuerySortString,
   getPrintedDetails,
-  getLastPrintedDetails,
 } from './utils';
 import SinglePrintButtonForPickSlip from '../components/SinglePrintButtonForPickSlip';
 
@@ -135,6 +134,15 @@ export const getFilteredColumnHeadersMap = (columnHeaders) => (
 
 export const extractPickSlipRequestIds = (pickSlipsData) => {
   return [...new Set(pickSlipsData.map(pickSlip => pickSlip['request.requestID']))];
+};
+
+export const getLastPrintedDetails = (printDetails, intl) => {
+  const fullName = getFullName(printDetails?.lastPrintRequester);
+  const formattedDate = intl.formatDate(printDetails?.printEventDate);
+  const formattedTime = intl.formatTime(printDetails?.printEventDate);
+  const localizedDateTime = `${formattedDate}${formattedTime ? ', ' : ''}${formattedTime}`;
+
+  return fullName + ' ' + localizedDateTime;
 };
 
 export const urls = {
