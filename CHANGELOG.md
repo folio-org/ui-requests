@@ -6,6 +6,7 @@
 * Replace moment with day.js. Refs UIREQ-1291.
 * Reduce count of eslint errors after update eslint-config-stripes. Refs UIREQ-1289.
 * Display loan type and "For use at location" loan-policy setting in new-request form. Fixes UIREQ-1282.
+* Display Unknown user instead of link with undefined when a user record is deleted. Refs UIREQ-1312.
 
 ## [12.0.3] (https://github.com/folio-org/ui-requests/tree/v12.0.3) (2025-05-28)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v12.0.2...v12.0.3)
