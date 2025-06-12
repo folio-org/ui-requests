@@ -38,7 +38,8 @@ export const isReorderableRequest = request => {
 export const getStatusQuery = (statuses = []) => statuses.reduce((acc, val) => `${acc ? acc + ' or ' : acc}status=="${val}"`, '');
 
 export const getFullNameForCsvRecords = (record) => {
-  const { firstName = '', middleName = '', lastName = '' } = record;
+  const { firstName = '', middleName = '', lastName = '' } = record || {};
+
   return [firstName, middleName, lastName].filter(Boolean).join(' ');
 };
 
@@ -47,4 +48,11 @@ export const updateQuerySortString = (queryString) => {
   const filteredQueryString = queryString.split(',').filter(part => !substringsToRemove.includes(part));
 
   return filteredQueryString.join(',') || 'requestDate';
+};
+
+export const getPrintedDetails = (record) => {
+  const fullName = getFullNameForCsvRecords(record.printDetails.lastPrintRequester);
+  const lastPrintedDate = record.printDetails.printEventDate || '';
+
+  return [fullName, lastPrintedDate].filter(Boolean).join(', ');
 };

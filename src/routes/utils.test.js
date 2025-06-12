@@ -10,6 +10,7 @@ import {
   getStatusQuery,
   getFullNameForCsvRecords,
   updateQuerySortString,
+  getPrintedDetails,
 } from './utils';
 
 describe('utils', () => {
@@ -185,6 +186,10 @@ describe('utils', () => {
       const record = {};
       expect(getFullNameForCsvRecords(record)).toBe('');
     });
+
+    it('should return an empty string if the record is missing', () => {
+      expect(getFullNameForCsvRecords()).toBe('');
+    });
   });
 
   describe('updateQuerySortString', () => {
@@ -204,6 +209,40 @@ describe('utils', () => {
       const prop = 'printed,copies';
       const expectedOutput = 'requestDate';
       expect(updateQuerySortString(prop)).toBe(expectedOutput);
+    });
+  });
+
+  describe('getPrintedDetails', () => {
+    it('should return full name when printEventDate is not passed', () => {
+      const record = {
+        printDetails: {
+          lastPrintRequester: { firstName: 'John', lastName: 'Doe' },
+        },
+      };
+
+      expect(getPrintedDetails(record)).toBe('John Doe');
+    });
+
+    it('should return printEventDate when when there is no full name', () => {
+      const record = {
+        printDetails: {
+          lastPrintRequester: {},
+          printEventDate: 'date1',
+        },
+      };
+
+      expect(getPrintedDetails(record)).toBe('date1');
+    });
+
+    it('should return formatted string with full name and last printed date', () => {
+      const record = {
+        printDetails: {
+          lastPrintRequester: { firstName: 'John', lastName: 'Doe' },
+          printEventDate: 'date1',
+        },
+      };
+
+      expect(getPrintedDetails(record)).toBe('John Doe, date1');
     });
   });
 });
