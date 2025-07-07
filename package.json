@@ -148,6 +148,8 @@
           "circulation-bff.requests.search-instances.get",
           "circulation-bff.requests.post",
           "consortium-search.locations.collection.get",
+          "search.instances.collection.get",
+          "search.facets.collection.get",
           "inventory-storage.material-types.collection.get",
           "inventory-storage.nature-of-content-terms.collection.get",
           "inventory-storage.holdings-types.collection.get",
