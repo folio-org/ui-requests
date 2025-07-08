@@ -301,5 +301,6 @@
     "printPickSlipsForSp": "打印选取单{sp}",
     "printSearchSlipsForSp": "打印搜索单{sp}",
     "printSelectedPickSlipsForSp": "打印选定的选取单{sp}",
-    "requestUuid": "请求 UUID"
+    "requestUuid": "请求 UUID",
+    "forUseAtLocation": "For use at location"
 }

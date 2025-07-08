@@ -301,5 +301,6 @@
     "printPickSlipsForSp": "Drukuj rewersy zamówienia {sp}",
     "printSearchSlipsForSp": "Print search slips {sp}",
     "printSelectedPickSlipsForSp": "Drukuj wybrane rewersy zamówienia {sp}",
-    "requestUuid": "UUID rezerwacji"
+    "requestUuid": "UUID rezerwacji",
+    "forUseAtLocation": "For use at location"
 }

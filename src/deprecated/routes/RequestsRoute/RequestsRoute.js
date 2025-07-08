@@ -102,6 +102,7 @@ import {
   getStatusQuery,
   getFullNameForCsvRecords,
   updateQuerySortString,
+  getPrintedDetails,
 } from '../../../routes/utils';
 import SinglePrintButtonForPickSlip from '../../../components/SinglePrintButtonForPickSlip';
 
@@ -981,11 +982,7 @@ class RequestsRoute extends React.Component {
         record.requester.name = getFullNameForCsvRecords(record.requester);
       }
       if (record.printDetails) {
-        const fullName = getFullNameForCsvRecords(record.printDetails.lastPrintRequester);
-        const lastPrintedDate = record.printDetails.printEventDate || '';
-        const date = lastPrintedDate ? `, ${lastPrintedDate}` : '';
-
-        record.printDetails.lastPrintedDetails = `${fullName}${date}`;
+        record.printDetails.lastPrintedDetails = getPrintedDetails(record);
       }
       if (record.loan) {
         const { dueDate } = record.loan;
