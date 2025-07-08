@@ -302,5 +302,6 @@
     "printSearchSlipsForSp": "طباعة قسائم البحث {sp}",
     "printSelectedPickSlipsForSp": "طباعة قسائم الالتقاط المحددة {sp}",
     "requestUuid": "طلب معرف عمومي فريد",
-    "forUseAtLocation": "For use at location"
+    "forUseAtLocation": "For use at location",
+    "errors.user.unknown": "Unknown user"
 }

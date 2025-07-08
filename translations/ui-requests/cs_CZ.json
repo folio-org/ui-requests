@@ -302,5 +302,6 @@
     "printSearchSlipsForSp": "Vytisknout vyhledávací lístky {sp}",
     "printSelectedPickSlipsForSp": "Vytisknout vybrané cirkulační lístky žádanek {sp}",
     "requestUuid": "Požadavek (UUID)",
-    "forUseAtLocation": "For use at location"
+    "forUseAtLocation": "Pro použití v lokaci",
+    "errors.user.unknown": "Neznámý uživatel"
 }
