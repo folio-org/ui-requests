@@ -4,7 +4,6 @@ import { Field } from 'react-final-form';
 import { get } from 'lodash';
 import PropTypes from 'prop-types';
 import { useOkapiKy } from '@folio/stripes/core';
-import css from './Icon.css';
 
 import {
   Col,
@@ -32,6 +31,7 @@ import {
   isFormEditing,
   resetFieldState,
 } from '../../utils';
+import css from './Icon.css';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 
@@ -168,7 +168,7 @@ const RequestInformation = ({
               }
               {loanPolicy?.loansPolicy?.forUseAtLocation && (
                 <Icon icon="check-circle" size="large" iconRootClass={css.icon} iconPosition="end">
-                  <span class={css.textWithinIcon}><FormattedMessage id="ui-requests.forUseAtLocation" /></span>
+                  <span className={css.textWithinIcon}><FormattedMessage id="ui-requests.forUseAtLocation" /></span>
                 </Icon>
               )}
             </Col>
