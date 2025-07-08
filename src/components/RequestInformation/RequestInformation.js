@@ -9,6 +9,7 @@ import {
   Col,
   Datepicker,
   FormattedDate,
+  Icon,
   KeyValue,
   NoValue,
   Row,
@@ -30,6 +31,7 @@ import {
   isFormEditing,
   resetFieldState,
 } from '../../utils';
+import css from './Icon.css';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 
@@ -164,7 +166,11 @@ const RequestInformation = ({
                   }}
                 </Field>
               }
-              {loanPolicy?.loansPolicy?.forUseAtLocation && <b><FormattedMessage id="ui-requests.forUseAtLocation" /></b>}
+              {loanPolicy?.loansPolicy?.forUseAtLocation && (
+                <Icon icon="check-circle" size="large" iconRootClass={css.icon} iconPosition="end">
+                  <span className={css.textWithinIcon}><FormattedMessage id="ui-requests.forUseAtLocation" /></span>
+                </Icon>
+              )}
             </Col>
             <Col xs={2}>
               {isEditForm &&
