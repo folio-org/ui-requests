@@ -302,5 +302,6 @@
     "printSearchSlipsForSp": "Zoekbonnen printen {sp}",
     "printSelectedPickSlipsForSp": "Geselecteerde afhaalbonnen printen {sp}",
     "requestUuid": "Aanvraag UUID",
-    "forUseAtLocation": "For use at location"
+    "forUseAtLocation": "Voor gebruik op Locatie",
+    "errors.user.unknown": "Onbekende gebruiker"
 }

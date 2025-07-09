@@ -302,5 +302,6 @@
     "printSearchSlipsForSp": "Imprimir recibos de busca {sp}",
     "printSelectedPickSlipsForSp": "Imprimir recibos de retirada selecionados {sp}",
     "requestUuid": "UUID da solicitação",
-    "forUseAtLocation": "Para uso no local"
+    "forUseAtLocation": "Para uso no local",
+    "errors.user.unknown": "Usuário desconhecido"
 }

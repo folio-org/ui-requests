@@ -302,5 +302,6 @@
     "printSearchSlipsForSp": "Print search slips {sp}",
     "printSelectedPickSlipsForSp": "Print selected pick slips {sp}",
     "requestUuid": "Request UUID",
-    "forUseAtLocation": "For use at location"
+    "forUseAtLocation": "For use at location",
+    "errors.user.unknown": "Unknown user"
 }
