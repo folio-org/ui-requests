@@ -270,7 +270,7 @@
     "errors.requesterAlreadyHasThisItemOnLoan": "Ініціатору цього замовлення вже видано цей примірник",
     "errors.cannotCreatePageTlrWithoutItemId": "Неможливо створити замовлення зі сховища на рівні назви для цього ІД біб.запису (інстанса) без ІД примірника",
     "errors.holdAndRecallTlrNotAllowedPageableAvailableItemFound": "Замовлення/відклик запиту на рівні назви не дозволені: для біб.запису (інстансу) знайдений доступний примірник на іншій сторінці",
-    "errors.userCannotBeProxyForThemselves": "User cannot be proxy for themselves",
+    "errors.userCannotBeProxyForThemselves": "Користувач не може бути довіреною особою для самого себе.",
     "errors.holdShelfRequestsRequirePickupServicePoint": "Для виконання замовлень зі збереженням на бронеполиці потрібен пункт обслуговування для видачі",
     "errors.requestAlreadyClosed": "Помилка: Замовлення вже закрите.",
     "searchSlipsLoading": "Бланки невиконаних замовлень завантажуються, зачекайте, будь ласка",
@@ -303,5 +303,5 @@
     "printSelectedPickSlipsForSp": "Друк вибраних квитанцій для видачі {sp}",
     "requestUuid": "UUID замовлення",
     "forUseAtLocation": "Для використання у місці розміщення",
-    "errors.user.unknown": "Unknown user"
+    "errors.user.unknown": "Невідомий користувач"
 }
