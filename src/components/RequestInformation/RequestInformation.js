@@ -10,6 +10,7 @@ import {
   Datepicker,
   FormattedDate,
   Icon,
+  InfoPopover,
   KeyValue,
   NoValue,
   Row,
@@ -166,10 +167,29 @@ const RequestInformation = ({
                   }}
                 </Field>
               }
-              {loanPolicy?.loansPolicy?.forUseAtLocation && (
+              {/* XXX move this icon down into the next row */}
+              {/* XXX use stripes-components/InfoPopover to explain why it is/isn't UAL */}
+              {loanPolicy?.loansPolicy?.forUseAtLocation ? (
                 <Icon icon="check-circle" size="large" iconRootClass={css.icon} iconPosition="end">
                   <span className={css.textWithinIcon}><FormattedMessage id="ui-requests.forUseAtLocation" /></span>
                 </Icon>
+              ) : (
+                <span style={{ color: '#888' }}>
+                  Not a use-at-location loan
+                  {' '}
+                  <InfoPopover
+                    content={!loan ?
+                      'no loan for this item' :
+                      !loan.loanPolicyId ?
+                        'no loan policy ID in loan' :
+                        !loanPolicy ?
+                          'no loan policy found' :
+                          !loanPolicy.loansPolicy ?
+                            'no loans policy in loan policy' :
+                            `forUseAtLocation = ${loanPolicy.loansPolicy.forUseAtLocation}`
+                    }
+                  />
+                </span>
               )}
             </Col>
             <Col xs={2}>
