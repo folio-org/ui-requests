@@ -3,6 +3,8 @@ import {
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
 
+import { useOkapiKy } from '@folio/stripes/core';
+
 import {
   CommandList,
   defaultKeyboardShortcuts,
@@ -146,6 +148,11 @@ describe('ViewRequest', () => {
       },
     }
   };
+
+  const okapiKyFullItem = { id: '1', barcode: '123456', title: 'Mock Title' };
+  const okapiKyJson = jest.fn().mockResolvedValue({ items: [okapiKyFullItem] });
+  const okapiKyMockFetch = jest.fn().mockResolvedValue({ json: okapiKyJson });
+  useOkapiKy.mockReturnValue(okapiKyMockFetch);
 
   dayjs.tz = () => ({
     format: jest.fn(),
