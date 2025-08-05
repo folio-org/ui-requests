@@ -1,8 +1,8 @@
 // FullItemDetail.test.js
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
-import FullItemDetail from './FullItemDetail';
+import { render, screen, waitFor } from '@folio/jest-config-stripes/testing-library/react';
 import { useOkapiKy } from '@folio/stripes/core';
+import FullItemDetail from './FullItemDetail';
 import ItemDetail from '../../../ItemDetail';
 
 // Mock the useOkapiKy hook
