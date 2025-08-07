@@ -112,7 +112,7 @@ const ItemDetail = ({
         </Col>
         <Col xs={4}>
           <KeyValue label={<FormattedMessage id="ui-requests.loanType" />}>
-            {item.temporaryLoanType?.name || item.permanentLoanType?.name}
+            {item.loanTypeName || item.temporaryLoanType?.name || item.permanentLoanType?.name}
           </KeyValue>
         </Col>
       </Row>
