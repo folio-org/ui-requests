@@ -55,7 +55,6 @@ const RequestInformation = ({
   values,
   form,
   updateRequestPreferencesFields,
-  loan,
 }) => {
   const isEditForm = isFormEditing(request);
   const holdShelfExpireDate = get(request, ['status'], '') === requestStatuses.AWAITING_PICKUP
@@ -87,17 +86,37 @@ const RequestInformation = ({
   };
 
   const okapiKy = useOkapiKy();
-  const [loanPolicy, setLoanPolicy] = useState();
+  const [loanPolicyId, setLoanPolicyId] = useState();
+  // const [loanPolicy, setLoanPolicy] = useState();
 
-  useEffect(() => {
-    if (loan?.loanPolicyId) {
-      okapiKy(`loan-policy-storage/loan-policies/${loan.loanPolicyId}`).then(res => {
-        res.json().then(policy => {
-          setLoanPolicy(policy);
+  {
+    const itemTypeId = undefined;
+    const loanTypeId = undefined;
+    const locationId = undefined;
+    const patronTypeId = undefined;
+
+    useEffect(() => {
+      // circulation/rules/loan-policy?
+      //  item_type_id=1a54b431-2e4f-452d-9cae-9cee66c9a892&
+      //  loan_type_id=1c9f3c34-43be-44d7-b18f-f9e4ab891bbe&
+      //  location_id=57246b20-76a7-4725-91c7-dea9f336de4f&
+      //  patron_type_id=2467cdda-d950-4c25-b59d-d0786cbd7b1b
+      if (itemTypeId && loanTypeId && locationId && patronTypeId) {
+        okapiKy('circulation/rules/loan-policy?' +
+                `item_type_id=${itemTypeId}&` +
+                `loan_type_id=${loanTypeId}&` +
+                `location_id=${locationId}&` +
+                `patron_type_id=${patronTypeId}&`).then(res => {
+          res.json().then(policy => {
+            setLoanPolicyId(policy);
+          });
         });
-      });
-    }
-  }, [loan?.loanPolicyId]); // eslint-disable-line react-hooks/exhaustive-deps
+      }
+      // okapiKy cannot be included in deps, otherwise useEffect fires in a loop
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [itemTypeId, loanTypeId, locationId, patronTypeId]);
+    console.log('loanPolicyId =', loanPolicyId);
+  }
 
   return (
     <>
@@ -166,7 +185,7 @@ const RequestInformation = ({
                   }}
                 </Field>
               }
-              {loanPolicy?.loansPolicy?.forUseAtLocation && (
+              {loanPolicyId?.loansPolicy?.forUseAtLocation && (
                 <Icon icon="check-circle" size="large" iconRootClass={css.icon} iconPosition="end">
                   <span className={css.textWithinIcon}><FormattedMessage id="ui-requests.forUseAtLocation" /></span>
                 </Icon>
