@@ -179,6 +179,7 @@ ItemDetail.propTypes = {
         name: PropTypes.string,
       }),
     ]),
+    loanTypeName: PropTypes.string,
   }),
   loan: PropTypes.shape({
     dueDate: PropTypes.string,
