@@ -1426,8 +1426,10 @@ class RequestForm extends React.Component {
                       isRequestTypesReceived={isRequestTypesReceived}
                       isRequestTypeLoading={isRequestTypeLoading}
                       isSelectedInstance={Boolean(selectedInstance?.id)}
+                      selectedItem={selectedItem}
                       isSelectedItem={Boolean(selectedItem?.id)}
                       isSelectedUser={Boolean(selectedUser?.id)}
+                      selectedUser={selectedUser}
                       values={values}
                       form={form}
                     />
