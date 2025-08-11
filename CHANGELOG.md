@@ -9,7 +9,7 @@
 * Display Unknown user instead of link with undefined when a user record is deleted. Refs UIREQ-1312.
 * Add default value for `record` parameter when it is missing in `getFullNameForCsvRecords`. Add `getPrintedDetails` to display only the date in a CSV file when the user was deleted. Fixes UIREQ-1305.
 * Add missing subPermissions for "Requests: View, create" permission. Refs UIREQ-1296.
-* When creating or viewing a request, show the loan-type of requested item. Fixes UIREQ-1325.
+* When creating or viewing a request, show whether the a loan on the item would be use-at-location. Fixes UIREQ-1327.
 
 ## [12.0.3] (https://github.com/folio-org/ui-requests/tree/v12.0.3) (2025-05-28)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v12.0.2...v12.0.3)
