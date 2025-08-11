@@ -43,7 +43,7 @@ import {
 
 import ViewRequestShortcutsWrapper from '../../../components/ViewRequestShortcutsWrapper';
 import CancelRequestDialog from '../../../CancelRequestDialog';
-import FullItemDetail from './FullItemDetail';
+import ItemDetail from '../../../ItemDetail';
 import TitleInformation from '../../../components/TitleInformation';
 import UserDetail from '../../../UserDetail';
 import RequestFormContainer from '../RequestFormContainer/RequestFormContainer';
@@ -726,7 +726,7 @@ class ViewRequest extends React.Component {
               >
                 { item
                   ? (
-                    <FullItemDetail
+                    <ItemDetail
                       request={request}
                       item={request.item}
                       loan={request.loan}
