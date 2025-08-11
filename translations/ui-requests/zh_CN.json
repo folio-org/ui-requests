@@ -302,6 +302,6 @@
     "printSearchSlipsForSp": "打印搜索单{sp}",
     "printSelectedPickSlipsForSp": "打印选定的选取单{sp}",
     "requestUuid": "请求 UUID",
-    "forUseAtLocation": "For use at location",
-    "errors.user.unknown": "Unknown user"
+    "forUseAtLocation": "在现场使用",
+    "errors.user.unknown": "未知用户"
 }
