@@ -302,6 +302,6 @@
     "printSearchSlipsForSp": "Suchzettel drucken {sp}",
     "printSelectedPickSlipsForSp": "Ausgewählte Entnahmezettel drucken {sp}",
     "requestUuid": "Bestandsanfrage-UUID",
-    "forUseAtLocation": "For use at location",
-    "errors.user.unknown": "Unknown user"
+    "forUseAtLocation": "Zur Verwendung am Standort",
+    "errors.user.unknown": "Unbekannte/-r Benutzer/-in"
 }

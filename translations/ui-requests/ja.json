@@ -303,5 +303,5 @@
     "printSelectedPickSlipsForSp": "Print selected pick slips {sp}",
     "requestUuid": "Request UUID",
     "forUseAtLocation": "For use at location",
-    "errors.user.unknown": "Unknown user"
+    "errors.user.unknown": "不明なユーザー"
 }
