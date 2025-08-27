@@ -6,9 +6,12 @@ import {
   screen,
   fireEvent,
   cleanup,
+  act,
 } from '@folio/jest-config-stripes/testing-library/react';
 
 import { Select } from '@folio/stripes/components';
+
+import { useOkapiKy } from '@folio/stripes/core';
 
 import RequestInformation, {
   getNoRequestTypeErrorMessageId,
@@ -46,7 +49,8 @@ const labelIds = {
 const testIds = {
   requestTypeDropDown: 'requestTypeDropDown',
   errorMessage: 'errorMessage',
-  metadataDisplay: 'metadataDisplay,'
+  metadataDisplay: 'metadataDisplay,',
+  fual: 'fual', // for use at location
 };
 const basicProps = {
   isTlrEnabledOnEditPage: true,
@@ -132,6 +136,11 @@ describe('RequestInformation', () => {
         };
 
         expect(Select).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+      });
+
+      it('should not render "for use at location"', () => {
+        const fual = screen.queryByTestId(testIds.fual);
+        expect(fual).not.toBeInTheDocument();
       });
     });
 
@@ -457,6 +466,44 @@ describe('RequestInformation', () => {
         const metadataDisplay = screen.queryByTestId(testIds.metadataDisplay);
 
         expect(metadataDisplay).not.toBeInTheDocument();
+      });
+    });
+
+    const okapiKyJson = jest.fn().mockResolvedValue({ loanPolicyId: 'lpId' });
+    const okapiKyMockFetch = jest.fn().mockResolvedValue({ json: okapiKyJson });
+    useOkapiKy.mockReturnValue(okapiKyMockFetch);
+
+    describe('when information is provided for loan-policy query', () => {
+      const props = {
+        ...basicProps,
+        selectedItem: {
+          materialType: {
+            id: 'mtId',
+          },
+          temporaryLoanType: {
+            id: 'ltId',
+          },
+          effectiveLocation: {
+            id: 'elId',
+          },
+        },
+        selectedUser: {
+          patronGroup: 'pgId',
+        },
+      };
+
+      beforeEach(() => {
+        isFormEditing.mockReturnValue(true);
+        render(
+            <RequestInformation
+              {...props}
+            />
+        );
+      });
+
+      it('should render "for use at location"', () => {
+        const fual = screen.queryByTestId(testIds.fual);
+        expect(fual).toBeInTheDocument();
       });
     });
   });
