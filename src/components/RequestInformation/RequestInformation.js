@@ -98,11 +98,6 @@ const RequestInformation = ({
     const patronTypeId = selectedUser?.patronGroup;
 
     useEffect(() => {
-      // circulation/rules/loan-policy?
-      //  item_type_id=1a54b431-2e4f-452d-9cae-9cee66c9a892&
-      //  loan_type_id=1c9f3c34-43be-44d7-b18f-f9e4ab891bbe&
-      //  location_id=57246b20-76a7-4725-91c7-dea9f336de4f&
-      //  patron_type_id=2467cdda-d950-4c25-b59d-d0786cbd7b1b
       if (itemTypeId && loanTypeId && locationId && patronTypeId) {
         okapiKy('circulation/rules/loan-policy?' +
                 `item_type_id=${itemTypeId}&` +
