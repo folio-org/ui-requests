@@ -92,8 +92,6 @@ const RequestInformation = ({
   const [loanPolicy, setLoanPolicy] = useState();
 
   {
-    // XXX These item-field selectors are for item objects fetch when making a new request
-    // They will have to look in other places when using the stub item in an existing request
     const itemTypeId = selectedItem?.materialType?.id;
     const loanTypeId = selectedItem?.temporaryLoanType?.id || selectedItem?.permanentLoanType?.id;
     const locationId = selectedItem?.effectiveLocation?.id;
