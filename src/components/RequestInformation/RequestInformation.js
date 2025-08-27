@@ -106,14 +106,12 @@ const RequestInformation = ({
       //  location_id=57246b20-76a7-4725-91c7-dea9f336de4f&
       //  patron_type_id=2467cdda-d950-4c25-b59d-d0786cbd7b1b
       if (itemTypeId && loanTypeId && locationId && patronTypeId) {
-        console.log('*** searching for loan-policy with IDs');
         okapiKy('circulation/rules/loan-policy?' +
                 `item_type_id=${itemTypeId}&` +
                 `loan_type_id=${loanTypeId}&` +
                 `location_id=${locationId}&` +
                 `patron_type_id=${patronTypeId}&`).then(res => {
           res.json().then(policy => {
-            console.log('*** found loan-policy', policy);
             setLoanPolicyId(policy.loanPolicyId);
           });
         });
@@ -123,13 +121,10 @@ const RequestInformation = ({
     }, [itemTypeId, loanTypeId, locationId, patronTypeId]);
   }
 
-  console.log('*** loanPolicyId =', loanPolicyId);
   useEffect(() => {
     if (loanPolicyId) {
-      console.log('*** searching for loanPolicyId', loanPolicyId);
       okapiKy(`loan-policy-storage/loan-policies/${loanPolicyId}`).then(res => {
         res.json().then(policy => {
-          console.log('*** found policy', policy);
           setLoanPolicy(policy);
         });
       });

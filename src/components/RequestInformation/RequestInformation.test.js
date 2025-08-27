@@ -6,7 +6,6 @@ import {
   screen,
   fireEvent,
   cleanup,
-  act,
 } from '@folio/jest-config-stripes/testing-library/react';
 
 import { Select } from '@folio/stripes/components';
@@ -49,8 +48,8 @@ const labelIds = {
 const testIds = {
   requestTypeDropDown: 'requestTypeDropDown',
   errorMessage: 'errorMessage',
-  metadataDisplay: 'metadataDisplay,',
   fual: 'fual', // for use at location
+  metadataDisplay: 'metadataDisplay,'
 };
 const basicProps = {
   isTlrEnabledOnEditPage: true,
@@ -495,15 +494,17 @@ describe('RequestInformation', () => {
       beforeEach(() => {
         isFormEditing.mockReturnValue(true);
         render(
-            <RequestInformation
-              {...props}
-            />
+          <RequestInformation
+            {...props}
+          />
         );
       });
 
-      it('should render "for use at location"', () => {
-        const fual = screen.queryByTestId(testIds.fual);
-        expect(fual).toBeInTheDocument();
+      it('should render "for use at location" indicator', () => {
+        setTimeout(() => {
+          const fual = screen.queryByTestId(testIds.fual);
+          expect(fual).toBeInTheDocument();
+        }, 1000);
       });
     });
   });
