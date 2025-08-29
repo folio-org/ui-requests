@@ -206,7 +206,7 @@
     "requestQueue.volume": "Wolumin",
     "requestQueue.patronComments": "Komentarze czytelnika",
     "requestQueue.status": "Status rezerwacji",
-    "requestQueue.requestInProgress": "In progress",
+    "requestQueue.requestInProgress": "W toku",
     "requestQueue.noDataForFulfillment": "There are no requests in fulfillment.",
     "requestQueue.notYetFilledRequests.noData": "No requests found",
     "filters.requestLevel.item": "Egzemplarz",
