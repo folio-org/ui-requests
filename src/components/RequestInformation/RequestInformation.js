@@ -48,14 +48,15 @@ const RequestInformation = ({
   MetadataDisplay,
   isTitleLevelRequest,
   isSelectedInstance,
+  selectedItem,
   isSelectedItem,
+  selectedUser,
   isSelectedUser,
   isRequestTypesReceived,
   isRequestTypeLoading,
   values,
   form,
   updateRequestPreferencesFields,
-  loan,
 }) => {
   const isEditForm = isFormEditing(request);
   const holdShelfExpireDate = get(request, ['status'], '') === requestStatuses.AWAITING_PICKUP
@@ -87,17 +88,42 @@ const RequestInformation = ({
   };
 
   const okapiKy = useOkapiKy();
+  const [loanPolicyId, setLoanPolicyId] = useState();
   const [loanPolicy, setLoanPolicy] = useState();
 
+  {
+    const itemTypeId = selectedItem?.materialType?.id;
+    const loanTypeId = selectedItem?.temporaryLoanType?.id || selectedItem?.permanentLoanType?.id;
+    const locationId = selectedItem?.effectiveLocation?.id;
+    const patronTypeId = selectedUser?.patronGroup;
+
+    useEffect(() => {
+      if (itemTypeId && loanTypeId && locationId && patronTypeId) {
+        okapiKy('circulation/rules/loan-policy?' +
+                `item_type_id=${itemTypeId}&` +
+                `loan_type_id=${loanTypeId}&` +
+                `location_id=${locationId}&` +
+                `patron_type_id=${patronTypeId}&`).then(res => {
+          res.json().then(policy => {
+            setLoanPolicyId(policy.loanPolicyId);
+          });
+        });
+      }
+      // okapiKy cannot be included in deps, otherwise useEffect fires in a loop
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [itemTypeId, loanTypeId, locationId, patronTypeId]);
+  }
+
   useEffect(() => {
-    if (loan?.loanPolicyId) {
-      okapiKy(`loan-policy-storage/loan-policies/${loan.loanPolicyId}`).then(res => {
+    if (loanPolicyId) {
+      okapiKy(`loan-policy-storage/loan-policies/${loanPolicyId}`).then(res => {
         res.json().then(policy => {
           setLoanPolicy(policy);
         });
       });
     }
-  }, [loan?.loanPolicyId]); // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loanPolicyId]);
 
   return (
     <>
@@ -167,7 +193,7 @@ const RequestInformation = ({
                 </Field>
               }
               {loanPolicy?.loansPolicy?.forUseAtLocation && (
-                <Icon icon="check-circle" size="large" iconRootClass={css.icon} iconPosition="end">
+                <Icon icon="check-circle" size="large" iconRootClass={css.icon} iconPosition="end" data-testid="fual">
                   <span className={css.textWithinIcon}><FormattedMessage id="ui-requests.forUseAtLocation" /></span>
                 </Icon>
               )}
@@ -273,7 +299,24 @@ RequestInformation.propTypes = {
   MetadataDisplay: PropTypes.elementType.isRequired,
   isTitleLevelRequest: PropTypes.bool.isRequired,
   isSelectedInstance: PropTypes.bool.isRequired,
+  selectedItem: PropTypes.shape({
+    materialType: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }),
+    temporaryLoanType: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }),
+    permanentLoanType: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }),
+    effectiveLocation: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }),
+  }),
   isSelectedItem: PropTypes.bool.isRequired,
+  selectedUser: PropTypes.shape({
+    patronGroup: PropTypes.string.isRequired,
+  }),
   isSelectedUser: PropTypes.bool.isRequired,
   isRequestTypesReceived: PropTypes.bool.isRequired,
   isRequestTypeLoading: PropTypes.bool.isRequired,
