@@ -169,7 +169,7 @@
     "override": "Outrepasser",
     "errors.sync.requestQueueLabel": "La file d'attente des réservations n'est pas synchronisée",
     "errors.sync.requestQueueBody": "Cette file d'attente des réservations a été mise à jour par une autre personne ou un autre processus et peut ne pas être à jour.",
-    "errors.unknown.requestQueueLabel": "Erreur de file d'attente des réservationd",
+    "errors.unknown.requestQueueLabel": "Erreur de file d'attente des réservations",
     "errors.unknown.requestQueueBody": "La réorganisation de la file d'attente des réservations a échoué",
     "requestQueue.refresh": "Actualiser la file d'attente",
     "items.selectItem": "Sélectionner l'exemplaire",
