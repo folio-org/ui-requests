@@ -89,7 +89,7 @@ const RequestInformation = ({
 
   const okapiKy = useOkapiKy();
   const [loanPolicyId, setLoanPolicyId] = useState();
-  const [loanPolicy, setLoanPolicy] = useState();
+  const [forUseAtLocation, setForUseAtLocation] = useState();
 
   {
     const itemTypeId = selectedItem?.materialType?.id;
@@ -118,7 +118,7 @@ const RequestInformation = ({
     if (loanPolicyId) {
       okapiKy(`loan-policy-storage/loan-policies/${loanPolicyId}`).then(res => {
         res.json().then(policy => {
-          setLoanPolicy(policy);
+          setForUseAtLocation(policy?.loansPolicy?.forUseAtLocation);
         });
       });
     }
@@ -192,7 +192,7 @@ const RequestInformation = ({
                   }}
                 </Field>
               }
-              {loanPolicy?.loansPolicy?.forUseAtLocation && (
+              {forUseAtLocation && (
                 <Icon icon="check-circle" size="large" iconRootClass={css.icon} iconPosition="end" data-testid="fual">
                   <span className={css.textWithinIcon}><FormattedMessage id="ui-requests.forUseAtLocation" /></span>
                 </Icon>
