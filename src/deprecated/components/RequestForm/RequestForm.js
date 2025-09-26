@@ -82,6 +82,7 @@ import {
   getTlrSettings,
   getRequester,
 } from '../../utils';
+import LoanPolicyHookBridge from './LoanPolicyHookBridge';
 
 import css from './RequestForm.css';
 
@@ -272,6 +273,7 @@ class RequestForm extends React.Component {
       isRequestTypeLoading: false,
       isRequestTypesForDuplicate: false,
       isRequestTypesForEditing: false,
+      forUseAtLocation: undefined,
     };
 
     this.connectedCancelRequestDialog = props.stripes.connect(CancelRequestDialog);
@@ -1233,7 +1235,7 @@ class RequestForm extends React.Component {
     }
 
     const patronGroup = getPatronGroup(requester, patronGroups);
-    const fulfillmentTypeOptions = getFulfillmentTypeOptions(hasDelivery, optionLists?.fulfillmentTypes || []);
+    const fulfillmentTypeOptions = getFulfillmentTypeOptions(hasDelivery && !this.state.forUseAtLocation, optionLists?.fulfillmentTypes || []);
     const isSubmittingDisabled = isSubmittingButtonDisabled(pristine, submitting);
     const isTitleLevelRequest = createTitleLevelRequest || request?.requestLevel === REQUEST_LEVEL_TYPES.TITLE;
     const getPatronBlockModalOpenStatus = () => {
@@ -1265,6 +1267,11 @@ class RequestForm extends React.Component {
 
     return (
       <Paneset isRoot>
+        <LoanPolicyHookBridge
+          selectedItem={selectedItem}
+          selectedUser={selectedUser}
+          setForUseAtLocation={forUseAtLocation => this.setState({ forUseAtLocation })}
+        />
         <RequestFormShortcutsWrapper
           onSubmit={handleSubmit}
           onCancel={handleCancelAndClose}
@@ -1426,18 +1433,17 @@ class RequestForm extends React.Component {
                       isRequestTypesReceived={isRequestTypesReceived}
                       isRequestTypeLoading={isRequestTypeLoading}
                       isSelectedInstance={Boolean(selectedInstance?.id)}
-                      selectedItem={selectedItem}
                       isSelectedItem={Boolean(selectedItem?.id)}
                       isSelectedUser={Boolean(selectedUser?.id)}
-                      selectedUser={selectedUser}
                       values={values}
                       form={form}
+                      forUseAtLocation={this.state.forUseAtLocation}
                     />
                     {isFulfilmentPreferenceVisible &&
                       <FulfilmentPreference
                         isEditForm={isEditForm}
                         requestTypes={requestTypes}
-                        deliverySelected={deliverySelected}
+                        deliverySelected={deliverySelected && !this.state.forUseAtLocation}
                         deliveryAddress={addressDetail}
                         onChangeAddress={this.onChangeAddress}
                         changeDeliveryAddress={this.changeDeliveryAddress}
