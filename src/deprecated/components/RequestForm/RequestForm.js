@@ -1235,7 +1235,7 @@ class RequestForm extends React.Component {
     }
 
     const patronGroup = getPatronGroup(requester, patronGroups);
-    const fulfillmentTypeOptions = getFulfillmentTypeOptions(hasDelivery, optionLists?.fulfillmentTypes || []);
+    const fulfillmentTypeOptions = getFulfillmentTypeOptions(hasDelivery && !this.state.forUseAtLocation, optionLists?.fulfillmentTypes || []);
     const isSubmittingDisabled = isSubmittingButtonDisabled(pristine, submitting);
     const isTitleLevelRequest = createTitleLevelRequest || request?.requestLevel === REQUEST_LEVEL_TYPES.TITLE;
     const getPatronBlockModalOpenStatus = () => {
@@ -1443,7 +1443,7 @@ class RequestForm extends React.Component {
                       <FulfilmentPreference
                         isEditForm={isEditForm}
                         requestTypes={requestTypes}
-                        deliverySelected={deliverySelected}
+                        deliverySelected={deliverySelected && !this.state.forUseAtLocation}
                         deliveryAddress={addressDetail}
                         onChangeAddress={this.onChangeAddress}
                         changeDeliveryAddress={this.changeDeliveryAddress}
