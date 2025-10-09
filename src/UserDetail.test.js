@@ -3,15 +3,16 @@ import {
   screen,
   cleanup,
 } from '@folio/jest-config-stripes/testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 
 import { NoValue } from '@folio/stripes/components';
 
 import UserDetail from './UserDetail';
 import {
   getFullName,
-  userHighlightBox,
   getPatronGroup,
 } from './utils';
+import * as UserHighlightBox from './components/UserHighlightBox/UserHighlightBox';
 
 const basicProps = {
   deliveryAddress: 'deliveryAddress',
@@ -46,12 +47,6 @@ const labelIds = {
 
 jest.mock('./utils', () => ({
   getFullName: jest.fn((user) => user.lastName),
-  userHighlightBox: jest.fn((label, name, id, barcode) => (
-    <>
-      <div>{label}</div>
-      <div>{barcode}</div>
-    </>
-  )),
   getPatronGroup: jest.fn(() => ({
     group: 'testPatronGroup',
   })),
@@ -59,6 +54,10 @@ jest.mock('./utils', () => ({
 }));
 
 describe('UserDetail', () => {
+  let userHighlightBoxSpy;
+  beforeEach(() => {
+    userHighlightBoxSpy = jest.spyOn(UserHighlightBox, 'default');
+  });
   afterEach(() => {
     NoValue.mockClear();
     cleanup();
@@ -67,7 +66,9 @@ describe('UserDetail', () => {
   describe('when all data provided', () => {
     beforeEach(() => {
       render(
-        <UserDetail {...basicProps} />
+        <MemoryRouter>
+          <UserDetail {...basicProps} />
+        </MemoryRouter>
       );
     });
 
@@ -83,15 +84,12 @@ describe('UserDetail', () => {
       expect(getPatronGroup).toHaveBeenCalledWith(basicProps.user, basicProps.patronGroups);
     });
 
-    it('should trigger "userHighlightBox" with correct arguments', () => {
-      const expectedArgs = [
-        [expect.anything(), basicProps.proxy.lastName, basicProps.proxy.id, basicProps.proxy.barcode],
-        [expect.anything(), basicProps.user.lastName, basicProps.user.id, basicProps.user.barcode],
-      ];
-
-      expectedArgs.forEach((user, index) => {
-        expect(userHighlightBox).toHaveBeenNthCalledWith(index + 1, ...user);
-      });
+    it('should trigger "UserHighlightBox" with correct arguments', () => {
+      // I don't know why the Nth call method stopped working
+      // but I think it has something to do with the bonus {} passed as part
+      // of a component's constructor
+      expect(userHighlightBoxSpy.mock.calls[0][0]).toEqual({ title: expect.anything(), user: basicProps.user });
+      expect(userHighlightBoxSpy.mock.calls[1][0]).toEqual({ title: expect.anything(), user: basicProps.proxy });
     });
 
     it('should render proxy label', () => {
@@ -139,7 +137,9 @@ describe('UserDetail', () => {
 
     beforeEach(() => {
       render(
-        <UserDetail {...props} />
+        <MemoryRouter>
+          <UserDetail {...props} />
+        </MemoryRouter>
       );
     });
 
@@ -156,7 +156,9 @@ describe('UserDetail', () => {
 
     beforeEach(() => {
       render(
-        <UserDetail {...props} />
+        <MemoryRouter>
+          <UserDetail {...props} />
+        </MemoryRouter>
       );
     });
 
@@ -182,7 +184,9 @@ describe('UserDetail', () => {
 
     beforeEach(() => {
       render(
-        <UserDetail {...props} />
+        <MemoryRouter>
+          <UserDetail {...props} />
+        </MemoryRouter>
       );
     });
 
@@ -202,7 +206,9 @@ describe('UserDetail', () => {
 
     beforeEach(() => {
       render(
-        <UserDetail {...props} />
+        <MemoryRouter>
+          <UserDetail {...props} />
+        </MemoryRouter>
       );
     });
 
@@ -215,7 +221,9 @@ describe('UserDetail', () => {
     beforeEach(() => {
       getPatronGroup.mockReturnValueOnce(undefined);
       render(
-        <UserDetail {...basicProps} />
+        <MemoryRouter>
+          <UserDetail {...basicProps} />
+        </MemoryRouter>
       );
     });
 
@@ -232,7 +240,9 @@ describe('UserDetail', () => {
 
     beforeEach(() => {
       render(
-        <UserDetail {...props} />
+        <MemoryRouter>
+          <UserDetail {...props} />
+        </MemoryRouter>
       );
     });
 
@@ -258,7 +268,9 @@ describe('UserDetail', () => {
 
     beforeEach(() => {
       render(
-        <UserDetail {...props} />
+        <MemoryRouter>
+          <UserDetail {...props} />
+        </MemoryRouter>
       );
     });
 
@@ -280,7 +292,9 @@ describe('UserDetail', () => {
 
     beforeEach(() => {
       render(
-        <UserDetail {...props} />
+        <MemoryRouter>
+          <UserDetail {...props} />
+        </MemoryRouter>
       );
     });
 
