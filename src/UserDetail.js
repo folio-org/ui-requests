@@ -10,11 +10,13 @@ import {
 } from '@folio/stripes/components';
 
 import {
-  getFullName,
-  userHighlightBox,
   getPatronGroup,
   isProxyFunctionalityAvailable,
 } from './utils';
+
+import {
+  UserHighlightBox
+} from './components';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -60,27 +62,13 @@ class UserDetail extends React.Component {
       isEcsTlrSettingEnabled,
     } = this.props;
 
-    const id = user?.id ?? request.requesterId;
-    const name = getFullName(user);
-    const barcode = user ? user.barcode : '';
     const patronGroup = getPatronGroup(user, patronGroups) || {};
-
-    let proxyName;
-    let proxyBarcode;
-    let proxyId;
-    if (isProxyFunctionalityAvailable(isEcsTlrSettingEnabled) && proxy) {
-      proxyName = getFullName(proxy);
-      proxyBarcode = proxy?.barcode || <NoValue />;
-      proxyId = proxy.id || request.proxyUserId;
-    }
-
-    const proxySection = proxyId
-      ? userHighlightBox(<FormattedMessage id="ui-requests.requester.proxy" />, proxyName, proxyId, proxyBarcode)
-      : null;
-
     return (
       <div>
-        {userHighlightBox(<FormattedMessage id="ui-requests.requester.requester" />, name, id, barcode)}
+        <UserHighlightBox
+          title=<FormattedMessage id="ui-requests.requester.requester" />
+          user={user}
+        />
         <Row>
           <Col xs={4}>
             <KeyValue
@@ -106,7 +94,12 @@ class UserDetail extends React.Component {
               /> }
           </Col>
         </Row>
-        {proxySection}
+        {isProxyFunctionalityAvailable(isEcsTlrSettingEnabled) && proxy?.id &&
+          <UserHighlightBox
+            title=<FormattedMessage id="ui-requests.requester.proxy" />
+            user={proxy}
+          />
+        }
       </div>
     );
   }
