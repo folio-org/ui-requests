@@ -40,8 +40,8 @@ describe('userHighlightBox', () => {
     it('renders no links', () => {
       expect(uhb.queryAllByRole('link')).toHaveLength(0);
     });
-    it('renders unknown user', () => {
-      expect(uhb.queryAllByText('ui-requests.errors.user.unknown', { exact: false })).toHaveLength(1);
+    it('renders anonymized user', () => {
+      expect(uhb.queryAllByText('ui-requests.requestMeta.anonymized', { exact: false })).toHaveLength(1);
     });
     it('renders dash barcode', () => {
       expect(uhb.queryAllByText('No value')).toHaveLength(1);

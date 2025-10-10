@@ -27,7 +27,7 @@ const FullNameLink = ({
   const id = requester?.id ?? requesterId;
   return (id
     ? <Link to={`/users/view/${id}`}>{getFullName(requester)}</Link>
-    : <FormattedMessage id="ui-requests.errors.user.unknown" />
+    : <FormattedMessage id="ui-requests.requestMeta.anonymized" />
   );
 };
 
