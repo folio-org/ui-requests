@@ -6,6 +6,7 @@ import {
 } from '@folio/jest-config-stripes/testing-library/react';
 import { NoValue } from '@folio/stripes/components';
 
+import * as utils from '../../utils';
 import { BarcodeLink, FullNameLink } from './RequesterLinks';
 
 describe('BarcodeLink', () => {
@@ -77,6 +78,13 @@ describe('BarcodeLink', () => {
 });
 
 describe('FullNameLink', () => {
+  let getFullNameSpy;
+  beforeEach(() => {
+    getFullNameSpy = jest.spyOn(utils, 'getFullName');
+  });
+  afterEach(() => {
+    getFullNameSpy.mockClear();
+  });
   describe('When name is presented', () => {
     let mockedRequester;
     let mockedRequest;
@@ -98,6 +106,7 @@ describe('FullNameLink', () => {
         </MemoryRouter>
       );
 
+      expect(getFullNameSpy).toHaveBeenCalled();
       expect(screen.getByText(mockedRequester.lastName)).toBeInTheDocument();
     });
 
