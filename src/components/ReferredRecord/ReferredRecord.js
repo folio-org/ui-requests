@@ -8,7 +8,7 @@ import {
   KeyValue,
 } from '@folio/stripes/components';
 
-import { createUserHighlightBoxLink } from '../../utils';
+import { FullNameLink } from '../RequesterLinks';
 
 import css from './ReferredRecord.css';
 
@@ -20,8 +20,7 @@ const ReferredRecord = ({ values }) => {
     itemId,
     holdingsRecordId,
     requestCreateDate,
-    requesterId,
-    requesterName,
+    request,
   } = values;
 
   const instanceLink = (
@@ -63,7 +62,7 @@ const ReferredRecord = ({ values }) => {
       <div>
         <FormattedMessage
           id="ui-requests.notes.assigned.requester"
-          values={{ requesterName: createUserHighlightBoxLink(requesterName, requesterId) }}
+          values={{ requesterName: <FullNameLink request={request} /> }}
         />
       </div>
       <div>
@@ -76,6 +75,13 @@ const ReferredRecord = ({ values }) => {
   );
 };
 
+const userShape = {
+  lastName: PropTypes.string,
+  firstName: PropTypes.string,
+  middleName: PropTypes.string,
+  preferredFirstName: PropTypes.string,
+};
+
 ReferredRecord.propTypes = {
   values: PropTypes.shape({
     instanceId: PropTypes.string.isRequired,
@@ -84,8 +90,15 @@ ReferredRecord.propTypes = {
     itemId: PropTypes.string.isRequired,
     holdingsRecordId: PropTypes.string.isRequired,
     requestCreateDate: PropTypes.string.isRequired,
-    requesterId: PropTypes.string.isRequired,
-    requesterName: PropTypes.string.isRequired,
+    request: PropTypes.shape({
+      requesterId: PropTypes.string,
+      requester: PropTypes.shape({
+        id: PropTypes.string,
+        barcode: PropTypes.string,
+        personal: PropTypes.shape(userShape),
+        ...userShape
+      }),
+    }),
   }).isRequired,
 };
 
