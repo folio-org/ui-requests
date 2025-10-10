@@ -6,7 +6,7 @@ import {
 import { AppIcon } from '@folio/stripes/core';
 
 import ItemLink from './components/ItemLink';
-import RequesterLink from './components/RequesterLink';
+import { BarcodeLink } from '../components/RequesterLinks';
 import { getFullName } from '../utils';
 import {
   MISSING_VALUE_SYMBOL,
@@ -56,7 +56,7 @@ export const formatter = {
   status: request => <FormattedMessage id={requestStatusesTranslations[request.status]} />,
   pickupDelivery: request => request.pickupServicePoint?.name || (request.deliveryType ? <FormattedMessage id="ui-requests.requestQueue.deliveryType" values={{ type: request.deliveryType }} /> : MISSING_VALUE_SYMBOL),
   requester: (request) => getFullName(request.requester),
-  requesterBarcode: request => <RequesterLink request={request} />,
+  requesterBarcode: request => <BarcodeLink request={request} />,
   patronGroup: request => request?.requester?.patronGroup?.group || MISSING_VALUE_SYMBOL,
   requestType: request => <FormattedMessage id={requestTypesTranslations[request.requestType]} />,
   enumeration: request => request.item?.enumeration || MISSING_VALUE_SYMBOL,
