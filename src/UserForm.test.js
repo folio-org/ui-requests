@@ -2,11 +2,12 @@ import {
   render,
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 
 import { ProxyManager } from '@folio/stripes/smart-components';
 
 import UserForm from './UserForm';
-import { userHighlightBox } from './utils';
+import * as UserHighlightBox from './components/UserHighlightBox/UserHighlightBox';
 
 const basicProps = {
   onCloseProxy: jest.fn(),
@@ -32,17 +33,18 @@ jest.mock('@folio/stripes/smart-components', () => ({
 }));
 jest.mock('./utils', () => ({
   getFullName: jest.fn((user) => user.lastName),
-  userHighlightBox: jest.fn((title, name, id, barcode) => (
-    <>
-      <span>{title}</span>
-      <span>{name}</span>
-      <span>{barcode}</span>
-    </>
-  )),
   isProxyFunctionalityAvailable: jest.fn(() => true),
 }));
 
 describe('UserForm', () => {
+  let userHighlightBoxSpy;
+  beforeEach(() => {
+    userHighlightBoxSpy = jest.spyOn(UserHighlightBox, 'default');
+  });
+  afterEach(() => {
+    userHighlightBoxSpy.mockClear();
+  });
+
   describe('When proxy is provided', () => {
     const props = {
       ...basicProps,
@@ -55,9 +57,11 @@ describe('UserForm', () => {
 
     beforeEach(() => {
       render(
-        <UserForm
-          {...props}
-        />
+        <MemoryRouter>
+          <UserForm
+            {...props}
+          />
+        </MemoryRouter>
       );
     });
 
@@ -95,9 +99,11 @@ describe('UserForm', () => {
   describe('When proxy is not provided', () => {
     beforeEach(() => {
       render(
-        <UserForm
-          {...basicProps}
-        />
+        <MemoryRouter>
+          <UserForm
+            {...basicProps}
+          />
+        </MemoryRouter>
       );
     });
 
@@ -129,9 +135,11 @@ describe('UserForm', () => {
   describe('When creating a request', () => {
     beforeEach(() => {
       render(
-        <UserForm
-          {...basicProps}
-        />
+        <MemoryRouter>
+          <UserForm
+            {...basicProps}
+          />
+        </MemoryRouter>
       );
     });
 
@@ -157,9 +165,11 @@ describe('UserForm', () => {
       ProxyManager.mockClear();
 
       render(
-        <UserForm
-          {...props}
-        />
+        <MemoryRouter>
+          <UserForm
+            {...props}
+          />
+        </MemoryRouter>
       );
     });
 
@@ -171,16 +181,19 @@ describe('UserForm', () => {
   describe('When user id is provided', () => {
     beforeEach(() => {
       render(
-        <UserForm
-          {...basicProps}
-        />
+        <MemoryRouter>
+          <UserForm
+            {...basicProps}
+          />
+        </MemoryRouter>
       );
     });
 
-    it('should trigger "userHighlightBox" with user id', () => {
-      const expectedArgs = [expect.any(Object), basicProps.user.lastName, basicProps.user.id, basicProps.user.barcode];
-
-      expect(userHighlightBox).toHaveBeenCalledWith(...expectedArgs);
+    it('should trigger "UserHighlightBox" with user id', () => {
+      expect(userHighlightBoxSpy).toHaveBeenCalledWith({
+        title: expect.anything(),
+        user: basicProps.user
+      }, {});
     });
   });
 
@@ -198,16 +211,19 @@ describe('UserForm', () => {
 
     beforeEach(() => {
       render(
-        <UserForm
-          {...props}
-        />
+        <MemoryRouter>
+          <UserForm
+            {...props}
+          />
+        </MemoryRouter>
       );
     });
 
-    it('should trigger "userHighlightBox" with requester id', () => {
-      const expectedArgs = [expect.any(Object), props.user.lastName, props.request.requesterId, props.user.barcode];
-
-      expect(userHighlightBox).toHaveBeenCalledWith(...expectedArgs);
+    it('should trigger "UserHighlightBox" with requester id', () => {
+      expect(userHighlightBoxSpy).toHaveBeenCalledWith({
+        title: expect.anything(),
+        user: expect.objectContaining({ id: props.request.requesterId })
+      }, {});
     });
   });
 });
