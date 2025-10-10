@@ -8,7 +8,7 @@ import {
 } from './constants';
 
 import ItemLink from './components/ItemLink';
-import RequesterLink from './components/RequesterLink';
+import { BarcodeLink } from '../components/RequesterLinks';
 import {
   getFullName,
 } from '../utils';
@@ -20,7 +20,9 @@ import {
 } from '../constants';
 
 jest.mock('./components/ItemLink', () => jest.fn(() => null));
-jest.mock('./components/RequesterLink', () => jest.fn(() => null));
+jest.mock('../components/RequesterLinks', () => ({
+  BarcodeLink: jest.fn(() => null),
+}));
 jest.mock('../utils', () => ({
   getFullName: jest.fn(),
 }));
@@ -90,10 +92,10 @@ describe('formatter', () => {
       }));
     });
 
-    it('should call "RequesterLink" with correct props', () => {
+    it('should call "BarcodeLink" with correct props', () => {
       render(formatter.requesterBarcode(requiredData));
 
-      expect(RequesterLink).toHaveBeenCalledWith(expect.objectContaining({
+      expect(BarcodeLink).toHaveBeenCalledWith(expect.objectContaining({
         request: requiredData,
       }), {});
     });
