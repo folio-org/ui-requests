@@ -12,10 +12,12 @@ import {
 import { ProxyManager } from '@folio/stripes/smart-components';
 
 import {
-  getFullName,
-  userHighlightBox,
   isProxyFunctionalityAvailable,
 } from './utils';
+
+import {
+  UserHighlightBox
+} from './components';
 
 class UserForm extends React.Component {
   static propTypes = {
@@ -58,39 +60,30 @@ class UserForm extends React.Component {
       isEcsTlrSettingEnabled,
     } = this.props;
     const isProxyAvailable = isProxyFunctionalityAvailable(isEcsTlrSettingEnabled);
-    const id = user?.id ?? request.requesterId;
-    const name = getFullName(user);
-    const barcode = user.barcode;
     const isEditable = !!request;
     const isProxyManagerAvailable = isProxyAvailable && !isEditable;
 
-    let proxyName;
-    let proxyBarcode;
-    let proxyId;
-    if (isProxyAvailable && proxy) {
-      proxyName = getFullName(proxy);
-      proxyBarcode = proxy?.barcode || '-';
-      proxyId = proxy.id;
-    }
-
-    const proxySection = proxyId && proxyId !== id
-      ? userHighlightBox(<FormattedMessage id="ui-requests.requester.proxy" />, name, id, barcode)
-      : null;
-
-    const userSection = proxyId
-      ? userHighlightBox(<FormattedMessage id="ui-requests.requester.requester" />, proxyName, proxyId, proxyBarcode)
-      : userHighlightBox(<FormattedMessage id="ui-requests.requester.requester" />, name, id, barcode);
+    const requestUser = { ...user, id : (user?.id ?? request.requesterId) };
 
     return (
       <div>
-        {userSection}
+        <UserHighlightBox
+          title=<FormattedMessage id="ui-requests.requester.requester" />
+          user={isProxyAvailable && proxy?.id ? proxy : requestUser}
+        />
+
         <Row>
           <Col xs={4}>
             <KeyValue label={<FormattedMessage id="ui-requests.requester.patronGroup.group" />} value={patronGroup || '-'} />
           </Col>
         </Row>
 
-        {proxySection}
+        { isProxyAvailable && proxy?.id && proxy.id !== requestUser.id &&
+          <UserHighlightBox
+            title=<FormattedMessage id="ui-requests.requester.proxy" />
+            user={requestUser}
+          />
+        }
 
         {isProxyManagerAvailable &&
           <this.connectedProxyManager

@@ -85,11 +85,8 @@ describe('UserDetail', () => {
     });
 
     it('should trigger "UserHighlightBox" with correct arguments', () => {
-      // I don't know why the Nth call method stopped working
-      // but I think it has something to do with the bonus {} passed as part
-      // of a component's constructor
-      expect(userHighlightBoxSpy.mock.calls[0][0]).toEqual({ title: expect.anything(), user: basicProps.user });
-      expect(userHighlightBoxSpy.mock.calls[1][0]).toEqual({ title: expect.anything(), user: basicProps.proxy });
+      expect(userHighlightBoxSpy).toHaveBeenNthCalledWith(1, { title: expect.anything(), user: basicProps.user }, {});
+      expect(userHighlightBoxSpy).toHaveBeenNthCalledWith(2, { title: expect.anything(), user: basicProps.proxy }, {});
     });
 
     it('should render proxy label', () => {
