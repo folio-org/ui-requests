@@ -147,9 +147,9 @@ describe('FullNameLink', () => {
       );
     });
 
-    it('should render error (for now)', () => {
+    it('should render anonymized', () => {
       expect(screen.queryAllByRole('link')).toHaveLength(0);
-      expect(screen.queryAllByText('ui-requests.errors.user.unknown')).toHaveLength(1);
+      expect(screen.queryAllByText('ui-requests.requestMeta.anonymized')).toHaveLength(1);
     });
   });
 });
