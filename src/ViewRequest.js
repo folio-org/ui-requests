@@ -60,7 +60,6 @@ import {
 import {
   toUserAddress,
   isDelivery,
-  getFullName,
   getTlrSettings,
   generateUserName,
   isValidRequest,
