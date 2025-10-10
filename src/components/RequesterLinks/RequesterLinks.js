@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 import { NoValue } from '@folio/stripes/components';
 
@@ -24,7 +25,10 @@ const FullNameLink = ({
   },
 }) => {
   const id = requester?.id ?? requesterId;
-  return (id ? <Link to={`/users/view/${id}`}>{getFullName(requester)}</Link> : '');
+  return (id
+    ? <Link to={`/users/view/${id}`}>{getFullName(requester)}</Link>
+    : <FormattedMessage id="ui-requests.errors.user.unknown" />
+  );
 };
 
 const userShape = {
