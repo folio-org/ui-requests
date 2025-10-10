@@ -1,6 +1,3 @@
-import { render } from '@folio/jest-config-stripes/testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-
 import {
   escape,
 } from 'lodash';
