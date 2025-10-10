@@ -49,7 +49,7 @@ const userShape = {
   lastName: PropTypes.string,
   firstName: PropTypes.string,
   middleName: PropTypes.string,
-  preferredFirstName: PropTypes,
+  preferredFirstName: PropTypes.string,
 };
 
 UserHighlightBox.propTypes = {
