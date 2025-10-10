@@ -7,7 +7,6 @@ import {
 
 import {
   buildTemplate,
-  userHighlightBox,
   duplicateRequest,
   escapeValue,
   getTlrSettings,
@@ -126,57 +125,6 @@ describe('buildTemplate', () => {
     expect(v).toEqual('The vorpal blade went snicker-snack!');
   });
 });
-
-describe('userHighlightBox', () => {
-  const title = 'user title';
-  let uhb;
-  describe('given a user', () => {
-    let name;
-    let id;
-    let barcode;
-    beforeEach(() => {
-      name = 'user name';
-      id = 'id';
-      barcode = 'barcode';
-      uhb = render(
-        <MemoryRouter>
-          {userHighlightBox(title, name, id, barcode)}
-        </MemoryRouter>
-      );
-    });
-    it('renders the title', () => {
-      expect(uhb.queryAllByText(title)).toHaveLength(1);
-    });
-    it('renders the user name as a link', () => {
-      expect(uhb.getByText(name).href).toMatch(`/users/view/${id}`);
-    });
-    it('renders the user barcode as a link', () => {
-      expect(uhb.getByText(barcode).href).toMatch(`/users/view/${id}`);
-    });
-  });
-  describe('given a null user', () => {
-    beforeEach(() => {
-      uhb = render(
-        <MemoryRouter>
-          {userHighlightBox(title)}
-        </MemoryRouter>
-      );
-    });
-    it('renders the title', () => {
-      expect(uhb.queryAllByText(title)).toHaveLength(1);
-    });
-    it('renders no links', () => {
-      expect(uhb.queryAllByRole('link')).toHaveLength(0);
-    });
-    it('renders unknown user', () => {
-      expect(uhb.queryAllByText('ui-requests.errors.user.unknown', {exact: false})).toHaveLength(1);
-    });
-    it('renders dash barcode', () => {
-      expect(uhb.queryAllByText('No value')).toHaveLength(1);
-    });
-  });
-});
-
 
 describe('duplicateRequest', () => {
   it('omits non-cloneable attributes', () => {
