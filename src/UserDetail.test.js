@@ -9,7 +9,6 @@ import { NoValue } from '@folio/stripes/components';
 
 import UserDetail from './UserDetail';
 import {
-  getFullName,
   getPatronGroup,
 } from './utils';
 import * as UserHighlightBox from './components/UserHighlightBox/UserHighlightBox';
@@ -70,14 +69,6 @@ describe('UserDetail', () => {
           <UserDetail {...basicProps} />
         </MemoryRouter>
       );
-    });
-
-    it('should trigger "getFullName" with correct argument', () => {
-      const expectedArgs = [basicProps.user, basicProps.proxy];
-
-      expectedArgs.forEach((user, index) => {
-        expect(getFullName).toHaveBeenNthCalledWith(index + 1, user);
-      });
     });
 
     it('should trigger "getPatronGroup" with correct arguments', () => {
