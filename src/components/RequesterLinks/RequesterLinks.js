@@ -11,7 +11,7 @@ const BarcodeLink = ({
   request: {
     requesterId,
     requester,
-  },
+  } = {},
 }) => {
   const id = requester?.id ?? requesterId;
   const barcode = requester?.barcode;
@@ -22,7 +22,7 @@ const FullNameLink = ({
   request: {
     requesterId,
     requester,
-  },
+  } = {},
 }) => {
   const id = requester?.id ?? requesterId;
   return (id

@@ -684,9 +684,8 @@ class ViewRequest extends React.Component {
       itemBarcode: request.item?.barcode,
       itemId: request.itemId,
       holdingsRecordId: request.holdingsRecordId,
-      requesterName: getFullName(request.requester),
-      requesterId: request.requester?.id ?? request.requesterId,
       requestCreateDate: request.metadata.createdDate,
+      request,
     };
 
     const isDuplicatingDisabled =
