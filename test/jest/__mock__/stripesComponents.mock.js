@@ -81,7 +81,7 @@ jest.mock('@folio/stripes/components', () => ({
       {children}
     </div>
   )),
-  Icon: jest.fn(({ children }) => <div>{children}</div>),
+  Icon: jest.fn(({ children, 'data-testid': testId }) => <div data-testid={testId}>{children}</div>),
   Layout: jest.fn(({
     children,
     'data-testid': testId,

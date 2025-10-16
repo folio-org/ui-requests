@@ -176,6 +176,7 @@ class ViewRequest extends React.Component {
 
     this.state = {
       request: {},
+      hasFullRequestLoaded: false,
       moveRequest: false,
       titleLevelRequestsFeatureEnabled,
     };
@@ -226,9 +227,20 @@ class ViewRequest extends React.Component {
   }
 
   loadFullRequest(basicRequest) {
+    const {
+      match: {
+        params: {
+          id,
+        },
+      },
+    } = this.props;
+
     return this.props.joinRequest(basicRequest).then(request => {
       if (this._isMounted) {
-        this.setState({ request });
+        this.setState({
+          request,
+          hasFullRequestLoaded: id === request.id,
+        });
       }
     });
   }
@@ -492,6 +504,7 @@ class ViewRequest extends React.Component {
       isCancellingRequest,
       moveRequest,
       titleLevelRequestsFeatureEnabled,
+      hasFullRequestLoaded,
     } = this.state;
     const {
       requestLevel,
@@ -509,7 +522,7 @@ class ViewRequest extends React.Component {
     const isRequestOpen = requestStatus.startsWith('Open');
     const cancellationReasonMap = keyBy(cancellationReasons, 'id');
     const isRequestValid = isValidRequest(request);
-    const isDCBTransaction = isVirtualPatron(requester?.personal?.lastName) || isVirtualItem(request?.instanceId, request?.holdingsRecordId);
+    const isDCBTransaction = isVirtualPatron(requester) || isVirtualItem(request?.instanceId, request?.holdingsRecordId);
 
     let deliveryAddressDetail;
     let selectedDelivery = false;
@@ -537,6 +550,17 @@ class ViewRequest extends React.Component {
     const actionMenu = ({ onToggle }) => {
       if (isEcsTlrSecondaryRequest) {
         return null;
+      }
+
+      // Show a loading indicator while the full request details are being loaded,
+      // since the `isDCBTransaction` depends on having the full details and used to determine what actions to display.
+      if (!hasFullRequestLoaded) {
+        return (
+          <Icon
+            icon="spinner-ellipsis"
+            data-testid="actionMenu-loader"
+          />
+        );
       }
 
       const isMoveAndDuplicateHidden = shouldHideMoveAndDuplicate(stripes, isEcsTlrPrimaryRequest, isEcsTlrSettingReceived, isEcsTlrSettingEnabled, isEcsIntermediateRequestInCentralTenant);
@@ -665,9 +689,11 @@ class ViewRequest extends React.Component {
     };
 
     const isDuplicatingDisabled =
-      isRequestClosed &&
+      isDCBTransaction || (
+        isRequestClosed &&
       request.requestLevel === REQUEST_LEVEL_TYPES.TITLE &&
-      !this.state.titleLevelRequestsFeatureEnabled;
+      !this.state.titleLevelRequestsFeatureEnabled
+      );
     const requestTypeMessageKey = requestTypesTranslations[request.requestType];
     const requestTypeMessage = requestTypeMessageKey ? <FormattedMessage id={requestTypeMessageKey} /> : <NoValue />;
     const requestStatusMessageKey = requestStatusesTranslations[request.status];
@@ -689,7 +715,7 @@ class ViewRequest extends React.Component {
           onEdit={this.props.onEdit}
           accordionStatusRef={this.accordionStatusRef}
           isDuplicatingDisabled={isDuplicatingDisabled}
-          isEditingDisabled={isRequestClosed}
+          isEditingDisabled={isRequestClosed || isDCBTransaction}
           stripes={stripes}
         >
           <TitleManager record={get(request, ['instance', 'title'])} />

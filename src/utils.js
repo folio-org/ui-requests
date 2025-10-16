@@ -34,7 +34,6 @@ import {
   INVALID_REQUEST_HARDCODED_ID,
   DCB_INSTANCE_ID,
   DCB_HOLDINGS_RECORD_ID,
-  DCB_USER,
   SLIPS_TYPE,
   REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS,
 } from './constants';
@@ -415,12 +414,7 @@ export const isVirtualItem = (
   return instanceId === DCB_INSTANCE_ID && holdingsRecordId === DCB_HOLDINGS_RECORD_ID;
 };
 
-
-/*
-  DCB Transactions (where FOLIO plays a) lending role work with virtual patons,
-  whose lastname is hard coded to "DcbSystem"
-*/
-export const isVirtualPatron = (lastName) => lastName === DCB_USER.lastName;
+export const isVirtualPatron = (user) => user?.type === 'dcb';
 
 export const memoizeValidation = (fn) => {
   const lastArgs = {};
