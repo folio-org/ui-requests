@@ -420,10 +420,6 @@ export const REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS = {
   [REQUEST_ERROR_MESSAGE_CODE.ITEM_OF_THIS_INSTANCE_ALREADY_REQUESTED]: 'ui-requests.errors.itemOfThisInstanceAlreadyRequested',
 };
 
-export const DCB_USER = {
-  lastName: 'DcbSystem'
-};
-
 export const DCB_INSTANCE_ID = '9d1b77e4-f02e-4b7f-b296-3f2042ddac54';
 export const DCB_HOLDINGS_RECORD_ID = '10cd3a5a-d36f-4c7a-bc4f-e1ae3cf820c9';
 

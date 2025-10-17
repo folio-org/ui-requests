@@ -20,7 +20,6 @@ import ViewRequest, {
   isAnyActionButtonVisible,
   shouldHideMoveAndDuplicate,
 } from './ViewRequest';
-import RequestForm from './RequestForm';
 import MoveRequestManager from './MoveRequestManager';
 import CancelRequestDialog from './CancelRequestDialog';
 import UserDetail from './UserDetail';
@@ -172,9 +171,7 @@ describe('ViewRequest', () => {
   const mockedRequestWithDCBUser = {
     ...mockedRequest,
     requester: {
-      personal: {
-        lastName: 'DcbSystem',
-      }
+      type: 'dcb',
     }
   };
   const mockedRequestWithVirtualItem = {
@@ -297,16 +294,13 @@ describe('ViewRequest', () => {
   );
   checkIfUserInCentralTenant.mockReturnValue(true);
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('Non DCB Transactions', () => {
-    beforeEach(() => {
-      renderViewRequest(defaultProps);
-    });
-
-    afterEach(() => {
-      RequestForm.mockClear();
-    });
-
     it('should render request detail title', () => {
+      renderViewRequest(defaultProps);
       expect(screen.getByText(labelIds.requestDetailTitle)).toBeInTheDocument();
     });
 
@@ -324,11 +318,29 @@ describe('ViewRequest', () => {
               };
             });
 
-            it('should render "Duplicate" button', () => {
+            it('should render "Duplicate" button', async () => {
+              renderViewRequest({
+                ...defaultProps,
+                joinRequest: () => Promise.resolve(mockedRequest),
+              });
+
+              await waitFor(() => {
+                expect(screen.queryByTestId('actionMenu-loader')).not.toBeInTheDocument();
+              });
+
               expect(screen.getByText(labelIds.duplicateRequest)).toBeInTheDocument();
             });
 
             it('should trigger "onDuplicate"', async () => {
+              renderViewRequest({
+                ...defaultProps,
+                joinRequest: () => Promise.resolve(mockedRequest),
+              });
+
+              await waitFor(() => {
+                expect(screen.queryByTestId('actionMenu-loader')).not.toBeInTheDocument();
+              });
+
               const duplicateButton = screen.getByText(labelIds.duplicateRequest);
 
               await userEvent.click(duplicateButton);
@@ -344,7 +356,16 @@ describe('ViewRequest', () => {
               };
             });
 
-            it('should not render "Duplicate" button', () => {
+            it('should not render "Duplicate" button', async () => {
+              renderViewRequest({
+                ...defaultProps,
+                joinRequest: () => Promise.resolve(mockedRequest),
+              });
+
+              await waitFor(() => {
+                expect(screen.queryByTestId('actionMenu-loader')).not.toBeInTheDocument();
+              });
+
               expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
             });
           });
@@ -366,11 +387,16 @@ describe('ViewRequest', () => {
             },
           };
 
-          beforeEach(() => {
-            renderViewRequest(props);
-          });
+          it('should not render "Duplicate" button', async () => {
+            renderViewRequest({
+              ...props,
+              joinRequest: () => Promise.resolve(closedInvalidRequest),
+            });
 
-          it('should not render "Duplicate" button', () => {
+            await waitFor(() => {
+              expect(screen.queryByTestId('actionMenu-loader')).not.toBeInTheDocument();
+            });
+
             expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
           });
         });
@@ -393,11 +419,16 @@ describe('ViewRequest', () => {
             },
           };
 
-          beforeEach(() => {
-            renderViewRequest(props);
-          });
+          it('actions menu should show all possible actions', async () => {
+            renderViewRequest({
+              ...props,
+              joinRequest: () => Promise.resolve(openValidRequest),
+            });
 
-          it('actions menu should show all possible actions', () => {
+            await waitFor(() => {
+              expect(screen.queryByTestId('actionMenu-loader')).not.toBeInTheDocument();
+            });
+
             expect(screen.getByText(labelIds.cancelRequest)).toBeInTheDocument();
             expect(screen.getByText(labelIds.edit)).toBeInTheDocument();
             expect(screen.getByText(labelIds.duplicateRequest)).toBeInTheDocument();
@@ -407,27 +438,31 @@ describe('ViewRequest', () => {
         });
 
         describe('when request is invalid', () => {
+          const invalidRequest = {
+            ...openValidRequest,
+            instanceId: INVALID_REQUEST_HARDCODED_ID,
+            holdingsRecordId: INVALID_REQUEST_HARDCODED_ID,
+          };
           const props = {
             ...defaultProps,
             resources: {
               selectedRequest: {
                 hasLoaded: true,
-                records: [
-                  {
-                    ...openValidRequest,
-                    instanceId: INVALID_REQUEST_HARDCODED_ID,
-                    holdingsRecordId: INVALID_REQUEST_HARDCODED_ID,
-                  },
-                ],
+                records: [invalidRequest],
               },
             },
           };
 
-          beforeEach(() => {
-            renderViewRequest(props);
-          });
+          it('should render action menu with only "Cancel request" button', async () => {
+            renderViewRequest({
+              ...props,
+              joinRequest: () => Promise.resolve(invalidRequest),
+            });
 
-          it('should render action menu with only "Cancel request" button', () => {
+            await waitFor(() => {
+              expect(screen.queryByTestId('actionMenu-loader')).not.toBeInTheDocument();
+            });
+
             expect(screen.getByText(labelIds.cancelRequest)).toBeInTheDocument();
             expect(screen.queryByText(labelIds.edit)).not.toBeInTheDocument();
             expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
@@ -440,22 +475,48 @@ describe('ViewRequest', () => {
 
     describe('Keyboard shortcuts', () => {
       it('should check permission when duplicating', () => {
+        renderViewRequest({
+          ...defaultProps,
+          resources: {
+            selectedRequest: {
+              hasLoaded: true,
+              records: [
+                {
+                  ...mockedRequest,
+                  status: requestStatuses.NOT_YET_FILLED,
+                },
+              ],
+            },
+          },
+        });
+
         duplicateRecordShortcut(document.body);
-        expect(defaultProps.stripes.hasPerm).toHaveBeenCalled();
+        expect(defaultProps.stripes.hasPerm).toHaveBeenCalledWith('ui-requests.create');
       });
 
       it('should check permission on edit', () => {
+        renderViewRequest({
+          ...defaultProps,
+          resources: {
+            selectedRequest: {
+              hasLoaded: true,
+              records: [
+                {
+                  ...mockedRequest,
+                  status: requestStatuses.NOT_YET_FILLED,
+                },
+              ],
+            },
+          },
+        });
+
         editRecordShortcut(document.body);
-        expect(defaultProps.stripes.hasPerm).toHaveBeenCalled();
+        expect(defaultProps.stripes.hasPerm).toHaveBeenCalledWith('ui-requests.edit');
       });
     });
   });
 
   describe('DCB Transactions', () => {
-    afterEach(() => {
-      RequestForm.mockClear();
-    });
-
     describe('when virtual patron-DCB Lending flow', () => {
       describe('when in request detail', () => {
         beforeAll(() => {
@@ -468,24 +529,35 @@ describe('ViewRequest', () => {
             ...mockedRequestWithDCBUser,
             status: cStatus,
           }));
-          const closedRequestsProps = closedRequests.map(cReq => ({
-            ...defaultDCBLendingProps,
-            resources: {
-              selectedRequest: {
-                hasLoaded: true,
-                records: [
-                  {
-                    ...defaultDCBLendingProps.resources.selectedRequest.records,
-                    ...cReq,
-                  },
-                ],
-              },
-            }
-          }));
+
+          const closedRequestsProps = closedRequests.map(cReq => {
+            const record = {
+              ...defaultDCBLendingProps.resources.selectedRequest.records[0],
+              ...cReq,
+            };
+
+            return {
+              ...defaultDCBLendingProps,
+              joinRequest: () => Promise.resolve(record),
+              resources: {
+                selectedRequest: {
+                  hasLoaded: true,
+                  records: [
+                    record,
+                  ],
+                },
+              }
+            };
+          });
 
           closedRequestsProps.forEach(props => {
-            it(`should not render action menu when request status is ${props?.resources?.selectedRequest?.records[0]?.status}`, () => {
+            it(`should not render action menu when request status is ${props?.resources?.selectedRequest?.records[0]?.status}`, async () => {
               renderViewRequest(props);
+
+              await waitFor(() => {
+                expect(screen.queryByTestId('actionMenu-loader')).not.toBeInTheDocument();
+              });
+
               expect(screen.queryByRole('button', { name: 'Actions' })).toBeNull();
             });
           });
@@ -503,7 +575,6 @@ describe('ViewRequest', () => {
                 hasLoaded: true,
                 records: [
                   {
-                    ...defaultDCBLendingProps.resources.selectedRequest.records,
                     ...openValidRequest,
                   },
                 ],
@@ -511,11 +582,16 @@ describe('ViewRequest', () => {
             },
           };
 
-          beforeEach(() => {
-            renderViewRequest(props);
-          });
+          it('should render action menu with only "Cancel request" button', async () => {
+            renderViewRequest({
+              ...props,
+              joinRequest: () => Promise.resolve(openValidRequest),
+            });
 
-          it('should render action menu with only "Cancel request" button', () => {
+            await waitFor(() => {
+              expect(screen.queryByTestId('actionMenu-loader')).not.toBeInTheDocument();
+            });
+
             expect(screen.getByText(labelIds.cancelRequest)).toBeInTheDocument();
             expect(screen.queryByText(labelIds.edit)).not.toBeInTheDocument();
             expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
@@ -526,17 +602,50 @@ describe('ViewRequest', () => {
       });
 
       describe('Keyboard shortcuts', () => {
-        beforeEach(() => {
-          renderViewRequest(defaultDCBLendingProps);
-        });
-        it('should check permission when duplicating', () => {
+        it('should not be able to duplicate a DCB request', () => {
+          const record = {
+            ...mockedRequestWithDCBUser,
+            status: requestStatuses.NOT_YET_FILLED,
+          };
+
+          renderViewRequest({
+            ...defaultDCBLendingProps,
+            joinRequest: () => Promise.resolve(record),
+            resources: {
+              selectedRequest: {
+                hasLoaded: true,
+                records: [
+                  record,
+                ],
+              },
+            },
+          });
+
           duplicateRecordShortcut(document.body);
-          expect(defaultProps.stripes.hasPerm).toHaveBeenCalled();
+          expect(defaultDCBLendingProps.stripes.hasPerm).not.toHaveBeenCalledWith('ui-requests.create');
         });
 
-        it('should check permission on edit', () => {
+        it('should not be able to edit a DCB request', () => {
+          const record = {
+            ...mockedRequestWithDCBUser,
+            status: requestStatuses.NOT_YET_FILLED,
+          };
+
+          renderViewRequest({
+            ...defaultDCBLendingProps,
+            joinRequest: () => Promise.resolve(record),
+            resources: {
+              selectedRequest: {
+                hasLoaded: true,
+                records: [
+                  record,
+                ],
+              },
+            },
+          });
+
           editRecordShortcut(document.body);
-          expect(defaultProps.stripes.hasPerm).toHaveBeenCalled();
+          expect(defaultDCBLendingProps.stripes.hasPerm).not.toHaveBeenCalledWith('ui-requests.edit');
         });
       });
     });
@@ -550,27 +659,37 @@ describe('ViewRequest', () => {
         describe('when current borrowing request status starts with "Closed"', () => {
           const closedStatuses = [requestStatuses.FILLED, requestStatuses.CANCELLED, requestStatuses.PICKUP_EXPIRED, requestStatuses.UNFILLED];
           const closedRequests = closedStatuses.map(cStatus => ({
-            ...mockedRequestWithDCBUser,
+            ...mockedRequestWithVirtualItem,
             status: cStatus,
           }));
-          const closedRequestsProps = closedRequests.map(cReq => ({
-            ...defaultDCBBorrowingProps,
-            resources: {
-              selectedRequest: {
-                hasLoaded: true,
-                records: [
-                  {
-                    ...defaultDCBBorrowingProps.resources.selectedRequest.records,
-                    ...cReq,
-                  },
-                ],
-              },
-            }
-          }));
+          const closedRequestsProps = closedRequests.map(cReq => {
+            const record = {
+              ...defaultDCBBorrowingProps.resources.selectedRequest.records[0],
+              ...cReq,
+            };
+
+            return {
+              ...defaultDCBBorrowingProps,
+              joinRequest: () => Promise.resolve(record),
+              resources: {
+                selectedRequest: {
+                  hasLoaded: true,
+                  records: [
+                    record,
+                  ],
+                },
+              }
+            };
+          });
 
           closedRequestsProps.forEach(props => {
-            it(`should not render action menu when request status is ${props?.resources?.selectedRequest?.records[0]?.status}`, () => {
+            it(`should not render action menu when request status is ${props?.resources?.selectedRequest?.records[0]?.status}`, async () => {
               renderViewRequest(props);
+
+              await waitFor(() => {
+                expect(screen.queryByTestId('actionMenu-loader')).not.toBeInTheDocument();
+              });
+
               expect(screen.queryByRole('button', { name: 'Actions' })).toBeNull();
             });
           });
@@ -578,7 +697,7 @@ describe('ViewRequest', () => {
 
         describe('when current borrowing request is open', () => {
           const openValidRequest = {
-            ...mockedRequestWithDCBUser,
+            ...mockedRequestWithVirtualItem,
             status: requestStatuses.NOT_YET_FILLED,
           };
           const props = {
@@ -588,7 +707,6 @@ describe('ViewRequest', () => {
                 hasLoaded: true,
                 records: [
                   {
-                    ...defaultDCBBorrowingProps.resources.selectedRequest.records,
                     ...openValidRequest,
                   },
                 ],
@@ -596,11 +714,16 @@ describe('ViewRequest', () => {
             },
           };
 
-          beforeEach(() => {
-            renderViewRequest(props);
-          });
+          it('should render action menu with only "Cancel request" button', async () => {
+            renderViewRequest({
+              ...props,
+              joinRequest: () => Promise.resolve(openValidRequest),
+            });
 
-          it('should render action menu with only "Cancel request" button', () => {
+            await waitFor(() => {
+              expect(screen.queryByTestId('actionMenu-loader')).not.toBeInTheDocument();
+            });
+
             expect(screen.getByText(labelIds.cancelRequest)).toBeInTheDocument();
             expect(screen.queryByText(labelIds.edit)).not.toBeInTheDocument();
             expect(screen.queryByText(labelIds.duplicateRequest)).not.toBeInTheDocument();
@@ -611,27 +734,56 @@ describe('ViewRequest', () => {
       });
 
       describe('Keyboard shortcuts', () => {
-        beforeEach(() => {
-          renderViewRequest(defaultDCBBorrowingProps);
-        });
-        it('should check permission when duplicating', () => {
+        it('should not be able to duplicate a DCB request', () => {
+          const record = {
+            ...mockedRequestWithVirtualItem,
+            status: requestStatuses.NOT_YET_FILLED,
+          };
+
+          renderViewRequest({
+            ...defaultDCBBorrowingProps,
+            joinRequest: () => Promise.resolve(record),
+            resources: {
+              selectedRequest: {
+                hasLoaded: true,
+                records: [
+                  record,
+                ],
+              },
+            },
+          });
+
           duplicateRecordShortcut(document.body);
-          expect(defaultProps.stripes.hasPerm).toHaveBeenCalled();
+          expect(defaultDCBBorrowingProps.stripes.hasPerm).not.toHaveBeenCalledWith('ui-requests.create');
         });
 
-        it('should check permission on edit', () => {
+        it('should not be able to edit a DCB request', () => {
+          const record = {
+            ...mockedRequestWithVirtualItem,
+            status: requestStatuses.NOT_YET_FILLED,
+          };
+
+          renderViewRequest({
+            ...defaultDCBBorrowingProps,
+            joinRequest: () => Promise.resolve(record),
+            resources: {
+              selectedRequest: {
+                hasLoaded: true,
+                records: [
+                  record,
+                ],
+              },
+            },
+          });
+
           editRecordShortcut(document.body);
-          expect(defaultProps.stripes.hasPerm).toHaveBeenCalled();
+          expect(defaultDCBBorrowingProps.stripes.hasPerm).not.toHaveBeenCalledWith('ui-requests.edit');
         });
       });
     });
   });
 
   describe('Component updating', () => {
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-
     describe('When new request is loaded', () => {
       const newProps = {
         ...defaultProps,
@@ -701,10 +853,6 @@ describe('ViewRequest', () => {
   });
 
   describe('Request updating', () => {
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-
     describe('When proxy functionality available', () => {
       const props = {
         ...defaultProps,
@@ -875,6 +1023,7 @@ describe('ViewRequest', () => {
   describe('Request canceling via action menu', () => {
     const props = {
       ...defaultProps,
+      joinRequest: () => Promise.resolve(openRequest),
       resources: {
         selectedRequest: {
           hasLoaded: true,
@@ -888,15 +1037,15 @@ describe('ViewRequest', () => {
       },
     };
 
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-
     beforeEach(() => {
       render(<ViewRequest {...props} />);
     });
 
     it('should trigger CancelRequestDialog with correct "open" prop', async () => {
+      await waitFor(() => {
+        expect(screen.queryByTestId('actionMenu-loader')).not.toBeInTheDocument();
+      });
+
       const cancelButton = screen.getByText(labelIds.cancelRequest);
       const expectedProps = {
         open: true,
@@ -912,6 +1061,7 @@ describe('ViewRequest', () => {
   describe('Request moving', () => {
     const props = {
       ...defaultProps,
+      joinRequest: () => Promise.resolve(openRequest),
       resources: {
         selectedRequest: {
           hasLoaded: true,
@@ -920,12 +1070,12 @@ describe('ViewRequest', () => {
       },
     };
 
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-
     beforeEach(async () => {
       render(<ViewRequest {...props} />);
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('actionMenu-loader')).not.toBeInTheDocument();
+      });
 
       const moveRequestButton = screen.getByText(labelIds.moveRequest);
 
@@ -965,6 +1115,7 @@ describe('ViewRequest', () => {
   describe('Request reordering', () => {
     const props = {
       ...defaultProps,
+      joinRequest: () => Promise.resolve(openRequest),
       resources: {
         selectedRequest: {
           hasLoaded: true,
@@ -973,15 +1124,15 @@ describe('ViewRequest', () => {
       },
     };
 
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-
     beforeEach(() => {
       render(<ViewRequest {...props} />);
     });
 
     it('should trigger "history.push" after clicking on reorder request button', async () => {
+      await waitFor(() => {
+        expect(screen.queryByTestId('actionMenu-loader')).not.toBeInTheDocument();
+      });
+
       const reorderQueueButton = screen.getByText(labelIds.reorderQueue);
       const expectedArgs = [
         `${requestQueueUrl}${props.location.search}`,
@@ -997,6 +1148,7 @@ describe('ViewRequest', () => {
   describe('Request editing', () => {
     const props = {
       ...defaultProps,
+      joinRequest: () => Promise.resolve(openRequest),
       resources: {
         selectedRequest: {
           hasLoaded: true,
@@ -1005,15 +1157,15 @@ describe('ViewRequest', () => {
       },
     };
 
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-
     beforeEach(() => {
       render(<ViewRequest {...props} />);
     });
 
     it('should trigger "onEdit" after clicking on edit button', async () => {
+      await waitFor(() => {
+        expect(screen.queryByTestId('actionMenu-loader')).not.toBeInTheDocument();
+      });
+
       const editButton = screen.getByText(labelIds.edit);
 
       await userEvent.click(editButton);
@@ -1025,6 +1177,7 @@ describe('ViewRequest', () => {
   describe('Request duplicating', () => {
     const props = {
       ...defaultProps,
+      joinRequest: () => Promise.resolve(openRequest),
       resources: {
         selectedRequest: {
           hasLoaded: true,
@@ -1033,15 +1186,15 @@ describe('ViewRequest', () => {
       },
     };
 
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-
     beforeEach(() => {
       render(<ViewRequest {...props} />);
     });
 
     it('should trigger "onDuplicate" after clicking on duplicate button', async () => {
+      await waitFor(() => {
+        expect(screen.queryByTestId('actionMenu-loader')).not.toBeInTheDocument();
+      });
+
       const duplicateButton = screen.getByText(labelIds.duplicateRequest);
 
       await userEvent.click(duplicateButton);
