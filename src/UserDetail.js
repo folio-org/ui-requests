@@ -9,14 +9,11 @@ import {
   NoValue,
 } from '@folio/stripes/components';
 
+import UserHighlightBox from './components/UserHighlightBox';
 import {
   getPatronGroup,
   isProxyFunctionalityAvailable,
 } from './utils';
-
-import {
-  UserHighlightBox
-} from './components';
 
 class UserDetail extends React.Component {
   static propTypes = {
@@ -62,12 +59,27 @@ class UserDetail extends React.Component {
       isEcsTlrSettingEnabled,
     } = this.props;
 
+    const id = user?.id ?? request.requesterId;
     const patronGroup = getPatronGroup(user, patronGroups) || {};
+
+    let proxyId;
+    if (isProxyFunctionalityAvailable(isEcsTlrSettingEnabled) && proxy) {
+      proxyId = proxy.id || request.proxyUserId;
+    }
+
+    const proxySection = proxyId
+      ? <UserHighlightBox
+        title={<FormattedMessage id="ui-requests.requester.proxy" />}
+        userId={proxyId}
+        user={proxy}
+      />
+      : null;
+
     return (
       <div>
         <UserHighlightBox
           title={<FormattedMessage id="ui-requests.requester.requester" />}
-          userId={request?.requesterId}
+          userId={id}
           user={user}
         />
         <Row>
@@ -95,13 +107,7 @@ class UserDetail extends React.Component {
               /> }
           </Col>
         </Row>
-        {isProxyFunctionalityAvailable(isEcsTlrSettingEnabled) && (request?.proxyUserId || proxy) &&
-          <UserHighlightBox
-            title={<FormattedMessage id="ui-requests.requester.proxy" />}
-            userId={request?.proxyUserId}
-            user={proxy}
-          />
-        }
+        {proxySection}
       </div>
     );
   }

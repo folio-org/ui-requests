@@ -13,7 +13,6 @@ import { ProxyManager } from '@folio/stripes/smart-components';
 
 import UserHighlightBox from './components/UserHighlightBox';
 import {
-  getFullName,
   isProxyFunctionalityAvailable,
 } from './utils';
 
