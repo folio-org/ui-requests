@@ -11,13 +11,11 @@ import {
 } from '@folio/stripes/components';
 import { ProxyManager } from '@folio/stripes/smart-components';
 
+import UserHighlightBox from './components/UserHighlightBox';
 import {
+  getFullName,
   isProxyFunctionalityAvailable,
 } from './utils';
-
-import {
-  UserHighlightBox
-} from './components';
 
 class UserForm extends React.Component {
   static propTypes = {
@@ -60,42 +58,45 @@ class UserForm extends React.Component {
       isEcsTlrSettingEnabled,
     } = this.props;
     const isProxyAvailable = isProxyFunctionalityAvailable(isEcsTlrSettingEnabled);
+    const id = user?.id ?? request.requesterId;
     const isEditable = !!request;
     const isProxyManagerAvailable = isProxyAvailable && !isEditable;
 
-    const requestUser = { ...user, id : (user?.id ?? request.requesterId) };
-
-    let displayUserId;
-    let displayUser;
-    if (isProxyAvailable && (request?.proxyUserId || proxy)) {
-      displayUserId = request?.proxyUserId;
-      displayUser = proxy;
-    } else {
-      displayUserId = request?.requesterId;
-      displayUser = user;
+    let proxyId;
+    if (isProxyAvailable && proxy) {
+      proxyId = proxy.id;
     }
+
+    const proxySection = proxyId && proxyId !== id
+      ? <UserHighlightBox
+        title={<FormattedMessage id="ui-requests.requester.proxy" />}
+        userId={id}
+        user={user}
+      />
+      : null;
+
+    const userSection = proxyId
+      ? <UserHighlightBox
+        title={<FormattedMessage id="ui-requests.requester.requester" />}
+        userId={proxyId}
+        user={proxy}
+      />
+      : <UserHighlightBox
+        title={<FormattedMessage id="ui-requests.requester.requester" />}
+        userId={id}
+        user={user}
+      />;
 
     return (
       <div>
-        <UserHighlightBox
-          title={<FormattedMessage id="ui-requests.requester.requester" />}
-          userId={displayUserId}
-          user={displayUser}
-        />
-
+        {userSection}
         <Row>
           <Col xs={4}>
             <KeyValue label={<FormattedMessage id="ui-requests.requester.patronGroup.group" />} value={patronGroup || '-'} />
           </Col>
         </Row>
 
-        { isProxyAvailable && proxy?.id && proxy.id !== requestUser.id &&
-          <UserHighlightBox
-            title=<FormattedMessage id="ui-requests.requester.proxy" />
-            userId={requestUser.id}
-            user={requestUser}
-          />
-        }
+        {proxySection}
 
         {isProxyManagerAvailable &&
           <this.connectedProxyManager
