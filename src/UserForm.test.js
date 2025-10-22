@@ -192,9 +192,9 @@ describe('UserForm', () => {
 
     it('should trigger "UserHighlightBox" with user id', () => {
       expect(userHighlightBoxSpy).toHaveBeenCalledWith({
-        title: expect.anything(),
-        userId: null,
-        user: basicProps.user
+        title: expect.any(Object),
+        userId: basicProps.user.id,
+        user: basicProps.user,
       }, {});
     });
   });
@@ -223,7 +223,7 @@ describe('UserForm', () => {
 
     it('should trigger "UserHighlightBox" with requester id', () => {
       expect(userHighlightBoxSpy).toHaveBeenCalledWith({
-        title: expect.anything(),
+        title: expect.any(Object),
         userId: props.request.requesterId,
         user: props.user,
       }, {});
