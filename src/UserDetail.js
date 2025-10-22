@@ -67,6 +67,7 @@ class UserDetail extends React.Component {
       <div>
         <UserHighlightBox
           title={<FormattedMessage id="ui-requests.requester.requester" />}
+          userId={request?.requesterId}
           user={user}
         />
         <Row>
@@ -94,9 +95,10 @@ class UserDetail extends React.Component {
               /> }
           </Col>
         </Row>
-        {isProxyFunctionalityAvailable(isEcsTlrSettingEnabled) && proxy?.id &&
+        {isProxyFunctionalityAvailable(isEcsTlrSettingEnabled) && (request?.proxyUserId || proxy) &&
           <UserHighlightBox
             title={<FormattedMessage id="ui-requests.requester.proxy" />}
+            userId={request?.proxyUserId}
             user={proxy}
           />
         }

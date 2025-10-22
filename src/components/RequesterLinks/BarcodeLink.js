@@ -6,15 +6,14 @@ import { NoValue } from '@folio/stripes/components';
 import propTypes from './propTypes';
 
 const BarcodeLink = ({
-  request: {
-    requesterId,
-    requester,
-  } = {},
+  userId,
+  user,
 }) => {
-  const id = requester?.id ?? requesterId;
-  const barcode = requester?.barcode;
-  return (barcode ? <Link to={`/users/view/${id}`}>{barcode}</Link> : <NoValue />);
+  return user?.barcode
+    ? <Link to={`/users/view/${user?.id ?? userId}`}>{user.barcode}</Link>
+    : <NoValue />;
 };
+
 BarcodeLink.propTypes = propTypes;
 
 export default BarcodeLink;

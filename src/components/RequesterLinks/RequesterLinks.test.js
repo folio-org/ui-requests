@@ -12,22 +12,19 @@ import { BarcodeLink, FullNameLink } from './index';
 describe('BarcodeLink', () => {
   describe('When barcode is presented', () => {
     let mockedRequester;
-    let mockedRequest;
+    let mockedRequesterId;
     beforeEach(() => {
       mockedRequester = {
         id: 'testRequesterId',
         barcode: 'testRequesterBarcode',
       };
-      mockedRequest = {
-        requesterId: 'testRequestRequesterId',
-        requester: mockedRequester,
-      };
+      mockedRequesterId = 'testRequestRequesterId';
     });
 
     it('should render `Link` with correct label', () => {
       render(
         <MemoryRouter>
-          <BarcodeLink request={mockedRequest} />
+          <BarcodeLink userId={mockedRequesterId} user={mockedRequester} />
         </MemoryRouter>
       );
 
@@ -39,7 +36,7 @@ describe('BarcodeLink', () => {
         const expectedResult = `/users/view/${mockedRequester.id}`;
         render(
           <MemoryRouter>
-            <BarcodeLink request={mockedRequest} />
+            <BarcodeLink userId={mockedRequesterId} user={mockedRequester} />
           </MemoryRouter>
         );
 
@@ -49,13 +46,13 @@ describe('BarcodeLink', () => {
 
     describe('and the requester does not have an id', () => {
       it('should render `Link` with correct `href` attribute', () => {
-        mockedRequest.requester.id = null;
+        mockedRequester.id = null;
+        const expectedResult = `/users/view/${mockedRequesterId}`;
         render(
           <MemoryRouter>
-            <BarcodeLink request={mockedRequest} />
+            <BarcodeLink userId={mockedRequesterId} user={mockedRequester} />
           </MemoryRouter>
         );
-        const expectedResult = `/users/view/${mockedRequest.requesterId}`;
 
         expect(screen.getByRole('link')).toHaveAttribute('href', expectedResult);
       });
@@ -66,7 +63,7 @@ describe('BarcodeLink', () => {
     beforeEach(() => {
       render(
         <MemoryRouter>
-          <BarcodeLink request={{}} />
+          <BarcodeLink user={{}} />
         </MemoryRouter>
       );
     });
@@ -78,12 +75,10 @@ describe('BarcodeLink', () => {
 });
 
 describe('FullNameLink', () => {
-  let mockedRequest;
+  let mockedRequesterId;
   let getFullNameSpy;
   beforeEach(() => {
-    mockedRequest = {
-      requesterId: 'testRequestRequesterId',
-    };
+    mockedRequesterId = 'testRequestRequesterId';
     getFullNameSpy = jest.spyOn(utils, 'getFullName');
   });
   afterEach(() => {
@@ -96,13 +91,12 @@ describe('FullNameLink', () => {
         id: 'testRequesterId',
         lastName: 'lastName',
       };
-      mockedRequest.requester = mockedRequester;
     });
 
     it('should render `Link` with correct label', () => {
       render(
         <MemoryRouter>
-          <FullNameLink request={mockedRequest} />
+          <FullNameLink userId={mockedRequesterId} user={mockedRequester} />
         </MemoryRouter>
       );
 
@@ -115,7 +109,7 @@ describe('FullNameLink', () => {
         const expectedResult = `/users/view/${mockedRequester.id}`;
         render(
           <MemoryRouter>
-            <FullNameLink request={mockedRequest} />
+            <FullNameLink userId={mockedRequesterId} user={mockedRequester} />
           </MemoryRouter>
         );
 
@@ -125,13 +119,13 @@ describe('FullNameLink', () => {
 
     describe('and the requester does not have an id', () => {
       it('should render `Link` with correct `href` attribute', () => {
-        mockedRequest.requester.id = null;
+        mockedRequester.id = null;
         render(
           <MemoryRouter>
-            <FullNameLink request={mockedRequest} />
+            <FullNameLink userId={mockedRequesterId} user={mockedRequester} />
           </MemoryRouter>
         );
-        const expectedResult = `/users/view/${mockedRequest.requesterId}`;
+        const expectedResult = `/users/view/${mockedRequesterId}`;
 
         expect(screen.getByRole('link')).toHaveAttribute('href', expectedResult);
       });
@@ -143,7 +137,7 @@ describe('FullNameLink', () => {
       it('should render unknown', () => {
         render(
           <MemoryRouter>
-            <FullNameLink request={mockedRequest} />
+            <FullNameLink userId={mockedRequesterId} user={null} />
           </MemoryRouter>
         );
         expect(screen.queryAllByRole('link')).toHaveLength(0);
@@ -153,10 +147,9 @@ describe('FullNameLink', () => {
 
     describe('and the requesterId does not exist', () => {
       it('should render anonymized', () => {
-        mockedRequest.requesterId = null;
         render(
           <MemoryRouter>
-            <FullNameLink request={mockedRequest} />
+            <FullNameLink userId={null} user={null} />
           </MemoryRouter>
         );
         expect(screen.queryAllByRole('link')).toHaveLength(0);

@@ -6,16 +6,14 @@ import { getFullName } from '../../utils';
 import propTypes from './propTypes';
 
 const FullNameLink = ({
-  request: {
-    requesterId,
-    requester,
-  } = {},
+  userId,
+  user,
 }) => {
-  if (requester != null) {
-    return <Link to={`/users/view/${requester?.id ?? requesterId}`}>{getFullName(requester)}</Link>;
+  if (user != null) {
+    return <Link to={`/users/view/${user?.id ?? userId}`}>{getFullName(user)}</Link>;
   }
 
-  return requesterId != null
+  return userId != null
     ? <FormattedMessage id="ui-requests.requestMeta.unknown" />
     : <FormattedMessage id="ui-requests.requestMeta.anonymized" />;
 };
