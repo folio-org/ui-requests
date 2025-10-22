@@ -66,7 +66,7 @@ class UserDetail extends React.Component {
     return (
       <div>
         <UserHighlightBox
-          title=<FormattedMessage id="ui-requests.requester.requester" />
+          title={<FormattedMessage id="ui-requests.requester.requester" />}
           user={user}
         />
         <Row>
@@ -96,7 +96,7 @@ class UserDetail extends React.Component {
         </Row>
         {isProxyFunctionalityAvailable(isEcsTlrSettingEnabled) && proxy?.id &&
           <UserHighlightBox
-            title=<FormattedMessage id="ui-requests.requester.proxy" />
+            title={<FormattedMessage id="ui-requests.requester.proxy" />}
             user={proxy}
           />
         }

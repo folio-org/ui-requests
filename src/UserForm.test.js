@@ -1,8 +1,9 @@
+import { MemoryRouter } from 'react-router-dom';
+
 import {
   render,
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
 
 import { ProxyManager } from '@folio/stripes/smart-components';
 
