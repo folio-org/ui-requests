@@ -62,7 +62,7 @@ const ReferredRecord = ({ values }) => {
       <div>
         <FormattedMessage
           id="ui-requests.notes.assigned.requester"
-          values={{ requesterName: <FullNameLink request={request} /> }}
+          values={{ requesterName: <FullNameLink userId={request?.requesterId} user={request?.requester} /> }}
         />
       </div>
       <div>
