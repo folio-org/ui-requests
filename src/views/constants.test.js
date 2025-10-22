@@ -96,7 +96,7 @@ describe('formatter', () => {
       render(formatter.requesterBarcode(requiredData));
 
       expect(BarcodeLink).toHaveBeenCalledWith(expect.objectContaining({
-        request: requiredData,
+        user: requiredData.requester,
       }), {});
     });
 
