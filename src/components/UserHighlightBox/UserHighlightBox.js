@@ -13,6 +13,7 @@ import { BarcodeLink, FullNameLink } from '../RequesterLinks';
 
 const UserHighlightBox = ({
   title,
+  userId,
   user,
 }) => {
   return (
@@ -23,11 +24,11 @@ const UserHighlightBox = ({
             {title}
           </Headline>
           <div>
-            <FullNameLink request={{ requester:user }} />
+            <FullNameLink userId={userId} user={user} />
             {' '}
             <FormattedMessage id="ui-requests.barcode" />:
             {' '}
-            <BarcodeLink request={{ requester:user }} />
+            <BarcodeLink userId={userId} user={user} />
           </div>
         </div>
       </Col>
@@ -44,6 +45,7 @@ const userShape = {
 
 UserHighlightBox.propTypes = {
   title: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired,
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
     barcode: PropTypes.string.isRequired,

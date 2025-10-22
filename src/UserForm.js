@@ -65,11 +65,22 @@ class UserForm extends React.Component {
 
     const requestUser = { ...user, id : (user?.id ?? request.requesterId) };
 
+    let displayUserId;
+    let displayUser;
+    if (isProxyAvailable && (request?.proxyUserId || proxy)) {
+      displayUserId = request?.proxyUserId;
+      displayUser = proxy;
+    } else {
+      displayUserId = request?.requesterId;
+      displayUser = user;
+    }
+
     return (
       <div>
         <UserHighlightBox
           title={<FormattedMessage id="ui-requests.requester.requester" />}
-          user={isProxyAvailable && proxy?.id ? proxy : requestUser}
+          userId={displayUserId}
+          user={displayUser}
         />
 
         <Row>
@@ -81,6 +92,7 @@ class UserForm extends React.Component {
         { isProxyAvailable && proxy?.id && proxy.id !== requestUser.id &&
           <UserHighlightBox
             title=<FormattedMessage id="ui-requests.requester.proxy" />
+            userId={requestUser.id}
             user={requestUser}
           />
         }

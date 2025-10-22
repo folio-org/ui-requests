@@ -9,17 +9,15 @@ const userShape = {
 };
 
 const propTypes = {
-  request: PropTypes.shape({
-    requesterId: PropTypes.string,
-    requester: PropTypes.shape(
-      {
-        id: PropTypes.string,
-        barcode: PropTypes.string,
-        personal: PropTypes.shape(userShape),
-        ...userShape
-      }
-    ),
-  }).isRequired,
+  userId: PropTypes.string.isRequired,
+  user: PropTypes.shape(
+    {
+      id: PropTypes.string,
+      barcode: PropTypes.string,
+      personal: PropTypes.shape(userShape),
+      ...userShape
+    }
+  ).isRequired,
 };
 
 export default propTypes;
