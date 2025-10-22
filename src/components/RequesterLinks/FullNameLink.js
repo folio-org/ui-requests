@@ -14,7 +14,7 @@ const FullNameLink = ({
   }
 
   return userId != null
-    ? <FormattedMessage id="ui-requests.requestMeta.unknown" />
+    ? <FormattedMessage id="ui-requests.errors.user.unknown" />
     : <FormattedMessage id="ui-requests.requestMeta.anonymized" />;
 };
 
