@@ -1,17 +1,18 @@
+import { MemoryRouter } from 'react-router-dom';
 import {
   render,
   screen,
   cleanup,
 } from '@folio/jest-config-stripes/testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
 
 import { NoValue } from '@folio/stripes/components';
 
 import UserDetail from './UserDetail';
+import * as UserHighlightBox from './components/UserHighlightBox/UserHighlightBox';
 import {
+  getFullName,
   getPatronGroup,
 } from './utils';
-import * as UserHighlightBox from './components/UserHighlightBox/UserHighlightBox';
 
 const basicProps = {
   deliveryAddress: 'deliveryAddress',
@@ -57,8 +58,10 @@ describe('UserDetail', () => {
   beforeEach(() => {
     userHighlightBoxSpy = jest.spyOn(UserHighlightBox, 'default');
   });
+
   afterEach(() => {
     NoValue.mockClear();
+    userHighlightBoxSpy.mockClear();
     cleanup();
   });
 
@@ -71,13 +74,27 @@ describe('UserDetail', () => {
       );
     });
 
+    it('should trigger "getFullName" with correct argument', () => {
+      const expectedArgs = [basicProps.user, basicProps.proxy];
+
+      expectedArgs.forEach((user, index) => {
+        expect(getFullName).toHaveBeenNthCalledWith(index + 1, user);
+      });
+    });
+
     it('should trigger "getPatronGroup" with correct arguments', () => {
       expect(getPatronGroup).toHaveBeenCalledWith(basicProps.user, basicProps.patronGroups);
     });
 
     it('should trigger "UserHighlightBox" with correct arguments', () => {
-      expect(userHighlightBoxSpy).toHaveBeenNthCalledWith(1, { title: expect.anything(), user: basicProps.user }, {});
-      expect(userHighlightBoxSpy).toHaveBeenNthCalledWith(2, { title: expect.anything(), user: basicProps.proxy }, {});
+      const expectedArgs = [
+        { title: expect.anything(), userId:basicProps.user.id, user:basicProps.user },
+        { title: expect.anything(), userId:basicProps.proxy.id, user:basicProps.proxy },
+      ];
+
+      expectedArgs.forEach((user, index) => {
+        expect(userHighlightBoxSpy).toHaveBeenNthCalledWith(index + 1, user, {});
+      });
     });
 
     it('should render proxy label', () => {
