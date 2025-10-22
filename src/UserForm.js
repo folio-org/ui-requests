@@ -68,7 +68,7 @@ class UserForm extends React.Component {
     return (
       <div>
         <UserHighlightBox
-          title=<FormattedMessage id="ui-requests.requester.requester" />
+          title={<FormattedMessage id="ui-requests.requester.requester" />}
           user={isProxyAvailable && proxy?.id ? proxy : requestUser}
         />
 
