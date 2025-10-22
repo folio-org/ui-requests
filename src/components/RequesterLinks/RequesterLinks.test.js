@@ -7,7 +7,7 @@ import {
 import { NoValue } from '@folio/stripes/components';
 
 import * as utils from '../../utils';
-import { BarcodeLink, FullNameLink } from './RequesterLinks';
+import { BarcodeLink, FullNameLink } from './index';
 
 describe('BarcodeLink', () => {
   describe('When barcode is presented', () => {

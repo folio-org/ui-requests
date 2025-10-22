@@ -1,2 +1,2 @@
-export { BarcodeLink } from './RequesterLinks';
-export { FullNameLink } from './RequesterLinks';
+export { default as BarcodeLink } from './BarcodeLink';
+export { default as FullNameLink } from './FullNameLink';
