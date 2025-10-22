@@ -11,16 +11,13 @@ const FullNameLink = ({
     requester,
   } = {},
 }) => {
-  if (requesterId != null && requester == null) {
-    return <FormattedMessage id="ui-requests.requestMeta.unknown" />;
+  if (requester != null) {
+    return <Link to={`/users/view/${requester?.id ?? requesterId}`}>{getFullName(requester)}</Link>;
   }
 
-  if (requesterId == null && requester == null) {
-    return <FormattedMessage id="ui-requests.requestMeta.anonymized" />;
-  }
-
-  const id = requester?.id ?? requesterId;
-  return <Link to={`/users/view/${id}`}>{getFullName(requester)}</Link>;
+  return requesterId != null
+    ? <FormattedMessage id="ui-requests.requestMeta.unknown" />
+    : <FormattedMessage id="ui-requests.requestMeta.anonymized" />;
 };
 
 FullNameLink.propTypes = propTypes;
