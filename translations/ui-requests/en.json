@@ -111,6 +111,7 @@
   "errors.holdShelfRequestsRequirePickupServicePoint": "Hold shelf fulfillment requests require a Pickup service point",
   "errors.movingRequestToTheSameItem": "Not allowed to move title level page request to the same item",
   "errors.itemOfThisInstanceAlreadyRequested": "This requester already has an open request for one of the instance's items",
+  "errors.user.unknown": "Unknown user",
 
   "actions.edit": "Edit",
   "actions.editRequestLink": "Edit Request Dialog",
