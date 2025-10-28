@@ -141,7 +141,7 @@ describe('FullNameLink', () => {
           </MemoryRouter>
         );
         expect(screen.queryAllByRole('link')).toHaveLength(0);
-        expect(screen.queryAllByText('ui-requests.requestMeta.unknown')).toHaveLength(1);
+        expect(screen.queryAllByText('ui-requests.errors.user.unknown')).toHaveLength(1);
       });
     });
 
