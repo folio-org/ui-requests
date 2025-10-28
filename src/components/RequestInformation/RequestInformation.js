@@ -1,9 +1,8 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'react-final-form';
 import { get } from 'lodash';
 import PropTypes from 'prop-types';
-import { useOkapiKy } from '@folio/stripes/core';
 
 import {
   Col,
@@ -48,15 +47,14 @@ const RequestInformation = ({
   MetadataDisplay,
   isTitleLevelRequest,
   isSelectedInstance,
-  selectedItem,
   isSelectedItem,
-  selectedUser,
   isSelectedUser,
   isRequestTypesReceived,
   isRequestTypeLoading,
   values,
   form,
   updateRequestPreferencesFields,
+  forUseAtLocation,
 }) => {
   const isEditForm = isFormEditing(request);
   const holdShelfExpireDate = get(request, ['status'], '') === requestStatuses.AWAITING_PICKUP
@@ -86,44 +84,6 @@ const RequestInformation = ({
     input.onChange(e);
     updateRequestPreferencesFields();
   };
-
-  const okapiKy = useOkapiKy();
-  const [loanPolicyId, setLoanPolicyId] = useState();
-  const [loanPolicy, setLoanPolicy] = useState();
-
-  {
-    const itemTypeId = selectedItem?.materialType?.id;
-    const loanTypeId = selectedItem?.temporaryLoanType?.id || selectedItem?.permanentLoanType?.id;
-    const locationId = selectedItem?.effectiveLocation?.id;
-    const patronTypeId = selectedUser?.patronGroup;
-
-    useEffect(() => {
-      if (itemTypeId && loanTypeId && locationId && patronTypeId) {
-        okapiKy('circulation/rules/loan-policy?' +
-                `item_type_id=${itemTypeId}&` +
-                `loan_type_id=${loanTypeId}&` +
-                `location_id=${locationId}&` +
-                `patron_type_id=${patronTypeId}&`).then(res => {
-          res.json().then(policy => {
-            setLoanPolicyId(policy.loanPolicyId);
-          });
-        });
-      }
-      // okapiKy cannot be included in deps, otherwise useEffect fires in a loop
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [itemTypeId, loanTypeId, locationId, patronTypeId]);
-  }
-
-  useEffect(() => {
-    if (loanPolicyId) {
-      okapiKy(`loan-policy-storage/loan-policies/${loanPolicyId}`).then(res => {
-        res.json().then(policy => {
-          setLoanPolicy(policy);
-        });
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loanPolicyId]);
 
   return (
     <>
@@ -192,7 +152,7 @@ const RequestInformation = ({
                   }}
                 </Field>
               }
-              {loanPolicy?.loansPolicy?.forUseAtLocation && (
+              {forUseAtLocation && (
                 <Icon icon="check-circle" size="large" iconRootClass={css.icon} iconPosition="end" data-testid="fual">
                   <span className={css.textWithinIcon}><FormattedMessage id="ui-requests.forUseAtLocation" /></span>
                 </Icon>
