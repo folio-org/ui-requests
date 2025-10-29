@@ -1,5 +1,10 @@
 # Change history for ui-requests
 
+## [12.0.4] (https://github.com/folio-org/ui-requests/tree/v12.0.4) (2025-10-29)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v12.0.3...v12.0.4)
+
+* Use the `type` field to determine a DCB user. Show a loading indicator while full request details are being loaded, the `type` field will only be available after loading. Refs UIREQ-1338.
+
 ## [12.0.3] (https://github.com/folio-org/ui-requests/tree/v12.0.3) (2025-05-28)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v12.0.2...v12.0.3)
 
