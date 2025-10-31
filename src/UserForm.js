@@ -11,9 +11,8 @@ import {
 } from '@folio/stripes/components';
 import { ProxyManager } from '@folio/stripes/smart-components';
 
+import UserHighlightBox from './components/UserHighlightBox';
 import {
-  getFullName,
-  userHighlightBox,
   isProxyFunctionalityAvailable,
 } from './utils';
 
@@ -59,27 +58,33 @@ class UserForm extends React.Component {
     } = this.props;
     const isProxyAvailable = isProxyFunctionalityAvailable(isEcsTlrSettingEnabled);
     const id = user?.id ?? request.requesterId;
-    const name = getFullName(user);
-    const barcode = user.barcode;
     const isEditable = !!request;
     const isProxyManagerAvailable = isProxyAvailable && !isEditable;
 
-    let proxyName;
-    let proxyBarcode;
     let proxyId;
     if (isProxyAvailable && proxy) {
-      proxyName = getFullName(proxy);
-      proxyBarcode = proxy?.barcode || '-';
       proxyId = proxy.id;
     }
 
     const proxySection = proxyId && proxyId !== id
-      ? userHighlightBox(<FormattedMessage id="ui-requests.requester.proxy" />, name, id, barcode)
+      ? <UserHighlightBox
+        title={<FormattedMessage id="ui-requests.requester.proxy" />}
+        userId={id}
+        user={user}
+      />
       : null;
 
     const userSection = proxyId
-      ? userHighlightBox(<FormattedMessage id="ui-requests.requester.requester" />, proxyName, proxyId, proxyBarcode)
-      : userHighlightBox(<FormattedMessage id="ui-requests.requester.requester" />, name, id, barcode);
+      ? <UserHighlightBox
+        title={<FormattedMessage id="ui-requests.requester.requester" />}
+        userId={proxyId}
+        user={proxy}
+      />
+      : <UserHighlightBox
+        title={<FormattedMessage id="ui-requests.requester.requester" />}
+        userId={id}
+        user={user}
+      />;
 
     return (
       <div>
