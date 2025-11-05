@@ -259,13 +259,13 @@ export const getListFormatter = (
     />),
   'itemBarcode': rq => (rq?.item?.barcode || <NoValue />),
   'position': rq => (rq.position || <NoValue />),
-  ...(isProxyAvailable ? { 'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : <NoValue />) } : {}),
+  ...(isProxyAvailable ? { 'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : (rq.proxyUserId ? <NoValue /> : <FormattedMessage id="ui-requests.requestMeta.anonymized" />)) } : {}),
   'requestDate': rq => (
     <AppIcon size="small" app="requests">
       <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
     </AppIcon>
   ),
-  'requester': rq => (rq.requester ? getFullName(rq.requester) : <NoValue />),
+  'requester': rq => (rq.requester ? getFullName(rq.requester) : (rq.requesterId ? <NoValue /> : <FormattedMessage id="ui-requests.requestMeta.anonymized" />)),
   'singlePrint': rq => {
     const singlePrintButtonProps = {
       request: rq,
