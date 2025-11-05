@@ -89,6 +89,7 @@ const testIds = {
   singlePrintButton: 'singlePrintButton',
   rowCheckbox: 'rowCheckbox',
   selectRequestCheckbox: 'selectRequestCheckbox',
+  anonymized: 'ui-requests.requestMeta.anonymized',
 };
 
 const intlCache = createIntlCache();
@@ -231,6 +232,7 @@ const labelIds = {
   titleWithSearch: 'ui-requests.documentTitle.search',
   defaultTitle: 'ui-requests.meta.title',
   recordsSelected: 'ui-requests.rows.recordsSelected',
+  anonymized: 'ui-requests.requestMeta.anonymized',
 };
 const mockedRequest = {
   requestLevel: REQUEST_LEVEL_TYPES.ITEM,
@@ -1268,8 +1270,15 @@ describe('RequestsRoute', () => {
         expect(listFormatter.proxy(requestWithData)).toBe(mockProxy);
       });
 
-      it('should trigger NoValue component', () => {
+      it('should render Anonymized', () => {
         render(listFormatter.proxy(requestWithoutData));
+
+        expect(screen.getByText(labelIds.anonymized)).toBeInTheDocument();
+      });
+
+      it('should trigger NoValue component', () => {
+        const req = { ...requestWithoutData, proxyUserId: 'deleted proxy user' };
+        render(listFormatter.proxy(req));
 
         expect(NoValue).toHaveBeenCalled();
       });
@@ -1305,8 +1314,15 @@ describe('RequestsRoute', () => {
         expect(listFormatter.requester(requestWithData)).toBe(mockRequester);
       });
 
-      it('should trigger NoValue component', () => {
+      it('should render Anonymized', () => {
         render(listFormatter.requester(requestWithoutData));
+
+        expect(screen.getByText(labelIds.anonymized)).toBeInTheDocument();
+      });
+
+      it('should trigger NoValue component', () => {
+        const req = { ...requestWithoutData, requesterId: 'deleted requester' };
+        render(listFormatter.requester(req));
 
         expect(NoValue).toHaveBeenCalled();
       });
