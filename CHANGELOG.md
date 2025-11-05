@@ -2,6 +2,7 @@
 
 ## 13.0.0 IN PROGRESS
 
+* Display Anonymized when searching requests. Refs UIREQ-1312.
 * *BREAKING* Use `convertToSlipData` and supporting functions from `stripes-util`. Refs UIREQ-1263.
 * Replace moment with day.js. Refs UIREQ-1291.
 * Reduce count of eslint errors after update eslint-config-stripes. Refs UIREQ-1289.
