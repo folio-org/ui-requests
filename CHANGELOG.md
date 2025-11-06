@@ -11,6 +11,7 @@
 * Add missing subPermissions for "Requests: View, create" permission. Refs UIREQ-1296.
 * Display loan type on the Request Detail page, as well as New Request page. Refs UIREQ-1328.
 * When creating or viewing a request, show whether the a loan on the item would be use-at-location. Fixes UIREQ-1327.
+* Express servicepoints dependency through `package.json::stripes.actsAs`. Refs UIREQ-1061.
 
 ## [12.0.4] (https://github.com/folio-org/ui-requests/tree/v12.0.4) (2025-10-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v12.0.3...v12.0.4)
