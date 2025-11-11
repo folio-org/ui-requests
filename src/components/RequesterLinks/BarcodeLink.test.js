@@ -10,15 +10,11 @@ import BarcodeLink from './BarcodeLink';
 
 describe('BarcodeLink', () => {
   describe('When barcode is presented', () => {
-    let mockedRequester;
-    let mockedRequesterId;
-    beforeEach(() => {
-      mockedRequester = {
-        id: 'testRequesterId',
-        barcode: 'testRequesterBarcode',
-      };
-      mockedRequesterId = 'testRequestRequesterId';
-    });
+    const mockedRequester = {
+      id: 'testRequesterId',
+      barcode: 'testRequesterBarcode',
+    };
+    const mockedRequesterId = 'testRequestRequesterId';
 
     it('should render `Link` with correct label', () => {
       render(

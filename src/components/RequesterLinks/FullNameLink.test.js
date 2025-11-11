@@ -9,23 +9,19 @@ import * as utils from '../../utils';
 import FullNameLink from './FullNameLink';
 
 describe('FullNameLink', () => {
-  let mockedRequesterId;
+  const mockedRequesterId = 'testRequestRequesterId';
   let getFullNameSpy;
   beforeEach(() => {
-    mockedRequesterId = 'testRequestRequesterId';
     getFullNameSpy = jest.spyOn(utils, 'getFullName');
   });
   afterEach(() => {
     getFullNameSpy.mockClear();
   });
   describe('When requester is present', () => {
-    let mockedRequester;
-    beforeEach(() => {
-      mockedRequester = {
-        id: 'testRequesterId',
-        lastName: 'lastName',
-      };
-    });
+    const mockedRequester = {
+      id: 'testRequesterId',
+      lastName: 'lastName',
+    };
 
     it('should render `Link` with correct label', () => {
       render(
