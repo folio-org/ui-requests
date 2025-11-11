@@ -4,75 +4,9 @@ import {
   render,
   screen,
 } from '@folio/jest-config-stripes/testing-library/react';
-import { NoValue } from '@folio/stripes/components';
 
 import * as utils from '../../utils';
-import { BarcodeLink, FullNameLink } from './index';
-
-describe('BarcodeLink', () => {
-  describe('When barcode is presented', () => {
-    let mockedRequester;
-    let mockedRequesterId;
-    beforeEach(() => {
-      mockedRequester = {
-        id: 'testRequesterId',
-        barcode: 'testRequesterBarcode',
-      };
-      mockedRequesterId = 'testRequestRequesterId';
-    });
-
-    it('should render `Link` with correct label', () => {
-      render(
-        <MemoryRouter>
-          <BarcodeLink userId={mockedRequesterId} user={mockedRequester} />
-        </MemoryRouter>
-      );
-
-      expect(screen.getByText(mockedRequester.barcode)).toBeInTheDocument();
-    });
-
-    describe('and the requester has an id', () => {
-      it('should render `Link` with correct `href` attribute', () => {
-        const expectedResult = `/users/view/${mockedRequester.id}`;
-        render(
-          <MemoryRouter>
-            <BarcodeLink userId={mockedRequesterId} user={mockedRequester} />
-          </MemoryRouter>
-        );
-
-        expect(screen.getByRole('link')).toHaveAttribute('href', expectedResult);
-      });
-    });
-
-    describe('and the requester does not have an id', () => {
-      it('should render `Link` with correct `href` attribute', () => {
-        mockedRequester.id = null;
-        const expectedResult = `/users/view/${mockedRequesterId}`;
-        render(
-          <MemoryRouter>
-            <BarcodeLink userId={mockedRequesterId} user={mockedRequester} />
-          </MemoryRouter>
-        );
-
-        expect(screen.getByRole('link')).toHaveAttribute('href', expectedResult);
-      });
-    });
-  });
-
-  describe('When barcode is not presented', () => {
-    beforeEach(() => {
-      render(
-        <MemoryRouter>
-          <BarcodeLink user={{}} />
-        </MemoryRouter>
-      );
-    });
-
-    it('should trigger NoValue component', () => {
-      expect(NoValue).toHaveBeenCalled();
-    });
-  });
-});
+import FullNameLink from './FullNameLink';
 
 describe('FullNameLink', () => {
   let mockedRequesterId;
