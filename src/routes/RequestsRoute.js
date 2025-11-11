@@ -232,6 +232,19 @@ export const urls = {
   },
 };
 
+function userFormatter(id, user) {
+  if (user) {
+    return getFullName(user);
+  }
+
+  if (id) {
+    // User has been deleted
+    return <NoValue />;
+  }
+
+  return <FormattedMessage id="ui-requests.requestMeta.anonymized" />;
+}
+
 export const getListFormatter = (
   {
     getRowURL,
@@ -259,13 +272,13 @@ export const getListFormatter = (
     />),
   'itemBarcode': rq => (rq?.item?.barcode || <NoValue />),
   'position': rq => (rq.position || <NoValue />),
-  ...(isProxyAvailable ? { 'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : (rq.proxyUserId ? <NoValue /> : <FormattedMessage id="ui-requests.requestMeta.anonymized" />)) } : {}),
+  ...(isProxyAvailable ? { 'proxy': rq => userFormatter(rq.proxyUserId, rq.proxy) } : {}),
   'requestDate': rq => (
     <AppIcon size="small" app="requests">
       <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
     </AppIcon>
   ),
-  'requester': rq => (rq.requester ? getFullName(rq.requester) : (rq.requesterId ? <NoValue /> : <FormattedMessage id="ui-requests.requestMeta.anonymized" />)),
+  'requester': rq => userFormatter(rq.requesterId, rq.requester),
   'singlePrint': rq => {
     const singlePrintButtonProps = {
       request: rq,
