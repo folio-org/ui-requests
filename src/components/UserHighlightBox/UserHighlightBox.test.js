@@ -7,9 +7,8 @@ describe('userHighlightBox', () => {
   const title = 'user title';
   let uhb;
   describe('given a user', () => {
-    let user;
+    const user = { id: 'id', lastName: 'user name', barcode: 'barcode' };
     beforeEach(() => {
-      user = { id: 'id', lastName: 'user name', barcode: 'barcode' };
       uhb = render(
         <MemoryRouter>
           <UserHighlightBox title={title} user={user} />
