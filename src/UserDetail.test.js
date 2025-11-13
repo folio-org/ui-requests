@@ -1,3 +1,4 @@
+import { MemoryRouter } from 'react-router-dom';
 import {
   render,
   screen,
@@ -7,9 +8,9 @@ import {
 import { NoValue } from '@folio/stripes/components';
 
 import UserDetail from './UserDetail';
+import * as UserHighlightBox from './components/UserHighlightBox/UserHighlightBox';
 import {
   getFullName,
-  userHighlightBox,
   getPatronGroup,
 } from './utils';
 
@@ -46,12 +47,6 @@ const labelIds = {
 
 jest.mock('./utils', () => ({
   getFullName: jest.fn((user) => user.lastName),
-  userHighlightBox: jest.fn((label, name, id, barcode) => (
-    <>
-      <div>{label}</div>
-      <div>{barcode}</div>
-    </>
-  )),
   getPatronGroup: jest.fn(() => ({
     group: 'testPatronGroup',
   })),
@@ -59,15 +54,23 @@ jest.mock('./utils', () => ({
 }));
 
 describe('UserDetail', () => {
+  let userHighlightBoxSpy;
+  beforeEach(() => {
+    userHighlightBoxSpy = jest.spyOn(UserHighlightBox, 'default');
+  });
+
   afterEach(() => {
     NoValue.mockClear();
+    userHighlightBoxSpy.mockClear();
     cleanup();
   });
 
   describe('when all data provided', () => {
     beforeEach(() => {
       render(
-        <UserDetail {...basicProps} />
+        <MemoryRouter>
+          <UserDetail {...basicProps} />
+        </MemoryRouter>
       );
     });
 
@@ -83,14 +86,14 @@ describe('UserDetail', () => {
       expect(getPatronGroup).toHaveBeenCalledWith(basicProps.user, basicProps.patronGroups);
     });
 
-    it('should trigger "userHighlightBox" with correct arguments', () => {
+    it('should trigger "UserHighlightBox" with correct arguments', () => {
       const expectedArgs = [
-        [expect.anything(), basicProps.proxy.lastName, basicProps.proxy.id, basicProps.proxy.barcode],
-        [expect.anything(), basicProps.user.lastName, basicProps.user.id, basicProps.user.barcode],
+        { title: expect.anything(), userId:basicProps.user.id, user:basicProps.user },
+        { title: expect.anything(), userId:basicProps.proxy.id, user:basicProps.proxy },
       ];
 
       expectedArgs.forEach((user, index) => {
-        expect(userHighlightBox).toHaveBeenNthCalledWith(index + 1, ...user);
+        expect(userHighlightBoxSpy).toHaveBeenNthCalledWith(index + 1, user, {});
       });
     });
 
@@ -139,7 +142,9 @@ describe('UserDetail', () => {
 
     beforeEach(() => {
       render(
-        <UserDetail {...props} />
+        <MemoryRouter>
+          <UserDetail {...props} />
+        </MemoryRouter>
       );
     });
 
@@ -156,7 +161,9 @@ describe('UserDetail', () => {
 
     beforeEach(() => {
       render(
-        <UserDetail {...props} />
+        <MemoryRouter>
+          <UserDetail {...props} />
+        </MemoryRouter>
       );
     });
 
@@ -182,7 +189,9 @@ describe('UserDetail', () => {
 
     beforeEach(() => {
       render(
-        <UserDetail {...props} />
+        <MemoryRouter>
+          <UserDetail {...props} />
+        </MemoryRouter>
       );
     });
 
@@ -202,7 +211,9 @@ describe('UserDetail', () => {
 
     beforeEach(() => {
       render(
-        <UserDetail {...props} />
+        <MemoryRouter>
+          <UserDetail {...props} />
+        </MemoryRouter>
       );
     });
 
@@ -215,7 +226,9 @@ describe('UserDetail', () => {
     beforeEach(() => {
       getPatronGroup.mockReturnValueOnce(undefined);
       render(
-        <UserDetail {...basicProps} />
+        <MemoryRouter>
+          <UserDetail {...basicProps} />
+        </MemoryRouter>
       );
     });
 
@@ -232,7 +245,9 @@ describe('UserDetail', () => {
 
     beforeEach(() => {
       render(
-        <UserDetail {...props} />
+        <MemoryRouter>
+          <UserDetail {...props} />
+        </MemoryRouter>
       );
     });
 
@@ -258,7 +273,9 @@ describe('UserDetail', () => {
 
     beforeEach(() => {
       render(
-        <UserDetail {...props} />
+        <MemoryRouter>
+          <UserDetail {...props} />
+        </MemoryRouter>
       );
     });
 
@@ -280,7 +297,9 @@ describe('UserDetail', () => {
 
     beforeEach(() => {
       render(
-        <UserDetail {...props} />
+        <MemoryRouter>
+          <UserDetail {...props} />
+        </MemoryRouter>
       );
     });
 

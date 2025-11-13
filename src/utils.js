@@ -13,15 +13,6 @@ import {
 } from 'lodash';
 import queryString from 'query-string';
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
-
-import {
-  Col,
-  Headline,
-  Row,
-  NoValue,
-} from '@folio/stripes/components';
 
 import {
   requestTypeOptionMap,
@@ -36,8 +27,6 @@ import {
   REQUEST_ERROR_MESSAGE_TRANSLATION_KEYS,
 } from './constants';
 
-import css from './requests.css';
-
 export function getFullName(user) {
   const userNameObj = user?.personal || user;
   const lastName = get(userNameObj, ['lastName']) ?? '';
@@ -47,34 +36,6 @@ export function getFullName(user) {
   const displayedFirstName = preferredFirstName || firstName;
 
   return `${lastName}${displayedFirstName ? ', ' : ''}${displayedFirstName}${middleName ? ' ' : ''}${middleName}`;
-}
-
-export const createUserHighlightBoxLink = (linkText, id) => {
-  return linkText ? <Link to={`/users/view/${id}`}>{linkText}</Link> : '';
-};
-
-export function userHighlightBox(title, name, id, barcode) {
-  const recordLink = createUserHighlightBoxLink(name, id);
-  const barcodeLink = createUserHighlightBoxLink(barcode, id);
-
-  return (
-    <Row>
-      <Col xs={12}>
-        <div className={`${css.section} ${css.active}`}>
-          <Headline size="medium" tag="h3">
-            {title}
-          </Headline>
-          <div>
-            {recordLink || <FormattedMessage id="ui-requests.errors.user.unknown" />}
-            {' '}
-            <FormattedMessage id="ui-requests.barcode" />:
-            {' '}
-            {barcode ? barcodeLink : <NoValue />}
-          </div>
-        </div>
-      </Col>
-    </Row>
-  );
 }
 
 export function toUserAddress(addr) {
