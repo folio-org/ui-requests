@@ -40,7 +40,11 @@
     "permissionSets": [
       {
         "permissionName": "module.requests.enabled",
-        "displayName": "UI: Requests module is enabled"
+        "displayName": "UI: Requests module is enabled",
+        "subPermissions": [
+          "mod-settings.global.read.stripes-core.prefs.manage",
+          "mod-settings.entries.collection.get"
+        ]
       },
       {
         "permissionName": "ui-requests.moveRequest.execute",
