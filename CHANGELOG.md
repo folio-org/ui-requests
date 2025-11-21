@@ -2,7 +2,6 @@
 
 ## 13.0.0 IN PROGRESS
 
-* Display Anonymized when viewing a requester/proxy for a single anonymized loan. Refs UIREQ-1313.
 * *BREAKING* Use `convertToSlipData` and supporting functions from `stripes-util`. Refs UIREQ-1263.
 * Replace moment with day.js. Refs UIREQ-1291.
 * Reduce count of eslint errors after update eslint-config-stripes. Refs UIREQ-1289.
@@ -13,6 +12,7 @@
 * Display loan type on the Request Detail page, as well as New Request page. Refs UIREQ-1328.
 * When creating or viewing a request, show whether the a loan on the item would be use-at-location. Fixes UIREQ-1327.
 * Added global permissions for get read-access to values such as tenant’s locale, timezone, and currency. Refs UIREQ-1341.
+* Display Anonymized when viewing a requester/proxy for a single anonymized loan. Refs UIREQ-1313.
 
 ## [12.0.4] (https://github.com/folio-org/ui-requests/tree/v12.0.4) (2025-10-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v12.0.3...v12.0.4)
