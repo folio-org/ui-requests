@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
-import { getFullName } from '../../utils';
+import { getFullName, isUserAnonymized } from '../../utils';
 import propTypes from './propTypes';
 
 // This link component takes both the userId and the user object
@@ -17,9 +17,9 @@ const FullNameLink = ({
     return <Link to={`/users/view/${user?.id ?? userId}`}>{getFullName(user)}</Link>;
   }
 
-  return userId
-    ? <FormattedMessage id="ui-requests.errors.user.unknown" />
-    : <FormattedMessage id="ui-requests.requestMeta.anonymized" />;
+  return isUserAnonymized(userId)
+    ? <FormattedMessage id="ui-requests.requestMeta.anonymized" />
+    : <FormattedMessage id="ui-requests.errors.user.unknown" />;
 };
 
 FullNameLink.propTypes = propTypes;
