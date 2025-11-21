@@ -7,8 +7,9 @@ import {
   Row,
 } from '@folio/stripes/components';
 
-import css from '../../requests.css';
 import { BarcodeLink, FullNameLink } from '../RequesterLinks';
+
+import css from '../../requests.css';
 
 const UserHighlightBox = ({
   title,
