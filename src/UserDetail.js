@@ -9,9 +9,8 @@ import {
   NoValue,
 } from '@folio/stripes/components';
 
+import UserHighlightBox from './components/UserHighlightBox';
 import {
-  getFullName,
-  userHighlightBox,
   getPatronGroup,
   isProxyFunctionalityAvailable,
 } from './utils';
@@ -61,26 +60,28 @@ class UserDetail extends React.Component {
     } = this.props;
 
     const id = user?.id ?? request.requesterId;
-    const name = getFullName(user);
-    const barcode = user ? user.barcode : '';
     const patronGroup = getPatronGroup(user, patronGroups) || {};
 
-    let proxyName;
-    let proxyBarcode;
     let proxyId;
     if (isProxyFunctionalityAvailable(isEcsTlrSettingEnabled) && proxy) {
-      proxyName = getFullName(proxy);
-      proxyBarcode = proxy?.barcode || <NoValue />;
       proxyId = proxy.id || request.proxyUserId;
     }
 
     const proxySection = proxyId
-      ? userHighlightBox(<FormattedMessage id="ui-requests.requester.proxy" />, proxyName, proxyId, proxyBarcode)
+      ? <UserHighlightBox
+        title={<FormattedMessage id="ui-requests.requester.proxy" />}
+        userId={proxyId}
+        user={proxy}
+      />
       : null;
 
     return (
       <div>
-        {userHighlightBox(<FormattedMessage id="ui-requests.requester.requester" />, name, id, barcode)}
+        <UserHighlightBox
+          title={<FormattedMessage id="ui-requests.requester.requester" />}
+          userId={id}
+          user={user}
+        />
         <Row>
           <Col xs={4}>
             <KeyValue
