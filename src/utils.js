@@ -38,6 +38,10 @@ export function getFullName(user) {
   return `${lastName}${displayedFirstName ? ', ' : ''}${displayedFirstName}${middleName ? ' ' : ''}${middleName}`;
 }
 
+export function isUserAnonymized(userId) {
+  return !userId;
+}
+
 export function toUserAddress(addr) {
   return (
     <div>
