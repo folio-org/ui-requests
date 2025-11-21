@@ -12,8 +12,12 @@ const propsData = {
   itemId: 'testItemId',
   holdingsRecordId: 'testHoldingsRecordId',
   requestCreateDate: '2023-04-05',
-  requesterId: 'testRequesterId',
-  requesterName: 'testRequesterName',
+  request: {
+    requesterId: 'testRequesterId',
+    requester: {
+      lastName: 'testRequesterName',
+    }
+  },
 };
 const labelIds = {
   entityTypeRequest: 'ui-requests.notes.entityType.request',
