@@ -2,9 +2,12 @@ import {
   escape,
 } from 'lodash';
 
+import { NoValue } from '@folio/stripes/components';
+
 import {
   buildTemplate,
   createUserHighlightBoxLink,
+  computeUserDisplayForRequest,
   duplicateRequest,
   escapeValue,
   getTlrSettings,
@@ -137,6 +140,172 @@ describe('createUserHighlightBoxLink', () => {
   it('returns empty string given no values', () => {
     const text = createUserHighlightBoxLink('', '');
     expect(text).toMatch('');
+  });
+});
+
+describe('computeUserDisplayForRequest', () => {
+  const requesterId = { requesterId: 'requesterId' };
+  const requester = {
+    lastName: 'requester',
+    barcode: 'rb'
+  };
+
+  const proxyUserId = { proxyUserId: 'proxyUserId' };
+  const proxy = {
+    lastName: 'proxy',
+    barcode: 'pb'
+  };
+
+  const requesterName = { link: { text: 'requester', to: 'requesterId' } };
+  const requesterBarcode = { link: { text: 'rb', to: 'requesterId' } };
+  const proxyName = { link: { text: 'proxy', to: 'proxyUserId' } };
+  const proxyBarcode = { link: { text: 'pb', to: 'proxyUserId' } };
+  const anonymizedUser = { formattedMessageId: 'ui-requests.requestMeta.anonymized' };
+  const unknownUser = { formattedMessageId: 'ui-requests.errors.user.unknown' };
+
+  describe.each([
+    {
+      name: 'requester + proxy',
+      request: { ...requesterId, requester, ...proxyUserId, proxy },
+      expected: {
+        requesterName,
+        requesterBarcode,
+        proxyName,
+        proxyBarcode,
+      }
+    },
+    {
+      name: 'requester + unknown proxy',
+      request: { ...requesterId, requester, ...proxyUserId },
+      expected: {
+        requesterName,
+        requesterBarcode,
+        proxyName: unknownUser,
+        proxyBarcode: false,
+      }
+    },
+    {
+      name: 'requester + null proxy',
+      request: { ...requesterId, requester },
+      expected: {
+        requesterName,
+        requesterBarcode,
+        proxy: null,
+      }
+    },
+    {
+      name: 'unknown requester + proxy',
+      request: { ...requesterId, ...proxyUserId, proxy },
+      expected: {
+        requesterName: unknownUser,
+        requesterBarcode: false,
+        proxyName,
+        proxyBarcode,
+      }
+    },
+    {
+      name: 'unknown requester + unknown proxy',
+      request: { ...requesterId, ...proxyUserId },
+      expected: {
+        requesterName: unknownUser,
+        requesterBarcode: false,
+        proxyName: unknownUser,
+        proxyBarcode: false,
+      }
+    },
+    {
+      name: 'unknown requester + null proxy',
+      request: { ...requesterId },
+      expected: {
+        requesterName: unknownUser,
+        requesterBarcode: false,
+        proxy: null
+      }
+    },
+    {
+      name: 'null requester + proxy',
+      request: { ...proxyUserId, proxy },
+      expected: {
+        requesterName: unknownUser,
+        requesterBarcode: false,
+        proxyName,
+        proxyBarcode,
+      }
+    },
+    {
+      name: 'null requester + unknown proxy',
+      request: { ...proxyUserId },
+      expected: {
+        requesterName: unknownUser,
+        requesterBarcode: false,
+        proxyName: unknownUser,
+        proxyBarcode: false,
+      }
+    },
+    {
+      name: 'anonymized requester + null proxy',
+      request: { },
+      expected: {
+        requesterName: anonymizedUser,
+        requesterBarcode: false,
+        proxy: null
+      }
+    },
+  ])('has expected user display values for $name', ({ request, expected }) => {
+    describe('with Proxy Enabled', () => {
+      let display;
+      beforeAll(() => {
+        display = computeUserDisplayForRequest(request, false);
+      });
+      it.each([
+        'requesterName',
+        'requesterBarcode',
+      ])('for %s', (prop) => {
+        if (expected[prop]?.link) {
+          expect(display[prop]).toMatch(expected[prop].link.text);
+          expect(display[prop + 'Link'].props.children).toMatch(expected[prop].link.text);
+          expect(display[prop + 'Link'].props.to).toMatch(expected[prop].link.to);
+        } else if (expected[prop]?.formattedMessageId) {
+          expect(display[prop].props.id).toMatch(expected[prop].formattedMessageId);
+        } else if (expected[prop] === false) {
+          expect(display[prop].type).toBe(NoValue);
+        } else if (expected[prop] === null) {
+          expect(display[prop]).toBeNull();
+        } else {
+          throw new Error(`${prop} had unknown expected value ${expected[prop]}`);
+        }
+      });
+      it.each([
+        'proxyName',
+        'proxyBarcode'
+      ])('for %s', (prop) => {
+        if (expected.proxy === null) {
+          expect(display.proxy).toBeNull();
+        } else if (expected[prop]?.link) {
+          expect(display.proxy[prop]).toMatch(expected[prop].link.text);
+          expect(display.proxy[prop + 'Link'].props.children).toMatch(expected[prop].link.text);
+          expect(display.proxy[prop + 'Link'].props.to).toMatch(expected[prop].link.to);
+        } else if (expected[prop]?.formattedMessageId) {
+          expect(display.proxy[prop].props.id).toMatch(expected[prop].formattedMessageId);
+        } else if (expected[prop] === false) {
+          expect(display.proxy[prop].type).toBe(NoValue);
+        } else if (expected[prop] === null) {
+          expect(display.proxy[prop]).toBeNull();
+        } else {
+          throw new Error(`${prop} had unknown expected value ${expected[prop]}`);
+        }
+      });
+    });
+    it('with Proxy Disabled', () => {
+      if (request.proxy || request.proxyUserId) {
+        expect(() => {
+          computeUserDisplayForRequest(request, true);
+        }).toThrow();
+      } else {
+        const display = computeUserDisplayForRequest(request, true);
+        expect(display.proxy).toBeNull();
+      }
+    });
   });
 });
 

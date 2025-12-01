@@ -53,6 +53,72 @@ export const createUserHighlightBoxLink = (linkText, id) => {
   return linkText ? <Link to={`/users/view/${id}`}>{linkText}</Link> : '';
 };
 
+export const isProxyFunctionalityAvailable = (isEcsTlrSettingEnabled) => {
+  return !isEcsTlrSettingEnabled;
+};
+
+export function computeUserDisplayForRequest(request, isEcsTlrSettingEnabled) {
+  const proxyUserId = request.proxy?.id ?? request.proxyUserId;
+  const unknownProxy = (!!proxyUserId && !request.proxy);
+  const nullProxy = (!proxyUserId && !request.proxy);
+  if (!isProxyFunctionalityAvailable(isEcsTlrSettingEnabled) && !nullProxy) {
+    throw new Error();
+  }
+
+  const requesterId = request.requester?.id ?? request.requesterId;
+  const isAnonymized = !requesterId && !request.requester && nullProxy;
+  if (isAnonymized) {
+    return {
+      requesterName: <FormattedMessage id="ui-requests.requestMeta.anonymized" />,
+      requesterNameLink: <FormattedMessage id="ui-requests.requestMeta.anonymized" />,
+      requesterBarcode: <NoValue />,
+      requesterBarcodeLink: <NoValue />,
+      proxy: null,
+    };
+  }
+
+  const unknownRequester = (!!requesterId && !request.requester) || (!requesterId && !nullProxy);
+  const requesterDisplay = {
+    requesterName: unknownRequester
+      ? <FormattedMessage id="ui-requests.errors.user.unknown" />
+      : getFullName(request.requester),
+    requesterNameLink: unknownRequester
+      ? <FormattedMessage id="ui-requests.errors.user.unknown" />
+      : createUserHighlightBoxLink(getFullName(request.requester), requesterId),
+    requesterBarcode: unknownRequester
+      ? <NoValue />
+      : request.requester.barcode,
+    requesterBarcodeLink: unknownRequester
+      ? <NoValue />
+      : createUserHighlightBoxLink(request.requester.barcode, requesterId),
+  };
+
+  if (nullProxy) {
+    return {
+      ...requesterDisplay,
+      proxy: null
+    };
+  }
+
+  return {
+    ...requesterDisplay,
+    proxy: {
+      proxyName: unknownProxy
+        ? <FormattedMessage id="ui-requests.errors.user.unknown" />
+        : getFullName(request.proxy),
+      proxyNameLink: unknownProxy
+        ? <FormattedMessage id="ui-requests.errors.user.unknown" />
+        : createUserHighlightBoxLink(getFullName(request.proxy), proxyUserId),
+      proxyBarcode: unknownProxy
+        ? <NoValue />
+        : request.proxy.barcode,
+      proxyBarcodeLink: unknownProxy
+        ? <NoValue />
+        : createUserHighlightBoxLink(request.proxy.barcode, proxyUserId),
+    }
+  };
+}
+
 export function userHighlightBox(title, name, id, barcode) {
   const recordLink = createUserHighlightBoxLink(name, id);
   const barcodeLink = createUserHighlightBoxLink(barcode, id);
@@ -427,10 +493,6 @@ export function resetFieldState(form, fieldName) {
 
 export const isMultiDataTenant = (stripes) => {
   return stripes.hasInterface('consortia') && stripes.hasInterface('ecs-tlr');
-};
-
-export const isProxyFunctionalityAvailable = (isEcsTlrSettingEnabled) => {
-  return !isEcsTlrSettingEnabled;
 };
 
 export const getRequester = (proxy, selectedUser, isEcsTlrSettingEnabled) => {
