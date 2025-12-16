@@ -74,6 +74,7 @@ import {
   RESOURCE_TYPES,
   requestFilterTypes,
   PROXY_COLUMNS,
+  TAGS_SCOPES,
 } from '../constants';
 import {
   buildUrl,
@@ -1794,6 +1795,7 @@ class RequestsRoute extends React.Component {
               parentResources={resources}
               parentMutator={mutator}
               detailProps={{
+                tagsScope: TAGS_SCOPES.TAG,
                 onChangePatron: this.onChangePatron,
                 stripes,
                 history,

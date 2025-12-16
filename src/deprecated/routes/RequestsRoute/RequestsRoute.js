@@ -67,6 +67,7 @@ import {
   INPUT_REQUEST_SEARCH_SELECTOR,
   PRINT_DETAILS_COLUMNS,
   requestFilterTypes,
+  TAGS_SCOPES,
 } from '../../../constants';
 import {
   buildUrl,
@@ -1720,6 +1721,7 @@ class RequestsRoute extends React.Component {
               parentResources={resources}
               parentMutator={mutator}
               detailProps={{
+                tagsScope: TAGS_SCOPES.TAG,
                 onChangePatron: this.onChangePatron,
                 stripes,
                 history,
