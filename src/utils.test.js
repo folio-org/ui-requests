@@ -2,9 +2,12 @@ import {
   escape,
 } from 'lodash';
 
+import { NoValue } from '@folio/stripes/components';
+
 import {
   buildTemplate,
   createUserHighlightBoxLink,
+  computeUserDisplayForRequest,
   duplicateRequest,
   escapeValue,
   getTlrSettings,
@@ -137,6 +140,95 @@ describe('createUserHighlightBoxLink', () => {
   it('returns empty string given no values', () => {
     const text = createUserHighlightBoxLink('', '');
     expect(text).toMatch('');
+  });
+});
+
+describe('computeUserDisplayForRequest', () => {
+  it.each([
+    {
+      testName: 'all values',
+      input: { rid: true, r: true, rb: true, ecs: false, pid: true, p: true, pb: true },
+      expected: { rn: true, rb: true, pn: true, pb: true },
+    },
+    {
+      testName: 'users missing barcodes',
+      input: { rid: true, r: true, rb: false, ecs: false, pid: true, p: true, pb: false },
+      expected: { rn: true, rb: 'novalue', pn: true, pb: 'novalue' },
+    },
+    {
+      testName: 'proxy functionality disabled',
+      input: { rid: true, r: true, rb: true, ecs: true, pid: true, p: true, pb: true },
+      expected: { rn: true, rb: true, pn: null, pb: null },
+    },
+    {
+      testName: 'anonymized user with proxy',
+      input: { rid: false, r: false, pid: true, p: true, pb: true },
+      expected: { rn: 'anonymized', rb: 'novalue', pn: null, pb: null },
+    },
+    {
+      testName: 'anonymized user with no proxy',
+      input: { rid: false, r: false, pid: false },
+      expected: { rn: 'anonymized', rb: 'novalue', pn: null, pb: null },
+    },
+    {
+      testName: 'unknown user with with proxy',
+      input: { rid: true, r: false, pid: true, p: true, pb: true },
+      expected: { rn: 'unknown', rb: 'novalue', pn: true, pb: true },
+    },
+    {
+      testName: 'unknown user with with no proxy',
+      input: { rid: true, r: false, pid: false },
+      expected: { rn: 'unknown', rb: 'novalue', pn: null, pb: null },
+    },
+
+  ])('has expected user display values for $testName', ({ input, expected }) => {
+    const request = {};
+    if (input.rid) {
+      request.requesterId = 'requesterId';
+    }
+    if (input.r) {
+      request.requester = {
+        lastName: 'requester'
+      };
+      if (input.rb) {
+        request.requester.barcode = 'requesterBarcode';
+      }
+    }
+    if (input.pid) {
+      request.proxyUserId = 'proxyUserId';
+    }
+    if (input.p) {
+      request.proxy = {
+        lastName: 'proxy'
+      };
+      if (input.pb) {
+        request.proxy.barcode = 'proxyBarcode';
+      }
+    }
+
+    const display = computeUserDisplayForRequest(request, input.ecs);
+
+    const test = (prop, exp, linkText, linkTo) => {
+      if (exp === true) {
+        expect(prop.props.children).toMatch(linkText);
+        expect(prop.props.to).toMatch(linkTo);
+      } else if (exp === 'anonymized') {
+        expect(prop.props.id).toMatch('ui-requests.requestMeta.anonymized');
+      } else if (exp === 'unknown') {
+        expect(prop.props.id).toMatch('ui-requests.errors.user.unknown');
+      } else if (exp === 'novalue') {
+        expect(prop.type).toBe(NoValue);
+      } else if (exp === null) {
+        expect(prop).toBeNull();
+      } else {
+        throw new Error(exp);
+      }
+    };
+
+    test(display.requesterName, expected.rn, 'requester', '/users/view/requesterId');
+    test(display.requesterBarcode, expected.rb, 'requesterBarcode', '/users/view/requesterId');
+    test(display.proxyName, expected.pn, 'proxy', '/users/view/proxyUserId');
+    test(display.proxyBarcode, expected.pb, 'proxyBarcode', '/users/view/proxyUserId');
   });
 });
 
