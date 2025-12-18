@@ -427,6 +427,10 @@ export const SETTINGS_SCOPES = {
   CIRCULATION: 'circulation',
 };
 
+export const TAGS_SCOPES = {
+  TAG: 'ui-tags.tags.manage',
+};
+
 export const SETTINGS_KEYS = {
   GENERAL_TLR: 'generalTlr',
 };
