@@ -11,6 +11,7 @@ import {
   getFullNameForCsvRecords,
   updateQuerySortString,
   getPrintedDetails,
+  getPrintHoldRequestsEnabled,
 } from './utils';
 
 describe('utils', () => {
@@ -243,6 +244,36 @@ describe('utils', () => {
       };
 
       expect(getPrintedDetails(record)).toBe('John Doe, date1');
+    });
+  });
+
+  describe('getPrintHoldRequestsEnabled', () => {
+    it('should return false if input is undefined', () => {
+      expect(getPrintHoldRequestsEnabled()).toBe(false);
+    });
+
+    it('should return false if records is missing', () => {
+      expect(getPrintHoldRequestsEnabled({})).toBe(false);
+    });
+
+    it('should return false if records array is empty', () => {
+      expect(getPrintHoldRequestsEnabled({ records: [] })).toBe(false);
+    });
+
+    it('should return false if value is missing in records[0]', () => {
+      expect(getPrintHoldRequestsEnabled({ records: [{}] })).toBe(false);
+    });
+
+    it('should return false if printHoldRequestsEnabled is missing in value', () => {
+      expect(getPrintHoldRequestsEnabled({ records: [{ value: {} }] })).toBe(false);
+    });
+
+    it('should return true if printHoldRequestsEnabled is true', () => {
+      expect(getPrintHoldRequestsEnabled({ records: [{ value: { printHoldRequestsEnabled: true } }] })).toBe(true);
+    });
+
+    it('should return false if printHoldRequestsEnabled is false', () => {
+      expect(getPrintHoldRequestsEnabled({ records: [{ value: { printHoldRequestsEnabled: false } }] })).toBe(false);
     });
   });
 });

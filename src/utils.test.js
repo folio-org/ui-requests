@@ -187,8 +187,8 @@ describe('duplicateRequest', () => {
 
 describe('getTlrSettings', () => {
   const defaultSettings = {
-    titleLevelRequestsFeatureEnabled: true,
     createTitleLevelRequestsByDefault: false,
+    titleLevelRequestsFeatureEnabled: true,
   };
 
   it('should return passed settings', () => {

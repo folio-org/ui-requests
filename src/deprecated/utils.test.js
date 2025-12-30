@@ -11,7 +11,7 @@ describe('utils', () => {
     };
 
     it('should return passed settings', () => {
-      expect(getTlrSettings(JSON.stringify(defaultSettings))).toEqual(defaultSettings);
+      expect(getTlrSettings(defaultSettings)).toEqual(defaultSettings);
     });
 
     it('should return empty object if nothing passed', () => {
