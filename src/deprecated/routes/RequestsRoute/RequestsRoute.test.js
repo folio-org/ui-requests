@@ -33,7 +33,6 @@ import { effectiveCallNumber } from '@folio/stripes/util';
 import RequestsRoute, {
   buildHoldRecords,
   getListFormatter,
-  getPrintHoldRequestsEnabled,
   getLastPrintedDetails,
   getFilteredColumnHeadersMap,
   urls,
@@ -476,7 +475,9 @@ describe('RequestsRoute', () => {
       },
       printHoldRequests: {
         records: [{
-          value: '{"printHoldRequestsEnabled": true}',
+          value: {
+            printHoldRequestsEnabled: true,
+          },
         }],
       },
       circulationSettings: {
@@ -1006,11 +1007,11 @@ describe('RequestsRoute', () => {
           ...defaultProps.resources,
           configs: {
             hasLoaded: true,
-            records: [
-              {
-                value: '{"createTitleLevelRequestsByDefault": true}',
-              }
-            ],
+            records: [{
+              value: {
+                createTitleLevelRequestsByDefault: true,
+              },
+            }],
           },
         },
       };
@@ -1425,30 +1426,6 @@ describe('RequestsRoute', () => {
 
         expect(NoValue).toHaveBeenCalled();
       });
-    });
-  });
-
-  describe('getPrintHoldRequestsEnabled', () => {
-    it('should return true when printHoldRequestsEnabled is true', () => {
-      expect(getPrintHoldRequestsEnabled({
-        records: [{
-          value: '{"printHoldRequestsEnabled": true}',
-        }],
-      })).toBeTruthy();
-    });
-
-    it('should return false when printHoldRequestsEnabled is false', () => {
-      expect(getPrintHoldRequestsEnabled({
-        records: [{
-          value: '{"printHoldRequestsEnabled": false}',
-        }],
-      })).toBeFalsy();
-    });
-
-    it('should return false when value absent', () => {
-      expect(getPrintHoldRequestsEnabled({
-        records: [],
-      })).toBeFalsy();
     });
   });
 

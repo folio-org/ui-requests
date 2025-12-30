@@ -9,7 +9,10 @@ import { stripesConnect } from '@folio/stripes/core';
 
 import RequestQueueView from '../../../views/RequestQueueView';
 import urls from '../../../routes/urls';
-import { requestStatuses } from '../../../constants';
+import {
+  requestStatuses,
+  SETTINGS_KEYS,
+} from '../../../constants';
 import {
   isPageRequest,
 } from '../../../utils';
@@ -29,10 +32,10 @@ class RequestQueueRoute extends React.Component {
   static manifest = {
     configs: {
       type: 'okapi',
-      records: 'configs',
-      path: 'configurations/entries',
+      records: 'circulationSettings',
+      path: 'circulation/settings',
       params: {
-        query: '(module==SETTINGS and configName==TLR)',
+        query: `(name==${SETTINGS_KEYS.TLR})`,
       },
     },
     addressTypes: {
