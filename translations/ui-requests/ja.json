@@ -65,7 +65,7 @@
     "routingErrorOops": "おっと!",
     "routingError": "How did you get to {pathname}?",
     "requests.title": "タイトル",
-    "requests.type": "種類",
+    "requests.type": "タイプ",
     "requests.status": "リクエストステータス",
     "requests.requester": "リクエスト者",
     "requests.requesterBarcode": "リクエスト者バーコード",
