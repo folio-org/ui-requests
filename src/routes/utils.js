@@ -56,3 +56,7 @@ export const getPrintedDetails = (record) => {
 
   return [fullName, lastPrintedDate].filter(Boolean).join(', ');
 };
+
+export const getPrintHoldRequestsEnabled = (printHoldRequests) => (
+  printHoldRequests?.records?.[0]?.value?.printHoldRequestsEnabled ?? false
+);
