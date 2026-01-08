@@ -8,8 +8,7 @@ import { NoValue } from '@folio/stripes/components';
 
 import UserDetail from './UserDetail';
 import {
-  getFullName,
-  userHighlightBox,
+  userHighlightBox2,
   getPatronGroup,
 } from './utils';
 
@@ -17,21 +16,22 @@ const basicProps = {
   deliveryAddress: 'deliveryAddress',
   patronGroups: [],
   pickupServicePoint: 'SP',
-  proxy: {
-    barcode: 'proxyBarcode',
-    id: 'proxyId',
-    lastName: 'proxyLastName',
-  },
   request: {
     requesterId: 'requesterId',
+    requester: {
+      id: 'requesterId',
+      lastName: 'userLastName',
+      barcode: 'userBarcode',
+    },
     proxyUserId: 'proxyUserId',
+    proxy: {
+      id: 'proxyId',
+      barcode: 'proxyBarcode',
+      lastName: 'proxyLastName',
+    },
     fulfillmentPreference: 'fulfillmentPreference',
   },
-  user: {
-    id: 'userId',
-    barcode: 'userBarcode',
-    lastName: 'userLastName',
-  },
+  user: { id: 'userId' },
   selectedDelivery: true,
   isEcsTlrSettingEnabled: false,
 };
@@ -45,8 +45,19 @@ const labelIds = {
 };
 
 jest.mock('./utils', () => ({
-  getFullName: jest.fn((user) => user.lastName),
-  userHighlightBox: jest.fn((label, name, id, barcode) => (
+  computeUserDisplayForRequest: jest.fn((request) => ({
+    requesterNameLink: request.requester.lastName,
+    requesterBarcodeLink: request.requester.barcode,
+    ...(request.proxy ?
+      {
+        proxy: {
+          proxyNameLink: request.proxy.lastName,
+          proxyBarcodeLink: request.proxy.barcode
+        }
+      }
+      : {}),
+  })),
+  userHighlightBox2: jest.fn((label, name, barcode) => (
     <>
       <div>{label}</div>
       <div>{barcode}</div>
@@ -71,26 +82,18 @@ describe('UserDetail', () => {
       );
     });
 
-    it('should trigger "getFullName" with correct argument', () => {
-      const expectedArgs = [basicProps.user, basicProps.proxy];
-
-      expectedArgs.forEach((user, index) => {
-        expect(getFullName).toHaveBeenNthCalledWith(index + 1, user);
-      });
-    });
-
     it('should trigger "getPatronGroup" with correct arguments', () => {
       expect(getPatronGroup).toHaveBeenCalledWith(basicProps.user, basicProps.patronGroups);
     });
 
     it('should trigger "userHighlightBox" with correct arguments', () => {
       const expectedArgs = [
-        [expect.anything(), basicProps.proxy.lastName, basicProps.proxy.id, basicProps.proxy.barcode],
-        [expect.anything(), basicProps.user.lastName, basicProps.user.id, basicProps.user.barcode],
+        [expect.anything(), basicProps.request.proxy.lastName, basicProps.request.proxy.barcode],
+        [expect.anything(), basicProps.request.requester.lastName, basicProps.request.requester.barcode],
       ];
 
       expectedArgs.forEach((user, index) => {
-        expect(userHighlightBox).toHaveBeenNthCalledWith(index + 1, ...user);
+        expect(userHighlightBox2).toHaveBeenNthCalledWith(index + 1, ...user);
       });
     });
 
@@ -227,32 +230,10 @@ describe('UserDetail', () => {
   describe('when proxy is not provided', () => {
     const props = {
       ...basicProps,
-      proxy: null,
-    };
-
-    beforeEach(() => {
-      render(
-        <UserDetail {...props} />
-      );
-    });
-
-    it('should not render proxy label', () => {
-      const proxyLabel = screen.queryByText(labelIds.proxy);
-
-      expect(proxyLabel).toBeNull();
-    });
-  });
-
-  describe('when proxy id and proxy user id are not provided', () => {
-    const props = {
-      ...basicProps,
-      proxy: {
-        ...basicProps.proxy,
-        id: undefined,
-      },
       request: {
         ...basicProps.request,
-        proxyUserId: undefined,
+        proxyUserId: null,
+        proxy: null,
       },
     };
 
@@ -266,26 +247,6 @@ describe('UserDetail', () => {
       const proxyLabel = screen.queryByText(labelIds.proxy);
 
       expect(proxyLabel).toBeNull();
-    });
-  });
-
-  describe('when proxy barcode is not provided', () => {
-    const props = {
-      ...basicProps,
-      proxy: {
-        ...basicProps.proxy,
-        barcode: undefined,
-      },
-    };
-
-    beforeEach(() => {
-      render(
-        <UserDetail {...props} />
-      );
-    });
-
-    it('should render "NoValue" component once', () => {
-      expect(NoValue).toBeCalledTimes(1);
     });
   });
 });

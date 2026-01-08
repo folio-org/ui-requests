@@ -10,8 +10,8 @@ import {
 } from '@folio/stripes/components';
 
 import {
-  getFullName,
-  userHighlightBox,
+  computeUserDisplayForRequest,
+  userHighlightBox2,
   getPatronGroup,
   isProxyFunctionalityAvailable,
 } from './utils';
@@ -25,18 +25,21 @@ class UserDetail extends React.Component {
       })
     ),
     pickupServicePoint: PropTypes.string,
-    proxy: PropTypes.shape({
-      id: PropTypes.string,
-      barcode: PropTypes.string,
-    }),
     request: PropTypes.shape({
       requesterId: PropTypes.string,
+      requester: PropTypes.shape({
+        id: PropTypes.string,
+        barcode: PropTypes.string,
+      }),
       proxyUserId: PropTypes.string,
+      proxy: PropTypes.shape({
+        id: PropTypes.string,
+        barcode: PropTypes.string,
+      }),
       fulfillmentPreference: PropTypes.string,
     }).isRequired,
     user: PropTypes.shape({
       id: PropTypes.string,
-      barcode: PropTypes.string,
     }).isRequired,
     isEcsTlrSettingEnabled: PropTypes.bool,
     selectedDelivery: PropTypes.bool,
@@ -44,14 +47,12 @@ class UserDetail extends React.Component {
 
   static defaultProps = {
     pickupServicePoint: '',
-    proxy: {},
     selectedDelivery: false,
   };
 
   render() {
     const {
       user,
-      proxy,
       request,
       patronGroups,
       deliveryAddress,
@@ -59,28 +60,30 @@ class UserDetail extends React.Component {
       selectedDelivery,
       isEcsTlrSettingEnabled,
     } = this.props;
-
-    const id = user?.id ?? request.requesterId;
-    const name = getFullName(user);
-    const barcode = user ? user.barcode : '';
     const patronGroup = getPatronGroup(user, patronGroups) || {};
+    const detailRequest = { ...request };
 
-    let proxyName;
-    let proxyBarcode;
-    let proxyId;
-    if (isProxyFunctionalityAvailable(isEcsTlrSettingEnabled) && proxy) {
-      proxyName = getFullName(proxy);
-      proxyBarcode = proxy?.barcode || <NoValue />;
-      proxyId = proxy.id || request.proxyUserId;
+    if (!isProxyFunctionalityAvailable(isEcsTlrSettingEnabled)) {
+      delete detailRequest.proxyUserId;
+      delete detailRequest.proxy;
     }
 
-    const proxySection = proxyId
-      ? userHighlightBox(<FormattedMessage id="ui-requests.requester.proxy" />, proxyName, proxyId, proxyBarcode)
+    const userDisplay = computeUserDisplayForRequest(detailRequest);
+    const proxySection = userDisplay.proxy
+      ? userHighlightBox2(
+        <FormattedMessage id="ui-requests.requester.proxy" />,
+        userDisplay.proxy.proxyNameLink,
+        userDisplay.proxy.proxyBarcodeLink,
+      )
       : null;
 
     return (
       <div>
-        {userHighlightBox(<FormattedMessage id="ui-requests.requester.requester" />, name, id, barcode)}
+        {userHighlightBox2(
+          <FormattedMessage id="ui-requests.requester.requester" />,
+          userDisplay.requesterNameLink,
+          userDisplay.requesterBarcodeLink,
+        )}
         <Row>
           <Col xs={4}>
             <KeyValue
