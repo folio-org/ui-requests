@@ -1393,7 +1393,6 @@ describe('ViewRequest', () => {
       const expectedProps = {
         deliveryAddress: deliveryAddressDetail,
         user:request.requester,
-        proxy: request.proxy,
         selectedDelivery: true,
         patronGroups: props.patronGroups,
         stripes: props.stripes,
@@ -1424,7 +1423,6 @@ describe('ViewRequest', () => {
       const expectedProps = {
         deliveryAddress: undefined,
         user:request.requester,
-        proxy: request.proxy,
         selectedDelivery: false,
         patronGroups: props.patronGroups,
         stripes: props.stripes,

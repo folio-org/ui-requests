@@ -855,7 +855,6 @@ class ViewRequest extends React.Component {
               >
                 <UserDetail
                   user={request.requester}
-                  proxy={request.proxy}
                   stripes={stripes}
                   patronGroups={patronGroups}
                   request={request}
