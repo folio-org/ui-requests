@@ -8,7 +8,7 @@ import {
   KeyValue,
 } from '@folio/stripes/components';
 
-import { createUserHighlightBoxLink } from '../../utils';
+import { computeUserDisplayForRequest } from '../../utils';
 
 import css from './ReferredRecord.css';
 
@@ -19,9 +19,9 @@ const ReferredRecord = ({ values }) => {
     itemBarcode,
     itemId,
     holdingsRecordId,
+    request,
+    isEcsTlrSettingEnabled = false,
     requestCreateDate,
-    requesterId,
-    requesterName,
   } = values;
 
   const instanceLink = (
@@ -46,6 +46,7 @@ const ReferredRecord = ({ values }) => {
     </span>
   );
 
+  const userDisplay = computeUserDisplayForRequest(request, isEcsTlrSettingEnabled);
   return (
     <KeyValue
       data-test-referred-record
@@ -63,7 +64,7 @@ const ReferredRecord = ({ values }) => {
       <div>
         <FormattedMessage
           id="ui-requests.notes.assigned.requester"
-          values={{ requesterName: createUserHighlightBoxLink(requesterName, requesterId) }}
+          values={{ requesterName: userDisplay.requesterNameLink }}
         />
       </div>
       <div>
@@ -84,8 +85,11 @@ ReferredRecord.propTypes = {
     itemId: PropTypes.string.isRequired,
     holdingsRecordId: PropTypes.string.isRequired,
     requestCreateDate: PropTypes.string.isRequired,
-    requesterId: PropTypes.string.isRequired,
-    requesterName: PropTypes.string.isRequired,
+    request: PropTypes.shape({
+      requesterId: PropTypes.string.isRequired,
+      proxyUserId: PropTypes.string,
+    }).isRequired,
+    isEcsTlrSettingEnabled: PropTypes.string,
   }).isRequired,
 };
 
