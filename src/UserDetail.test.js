@@ -8,7 +8,7 @@ import { NoValue } from '@folio/stripes/components';
 
 import UserDetail from './UserDetail';
 import {
-  userHighlightBox2,
+  userHighlightBox,
   getPatronGroup,
 } from './utils';
 
@@ -57,7 +57,7 @@ jest.mock('./utils', () => ({
       }
       : {}),
   })),
-  userHighlightBox2: jest.fn((label, name, barcode) => (
+  userHighlightBox: jest.fn((label, name, barcode) => (
     <>
       <div>{label}</div>
       <div>{barcode}</div>
@@ -93,7 +93,7 @@ describe('UserDetail', () => {
       ];
 
       expectedArgs.forEach((user, index) => {
-        expect(userHighlightBox2).toHaveBeenNthCalledWith(index + 1, ...user);
+        expect(userHighlightBox).toHaveBeenNthCalledWith(index + 1, ...user);
       });
     });
 

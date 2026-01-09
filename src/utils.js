@@ -112,7 +112,7 @@ export function computeUserDisplayForRequest(request) {
   };
 }
 
-export function userHighlightBox2(title, recordLink, barcodeLink) {
+export function userHighlightBox(title, recordLink, barcodeLink) {
   return (
     <Row>
       <Col xs={12}>
@@ -126,30 +126,6 @@ export function userHighlightBox2(title, recordLink, barcodeLink) {
             <FormattedMessage id="ui-requests.barcode" />:
             {' '}
             {barcodeLink}
-          </div>
-        </div>
-      </Col>
-    </Row>
-  );
-}
-
-export function userHighlightBox(title, name, id, barcode) {
-  const recordLink = createUserHighlightBoxLink(name, id);
-  const barcodeLink = createUserHighlightBoxLink(barcode, id);
-
-  return (
-    <Row>
-      <Col xs={12}>
-        <div className={`${css.section} ${css.active}`}>
-          <Headline size="medium" tag="h3">
-            {title}
-          </Headline>
-          <div>
-            {recordLink || <FormattedMessage id="ui-requests.errors.user.unknown" />}
-            {' '}
-            <FormattedMessage id="ui-requests.barcode" />:
-            {' '}
-            {barcode ? barcodeLink : <NoValue />}
           </div>
         </div>
       </Col>

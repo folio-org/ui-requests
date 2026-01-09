@@ -43,7 +43,7 @@ jest.mock('./utils', () => ({
       }
       : {}),
   })),
-  userHighlightBox2: jest.fn((title, name, barcode) => (
+  userHighlightBox: jest.fn((title, name, barcode) => (
     <>
       <span>{title}</span>
       <span>{name}</span>
