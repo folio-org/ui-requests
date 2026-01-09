@@ -72,6 +72,7 @@ import {
 import {
   buildUrl,
   getFullName,
+  computeUserDisplayForRequest,
   duplicateRequest,
   getInstanceQueryString,
   isDuplicateMode,
@@ -242,13 +243,13 @@ export const getListFormatter = (
     />),
   'itemBarcode': rq => (rq?.item?.barcode || <NoValue />),
   'position': rq => (rq.position || <NoValue />),
-  'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : <NoValue />),
+  'proxy': rq => computeUserDisplayForRequest(rq).proxy?.proxyName || <NoValue />,
   'requestDate': rq => (
     <AppIcon size="small" app="requests">
       <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
     </AppIcon>
   ),
-  'requester': rq => (rq.requester ? getFullName(rq.requester) : <NoValue />),
+  'requester': rq => computeUserDisplayForRequest(rq).requesterName,
   'singlePrint': rq => {
     const singlePrintButtonProps = {
       request: rq,
@@ -265,7 +266,7 @@ export const getListFormatter = (
     return (
       <SinglePrintButtonForPickSlip {...singlePrintButtonProps} />);
   },
-  'requesterBarcode': rq => (rq?.requester?.barcode || <NoValue />),
+  'requesterBarcode': rq => computeUserDisplayForRequest(rq).requesterBarcode || <NoValue />,
   'requestStatus': rq => (requestStatusesTranslations[rq.status]
     ? <FormattedMessage id={requestStatusesTranslations[rq.status]} />
     : <NoValue />),

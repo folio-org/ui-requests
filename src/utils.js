@@ -57,7 +57,7 @@ export const isProxyFunctionalityAvailable = (isEcsTlrSettingEnabled) => {
   return !isEcsTlrSettingEnabled;
 };
 
-export function computeUserDisplayForRequest(request, isEcsTlrSettingEnabled) {
+export function computeUserDisplayForRequest(request, isEcsTlrSettingEnabled = false) {
   const proxyUserId = request.proxy?.id ?? request.proxyUserId;
   const unknownProxy = (!!proxyUserId && !request.proxy);
   const nullProxy = (!proxyUserId && !request.proxy);
