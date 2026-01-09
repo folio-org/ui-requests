@@ -88,6 +88,7 @@ const testIds = {
   singlePrintButton: 'singlePrintButton',
   rowCheckbox: 'rowCheckbox',
   selectRequestCheckbox: 'selectRequestCheckbox',
+  anonymized: 'ui-requests.requestMeta.anonymized',
 };
 
 const intlCache = createIntlCache();
@@ -1165,13 +1166,19 @@ describe('RequestsRoute', () => {
         retrievalServicePointName: 'Circ Desk 1',
       },
       position: 'position',
-      proxy: {},
+      proxy: {
+        id: 'proxyId',
+        lastName: 'proxyLastName',
+        firstName: 'proxyFirstName',
+        barcode: 'proxyBarcode',
+      },
       requestDate: '02.02.2023',
       singlePrint: 'singlePrint',
       requester: {
-        lastName: 'lastName',
-        firstName: 'firstName',
-        barcode: 'barcode',
+        id: 'requesterId',
+        lastName: 'requesterLastName',
+        firstName: 'requesterFirstName',
+        barcode: 'requesterBarcode',
       },
       status: requestStatuses.CANCELLED,
       requestType: requestTypesMap.RECALL,
@@ -1262,11 +1269,7 @@ describe('RequestsRoute', () => {
 
     describe('proxy', () => {
       it('should return request proxy', () => {
-        const mockProxy = 'proxy full name';
-
-        getFullName.mockReturnValueOnce(mockProxy);
-
-        expect(listFormatter.proxy(requestWithData)).toBe(mockProxy);
+        expect(listFormatter.proxy(requestWithData)).toBe('proxyLastName, proxyFirstName');
       });
 
       it('should trigger NoValue component', () => {
@@ -1299,17 +1302,13 @@ describe('RequestsRoute', () => {
 
     describe('requester', () => {
       it('should return requester information', () => {
-        const mockRequester = `${requestWithData.requester.lastName}, ${requestWithData.requester.firstName}`;
-
-        getFullName.mockReturnValueOnce(mockRequester);
-
-        expect(listFormatter.requester(requestWithData)).toBe(mockRequester);
+        expect(listFormatter.requester(requestWithData)).toBe('requesterLastName, requesterFirstName');
       });
 
-      it('should trigger NoValue component', () => {
+      it('should render Anonymized', () => {
         render(listFormatter.requester(requestWithoutData));
 
-        expect(NoValue).toHaveBeenCalled();
+        expect(screen.getByText(testIds.anonymized)).toBeInTheDocument();
       });
     });
 
