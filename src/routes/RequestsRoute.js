@@ -79,6 +79,7 @@ import {
 import {
   buildUrl,
   getFullName,
+  computeUserDisplayForRequest,
   duplicateRequest,
   getTlrSettings,
   getInstanceQueryString,
@@ -250,6 +251,7 @@ export const getListFormatter = (
     onBeforePrintForSinglePrintButton,
     onAfterPrintForSinglePrintButton,
     isProxyAvailable,
+    isEcsTlrSettingEnabled,
   }
 ) => ({
   'select': rq => (
@@ -260,13 +262,13 @@ export const getListFormatter = (
     />),
   'itemBarcode': rq => (rq?.item?.barcode || <NoValue />),
   'position': rq => (rq.position || <NoValue />),
-  ...(isProxyAvailable ? { 'proxy': rq => (rq.proxy ? getFullName(rq.proxy) : <NoValue />) } : {}),
+  ...(isProxyAvailable ? { 'proxy': rq => computeUserDisplayForRequest(rq, isEcsTlrSettingEnabled).proxy?.proxyName || <NoValue /> } : {}),
   'requestDate': rq => (
     <AppIcon size="small" app="requests">
       <FormattedTime value={rq.requestDate} day="numeric" month="numeric" year="numeric" />
     </AppIcon>
   ),
-  'requester': rq => (rq.requester ? getFullName(rq.requester) : <NoValue />),
+  'requester': rq => computeUserDisplayForRequest(rq, isEcsTlrSettingEnabled).requesterName,
   'singlePrint': rq => {
     const singlePrintButtonProps = {
       request: rq,
@@ -283,7 +285,7 @@ export const getListFormatter = (
     return (
       <SinglePrintButtonForPickSlip {...singlePrintButtonProps} />);
   },
-  'requesterBarcode': rq => (rq?.requester?.barcode || <NoValue />),
+  'requesterBarcode': rq => computeUserDisplayForRequest(rq, isEcsTlrSettingEnabled).requesterBarcode || <NoValue />,
   'requestStatus': rq => (requestStatusesTranslations[rq.status]
     ? <FormattedMessage id={requestStatusesTranslations[rq.status]} />
     : <NoValue />),
@@ -1576,6 +1578,7 @@ class RequestsRoute extends React.Component {
         onBeforePrintForSinglePrintButton: this.savePrintEventDetails,
         onAfterPrintForSinglePrintButton: this.onAfterPrintForPrintButton,
         isProxyAvailable,
+        isEcsTlrSettingEnabled,
       }
     );
 
