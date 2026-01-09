@@ -11,7 +11,7 @@ import {
 
 import {
   computeUserDisplayForRequest,
-  userHighlightBox2,
+  userHighlightBox,
   getPatronGroup,
 } from './utils';
 
@@ -63,7 +63,7 @@ class UserDetail extends React.Component {
 
     const userDisplay = computeUserDisplayForRequest(request, isEcsTlrSettingEnabled);
     const proxySection = userDisplay.proxy
-      ? userHighlightBox2(
+      ? userHighlightBox(
         <FormattedMessage id="ui-requests.requester.proxy" />,
         userDisplay.proxy.proxyNameLink,
         userDisplay.proxy.proxyBarcodeLink
@@ -72,7 +72,7 @@ class UserDetail extends React.Component {
 
     return (
       <div>
-        {userHighlightBox2(
+        {userHighlightBox(
           <FormattedMessage id="ui-requests.requester.requester" />,
           userDisplay.requesterNameLink,
           userDisplay.requesterBarcodeLink,

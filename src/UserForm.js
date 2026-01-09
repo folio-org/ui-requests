@@ -13,7 +13,7 @@ import { ProxyManager } from '@folio/stripes/smart-components';
 
 import {
   computeUserDisplayForRequest,
-  userHighlightBox2,
+  userHighlightBox,
   isProxyFunctionalityAvailable,
 } from './utils';
 
@@ -73,12 +73,12 @@ class UserForm extends React.Component {
     const userDisplay = computeUserDisplayForRequest(pseudoRequest, isEcsTlrSettingEnabled);
 
     const proxySection = userDisplay.proxy && pseudoRequest.proxyUserId !== pseudoRequest.requesterId
-      ? userHighlightBox2(<FormattedMessage id="ui-requests.requester.proxy" />, userDisplay.requesterNameLink, userDisplay.requesterBarcodeLink)
+      ? userHighlightBox(<FormattedMessage id="ui-requests.requester.proxy" />, userDisplay.requesterNameLink, userDisplay.requesterBarcodeLink)
       : null;
 
     const userSection = userDisplay.proxy
-      ? userHighlightBox2(<FormattedMessage id="ui-requests.requester.requester" />, userDisplay.proxy.proxyNameLink, userDisplay.proxy.proxyBarcodeLink)
-      : userHighlightBox2(<FormattedMessage id="ui-requests.requester.requester" />, userDisplay.requesterNameLink, userDisplay.requesterBarcodeLink);
+      ? userHighlightBox(<FormattedMessage id="ui-requests.requester.requester" />, userDisplay.proxy.proxyNameLink, userDisplay.proxy.proxyBarcodeLink)
+      : userHighlightBox(<FormattedMessage id="ui-requests.requester.requester" />, userDisplay.requesterNameLink, userDisplay.requesterBarcodeLink);
 
     return (
       <div>
