@@ -13,6 +13,7 @@
 * When creating or viewing a request, show whether the a loan on the item would be use-at-location. Fixes UIREQ-1327.
 * Added global permissions for get read-access to values such as tenant’s locale, timezone, and currency. Refs UIREQ-1341.
 * Migrate tag flag from mod-configuration to mod-settings. Refs UIREQ-1344.
+* Add 'subscribesTo' field for servicepoints in package.json. Refs UIREQ-1061.
 
 ## [12.0.4] (https://github.com/folio-org/ui-requests/tree/v12.0.4) (2025-10-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v12.0.3...v12.0.4)
