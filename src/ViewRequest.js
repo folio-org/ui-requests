@@ -60,7 +60,6 @@ import {
 import {
   toUserAddress,
   isDelivery,
-  getFullName,
   getTlrSettings,
   generateUserName,
   isValidRequest,
@@ -723,8 +722,7 @@ class ViewRequest extends React.Component {
       itemBarcode: request.item?.barcode,
       itemId: request.itemId,
       holdingsRecordId: request.holdingsRecordId,
-      requesterName: getFullName(request.requester),
-      requesterId: request.requester?.id ?? request.requesterId,
+      request,
       requestCreateDate: request.metadata.createdDate,
     };
 
@@ -894,7 +892,6 @@ class ViewRequest extends React.Component {
               >
                 <UserDetail
                   user={request.requester}
-                  proxy={request.proxy}
                   stripes={stripes}
                   patronGroups={patronGroups}
                   request={request}

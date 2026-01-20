@@ -17,8 +17,12 @@ export const historyData = {
         itemId: 'testItemId',
         holdingsRecordId: 'testHoldingsRecordId',
         requestCreateDate: '2023-04-05',
-        requesterId: 'testRequesterId',
-        requesterName: 'testRequesterName',
+        request: {
+          requesterId: 'testRequesterId',
+          requester: {
+            lastLame: 'testRequesterName',
+          }
+        }
       }
     }
   },
