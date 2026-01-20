@@ -58,7 +58,7 @@ class UserForm extends React.Component {
     } = this.props;
     const isProxyAvailable = isProxyFunctionalityAvailable(isEcsTlrSettingEnabled);
     const pseudoRequest = {
-      ...(request || {}),
+      ...request,
       requesterId: user?.id ?? request.requesterId,
       requester: user,
     };

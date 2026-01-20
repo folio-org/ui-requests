@@ -59,7 +59,6 @@ import {
 import {
   toUserAddress,
   isDelivery,
-  getFullName,
   generateUserName,
   isValidRequest,
   isVirtualItem,
