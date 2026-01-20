@@ -24,6 +24,7 @@
       }
     ],
     "queryResource": "query",
+    "subscribesTo": ["servicepoints"],
     "okapiInterfaces": {
       "cancellation-reason-storage": "1.1",
       "circulation": "14.2",
