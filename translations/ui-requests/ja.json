@@ -86,7 +86,7 @@
     "actions.duplicateRequest": "Duplicate",
     "actions.cancelNewRequest": "キャンセル",
     "close": "閉じる",
-    "blockedLabel": "Reason for block",
+    "blockedLabel": "ブロックの理由",
     "blockModal": "Patron blocked from requesting",
     "detailsButton": "ブロックの詳細を表示",
     "enter": "入力",
