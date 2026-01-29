@@ -28,6 +28,7 @@
     "okapiInterfaces": {
       "cancellation-reason-storage": "1.1",
       "circulation": "14.2",
+      "circulation-settings": "1.0",
       "inventory": "10.0 11.0 12.0 13.0 14.0",
       "request-storage": "6.0",
       "pick-slips": "0.1",
@@ -107,7 +108,7 @@
           "inventory-storage.service-points.item.get",
           "addresstypes.collection.get",
           "usergroups.collection.get",
-          "configuration.entries.collection.get",
+          "circulation.settings.collection.get",
           "inventory.items.collection.get",
           "inventory.items.item.get",
           "inventory.instances.item.get",

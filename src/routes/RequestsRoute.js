@@ -67,7 +67,6 @@ import {
   fulfillmentTypeMap,
   DEFAULT_REQUEST_TYPE_VALUE,
   INPUT_REQUEST_SEARCH_SELECTOR,
-  SETTINGS_SCOPES,
   SETTINGS_KEYS,
   ITEM_QUERIES,
   PRINT_DETAILS_COLUMNS,
@@ -113,20 +112,12 @@ import {
   getFullNameForCsvRecords,
   updateQuerySortString,
   getPrintedDetails,
+  getPrintHoldRequestsEnabled,
 } from './utils';
 import SinglePrintButtonForPickSlip from '../components/SinglePrintButtonForPickSlip';
 
 const INITIAL_RESULT_COUNT = 30;
 const RESULT_COUNT_INCREMENT = 30;
-
-export const getPrintHoldRequestsEnabled = (printHoldRequests) => {
-  const value = printHoldRequests.records[0]?.value;
-  const {
-    printHoldRequestsEnabled = false,
-  } = value ? JSON.parse(value) : {};
-
-  return printHoldRequestsEnabled;
-};
 
 export const getFilteredColumnHeadersMap = (columnHeaders) => (
   columnHeaders.filter(column => column.value !== PRINT_DETAILS_COLUMNS.COPIES &&
@@ -454,10 +445,10 @@ class RequestsRoute extends React.Component {
     },
     printHoldRequests: {
       type: 'okapi',
-      records: 'configs',
-      path: 'configurations/entries',
+      records: 'circulationSettings',
+      path: 'circulation/settings',
       params: {
-        query: '(module==SETTINGS and configName==PRINT_HOLD_REQUESTS)',
+        query: `(name==${SETTINGS_KEYS.PRINT_HOLD_REQUESTS})`,
       },
     },
     currentServicePoint: {},
@@ -480,10 +471,10 @@ class RequestsRoute extends React.Component {
     },
     configs: {
       type: 'okapi',
-      records: 'items',
-      path: 'settings/entries',
+      records: 'circulationSettings',
+      path: 'circulation/settings',
       params: {
-        query: `(scope==${SETTINGS_SCOPES.CIRCULATION} and key==${SETTINGS_KEYS.GENERAL_TLR})`,
+        query: `(name==${SETTINGS_KEYS.GENERAL_TLR})`,
       },
     },
     circulationSettings: {
@@ -492,7 +483,7 @@ class RequestsRoute extends React.Component {
       records: 'circulationSettings',
       path: 'circulation/settings',
       params: {
-        query: '(name=printEventLogFeature)',
+        query: `(name==${SETTINGS_KEYS.PRINT_EVENT_LOG_FEATURE})`,
       },
     },
     savePrintDetails: {

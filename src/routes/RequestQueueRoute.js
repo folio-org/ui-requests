@@ -11,7 +11,6 @@ import RequestQueueView from '../views/RequestQueueView';
 import urls from './urls';
 import {
   requestStatuses,
-  SETTINGS_SCOPES,
   SETTINGS_KEYS,
 } from '../constants';
 import {
@@ -33,10 +32,10 @@ class RequestQueueRoute extends React.Component {
   static manifest = {
     configs: {
       type: 'okapi',
-      records: 'items',
-      path: 'settings/entries',
+      records: 'circulationSettings',
+      path: 'circulation/settings',
       params: {
-        query: `(scope==${SETTINGS_SCOPES.CIRCULATION} and key==${SETTINGS_KEYS.GENERAL_TLR})`,
+        query: `(name==${SETTINGS_KEYS.GENERAL_TLR})`,
       },
     },
     addressTypes: {
