@@ -12,7 +12,7 @@ import {
 import { ProxyManager } from '@folio/stripes/smart-components';
 
 import {
-  getFullName,
+  computeUserDisplayForRequest,
   userHighlightBox,
   isProxyFunctionalityAvailable,
 } from './utils';
@@ -41,7 +41,6 @@ class UserForm extends React.Component {
 
   static defaultProps = {
     patronGroup: '',
-    proxy: {},
   };
 
   constructor(props) {
@@ -58,28 +57,28 @@ class UserForm extends React.Component {
       isEcsTlrSettingEnabled,
     } = this.props;
     const isProxyAvailable = isProxyFunctionalityAvailable(isEcsTlrSettingEnabled);
-    const id = user?.id ?? request.requesterId;
-    const name = getFullName(user);
-    const barcode = user.barcode;
+    const pseudoRequest = {
+      ...request,
+      requesterId: user?.id ?? request.requesterId,
+      requester: user,
+    };
     const isEditable = !!request;
     const isProxyManagerAvailable = isProxyAvailable && !isEditable;
 
-    let proxyName;
-    let proxyBarcode;
-    let proxyId;
     if (isProxyAvailable && proxy) {
-      proxyName = getFullName(proxy);
-      proxyBarcode = proxy?.barcode || '-';
-      proxyId = proxy.id;
+      pseudoRequest.proxyUserId = proxy.id;
+      pseudoRequest.proxy = proxy;
     }
 
-    const proxySection = proxyId && proxyId !== id
-      ? userHighlightBox(<FormattedMessage id="ui-requests.requester.proxy" />, name, id, barcode)
+    const userDisplay = computeUserDisplayForRequest(pseudoRequest);
+
+    const proxySection = userDisplay.proxy && pseudoRequest.proxyUserId !== pseudoRequest.requesterId
+      ? userHighlightBox(<FormattedMessage id="ui-requests.requester.proxy" />, userDisplay.requesterNameLink, userDisplay.requesterBarcodeLink)
       : null;
 
-    const userSection = proxyId
-      ? userHighlightBox(<FormattedMessage id="ui-requests.requester.requester" />, proxyName, proxyId, proxyBarcode)
-      : userHighlightBox(<FormattedMessage id="ui-requests.requester.requester" />, name, id, barcode);
+    const userSection = userDisplay.proxy
+      ? userHighlightBox(<FormattedMessage id="ui-requests.requester.requester" />, userDisplay.proxy.proxyNameLink, userDisplay.proxy.proxyBarcodeLink)
+      : userHighlightBox(<FormattedMessage id="ui-requests.requester.requester" />, userDisplay.requesterNameLink, userDisplay.requesterBarcodeLink);
 
     return (
       <div>
@@ -95,7 +94,7 @@ class UserForm extends React.Component {
         {isProxyManagerAvailable &&
           <this.connectedProxyManager
             patron={user}
-            proxy={proxy}
+            proxy={proxy || {}}
             onSelectPatron={this.props.onSelectProxy}
             onClose={this.props.onCloseProxy}
           /> }

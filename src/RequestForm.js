@@ -391,7 +391,7 @@ class RequestForm extends React.Component {
       const resourceTypeId = getResourceTypeId(isTitleLevelRequest);
       const resourceId = isTitleLevelRequest ? request.instanceId : request.itemId;
 
-      this.findRequestTypes(resourceId, request.requester.id || request.requesterId, resourceTypeId);
+      this.findRequestTypes(resourceId, request.requester?.id || request.requesterId, resourceTypeId);
     }
 
     if (prevQuery.userBarcode !== query.userBarcode) {

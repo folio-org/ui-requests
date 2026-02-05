@@ -6,7 +6,7 @@ import {
 import { ProxyManager } from '@folio/stripes/smart-components';
 
 import UserForm from './UserForm';
-import { userHighlightBox } from './utils';
+import { computeUserDisplayForRequest } from './utils';
 
 const basicProps = {
   onCloseProxy: jest.fn(),
@@ -31,8 +31,19 @@ jest.mock('@folio/stripes/smart-components', () => ({
   ProxyManager: jest.fn(() => <div />),
 }));
 jest.mock('./utils', () => ({
-  getFullName: jest.fn((user) => user.lastName),
-  userHighlightBox: jest.fn((title, name, id, barcode) => (
+  computeUserDisplayForRequest: jest.fn((request) => ({
+    requesterNameLink: request.requester.lastName,
+    requesterBarcodeLink: request.requester.barcode,
+    ...(request.proxy ?
+      {
+        proxy: {
+          proxyNameLink: request.proxy.lastName,
+          proxyBarcodeLink: request.proxy.barcode
+        }
+      }
+      : {}),
+  })),
+  userHighlightBox: jest.fn((title, name, barcode) => (
     <>
       <span>{title}</span>
       <span>{name}</span>
@@ -170,6 +181,7 @@ describe('UserForm', () => {
 
   describe('When user id is provided', () => {
     beforeEach(() => {
+      computeUserDisplayForRequest.mockClear();
       render(
         <UserForm
           {...basicProps}
@@ -177,10 +189,9 @@ describe('UserForm', () => {
       );
     });
 
-    it('should trigger "userHighlightBox" with user id', () => {
-      const expectedArgs = [expect.any(Object), basicProps.user.lastName, basicProps.user.id, basicProps.user.barcode];
-
-      expect(userHighlightBox).toHaveBeenCalledWith(...expectedArgs);
+    it('should trigger "computeUserDisplayForRequest" with user id', () => {
+      const actualRequest = computeUserDisplayForRequest.mock.calls[0][0];
+      expect(actualRequest.requesterId).toEqual(basicProps.user.id);
     });
   });
 
@@ -197,6 +208,7 @@ describe('UserForm', () => {
     };
 
     beforeEach(() => {
+      computeUserDisplayForRequest.mockClear();
       render(
         <UserForm
           {...props}
@@ -204,10 +216,9 @@ describe('UserForm', () => {
       );
     });
 
-    it('should trigger "userHighlightBox" with requester id', () => {
-      const expectedArgs = [expect.any(Object), props.user.lastName, props.request.requesterId, props.user.barcode];
-
-      expect(userHighlightBox).toHaveBeenCalledWith(...expectedArgs);
+    it('should trigger "computeUserDisplayForRequest" with requester id', () => {
+      const actualRequest = computeUserDisplayForRequest.mock.calls[0][0];
+      expect(actualRequest.requesterId).toEqual(props.request.requesterId);
     });
   });
 });

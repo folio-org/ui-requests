@@ -60,6 +60,7 @@
   "requests.instances.rows.select": "Select instance",
 
   "request.detail.title": "Request details",
+  "requestMeta.anonymized": "Anonymized",
   "requestMeta.information": "Request information",
   "requestMeta.type": "Request type",
   "requestMeta.type.recall": "Recall",
