@@ -303,5 +303,6 @@
     "printSelectedPickSlipsForSp": "Drukuj wybrane rewersy zamówienia {sp}",
     "requestUuid": "UUID rezerwacji",
     "forUseAtLocation": "Do użytku w lokalizacji",
-    "errors.user.unknown": "Nieznany użytkownik"
+    "errors.user.unknown": "Nieznany użytkownik",
+    "requestMeta.anonymized": "Anonymized"
 }

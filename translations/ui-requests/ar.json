@@ -303,5 +303,6 @@
     "printSelectedPickSlipsForSp": "طباعة قسائم الالتقاط المحددة {sp}",
     "requestUuid": "طلب معرف عمومي فريد",
     "forUseAtLocation": "For use at location",
-    "errors.user.unknown": "Unknown user"
+    "errors.user.unknown": "Unknown user",
+    "requestMeta.anonymized": "Anonymized"
 }

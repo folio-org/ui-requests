@@ -303,5 +303,6 @@
     "printSelectedPickSlipsForSp": "Vytisknout vybrané cirkulační lístky žádanek {sp}",
     "requestUuid": "Požadavek (UUID)",
     "forUseAtLocation": "Pro použití v lokaci",
-    "errors.user.unknown": "Neznámý uživatel"
+    "errors.user.unknown": "Neznámý uživatel",
+    "requestMeta.anonymized": "Anonymizováno"
 }

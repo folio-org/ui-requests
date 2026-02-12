@@ -303,5 +303,6 @@
     "printSelectedPickSlipsForSp": "Imprimir recibos de retirada selecionados {sp}",
     "requestUuid": "UUID da requisição",
     "forUseAtLocation": "Para uso no local",
-    "errors.user.unknown": "Usuário desconhecido"
+    "errors.user.unknown": "Usuário desconhecido",
+    "requestMeta.anonymized": "Anonimizado"
 }

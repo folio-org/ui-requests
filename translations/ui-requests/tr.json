@@ -303,5 +303,6 @@
     "printSelectedPickSlipsForSp": "Seç teslim fişlerini baskı {sp}",
     "requestUuid": "Evrensel benzersiz tanımlayıcı Talep",
     "forUseAtLocation": "Konumda kullanım için",
-    "errors.user.unknown": "Bilinmeyen kullanıcı"
+    "errors.user.unknown": "Bilinmeyen kullanıcı",
+    "requestMeta.anonymized": "Anonymized"
 }

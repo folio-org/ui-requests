@@ -303,5 +303,6 @@
     "printSelectedPickSlipsForSp": "Geselecteerde afhaalbonnen printen {sp}",
     "requestUuid": "Aanvraag UUID",
     "forUseAtLocation": "Voor gebruik op Locatie",
-    "errors.user.unknown": "Onbekende gebruiker"
+    "errors.user.unknown": "Onbekende gebruiker",
+    "requestMeta.anonymized": "Anonymized"
 }

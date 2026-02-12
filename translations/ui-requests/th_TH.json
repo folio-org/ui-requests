@@ -49,7 +49,7 @@
     "cancel.additionalInfoPlaceholderOptional": "Enter more information about the cancellation (optional)",
     "meta.title": "Requests",
     "resultCount": "{count, number} {count, plural, one {Record found} other {Records found}}",
-    "barcode": "Barcode",
+    "barcode": "บาร์โค้ด",
     "item.requestsOnItem": "Requests on item",
     "actions.viewRequestsInQueue": "view requests in queue",
     "actions.selectPickupSp": "Select pickup service point",
@@ -303,5 +303,6 @@
     "printSelectedPickSlipsForSp": "Print selected pick slips {sp}",
     "requestUuid": "Request UUID",
     "forUseAtLocation": "For use at location",
-    "errors.user.unknown": "Unknown user"
+    "errors.user.unknown": "Unknown user",
+    "requestMeta.anonymized": "Anonymized"
 }
