@@ -54,7 +54,7 @@
     "actions.viewRequestsInQueue": "view requests in queue",
     "actions.selectPickupSp": "Select pickup service point",
     "requestType": "Request type",
-    "status": "Request status",
+    "status": "สถานะคำร้อง",
     "requestExpirationDate": "Request expiration date",
     "holdShelfExpirationDate": "Hold shelf expiration date",
     "position": "Position in queue",
@@ -184,7 +184,7 @@
     "instance.title": "Title",
     "instance.contributorNames": "Contributor",
     "requestLevel": "Request level",
-    "itemLevel": "Item",
+    "itemLevel": "รายการทรัพยากร",
     "titleLevel": "Title",
     "requests.year": "Year",
     "requests.createTitleLevelRequest": "Create title level request",
@@ -199,7 +199,7 @@
     "requestQueue.fulfillmentInProgressSectionTitle": "Fulfillment in progress",
     "requestQueue.notYetFilledSectionTitle": "Open - Not yet filled",
     "requestQueue.order": "Order",
-    "requestQueue.fulfillmentStatus": "Status",
+    "requestQueue.fulfillmentStatus": "สถานะ",
     "requestQueue.itemBarcode": "Item barcode",
     "requestQueue.enumeration": "Enumeration",
     "requestQueue.chronology": "Chronology",
@@ -209,7 +209,7 @@
     "requestQueue.requestInProgress": "In progress",
     "requestQueue.noDataForFulfillment": "There are no requests in fulfillment.",
     "requestQueue.notYetFilledRequests.noData": "No requests found",
-    "filters.requestLevel.item": "Item",
+    "filters.requestLevel.item": "รายการทรัพยากร",
     "filters.requestLevel.title": "Title",
     "requests.queuePosition": "Queue position",
     "requestQueue.heading": "Request queue on instance • {title} /{author}.",
@@ -304,5 +304,5 @@
     "requestUuid": "Request UUID",
     "forUseAtLocation": "For use at location",
     "errors.user.unknown": "Unknown user",
-    "requestMeta.anonymized": "Anonymized"
+    "requestMeta.anonymized": "ทำให้เป็นนิรนาม"
 }
