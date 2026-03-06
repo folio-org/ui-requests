@@ -17,6 +17,7 @@
 * *BREAKING* Migrate config values from mod-configuration and mod-settings. Refs UIREQ-1346.
 * Display Anonymized when viewing a requester/proxy for a single anonymized request. Refs UIREQ-1313.
 * Display Anonymized when listing requests. Refs UIREQ-1314
+* Fixed CSV export issue when searching by title. Refs UIREQ-1352.
 
 ## [12.0.4] (https://github.com/folio-org/ui-requests/tree/v12.0.4) (2025-10-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v12.0.3...v12.0.4)
