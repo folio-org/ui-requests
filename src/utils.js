@@ -497,3 +497,40 @@ export const getRequester = (proxy, selectedUser, isEcsTlrSettingEnabled) => {
 
   return selectedUser;
 };
+
+// Fields configuration for CQL search string generation. Each field defines:
+// - field: the CQL field name
+// - operator: the operator to use (== or =)
+// - wildcard: whether to append a * wildcard to the query term
+const requestSearchFields = [
+  { field: 'id', operator: '==', wildcard: false },
+  { field: 'requesterId', operator: '==', wildcard: false },
+  { field: 'requester.barcode', operator: '==', wildcard: true },
+  { field: 'instance.title', operator: '=', wildcard: true },
+  { field: 'instanceId', operator: '=', wildcard: true },
+  { field: 'item.barcode', operator: '=', wildcard: true },
+  { field: 'itemId', operator: '==', wildcard: false },
+  { field: 'itemIsbn', operator: '==', wildcard: false },
+  { field: 'searchIndex.callNumberComponents.callNumber', operator: '==', wildcard: true },
+  { field: 'fullCallNumberIndex', operator: '==', wildcard: true },
+];
+
+/**
+ * Generates a CQL search string for requests using a set of predefined fields.
+ * Each field uses a specific operator (== or =) and may append a wildcard (*).
+ *
+ * @param {string} queryTerm - The search term to use in the CQL string.
+ * @returns {string} The generated CQL search string.
+ *
+ * Example:
+ *   generateRequestSearchCqlString('111')
+ *   => (id=="111" or requesterId=="111" or requester.barcode=="111*" ...)
+ */
+export const generateRequestSearchCqlString = (queryTerm = '%{query.query}') => {
+  // Build each clause using the field config
+  const clauses = requestSearchFields.map(({ field, operator, wildcard }) => (
+    `${field}${operator}"${queryTerm}${wildcard ? '*' : ''}"`
+  ));
+
+  return `(${clauses.join(' or ')})`;
+};

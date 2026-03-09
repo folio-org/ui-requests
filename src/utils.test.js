@@ -38,6 +38,7 @@ import {
   getRequester,
   getFullName,
   isProxyFunctionalityAvailable,
+  generateRequestSearchCqlString,
 } from './utils';
 
 import {
@@ -1159,5 +1160,74 @@ describe('getFullName', () => {
       firstName: 'John'
     };
     expect(getFullName(user)).toBe('Doe, John');
+  });
+});
+
+describe('generateRequestSearchCqlString', () => {
+  it('should generate CQL string with default placeholder', () => {
+    const result = generateRequestSearchCqlString();
+
+    expect(result).toBe(
+      '(id=="%{query.query}" or requesterId=="%{query.query}" or requester.barcode=="%{query.query}*" or instance.title="%{query.query}*" or instanceId="%{query.query}*" or item.barcode="%{query.query}*" or itemId=="%{query.query}" or itemIsbn=="%{query.query}" or searchIndex.callNumberComponents.callNumber=="%{query.query}*" or fullCallNumberIndex=="%{query.query}*")'
+    );
+  });
+
+  it('should generate CQL string with custom term', () => {
+    const result = generateRequestSearchCqlString('111');
+
+    expect(result).toBe(
+      '(id=="111" or requesterId=="111" or requester.barcode=="111*" or instance.title="111*" or instanceId="111*" or item.barcode="111*" or itemId=="111" or itemIsbn=="111" or searchIndex.callNumberComponents.callNumber=="111*" or fullCallNumberIndex=="111*")'
+    );
+  });
+
+  it('should include wildcards for fields that require *', () => {
+    const result = generateRequestSearchCqlString('abc');
+
+    expect(result).toContain('requester.barcode=="abc*"');
+    expect(result).toContain('instance.title="abc*"');
+    expect(result).toContain('instanceId="abc*"');
+    expect(result).toContain('item.barcode="abc*"');
+    expect(result).toContain('searchIndex.callNumberComponents.callNumber=="abc*"');
+    expect(result).toContain('fullCallNumberIndex=="abc*"');
+  });
+
+  it('should not include wildcards for fields that do not require *', () => {
+    const result = generateRequestSearchCqlString('abc');
+
+    expect(result).toContain('id=="abc"');
+    expect(result).toContain('requesterId=="abc"');
+    expect(result).toContain('itemId=="abc"');
+    expect(result).toContain('itemIsbn=="abc"');
+    expect(result).not.toContain('itemId=="abc*"');
+    expect(result).not.toContain('id=="abc*"');
+    expect(result).not.toContain('requesterId=="abc*"');
+    expect(result).not.toContain('itemIsbn=="abc*"');
+  });
+
+  it('should use == operator for correct fields', () => {
+    const result = generateRequestSearchCqlString('111');
+
+    expect(result).toContain('id=="111"');
+    expect(result).toContain('requesterId=="111"');
+    expect(result).toContain('requester.barcode=="111*"');
+    expect(result).toContain('itemId=="111"');
+    expect(result).toContain('itemIsbn=="111"');
+    expect(result).toContain('searchIndex.callNumberComponents.callNumber=="111*"');
+    expect(result).toContain('fullCallNumberIndex=="111*"');
+  });
+
+  it('should use = operator for correct fields', () => {
+    const result = generateRequestSearchCqlString('111');
+
+    expect(result).toContain('instance.title="111*"');
+    expect(result).toContain('instanceId="111*"');
+    expect(result).toContain('item.barcode="111*"');
+  });
+
+  it('should return a string wrapped in parentheses', () => {
+    const result = generateRequestSearchCqlString('foo');
+
+    expect(result.startsWith('(')).toBe(true);
+    expect(result.endsWith(')')).toBe(true);
   });
 });

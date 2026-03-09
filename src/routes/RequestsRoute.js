@@ -90,6 +90,7 @@ import {
   getNextSelectedRowsState,
   isMultiDataTenant,
   isProxyFunctionalityAvailable,
+  generateRequestSearchCqlString,
 } from '../utils';
 import packageInfo from '../../package';
 import CheckboxColumn from '../components/CheckboxColumn';
@@ -334,7 +335,7 @@ class RequestsRoute extends React.Component {
         params: {
           query: makeQueryFunction(
             'cql.allRecords=1',
-            '(id=="%{query.query}" or requesterId=="%{query.query}" or requester.barcode=="%{query.query}*" or instance.title="%{query.query}*" or instanceId="%{query.query}*" or item.barcode=="%{query.query}*" or itemId=="%{query.query}" or itemIsbn="%{query.query}" or searchIndex.callNumberComponents.callNumber=="%{query.query}*" or fullCallNumberIndex=="%{query.query}*")',
+            generateRequestSearchCqlString(),
             {
               'title': 'instance.title',
               'instanceId': 'instanceId',
@@ -953,7 +954,7 @@ class RequestsRoute extends React.Component {
     const filterQuery = filters2cql(RequestsFiltersConfig, deparseFilters(this.getActiveFilters()));
 
     if (queryTerm) {
-      queryString = `(requesterId=="${queryTerm}" or requester.barcode=="${queryTerm}*" or item.title="${queryTerm}*" or item.barcode=="${queryTerm}*" or itemId=="${queryTerm}")`;
+      queryString = generateRequestSearchCqlString(queryTerm);
       queryClauses.push(queryString);
     }
     if (filterQuery) queryClauses.push(filterQuery);
