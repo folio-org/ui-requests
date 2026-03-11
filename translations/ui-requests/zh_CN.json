@@ -304,5 +304,5 @@
     "requestUuid": "请求 UUID",
     "forUseAtLocation": "在现场使用",
     "errors.user.unknown": "未知用户",
-    "requestMeta.anonymized": "Anonymized"
+    "requestMeta.anonymized": "已匿名化"
 }

@@ -304,5 +304,5 @@
     "requestUuid": "Aanvraag UUID",
     "forUseAtLocation": "Voor gebruik op Locatie",
     "errors.user.unknown": "Onbekende gebruiker",
-    "requestMeta.anonymized": "Anonymized"
+    "requestMeta.anonymized": "Geanonimiseerd"
 }
