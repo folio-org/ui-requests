@@ -18,6 +18,7 @@
 * Display Anonymized when viewing a requester/proxy for a single anonymized request. Refs UIREQ-1313.
 * Display Anonymized when listing requests. Refs UIREQ-1314
 * Fixed CSV export issue when searching by title. Refs UIREQ-1352.
+* Fix problem with search for Requests by Instance ISBN. Refs UIREQ-1355.
 
 ## [12.0.4] (https://github.com/folio-org/ui-requests/tree/v12.0.4) (2025-10-29)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v12.0.3...v12.0.4)

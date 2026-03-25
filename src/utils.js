@@ -508,9 +508,9 @@ const requestSearchFields = [
   { field: 'requester.barcode', operator: '==', wildcard: true },
   { field: 'instance.title', operator: '=', wildcard: true },
   { field: 'instanceId', operator: '=', wildcard: true },
-  { field: 'item.barcode', operator: '=', wildcard: true },
+  { field: 'item.barcode', operator: '==', wildcard: true },
   { field: 'itemId', operator: '==', wildcard: false },
-  { field: 'itemIsbn', operator: '==', wildcard: false },
+  { field: 'itemIsbn', operator: '=', wildcard: false },
   { field: 'searchIndex.callNumberComponents.callNumber', operator: '==', wildcard: true },
   { field: 'fullCallNumberIndex', operator: '==', wildcard: true },
 ];
