@@ -304,5 +304,5 @@
     "requestUuid": "Bestandsanfrage-UUID",
     "forUseAtLocation": "Zur Verwendung am Standort",
     "errors.user.unknown": "Unbekannte/-r Benutzer/-in",
-    "requestMeta.anonymized": "Anonymized"
+    "requestMeta.anonymized": "Anonymisiert"
 }
