@@ -304,5 +304,5 @@
     "requestUuid": "UUID замовлення",
     "forUseAtLocation": "Для використання у місці розміщення",
     "errors.user.unknown": "Невідомий користувач",
-    "requestMeta.anonymized": "Anonymized"
+    "requestMeta.anonymized": "Анонімізовано"
 }
