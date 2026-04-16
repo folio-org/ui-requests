@@ -93,7 +93,7 @@
     "showTags": "タグを表示",
     "tags.tagList": "タグ",
     "item.copyNumbers": "Copy number",
-    "requestNotAllowed": "Request not allowed",
+    "requestNotAllowed": "リクエストは許可されていません",
     "additionalReasons": "View block details to see additional reasons for block...",
     "pickupServicePoint.name": "受取サービスポイント",
     "item.id": "資料 ID",

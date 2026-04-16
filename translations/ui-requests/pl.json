@@ -299,7 +299,7 @@
     "exportExpiredHoldShelfCsv": "Raport o zwolnionych rezerwacjach {currentServicePoint} (CSV)",
     "exportSearchResultsCsv": "Eksportuj wyniki wyszukiwania (CSV)",
     "printPickSlipsForSp": "Drukuj rewersy zamówienia {sp}",
-    "printSearchSlipsForSp": "Print search slips {sp}",
+    "printSearchSlipsForSp": "Drukuj rewersy wyszukiwania {sp}",
     "printSelectedPickSlipsForSp": "Drukuj wybrane rewersy zamówienia {sp}",
     "requestUuid": "UUID rezerwacji",
     "forUseAtLocation": "Do użytku w lokalizacji",
