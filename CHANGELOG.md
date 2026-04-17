@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## 13.0.0 IN PROGRESS
+## [13.0.0] (https://github.com/folio-org/ui-requests/tree/v13.0.0) (2026-04-17)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v12.0.4...v13.0.0)
 
 * *BREAKING* Use `convertToSlipData` and supporting functions from `stripes-util`. Refs UIREQ-1263.
 * Replace moment with day.js. Refs UIREQ-1291.
