@@ -74,6 +74,14 @@
         ]
       },
       {
+        "permissionName": "ui-requests.anonymizeSingleRequest.execute",
+        "displayName": "Requests: Anonymize a single request",
+        "visible": true,
+        "subPermissions": [
+          "circulation.requests.anonymize.item.post"
+        ]
+      },
+      {
         "permissionName": "ui-requests.all",
         "displayName": "Requests: All permissions",
         "description": "All permissions for the Requests app",
