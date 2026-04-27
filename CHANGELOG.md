@@ -1,5 +1,10 @@
 # Change history for ui-requests
 
+## 13.0.0 IN PROGRESS
+
+* Add permission for anonymizing single requests. Refs UIREQ-12363, CIRC-2364.
+
+
 ## [13.0.0] (https://github.com/folio-org/ui-requests/tree/v13.0.0) (2026-04-17)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v12.0.4...v13.0.0)
 
