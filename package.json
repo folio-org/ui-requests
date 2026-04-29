@@ -90,7 +90,8 @@
           "ui-requests.create",
           "ui-requests.edit",
           "ui-requests.moveRequest.execute",
-          "ui-requests.reorderQueue.execute"
+          "ui-requests.reorderQueue.execute",
+          "ui-requests.anonymizeSingleRequest.execute"
         ],
         "visible": true
       },
