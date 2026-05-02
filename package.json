@@ -74,6 +74,14 @@
         ]
       },
       {
+        "permissionName": "ui-requests.anonymizeSingleRequest.execute",
+        "displayName": "Requests: Anonymize a single request",
+        "visible": true,
+        "subPermissions": [
+          "circulation.requests.anonymize.item.post"
+        ]
+      },
+      {
         "permissionName": "ui-requests.all",
         "displayName": "Requests: All permissions",
         "description": "All permissions for the Requests app",
@@ -82,7 +90,8 @@
           "ui-requests.create",
           "ui-requests.edit",
           "ui-requests.moveRequest.execute",
-          "ui-requests.reorderQueue.execute"
+          "ui-requests.reorderQueue.execute",
+          "ui-requests.anonymizeSingleRequest.execute"
         ],
         "visible": true
       },
