@@ -1,6 +1,6 @@
 {
   "name": "@folio/requests",
-  "version": "13.0.0",
+  "version": "13.0.1",
   "description": "Requests manager",
   "repository": "folio-org/ui-requests",
   "publishConfig": {
@@ -247,7 +247,7 @@
     "react-router-dom": "^5.2.0"
   },
   "optionalDependencies": {
-    "@folio/plugin-find-instance": "^9.0.0",
+    "@folio/plugin-find-instance": "^10.0.0",
     "@folio/plugin-find-user": "^8.0.0"
   }
 }
