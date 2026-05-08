@@ -1,6 +1,7 @@
 # Change history for ui-requests
 
-## [13.0.1] (IN PROGRESS)
+## [13.0.1] (https://github.com/folio-org/ui-requests/tree/v13.0.1) (2026-05-06)
+[Full Changelog](https://github.com/folio-org/ui-requests/compare/v13.0.0...v13.0.1)
 
 * Bump major version of optionalDependency (`@folio/plugin-find-instance`). Fixes UIREQ-1361.
 
