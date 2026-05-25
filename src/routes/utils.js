@@ -11,7 +11,7 @@ const isYear = (value) => YEAR_REGEX.test(value);
 // eslint-disable-next-line import/prefer-default-export
 export const getFormattedYears = (publications, limit) => {
   const years = publications
-    ?.map(({ dateOfPublication }) => dateOfPublication)
+    ?.flatMap(({ dateOfPublication }) => dateOfPublication?.split(',').map((y) => y.trim()) ?? [])
     .filter((year) => isYear(year));
 
   return years?.length

@@ -1,5 +1,9 @@
 # Change history for ui-requests
 
+## [13.1.0] IN_PROGRESS
+
+* Fix "Year" field to correctly parse and display multiple years. Refs UIREQ-1363.
+
 ## [13.0.1] (https://github.com/folio-org/ui-requests/tree/v13.0.1) (2026-05-06)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v13.0.0...v13.0.1)
 
