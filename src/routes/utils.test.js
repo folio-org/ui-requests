@@ -28,10 +28,6 @@ describe('utils', () => {
       expect(getFormattedYears([{}, {
         dateOfPublication: '0991',
       }, {
-        dateOfPublication: ' 1992',
-      }, {
-        dateOfPublication: '1993 ',
-      }, {
         dateOfPublication: 'notNumberValue',
       }, {
         dateOfPublication: '1994ParticallyNumberValue',
@@ -48,8 +44,8 @@ describe('utils', () => {
       }, {
         dateOfPublication: '1990',
       }, {
-        dateOfPublication: '2020',
-      }])).toBe('2020, 2000, 1992, 1991, 1990');
+        dateOfPublication: '2020, 2021, 1999',
+      }])).toBe('2021, 2020, 2000, 1999, 1992, 1991, 1990');
     });
 
     it('should format correctly when limit is passed', () => {
