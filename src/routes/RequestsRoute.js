@@ -281,7 +281,7 @@ export const getListFormatter = (
     ? <FormattedMessage id={requestStatusesTranslations[rq.status]} />
     : <NoValue />),
   'type': rq => <FormattedMessage id={requestTypesTranslations[rq.requestType]} />,
-  'title': rq => <TextLink to={getRowURL(rq.id)}>{(rq.instance ? rq.instance.title : <NoValue />)}</TextLink>,
+  'title': rq => (rq.instance?.title ? <TextLink to={getRowURL(rq.id)}>{rq.instance.title}</TextLink> : <NoValue />),
   'year': rq => (getFormattedYears(rq.instance?.publication, DEFAULT_DISPLAYED_YEARS_AMOUNT) || <NoValue />),
   'callNumber': rq => (effectiveCallNumber(rq.item) || <NoValue />),
   'servicePoint': rq => get(rq, 'pickupServicePoint.name', <NoValue />),
