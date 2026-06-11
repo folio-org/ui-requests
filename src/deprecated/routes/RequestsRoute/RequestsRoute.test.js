@@ -1353,6 +1353,11 @@ describe('RequestsRoute', () => {
     });
 
     describe('title', () => {
+      afterEach(() => {
+        TextLink.mockClear();
+        NoValue.mockClear();
+      });
+
       it('should render instance title', () => {
         render(listFormatter.title(requestWithData));
 
