@@ -1507,6 +1507,11 @@ describe('RequestsRoute', () => {
     });
 
     describe('title', () => {
+      afterEach(() => {
+        TextLink.mockClear();
+        NoValue.mockClear();
+      });
+
       it('should render instance title', () => {
         render(listFormatter.title(requestWithData));
 
@@ -1523,6 +1528,20 @@ describe('RequestsRoute', () => {
         render(listFormatter.title(requestWithData));
 
         expect(TextLink).toHaveBeenCalledWith(expect.objectContaining(expectedProps), {});
+      });
+
+      it('should render "NoValue" and not "TextLink" when instance is missing', () => {
+        render(listFormatter.title(requestWithoutData));
+
+        expect(NoValue).toHaveBeenCalled();
+        expect(TextLink).not.toHaveBeenCalled();
+      });
+
+      it('should render "NoValue" and not "TextLink" when instance title is missing', () => {
+        render(listFormatter.title({ ...requestWithData, instance: {} }));
+
+        expect(NoValue).toHaveBeenCalled();
+        expect(TextLink).not.toHaveBeenCalled();
       });
     });
 
