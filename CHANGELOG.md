@@ -2,6 +2,8 @@
 
 ## [13.1.0] IN_PROGRESS
 
+* Fix displaying a dash placeholder instead of an empty link when instance title is missing in the requests list. Refs UIREQ-1365.
+
 ## [13.0.2] (https://github.com/folio-org/ui-requests/tree/v13.0.2) (2026-06-02)
 [Full Changelog](https://github.com/folio-org/ui-requests/compare/v13.0.1...v13.0.2)
 
