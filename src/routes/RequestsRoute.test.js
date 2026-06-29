@@ -146,6 +146,7 @@ jest.mock('../components', () => ({
     onBeforePrint,
     onAfterPrint,
     children,
+    'data-testid': dataTestid,
   }) => {
     const handleClick = () => {
       Promise.resolve(onBeforeGetContent());
@@ -157,6 +158,7 @@ jest.mock('../components', () => ({
         <button
           type="button"
           onClick={handleClick}
+          data-testid={dataTestid}
         >
           PrintButton
         </button>
@@ -1031,6 +1033,52 @@ describe('RequestsRoute', () => {
         });
 
         expect(defaultProps.mutator.query.update).toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('Print search slips', () => {
+    describe('When isViewPrintDetailsEnabled is true', () => {
+      it('should trigger mutator.savePrintDetails.POST', async () => {
+        renderComponent(defaultProps);
+        await userEvent.click(screen.getByTestId('printSearchSlipsBtn'));
+
+        expect(defaultProps.mutator.savePrintDetails.POST).toHaveBeenCalled();
+      });
+
+      it('should trigger mutator.resultOffset.replace', async () => {
+        renderComponent(defaultProps);
+        await userEvent.click(screen.getByTestId('printSearchSlipsBtn'));
+
+        await waitFor(() => {
+          expect(defaultProps.mutator.resultOffset.replace).toHaveBeenCalledWith(0);
+        });
+      });
+    });
+
+    describe('When isViewPrintDetailsEnabled is false', () => {
+      const getPropsWithPrintLogDisabled = () => ({
+        ...defaultProps,
+        resources: {
+          ...defaultProps.resources,
+          circulationSettings: {
+            ...defaultProps.resources.circulationSettings,
+            records: defaultProps.resources.circulationSettings.records.map(record => ({
+              ...record,
+              value: {
+                ...record.value,
+                enablePrintLog: 'false',
+              },
+            })),
+          },
+        },
+      });
+
+      it('should not trigger mutator.savePrintDetails.POST', async () => {
+        renderComponent(getPropsWithPrintLogDisabled());
+        await userEvent.click(screen.getByTestId('printSearchSlipsBtn'));
+
+        expect(defaultProps.mutator.savePrintDetails.POST).not.toHaveBeenCalled();
       });
     });
   });

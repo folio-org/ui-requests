@@ -1699,10 +1699,18 @@ class RequestsRoute extends React.Component {
                   <PrintButton
                     buttonStyle="dropdownItem"
                     id="printSearchSlipsBtn"
+                    data-testid="printSearchSlipsBtn"
                     disabled={isSearchSlipsEmpty}
                     template={searchSlipsPrintTemplate}
                     contentRef={this.searchSlipsPrintContentRef}
                     onBeforeGetContent={() => this.onBeforeGetContentForPrintButton(onToggle)}
+                    onBeforePrint={async () => {
+                      if (isViewPrintDetailsEnabled) {
+                        const requestIds = extractPickSlipRequestIds(searchSlipsData);
+                        await this.savePrintEventDetails(requestIds);
+                      }
+                    }}
+                    onAfterPrint={this.onAfterPrintForPrintButton}
                   >
                     <Icon icon="print">
                       <FormattedMessage
