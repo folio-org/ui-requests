@@ -205,7 +205,7 @@
     "@babel/plugin-proposal-decorators": "^7.13.5",
     "@babel/plugin-transform-runtime": "^7.13.10",
     "@folio/eslint-config-stripes": "^8.0.0",
-    "@folio/jest-config-stripes": "^3.0.0",
+    "@folio/jest-config-stripes": "^4.0.0",
     "@folio/stripes": "^10.0.0",
     "@folio/stripes-cli": "^4.0.0",
     "@folio/stripes-components": "^13.0.0",
